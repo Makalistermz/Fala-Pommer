@@ -114,6 +114,17 @@ body {
   background-color: #0c4195;
 }
 
+.login__google {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login__google p {
+    padding: 5px;
+    font-size: 13px;
+}
+
 .login__cadastro {
   text-align: center;
   margin-top: 28px;
@@ -124,7 +135,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 60px;
-  background-color: #074CB3;
+  background-color: #084DB4;
 }
 
 .login__ilustracao img {

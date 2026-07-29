@@ -9,7 +9,6 @@ import {
 
 import { jwtDecode } from "jwt-decode";
 
-// 1. Defina a estrutura dos dados do usuário contidos no JWT do Google
 interface GoogleUser {
   iss: string;
   nbf: number;
@@ -28,7 +27,6 @@ interface GoogleUser {
 }
 
 function Login() {
-    // 2. Tipagem correta do parâmetro de sucesso vindo da biblioteca
     function handleSuccess(response: CredentialResponse) {
         const token = response.credential;
 
@@ -105,7 +103,7 @@ function Login() {
           </form>
 
         <div className="login__google">
-            <span>Ou continue com</span>
+            <p className="">Ou continue com</p>
 
             <GoogleLogin
               onSuccess={handleSuccess}

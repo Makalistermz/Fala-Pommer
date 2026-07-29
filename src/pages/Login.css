@@ -1,0 +1,135 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.login {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+.login__formulario {
+  display: flex;
+  flex-direction: column;
+  padding: 40px 7%;
+  background-color: #ffffff;
+}
+
+.login__cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.login__cabecalho img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.login__cabecalho span {
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+.login__conteudo {
+  width: 100%;
+  max-width: 430px;
+  margin: auto;
+}
+
+.login__conteudo h1 {
+  margin-bottom: 8px;
+  font-size: 38px;
+}
+
+.login__conteudo > p {
+  margin-bottom: 32px;
+  color: #666666;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.campo label {
+  font-weight: 600;
+}
+
+.campo input {
+  width: 100%;
+  height: 50px;
+  padding: 0 14px;
+  border: 1px solid #c9c9c9;
+  border-radius: 6px;
+  font-size: 16px;
+  outline: none;
+}
+
+.campo input:focus {
+  border-color: #1351b4;
+  box-shadow: 0 0 0 3px rgb(19 81 180 / 15%);
+}
+
+.login__opcoes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.lembrar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.login a {
+  color: #1351b4;
+}
+
+.login__botao {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 6px;
+  background-color: #1351b4;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login__botao:hover {
+  background-color: #0c4195;
+}
+
+.login__cadastro {
+  text-align: center;
+  margin-top: 28px;
+}
+
+.login__ilustracao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  background-color: #074CB3;
+}
+
+.login__ilustracao img {
+  width: 100%;
+  max-width: 650px;
+  max-height: 85vh;
+  object-fit: contain;
+}

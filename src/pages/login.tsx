@@ -2,7 +2,55 @@ import brasao from "../assets/img/brasao.png";
 import imagemLogin from "../assets/img/imagem-pagina-login.png";
 import "./Login.css";
 
+import {
+  GoogleLogin,
+  type CredentialResponse,
+} from "@react-oauth/google";
+
+import { jwtDecode } from "jwt-decode";
+
+// 1. Defina a estrutura dos dados do usuário contidos no JWT do Google
+interface GoogleUser {
+  iss: string;
+  nbf: number;
+  aud: string;
+  sub: string; // ID único do usuário no Google
+  email: string;
+  email_verified: boolean;
+  azp: string;
+  name: string;
+  picture: string; // URL da foto de perfil
+  given_name: string;
+  family_name: string;
+  iat: number;
+  exp: number;
+  jti: string;
+}
+
 function Login() {
+    // 2. Tipagem correta do parâmetro de sucesso vindo da biblioteca
+    function handleSuccess(response: CredentialResponse) {
+        const token = response.credential;
+
+        if (!token) {
+            console.error("O Google não retornou uma credencial.");
+            return;
+        }
+
+        const usuario = jwtDecode<GoogleUser>(token);
+
+        console.log("Usuário:", usuario);
+        console.log("Nome:", usuario.name);
+        console.log("E-mail:", usuario.email);
+
+        // Futuramente:
+        // enviar token para o backend validar
+    }
+
+    function handleError() {
+        console.error("Falha na autenticação do Google.");
+    }
+
   return (
     <main className="login">
       <section className="login__formulario">
@@ -55,6 +103,19 @@ function Login() {
               Entrar
             </button>
           </form>
+
+        <div className="login__google">
+            <span>Ou continue com</span>
+
+            <GoogleLogin
+              onSuccess={handleSuccess}
+              onError={handleError}
+              theme="outline"
+              shape="rectangular"
+              text="signin_with"
+              width={430}
+            />
+        </div>
 
           <p className="login__cadastro">
             Ainda não possui conta? <a href="/cadastro">Cadastre-se</a>

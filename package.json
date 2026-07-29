@@ -1,0 +1,21 @@
+{
+  "name": "fala-pommer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Makalistermz/Fala-Pommer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Makalistermz/Fala-Pommer/issues"
+  },
+  "homepage": "https://github.com/Makalistermz/Fala-Pommer#readme"
+}

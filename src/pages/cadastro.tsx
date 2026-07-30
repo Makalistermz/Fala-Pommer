@@ -11,7 +11,25 @@ function Cadastro() {
 
         const dados = Object.fromEntries(dadosFormulario.entries());
 
-        console.log(dados)
+        try {
+            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/usuarios`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dados),
+            });
+
+            if(!resposta.ok) {
+                throw new Error(`Erro no servidor: ${resposta.status}`)
+            }
+
+            const resultado = await resposta.json();
+
+            console.log(resultado.mensagem);
+        } catch (erro) {
+            console.error("Falha ao enviar o cadastro:", erro);
+        }
     }
 
     return (

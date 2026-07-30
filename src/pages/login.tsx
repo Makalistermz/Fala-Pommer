@@ -1,6 +1,6 @@
 import brasao from "../assets/img/brasao.png";
 import imagemLogin from "../assets/img/imagem-pagina-login.png";
-import "./Login.css";
+import "./LoginCadastro.css";
 import { Link } from "react-router";
 
 import {

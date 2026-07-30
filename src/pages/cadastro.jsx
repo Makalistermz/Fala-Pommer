@@ -15,7 +15,7 @@ function Cadastro() {
                 <section className="cadastro__conteudo">
                     <h1>Bem-vindo ao Fala Pommer</h1>
                     <p>Preencha os dados para concluir o cadastro</p>
-                    <form>
+                    <form method="POST">
                         <div className="campo">
                             <label htmlFor="nome">Nome completo</label>
                             <input

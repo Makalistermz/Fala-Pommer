@@ -269,7 +269,7 @@ body {
 
 .cadastro .campo input:focus {
   border-color: #1351b4;
-  box-shadow: 0 0 0 3px rgb(19 81 180 / 15%);
+  box-shadow: 0 0 0 4px rgb(19 81 180 / 15%);
 }
 
 .cadastro .campo input[type="date"] {

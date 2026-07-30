@@ -116,10 +116,10 @@ function Cadastro() {
                             />
                         </div>
                         <div className="campo">
-                            <label htmlFor="Confirmarsenha">Confirmar senha</label>
+                            <label htmlFor="confirmarSenha">Confirmar senha</label>
                             <input
-                                id="Confirmarsenha"
-                                name="Confirmarsenha"
+                                id="confirmarSenha"
+                                name="confirmarSenha"
                                 type="password"
                                 placeholder="Confirme sua senha"
                                 autoComplete="new-password"

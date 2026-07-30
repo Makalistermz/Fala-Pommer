@@ -1,6 +1,7 @@
 import brasao from "../assets/img/brasao.png";
 import imagemLogin from "../assets/img/imagem-pagina-login.png";
 import "./Login.css";
+import { Link } from "react-router";
 
 import {
   GoogleLogin,
@@ -116,7 +117,7 @@ function Login() {
         </div>
 
           <p className="login__cadastro">
-            Ainda não possui conta? <a href="/cadastro">Cadastre-se</a>
+            Ainda não possui conta? <Link to="/cadastro">Cadastre-se</Link>
           </p>
         </div>
       </section>

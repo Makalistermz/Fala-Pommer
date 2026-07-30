@@ -1,6 +1,19 @@
 import imagemCadastro from "../assets/img/imagem-pagina-cadastro.png"
 
 function Cadastro() {
+
+    async function cadastrar(
+    event: React.SubmitEvent<HTMLFormElement>,
+    ) {
+        event.preventDefault();
+
+        const dadosFormulario = new FormData(event.currentTarget);
+
+        const dados = Object.fromEntries(dadosFormulario.entries());
+
+        console.log(dados)
+    }
+
     return (
         <main className="cadastro">
             <section className="cadastro__ilustracao">
@@ -15,7 +28,7 @@ function Cadastro() {
                 <section className="cadastro__conteudo">
                     <h1>Bem-vindo ao Fala Pommer</h1>
                     <p>Preencha os dados para concluir o cadastro</p>
-                    <form method="POST">
+                    <form method="POST" onSubmit={cadastrar}>
                         <div className="campo">
                             <label htmlFor="nome">Nome completo</label>
                             <input

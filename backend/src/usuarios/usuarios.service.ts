@@ -33,14 +33,17 @@ export class UsuariosService {
         SALT_ROUNDS,
     );
 
+    const cpfLimpo = dados.cpf.replace(/\D/g, "");
+    const telefoneLimpo = dados.numeroTelefone.replace(/\D/g, "");
+
     const usuarioCriado = await this.prisma.cadastro.create({
         data: {  // Contém o que será inserido
             nome: dados.nome,
             data_nascimento: new Date(
                 `${dados.dataNascimento}T00:00:00.000Z`,
             ),
-            cpf: dados.cpf,
-            telefone: dados.numeroTelefone,
+            cpf: cpfLimpo,
+            telefone: telefoneLimpo,
             email: dados.email.trim().toLowerCase(),
             senha: senhaHash,
         },

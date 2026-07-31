@@ -1,5 +1,22 @@
 import imagemCadastro from "../assets/img/imagem-pagina-cadastro.png"
 
+function aplicarMascaraCpf(event: React.FormEvent<HTMLInputElement>) {
+    event.currentTarget.value = event.currentTarget.value
+        .replace(/\D/g, "")
+        .slice(0, 11)
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+}
+
+function aplicarMascaraTelefone(event: React.FormEvent<HTMLInputElement>) {
+    event.currentTarget.value = event.currentTarget.value
+        .replace(/\D/g, "")
+        .slice(0, 11)
+        .replace(/^(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d)(\d{4})$/, "$1-$2");
+}
+
 function Cadastro() {
 
     async function cadastrar(
@@ -74,6 +91,7 @@ function Cadastro() {
                                 name="cpf"
                                 type="text"
                                 inputMode="numeric"
+                                onInput={aplicarMascaraCpf}
                                 placeholder="Ex: 999.999.999-99"
                                 autoComplete="off"
                                 maxLength={14}
@@ -88,6 +106,7 @@ function Cadastro() {
                                 name="numeroTelefone"
                                 type="tel"
                                 inputMode="tel"
+                                onInput={aplicarMascaraTelefone}
                                 autoComplete="tel"
                                 placeholder="Ex: (27) 99999-9999"
                                 maxLength={15}

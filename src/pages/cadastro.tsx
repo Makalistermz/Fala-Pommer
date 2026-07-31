@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import imagemCadastro from "../assets/img/imagem-pagina-cadastro.png";
 import { ModalFeedback } from "../components/ModalFeedback";
 
@@ -77,6 +77,11 @@ function Cadastro() {
         }
     }
 
+    const estiloObrigatorio: React.CSSProperties = {
+        color: 'red',
+    }
+    const obrigatorio = <span style={estiloObrigatorio}>*</span>;
+
     return (
         <main className="cadastro">
             <section className="cadastro__ilustracao">
@@ -93,7 +98,7 @@ function Cadastro() {
                     <p>Preencha os dados para concluir o cadastro</p>
                     <form method="POST" onSubmit={cadastrar}>
                         <div className="campo">
-                            <label htmlFor="nome">Nome completo</label>
+                            <label htmlFor="nome">Nome completo{obrigatorio}</label>
                             <input
                                 id="nome"
                                 name="nome"
@@ -104,7 +109,7 @@ function Cadastro() {
                             />
                         </div>
                         <div className="campo">
-                            <label htmlFor="dataNascimento">Data de nascimento</label>
+                            <label htmlFor="dataNascimento">Data de nascimento{obrigatorio}</label>
                             <input
                                 id="dataNascimento"
                                 name="dataNascimento"
@@ -113,7 +118,7 @@ function Cadastro() {
                             />
                         </div>
                         <div className="campo">
-                            <label htmlFor="cpf">CPF</label>
+                            <label htmlFor="cpf">CPF{obrigatorio}</label>
                             <input
                                 id="cpf"
                                 name="cpf"
@@ -127,7 +132,7 @@ function Cadastro() {
                             />
                         </div>
                         <div className="campo">
-                            <label htmlFor="numeroTelefone">Telefone</label>
+                            <label htmlFor="numeroTelefone">Telefone{obrigatorio}</label>
                     
                             <input
                                 id="numeroTelefone"
@@ -142,7 +147,7 @@ function Cadastro() {
                             />
                         </div>
                         <div className="campo">
-                            <label htmlFor="email">E-mail</label>
+                            <label htmlFor="email">E-mail{obrigatorio}</label>
                             <input
                                 id="email"
                                 name="email"
@@ -153,7 +158,7 @@ function Cadastro() {
                             />
                         </div>
                         <div className="campo">
-                            <label htmlFor="senha">Senha</label>
+                            <label htmlFor="senha">Senha{obrigatorio}</label>
                             <input
                                 id="senha"
                                 name="senha"
@@ -164,7 +169,7 @@ function Cadastro() {
                             />
                         </div>
                         <div className="campo">
-                            <label htmlFor="confirmarSenha">Confirmar senha</label>
+                            <label htmlFor="confirmarSenha">Confirmar senha{obrigatorio}</label>
                             <input
                                 id="confirmarSenha"
                                 name="confirmarSenha"

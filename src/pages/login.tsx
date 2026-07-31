@@ -1,6 +1,7 @@
 import brasao from "../assets/img/brasao.png";
 import imagemLogin from "../assets/img/imagem-pagina-login.png";
 import "./LoginCadastro.css";
+import "./RecuperarSenha.css";
 import { Link } from "react-router";
 
 import {
@@ -95,7 +96,7 @@ function Login() {
                 Lembrar de mim
               </label>
 
-              <a href="/recuperar-senha">Esqueci minha senha</a>
+              <Link to="/recuperar-senha">Esqueci minha senha</Link>
             </div>
 
             <button className="login__botao" type="submit">

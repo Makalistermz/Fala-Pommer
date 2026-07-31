@@ -21,7 +21,7 @@ export class CriarUsuarioDto {
 
   @IsOptional()
   @IsString()
-  numeroTelefone?: string;
+  numeroTelefone!: string;
 
   @IsEmail()
   email!: string;

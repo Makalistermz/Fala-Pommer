@@ -1,14 +1,15 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { CriarUsuarioDto } from "./dto/criar-usuario.dto";
+import { UsuariosService } from "./usuarios.service";
 
-@Controller('usuarios')
+@Controller("usuarios")
 export class UsuariosController {
-    @Post()
-    cadastrar(@Body() dados: CriarUsuarioDto) {
-        console.log("Campos recebidos:", Object.keys(dados));
+  constructor(
+    private readonly usuariosService: UsuariosService,
+  ) {}
 
-        return {
-            mensagem: "Dados recebidos pelo backend com sucesso.",
-        };
-    }
+  @Post()
+  cadastrar(@Body() dados: CriarUsuarioDto) {
+    return this.usuariosService.cadastrar(dados);
+  }
 }

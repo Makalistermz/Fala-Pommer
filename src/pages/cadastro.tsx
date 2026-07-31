@@ -91,6 +91,7 @@ function Cadastro() {
                                 autoComplete="tel"
                                 placeholder="Ex: (27) 99999-9999"
                                 maxLength={15}
+                                required
                             />
                         </div>
                         <div className="campo">

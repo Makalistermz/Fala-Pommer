@@ -1,4 +1,6 @@
-import imagemCadastro from "../assets/img/imagem-pagina-cadastro.png"
+import { useState } from "react";
+import imagemCadastro from "../assets/img/imagem-pagina-cadastro.png";
+import { ModalFeedback } from "../components/ModalFeedback";
 
 function aplicarMascaraCpf(event: React.FormEvent<HTMLInputElement>) {
     event.currentTarget.value = event.currentTarget.value
@@ -19,6 +21,12 @@ function aplicarMascaraTelefone(event: React.FormEvent<HTMLInputElement>) {
 
 function Cadastro() {
 
+    const [feedback, setFeedback] = useState({
+        aberto: false,
+        tipo: "erro" as "erro" | "sucesso",
+        mensagem: ""
+    });
+
     async function cadastrar(
     event: React.SubmitEvent<HTMLFormElement>,
     ) {
@@ -37,15 +45,35 @@ function Cadastro() {
                 body: JSON.stringify(dados),
             });
 
-            if(!resposta.ok) {
-                throw new Error(`Erro no servidor: ${resposta.status}`)
+            const resultado = await resposta.json();
+
+            if (!resposta.ok) {
+                setFeedback({
+                    aberto: true,
+                    tipo: "erro",
+                    mensagem: Array.isArray(resultado.message)
+                        ? resultado.message.join(", ")
+                        : resultado.message
+                });
+
+                return;
             }
 
-            const resultado = await resposta.json();
+            setFeedback({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem: "Seu cadastro foi realizado com sucesso."
+            });
 
             console.log(resultado.mensagem);
         } catch (erro) {
             console.error("Falha ao enviar o cadastro:", erro);
+
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: "Não foi possível conectar com o servidor."
+            });
         }
     }
 
@@ -152,6 +180,18 @@ function Cadastro() {
                     </form>
                 </section>
               </section>
+
+              <ModalFeedback
+                    aberto={feedback.aberto}
+                    tipo={feedback.tipo}
+                    mensagem={feedback.mensagem}
+                    aoFechar={() => {
+                        setFeedback((estadoAtual) => ({
+                            ...estadoAtual,
+                            aberto: false
+                        }));
+                    }}
+                />
         </main>
     );
 }

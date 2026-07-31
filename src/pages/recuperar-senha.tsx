@@ -22,7 +22,7 @@ function RecuperarSenha() {
 
         <div className="recuperacao__conteudo">
           <Link
-            className="recuperacao__voltar"
+            className="voltar"
             to="/"
           >
             <span aria-hidden="true">←</span>

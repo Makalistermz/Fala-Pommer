@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import imagemCadastro from "../assets/img/imagem-pagina-cadastro.png";
 import { ModalFeedback } from "../components/ModalFeedback";
+import { Link } from "react-router";
 
 function aplicarMascaraCpf(event: React.FormEvent<HTMLInputElement>) {
     event.currentTarget.value = event.currentTarget.value
@@ -139,6 +140,14 @@ function Cadastro() {
               <section className="cadastro__formulario">
 
                 <section className="cadastro__conteudo">
+                    <Link
+                        className="voltar"
+                        to="/"
+                    >
+                        <span aria-hidden="true">←</span>
+                        Voltar para o login
+                    </Link>
+
                     <h1>Bem-vindo ao Fala Pommer</h1>
                     <p>Preencha os dados para concluir o cadastro</p>
                     <form method="POST" onSubmit={cadastrar}>

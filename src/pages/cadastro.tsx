@@ -82,6 +82,51 @@ function Cadastro() {
     }
     const obrigatorio = <span style={estiloObrigatorio}>*</span>;
 
+
+    const [forcaSenha, setForcaSenha] = useState<
+        "" | "Fraca" | "Media" | "Forte"
+    >("");
+
+    function verificarForcaSenha(
+        evento: React.ChangeEvent<HTMLInputElement>
+    ) {
+        const senha = evento.target.value
+
+        const temMinuscula = /[a-z]/.test(senha);
+        const temMaiuscula = /[A-Z]/.test(senha);
+        const temNumero = /[0-9]/.test(senha);
+        const temEspecial = /[^0-9A-Za-z\s]/.test(senha);
+        const temTamanhoMinimo = senha.length >= 8;
+
+        if (senha === "") {
+            setForcaSenha("");
+            return;
+        }
+
+        if (
+            temTamanhoMinimo &&
+            temMinuscula &&
+            temMaiuscula &&
+            temNumero &&
+            temEspecial
+        ) {
+            setForcaSenha("Forte");
+            return;
+        }
+
+        if (
+            temTamanhoMinimo &&
+            temMinuscula &&
+            temMaiuscula &&
+            temNumero
+        ) {
+            setForcaSenha("Media");
+            return;
+        }
+
+        setForcaSenha("Fraca");
+    }
+
     return (
         <main className="cadastro">
             <section className="cadastro__ilustracao">
@@ -166,6 +211,8 @@ function Cadastro() {
                                 placeholder="Digite sua senha"
                                 autoComplete="new-password"
                                 required
+                                minLength={8}
+                                onChange={verificarForcaSenha}
                             />
                         </div>
                         <div className="campo">
@@ -177,8 +224,23 @@ function Cadastro() {
                                 placeholder="Confirme sua senha"
                                 autoComplete="new-password"
                                 required
+                                minLength={8}
                             />
                         </div>
+
+                        {forcaSenha && (
+                            <div className="container-forca-senha">
+                                <p>
+                                    Força da senha:
+                                    <span className={`senha-${forcaSenha}`}>
+                                        {" "}
+                                        {forcaSenha === "Media" ? "Média" : forcaSenha}
+                                    </span>
+                                </p>
+                                <div className={`barra-progressiva-${forcaSenha} barra-progressiva`}></div>
+                            </div>
+                        )}
+
                         <button className="cadastro__botao" type="submit">
                             Cadastrar
                         </button>

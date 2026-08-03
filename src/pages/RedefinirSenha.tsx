@@ -1,9 +1,17 @@
 import { Link, useSearchParams } from "react-router";
+import { ModalFeedback } from "../components/ModalFeedback";
 import "./css/RedefinirSenha.css";
+import React, { useState } from "react";
 
 function RedefinirSenha() {
     const [parametros] = useSearchParams();
     const token = parametros.get("token");
+
+    const [feedback, setFeedback] = useState({
+        aberto: false,
+        tipo: "erro" as "erro" | "sucesso",
+        mensagem: ""
+    });
 
     if (!token) {
         return (
@@ -24,6 +32,63 @@ function RedefinirSenha() {
                 </section>
             </main>
         );
+    }
+
+    async function cadastrarNovaSenha(
+        event: React.SubmitEvent<HTMLFormElement>,
+    ) {
+        event.preventDefault();
+
+        const dadosFormulario = new FormData(event.currentTarget);
+
+        const dados = {
+            ...Object.fromEntries(dadosFormulario.entries()),
+            token
+        };
+
+        try {
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/recuperacao-senha/redefinir`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dados)
+                }
+            );
+
+            const resultado = await resposta.json();
+
+            if (!resposta.ok) {
+                setFeedback({
+                    aberto: true,
+                    tipo: "erro",
+                    mensagem: Array.isArray(resultado.message)
+                        ? resultado.message.join(", ")
+                        : resultado.message
+                });
+
+                return;
+            }
+
+            setFeedback({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem:
+                    resultado.mensagem ||
+                    "Sua senha foi redefinida com sucesso."
+            });
+            
+        } catch (erro) {
+            console.error("Falha ao redefinir a senha:", erro);
+
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: "Não foi possível conectar com o servidor."
+            });
+        }
     }
 
     return (
@@ -59,7 +124,7 @@ function RedefinirSenha() {
                         o acesso à sua conta.
                     </p>
 
-                    <form>
+                    <form method="POST" onSubmit={cadastrarNovaSenha}>
                         <div className="redefinir__campo">
                             <label htmlFor="novaSenha">
                                 Nova senha
@@ -72,6 +137,7 @@ function RedefinirSenha() {
                                 type="password"
                                 placeholder="Digite sua nova senha"
                                 autoComplete="new-password"
+                                minLength={8}
                                 required
                             />
 
@@ -93,6 +159,7 @@ function RedefinirSenha() {
                                 type="password"
                                 placeholder="Confirme sua nova senha"
                                 autoComplete="new-password"
+                                minLength={8}
                                 required
                             />
                         </div>
@@ -106,6 +173,18 @@ function RedefinirSenha() {
                     </form>
                 </div>
             </section>
+
+            <ModalFeedback
+                    aberto={feedback.aberto}
+                    tipo={feedback.tipo}
+                    mensagem={feedback.mensagem}
+                    aoFechar={() => {
+                        setFeedback((estadoAtual) => ({
+                            ...estadoAtual,
+                            aberto: false
+                        }));
+                    }}
+                />
         </main>
     );
 }

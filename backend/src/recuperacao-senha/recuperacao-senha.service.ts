@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { randomBytes, createHash } from "node:crypto";
 import { PrismaService } from "../prisma/prisma.service";
 import { EmailService } from "../email/email.service";
@@ -55,5 +55,30 @@ export class RecuperacaoSenhaService {
         );
 
         return mensagemPadrao;
+    }
+
+    async redefinirSenha(dados) {
+        if (dados.novaSenha !== dados.confirmarNovaSenha) {
+            throw new BadRequestException("As senhas não coincidemAs senhas não coincidem");
+        }
+
+        const temMinuscula = /[a-z]/.test(dados.senha);
+        const temMaiuscula = /[A-Z]/.test(dados.senha);
+        const temNumero = /[0-9]/.test(dados.senha);
+        const temEspecial = /[^0-9A-Za-z\s]/.test(dados.senha);
+
+        if (!temMinuscula || !temMaiuscula || !temNumero || !temEspecial) {
+            throw new BadRequestException("Insira uma senha mais forte contendo letras maiúsculas, minúsculas, números e símbolos")
+        }
+
+        const senhaJaExistente = await this.prisma.cadastro.findFirst({
+            where: {
+                senha: dados.senha
+            }
+        });
+
+        if (senhaJaExistente) {
+            throw new ConflictException("Não adicione senhas antigas");
+        }
     }
 }

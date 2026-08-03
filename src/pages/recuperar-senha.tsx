@@ -18,6 +18,16 @@ function RecuperarSenha() {
 
   return (
     <main className="recuperacao">
+      <section
+        className="recuperacao__ilustracao"
+        aria-label="Ilustração de recuperação de senha"
+      >
+        <img
+          src={imagemRecuperacao}
+          alt="Pessoa recebendo um e-mail seguro para recuperar a senha"
+        />
+      </section>
+      
       <section className="recuperacao__formulario">
 
         <div className="recuperacao__conteudo">
@@ -74,15 +84,6 @@ function RecuperarSenha() {
         </div>
       </section>
 
-      <section
-        className="recuperacao__ilustracao"
-        aria-label="Ilustração de recuperação de senha"
-      >
-        <img
-          src={imagemRecuperacao}
-          alt="Pessoa recebendo um e-mail seguro para recuperar a senha"
-        />
-      </section>
     </main>
   );
 }

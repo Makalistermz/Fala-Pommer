@@ -12,6 +12,16 @@ export class UsuariosService {
     if (dados.senha !== dados.confirmarSenha) {
         throw new BadRequestException("As senhas não coincidem");
     }
+    
+    const temMinuscula = /[a-z]/.test(dados.senha);
+    const temMaiuscula = /[A-Z]/.test(dados.senha);
+    const temNumero = /[0-9]/.test(dados.senha);
+    const temEspecial = /[^0-9A-Za-z\s]/.test(dados.senha);
+    const temTamanhoMinimo = dados.senha.length >= 8;
+
+    if (!temMinuscula || !temMaiuscula || !temNumero || !temEspecial) {
+        throw new BadRequestException("Insira uma senha mais forte contendo letras maiúsculas, minúsculas, números e símbolos")
+    }
 
     const usuarioExistente = await this.prisma.cadastro.findFirst({
         where: {

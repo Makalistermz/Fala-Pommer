@@ -2,7 +2,8 @@ import { BadRequestException, ConflictException, Injectable } from '@nestjs/comm
 import { randomBytes, createHash } from "node:crypto";
 import { PrismaService } from "../prisma/prisma.service";
 import { EmailService } from "../email/email.service";
-
+import { RedefinirSenhaDto } from './dto/redefinir-senha.dto';
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class RecuperacaoSenhaService {
@@ -57,28 +58,23 @@ export class RecuperacaoSenhaService {
         return mensagemPadrao;
     }
 
-    async redefinirSenha(dados) {
+    async redefinirSenha(dados: RedefinirSenhaDto) {
         if (dados.novaSenha !== dados.confirmarNovaSenha) {
             throw new BadRequestException("As senhas não coincidem");
         }
 
-        const temMinuscula = /[a-z]/.test(dados.senha);
-        const temMaiuscula = /[A-Z]/.test(dados.senha);
-        const temNumero = /[0-9]/.test(dados.senha);
-        const temEspecial = /[^0-9A-Za-z\s]/.test(dados.senha);
+        const temMinuscula = /[a-z]/.test(dados.novaSenha);
+        const temMaiuscula = /[A-Z]/.test(dados.novaSenha);
+        const temNumero = /[0-9]/.test(dados.novaSenha);
+        const temEspecial = /[^0-9A-Za-z\s]/.test(dados.novaSenha);
 
         if (!temMinuscula || !temMaiuscula || !temNumero || !temEspecial) {
             throw new BadRequestException("Insira uma senha mais forte contendo letras maiúsculas, minúsculas, números e símbolos")
         }
 
-        const senhaJaExistente = await this.prisma.cadastro.findFirst({
-            where: {
-                senha: dados.senha
-            }
-        });
-
-        if (senhaJaExistente) {
-            throw new ConflictException("Não adicione senhas antigas");
-        }
+        //const mesmaSenha = await bcrypt.compare(
+        //    dados.novaSenha,
+        //    usuario.senha
+        //);
     }
 }

@@ -14,7 +14,7 @@ export class RecuperacaoSenhaService {
 
         const mensagemPadrao = {
             mensagem:
-                "Se o e-mail estiver cadastrado, enviaremos as instruções de recuperação."
+                "Um link para redefinir sua senha foi enviado para o seu e-mail."
         };
 
         const usuario = await this.prisma.cadastro.findFirst({

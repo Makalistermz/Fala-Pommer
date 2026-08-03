@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import imagemRecuperacao from "../assets/img/imagem-recuperar-senha.png";
 import { ModalFeedback } from "../components/ModalFeedback";
-import "./RecuperarSenha.css";
+import "./css/RecuperarSenha.css";
 
 function RecuperarSenha() {
   const [carregando, setCarregando] = useState(false);

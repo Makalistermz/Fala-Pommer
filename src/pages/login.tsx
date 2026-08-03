@@ -1,7 +1,7 @@
 import brasao from "../assets/img/brasao.png";
 import imagemLogin from "../assets/img/imagem-pagina-login.png";
-import "./LoginCadastro.css";
-import "./RecuperarSenha.css";
+import "./css/LoginCadastro.css";
+import "./css/RecuperarSenha.css";
 import { Link } from "react-router";
 
 import {

@@ -77,7 +77,9 @@ export const CadastroScalarFieldEnum = {
   cpf: 'cpf',
   telefone: 'telefone',
   email: 'email',
-  senha: 'senha'
+  senha: 'senha',
+  token_recuperacao: 'token_recuperacao',
+  token_recuperacao_expira_em: 'token_recuperacao_expira_em'
 } as const
 
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]
@@ -91,12 +93,21 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
 export const cadastroOrderByRelevanceFieldEnum = {
   nome: 'nome',
   cpf: 'cpf',
   telefone: 'telefone',
   email: 'email',
-  senha: 'senha'
+  senha: 'senha',
+  token_recuperacao: 'token_recuperacao'
 } as const
 
 export type cadastroOrderByRelevanceFieldEnum = (typeof cadastroOrderByRelevanceFieldEnum)[keyof typeof cadastroOrderByRelevanceFieldEnum]

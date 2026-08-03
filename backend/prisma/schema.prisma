@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
   moduleFormat = "cjs"
 }
 
@@ -9,11 +9,13 @@ datasource db {
 }
 
 model cadastro {
-  id              Int      @id @default(autoincrement())
-  nome            String   @db.VarChar(150)
-  data_nascimento DateTime @db.Date
-  cpf             String   @db.VarChar(20)
-  telefone        String   @db.VarChar(20)
-  email           String   @db.VarChar(150)
-  senha           String   @db.VarChar(255)
+  id                          Int       @id @default(autoincrement())
+  nome                        String    @db.VarChar(150)
+  data_nascimento             DateTime  @db.Date
+  cpf                         String    @db.VarChar(20)
+  telefone                    String    @db.VarChar(20)
+  email                       String    @db.VarChar(150)
+  senha                       String    @db.VarChar(255)
+  token_recuperacao           String?   @db.VarChar(64)
+  token_recuperacao_expira_em DateTime?
 }

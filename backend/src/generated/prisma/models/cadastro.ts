@@ -42,6 +42,8 @@ export type CadastroMinAggregateOutputType = {
   telefone: string | null
   email: string | null
   senha: string | null
+  token_recuperacao: string | null
+  token_recuperacao_expira_em: Date | null
 }
 
 export type CadastroMaxAggregateOutputType = {
@@ -52,6 +54,8 @@ export type CadastroMaxAggregateOutputType = {
   telefone: string | null
   email: string | null
   senha: string | null
+  token_recuperacao: string | null
+  token_recuperacao_expira_em: Date | null
 }
 
 export type CadastroCountAggregateOutputType = {
@@ -62,6 +66,8 @@ export type CadastroCountAggregateOutputType = {
   telefone: number
   email: number
   senha: number
+  token_recuperacao: number
+  token_recuperacao_expira_em: number
   _all: number
 }
 
@@ -82,6 +88,8 @@ export type CadastroMinAggregateInputType = {
   telefone?: true
   email?: true
   senha?: true
+  token_recuperacao?: true
+  token_recuperacao_expira_em?: true
 }
 
 export type CadastroMaxAggregateInputType = {
@@ -92,6 +100,8 @@ export type CadastroMaxAggregateInputType = {
   telefone?: true
   email?: true
   senha?: true
+  token_recuperacao?: true
+  token_recuperacao_expira_em?: true
 }
 
 export type CadastroCountAggregateInputType = {
@@ -102,6 +112,8 @@ export type CadastroCountAggregateInputType = {
   telefone?: true
   email?: true
   senha?: true
+  token_recuperacao?: true
+  token_recuperacao_expira_em?: true
   _all?: true
 }
 
@@ -199,6 +211,8 @@ export type CadastroGroupByOutputType = {
   telefone: string
   email: string
   senha: string
+  token_recuperacao: string | null
+  token_recuperacao_expira_em: Date | null
   _count: CadastroCountAggregateOutputType | null
   _avg: CadastroAvgAggregateOutputType | null
   _sum: CadastroSumAggregateOutputType | null
@@ -232,6 +246,8 @@ export type cadastroWhereInput = {
   telefone?: Prisma.StringFilter<"cadastro"> | string
   email?: Prisma.StringFilter<"cadastro"> | string
   senha?: Prisma.StringFilter<"cadastro"> | string
+  token_recuperacao?: Prisma.StringNullableFilter<"cadastro"> | string | null
+  token_recuperacao_expira_em?: Prisma.DateTimeNullableFilter<"cadastro"> | Date | string | null
 }
 
 export type cadastroOrderByWithRelationInput = {
@@ -242,6 +258,8 @@ export type cadastroOrderByWithRelationInput = {
   telefone?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senha?: Prisma.SortOrder
+  token_recuperacao?: Prisma.SortOrderInput | Prisma.SortOrder
+  token_recuperacao_expira_em?: Prisma.SortOrderInput | Prisma.SortOrder
   _relevance?: Prisma.cadastroOrderByRelevanceInput
 }
 
@@ -256,6 +274,8 @@ export type cadastroWhereUniqueInput = Prisma.AtLeast<{
   telefone?: Prisma.StringFilter<"cadastro"> | string
   email?: Prisma.StringFilter<"cadastro"> | string
   senha?: Prisma.StringFilter<"cadastro"> | string
+  token_recuperacao?: Prisma.StringNullableFilter<"cadastro"> | string | null
+  token_recuperacao_expira_em?: Prisma.DateTimeNullableFilter<"cadastro"> | Date | string | null
 }, "id">
 
 export type cadastroOrderByWithAggregationInput = {
@@ -266,6 +286,8 @@ export type cadastroOrderByWithAggregationInput = {
   telefone?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senha?: Prisma.SortOrder
+  token_recuperacao?: Prisma.SortOrderInput | Prisma.SortOrder
+  token_recuperacao_expira_em?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.cadastroCountOrderByAggregateInput
   _avg?: Prisma.cadastroAvgOrderByAggregateInput
   _max?: Prisma.cadastroMaxOrderByAggregateInput
@@ -284,6 +306,8 @@ export type cadastroScalarWhereWithAggregatesInput = {
   telefone?: Prisma.StringWithAggregatesFilter<"cadastro"> | string
   email?: Prisma.StringWithAggregatesFilter<"cadastro"> | string
   senha?: Prisma.StringWithAggregatesFilter<"cadastro"> | string
+  token_recuperacao?: Prisma.StringNullableWithAggregatesFilter<"cadastro"> | string | null
+  token_recuperacao_expira_em?: Prisma.DateTimeNullableWithAggregatesFilter<"cadastro"> | Date | string | null
 }
 
 export type cadastroCreateInput = {
@@ -293,6 +317,8 @@ export type cadastroCreateInput = {
   telefone: string
   email: string
   senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
 }
 
 export type cadastroUncheckedCreateInput = {
@@ -303,6 +329,8 @@ export type cadastroUncheckedCreateInput = {
   telefone: string
   email: string
   senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
 }
 
 export type cadastroUpdateInput = {
@@ -312,6 +340,8 @@ export type cadastroUpdateInput = {
   telefone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type cadastroUncheckedUpdateInput = {
@@ -322,6 +352,8 @@ export type cadastroUncheckedUpdateInput = {
   telefone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type cadastroCreateManyInput = {
@@ -332,6 +364,8 @@ export type cadastroCreateManyInput = {
   telefone: string
   email: string
   senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
 }
 
 export type cadastroUpdateManyMutationInput = {
@@ -341,6 +375,8 @@ export type cadastroUpdateManyMutationInput = {
   telefone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type cadastroUncheckedUpdateManyInput = {
@@ -351,6 +387,8 @@ export type cadastroUncheckedUpdateManyInput = {
   telefone?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type cadastroOrderByRelevanceInput = {
@@ -367,6 +405,8 @@ export type cadastroCountOrderByAggregateInput = {
   telefone?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senha?: Prisma.SortOrder
+  token_recuperacao?: Prisma.SortOrder
+  token_recuperacao_expira_em?: Prisma.SortOrder
 }
 
 export type cadastroAvgOrderByAggregateInput = {
@@ -381,6 +421,8 @@ export type cadastroMaxOrderByAggregateInput = {
   telefone?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senha?: Prisma.SortOrder
+  token_recuperacao?: Prisma.SortOrder
+  token_recuperacao_expira_em?: Prisma.SortOrder
 }
 
 export type cadastroMinOrderByAggregateInput = {
@@ -391,6 +433,8 @@ export type cadastroMinOrderByAggregateInput = {
   telefone?: Prisma.SortOrder
   email?: Prisma.SortOrder
   senha?: Prisma.SortOrder
+  token_recuperacao?: Prisma.SortOrder
+  token_recuperacao_expira_em?: Prisma.SortOrder
 }
 
 export type cadastroSumOrderByAggregateInput = {
@@ -403,6 +447,14 @@ export type StringFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -423,6 +475,8 @@ export type cadastroSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   telefone?: boolean
   email?: boolean
   senha?: boolean
+  token_recuperacao?: boolean
+  token_recuperacao_expira_em?: boolean
 }, ExtArgs["result"]["cadastro"]>
 
 
@@ -435,9 +489,11 @@ export type cadastroSelectScalar = {
   telefone?: boolean
   email?: boolean
   senha?: boolean
+  token_recuperacao?: boolean
+  token_recuperacao_expira_em?: boolean
 }
 
-export type cadastroOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "data_nascimento" | "cpf" | "telefone" | "email" | "senha", ExtArgs["result"]["cadastro"]>
+export type cadastroOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "data_nascimento" | "cpf" | "telefone" | "email" | "senha" | "token_recuperacao" | "token_recuperacao_expira_em", ExtArgs["result"]["cadastro"]>
 
 export type $cadastroPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "cadastro"
@@ -450,6 +506,8 @@ export type $cadastroPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     telefone: string
     email: string
     senha: string
+    token_recuperacao: string | null
+    token_recuperacao_expira_em: Date | null
   }, ExtArgs["result"]["cadastro"]>
   composites: {}
 }
@@ -826,6 +884,8 @@ export interface cadastroFieldRefs {
   readonly telefone: Prisma.FieldRef<"cadastro", 'String'>
   readonly email: Prisma.FieldRef<"cadastro", 'String'>
   readonly senha: Prisma.FieldRef<"cadastro", 'String'>
+  readonly token_recuperacao: Prisma.FieldRef<"cadastro", 'String'>
+  readonly token_recuperacao_expira_em: Prisma.FieldRef<"cadastro", 'DateTime'>
 }
     
 

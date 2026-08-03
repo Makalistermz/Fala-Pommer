@@ -59,7 +59,7 @@ export class RecuperacaoSenhaService {
 
     async redefinirSenha(dados) {
         if (dados.novaSenha !== dados.confirmarNovaSenha) {
-            throw new BadRequestException("As senhas não coincidemAs senhas não coincidem");
+            throw new BadRequestException("As senhas não coincidem");
         }
 
         const temMinuscula = /[a-z]/.test(dados.senha);

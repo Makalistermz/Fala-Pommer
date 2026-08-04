@@ -18,8 +18,8 @@ export function ModalFeedback({
     }
 
     const titulo = tipo === "erro"
-        ? "Não foi possível cadastrar"
-        : "Cadastro concluído";
+        ? "Erro"
+        : "Concluído";
 
     return (
         <div className="modal-fundo" onClick={aoFechar}>

@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { randomBytes, createHash } from "node:crypto";
 import { PrismaService } from "../prisma/prisma.service";
 import { EmailService } from "../email/email.service";
@@ -72,9 +72,76 @@ export class RecuperacaoSenhaService {
             throw new BadRequestException("Insira uma senha mais forte contendo letras maiúsculas, minúsculas, números e símbolos")
         }
 
-        //const mesmaSenha = await bcrypt.compare(
-        //    dados.novaSenha,
-        //    usuario.senha
-        //);
+        const tokenHash = createHash("sha256")
+        .update(dados.token)
+        .digest("hex");
+
+        const usuario = await this.prisma.cadastro.findFirst({
+            where: {
+                token_recuperacao: tokenHash
+            },
+            select: {
+                id: true,
+                senha: true,
+                token_recuperacao_expira_em: true
+            }
+        });
+
+        if (!usuario) {
+            throw new BadRequestException(
+                "O link de recuperação é inválido."
+            );
+        }
+
+        const expiracao = usuario.token_recuperacao_expira_em;
+
+        if (!expiracao || expiracao.getTime() <= Date.now()) {
+            await this.prisma.cadastro.update({
+                where: {
+                    id: usuario.id
+                },
+                data: {
+                    token_recuperacao: null,
+                    token_recuperacao_expira_em: null
+                }
+            });
+
+            throw new BadRequestException(
+                "O link de recuperação expirou. Solicite um novo link."
+            );
+        }
+
+        const mesmaSenha = await bcrypt.compare(
+            dados.novaSenha,
+            usuario.senha
+        );
+
+        if (mesmaSenha) {
+            throw new BadRequestException(
+                "Por motivos de segurança, escolha uma senha diferente das que você já usou."
+            );
+        }
+
+        const SALT_ROUNDS = 10;
+
+        const novaSenhaHash = await bcrypt.hash(
+            dados.novaSenha,
+            SALT_ROUNDS
+        );
+
+        await this.prisma.cadastro.update({
+            where: {
+                id: usuario.id
+            },
+            data: {
+                senha: novaSenhaHash,
+                token_recuperacao: null,
+                token_recuperacao_expira_em: null
+            }
+        });
+
+        return {
+            mensagem: "Sua senha foi redefinida com sucesso."
+        };
     }
 }

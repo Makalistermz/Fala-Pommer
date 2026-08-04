@@ -1,8 +1,10 @@
 import brasao from "../assets/img/brasao.png";
+import { useState } from "react";
 import imagemLogin from "../assets/img/imagem-pagina-login.png";
 import "./css/LoginCadastro.css";
 import "./css/RecuperarSenha.css";
-import { Link } from "react-router";
+import { Link, useNavigate  } from "react-router";
+import { ModalFeedback } from "../components/ModalFeedback";
 
 import {
   GoogleLogin,
@@ -29,25 +31,89 @@ interface GoogleUser {
 }
 
 function Login() {
-    function handleSuccess(response: CredentialResponse) {
-        const token = response.credential;
+  const [feedback, setFeedback] = useState({
+    aberto: false,
+    tipo: "erro" as "erro" | "sucesso",
+    mensagem: ""
+  });
 
-        if (!token) {
-            console.error("O Google não retornou uma credencial.");
+  const navigate = useNavigate();
+
+  async function entrar(
+      event: React.SubmitEvent<HTMLFormElement>
+  ) {
+      event.preventDefault();
+
+      const formulario = new FormData(event.currentTarget);
+
+      const email = formulario.get("email");
+      const senha = formulario.get("senha");
+
+      try {
+        const resposta = await fetch(
+            `${import.meta.env.VITE_API_URL}/auth/login`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    senha
+                })
+            }
+        );
+
+          const resultado = await resposta.json();
+
+          if (!resposta.ok) {
+            setFeedback({
+              aberto: true,
+              tipo: "erro",
+              mensagem: Array.isArray(resultado.message)
+                  ? resultado.message.join(", ")
+                  : resultado.message
+            });
+
             return;
-        }
+          }
 
-        const usuario = jwtDecode<GoogleUser>(token);
+          localStorage.setItem(
+            "access_token",
+            resultado.access_token
+          );
 
-        console.log("Usuário:", usuario);
-        console.log("Nome:", usuario.name);
-        console.log("E-mail:", usuario.email);
+          navigate("/home");
 
+          
+      } catch (erro) {
+        console.error("Não foi possível conectar ao servidor:", erro);
+        setFeedback({
+          aberto: true,
+          tipo: "erro",
+          mensagem: "Não foi possível conectar com o servidor."
+        });
+      }
     }
 
-    function handleError() {
-        console.error("Falha na autenticação do Google.");
+  function handleSuccess(response: CredentialResponse) {
+    const token = response.credential;
+
+    if (!token) {
+        console.error("O Google não retornou uma credencial.");
+        return;
     }
+
+    const usuario = jwtDecode<GoogleUser>(token);
+
+    console.log("Usuário:", usuario);
+    console.log("Nome:", usuario.name);
+    console.log("E-mail:", usuario.email);
+  }
+
+  function handleError() {
+    console.error("Falha na autenticação do Google.");
+  }
 
   return (
     <main className="login">
@@ -61,7 +127,7 @@ function Login() {
           <h1>Bem-vindo de volta</h1>
           <p>Informe seus dados para entrar</p>
 
-          <form>
+          <form onSubmit={entrar}>
             <div className="campo">
               <label htmlFor="email">E-mail</label>
 
@@ -127,6 +193,17 @@ function Login() {
           alt="Ilustração de comunicação e atendimento"
         />
       </section>
+      <ModalFeedback
+        aberto={feedback.aberto}
+        tipo={feedback.tipo}
+        mensagem={feedback.mensagem}
+        aoFechar={() => {
+            setFeedback((estadoAtual) => ({
+                ...estadoAtual,
+                aberto: false
+            }));
+        }}
+      />
     </main>
   );
 }

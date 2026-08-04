@@ -44,6 +44,7 @@ export type CadastroMinAggregateOutputType = {
   senha: string | null
   token_recuperacao: string | null
   token_recuperacao_expira_em: Date | null
+  tipo_usuario: $Enums.cadastro_tipo_usuario | null
 }
 
 export type CadastroMaxAggregateOutputType = {
@@ -56,6 +57,7 @@ export type CadastroMaxAggregateOutputType = {
   senha: string | null
   token_recuperacao: string | null
   token_recuperacao_expira_em: Date | null
+  tipo_usuario: $Enums.cadastro_tipo_usuario | null
 }
 
 export type CadastroCountAggregateOutputType = {
@@ -68,6 +70,7 @@ export type CadastroCountAggregateOutputType = {
   senha: number
   token_recuperacao: number
   token_recuperacao_expira_em: number
+  tipo_usuario: number
   _all: number
 }
 
@@ -90,6 +93,7 @@ export type CadastroMinAggregateInputType = {
   senha?: true
   token_recuperacao?: true
   token_recuperacao_expira_em?: true
+  tipo_usuario?: true
 }
 
 export type CadastroMaxAggregateInputType = {
@@ -102,6 +106,7 @@ export type CadastroMaxAggregateInputType = {
   senha?: true
   token_recuperacao?: true
   token_recuperacao_expira_em?: true
+  tipo_usuario?: true
 }
 
 export type CadastroCountAggregateInputType = {
@@ -114,6 +119,7 @@ export type CadastroCountAggregateInputType = {
   senha?: true
   token_recuperacao?: true
   token_recuperacao_expira_em?: true
+  tipo_usuario?: true
   _all?: true
 }
 
@@ -213,6 +219,7 @@ export type CadastroGroupByOutputType = {
   senha: string
   token_recuperacao: string | null
   token_recuperacao_expira_em: Date | null
+  tipo_usuario: $Enums.cadastro_tipo_usuario
   _count: CadastroCountAggregateOutputType | null
   _avg: CadastroAvgAggregateOutputType | null
   _sum: CadastroSumAggregateOutputType | null
@@ -248,6 +255,7 @@ export type cadastroWhereInput = {
   senha?: Prisma.StringFilter<"cadastro"> | string
   token_recuperacao?: Prisma.StringNullableFilter<"cadastro"> | string | null
   token_recuperacao_expira_em?: Prisma.DateTimeNullableFilter<"cadastro"> | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFilter<"cadastro"> | $Enums.cadastro_tipo_usuario
 }
 
 export type cadastroOrderByWithRelationInput = {
@@ -260,6 +268,7 @@ export type cadastroOrderByWithRelationInput = {
   senha?: Prisma.SortOrder
   token_recuperacao?: Prisma.SortOrderInput | Prisma.SortOrder
   token_recuperacao_expira_em?: Prisma.SortOrderInput | Prisma.SortOrder
+  tipo_usuario?: Prisma.SortOrder
   _relevance?: Prisma.cadastroOrderByRelevanceInput
 }
 
@@ -276,6 +285,7 @@ export type cadastroWhereUniqueInput = Prisma.AtLeast<{
   senha?: Prisma.StringFilter<"cadastro"> | string
   token_recuperacao?: Prisma.StringNullableFilter<"cadastro"> | string | null
   token_recuperacao_expira_em?: Prisma.DateTimeNullableFilter<"cadastro"> | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFilter<"cadastro"> | $Enums.cadastro_tipo_usuario
 }, "id">
 
 export type cadastroOrderByWithAggregationInput = {
@@ -288,6 +298,7 @@ export type cadastroOrderByWithAggregationInput = {
   senha?: Prisma.SortOrder
   token_recuperacao?: Prisma.SortOrderInput | Prisma.SortOrder
   token_recuperacao_expira_em?: Prisma.SortOrderInput | Prisma.SortOrder
+  tipo_usuario?: Prisma.SortOrder
   _count?: Prisma.cadastroCountOrderByAggregateInput
   _avg?: Prisma.cadastroAvgOrderByAggregateInput
   _max?: Prisma.cadastroMaxOrderByAggregateInput
@@ -308,6 +319,7 @@ export type cadastroScalarWhereWithAggregatesInput = {
   senha?: Prisma.StringWithAggregatesFilter<"cadastro"> | string
   token_recuperacao?: Prisma.StringNullableWithAggregatesFilter<"cadastro"> | string | null
   token_recuperacao_expira_em?: Prisma.DateTimeNullableWithAggregatesFilter<"cadastro"> | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioWithAggregatesFilter<"cadastro"> | $Enums.cadastro_tipo_usuario
 }
 
 export type cadastroCreateInput = {
@@ -319,6 +331,7 @@ export type cadastroCreateInput = {
   senha: string
   token_recuperacao?: string | null
   token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
 }
 
 export type cadastroUncheckedCreateInput = {
@@ -331,6 +344,7 @@ export type cadastroUncheckedCreateInput = {
   senha: string
   token_recuperacao?: string | null
   token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
 }
 
 export type cadastroUpdateInput = {
@@ -342,6 +356,7 @@ export type cadastroUpdateInput = {
   senha?: Prisma.StringFieldUpdateOperationsInput | string
   token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
 }
 
 export type cadastroUncheckedUpdateInput = {
@@ -354,6 +369,7 @@ export type cadastroUncheckedUpdateInput = {
   senha?: Prisma.StringFieldUpdateOperationsInput | string
   token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
 }
 
 export type cadastroCreateManyInput = {
@@ -366,6 +382,7 @@ export type cadastroCreateManyInput = {
   senha: string
   token_recuperacao?: string | null
   token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
 }
 
 export type cadastroUpdateManyMutationInput = {
@@ -377,6 +394,7 @@ export type cadastroUpdateManyMutationInput = {
   senha?: Prisma.StringFieldUpdateOperationsInput | string
   token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
 }
 
 export type cadastroUncheckedUpdateManyInput = {
@@ -389,6 +407,7 @@ export type cadastroUncheckedUpdateManyInput = {
   senha?: Prisma.StringFieldUpdateOperationsInput | string
   token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
 }
 
 export type cadastroOrderByRelevanceInput = {
@@ -407,6 +426,7 @@ export type cadastroCountOrderByAggregateInput = {
   senha?: Prisma.SortOrder
   token_recuperacao?: Prisma.SortOrder
   token_recuperacao_expira_em?: Prisma.SortOrder
+  tipo_usuario?: Prisma.SortOrder
 }
 
 export type cadastroAvgOrderByAggregateInput = {
@@ -423,6 +443,7 @@ export type cadastroMaxOrderByAggregateInput = {
   senha?: Prisma.SortOrder
   token_recuperacao?: Prisma.SortOrder
   token_recuperacao_expira_em?: Prisma.SortOrder
+  tipo_usuario?: Prisma.SortOrder
 }
 
 export type cadastroMinOrderByAggregateInput = {
@@ -435,6 +456,7 @@ export type cadastroMinOrderByAggregateInput = {
   senha?: Prisma.SortOrder
   token_recuperacao?: Prisma.SortOrder
   token_recuperacao_expira_em?: Prisma.SortOrder
+  tipo_usuario?: Prisma.SortOrder
 }
 
 export type cadastroSumOrderByAggregateInput = {
@@ -457,6 +479,10 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type Enumcadastro_tipo_usuarioFieldUpdateOperationsInput = {
+  set?: $Enums.cadastro_tipo_usuario
+}
+
 export type IntFieldUpdateOperationsInput = {
   set?: number
   increment?: number
@@ -477,6 +503,7 @@ export type cadastroSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   senha?: boolean
   token_recuperacao?: boolean
   token_recuperacao_expira_em?: boolean
+  tipo_usuario?: boolean
 }, ExtArgs["result"]["cadastro"]>
 
 
@@ -491,9 +518,10 @@ export type cadastroSelectScalar = {
   senha?: boolean
   token_recuperacao?: boolean
   token_recuperacao_expira_em?: boolean
+  tipo_usuario?: boolean
 }
 
-export type cadastroOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "data_nascimento" | "cpf" | "telefone" | "email" | "senha" | "token_recuperacao" | "token_recuperacao_expira_em", ExtArgs["result"]["cadastro"]>
+export type cadastroOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "data_nascimento" | "cpf" | "telefone" | "email" | "senha" | "token_recuperacao" | "token_recuperacao_expira_em" | "tipo_usuario", ExtArgs["result"]["cadastro"]>
 
 export type $cadastroPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "cadastro"
@@ -508,6 +536,7 @@ export type $cadastroPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     senha: string
     token_recuperacao: string | null
     token_recuperacao_expira_em: Date | null
+    tipo_usuario: $Enums.cadastro_tipo_usuario
   }, ExtArgs["result"]["cadastro"]>
   composites: {}
 }
@@ -886,6 +915,7 @@ export interface cadastroFieldRefs {
   readonly senha: Prisma.FieldRef<"cadastro", 'String'>
   readonly token_recuperacao: Prisma.FieldRef<"cadastro", 'String'>
   readonly token_recuperacao_expira_em: Prisma.FieldRef<"cadastro", 'DateTime'>
+  readonly tipo_usuario: Prisma.FieldRef<"cadastro", 'cadastro_tipo_usuario'>
 }
     
 

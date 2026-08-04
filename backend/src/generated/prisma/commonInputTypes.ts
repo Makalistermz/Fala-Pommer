@@ -77,6 +77,13 @@ export type DateTimeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
 }
 
+export type Enumcadastro_tipo_usuarioFilter<$PrismaModel = never> = {
+  equals?: $Enums.cadastro_tipo_usuario | Prisma.Enumcadastro_tipo_usuarioFieldRefInput<$PrismaModel>
+  in?: $Enums.cadastro_tipo_usuario[]
+  notIn?: $Enums.cadastro_tipo_usuario[]
+  not?: Prisma.NestedEnumcadastro_tipo_usuarioFilter<$PrismaModel> | $Enums.cadastro_tipo_usuario
+}
+
 export type SortOrderInput = {
   sort: Prisma.SortOrder
   nulls?: Prisma.NullsOrder
@@ -162,6 +169,16 @@ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
 }
 
+export type Enumcadastro_tipo_usuarioWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.cadastro_tipo_usuario | Prisma.Enumcadastro_tipo_usuarioFieldRefInput<$PrismaModel>
+  in?: $Enums.cadastro_tipo_usuario[]
+  notIn?: $Enums.cadastro_tipo_usuario[]
+  not?: Prisma.NestedEnumcadastro_tipo_usuarioWithAggregatesFilter<$PrismaModel> | $Enums.cadastro_tipo_usuario
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumcadastro_tipo_usuarioFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumcadastro_tipo_usuarioFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[]
@@ -223,6 +240,13 @@ export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
   gt?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel>
   gte?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel>
   not?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+}
+
+export type NestedEnumcadastro_tipo_usuarioFilter<$PrismaModel = never> = {
+  equals?: $Enums.cadastro_tipo_usuario | Prisma.Enumcadastro_tipo_usuarioFieldRefInput<$PrismaModel>
+  in?: $Enums.cadastro_tipo_usuario[]
+  notIn?: $Enums.cadastro_tipo_usuario[]
+  not?: Prisma.NestedEnumcadastro_tipo_usuarioFilter<$PrismaModel> | $Enums.cadastro_tipo_usuario
 }
 
 export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -325,6 +349,16 @@ export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumcadastro_tipo_usuarioWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.cadastro_tipo_usuario | Prisma.Enumcadastro_tipo_usuarioFieldRefInput<$PrismaModel>
+  in?: $Enums.cadastro_tipo_usuario[]
+  notIn?: $Enums.cadastro_tipo_usuario[]
+  not?: Prisma.NestedEnumcadastro_tipo_usuarioWithAggregatesFilter<$PrismaModel> | $Enums.cadastro_tipo_usuario
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumcadastro_tipo_usuarioFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumcadastro_tipo_usuarioFilter<$PrismaModel>
 }
 
 

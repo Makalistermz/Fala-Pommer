@@ -69,4 +69,12 @@ export class UsuariosService {
     return usuarioCriado;
 
   }
+
+  async buscarPorEmail(email: string) {
+    return this.prisma.cadastro.findFirst({
+        where: {
+            email,
+        }
+    });
+  }
 }

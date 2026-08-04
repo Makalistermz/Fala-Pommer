@@ -531,7 +531,8 @@ export const CadastroScalarFieldEnum = {
   email: 'email',
   senha: 'senha',
   token_recuperacao: 'token_recuperacao',
-  token_recuperacao_expira_em: 'token_recuperacao_expira_em'
+  token_recuperacao_expira_em: 'token_recuperacao_expira_em',
+  tipo_usuario: 'tipo_usuario'
 } as const
 
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]
@@ -589,6 +590,13 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'cadastro_tipo_usuario'
+ */
+export type Enumcadastro_tipo_usuarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'cadastro_tipo_usuario'>
     
 
 

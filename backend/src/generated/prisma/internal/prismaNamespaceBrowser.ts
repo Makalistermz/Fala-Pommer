@@ -79,7 +79,8 @@ export const CadastroScalarFieldEnum = {
   email: 'email',
   senha: 'senha',
   token_recuperacao: 'token_recuperacao',
-  token_recuperacao_expira_em: 'token_recuperacao_expira_em'
+  token_recuperacao_expira_em: 'token_recuperacao_expira_em',
+  tipo_usuario: 'tipo_usuario'
 } as const
 
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]

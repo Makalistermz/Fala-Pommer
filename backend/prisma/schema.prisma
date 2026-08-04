@@ -9,13 +9,20 @@ datasource db {
 }
 
 model cadastro {
-  id                          Int       @id @default(autoincrement())
-  nome                        String    @db.VarChar(150)
-  data_nascimento             DateTime  @db.Date
-  cpf                         String    @db.VarChar(20)
-  telefone                    String    @db.VarChar(20)
-  email                       String    @db.VarChar(150)
-  senha                       String    @db.VarChar(255)
-  token_recuperacao           String?   @db.VarChar(64)
+  id                          Int                   @id @default(autoincrement())
+  nome                        String                @db.VarChar(150)
+  data_nascimento             DateTime              @db.Date
+  cpf                         String                @db.VarChar(20)
+  telefone                    String                @db.VarChar(20)
+  email                       String                @db.VarChar(150)
+  senha                       String                @db.VarChar(255)
+  token_recuperacao           String?               @db.VarChar(64)
   token_recuperacao_expira_em DateTime?
+  tipo_usuario                cadastro_tipo_usuario @default(user)
+}
+
+enum cadastro_tipo_usuario {
+  user
+  admin
+  funcionario
 }

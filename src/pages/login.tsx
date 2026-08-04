@@ -43,8 +43,6 @@ function Login() {
         console.log("Nome:", usuario.name);
         console.log("E-mail:", usuario.email);
 
-        // Futuramente:
-        // enviar token para o backend validar
     }
 
     function handleError() {

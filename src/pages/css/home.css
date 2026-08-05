@@ -54,6 +54,36 @@
     transform: translateY(2px);
 }
 
+.pesquisa {
+    display: flex;
+    justify-content: center;
+    margin: 15px 25px;
+}
+
+.pesquisa-container {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    gap: 15px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.pesquisa-input-container {
+    flex: 1;
+    min-width: 0;
+}
+
+.pesquisa-input {
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    padding: 5px;
+}
+
 .chat {
     display: grid;
     grid-template-rows: auto 1fr auto;

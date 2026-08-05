@@ -30,7 +30,20 @@ function Home() {
                 </header>
 
                 <div className="pesquisa">
-                {/* Buscar conversa */}
+                    <div className="pesquisa-container">
+                        <div className="pesquisa-icone-container">
+                            <span className="pesquisa-icone">
+                                <svg width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                                    <path className="pesquisa-icone-path" d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                </svg>
+                            </span>
+                        </div>
+
+                        <div className="pesquisa-input-container">
+                            <input className="pesquisa-input" role="textbox" aria-label="Pesquisar ou começar uma nova conversa" autoComplete="off" dir="ltr" placeholder="Pesquisar ou começar uma nova conversa" type="text"/>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div className="filtros">

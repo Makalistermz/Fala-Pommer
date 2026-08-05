@@ -58,6 +58,11 @@
     transition: transform 0.25s ease;
 }
 
+.header-menu-svg:active {
+    scale: 0.8;
+    transition-duration: .2s;
+}
+
 .header-menu-button:hover .menu-dot-top {
     transform: translateY(-2px);
 }

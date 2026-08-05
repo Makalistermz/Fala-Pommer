@@ -75,7 +75,7 @@ function RotaProtegida({
     }
 
     if (situacao === "negado") {
-        return <Navigate to="/sem-permissao" replace />;
+        return <Navigate to="/sem-permissão" replace />;
     }
 
     return <Outlet />;

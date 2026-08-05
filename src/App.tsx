@@ -14,15 +14,27 @@ function App() {
       <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/recuperar-senha" element={<RecuperarSenha />} />
       <Route path="/RedefinirSenha" element={<RedefinirSenha />} />
+
       <Route
         element={
           <RotaProtegida
-            perfisPermitidos={["user", "admin", "funcionario"]}
+            perfisPermitidos={["admin", "funcionario"]}
           />
         }
       >
         <Route path="/home" element={<Home />} />
       </Route>
+
+      <Route
+        element={
+          <RotaProtegida
+            perfisPermitidos={["user"]}
+          />
+        }
+      >
+        <Route path="/sectors" element={<Home />} />
+      </Route>
+
     </Routes>
   );
 }

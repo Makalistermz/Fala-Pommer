@@ -52,6 +52,15 @@ export class AuthController {
         };
     }
 
+    @Get("area-municipe")
+    @UseGuards(AuthGuard, PerfisGuard)
+    @Perfis("user")
+    areaMunicipe() {
+        return {
+            mensagem: "Bem-vindo à área do municipe"
+        }
+    }
+
     @Post("login")
     @HttpCode(HttpStatus.OK)
     login(@Body() dados: LoginDto) {

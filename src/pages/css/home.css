@@ -108,6 +108,11 @@
     background-color: rgba(122, 122, 122, 0.15);
 }
 
+.menu-modal-button:hover .icones-modal {
+    transform: rotate(30deg);
+    transition-duration: .4s;
+}
+
 .menu-modal-texto {
     font-family: var(--fonte-dm-sans);
 }

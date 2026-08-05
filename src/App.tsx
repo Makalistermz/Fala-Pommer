@@ -6,6 +6,7 @@ import RecuperarSenha from "./pages/recuperar-senha"
 import RedefinirSenha from "./pages/RedefinirSenha";
 import Home from "./pages/home";
 import RotaProtegida from "./components/RotaProtegida";
+import Sectors from "./pages/sectors";
 
 function App() {
   return (
@@ -32,13 +33,12 @@ function App() {
           />
         }
       >
-        <Route path="/sectors" element={<Home />} />
+        <Route path="/sectors" element={<Sectors />} />
       </Route>
 
     </Routes>
   );
 }
 
-//verificar se /home na url funciona sem login
 
 export default App;

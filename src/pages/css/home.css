@@ -35,6 +35,12 @@
     font-family: var(--fonte-poppins);
 }
 
+.header-menu {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .header-menu-button {
     background-color: transparent;
     border: none;
@@ -54,10 +60,14 @@
     transform: translateY(2px);
 }
 
+.conversa-icone-path {
+    fill: var(--branco);
+}
+
 .pesquisa {
     display: flex;
     justify-content: center;
-    margin: 15px 25px;
+    margin: 20px;
 }
 
 .pesquisa-container {
@@ -67,9 +77,19 @@
     gap: 15px;
     padding: 10px;
     width: 100%;
-    border: 1px solid black;
+    border: 1px solid rgba(0, 0, 0, 0.75);
     border-radius: 30px;
     overflow: hidden;
+}
+
+.pesquisa-icone {
+    transform: translateY(2px);
+}
+
+.bi-search {
+    margin-left: 5px;
+    transform: translateY(2px);
+    fill: rgba(0, 0, 0, 0.75);
 }
 
 .pesquisa-input-container {
@@ -82,6 +102,35 @@
     box-sizing: border-box;
     border: none;
     padding: 5px;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.75);
+}
+
+.pesquisa-input:focus {
+    outline: none;
+}
+
+.filtros {
+    margin: 20px;
+}
+
+.filtros-lista {
+    display: flex;
+    gap: 15px;
+}
+
+.filtro-item {
+    padding: 5px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.750);
+    border-radius: 30px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.750);
+    font-family: var(--fonte-dm-sans);
+}
+
+.ativo {
+    background-color: var(--azul-escuro);
+    color: var(--branco);
 }
 
 .chat {

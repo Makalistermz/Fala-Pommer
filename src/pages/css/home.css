@@ -1,0 +1,61 @@
+.home {
+    width: 100vw;
+    height: 100vh;
+
+    display: grid;
+    grid-template-columns: 32% 68%;
+
+    overflow: hidden;
+    background: #f4f7fb;
+}
+
+.conversas {
+    background: #fff;
+    border-right: 1px solid #e5eaf0;
+}
+
+.conversas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--padding-padrao-coluna);
+    background-color: var(--azul-escuro);
+}
+
+.header-name {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-name span {
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--branco);
+    font-family: var(--fonte-poppins);
+}
+
+.header-menu-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-dot {
+    fill: var(--branco);
+    transition: transform 0.25s ease;
+}
+
+.header-menu-button:hover .menu-dot-top {
+    transform: translateY(-2px);
+}
+
+.header-menu-button:hover .menu-dot-bottom {
+    transform: translateY(2px);
+}
+
+.chat {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    background: #f4f7fb;
+}

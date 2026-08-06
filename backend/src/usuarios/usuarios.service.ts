@@ -2,6 +2,7 @@ import { BadRequestException, ConflictException, Injectable } from "@nestjs/comm
 import { PrismaService } from "../prisma/prisma.service";
 import { CriarUsuarioDto } from "./dto/criar-usuario.dto";
 import * as bcrypt from 'bcrypt';
+import { cpf, cnpj } from 'cpf-cnpj-validator'
 
 @Injectable()
 export class UsuariosService {
@@ -22,6 +23,10 @@ export class UsuariosService {
 
     if (anoNascimento < 1925) {
         throw new BadRequestException("Informe uma data de nascimento a partir de 1926.")
+    }
+
+    if (!cpf.isValid(dados.cpf)) {
+        throw new BadRequestException("CPF inválido. Confira os 11 dígitos e tente novamente.")
     }
     
     const temMinuscula = /[a-z]/.test(dados.senha);

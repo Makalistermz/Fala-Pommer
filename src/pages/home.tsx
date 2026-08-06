@@ -13,13 +13,19 @@ function Home() {
 
     const [usuarios, setUsuarios] = useState<UsuarioConversa[]>([]);
 
+    const [usuarioSelecionado, setUsuarioSelecionado] = useState<UsuarioConversa | null>(null);
+
     const [buscaUsuario, setBuscaUsuario] = useState("");
 
     const [carregandoUsuarios, setCarregandoUsuarios] = useState(false);
 
     const [filtroAtivo, setFiltroAtivo] = useState("todos");
 
+    const [contatoAtivo, setContatoAtivo] = useState<number | null>(null);
+
     const [menuAberto, setMenuAberto] = useState(false);
+
+    const [conversas, setConversas] = useState<UsuarioConversa[]>([]);
 
     const navigate = useNavigate();
 
@@ -101,6 +107,29 @@ function Home() {
         } finally {
             setCarregandoUsuarios(false);
         }
+    }
+
+    function selecionarUsuario(usuario: UsuarioConversa) {
+
+        setUsuarioSelecionado(usuario);
+
+        setConversas((conversasAtuais) => {
+
+            const jaExiste = conversasAtuais.some(
+                (conversa) => conversa.id === usuario.id
+            );
+
+            if (jaExiste) {
+                return conversasAtuais;
+            }
+
+            return [
+                usuario,
+                ...conversasAtuais
+            ];
+        });
+
+        setNovaConversaAberta(false);
     }
 
     const usuariosFiltrados = usuarios.filter((usuario) =>
@@ -211,7 +240,39 @@ function Home() {
                 </div>
 
                 <section className="lista-conversas">
-                {/* Conversas */}
+
+                    {conversas.map((conversa) => (
+
+                        <button
+                            key={conversa.id}
+                            onClick={() => {
+                                setUsuarioSelecionado(conversa);
+                                setContatoAtivo(conversa.id);
+                            }}
+                            className={`conversa-item ${
+                                contatoAtivo === conversa.id &&
+                                usuarioSelecionado?.id === conversa.id
+                                    ? "contato-ativo"
+                                    : ""
+                            }`}
+                        >
+                            <div className="conversa-avatar">
+                                {conversa.nome.charAt(0).toUpperCase()}
+                            </div>
+
+                            <div className="conversa-dados">
+                                <strong>
+                                    {conversa.nome}
+                                </strong>
+
+                                <span>
+                                    Clique para iniciar a conversa
+                                </span>
+                            </div>
+                        </button>
+
+                    ))}
+
                 </section>
 
                 <div
@@ -283,9 +344,7 @@ function Home() {
                                 <button
                                     key={usuario.id}
                                     className="nova-conversa__usuario"
-                                    onClick={() => {
-                                        console.log("Selecionado:", usuario);
-                                    }}
+                                    onClick={() => selecionarUsuario(usuario)}
                                 >
 
                                     <div className="nova-conversa__avatar">

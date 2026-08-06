@@ -206,6 +206,72 @@
     color: var(--branco);
 }
 
+.lista-conversas {
+    margin: 0px 10px;
+}
+
+.conversa-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+.conversa-item.contato-ativo {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.conversa-avatar {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    background-color: var(--azul-escuro);
+    color: var(--branco);
+
+    font-family: var(--fonte-poppins);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.conversa-dados {
+    flex: 1;
+
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.conversa-dados strong {
+    color: #1d2939;
+
+    font-family: var(--fonte-dm-sans);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.conversa-dados span {
+    color: #667085;
+
+    font-family: var(--fonte-dm-sans);
+    font-size: 13px;
+}
+
 .conversas {
     position: relative;
     overflow: hidden;
@@ -237,7 +303,6 @@
 
     pointer-events: auto;
 }
-
 
 /* HEADER */
 
@@ -285,7 +350,6 @@
     background-color: rgba(255, 255, 255, 0.15);
 }
 
-
 /* PESQUISA */
 
 .nova-conversa__pesquisa {
@@ -317,7 +381,6 @@
     font-size: 15px;
 }
 
-
 /* TÍTULO */
 
 .nova-conversa__titulo-lista {
@@ -332,7 +395,6 @@
     letter-spacing: 1px;
 }
 
-
 /* LISTA */
 
 .nova-conversa__usuarios {
@@ -340,7 +402,6 @@
 
     overflow-y: auto;
 }
-
 
 /* USUÁRIO */
 
@@ -369,7 +430,6 @@
     background-color: #f2f4f7;
 }
 
-
 /* AVATAR */
 
 .nova-conversa__avatar {
@@ -391,7 +451,6 @@
     font-size: 18px;
     font-weight: 600;
 }
-
 
 /* DADOS */
 
@@ -423,7 +482,6 @@
     font-size: 13px;
 }
 
-
 /* MENSAGENS */
 
 .nova-conversa__mensagem {
@@ -452,7 +510,6 @@
         --largura-conversas: 38%;
     }
 }
-
 
 /* Tablet */
 @media (max-width: 900px) {

@@ -7,6 +7,7 @@ import RedefinirSenha from "./pages/RedefinirSenha";
 import Home from "./pages/home";
 import RotaProtegida from "./components/RotaProtegida";
 import Sectors from "./pages/sectors";
+import SemPermissao from "./components/SemPermissao";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/recuperar-senha" element={<RecuperarSenha />} />
       <Route path="/RedefinirSenha" element={<RedefinirSenha />} />
+      <Route path="/SemPermissao" element={<SemPermissao />} />
 
       <Route
         element={

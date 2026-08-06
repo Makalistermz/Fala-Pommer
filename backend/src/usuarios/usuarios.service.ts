@@ -12,6 +12,17 @@ export class UsuariosService {
     if (dados.senha !== dados.confirmarSenha) {
         throw new BadRequestException("As senhas não coincidem");
     }
+
+    const dataNascimento = new Date(dados.dataNascimento);
+    const anoNascimento = dataNascimento.getFullYear();
+
+    if (anoNascimento > 2014) {
+        throw new BadRequestException("Informe uma data de nascimento antes de 2014.")
+    }
+
+    if (anoNascimento < 1925) {
+        throw new BadRequestException("Informe uma data de nascimento a partir de 1926.")
+    }
     
     const temMinuscula = /[a-z]/.test(dados.senha);
     const temMaiuscula = /[A-Z]/.test(dados.senha);

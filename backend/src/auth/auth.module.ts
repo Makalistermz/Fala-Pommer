@@ -17,6 +17,8 @@ import { PerfisGuard } from "./guards/perfis.guard";
         ConfigModule,
 
         JwtModule.registerAsync({
+            global: true,
+
             inject: [ConfigService],
 
             useFactory: (configService: ConfigService) => ({

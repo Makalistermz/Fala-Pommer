@@ -3,7 +3,20 @@ import "./css/home.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
+interface UsuarioConversa {
+    id: number;
+    nome: string;
+}
+
 function Home() {
+    const [novaConversaAberta, setNovaConversaAberta] = useState(false);
+
+    const [usuarios, setUsuarios] = useState<UsuarioConversa[]>([]);
+
+    const [buscaUsuario, setBuscaUsuario] = useState("");
+
+    const [carregandoUsuarios, setCarregandoUsuarios] = useState(false);
+
     const [filtroAtivo, setFiltroAtivo] = useState("todos");
 
     const [menuAberto, setMenuAberto] = useState(false);
@@ -59,6 +72,43 @@ function Home() {
         buscarPerfil();
     }, []);
 
+    async function abrirNovaConversa() {
+        setNovaConversaAberta(true);
+        setCarregandoUsuarios(true);
+
+        const token = localStorage.getItem("access_token");
+
+        try {
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/usuarios/conversas`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            if (!resposta.ok) {
+                throw new Error("Não foi possível buscar os usuários.");
+            }
+
+            const dados = await resposta.json();
+
+            setUsuarios(dados);
+
+        } catch (erro) {
+            console.error(erro);
+        } finally {
+            setCarregandoUsuarios(false);
+        }
+    }
+
+    const usuariosFiltrados = usuarios.filter((usuario) =>
+        usuario.nome
+            .toLowerCase()
+            .includes(buscaUsuario.toLowerCase())
+    );
+
     return (
         <main className="home">
             <aside className="conversas">
@@ -73,7 +123,11 @@ function Home() {
                     </div>
 
                     <div className="header-menu">
-                        <button className="header-menu-button">
+                        <button 
+                            className="header-menu-button"
+                            onClick={abrirNovaConversa}
+                            aria-label="Nova conversa"
+                        >
                             <span className="header-menu-icon">
                                 <svg width="24" height="24" className="header-menu-svg mensagem" viewBox="0 0 16 16">
                                     <path className="conversa-icone-path" d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z"/>
@@ -159,6 +213,117 @@ function Home() {
                 <section className="lista-conversas">
                 {/* Conversas */}
                 </section>
+
+                <div
+                    className={`nova-conversa ${
+                        novaConversaAberta ? "nova-conversa--aberta" : ""
+                    }`}
+                >
+                    <header className="nova-conversa__header">
+                        <button
+                            className="nova-conversa__voltar"
+                            onClick={() => setNovaConversaAberta(false)}
+                            aria-label="Voltar"
+                        >
+                            <svg
+                                width="22"
+                                height="22"
+                                viewBox="0 0 16 16"
+                                fill="currentColor"
+                            >
+                                <path
+                                    fillRule="evenodd"
+                                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+                                />
+                            </svg>
+                        </button>
+
+                        <h2>Nova conversa</h2>
+
+                    </header>
+
+
+                    <div className="nova-conversa__pesquisa">
+
+                        <svg
+                            width="17"
+                            height="17"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                        >
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
+
+                        <input
+                            type="text"
+                            placeholder="Pesquisar usuário"
+                            value={buscaUsuario}
+                            onChange={(event) => setBuscaUsuario(event.target.value)}
+                        />
+
+                    </div>
+
+
+                    <div className="nova-conversa__titulo-lista">
+                        USUÁRIOS
+                    </div>
+
+
+                    <div className="nova-conversa__usuarios">
+
+                        {carregandoUsuarios && (
+                            <p className="nova-conversa__mensagem">
+                                Carregando usuários...
+                            </p>
+                        )}
+
+                        {!carregandoUsuarios &&
+                            usuariosFiltrados.map((usuario) => (
+
+                                <button
+                                    key={usuario.id}
+                                    className="nova-conversa__usuario"
+                                    onClick={() => {
+                                        console.log("Selecionado:", usuario);
+                                    }}
+                                >
+
+                                    <div className="nova-conversa__avatar">
+                                        {usuario.nome.charAt(0).toUpperCase()}
+                                    </div>
+
+                                    <div className="nova-conversa__dados">
+
+                                        <strong>
+                                            {usuario.nome}
+                                        </strong>
+
+                                        <span>
+                                            Usuário Fala Pommer
+                                        </span>
+
+                                    </div>
+
+                                </button>
+
+                            ))
+                        }
+
+
+                        {!carregandoUsuarios &&
+                            usuariosFiltrados.length === 0 && (
+
+                                <p className="nova-conversa__mensagem">
+                                    Nenhum usuário encontrado.
+                                </p>
+
+                            )
+                        }
+
+                    </div>
+
+                </div>
+
             </aside>
 
             <section className="chat">

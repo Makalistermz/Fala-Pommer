@@ -77,4 +77,21 @@ export class UsuariosService {
         }
     });
   }
+
+  async listarUsuariosParaConversa() {
+    return this.prisma.cadastro.findMany({
+        where: {
+            tipo_usuario: "user"
+        },
+
+        select: {
+            id: true,
+            nome: true
+        },
+
+        orderBy: {
+            nome: "asc"
+        }
+    });
+}
 }

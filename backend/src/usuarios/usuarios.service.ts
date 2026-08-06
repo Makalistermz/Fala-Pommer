@@ -24,10 +24,6 @@ export class UsuariosService {
     if (anoNascimento < 1925) {
         throw new BadRequestException("Informe uma data de nascimento a partir de 1926.")
     }
-
-    if (!cpf.isValid(dados.cpf)) {
-        throw new BadRequestException("CPF inválido. Confira os 11 dígitos e tente novamente.")
-    }
     
     const temMinuscula = /[a-z]/.test(dados.senha);
     const temMaiuscula = /[A-Z]/.test(dados.senha);

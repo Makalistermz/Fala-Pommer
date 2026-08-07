@@ -665,9 +665,47 @@
     background: transparent;
 }
 
+.chat-input__acao {
+    position: relative;
+}
+
 .chat-input__acao button:hover {
     color: #1570ef;
     background: #eaf2ff;
+}
+
+.chat-input__emojis {
+    position: absolute;
+    bottom: calc(100% + 14px);
+    left: -44px;
+    z-index: 10;
+
+    overflow: hidden;
+
+    background: #ffffff !important;
+    border: 1px solid #e4e7ec;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(16, 24, 40, 0.16);
+}
+
+.chat-input__emojis emoji-picker {
+    width: 320px;
+    height: 360px;
+
+    --num-columns: 7;
+    --emoji-size: 1.35rem;
+    --emoji-padding: 0.45rem;
+    --category-emoji-size: 1.05rem;
+    --category-emoji-padding: 0.35rem;
+
+    --background: #ffffff;
+    --border-color: #ffffff;
+
+    --button-hover-background: #00000010;
+
+    --button-active-background: #00000010;
+
+    --input-font-color: #000000b7;
 }
 
 .chat-input__campo {

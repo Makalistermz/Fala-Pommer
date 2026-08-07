@@ -35,6 +35,8 @@ function Home() {
 
     const [menuAberto, setMenuAberto] = useState(false);
 
+    const [menuAbertoArquivos, setMenuAbertoArquivo] = useState(false);
+
     const [conversas, setConversas] = useState<Conversa[]>([]);
 
     const [mensagem, setMensagem] = useState("");
@@ -541,11 +543,45 @@ function Home() {
                                     <button
                                         type="button"
                                         aria-label="Anexar arquivo"
+                                        onClick={() => setMenuAbertoArquivo(aberto => !aberto)}
                                     >
                                         <svg width="16" height="16" fill="currentColor" className="bi bi-paperclip" viewBox="0 0 16 16">
                                             <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z"/>
                                         </svg>
                                     </button>
+
+                                    {menuAbertoArquivos && (
+                                        <div className="menu-arquivos">
+                                            <nav className="menu-arquivos__lista">
+                                                <a href="#" className="menu-arquivos__item documentos">
+                                                    <div className="menu-arquivos__icone">
+                                                        <svg width="16" height="16" fill="currentColor" className="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                                            <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5"/>
+                                                            <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
+                                                        </svg>
+                                                    </div>
+                                                    <span className="menu-arquivos__texto">Documentos</span>
+                                                </a>
+                                                <a href="#" className="menu-arquivos__item fotos-videos">
+                                                    <div className="menu-arquivos__icone">
+                                                        <svg width="16" height="16" fill="currentColor" className="bi bi-images" viewBox="0 0 16 16">
+                                                            <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                                                            <path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2M14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1M2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1z"/>
+                                                        </svg>
+                                                    </div>
+                                                    <span className="menu-arquivos__texto">Fotos e Videos</span>
+                                                </a>
+                                                <a href="#" className="menu-arquivos__item audio">
+                                                    <div className="menu-arquivos__icone">
+                                                        <svg width="16" height="16" fill="currentColor" className="bi bi-headphones" viewBox="0 0 16 16">
+                                                            <path d="M8 3a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V8a6 6 0 1 1 12 0v5a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1V8a5 5 0 0 0-5-5"/>
+                                                        </svg>
+                                                    </div>
+                                                    <span className="menu-arquivos__texto">Áudio</span>
+                                                </a>
+                                            </nav>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="chat-input__acao">

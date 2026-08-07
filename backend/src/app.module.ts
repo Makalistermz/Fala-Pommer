@@ -7,9 +7,10 @@ import { RecuperacaoSenhaModule } from './recuperacao-senha/recuperacao-senha.mo
 import { EmailModule } from './email/email.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from "@nestjs/config";
+import { ConversasModule } from './conversas/conversas.module';
 
 @Module({
-  imports: [PrismaModule, UsuariosModule, RecuperacaoSenhaModule, EmailModule, AuthModule, ConfigModule.forRoot({isGlobal: true})],
+  imports: [PrismaModule, UsuariosModule, RecuperacaoSenhaModule, EmailModule, AuthModule, ConfigModule.forRoot({isGlobal: true}), ConversasModule],
   controllers: [AppController],
   providers: [AppService],
 })

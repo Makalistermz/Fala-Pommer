@@ -9,4 +9,6 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/cadastro.js'
+export type * from './models/conversa.js'
+export type * from './models/conversa_participante.js'
 export type * from './commonInputTypes.js'

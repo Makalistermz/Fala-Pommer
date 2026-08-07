@@ -179,6 +179,23 @@ export type Enumcadastro_tipo_usuarioWithAggregatesFilter<$PrismaModel = never> 
   _max?: Prisma.NestedEnumcadastro_tipo_usuarioFilter<$PrismaModel>
 }
 
+export type Enumconversa_tipoFilter<$PrismaModel = never> = {
+  equals?: $Enums.conversa_tipo | Prisma.Enumconversa_tipoFieldRefInput<$PrismaModel>
+  in?: $Enums.conversa_tipo[]
+  notIn?: $Enums.conversa_tipo[]
+  not?: Prisma.NestedEnumconversa_tipoFilter<$PrismaModel> | $Enums.conversa_tipo
+}
+
+export type Enumconversa_tipoWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.conversa_tipo | Prisma.Enumconversa_tipoFieldRefInput<$PrismaModel>
+  in?: $Enums.conversa_tipo[]
+  notIn?: $Enums.conversa_tipo[]
+  not?: Prisma.NestedEnumconversa_tipoWithAggregatesFilter<$PrismaModel> | $Enums.conversa_tipo
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumconversa_tipoFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumconversa_tipoFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[]
@@ -359,6 +376,23 @@ export type NestedEnumcadastro_tipo_usuarioWithAggregatesFilter<$PrismaModel = n
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumcadastro_tipo_usuarioFilter<$PrismaModel>
   _max?: Prisma.NestedEnumcadastro_tipo_usuarioFilter<$PrismaModel>
+}
+
+export type NestedEnumconversa_tipoFilter<$PrismaModel = never> = {
+  equals?: $Enums.conversa_tipo | Prisma.Enumconversa_tipoFieldRefInput<$PrismaModel>
+  in?: $Enums.conversa_tipo[]
+  notIn?: $Enums.conversa_tipo[]
+  not?: Prisma.NestedEnumconversa_tipoFilter<$PrismaModel> | $Enums.conversa_tipo
+}
+
+export type NestedEnumconversa_tipoWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.conversa_tipo | Prisma.Enumconversa_tipoFieldRefInput<$PrismaModel>
+  in?: $Enums.conversa_tipo[]
+  notIn?: $Enums.conversa_tipo[]
+  not?: Prisma.NestedEnumconversa_tipoWithAggregatesFilter<$PrismaModel> | $Enums.conversa_tipo
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumconversa_tipoFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumconversa_tipoFilter<$PrismaModel>
 }
 
 

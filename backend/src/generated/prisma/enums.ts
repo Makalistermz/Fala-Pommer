@@ -16,3 +16,11 @@ export const cadastro_tipo_usuario = {
 } as const
 
 export type cadastro_tipo_usuario = (typeof cadastro_tipo_usuario)[keyof typeof cadastro_tipo_usuario]
+
+
+export const conversa_tipo = {
+  privada: 'privada',
+  grupo: 'grupo'
+} as const
+
+export type conversa_tipo = (typeof conversa_tipo)[keyof typeof conversa_tipo]

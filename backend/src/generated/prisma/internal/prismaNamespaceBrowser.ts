@@ -51,7 +51,9 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  cadastro: 'cadastro'
+  cadastro: 'cadastro',
+  conversa: 'conversa',
+  conversa_participante: 'conversa_participante'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -84,6 +86,24 @@ export const CadastroScalarFieldEnum = {
 } as const
 
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]
+
+
+export const ConversaScalarFieldEnum = {
+  id: 'id',
+  tipo: 'tipo',
+  criada_em: 'criada_em'
+} as const
+
+export type ConversaScalarFieldEnum = (typeof ConversaScalarFieldEnum)[keyof typeof ConversaScalarFieldEnum]
+
+
+export const Conversa_participanteScalarFieldEnum = {
+  conversa_id: 'conversa_id',
+  usuario_id: 'usuario_id',
+  entrou_em: 'entrou_em'
+} as const
+
+export type Conversa_participanteScalarFieldEnum = (typeof Conversa_participanteScalarFieldEnum)[keyof typeof Conversa_participanteScalarFieldEnum]
 
 
 export const SortOrder = {

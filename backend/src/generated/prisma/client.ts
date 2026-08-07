@@ -44,3 +44,13 @@ export { Prisma }
  * 
  */
 export type cadastro = Prisma.cadastroModel
+/**
+ * Model conversa
+ * 
+ */
+export type conversa = Prisma.conversaModel
+/**
+ * Model conversa_participante
+ * 
+ */
+export type conversa_participante = Prisma.conversa_participanteModel

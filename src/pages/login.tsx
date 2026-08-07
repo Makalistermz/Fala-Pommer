@@ -83,7 +83,11 @@ function Login() {
             resultado.access_token
           );
 
-          navigate("/home");
+          if (resultado.usuario.tipo === "user") {
+            navigate("/sectors");
+          } else {
+            navigate("/home");
+          }
 
           
       } catch (erro) {

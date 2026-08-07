@@ -17,6 +17,8 @@ function Home() {
 
     const [buscaUsuario, setBuscaUsuario] = useState("");
 
+    const [buscaConversa, setBuscaConversa] = useState("");
+
     const [carregandoUsuarios, setCarregandoUsuarios] = useState(false);
 
     const [filtroAtivo, setFiltroAtivo] = useState("todos");
@@ -138,6 +140,12 @@ function Home() {
             .includes(buscaUsuario.toLowerCase())
     );
 
+    const conversasFiltradas = conversas.filter((conversa) =>
+        conversa.nome
+            .toLowerCase()
+            .includes(buscaConversa.trim().toLowerCase())
+    );
+
     return (
         <main className="home">
             <aside className="conversas">
@@ -192,7 +200,20 @@ function Home() {
                         </div>
 
                         <div className="pesquisa-input-container">
-                            <input className="pesquisa-input" name="pesquisa-input" role="textbox" aria-label="Pesquisar ou começar uma nova conversa" autoComplete="off" dir="ltr" placeholder="Pesquisar ou começar uma nova conversa" type="text"/>
+                            <input
+                                className="pesquisa-input"
+                                name="pesquisa-input"
+                                role="textbox"
+                                aria-label="Pesquisar conversa"
+                                autoComplete="off"
+                                dir="ltr"
+                                placeholder="Pesquisar conversa"
+                                type="search"
+                                value={buscaConversa}
+                                onChange={(event) =>
+                                    setBuscaConversa(event.target.value)
+                                }
+                            />
                         </div>
                     </div>
 
@@ -241,7 +262,7 @@ function Home() {
 
                 <section className="lista-conversas">
 
-                    {conversas.map((conversa) => (
+                    {conversasFiltradas.map((conversa) => (
 
                         <button
                             key={conversa.id}
@@ -272,6 +293,13 @@ function Home() {
                         </button>
 
                     ))}
+
+                    {buscaConversa.trim() &&
+                        conversasFiltradas.length === 0 && (
+                            <p className="lista-conversas__vazia">
+                                Nenhuma conversa encontrada.
+                            </p>
+                        )}
 
                 </section>
 
@@ -387,31 +415,61 @@ function Home() {
 
 
             <section className="chat">
-                <header className="chat-header">
-                    {usuarioSelecionado && (
-                        <div className="chat-header__usuario">
-                            <div className="chat-header__avatar">
-                                {usuarioSelecionado.nome
-                                    .charAt(0)
-                                    .toUpperCase()}
-                            </div>
+                {usuarioSelecionado ? (
+                    <>
+                        <header className="chat-header">
+                            <div className="chat-header__usuario">
+                                <div className="chat-header__avatar">
+                                    {usuarioSelecionado.nome
+                                        .charAt(0)
+                                        .toUpperCase()}
+                                </div>
 
-                            <div className="chat-header__dados">
-                                <strong>
-                                    {usuarioSelecionado.nome}
-                                </strong>
+                                <div className="chat-header__dados">
+                                    <strong>
+                                        {usuarioSelecionado.nome}
+                                    </strong>
+                                </div>
                             </div>
+                        </header>
+
+                        <div className="mensagens">
+                        {/* Mensagens */}
                         </div>
-                    )}
-                </header>
 
-                <div className="mensagens">
-                {/* Mensagens */}
-                </div>
+                        <footer className="chat-input">
+                        {/* Campo para enviar mensagem */}
+                        </footer>
+                    </>
+                ) : (
+                    <div className="chat-vazio">
+                        <div className="chat-vazio__icone">
+                            <svg
+                                width="38"
+                                height="38"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.7"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
+                                <path d="M8 10h.01" />
+                                <path d="M12 10h.01" />
+                                <path d="M16 10h.01" />
+                            </svg>
+                        </div>
 
-                <footer className="chat-input">
-                {/* Campo para enviar mensagem */}
-                </footer>
+                        <h2>Nenhuma conversa selecionada</h2>
+
+                        <p>
+                            Selecione um contato ao lado para iniciar
+                            uma conversa.
+                        </p>
+                    </div>
+                )}
             </section>
 
             {menuAberto && (

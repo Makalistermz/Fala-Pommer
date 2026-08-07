@@ -701,7 +701,7 @@ function Home() {
                                         ref={inputDocumentosRef}
                                         className="chat-input__arquivo-oculto"
                                         type="file"
-                                        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv"
+                                        accept=".pdf,.doc,.docx"
                                         onChange={selecionarArquivo}
                                     />
 

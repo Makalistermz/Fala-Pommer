@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Get,
     Post,
     Req,
     UseGuards
@@ -10,16 +11,9 @@ import { ConversasService } from "./conversas.service";
 import { CriarConversaDto } from "./dto/criar-conversas.dto";
 
 import { AuthGuard } from "../auth/auth.guard";
+import type { RequisicaoAutenticada } from "../auth/auth.guard";
 import { PerfisGuard } from "../auth/guards/perfis.guard";
 import { Perfis } from "../auth/decorators/perfis.decorator";
-
-interface RequisicaoAutenticada extends Request {
-    usuario: {
-        sub: number;
-        email: string;
-        tipo: "user" | "admin" | "funcionario";
-    };
-}
 
 @Controller("conversas")
 @UseGuards(AuthGuard, PerfisGuard)
@@ -29,13 +23,22 @@ export class ConversasController {
         private readonly conversasService: ConversasService
     ) {}
 
+    @Get()
+    listar(
+        @Req() requisicao: RequisicaoAutenticada
+    ) {
+        return this.conversasService.listar(
+            requisicao.usuario!.sub
+        );
+    }
+
     @Post()
     criarOuBuscar(
         @Req() requisicao: RequisicaoAutenticada,
         @Body() dados: CriarConversaDto
     ) {
         return this.conversasService.criarOuBuscar(
-            requisicao.usuario.sub,
+            requisicao.usuario!.sub,
             dados.usuarioId
         );
     }

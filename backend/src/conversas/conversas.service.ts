@@ -12,6 +12,60 @@ export class ConversasService {
         private readonly prisma: PrismaService
     ) {}
 
+    async listar(usuarioLogadoId: number) {
+        const conversas =
+            await this.prisma.conversa.findMany({
+                where: {
+                    tipo: "privada",
+                    conversa_participante: {
+                        some: {
+                            usuario_id: usuarioLogadoId
+                        }
+                    }
+                },
+
+                include: {
+                    conversa_participante: {
+                        where: {
+                            usuario_id: {
+                                not: usuarioLogadoId
+                            }
+                        },
+
+                        include: {
+                            cadastro: {
+                                select: {
+                                    id: true,
+                                    nome: true,
+                                    tipo_usuario: true
+                                }
+                            }
+                        }
+                    }
+                },
+
+                orderBy: {
+                    criada_em: "desc"
+                }
+            });
+
+        return conversas.flatMap((conversa) => {
+            const contato =
+                conversa.conversa_participante[0]?.cadastro;
+
+            if (!contato) {
+                return [];
+            }
+
+            return [{
+                id: conversa.id,
+                tipo: conversa.tipo,
+                criadaEm: conversa.criada_em,
+                contato
+            }];
+        });
+    }
+
     async criarOuBuscar(
         usuarioLogadoId: number,
         usuarioSelecionadoId: number
@@ -97,47 +151,58 @@ export class ConversasService {
                 }
             });
 
-        if (conversaExistente) {
-            return conversaExistente;
-        }
+        const conversa = conversaExistente ??
+            await this.prisma.conversa.create({
+                data: {
+                    tipo: "privada",
 
-        return this.prisma.conversa.create({
-            data: {
-                tipo: "privada",
-
-                conversa_participante: {
-                    create: [
-                        {
-                            cadastro: {
-                                connect: {
-                                    id: usuarioLogadoId
+                    conversa_participante: {
+                        create: [
+                            {
+                                cadastro: {
+                                    connect: {
+                                        id: usuarioLogadoId
+                                    }
+                                }
+                            },
+                            {
+                                cadastro: {
+                                    connect: {
+                                        id: usuarioSelecionadoId
+                                    }
                                 }
                             }
-                        },
-                        {
-                            cadastro: {
-                                connect: {
-                                    id: usuarioSelecionadoId
-                                }
-                            }
-                        }
-                    ]
-                }
-            },
+                        ]
+                    }
+                },
 
-            include: {
-                conversa_participante: {
-                    include: {
-                        cadastro: {
-                            select: {
-                                id: true,
-                                nome: true,
-                                tipo_usuario: true
+                include: {
+                    conversa_participante: {
+                        include: {
+                            cadastro: {
+                                select: {
+                                    id: true,
+                                    nome: true,
+                                    tipo_usuario: true
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
+
+        const contato = conversa.conversa_participante
+            .find(
+                (participante) =>
+                    participante.usuario_id ===
+                    usuarioSelecionadoId
+            )!.cadastro;
+
+        return {
+            id: conversa.id,
+            tipo: conversa.tipo,
+            criadaEm: conversa.criada_em,
+            contato
+        };
     }
 }

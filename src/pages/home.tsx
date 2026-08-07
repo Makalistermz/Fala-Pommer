@@ -8,6 +8,13 @@ interface UsuarioConversa {
     nome: string;
 }
 
+interface Conversa {
+    id: number;
+    tipo: "privada" | "grupo";
+    criadaEm: string;
+    contato: UsuarioConversa;
+}
+
 function Home() {
     const [novaConversaAberta, setNovaConversaAberta] = useState(false);
 
@@ -27,7 +34,7 @@ function Home() {
 
     const [menuAberto, setMenuAberto] = useState(false);
 
-    const [conversas, setConversas] = useState<UsuarioConversa[]>([]);
+    const [conversas, setConversas] = useState<Conversa[]>([]);
 
     const navigate = useNavigate();
 
@@ -80,6 +87,44 @@ function Home() {
         buscarPerfil();
     }, []);
 
+    useEffect(() => {
+        async function buscarConversas() {
+            const token = localStorage.getItem("access_token");
+
+            if (!token) {
+                return;
+            }
+
+            try {
+                const resposta = await fetch(
+                    `${import.meta.env.VITE_API_URL}/conversas`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                if (!resposta.ok) {
+                    throw new Error(
+                        "Não foi possível carregar as conversas."
+                    );
+                }
+
+                const dados: Conversa[] = await resposta.json();
+
+                setConversas(dados);
+            } catch (erro) {
+                console.error(
+                    "Erro ao carregar conversas:",
+                    erro
+                );
+            }
+        }
+
+        buscarConversas();
+    }, []);
+
     async function abrirNovaConversa() {
         setNovaConversaAberta(true);
         setCarregandoUsuarios(true);
@@ -111,27 +156,63 @@ function Home() {
         }
     }
 
-    function selecionarUsuario(usuario: UsuarioConversa) {
+    async function selecionarUsuario(
+        usuario: UsuarioConversa
+    ) {
+        const token = localStorage.getItem("access_token");
 
-        setUsuarioSelecionado(usuario);
+        if (!token) {
+            return;
+        }
 
-        setConversas((conversasAtuais) => {
-
-            const jaExiste = conversasAtuais.some(
-                (conversa) => conversa.id === usuario.id
+        try {
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/conversas`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        usuarioId: usuario.id
+                    })
+                }
             );
 
-            if (jaExiste) {
-                return conversasAtuais;
+            if (!resposta.ok) {
+                const resultado = await resposta.json();
+
+                throw new Error(
+                    Array.isArray(resultado.message)
+                        ? resultado.message.join(", ")
+                        : resultado.message
+                );
             }
 
-            return [
-                usuario,
-                ...conversasAtuais
-            ];
-        });
+            const conversa: Conversa =
+                await resposta.json();
 
-        setNovaConversaAberta(false);
+            setUsuarioSelecionado(conversa.contato);
+            setContatoAtivo(conversa.id);
+
+            setConversas((conversasAtuais) => {
+                const jaExiste = conversasAtuais.some(
+                    (item) => item.id === conversa.id
+                );
+
+                return jaExiste
+                    ? conversasAtuais
+                    : [conversa, ...conversasAtuais];
+            });
+
+            setNovaConversaAberta(false);
+        } catch (erro) {
+            console.error(
+                "Erro ao iniciar conversa:",
+                erro
+            );
+        }
     }
 
     const usuariosFiltrados = usuarios.filter((usuario) =>
@@ -141,7 +222,7 @@ function Home() {
     );
 
     const conversasFiltradas = conversas.filter((conversa) =>
-        conversa.nome
+        conversa.contato.nome
             .toLowerCase()
             .includes(buscaConversa.trim().toLowerCase())
     );
@@ -267,23 +348,28 @@ function Home() {
                         <button
                             key={conversa.id}
                             onClick={() => {
-                                setUsuarioSelecionado(conversa);
+                                setUsuarioSelecionado(
+                                    conversa.contato
+                                );
                                 setContatoAtivo(conversa.id);
                             }}
                             className={`conversa-item ${
                                 contatoAtivo === conversa.id &&
-                                usuarioSelecionado?.id === conversa.id
+                                usuarioSelecionado?.id ===
+                                    conversa.contato.id
                                     ? "contato-ativo"
                                     : ""
                             }`}
                         >
                             <div className="conversa-avatar">
-                                {conversa.nome.charAt(0).toUpperCase()}
+                                {conversa.contato.nome
+                                    .charAt(0)
+                                    .toUpperCase()}
                             </div>
 
                             <div className="conversa-dados">
                                 <strong>
-                                    {conversa.nome}
+                                    {conversa.contato.nome}
                                 </strong>
 
                                 <span>
@@ -438,7 +524,51 @@ function Home() {
                         </div>
 
                         <footer className="chat-input">
-                        {/* Campo para enviar mensagem */}
+                            <div className="chat-input__conteudo">
+                                <div className="chat-input__acao">
+                                    <button
+                                        type="button"
+                                        aria-label="Anexar arquivo"
+                                    >
+                                        <svg width="16" height="16" fill="currentColor" className="bi bi-paperclip" viewBox="0 0 16 16">
+                                            <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div className="chat-input__acao">
+                                    <button
+                                        type="button"
+                                        aria-label="Adicionar emoji"
+                                    >
+                                        <svg width="16" height="16" fill="currentColor" className="bi bi-emoji-smile" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                            <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5m4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5"/>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div className="chat-input__campo">
+                                    <input
+                                        type="text"
+                                        name="mensagem"
+                                        aria-label="Mensagem"
+                                        placeholder="Digite uma mensagem"
+                                        autoComplete="off"
+                                    />
+                                </div>
+
+                                <div className="chat-input__enviar">
+                                    <button
+                                        type="button"
+                                        aria-label="Enviar mensagem"
+                                    >
+                                        <svg width="16" height="16" fill="currentColor" className="bi bi-send-fill" viewBox="0 0 16 16">
+                                            <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
                         </footer>
                     </>
                 ) : (

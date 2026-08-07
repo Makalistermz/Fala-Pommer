@@ -641,6 +641,7 @@
 }
 
 .chat-input__acao button,
+.chat-input__audio button,
 .chat-input__enviar button {
     width: 38px;
     height: 38px;
@@ -785,6 +786,22 @@
     color: #98a2b3;
 }
 
+.chat-input__audio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-input__audio button {
+    color: #667085;
+    background: transparent;
+}
+
+.chat-input__audio button:hover {
+    color: #1570ef;
+    background: #eaf2ff;
+}
+
 .chat-input__enviar button {
     color: #ffffff;
     background: #1570ef;
@@ -795,11 +812,13 @@
 }
 
 .chat-input__acao button:active,
+.chat-input__audio button:active,
 .chat-input__enviar button:active {
     transform: scale(0.95);
 }
 
 .chat-input__acao svg,
+.chat-input__audio svg,
 .chat-input__enviar svg {
     width: 19px;
     height: 19px;

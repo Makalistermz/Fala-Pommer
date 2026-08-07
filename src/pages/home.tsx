@@ -385,9 +385,24 @@ function Home() {
 
             </aside>
 
+
             <section className="chat">
                 <header className="chat-header">
-                {/* Usuário da conversa */}
+                    {usuarioSelecionado && (
+                        <div className="chat-header__usuario">
+                            <div className="chat-header__avatar">
+                                {usuarioSelecionado.nome
+                                    .charAt(0)
+                                    .toUpperCase()}
+                            </div>
+
+                            <div className="chat-header__dados">
+                                <strong>
+                                    {usuarioSelecionado.nome}
+                                </strong>
+                            </div>
+                        </div>
+                    )}
                 </header>
 
                 <div className="mensagens">

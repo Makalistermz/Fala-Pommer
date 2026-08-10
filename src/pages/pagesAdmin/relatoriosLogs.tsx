@@ -14,7 +14,7 @@ const FORMATADOR_DATA = new Intl.DateTimeFormat("pt-BR", {
     timeStyle: "medium",
 });
 
-const ITENS_POR_PAGINA = 5;
+const ITENS_POR_PAGINA = 20;
 
 const NOMES_PERFIS: Record<RelatorioLog["tipoUsuario"], string> = {
     admin: "Administrador",

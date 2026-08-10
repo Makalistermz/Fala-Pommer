@@ -14,6 +14,8 @@ const FORMATADOR_DATA = new Intl.DateTimeFormat("pt-BR", {
     timeStyle: "medium",
 });
 
+const ITENS_POR_PAGINA = 5;
+
 const NOMES_PERFIS: Record<RelatorioLog["tipoUsuario"], string> = {
     admin: "Administrador",
     user: "Usuário",
@@ -28,6 +30,14 @@ function RelatoriosLogs() {
     const [relatorios, setRelatorios] = useState<RelatorioLog[]>([]);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
+    const [paginaAtual, setPaginaAtual] = useState(1);
+
+    const totalPaginas = Math.ceil(relatorios.length / ITENS_POR_PAGINA);
+    const inicioPagina = (paginaAtual - 1) * ITENS_POR_PAGINA;
+    const relatoriosPaginados = relatorios.slice(
+        inicioPagina,
+        inicioPagina + ITENS_POR_PAGINA,
+    );
 
     useEffect(() => {
         const controlador = new AbortController();
@@ -121,7 +131,7 @@ function RelatoriosLogs() {
                             </tr>
                         )}
 
-                        {!carregando && !erro && relatorios.map((relatorio) => (
+                        {!carregando && !erro && relatoriosPaginados.map((relatorio) => (
                             <tr key={relatorio.id}>
                                 <td>
                                     <strong className="relatorios-logs__usuario">
@@ -140,6 +150,45 @@ function RelatoriosLogs() {
                     </tbody>
                 </table>
             </div>
+
+            {!carregando && !erro && totalPaginas > 1 && (
+                <nav
+                    aria-label="Paginação dos relatórios de acesso"
+                    className="relatorios-logs__paginacao"
+                >
+                    <button
+                        type="button"
+                        onClick={() => setPaginaAtual((pagina) => pagina - 1)}
+                        disabled={paginaAtual === 1}
+                    >
+                        Anterior
+                    </button>
+
+                    {Array.from({ length: totalPaginas }, (_, indice) => {
+                        const pagina = indice + 1;
+
+                        return (
+                            <button
+                                key={pagina}
+                                type="button"
+                                onClick={() => setPaginaAtual(pagina)}
+                                aria-current={paginaAtual === pagina ? "page" : undefined}
+                                disabled={paginaAtual === pagina}
+                            >
+                                {pagina}
+                            </button>
+                        );
+                    })}
+
+                    <button
+                        type="button"
+                        onClick={() => setPaginaAtual((pagina) => pagina + 1)}
+                        disabled={paginaAtual === totalPaginas}
+                    >
+                        Próxima
+                    </button>
+                </nav>
+            )}
         </section>
     );
 }

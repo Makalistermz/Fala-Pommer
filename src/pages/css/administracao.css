@@ -605,6 +605,60 @@
     color: #a1263e;
 }
 
+.relatorios-logs__paginacao {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 24px;
+    border-top: 1px solid #e5eaf0;
+    background: #f8faff;
+}
+
+.relatorios-logs__paginacao button {
+    min-width: 38px;
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid #d5dce8;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #344054;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        border-color 160ms ease,
+        background-color 160ms ease,
+        color 160ms ease,
+        transform 160ms ease;
+}
+
+.relatorios-logs__paginacao button:hover:not(:disabled) {
+    border-color: var(--rosa-escuro);
+    background: #ef476e1a;
+    color: var(--rosa-escuro);
+    transform: translateY(-1px);
+}
+
+.relatorios-logs__paginacao button:focus-visible {
+    outline: 3px solid rgba(19, 81, 180, 0.25);
+    outline-offset: 2px;
+}
+
+.relatorios-logs__paginacao button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.relatorios-logs__paginacao button[aria-current="page"] {
+    border-color: var(--rosa-escuro);
+    background: var(--rosa-escuro);
+    color: #ffffff;
+    opacity: 1;
+}
+
 @media (max-width: 700px) {
     .administracao {
         --admin-sidebar-width: 230px;
@@ -667,6 +721,17 @@
 
     .relatorios-logs__header h2 {
         font-size: 19px;
+    }
+
+    .relatorios-logs__paginacao {
+        gap: 6px;
+        padding: 14px;
+    }
+
+    .relatorios-logs__paginacao button {
+        min-width: 36px;
+        height: 36px;
+        padding-inline: 10px;
     }
 }
 

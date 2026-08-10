@@ -8,6 +8,7 @@ import Home from "./pages/home";
 import RotaProtegida from "./components/RotaProtegida";
 import Sectors from "./pages/sectors";
 import SemPermissao from "./components/SemPermissao";
+import Administracao from "./pages/administracao";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         }
       >
         <Route path="/home" element={<Home />} />
+        <Route path="/administracao" element={<Administracao />} />
       </Route>
 
       <Route

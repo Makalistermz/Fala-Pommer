@@ -39,9 +39,14 @@ type RespostaLoginsMensais = {
 const opcoes: ChartOptions<"line"> = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: {
-        duration: 900,
-        easing: "easeOutQuart",
+    animations: {
+        tension: {
+            duration: 1000,
+            easing: "easeOutQuart",
+            from: .6,
+            to: 0,
+            loop: true         
+        },
     },
     plugins: {
         legend: {

@@ -488,6 +488,123 @@
     height: 320px;
 }
 
+.relatorios-logs {
+    overflow: hidden;
+    border: 1px solid #e5eaf0;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 8px 25px rgba(15, 38, 73, 0.08);
+}
+
+.relatorios-logs__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 24px;
+    border-bottom: 1px solid #e5eaf0;
+}
+
+.relatorios-logs__header span {
+    color: #1351b4;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+}
+
+.relatorios-logs__header h2 {
+    margin: 6px 0 4px;
+    color: #172033;
+    font-family: var(--fonte-poppins);
+    font-size: 22px;
+}
+
+.relatorios-logs__header p {
+    margin: 0;
+    color: #6e7e99;
+    font-size: 14px;
+}
+
+.relatorios-logs__header > strong {
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: #e7f0ff;
+    color: #1351b4;
+    font-size: 13px;
+}
+
+.relatorios-logs__tabela-container {
+    overflow-x: auto;
+}
+
+.relatorios-logs__tabela {
+    width: 100%;
+    min-width: 790px;
+    border-collapse: collapse;
+    color: #344054;
+    font-size: 14px;
+    text-align: left;
+}
+
+.relatorios-logs__tabela th {
+    padding: 13px 20px;
+    background: #f6f8fc;
+    color: #6e7e99;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.relatorios-logs__tabela td {
+    padding: 16px 20px;
+    border-top: 1px solid #edf0f5;
+}
+
+.relatorios-logs__tabela tbody tr {
+    transition: background-color 160ms ease;
+}
+
+.relatorios-logs__tabela tbody tr:hover {
+    background: #f8faff;
+}
+
+.relatorios-logs__usuario {
+    color: #172033;
+    font-weight: 600;
+}
+
+.relatorios-logs__status {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.relatorios-logs__status--encerrado {
+    background: #e8f7f1;
+    color: #087553;
+}
+
+.relatorios-logs__status--aberto {
+    background: #fff4e5;
+    color: #9a5b00;
+}
+
+.relatorios-logs__mensagem {
+    height: 180px;
+    color: #6e7e99;
+    text-align: center;
+}
+
+.relatorios-logs__mensagem--erro {
+    color: #a1263e;
+}
+
 @media (max-width: 700px) {
     .administracao {
         --admin-sidebar-width: 230px;
@@ -541,6 +658,15 @@
     .grafico-container,
     .grafico-container--barras {
         height: 280px;
+    }
+
+    .relatorios-logs__header {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .relatorios-logs__header h2 {
+        font-size: 19px;
     }
 }
 

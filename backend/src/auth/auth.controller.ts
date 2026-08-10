@@ -94,6 +94,24 @@ export class AuthController {
         return this.authService.obterQuantUsuarioCategoria();
     }
 
+    @Get("relatorios-logs")
+    @UseGuards(AuthGuard, PerfisGuard)
+    @Perfis("admin", "funcionario")
+    obterRelatoriosLogs() {
+        return this.authService.obterRelatoriosLogs();
+    }
+
+    @Post("logout")
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(AuthGuard)
+    logout(
+        @Req() requisicao: RequisicaoAutenticada
+    ) {
+        return this.authService.registrarSaida(
+            requisicao.usuario!.sub
+        );
+    }
+
     @Get("area-municipe")
     @UseGuards(AuthGuard, PerfisGuard)
     @Perfis("user")

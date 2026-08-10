@@ -92,7 +92,8 @@ export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typ
 export const Login_eventoScalarFieldEnum = {
   id: 'id',
   usuario_id: 'usuario_id',
-  criado_em: 'criado_em'
+  criado_em: 'criado_em',
+  saiu_em: 'saiu_em'
 } as const
 
 export type Login_eventoScalarFieldEnum = (typeof Login_eventoScalarFieldEnum)[keyof typeof Login_eventoScalarFieldEnum]

@@ -40,18 +40,21 @@ export type Login_eventoMinAggregateOutputType = {
   id: number | null
   usuario_id: number | null
   criado_em: Date | null
+  saiu_em: Date | null
 }
 
 export type Login_eventoMaxAggregateOutputType = {
   id: number | null
   usuario_id: number | null
   criado_em: Date | null
+  saiu_em: Date | null
 }
 
 export type Login_eventoCountAggregateOutputType = {
   id: number
   usuario_id: number
   criado_em: number
+  saiu_em: number
   _all: number
 }
 
@@ -70,18 +73,21 @@ export type Login_eventoMinAggregateInputType = {
   id?: true
   usuario_id?: true
   criado_em?: true
+  saiu_em?: true
 }
 
 export type Login_eventoMaxAggregateInputType = {
   id?: true
   usuario_id?: true
   criado_em?: true
+  saiu_em?: true
 }
 
 export type Login_eventoCountAggregateInputType = {
   id?: true
   usuario_id?: true
   criado_em?: true
+  saiu_em?: true
   _all?: true
 }
 
@@ -175,6 +181,7 @@ export type Login_eventoGroupByOutputType = {
   id: number
   usuario_id: number
   criado_em: Date
+  saiu_em: Date | null
   _count: Login_eventoCountAggregateOutputType | null
   _avg: Login_eventoAvgAggregateOutputType | null
   _sum: Login_eventoSumAggregateOutputType | null
@@ -204,6 +211,7 @@ export type login_eventoWhereInput = {
   id?: Prisma.IntFilter<"login_evento"> | number
   usuario_id?: Prisma.IntFilter<"login_evento"> | number
   criado_em?: Prisma.DateTimeFilter<"login_evento"> | Date | string
+  saiu_em?: Prisma.DateTimeNullableFilter<"login_evento"> | Date | string | null
   cadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }
 
@@ -211,6 +219,7 @@ export type login_eventoOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  saiu_em?: Prisma.SortOrderInput | Prisma.SortOrder
   cadastro?: Prisma.cadastroOrderByWithRelationInput
 }
 
@@ -221,6 +230,7 @@ export type login_eventoWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.login_eventoWhereInput | Prisma.login_eventoWhereInput[]
   usuario_id?: Prisma.IntFilter<"login_evento"> | number
   criado_em?: Prisma.DateTimeFilter<"login_evento"> | Date | string
+  saiu_em?: Prisma.DateTimeNullableFilter<"login_evento"> | Date | string | null
   cadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }, "id">
 
@@ -228,6 +238,7 @@ export type login_eventoOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  saiu_em?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.login_eventoCountOrderByAggregateInput
   _avg?: Prisma.login_eventoAvgOrderByAggregateInput
   _max?: Prisma.login_eventoMaxOrderByAggregateInput
@@ -242,10 +253,12 @@ export type login_eventoScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"login_evento"> | number
   usuario_id?: Prisma.IntWithAggregatesFilter<"login_evento"> | number
   criado_em?: Prisma.DateTimeWithAggregatesFilter<"login_evento"> | Date | string
+  saiu_em?: Prisma.DateTimeNullableWithAggregatesFilter<"login_evento"> | Date | string | null
 }
 
 export type login_eventoCreateInput = {
   criado_em?: Date | string
+  saiu_em?: Date | string | null
   cadastro: Prisma.cadastroCreateNestedOneWithoutLogin_eventoInput
 }
 
@@ -253,10 +266,12 @@ export type login_eventoUncheckedCreateInput = {
   id?: number
   usuario_id: number
   criado_em?: Date | string
+  saiu_em?: Date | string | null
 }
 
 export type login_eventoUpdateInput = {
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  saiu_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cadastro?: Prisma.cadastroUpdateOneRequiredWithoutLogin_eventoNestedInput
 }
 
@@ -264,22 +279,26 @@ export type login_eventoUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  saiu_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type login_eventoCreateManyInput = {
   id?: number
   usuario_id: number
   criado_em?: Date | string
+  saiu_em?: Date | string | null
 }
 
 export type login_eventoUpdateManyMutationInput = {
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  saiu_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type login_eventoUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  saiu_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type Login_eventoListRelationFilter = {
@@ -296,6 +315,7 @@ export type login_eventoCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  saiu_em?: Prisma.SortOrder
 }
 
 export type login_eventoAvgOrderByAggregateInput = {
@@ -307,12 +327,14 @@ export type login_eventoMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  saiu_em?: Prisma.SortOrder
 }
 
 export type login_eventoMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  saiu_em?: Prisma.SortOrder
 }
 
 export type login_eventoSumOrderByAggregateInput = {
@@ -364,11 +386,13 @@ export type login_eventoUncheckedUpdateManyWithoutCadastroNestedInput = {
 
 export type login_eventoCreateWithoutCadastroInput = {
   criado_em?: Date | string
+  saiu_em?: Date | string | null
 }
 
 export type login_eventoUncheckedCreateWithoutCadastroInput = {
   id?: number
   criado_em?: Date | string
+  saiu_em?: Date | string | null
 }
 
 export type login_eventoCreateOrConnectWithoutCadastroInput = {
@@ -404,25 +428,30 @@ export type login_eventoScalarWhereInput = {
   id?: Prisma.IntFilter<"login_evento"> | number
   usuario_id?: Prisma.IntFilter<"login_evento"> | number
   criado_em?: Prisma.DateTimeFilter<"login_evento"> | Date | string
+  saiu_em?: Prisma.DateTimeNullableFilter<"login_evento"> | Date | string | null
 }
 
 export type login_eventoCreateManyCadastroInput = {
   id?: number
   criado_em?: Date | string
+  saiu_em?: Date | string | null
 }
 
 export type login_eventoUpdateWithoutCadastroInput = {
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  saiu_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type login_eventoUncheckedUpdateWithoutCadastroInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  saiu_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type login_eventoUncheckedUpdateManyWithoutCadastroInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  saiu_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -431,6 +460,7 @@ export type login_eventoSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   usuario_id?: boolean
   criado_em?: boolean
+  saiu_em?: boolean
   cadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["login_evento"]>
 
@@ -440,9 +470,10 @@ export type login_eventoSelectScalar = {
   id?: boolean
   usuario_id?: boolean
   criado_em?: boolean
+  saiu_em?: boolean
 }
 
-export type login_eventoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "usuario_id" | "criado_em", ExtArgs["result"]["login_evento"]>
+export type login_eventoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "usuario_id" | "criado_em" | "saiu_em", ExtArgs["result"]["login_evento"]>
 export type login_eventoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }
@@ -456,6 +487,7 @@ export type $login_eventoPayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: number
     usuario_id: number
     criado_em: Date
+    saiu_em: Date | null
   }, ExtArgs["result"]["login_evento"]>
   composites: {}
 }
@@ -829,6 +861,7 @@ export interface login_eventoFieldRefs {
   readonly id: Prisma.FieldRef<"login_evento", 'Int'>
   readonly usuario_id: Prisma.FieldRef<"login_evento", 'Int'>
   readonly criado_em: Prisma.FieldRef<"login_evento", 'DateTime'>
+  readonly saiu_em: Prisma.FieldRef<"login_evento", 'DateTime'>
 }
     
 

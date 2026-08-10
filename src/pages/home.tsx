@@ -64,10 +64,25 @@ function Home() {
 
     const navigate = useNavigate();
 
-    function sair() {
-        localStorage.removeItem("access_token");
+    async function sair() {
+        const token = localStorage.getItem("access_token");
 
-        navigate("/");
+        try {
+            if (token) {
+                await fetch(
+                    `${import.meta.env.VITE_API_URL}/auth/logout`,
+                    {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+            }
+        } finally {
+            localStorage.removeItem("access_token");
+            navigate("/");
+        }
     }
 
     interface Usuario {

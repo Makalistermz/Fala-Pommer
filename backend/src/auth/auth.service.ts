@@ -99,6 +99,67 @@ export class AuthService {
         return resultado;
     }
 
+    async registrarSaida(usuarioId: number) {
+        const acessoAberto = await this.prisma.login_evento.findFirst({
+            where: {
+                usuario_id: usuarioId,
+                saiu_em: null
+            },
+            orderBy: {
+                criado_em: "desc"
+            },
+            select: {
+                id: true
+            }
+        });
+
+        if (!acessoAberto) {
+            return {
+                mensagem: "Nenhum acesso aberto encontrado."
+            };
+        }
+
+        await this.prisma.login_evento.update({
+            where: {
+                id: acessoAberto.id
+            },
+            data: {
+                saiu_em: new Date()
+            }
+        });
+
+        return {
+            mensagem: "Saída registrada com sucesso."
+        };
+    }
+
+    async obterRelatoriosLogs() {
+        const acessos = await this.prisma.login_evento.findMany({
+            orderBy: {
+                criado_em: "desc"
+            },
+            select: {
+                id: true,
+                criado_em: true,
+                saiu_em: true,
+                cadastro: {
+                    select: {
+                        nome: true,
+                        tipo_usuario: true
+                    }
+                }
+            }
+        });
+
+        return acessos.map((acesso) => ({
+            id: acesso.id,
+            usuario: acesso.cadastro.nome,
+            tipoUsuario: acesso.cadastro.tipo_usuario,
+            entrada: acesso.criado_em,
+            saida: acesso.saiu_em
+        }));
+    }
+
     async obterLoginsPorMes(ano: number) {
         const inicio = new Date(`${ano}-01-01T00:00:00-03:00`);
         const fim = new Date(`${ano + 1}-01-01T00:00:00-03:00`);

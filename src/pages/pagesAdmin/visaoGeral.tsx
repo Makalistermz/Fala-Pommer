@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { Bar, Line } from "react-chartjs-2";
+import gsap from 'gsap';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -44,6 +45,39 @@ type QuantUsuarioCategoria = {
         id: number;
     };
 };
+
+interface CounterProps {
+    endValue: number;
+    duration?: number;
+}
+
+export const NumberCounter: React.FC<CounterProps> = ({ endValue, duration = 2 }) => {
+    const numberRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        const element = numberRef.current;
+        if (!element) return;
+
+        // Objeto proxy para o GSAP animar o valor numérico
+        const proxy = { val: 0 };
+
+        const tween = gsap.to(proxy, {
+        val: endValue,
+        duration: duration,
+        ease: 'power1.out',
+        onUpdate: () => {
+            // Atualiza o textContent diretamente no DOM a cada frame
+            element.textContent = Math.round(proxy.val).toLocaleString('pt-BR');
+        },
+        });
+
+        return () => {
+        tween.kill(); // Limpa a animação ao desmontar o componente
+        };
+    }, [endValue, duration]);
+
+    return <strong ref={numberRef}>0</strong>;
+}
 
 const opcoesLogin: ChartOptions<"line"> = {
     responsive: true,
@@ -324,7 +358,7 @@ function VisaoGeral() {
                     </div>
                     <div className="info-cards">
                         <small>USUÁRIOS</small>
-                        <strong>{quantUsuarios}</strong>
+                        <NumberCounter endValue={quantUsuarios} />
                     </div>
                 </div>
 
@@ -337,7 +371,7 @@ function VisaoGeral() {
                     </div>
                     <div className="info-cards">
                         <small>SETORES</small>
-                        <strong>20</strong> {/*alterar após pegar o total de usuarios*/}
+                        <NumberCounter endValue={20} /> {/*alterar após pegar o total de usuarios*/}
                     </div>
                 </div>
             </div>
@@ -371,7 +405,7 @@ function VisaoGeral() {
                         <h2>Categorias de usuários</h2>
                     </div>
 
-                    <strong>{quantUsuarios}</strong>
+                    <NumberCounter endValue={quantUsuarios}/>
                 </div>
 
                 <div className="grafico-container grafico-container--barras">

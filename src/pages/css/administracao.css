@@ -304,6 +304,56 @@
     background: rgba(255, 209, 102, 0.16);
 }
 
+.container-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.cards {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    padding: 5px;
+    background-color: white;
+    border: 1px solid #e5eaf0;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(15, 38, 73, 0.08);
+}
+
+.icone-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #1351b4;
+    border-radius: 10px;
+}
+
+.icone {
+    fill: rgb(217, 231, 251);
+}
+
+.info-cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    padding-top: 5px;
+}
+
+.info-cards small {
+    font-size: 16px;
+    font-family: var(--fonte-dm-sans);
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.info-cards strong {
+    font-size: 1.7em;
+    font-family: var(--fonte-dm-sans);
+    color: rgba(0, 0, 0, 0.8);
+}
+
 .grafico-card {
     margin-top: 24px;
     padding: 24px;
@@ -472,6 +522,11 @@
 
     .admin-welcome {
         min-height: 260px;
+    }
+
+    .container-cards {
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr;
     }
 
     .grafico-card {

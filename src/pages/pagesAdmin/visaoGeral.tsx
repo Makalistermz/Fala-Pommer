@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Line } from "react-chartjs-2";
+import { Bar, Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -12,6 +12,7 @@ import {
     Filler,
     type ChartData,
     type ChartOptions,
+    BarElement,
 } from "chart.js";
 
 ChartJS.register(
@@ -19,6 +20,7 @@ ChartJS.register(
     LinearScale,
     PointElement,
     LineElement,
+    BarElement,
     Title,
     Tooltip,
     Legend,
@@ -36,9 +38,9 @@ type RespostaLoginsMensais = {
     meses: MesLogin[];
 };
 
-const opcoes: ChartOptions<"line"> = {
+const opcoesLogin: ChartOptions<"line"> = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: false, // Permite que o gráfico use toda a altura do container pai
     animations: {
         tension: {
             duration: 1000,
@@ -50,10 +52,10 @@ const opcoes: ChartOptions<"line"> = {
     },
     plugins: {
         legend: {
-            position: "top",
+            position: "top", // Posição da legenda ('top', 'bottom', 'left', 'right')
         },
         tooltip: {
-            enabled: true,
+            enabled: true, // Ativa os balões com informações ao passar o mouse
             callbacks: {
                 label: (contexto) => `${contexto.parsed.y} login${contexto.parsed.y === 1 ? "" : "s"}`,
             },
@@ -61,7 +63,7 @@ const opcoes: ChartOptions<"line"> = {
     },
     scales: {
         y: {
-            beginAtZero: true,
+            beginAtZero: true, // Garante que o eixo vertical comece sempre no número 0
             ticks: {
                 precision: 0,
             },
@@ -71,6 +73,36 @@ const opcoes: ChartOptions<"line"> = {
             },
         },
     },
+};
+
+const opcoesUsuarios: ChartOptions<"bar"> = {
+    responsive: true,
+    maintainAspectRatio: false,
+
+    plugins: {
+        legend: {
+            position: "top"
+        },
+
+        tooltip: {
+            enabled: true
+        }
+    },
+
+    scales: {
+        y: {
+            beginAtZero: true,
+
+            ticks: {
+                precision: 0
+            },
+
+            title: {
+                display: true,
+                text: "Quantidade de usuários"
+            }
+        }
+    }
 };
 
 function VisaoGeral() {
@@ -132,41 +164,86 @@ function VisaoGeral() {
         return () => controlador.abort();
     }, [anoAtual]);
 
-    const dados = useMemo<ChartData<"line">>(() => ({
+    const dadosLogin = useMemo<ChartData<"line">>(() => ({
         labels: resultado?.meses.map((mes) => mes.nome) ?? [],
         datasets: [
             {
-                label: `Logins em ${resultado?.ano ?? anoAtual}`,
-                data: resultado?.meses.map((mes) => mes.quantidade) ?? [],
+                label: `Logins em ${resultado?.ano ?? anoAtual}`, //Título da legenda
+                data: resultado?.meses.map((mes) => mes.quantidade) ?? [], //Eixo Y (valores numéricos)
                 borderColor: "rgb(59, 130, 246)",
                 backgroundColor: "rgba(59, 130, 246, 0.18)",
-                fill: true,
-                tension: 0.3,
-                pointRadius: 5,
-                pointHoverRadius: 7,
+                fill: true, //Define se a área sob a linha deve ser preenchida
+                tension: 0.3, //Curvatura da linha (0 = linhas retas, valores maiores = mais curvas)
+                pointRadius: 5, //Tamanho dos pontos nos nós dos dados
+                pointHoverRadius: 7, //Tamanho do ponto quando o mouse passa por cima
             },
         ],
     }), [anoAtual, resultado]);
 
+    const dadosUsuarios: ChartData<"bar"> = {
+        labels: ["Admin", "User", "Funcionário"],
+        datasets: [
+            {
+                label: 'Total de usuarios',
+                data: [2, 4, 10],
+                backgroundColor: [
+                    'rgb(52, 99, 175, 0.2)',
+                    'rgb(184, 14, 14, 0.2)',
+                    'rgb(22, 128, 27, 0.2)',
+                ],
+                borderColor: [
+                    'rgb(52, 99, 175)',
+                    'rgb(184, 14, 14)',
+                    'rgb(22, 128, 27)',
+                ],
+                borderWidth: 1,
+                borderRadius: 6
+            },
+        ],
+    }
+
     return (
-        <div className="grafico-card">
-            <div className="grafico-card-header">
-                <div>
-                    <span className="grafico-card-legenda">ACESSOS AO SISTEMA</span>
-                    <h2>Logins mensais</h2>
+        <>
+            <div className="grafico-card">
+                <div className="grafico-card-header">
+                    <div>
+                        <span className="grafico-card-legenda">ACESSOS AO SISTEMA</span>
+                        <h2>Logins mensais</h2>
+                    </div>
+                    <strong>{resultado?.ano ?? anoAtual}</strong>
                 </div>
-                <strong>{resultado?.ano ?? anoAtual}</strong>
+
+                {carregando && <p className="grafico-status">Carregando dados do gráfico...</p>}
+                {erro && <p className="grafico-status grafico-status-erro" role="alert">{erro}</p>}
+
+                {!carregando && !erro && (
+                    <div className="grafico-container">
+                        <Line data={dadosLogin} options={opcoesLogin} />
+                    </div>
+                )}
             </div>
 
-            {carregando && <p className="grafico-status">Carregando dados do gráfico...</p>}
-            {erro && <p className="grafico-status grafico-status-erro" role="alert">{erro}</p>}
+            <div className="grafico-card grafico-card--usuarios">
+                <div className="grafico-card-header">
+                    <div>
+                        <span className="grafico-card-legenda">
+                            TOTAL DE USUÁRIOS
+                        </span>
 
-            {!carregando && !erro && (
-                <div className="grafico-container">
-                    <Line data={dados} options={opcoes} />
+                        <h2>Categorias de usuários</h2>
+                    </div>
+
+                    <strong>16</strong> //alterar após pegar a quantidade certa de usuarios
                 </div>
-            )}
-        </div>
+
+                <div className="grafico-container grafico-container--barras">
+                    <Bar
+                        data={dadosUsuarios}
+                        options={opcoesUsuarios}
+                    />
+                </div>
+            </div>
+        </>
     );
 }
 

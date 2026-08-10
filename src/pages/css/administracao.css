@@ -360,6 +360,84 @@
     height: 380px;
 }
 
+.grafico-card {
+    min-width: 0;
+
+    padding: 24px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e5eaf0;
+    border-radius: 16px;
+
+    box-shadow: 0 8px 25px rgba(15, 38, 73, 0.08);
+}
+
+.grafico-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 20px;
+}
+
+.grafico-card-legenda {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: var(--azul-escuro);
+
+    font-family: var(--fonte-dm-sans);
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+.grafico-card-header h2 {
+    margin: 0;
+
+    color: #172033;
+
+    font-family: var(--fonte-poppins);
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.grafico-card-header strong {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-width: 48px;
+    height: 38px;
+
+    padding: 0 12px;
+
+    color: var(--azul-escuro);
+    background-color: #e7f0ff;
+
+    border-radius: 10px;
+
+    font-family: var(--fonte-poppins);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.grafico-container {
+    position: relative;
+
+    width: 100%;
+    height: 350px;
+
+    margin-top: 25px;
+}
+
+.grafico-container--barras {
+    height: 320px;
+}
+
 @media (max-width: 700px) {
     .administracao {
         --admin-sidebar-width: 230px;
@@ -394,6 +472,20 @@
 
     .admin-welcome {
         min-height: 260px;
+    }
+
+    .grafico-card {
+        padding: 18px;
+        border-radius: 12px;
+    }
+
+    .grafico-card-header h2 {
+        font-size: 18px;
+    }
+
+    .grafico-container,
+    .grafico-container--barras {
+        height: 280px;
     }
 }
 

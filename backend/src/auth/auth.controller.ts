@@ -79,6 +79,13 @@ export class AuthController {
         return this.authService.obterLoginsPorMes(anoInformado);
     }
 
+    @Get("quantidade-usuarios")
+    @UseGuards(AuthGuard, PerfisGuard)
+    @Perfis("admin", "funcionario")
+    obterQuantUsuarios() {
+        return this.authService.obterQuantUsuarios();
+    }
+
     @Get("area-municipe")
     @UseGuards(AuthGuard, PerfisGuard)
     @Perfis("user")

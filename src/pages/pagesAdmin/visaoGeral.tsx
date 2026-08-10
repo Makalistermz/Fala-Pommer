@@ -108,6 +108,7 @@ const opcoesUsuarios: ChartOptions<"bar"> = {
 function VisaoGeral() {
     const [resultado, setResultado] = useState<RespostaLoginsMensais | null>(null);
     const [carregando, setCarregando] = useState(true);
+    const [quantUsuarios, setQuantUsuarios] = useState(0);
     const [erro, setErro] = useState("");
     const anoAtual = Number(
         new Intl.DateTimeFormat("pt-BR", {
@@ -163,6 +164,36 @@ function VisaoGeral() {
 
         return () => controlador.abort();
     }, [anoAtual]);
+
+    useEffect(() => {
+        async function carregarQuantUsuarios() {
+            const token = localStorage.getItem("access_token");
+
+            if (!token) return;
+
+            try {
+                const resposta = await fetch(
+                    `${import.meta.env.VITE_API_URL}/auth/quantidade-usuarios`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível buscar os usuários.");
+                }
+
+                const total: number = await resposta.json();
+                setQuantUsuarios(total);
+            } catch (erro) {
+                console.error("Erro ao buscar quantidade de usuários:", erro);
+            }
+        }
+
+        void carregarQuantUsuarios();
+    }, []);
 
     const dadosLogin = useMemo<ChartData<"line">>(() => ({
         labels: resultado?.meses.map((mes) => mes.nome) ?? [],
@@ -247,7 +278,7 @@ function VisaoGeral() {
                     </div>
                     <div className="info-cards">
                         <small>USUÁRIOS</small>
-                        <strong>16</strong> {/*alterar após pegar o total de usuarios*/}
+                        <strong>{quantUsuarios}</strong>
                     </div>
                 </div>
 
@@ -294,7 +325,7 @@ function VisaoGeral() {
                         <h2>Categorias de usuários</h2>
                     </div>
 
-                    <strong>16</strong> {/*alterar após pegar a quantidade certa de usuarios*/}
+                    <strong>{quantUsuarios}</strong>
                 </div>
 
                 <div className="grafico-container grafico-container--barras">

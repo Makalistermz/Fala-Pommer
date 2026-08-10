@@ -83,6 +83,11 @@ export class AuthService {
         };
     }
 
+    async obterQuantUsuarios() {
+        const total = await this.prisma.cadastro.count();
+        return total;
+    }
+
     async obterLoginsPorMes(ano: number) {
         const inicio = new Date(`${ano}-01-01T00:00:00-03:00`);
         const fim = new Date(`${ano + 1}-01-01T00:00:00-03:00`);

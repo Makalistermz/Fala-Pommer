@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { Link } from "react-router";
 import brasao from "../assets/img/brasao.png";
 import "./css/administracao.css";
+import VisaoGeral from "./pagesAdmin/visaoGeral";
 
 type ItemMenu = {
     id: string;
@@ -60,6 +61,13 @@ const itensMenu: ItemMenu[] = [
 function Administracao() {
     const [menuAberto, setMenuAberto] = useState(true);
     const [itemAtivo, setItemAtivo] = useState("visao-geral");
+
+    function renderizarConteudo() {
+        switch (itemAtivo) {
+            case "visao-geral":
+                return <VisaoGeral />;
+        }
+    }
 
     return (
         <div className={`administracao ${menuAberto ? "menu-aberto" : "menu-fechado"}`}>
@@ -121,19 +129,9 @@ function Administracao() {
                         <h1>{itensMenu.find((item) => item.id === itemAtivo)?.label}</h1>
                     </div>
                 </header>
-
-                <section className="admin-welcome" aria-labelledby="titulo-boas-vindas">
-                    <div>
-                        <span className="admin-welcome-tag">Administração</span>
-                        <h2 id="titulo-boas-vindas">Bem-vindo ao painel</h2>
-                        <p>Gerencie as informações e configurações do Fala Pommer pelo menu lateral.</p>
-                    </div>
-                    <div className="admin-welcome-decoration" aria-hidden="true">
-                        <span />
-                        <span />
-                        <span />
-                    </div>
-                </section>
+                <div className="admin-page-content">
+                    {renderizarConteudo()}
+                </div>
             </main>
         </div>
     );

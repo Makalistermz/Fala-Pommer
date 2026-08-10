@@ -88,6 +88,17 @@ export class AuthService {
         return total;
     }
 
+    async obterQuantUsuarioCategoria() {
+        const resultado = await this.prisma.cadastro.groupBy({
+            by: ['tipo_usuario'],
+            _count: {
+                id: true,
+            },
+        });
+
+        return resultado;
+    }
+
     async obterLoginsPorMes(ano: number) {
         const inicio = new Date(`${ano}-01-01T00:00:00-03:00`);
         const fim = new Date(`${ano + 1}-01-01T00:00:00-03:00`);

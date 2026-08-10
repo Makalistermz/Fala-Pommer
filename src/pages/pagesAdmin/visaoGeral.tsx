@@ -38,6 +38,13 @@ type RespostaLoginsMensais = {
     meses: MesLogin[];
 };
 
+type QuantUsuarioCategoria = {
+    tipo_usuario: "admin" | "user" | "funcionario";
+    _count: {
+        id: number;
+    };
+};
+
 const opcoesLogin: ChartOptions<"line"> = {
     responsive: true,
     maintainAspectRatio: false, // Permite que o gráfico use toda a altura do container pai
@@ -109,6 +116,7 @@ function VisaoGeral() {
     const [resultado, setResultado] = useState<RespostaLoginsMensais | null>(null);
     const [carregando, setCarregando] = useState(true);
     const [quantUsuarios, setQuantUsuarios] = useState(0);
+    const [quantUsuariosCategoria, setQuantUsuariosCategoria] = useState<QuantUsuarioCategoria[]>([]);
     const [erro, setErro] = useState("");
     const anoAtual = Number(
         new Intl.DateTimeFormat("pt-BR", {
@@ -195,6 +203,44 @@ function VisaoGeral() {
         void carregarQuantUsuarios();
     }, []);
 
+    useEffect(() => {
+        async function carregarQuantUsuariosCategoria() {
+            const token = localStorage.getItem("access_token");
+
+            if (!token) return;
+
+            try {
+                const resposta = await fetch(
+                    `${import.meta.env.VITE_API_URL}/auth/quantidade-usuarios-categoria`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                    },
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível buscar os usuários.");
+                }
+
+                const dados = await resposta.json() as QuantUsuarioCategoria[];
+                setQuantUsuariosCategoria(dados);
+            } catch (erro) {
+                console.log("Erro ao buscar quantidade de usuarios po categoria:", erro);
+            }
+        }
+
+        void carregarQuantUsuariosCategoria();
+    }, []);
+
+    function obterQuantidadeCategoria(
+        tipo: QuantUsuarioCategoria["tipo_usuario"],
+    ) {
+        return quantUsuariosCategoria.find(
+            (categoria) => categoria.tipo_usuario === tipo,
+        )?._count.id ?? 0;
+    }
+
     const dadosLogin = useMemo<ChartData<"line">>(() => ({
         labels: resultado?.meses.map((mes) => mes.nome) ?? [],
         datasets: [
@@ -223,7 +269,7 @@ function VisaoGeral() {
                 label: "Administradores",
 
                 data: [
-                    2,     // Admin
+                    obterQuantidadeCategoria("admin"),     // Admin
                     null,  // Usuário
                     null   // Funcionário
                 ],
@@ -239,7 +285,7 @@ function VisaoGeral() {
 
                 data: [
                     null,  // Admin
-                    4,     // Usuário
+                    obterQuantidadeCategoria("user"),     // Usuário
                     null   // Funcionário
                 ],
 
@@ -255,7 +301,7 @@ function VisaoGeral() {
                 data: [
                     null,  // Admin
                     null,  // Usuário
-                    10     // Funcionário
+                    obterQuantidadeCategoria("funcionario")   // Funcionário
                 ],
 
                 backgroundColor: "rgba(26, 151, 10, 0.25)",

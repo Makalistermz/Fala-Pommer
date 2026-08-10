@@ -21,6 +21,7 @@ import { AuthService } from "./auth.service";
 import { LoginDto } from "./dto/login.dto";
 import { Perfis } from "./decorators/perfis.decorator";
 import { PerfisGuard } from "./guards/perfis.guard";
+import { get } from "http";
 
 @Controller("auth")
 export class AuthController {
@@ -84,6 +85,13 @@ export class AuthController {
     @Perfis("admin", "funcionario")
     obterQuantUsuarios() {
         return this.authService.obterQuantUsuarios();
+    }
+
+    @Get("quantidade-usuarios-categoria")
+    @UseGuards(AuthGuard, PerfisGuard)
+    @Perfis("admin", "funcionario")
+    obterQuantUsuarioCategoria() {
+        return this.authService.obterQuantUsuarioCategoria();
     }
 
     @Get("area-municipe")

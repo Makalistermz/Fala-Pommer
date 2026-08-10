@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import brasao from "../assets/img/brasao.png";
 import "./css/administracao.css";
 import VisaoGeral from "./pagesAdmin/visaoGeral";
+import RelatoriosLogs from "./pagesAdmin/relatoriosLogs";
 
 type ItemMenu = {
     id: string;
@@ -67,6 +68,9 @@ function Administracao() {
         switch (itemAtivo) {
             case "visao-geral":
                 return <VisaoGeral />;
+
+            case "relatorios":
+                return <RelatoriosLogs />
         }
     }
 

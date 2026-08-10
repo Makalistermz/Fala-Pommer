@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   cadastro: 'cadastro',
+  login_evento: 'login_evento',
   conversa: 'conversa',
   conversa_participante: 'conversa_participante'
 } as const
@@ -86,6 +87,15 @@ export const CadastroScalarFieldEnum = {
 } as const
 
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]
+
+
+export const Login_eventoScalarFieldEnum = {
+  id: 'id',
+  usuario_id: 'usuario_id',
+  criado_em: 'criado_em'
+} as const
+
+export type Login_eventoScalarFieldEnum = (typeof Login_eventoScalarFieldEnum)[keyof typeof Login_eventoScalarFieldEnum]
 
 
 export const ConversaScalarFieldEnum = {

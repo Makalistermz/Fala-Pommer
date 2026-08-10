@@ -1,6 +1,5 @@
-import { Line } from 'react-chartjs-2';
-
-// Importar os módulos necessários do núcleo do Chart.js
+import { useEffect, useMemo, useState } from "react";
+import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -10,10 +9,11 @@ import {
     Title,
     Tooltip,
     Legend,
-    Filler // Opcional: Necessário apenas se quiser preencher a área sob a linha
-} from 'chart.js';
+    Filler,
+    type ChartData,
+    type ChartOptions,
+} from "chart.js";
 
-// Registrar os módulos importados (Obrigatório no Chart.js moderno)
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -22,69 +22,147 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
-    Filler
+    Filler,
 );
 
+type MesLogin = {
+    mes: number;
+    nome: string;
+    quantidade: number;
+};
+
+type RespostaLoginsMensais = {
+    ano: number;
+    meses: MesLogin[];
+};
+
+const opcoes: ChartOptions<"line"> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: {
+        duration: 900,
+        easing: "easeOutQuart",
+    },
+    plugins: {
+        legend: {
+            position: "top",
+        },
+        tooltip: {
+            enabled: true,
+            callbacks: {
+                label: (contexto) => `${contexto.parsed.y} login${contexto.parsed.y === 1 ? "" : "s"}`,
+            },
+        },
+    },
+    scales: {
+        y: {
+            beginAtZero: true,
+            ticks: {
+                precision: 0,
+            },
+            title: {
+                display: true,
+                text: "Quantidade de logins",
+            },
+        },
+    },
+};
+
 function VisaoGeral() {
-    // Estrutura de Dados do Gráfico
-    const dados = {
-        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'], // Eixo X
+    const [resultado, setResultado] = useState<RespostaLoginsMensais | null>(null);
+    const [carregando, setCarregando] = useState(true);
+    const [erro, setErro] = useState("");
+    const anoAtual = Number(
+        new Intl.DateTimeFormat("pt-BR", {
+            timeZone: "America/Sao_Paulo",
+            year: "numeric",
+        }).format(new Date()),
+    );
+
+    useEffect(() => {
+        const controlador = new AbortController();
+
+        async function carregarLoginsMensais() {
+            const token = localStorage.getItem("access_token");
+
+            if (!token) {
+                setErro("Sessão expirada. Entre novamente para consultar os dados.");
+                setCarregando(false);
+                return;
+            }
+
+            try {
+                const resposta = await fetch(
+                    `${import.meta.env.VITE_API_URL}/auth/logins-por-mes?ano=${anoAtual}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                        signal: controlador.signal,
+                    },
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível consultar os logins mensais.");
+                }
+
+                const dados = await resposta.json() as RespostaLoginsMensais;
+                setResultado(dados);
+                setErro("");
+            } catch (error) {
+                if (error instanceof DOMException && error.name === "AbortError") {
+                    return;
+                }
+
+                setErro("Não foi possível carregar a quantidade de logins.");
+            } finally {
+                if (!controlador.signal.aborted) {
+                    setCarregando(false);
+                }
+            }
+        }
+
+        void carregarLoginsMensais();
+
+        return () => controlador.abort();
+    }, [anoAtual]);
+
+    const dados = useMemo<ChartData<"line">>(() => ({
+        labels: resultado?.meses.map((mes) => mes.nome) ?? [],
         datasets: [
             {
-                label: 'Quantidades de login no mês', // Título da legenda
-                data:[4, 8, 6, 12, 10, 15, 100, 243, 60, 500, 200, 300], // Eixo Y (valores numéricos)
-                borderColor: 'rgb(59, 130, 246)', // Cor da linha (Azul)
-                backgroundColor: 'rgba(59, 131, 246, 0.25)', // Cor do preenchimento sob a linha
-                fill: true, // Define se a área sob a linha deve ser preenchida
-                tension: 0.3, // Curvatura da linha (0 = linhas retas, valores maiores = mais curvas)
-                pointRadius: 5, // Tamanho dos pontos nos nós dos dados
-                pointHoverRadius: 7, // Tamanho do ponto quando o mouse passa por cima
+                label: `Logins em ${resultado?.ano ?? anoAtual}`,
+                data: resultado?.meses.map((mes) => mes.quantidade) ?? [],
+                borderColor: "rgb(59, 130, 246)",
+                backgroundColor: "rgba(59, 130, 246, 0.18)",
+                fill: true,
+                tension: 0.3,
+                pointRadius: 5,
+                pointHoverRadius: 7,
             },
         ],
-    };
-
-    //Configurações de Customização (Opcional, mas altamente recomendado)
-    const opcoes = {
-        responsive: true,
-        maintainAspectRatio: false, // Permite que o gráfico use toda a altura do container pai
-        plugins: {
-            legend: {
-                position: 'top', // Posição da legenda ('top', 'bottom', 'left', 'right')
-            },
-            tooltip: {
-                enabled: true, // Ativa os balões com informações ao passar o mouse
-            },
-        },
-        animations: {
-            tension: {
-                duration: 1000,
-                easing: 'linear',
-                from: 0.5,
-                to: 0,
-                loop: true
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true, // Garante que o eixo vertical comece sempre no número 0
-                min: 0,
-                max: 1000
-            },
-        },
-    };
+    }), [anoAtual, resultado]);
 
     return (
-        <>
-            {/*Definimos a altura no elemento pai para controlar o tamanho do gráfico*/}
-            <div className="grafico-card">
-                <h2>Login mensal</h2>
+        <div className="grafico-card">
+            <div className="grafico-card-header">
+                <div>
+                    <span className="grafico-card-legenda">ACESSOS AO SISTEMA</span>
+                    <h2>Logins mensais</h2>
+                </div>
+                <strong>{resultado?.ano ?? anoAtual}</strong>
+            </div>
 
+            {carregando && <p className="grafico-status">Carregando dados do gráfico...</p>}
+            {erro && <p className="grafico-status grafico-status-erro" role="alert">{erro}</p>}
+
+            {!carregando && !erro && (
                 <div className="grafico-container">
                     <Line data={dados} options={opcoes} />
                 </div>
-            </div>
-        </>
-    )
+            )}
+        </div>
+    );
 }
 
 export default VisaoGeral;

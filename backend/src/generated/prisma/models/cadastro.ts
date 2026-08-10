@@ -257,6 +257,7 @@ export type cadastroWhereInput = {
   token_recuperacao_expira_em?: Prisma.DateTimeNullableFilter<"cadastro"> | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFilter<"cadastro"> | $Enums.cadastro_tipo_usuario
   conversa_participante?: Prisma.Conversa_participanteListRelationFilter
+  login_evento?: Prisma.Login_eventoListRelationFilter
 }
 
 export type cadastroOrderByWithRelationInput = {
@@ -271,6 +272,7 @@ export type cadastroOrderByWithRelationInput = {
   token_recuperacao_expira_em?: Prisma.SortOrderInput | Prisma.SortOrder
   tipo_usuario?: Prisma.SortOrder
   conversa_participante?: Prisma.conversa_participanteOrderByRelationAggregateInput
+  login_evento?: Prisma.login_eventoOrderByRelationAggregateInput
   _relevance?: Prisma.cadastroOrderByRelevanceInput
 }
 
@@ -289,6 +291,7 @@ export type cadastroWhereUniqueInput = Prisma.AtLeast<{
   token_recuperacao_expira_em?: Prisma.DateTimeNullableFilter<"cadastro"> | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFilter<"cadastro"> | $Enums.cadastro_tipo_usuario
   conversa_participante?: Prisma.Conversa_participanteListRelationFilter
+  login_evento?: Prisma.Login_eventoListRelationFilter
 }, "id">
 
 export type cadastroOrderByWithAggregationInput = {
@@ -336,6 +339,7 @@ export type cadastroCreateInput = {
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
+  login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
 }
 
 export type cadastroUncheckedCreateInput = {
@@ -350,6 +354,7 @@ export type cadastroUncheckedCreateInput = {
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
+  login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
 }
 
 export type cadastroUpdateInput = {
@@ -363,6 +368,7 @@ export type cadastroUpdateInput = {
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
+  login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
 }
 
 export type cadastroUncheckedUpdateInput = {
@@ -377,6 +383,7 @@ export type cadastroUncheckedUpdateInput = {
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
+  login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
 }
 
 export type cadastroCreateManyInput = {
@@ -503,6 +510,20 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type cadastroCreateNestedOneWithoutLogin_eventoInput = {
+  create?: Prisma.XOR<Prisma.cadastroCreateWithoutLogin_eventoInput, Prisma.cadastroUncheckedCreateWithoutLogin_eventoInput>
+  connectOrCreate?: Prisma.cadastroCreateOrConnectWithoutLogin_eventoInput
+  connect?: Prisma.cadastroWhereUniqueInput
+}
+
+export type cadastroUpdateOneRequiredWithoutLogin_eventoNestedInput = {
+  create?: Prisma.XOR<Prisma.cadastroCreateWithoutLogin_eventoInput, Prisma.cadastroUncheckedCreateWithoutLogin_eventoInput>
+  connectOrCreate?: Prisma.cadastroCreateOrConnectWithoutLogin_eventoInput
+  upsert?: Prisma.cadastroUpsertWithoutLogin_eventoInput
+  connect?: Prisma.cadastroWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.cadastroUpdateToOneWithWhereWithoutLogin_eventoInput, Prisma.cadastroUpdateWithoutLogin_eventoInput>, Prisma.cadastroUncheckedUpdateWithoutLogin_eventoInput>
+}
+
 export type cadastroCreateNestedOneWithoutConversa_participanteInput = {
   create?: Prisma.XOR<Prisma.cadastroCreateWithoutConversa_participanteInput, Prisma.cadastroUncheckedCreateWithoutConversa_participanteInput>
   connectOrCreate?: Prisma.cadastroCreateOrConnectWithoutConversa_participanteInput
@@ -517,6 +538,76 @@ export type cadastroUpdateOneRequiredWithoutConversa_participanteNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.cadastroUpdateToOneWithWhereWithoutConversa_participanteInput, Prisma.cadastroUpdateWithoutConversa_participanteInput>, Prisma.cadastroUncheckedUpdateWithoutConversa_participanteInput>
 }
 
+export type cadastroCreateWithoutLogin_eventoInput = {
+  nome: string
+  data_nascimento: Date | string
+  cpf: string
+  telefone: string
+  email: string
+  senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
+  conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
+}
+
+export type cadastroUncheckedCreateWithoutLogin_eventoInput = {
+  id?: number
+  nome: string
+  data_nascimento: Date | string
+  cpf: string
+  telefone: string
+  email: string
+  senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
+  conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
+}
+
+export type cadastroCreateOrConnectWithoutLogin_eventoInput = {
+  where: Prisma.cadastroWhereUniqueInput
+  create: Prisma.XOR<Prisma.cadastroCreateWithoutLogin_eventoInput, Prisma.cadastroUncheckedCreateWithoutLogin_eventoInput>
+}
+
+export type cadastroUpsertWithoutLogin_eventoInput = {
+  update: Prisma.XOR<Prisma.cadastroUpdateWithoutLogin_eventoInput, Prisma.cadastroUncheckedUpdateWithoutLogin_eventoInput>
+  create: Prisma.XOR<Prisma.cadastroCreateWithoutLogin_eventoInput, Prisma.cadastroUncheckedCreateWithoutLogin_eventoInput>
+  where?: Prisma.cadastroWhereInput
+}
+
+export type cadastroUpdateToOneWithWhereWithoutLogin_eventoInput = {
+  where?: Prisma.cadastroWhereInput
+  data: Prisma.XOR<Prisma.cadastroUpdateWithoutLogin_eventoInput, Prisma.cadastroUncheckedUpdateWithoutLogin_eventoInput>
+}
+
+export type cadastroUpdateWithoutLogin_eventoInput = {
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  data_nascimento?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cpf?: Prisma.StringFieldUpdateOperationsInput | string
+  telefone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
+}
+
+export type cadastroUncheckedUpdateWithoutLogin_eventoInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  data_nascimento?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cpf?: Prisma.StringFieldUpdateOperationsInput | string
+  telefone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
+}
+
 export type cadastroCreateWithoutConversa_participanteInput = {
   nome: string
   data_nascimento: Date | string
@@ -527,6 +618,7 @@ export type cadastroCreateWithoutConversa_participanteInput = {
   token_recuperacao?: string | null
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
+  login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
 }
 
 export type cadastroUncheckedCreateWithoutConversa_participanteInput = {
@@ -540,6 +632,7 @@ export type cadastroUncheckedCreateWithoutConversa_participanteInput = {
   token_recuperacao?: string | null
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
+  login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
 }
 
 export type cadastroCreateOrConnectWithoutConversa_participanteInput = {
@@ -568,6 +661,7 @@ export type cadastroUpdateWithoutConversa_participanteInput = {
   token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutConversa_participanteInput = {
@@ -581,6 +675,7 @@ export type cadastroUncheckedUpdateWithoutConversa_participanteInput = {
   token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
 }
 
 
@@ -590,10 +685,12 @@ export type cadastroUncheckedUpdateWithoutConversa_participanteInput = {
 
 export type CadastroCountOutputType = {
   conversa_participante: number
+  login_evento: number
 }
 
 export type CadastroCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   conversa_participante?: boolean | CadastroCountOutputTypeCountConversa_participanteArgs
+  login_evento?: boolean | CadastroCountOutputTypeCountLogin_eventoArgs
 }
 
 /**
@@ -613,6 +710,13 @@ export type CadastroCountOutputTypeCountConversa_participanteArgs<ExtArgs extend
   where?: Prisma.conversa_participanteWhereInput
 }
 
+/**
+ * CadastroCountOutputType without action
+ */
+export type CadastroCountOutputTypeCountLogin_eventoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.login_eventoWhereInput
+}
+
 
 export type cadastroSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -626,6 +730,7 @@ export type cadastroSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   token_recuperacao_expira_em?: boolean
   tipo_usuario?: boolean
   conversa_participante?: boolean | Prisma.cadastro$conversa_participanteArgs<ExtArgs>
+  login_evento?: boolean | Prisma.cadastro$login_eventoArgs<ExtArgs>
   _count?: boolean | Prisma.CadastroCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cadastro"]>
 
@@ -647,6 +752,7 @@ export type cadastroSelectScalar = {
 export type cadastroOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "data_nascimento" | "cpf" | "telefone" | "email" | "senha" | "token_recuperacao" | "token_recuperacao_expira_em" | "tipo_usuario", ExtArgs["result"]["cadastro"]>
 export type cadastroInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   conversa_participante?: boolean | Prisma.cadastro$conversa_participanteArgs<ExtArgs>
+  login_evento?: boolean | Prisma.cadastro$login_eventoArgs<ExtArgs>
   _count?: boolean | Prisma.CadastroCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -654,6 +760,7 @@ export type $cadastroPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   name: "cadastro"
   objects: {
     conversa_participante: Prisma.$conversa_participantePayload<ExtArgs>[]
+    login_evento: Prisma.$login_eventoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1007,6 +1114,7 @@ readonly fields: cadastroFieldRefs;
 export interface Prisma__cadastroClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   conversa_participante<T extends Prisma.cadastro$conversa_participanteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$conversa_participanteArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_participantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  login_evento<T extends Prisma.cadastro$login_eventoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$login_eventoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$login_eventoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1415,6 +1523,30 @@ export type cadastro$conversa_participanteArgs<ExtArgs extends runtime.Types.Ext
   take?: number
   skip?: number
   distinct?: Prisma.Conversa_participanteScalarFieldEnum | Prisma.Conversa_participanteScalarFieldEnum[]
+}
+
+/**
+ * cadastro.login_evento
+ */
+export type cadastro$login_eventoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the login_evento
+   */
+  select?: Prisma.login_eventoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the login_evento
+   */
+  omit?: Prisma.login_eventoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.login_eventoInclude<ExtArgs> | null
+  where?: Prisma.login_eventoWhereInput
+  orderBy?: Prisma.login_eventoOrderByWithRelationInput | Prisma.login_eventoOrderByWithRelationInput[]
+  cursor?: Prisma.login_eventoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Login_eventoScalarFieldEnum | Prisma.Login_eventoScalarFieldEnum[]
 }
 
 /**

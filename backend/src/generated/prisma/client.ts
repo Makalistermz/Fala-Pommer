@@ -45,6 +45,11 @@ export { Prisma }
  */
 export type cadastro = Prisma.cadastroModel
 /**
+ * Model login_evento
+ * 
+ */
+export type login_evento = Prisma.login_eventoModel
+/**
  * Model conversa
  * 
  */

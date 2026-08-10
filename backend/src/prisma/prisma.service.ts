@@ -21,7 +21,10 @@ export class PrismaService
       throw new Error("DATABASE_URL não foi configurada.");
     }
 
-    const adapter = new PrismaMariaDb(databaseUrl);
+    const databaseUrlComFuso = new URL(databaseUrl);
+    databaseUrlComFuso.searchParams.set("timezone", "-03:00");
+
+    const adapter = new PrismaMariaDb(databaseUrlComFuso.toString());
 
     super({ adapter });
   }

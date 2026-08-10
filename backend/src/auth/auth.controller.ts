@@ -1,11 +1,13 @@
 import {
     Body,
     Controller,
+    BadRequestException,
     HttpCode,
     HttpStatus,
     Post,
     Get,
     Req,
+    Query,
     UseGuards
 } from "@nestjs/common";
 
@@ -50,6 +52,31 @@ export class AuthController {
         return{
             mensagem: "Bem-vindo à área da prefeitura"
         };
+    }
+
+    @Get("logins-por-mes")
+    @UseGuards(AuthGuard, PerfisGuard)
+    @Perfis("admin", "funcionario")
+    loginsPorMes(@Query("ano") ano?: string) {
+        const anoAtual = Number(
+            new Intl.DateTimeFormat("pt-BR", {
+                timeZone: "America/Sao_Paulo",
+                year: "numeric"
+            }).format(new Date())
+        );
+        const anoInformado = ano === undefined
+            ? anoAtual
+            : Number(ano);
+
+        if (
+            !Number.isInteger(anoInformado) ||
+            anoInformado < 2000 ||
+            anoInformado > anoAtual + 1
+        ) {
+            throw new BadRequestException("Ano inválido.");
+        }
+
+        return this.authService.obterLoginsPorMes(anoInformado);
     }
 
     @Get("area-municipe")

@@ -10,10 +10,12 @@ import { AuthService } from "./auth.service";
 import { UsuariosModule } from "../usuarios/usuarios.module";
 import { AuthGuard } from "./auth.guard";
 import { PerfisGuard } from "./guards/perfis.guard";
+import { PrismaModule } from "../prisma/prisma.module";
 
 @Module({
     imports: [
         UsuariosModule,
+        PrismaModule,
         ConfigModule,
 
         JwtModule.registerAsync({

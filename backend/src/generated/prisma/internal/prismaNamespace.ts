@@ -398,6 +398,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   cadastro: 'cadastro',
+  login_evento: 'login_evento',
   conversa: 'conversa',
   conversa_participante: 'conversa_participante'
 } as const
@@ -415,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "conversa" | "conversa_participante"
+    modelProps: "cadastro" | "login_evento" | "conversa" | "conversa_participante"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -482,6 +483,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.cadastroCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CadastroCountAggregateOutputType> | number
+        }
+      }
+    }
+    login_evento: {
+      payload: Prisma.$login_eventoPayload<ExtArgs>
+      fields: Prisma.login_eventoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.login_eventoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_eventoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.login_eventoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_eventoPayload>
+        }
+        findFirst: {
+          args: Prisma.login_eventoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_eventoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.login_eventoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_eventoPayload>
+        }
+        findMany: {
+          args: Prisma.login_eventoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_eventoPayload>[]
+        }
+        create: {
+          args: Prisma.login_eventoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_eventoPayload>
+        }
+        createMany: {
+          args: Prisma.login_eventoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.login_eventoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_eventoPayload>
+        }
+        update: {
+          args: Prisma.login_eventoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_eventoPayload>
+        }
+        deleteMany: {
+          args: Prisma.login_eventoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.login_eventoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.login_eventoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$login_eventoPayload>
+        }
+        aggregate: {
+          args: Prisma.Login_eventoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLogin_evento>
+        }
+        groupBy: {
+          args: Prisma.login_eventoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Login_eventoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.login_eventoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Login_eventoCountAggregateOutputType> | number
         }
       }
     }
@@ -670,6 +737,15 @@ export const CadastroScalarFieldEnum = {
 } as const
 
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]
+
+
+export const Login_eventoScalarFieldEnum = {
+  id: 'id',
+  usuario_id: 'usuario_id',
+  criado_em: 'criado_em'
+} as const
+
+export type Login_eventoScalarFieldEnum = (typeof Login_eventoScalarFieldEnum)[keyof typeof Login_eventoScalarFieldEnum]
 
 
 export const ConversaScalarFieldEnum = {
@@ -917,6 +993,7 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
   cadastro?: Prisma.cadastroOmit
+  login_evento?: Prisma.login_eventoOmit
   conversa?: Prisma.conversaOmit
   conversa_participante?: Prisma.conversa_participanteOmit
 }

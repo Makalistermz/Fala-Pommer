@@ -20,6 +20,17 @@ model cadastro {
   token_recuperacao_expira_em DateTime?
   tipo_usuario                cadastro_tipo_usuario   @default(user)
   conversa_participante       conversa_participante[]
+  login_evento                login_evento[]
+}
+
+model login_evento {
+  id         Int      @id @default(autoincrement())
+  usuario_id Int
+  criado_em  DateTime @default(now()) @db.DateTime(0)
+  cadastro   cadastro @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_login_evento_usuario")
+
+  @@index([usuario_id], map: "fk_login_evento_usuario")
+  @@index([criado_em], map: "idx_login_evento_criado_em")
 }
 
 model conversa {

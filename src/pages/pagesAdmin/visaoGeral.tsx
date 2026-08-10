@@ -181,26 +181,60 @@ function VisaoGeral() {
     }), [anoAtual, resultado]);
 
     const dadosUsuarios: ChartData<"bar"> = {
-        labels: ["Admin", "User", "Funcionário"],
+        labels: [
+            "Admin",
+            "Usuário",
+            "Funcionário"
+        ],
+
         datasets: [
             {
-                label: 'Total de usuarios',
-                data: [2, 4, 10],
-                backgroundColor: [
-                    'rgb(52, 99, 175, 0.2)',
-                    'rgb(184, 14, 14, 0.2)',
-                    'rgb(22, 128, 27, 0.2)',
+                label: "Administradores",
+
+                data: [
+                    2,     // Admin
+                    null,  // Usuário
+                    null   // Funcionário
                 ],
-                borderColor: [
-                    'rgb(52, 99, 175)',
-                    'rgb(184, 14, 14)',
-                    'rgb(22, 128, 27)',
-                ],
+
+                backgroundColor: "rgba(52, 99, 175, 0.25)",
+                borderColor: "rgb(52, 99, 175)",
                 borderWidth: 1,
-                borderRadius: 6
+                borderRadius: 6,
+                skipNull: true
             },
-        ],
-    }
+            {
+                label: "Usuários",
+
+                data: [
+                    null,  // Admin
+                    4,     // Usuário
+                    null   // Funcionário
+                ],
+
+                backgroundColor: "rgba(187, 17, 17, 0.25)",
+                borderColor: "rgb(187, 17, 17)",
+                borderWidth: 1,
+                borderRadius: 6,
+                skipNull: true
+            },
+            {
+                label: "Funcionários",
+
+                data: [
+                    null,  // Admin
+                    null,  // Usuário
+                    10     // Funcionário
+                ],
+
+                backgroundColor: "rgba(26, 151, 10, 0.25)",
+                borderColor: "rgb(26, 151, 10)",
+                borderWidth: 1,
+                borderRadius: 6,
+                skipNull: true
+            }
+        ]
+    };
 
     return (
         <>
@@ -233,7 +267,7 @@ function VisaoGeral() {
                         <h2>Categorias de usuários</h2>
                     </div>
 
-                    <strong>16</strong> //alterar após pegar a quantidade certa de usuarios
+                    <strong>16</strong> {/*alterar após pegar a quantidade certa de usuarios*/}
                 </div>
 
                 <div className="grafico-container grafico-container--barras">

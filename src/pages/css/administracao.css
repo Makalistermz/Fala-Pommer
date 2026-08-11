@@ -488,6 +488,114 @@
     height: 320px;
 }
 
+.setores {
+    overflow: hidden;
+    border: 1px solid #e5eaf0;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 8px 25px rgba(15, 38, 73, 0.08);
+}
+
+.setores__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 24px;
+    border-bottom: 1px solid #e5eaf0;
+}
+
+.setores__header span {
+    color: #1351b4;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+}
+
+.setores__header h2 {
+    margin: 6px 0 4px;
+    color: #172033;
+    font-family: var(--fonte-poppins);
+    font-size: 22px;
+}
+
+.setores__header p {
+    margin: 0;
+    color: #6e7e99;
+    font-size: 14px;
+}
+
+.setores__header > strong {
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: #e7f0ff;
+    color: #1351b4;
+    font-size: 13px;
+}
+
+.formulario-setor {
+    margin: 30px 20px;
+}
+
+.setor-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.container-campo-setor {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 32px;
+}
+
+.campo-form-setor {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.campo-form-setor label {
+    font-family: var(--fonte-dm-sans);
+    font-weight: 600;
+}
+
+.campo-form-setor input {
+    height: 40px;
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+
+.campo-form-setor input:focus {
+    outline-color: #1351b4b9;
+    box-shadow: 0 0 0 4px rgb(19 81 180 / 15%);
+}
+
+.botao-enviar-setor {
+    align-self: flex-end;
+    width: 150px;
+    height: 35px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background-color: var(--azul-escuro);
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.botao-enviar-setor:hover {
+    box-shadow: 0px 0px 5px 2px #1351b460;
+    scale: 1.03;
+    transition: .3s;
+}
+
+.botao-enviar-setor:active {
+    scale: .93;
+}
+
 .relatorios-logs {
     overflow: hidden;
     border: 1px solid #e5eaf0;
@@ -657,6 +765,13 @@
     background: var(--rosa-escuro);
     color: #ffffff;
     opacity: 1;
+}
+
+@media (max-width: 800px) {
+    .container-campo-setor {
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 700px) {

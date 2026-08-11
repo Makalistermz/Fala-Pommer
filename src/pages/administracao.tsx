@@ -4,6 +4,7 @@ import brasao from "../assets/img/brasao.png";
 import "./css/administracao.css";
 import VisaoGeral from "./pagesAdmin/visaoGeral";
 import RelatoriosLogs from "./pagesAdmin/relatoriosLogs";
+import Setores from "./pagesAdmin/setores";
 
 type ItemMenu = {
     id: string;
@@ -68,6 +69,9 @@ function Administracao() {
         switch (itemAtivo) {
             case "visao-geral":
                 return <VisaoGeral />;
+
+            case "setores":
+                return <Setores />;
 
             case "relatorios":
                 return <RelatoriosLogs />

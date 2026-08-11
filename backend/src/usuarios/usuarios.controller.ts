@@ -18,6 +18,13 @@ export class UsuariosController {
     return this.usuariosService.listarUsuariosParaConversa();
   }
 
+  @Get()
+  @UseGuards(AuthGuard, PerfisGuard)
+  @Perfis("admin")
+  listarTodos() {
+    return this.usuariosService.listarTodos();
+  }
+
   @Post()
   cadastrar(@Body() dados: CriarUsuarioDto) {
     return this.usuariosService.cadastrar(dados);

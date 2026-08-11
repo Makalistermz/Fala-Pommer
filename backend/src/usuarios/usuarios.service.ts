@@ -82,28 +82,42 @@ export class UsuariosService {
 
   }
 
-  async buscarPorEmail(email: string) {
-    return this.prisma.cadastro.findFirst({
-        where: {
-            email,
-        }
-    });
-  }
+    async buscarPorEmail(email: string) {
+        return this.prisma.cadastro.findFirst({
+            where: {
+                email,
+            }
+        });
+    }
 
-  async listarUsuariosParaConversa() {
-    return this.prisma.cadastro.findMany({
-        where: {
-            tipo_usuario: "user"
-        },
+    async listarUsuariosParaConversa() {
+        return this.prisma.cadastro.findMany({
+            where: {
+                tipo_usuario: "user"
+            },
 
-        select: {
-            id: true,
-            nome: true
-        },
+            select: {
+                id: true,
+                nome: true
+            },
 
-        orderBy: {
-            nome: "asc"
-        }
-    });
-}
+            orderBy: {
+                nome: "asc"
+            }
+        });
+    }
+
+    async listarTodos() {
+        return this.prisma.cadastro.findMany({
+            select: {
+                id: true,
+                nome: true,
+                telefone: true,
+                email: true,
+            },
+            orderBy: {
+                nome: "asc",
+            },
+        });
+    }
 }

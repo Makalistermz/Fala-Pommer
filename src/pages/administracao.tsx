@@ -5,6 +5,7 @@ import "./css/administracao.css";
 import VisaoGeral from "./pagesAdmin/visaoGeral";
 import RelatoriosLogs from "./pagesAdmin/relatoriosLogs";
 import Setores from "./pagesAdmin/setores";
+import Usuarios from "./pagesAdmin/usuarios";
 
 type ItemMenu = {
     id: string;
@@ -60,6 +61,9 @@ function Administracao() {
         switch (itemAtivo) {
             case "visao-geral":
                 return <VisaoGeral />;
+
+            case "usuarios":
+                return <Usuarios />;
 
             case "setores":
                 return <Setores />;

@@ -18,6 +18,7 @@ function Usuarios() {
     const [pesquisa, setPesquisa] = useState("");
     const [usuarioParaApagar, setUsuarioParaApagar] = useState<Usuario | null>(null);
     const [usuarioSendoApagado, setUsuarioSendoApagado] = useState<number | null>(null);
+    const [usuarioEmEdicao, setUsuarioEmEdicao] = useState<Usuario | null>(null);
     const [feedback, setFeedback] = useState({
         aberto: false,
         tipo: "erro" as "erro" | "sucesso",
@@ -68,6 +69,19 @@ function Usuarios() {
             setPaginaAtual(totalPaginas);
         }
     }, [paginaAtual, totalPaginas]);
+
+    useEffect(() => {
+        if (!usuarioEmEdicao) return;
+
+        function fecharComEscape(evento: KeyboardEvent) {
+            if (evento.key === "Escape") {
+                setUsuarioEmEdicao(null);
+            }
+        }
+
+        document.addEventListener("keydown", fecharComEscape);
+        return () => document.removeEventListener("keydown", fecharComEscape);
+    }, [usuarioEmEdicao]);
 
     async function apagar() {
         if (!usuarioParaApagar) return;
@@ -155,23 +169,51 @@ function Usuarios() {
 
                     <tbody>
                         {usuariosPaginados.map((usuario) => (
-                            <tr key={usuario.id}>
+                            <tr
+                                key={usuario.id}
+                                className="usuarios__linha"
+                                tabIndex={0}
+                                onClick={() => setUsuarioEmEdicao(usuario)}
+                                onKeyDown={(evento) => {
+                                    if (evento.target !== evento.currentTarget) return;
+
+                                    if (evento.key === "Enter" || evento.key === " ") {
+                                        evento.preventDefault();
+                                        setUsuarioEmEdicao(usuario);
+                                    }
+                                }}
+                            >
                                 <td>{usuario.id}</td>
                                 <td>{usuario.nome}</td>
                                 <td>{usuario.telefone}</td>
                                 <td>{usuario.email}</td>
                                 <td>{usuario.tipo_usuario}</td>
                                 <td className="usuarios__acoes">
-                                    <button
-                                        className="usuarios__botao-apagar"
-                                        type="button"
-                                        onClick={() => setUsuarioParaApagar(usuario)}
-                                        disabled={usuarioSendoApagado === usuario.id}
-                                    >
-                                        {usuarioSendoApagado === usuario.id
-                                            ? "Apagando..."
-                                            : "Apagar"}
-                                    </button>
+                                    <div className="usuarios__acoes-botoes">
+                                        <button
+                                            className="usuarios__botao-editar"
+                                            type="button"
+                                            onClick={(evento) => {
+                                                evento.stopPropagation();
+                                                setUsuarioEmEdicao(usuario);
+                                            }}
+                                        >
+                                            Editar
+                                        </button>
+                                        <button
+                                            className="usuarios__botao-apagar"
+                                            type="button"
+                                            onClick={(evento) => {
+                                                evento.stopPropagation();
+                                                setUsuarioParaApagar(usuario);
+                                            }}
+                                            disabled={usuarioSendoApagado === usuario.id}
+                                        >
+                                            {usuarioSendoApagado === usuario.id
+                                                ? "Apagando..."
+                                                : "Apagar"}
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
@@ -216,6 +258,32 @@ function Usuarios() {
                         Próxima
                     </button>
                 </nav>
+            )}
+
+            {usuarioEmEdicao && (
+                <div
+                    className="usuarios__painel-fundo"
+                    onClick={() => setUsuarioEmEdicao(null)}
+                >
+                    <aside
+                        className="usuarios__painel-lateral"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Editar usuário"
+                        onClick={(evento) => evento.stopPropagation()}
+                    >
+                        <button
+                            className="usuarios__painel-fechar"
+                            type="button"
+                            onClick={() => setUsuarioEmEdicao(null)}
+                            aria-label="Fechar painel"
+                        >
+                            ×
+                        </button>
+
+                        <div className="usuarios__painel-conteudo" />
+                    </aside>
+                </div>
             )}
 
             <ModalConfirmacao

@@ -594,6 +594,107 @@
     background: #f8faff;
 }
 
+.usuarios__linha {
+    cursor: pointer;
+}
+
+.usuarios__linha:focus-visible {
+    outline: 3px solid rgba(19, 81, 180, 0.25);
+    outline-offset: -3px;
+}
+
+.usuarios__acoes-botoes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.usuarios__botao-editar {
+    padding: 7px 12px;
+    border: 1px solid #1351b4;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1351b4;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background-color 160ms ease,
+        color 160ms ease,
+        transform 160ms ease;
+}
+
+.usuarios__botao-editar:hover {
+    background: #1351b4;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.usuarios__botao-editar:focus-visible {
+    outline: 3px solid rgba(19, 81, 180, 0.25);
+    outline-offset: 2px;
+}
+
+.usuarios__painel-fundo {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    background: rgba(15, 23, 42, 0.4);
+    animation: usuarios-painel-fundo-aparecer 200ms ease;
+}
+
+.usuarios__painel-lateral {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(420px, 90vw);
+    height: 100%;
+    padding: 24px;
+    background: #ffffff;
+    box-shadow: -12px 0 35px rgba(15, 38, 73, 0.2);
+    animation: usuarios-painel-entrar 240ms ease;
+}
+
+.usuarios__painel-fechar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin-left: auto;
+    border: 1px solid #d5dce8;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #344054;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.usuarios__painel-fechar:hover {
+    background: #f2f4f7;
+}
+
+.usuarios__painel-fechar:focus-visible {
+    outline: 3px solid rgba(19, 81, 180, 0.25);
+    outline-offset: 2px;
+}
+
+.usuarios__painel-conteudo {
+    min-height: calc(100% - 36px);
+}
+
+@keyframes usuarios-painel-fundo-aparecer {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes usuarios-painel-entrar {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
 .setores {
     overflow: hidden;
     border: 1px solid #e5eaf0;

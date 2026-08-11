@@ -12,10 +12,19 @@ const ITENS_POR_PAGINA = 50;
 function Usuarios() {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
     const [paginaAtual, setPaginaAtual] = useState(1);
+    const [pesquisa, setPesquisa] = useState("");
 
-    const totalPaginas = Math.ceil(usuarios.length / ITENS_POR_PAGINA);
+    const termoPesquisa = pesquisa.trim().toLocaleLowerCase("pt-BR");
+    const usuariosFiltrados = usuarios.filter((usuario) =>
+        String(usuario.id).includes(termoPesquisa) ||
+        usuario.nome.toLocaleLowerCase("pt-BR").includes(termoPesquisa) ||
+        usuario.telefone.toLocaleLowerCase("pt-BR").includes(termoPesquisa) ||
+        usuario.email.toLocaleLowerCase("pt-BR").includes(termoPesquisa)
+    );
+
+    const totalPaginas = Math.ceil(usuariosFiltrados.length / ITENS_POR_PAGINA);
     const inicioPagina = (paginaAtual - 1) * ITENS_POR_PAGINA;
-    const usuariosPaginados = usuarios.slice(
+    const usuariosPaginados = usuariosFiltrados.slice(
         inicioPagina,
         inicioPagina + ITENS_POR_PAGINA,
     );
@@ -59,6 +68,19 @@ function Usuarios() {
                     <p>Ajuste o cargo e o setor de atuação do usuário no sistema.</p>
                 </div>
             </header>
+
+            <div className="usuarios__pesquisa">
+                <input
+                    type="search"
+                    value={pesquisa}
+                    onChange={(evento) => {
+                        setPesquisa(evento.target.value);
+                        setPaginaAtual(1);
+                    }}
+                    placeholder="Pesquisar usuários..."
+                    aria-label="Pesquisar usuários"
+                />
+            </div>
 
             <div className="usuarios__tabela-container">
                 <table className="usuarios__tabela">

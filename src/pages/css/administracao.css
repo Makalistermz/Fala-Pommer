@@ -664,6 +664,59 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.25);
 }
 
+.container-info__painel-lateral {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.info__painel-lateral {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.info__painel-lateral label {
+    font-family: var(--fonte-dm-sans);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.info__painel-lateral input,
+.info__painel-lateral select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.info__painel-lateral input:focus,
+.info__painel-lateral select:focus {
+    outline-color: #1351b4b9;
+    box-shadow: 0 0 0 4px rgb(19 81 180 / 15%);
+}
+
+.botao__info-painel-lateral {
+    border: none;
+    border-radius: 10px;
+    background-color: var(--azul-escuro);
+    padding: 10px;
+    color: white;
+    font-family: var(--fonte-dm-sans);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.botao__info-painel-lateral:hover {
+    box-shadow: 0px 0px 5px 2px #1351b463;
+    cursor: pointer;
+    transition: .4s;
+}
+
+.botao__info-painel-lateral:active {
+    scale: .98;
+}
+
 .usuarios__painel-fechar {
     display: flex;
     align-items: center;

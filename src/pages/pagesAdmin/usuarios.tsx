@@ -331,22 +331,23 @@ function Usuarios() {
                             </button>
                         </header>
 
-                        <section>
+                        <section className="container-info__painel-lateral">
 
-                            <div>
+                            <div className="info__painel-lateral">
                                 <label>ID</label>
                                 <input type="text" value={usuarioEmEdicao.id} readOnly />
                             </div>
 
-                            <div>
+                            <div className="info__painel-lateral">
                                 <label htmlFor="">Nome</label>
                                 <input type="text" value={usuarioEmEdicao.nome} readOnly />
                             </div>
 
-                            <div>
-                                <label htmlFor="">Telefone</label>
+                            <div className="info__painel-lateral">
+                                <label htmlFor="telefone">Telefone</label>
                                 <input
                                     type="text"
+                                    id="telefone"
                                     value={usuarioEmEdicao.telefone}
                                     onChange={(evento) => {
                                         setUsuarioEmEdicao((usuarioAtual) =>
@@ -358,10 +359,11 @@ function Usuarios() {
                                 />
                             </div>
 
-                            <div>
-                                <label htmlFor="">E-mail</label>
+                            <div className="info__painel-lateral">
+                                <label htmlFor="email">E-mail</label>
                                 <input
                                     type="text"
+                                    id="email"
                                     value={usuarioEmEdicao.email}
                                     onChange={(evento) => {
                                         setUsuarioEmEdicao((usuarioAtual) =>
@@ -373,7 +375,7 @@ function Usuarios() {
                                 />
                             </div>
 
-                            <div>
+                            <div className="info__painel-lateral">
                                 <label htmlFor="tipo-usuario">Tipo de Usuario</label>
                                 <select
                                     id="tipo-usuario"
@@ -392,7 +394,7 @@ function Usuarios() {
                                 </select>
                             </div>
 
-                            <div>
+                            <div className="info__painel-lateral">
                                 <label htmlFor="setor-vinculado">Setor vinculado</label>
                                 <select
                                     id="setor-vinculado"
@@ -408,7 +410,7 @@ function Usuarios() {
                                 </select>
                             </div>
 
-                            <button type="button" onClick={salvarAlteracoes}>
+                            <button type="button" onClick={salvarAlteracoes} className="botao__info-painel-lateral">
                                 Salvar alterações
                             </button>
 

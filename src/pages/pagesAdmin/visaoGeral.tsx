@@ -150,6 +150,7 @@ function VisaoGeral() {
     const [resultado, setResultado] = useState<RespostaLoginsMensais | null>(null);
     const [carregando, setCarregando] = useState(true);
     const [quantUsuarios, setQuantUsuarios] = useState(0);
+    const [quantSetores, setQuantSetores] = useState(0);
     const [quantUsuariosCategoria, setQuantUsuariosCategoria] = useState<QuantUsuarioCategoria[]>([]);
     const [erro, setErro] = useState("");
     const anoAtual = Number(
@@ -235,6 +236,25 @@ function VisaoGeral() {
         }
 
         void carregarQuantUsuarios();
+    }, []);
+
+    useEffect(() => {
+        async function carregarQuantSetores() {
+            try {
+                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`);
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível buscar os setores.");
+                }
+
+                const setores = await resposta.json() as unknown[];
+                setQuantSetores(setores.length);
+            } catch (erro) {
+                console.error("Erro ao buscar quantidade de setores:", erro);
+            }
+        }
+
+        void carregarQuantSetores();
     }, []);
 
     useEffect(() => {
@@ -371,7 +391,7 @@ function VisaoGeral() {
                     </div>
                     <div className="info-cards">
                         <small>SETORES</small>
-                        <NumberCounter endValue={20} /> {/*alterar após pegar o total de usuarios*/}
+                        <NumberCounter endValue={quantSetores} />
                     </div>
                 </div>
             </div>

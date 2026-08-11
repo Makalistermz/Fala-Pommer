@@ -116,7 +116,7 @@ export class UsuariosService {
                 email: true,
             },
             orderBy: {
-                nome: "asc",
+                id: "asc",
             },
         });
     }

@@ -7,8 +7,18 @@ interface Usuario {
     email: string;
 }
 
+const ITENS_POR_PAGINA = 50;
+
 function Usuarios() {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+    const [paginaAtual, setPaginaAtual] = useState(1);
+
+    const totalPaginas = Math.ceil(usuarios.length / ITENS_POR_PAGINA);
+    const inicioPagina = (paginaAtual - 1) * ITENS_POR_PAGINA;
+    const usuariosPaginados = usuarios.slice(
+        inicioPagina,
+        inicioPagina + ITENS_POR_PAGINA,
+    );
 
     useEffect(() => {
         async function carregarUsuarios() {
@@ -32,7 +42,13 @@ function Usuarios() {
         }
 
         carregarUsuarios().catch(console.error);
-        }, []);
+    }, []);
+
+    useEffect(() => {
+        if (totalPaginas > 0 && paginaAtual > totalPaginas) {
+            setPaginaAtual(totalPaginas);
+        }
+    }, [paginaAtual, totalPaginas]);
 
     return (
         <section className="usuarios">
@@ -56,17 +72,56 @@ function Usuarios() {
                     </thead>
 
                     <tbody>
-                            {usuarios.map((usuario) => (
-                                <tr key={usuario.id}>
-                                    <td>{usuario.id}</td>
-                                    <td>{usuario.nome}</td>
-                                    <td>{usuario.telefone}</td>
-                                    <td>{usuario.email}</td>
-                                </tr>
-                            ))}
+                        {usuariosPaginados.map((usuario) => (
+                            <tr key={usuario.id}>
+                                <td>{usuario.id}</td>
+                                <td>{usuario.nome}</td>
+                                <td>{usuario.telefone}</td>
+                                <td>{usuario.email}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
+
+            {totalPaginas > 1 && (
+                <nav
+                    aria-label="Paginação dos usuários"
+                    className="relatorios-logs__paginacao"
+                >
+                    <button
+                        type="button"
+                        onClick={() => setPaginaAtual((pagina) => pagina - 1)}
+                        disabled={paginaAtual === 1}
+                    >
+                        Anterior
+                    </button>
+
+                    {Array.from({ length: totalPaginas }, (_, indice) => {
+                        const pagina = indice + 1;
+
+                        return (
+                            <button
+                                key={pagina}
+                                type="button"
+                                onClick={() => setPaginaAtual(pagina)}
+                                aria-current={paginaAtual === pagina ? "page" : undefined}
+                                disabled={paginaAtual === pagina}
+                            >
+                                {pagina}
+                            </button>
+                        );
+                    })}
+
+                    <button
+                        type="button"
+                        onClick={() => setPaginaAtual((pagina) => pagina + 1)}
+                        disabled={paginaAtual === totalPaginas}
+                    >
+                        Próxima
+                    </button>
+                </nav>
+            )}
         </section>
     )
 }

@@ -6,13 +6,23 @@ type Setor = {
     sigla_setor: string;
 }
 
+const ITENS_POR_PAGINA = 10;
+
 function Setores() {
     const [setores, setSetores] = useState<Setor[]>([]);
+    const [paginaAtual, setPaginaAtual] = useState(1);
     const [feedback, setFeedback] = useState({
         aberto: false,
         tipo: "erro" as "erro" | "sucesso",
         mensagem: ""
     });
+
+    const totalPaginas = Math.ceil(setores.length / ITENS_POR_PAGINA);
+    const inicioPagina = (paginaAtual - 1) * ITENS_POR_PAGINA;
+    const setoresPaginados = setores.slice(
+        inicioPagina,
+        inicioPagina + ITENS_POR_PAGINA,
+    );
 
     useEffect(() => {
         async function carregarSetores() {
@@ -140,7 +150,7 @@ function Setores() {
                     </thead>
 
                     <tbody>
-                        {setores.map((setor) => (
+                        {setoresPaginados.map((setor) => (
                             <tr key={`${setor.sigla_setor}-${setor.setor}`}>
                                 <td>{setor.sigla_setor}</td>
                                 <td>{setor.setor}</td>
@@ -149,6 +159,45 @@ function Setores() {
                     </tbody>
                 </table>
             </div>
+
+            {totalPaginas > 1 && (
+                <nav
+                    aria-label="Paginação dos setores"
+                    className="relatorios-logs__paginacao"
+                >
+                    <button
+                        type="button"
+                        onClick={() => setPaginaAtual((pagina) => pagina - 1)}
+                        disabled={paginaAtual === 1}
+                    >
+                        Anterior
+                    </button>
+
+                    {Array.from({ length: totalPaginas }, (_, indice) => {
+                        const pagina = indice + 1;
+
+                        return (
+                            <button
+                                key={pagina}
+                                type="button"
+                                onClick={() => setPaginaAtual(pagina)}
+                                aria-current={paginaAtual === pagina ? "page" : undefined}
+                                disabled={paginaAtual === pagina}
+                            >
+                                {pagina}
+                            </button>
+                        );
+                    })}
+
+                    <button
+                        type="button"
+                        onClick={() => setPaginaAtual((pagina) => pagina + 1)}
+                        disabled={paginaAtual === totalPaginas}
+                    >
+                        Próxima
+                    </button>
+                </nav>
+            )}
 
             <ModalFeedback
                 aberto={feedback.aberto}

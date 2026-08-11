@@ -8,17 +8,26 @@ interface Usuario {
     telefone: string;
     email: string;
     tipo_usuario: string;
+    setor_id?: number | null;
+}
+
+interface Setor {
+    id: number;
+    setor: string;
+    sigla_setor: string;
 }
 
 const ITENS_POR_PAGINA = 25;
 
 function Usuarios() {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+    const [setores, setSetores] = useState<Setor[]>([]);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [pesquisa, setPesquisa] = useState("");
     const [usuarioParaApagar, setUsuarioParaApagar] = useState<Usuario | null>(null);
     const [usuarioSendoApagado, setUsuarioSendoApagado] = useState<number | null>(null);
     const [usuarioEmEdicao, setUsuarioEmEdicao] = useState<Usuario | null>(null);
+    const [setorEmEdicao, setSetorEmEdicao] = useState("");
     const [feedback, setFeedback] = useState({
         aberto: false,
         tipo: "erro" as "erro" | "sucesso",
@@ -65,6 +74,21 @@ function Usuarios() {
     }, []);
 
     useEffect(() => {
+        async function carregarSetores() {
+            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`);
+
+            if (!resposta.ok) {
+                throw new Error("Não foi possível carregar os setores");
+            }
+
+            const dados: Setor[] = await resposta.json();
+            setSetores(dados);
+        }
+
+        carregarSetores().catch(console.error);
+    }, []);
+
+    useEffect(() => {
         if (totalPaginas > 0 && paginaAtual > totalPaginas) {
             setPaginaAtual(totalPaginas);
         }
@@ -82,6 +106,29 @@ function Usuarios() {
         document.addEventListener("keydown", fecharComEscape);
         return () => document.removeEventListener("keydown", fecharComEscape);
     }, [usuarioEmEdicao]);
+
+    function abrirEdicao(usuario: Usuario) {
+        setUsuarioEmEdicao({ ...usuario });
+        setSetorEmEdicao(usuario.setor_id ? String(usuario.setor_id) : "");
+    }
+
+    function salvarAlteracoes() {
+        if (!usuarioEmEdicao) return;
+
+        const usuarioAtualizado = {
+            ...usuarioEmEdicao,
+            setor_id: setorEmEdicao ? Number(setorEmEdicao) : null,
+        };
+
+        setUsuarios((usuariosAtuais) =>
+            usuariosAtuais.map((usuarioAtual) =>
+                usuarioAtual.id === usuarioAtualizado.id
+                    ? usuarioAtualizado
+                    : usuarioAtual,
+            ),
+        );
+        setUsuarioEmEdicao(null);
+    }
 
     async function apagar() {
         if (!usuarioParaApagar) return;
@@ -173,13 +220,13 @@ function Usuarios() {
                                 key={usuario.id}
                                 className="usuarios__linha"
                                 tabIndex={0}
-                                onClick={() => setUsuarioEmEdicao(usuario)}
+                                onClick={() => abrirEdicao(usuario)}
                                 onKeyDown={(evento) => {
                                     if (evento.target !== evento.currentTarget) return;
 
                                     if (evento.key === "Enter" || evento.key === " ") {
                                         evento.preventDefault();
-                                        setUsuarioEmEdicao(usuario);
+                                        abrirEdicao(usuario);
                                     }
                                 }}
                             >
@@ -195,7 +242,7 @@ function Usuarios() {
                                             type="button"
                                             onClick={(evento) => {
                                                 evento.stopPropagation();
-                                                setUsuarioEmEdicao(usuario);
+                                                abrirEdicao(usuario);
                                             }}
                                         >
                                             Editar
@@ -288,33 +335,82 @@ function Usuarios() {
 
                             <div>
                                 <label>ID</label>
-                                <input type="text" />
+                                <input type="text" value={usuarioEmEdicao.id} readOnly />
                             </div>
 
                             <div>
                                 <label htmlFor="">Nome</label>
-                                <input type="text" />
+                                <input type="text" value={usuarioEmEdicao.nome} readOnly />
                             </div>
 
                             <div>
                                 <label htmlFor="">Telefone</label>
-                                <input type="text" />
+                                <input
+                                    type="text"
+                                    value={usuarioEmEdicao.telefone}
+                                    onChange={(evento) => {
+                                        setUsuarioEmEdicao((usuarioAtual) =>
+                                            usuarioAtual
+                                                ? { ...usuarioAtual, telefone: evento.target.value }
+                                                : null,
+                                        );
+                                    }}
+                                />
                             </div>
 
                             <div>
                                 <label htmlFor="">E-mail</label>
-                                <input type="text" />
+                                <input
+                                    type="text"
+                                    value={usuarioEmEdicao.email}
+                                    onChange={(evento) => {
+                                        setUsuarioEmEdicao((usuarioAtual) =>
+                                            usuarioAtual
+                                                ? { ...usuarioAtual, email: evento.target.value }
+                                                : null,
+                                        );
+                                    }}
+                                />
                             </div>
 
                             <div>
-                                <label htmlFor="">Tipo de Usuario</label>
-                                <input type="text" /> {/*adicionar um estilo de TCombo onde vai aparecer as tres opções de usuario  */}
+                                <label htmlFor="tipo-usuario">Tipo de Usuario</label>
+                                <select
+                                    id="tipo-usuario"
+                                    value={usuarioEmEdicao.tipo_usuario}
+                                    onChange={(evento) => {
+                                        setUsuarioEmEdicao((usuarioAtual) =>
+                                            usuarioAtual
+                                                ? { ...usuarioAtual, tipo_usuario: evento.target.value }
+                                                : null,
+                                        );
+                                    }}
+                                >
+                                    <option value="user">Usuário</option>
+                                    <option value="funcionario">Funcionário</option>
+                                    <option value="admin">Administrador</option>
+                                </select>
                             </div>
 
                             <div>
-                                <label htmlFor="">Setor vinculado</label>
-                                <input type="text" /> {/*a mesma coisa adicionar uma especie de TCombo onde vai aparecer as opções de setores */}
+                                <label htmlFor="setor-vinculado">Setor vinculado</label>
+                                <select
+                                    id="setor-vinculado"
+                                    value={setorEmEdicao}
+                                    onChange={(evento) => setSetorEmEdicao(evento.target.value)}
+                                >
+                                    <option value="" disabled>Selecione um setor</option>
+                                    {setores.map((setor) => (
+                                        <option key={setor.id} value={setor.id}>
+                                            {setor.sigla_setor} - {setor.setor}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
+
+                            <button type="button" onClick={salvarAlteracoes}>
+                                Salvar alterações
+                            </button>
 
                         </section>
 

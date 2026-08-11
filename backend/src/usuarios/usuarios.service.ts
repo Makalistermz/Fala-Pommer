@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { CriarUsuarioDto } from "./dto/criar-usuario.dto";
 import * as bcrypt from 'bcrypt';
@@ -114,10 +114,23 @@ export class UsuariosService {
                 nome: true,
                 telefone: true,
                 email: true,
+                tipo_usuario: true,
             },
             orderBy: {
                 id: "asc",
             },
         });
+    }
+
+    async apagar(id: number) {
+        const resultado = await this.prisma.cadastro.deleteMany({
+            where: { id },
+        });
+
+        if (resultado.count === 0) {
+            throw new NotFoundException("Usuário não encontrado.");
+        }
+
+        return { mensagem: "Usuário apagado com sucesso." };
     }
 }

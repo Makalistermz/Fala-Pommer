@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
+import { ModalConfirmacao } from "../../components/ModalConfirmacao";
+import { ModalFeedback } from "../../components/ModalFeedback";
 
 interface Usuario {
     id: number;
     nome: string;
     telefone: string;
     email: string;
+    tipo_usuario: string;
 }
 
 const ITENS_POR_PAGINA = 50;
@@ -13,6 +16,13 @@ function Usuarios() {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [pesquisa, setPesquisa] = useState("");
+    const [usuarioParaApagar, setUsuarioParaApagar] = useState<Usuario | null>(null);
+    const [usuarioSendoApagado, setUsuarioSendoApagado] = useState<number | null>(null);
+    const [feedback, setFeedback] = useState({
+        aberto: false,
+        tipo: "erro" as "erro" | "sucesso",
+        mensagem: "",
+    });
 
     const termoPesquisa = pesquisa.trim().toLocaleLowerCase("pt-BR");
     const usuariosFiltrados = usuarios.filter((usuario) =>
@@ -59,6 +69,54 @@ function Usuarios() {
         }
     }, [paginaAtual, totalPaginas]);
 
+    async function apagar() {
+        if (!usuarioParaApagar) return;
+
+        setUsuarioSendoApagado(usuarioParaApagar.id);
+
+        try {
+            const token = localStorage.getItem("access_token");
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/usuarios/${usuarioParaApagar.id}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            );
+            const resultado = await resposta.json();
+
+            if (!resposta.ok) {
+                throw new Error(
+                    resultado.message ?? "Não foi possível apagar o usuário.",
+                );
+            }
+
+            setUsuarios((usuariosAtuais) =>
+                usuariosAtuais.filter(
+                    (usuarioAtual) => usuarioAtual.id !== usuarioParaApagar.id,
+                ),
+            );
+            setFeedback({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem: "O usuário foi apagado com sucesso",
+            });
+        } catch (erro) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: erro instanceof Error
+                    ? erro.message
+                    : "Não foi possível apagar o usuário.",
+            });
+        } finally {
+            setUsuarioSendoApagado(null);
+            setUsuarioParaApagar(null);
+        }
+    }
+
     return (
         <section className="usuarios">
             <header className="usuarios__header">
@@ -90,6 +148,8 @@ function Usuarios() {
                             <th scope="col">Nome</th>
                             <th scope="col">Telefone</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Tipo de Usuário</th>
+                            <th scope="col">Ações</th>
                         </tr>
                     </thead>
 
@@ -100,6 +160,19 @@ function Usuarios() {
                                 <td>{usuario.nome}</td>
                                 <td>{usuario.telefone}</td>
                                 <td>{usuario.email}</td>
+                                <td>{usuario.tipo_usuario}</td>
+                                <td className="usuarios__acoes">
+                                    <button
+                                        className="usuarios__botao-apagar"
+                                        type="button"
+                                        onClick={() => setUsuarioParaApagar(usuario)}
+                                        disabled={usuarioSendoApagado === usuario.id}
+                                    >
+                                        {usuarioSendoApagado === usuario.id
+                                            ? "Apagando..."
+                                            : "Apagar"}
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -144,6 +217,29 @@ function Usuarios() {
                     </button>
                 </nav>
             )}
+
+            <ModalConfirmacao
+                aberto={usuarioParaApagar !== null}
+                titulo="Apagar usuário?"
+                mensagem={usuarioParaApagar
+                    ? `Deseja realmente apagar o usuário ${usuarioParaApagar.nome}?`
+                    : ""}
+                carregando={usuarioSendoApagado !== null}
+                aoCancelar={() => setUsuarioParaApagar(null)}
+                aoConfirmar={() => void apagar()}
+            />
+
+            <ModalFeedback
+                aberto={feedback.aberto}
+                tipo={feedback.tipo}
+                mensagem={feedback.mensagem}
+                aoFechar={() => {
+                    setFeedback((estadoAtual) => ({
+                        ...estadoAtual,
+                        aberto: false,
+                    }));
+                }}
+            />
         </section>
     )
 }

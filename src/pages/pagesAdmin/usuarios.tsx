@@ -272,14 +272,51 @@ function Usuarios() {
                         aria-label="Editar usuário"
                         onClick={(evento) => evento.stopPropagation()}
                     >
-                        <button
-                            className="usuarios__painel-fechar"
-                            type="button"
-                            onClick={() => setUsuarioEmEdicao(null)}
-                            aria-label="Fechar painel"
-                        >
-                            ×
-                        </button>
+                        <header className="header__painel-lateral">
+                            <span>Informações</span>
+                            <button
+                                className="usuarios__painel-fechar"
+                                type="button"
+                                onClick={() => setUsuarioEmEdicao(null)}
+                                aria-label="Fechar painel"
+                            >
+                                ×
+                            </button>
+                        </header>
+
+                        <section>
+
+                            <div>
+                                <label>ID</label>
+                                <input type="text" />
+                            </div>
+
+                            <div>
+                                <label htmlFor="">Nome</label>
+                                <input type="text" />
+                            </div>
+
+                            <div>
+                                <label htmlFor="">Telefone</label>
+                                <input type="text" />
+                            </div>
+
+                            <div>
+                                <label htmlFor="">E-mail</label>
+                                <input type="text" />
+                            </div>
+
+                            <div>
+                                <label htmlFor="">Tipo de Usuario</label>
+                                <input type="text" /> {/*adicionar um estilo de TCombo onde vai aparecer as tres opções de usuario  */}
+                            </div>
+
+                            <div>
+                                <label htmlFor="">Setor vinculado</label>
+                                <input type="text" /> {/*a mesma coisa adicionar uma especie de TCombo onde vai aparecer as opções de setores */}
+                            </div>
+
+                        </section>
 
                         <div className="usuarios__painel-conteudo" />
                     </aside>

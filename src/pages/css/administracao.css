@@ -656,6 +656,14 @@
     animation: usuarios-painel-entrar 540ms ease;
 }
 
+.header__painel-lateral {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
 .usuarios__painel-fechar {
     display: flex;
     align-items: center;

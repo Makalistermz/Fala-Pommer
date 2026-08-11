@@ -28,6 +28,20 @@ const FORMATADOR_MES_SAO_PAULO = new Intl.DateTimeFormat("pt-BR", {
     month: "numeric"
 });
 
+const DIFERENCA_UTC_SAO_PAULO_EM_MS = 3 * 60 * 60 * 1000;
+
+function agoraEmSaoPaulo() {
+    return new Date(Date.now() - DIFERENCA_UTC_SAO_PAULO_EM_MS);
+}
+
+function serializarDataDeSaoPaulo(data: Date | null) {
+    if (!data) {
+        return null;
+    }
+
+    return `${data.toISOString().slice(0, -1)}-03:00`;
+}
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -59,7 +73,8 @@ export class AuthService {
 
         await this.prisma.login_evento.create({
             data: {
-                usuario_id: usuario.id
+                usuario_id: usuario.id,
+                criado_em: agoraEmSaoPaulo()
             }
         });
 
@@ -124,7 +139,7 @@ export class AuthService {
                 id: acessoAberto.id
             },
             data: {
-                saiu_em: new Date()
+                saiu_em: agoraEmSaoPaulo()
             }
         });
 
@@ -155,8 +170,8 @@ export class AuthService {
             id: acesso.id,
             usuario: acesso.cadastro.nome,
             tipoUsuario: acesso.cadastro.tipo_usuario,
-            entrada: acesso.criado_em,
-            saida: acesso.saiu_em
+            entrada: serializarDataDeSaoPaulo(acesso.criado_em),
+            saida: serializarDataDeSaoPaulo(acesso.saiu_em)
         }));
     }
 

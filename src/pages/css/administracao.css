@@ -632,6 +632,43 @@
     background: #f8faff;
 }
 
+.setores__acoes {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.setores__botao-apagar {
+    padding: 7px 12px;
+    border: 1px solid #d92d20;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #b42318;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background-color 160ms ease,
+        color 160ms ease,
+        transform 160ms ease;
+}
+
+.setores__botao-apagar:hover:not(:disabled) {
+    background: #d92d20;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.setores__botao-apagar:focus-visible {
+    outline: 3px solid rgba(217, 45, 32, 0.2);
+    outline-offset: 2px;
+}
+
+.setores__botao-apagar:disabled {
+    cursor: wait;
+    opacity: 0.55;
+}
+
 .relatorios-logs {
     overflow: hidden;
     border: 1px solid #e5eaf0;

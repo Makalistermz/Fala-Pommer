@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { SetoresService } from './setores.service';
 import { CriarSetorDTO } from './dto/criar-setor-dto';
 
@@ -16,5 +16,10 @@ export class SetoresController {
     @Post()
         criar(@Body() dados: CriarSetorDTO) {
             return this.setoresService.criar(dados);
+        }
+
+    @Delete(':id')
+        apagar(@Param('id', ParseIntPipe) id: number) {
+            return this.setoresService.apagar(id);
         }
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, ConflictException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CriarSetorDTO } from './dto/criar-setor-dto';
 
@@ -9,6 +9,7 @@ export class SetoresService {
     async listar() {
         return this.prisma.setores.findMany({
             select: {
+                id: true,
                 setor: true,
                 sigla_setor: true,
             },
@@ -39,6 +40,7 @@ export class SetoresService {
                 sigla_setor: dados.sigla_setor,
             },
             select: {
+                id: true,
                 setor: true,
                 sigla_setor: true,
             },
@@ -46,4 +48,16 @@ export class SetoresService {
 
         return setorCriado;
     };
+
+    async apagar(id: number) {
+        const resultado = await this.prisma.setores.deleteMany({
+            where: { id },
+        });
+
+        if (resultado.count === 0) {
+            throw new NotFoundException('Setor não encontrado.');
+        }
+
+        return { mensagem: 'Setor apagado com sucesso.' };
+    }
 };

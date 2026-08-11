@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { ModalConfirmacao } from "../../components/ModalConfirmacao";
 import { ModalFeedback } from "../../components/ModalFeedback";
 
 type Setor = {
+    id: number;
     setor: string;
     sigla_setor: string;
 }
@@ -11,6 +13,8 @@ const ITENS_POR_PAGINA = 10;
 function Setores() {
     const [setores, setSetores] = useState<Setor[]>([]);
     const [paginaAtual, setPaginaAtual] = useState(1);
+    const [setorParaApagar, setSetorParaApagar] = useState<Setor | null>(null);
+    const [setorSendoApagado, setSetorSendoApagado] = useState<number | null>(null);
     const [feedback, setFeedback] = useState({
         aberto: false,
         tipo: "erro" as "erro" | "sucesso",
@@ -42,6 +46,12 @@ function Setores() {
 
         carregarSetores();
     }, []);
+
+    useEffect(() => {
+        if (totalPaginas > 0 && paginaAtual > totalPaginas) {
+            setPaginaAtual(totalPaginas);
+        }
+    }, [paginaAtual, totalPaginas]);
 
     async function criar(
     event: React.SubmitEvent<HTMLFormElement>,
@@ -96,6 +106,44 @@ function Setores() {
 
     }
 
+    async function apagar() {
+        if (!setorParaApagar) return;
+
+        setSetorSendoApagado(setorParaApagar.id);
+
+        try {
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/setores/${setorParaApagar.id}`,
+                { method: "DELETE" },
+            );
+            const resultado = await resposta.json();
+
+            if (!resposta.ok) {
+                throw new Error(resultado.message ?? "Não foi possível apagar o setor.");
+            }
+
+            setSetores((setoresAtuais) =>
+                setoresAtuais.filter((setorAtual) => setorAtual.id !== setorParaApagar.id),
+            );
+            setFeedback({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem: "O setor foi apagado com sucesso"
+            });
+        } catch (erro) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: erro instanceof Error
+                    ? erro.message
+                    : "Não foi possível apagar o setor."
+            });
+        } finally {
+            setSetorSendoApagado(null);
+            setSetorParaApagar(null);
+        }
+    }
+
     const estiloObrigatorio: React.CSSProperties = {
         color: 'red',
     }
@@ -146,14 +194,25 @@ function Setores() {
                         <tr>
                             <th scope="col">Sigla</th>
                             <th scope="col">Setor</th>
+                            <th scope="col">Ações</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {setoresPaginados.map((setor) => (
-                            <tr key={`${setor.sigla_setor}-${setor.setor}`}>
+                            <tr key={setor.id}>
                                 <td>{setor.sigla_setor}</td>
                                 <td>{setor.setor}</td>
+                                <td className="setores__acoes">
+                                    <button
+                                        className="setores__botao-apagar"
+                                        type="button"
+                                        onClick={() => setSetorParaApagar(setor)}
+                                        disabled={setorSendoApagado === setor.id}
+                                    >
+                                        {setorSendoApagado === setor.id ? "Apagando..." : "Apagar"}
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -198,6 +257,17 @@ function Setores() {
                     </button>
                 </nav>
             )}
+
+            <ModalConfirmacao
+                aberto={setorParaApagar !== null}
+                titulo="Apagar setor?"
+                mensagem={setorParaApagar
+                    ? `Deseja realmente apagar o setor ${setorParaApagar.setor}?`
+                    : ""}
+                carregando={setorSendoApagado !== null}
+                aoCancelar={() => setSetorParaApagar(null)}
+                aoConfirmar={() => void apagar()}
+            />
 
             <ModalFeedback
                 aberto={feedback.aberto}

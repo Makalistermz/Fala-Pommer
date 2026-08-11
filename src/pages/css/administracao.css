@@ -653,7 +653,7 @@
     padding: 24px;
     background: #ffffff;
     box-shadow: -12px 0 35px rgba(15, 38, 73, 0.2);
-    animation: usuarios-painel-entrar 240ms ease;
+    animation: usuarios-painel-entrar 540ms ease;
 }
 
 .usuarios__painel-fechar {

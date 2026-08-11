@@ -10,7 +10,7 @@ interface Usuario {
     tipo_usuario: string;
 }
 
-const ITENS_POR_PAGINA = 50;
+const ITENS_POR_PAGINA = 25;
 
 function Usuarios() {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);

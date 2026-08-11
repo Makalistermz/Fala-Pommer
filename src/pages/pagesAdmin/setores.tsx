@@ -42,6 +42,28 @@ function Setores() {
                     <button className="botao-enviar-setor" type="submit">Enviar</button>
                 </form>
             </div>
+
+            <div className="setores__tabela-container">
+                <table className="setores__tabela">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sigla</th>
+                            <th scope="col">Setor</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                {/*adicionar quando tiver os valores */}
+                            </td>
+                            <td>
+                                {/*adicionar quando tiver os valores */}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
     )
 }

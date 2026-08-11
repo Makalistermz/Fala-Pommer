@@ -400,7 +400,8 @@ export const ModelName = {
   cadastro: 'cadastro',
   login_evento: 'login_evento',
   conversa: 'conversa',
-  conversa_participante: 'conversa_participante'
+  conversa_participante: 'conversa_participante',
+  setores: 'setores'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -416,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "login_evento" | "conversa" | "conversa_participante"
+    modelProps: "cadastro" | "login_evento" | "conversa" | "conversa_participante" | "setores"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -684,6 +685,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    setores: {
+      payload: Prisma.$setoresPayload<ExtArgs>
+      fields: Prisma.setoresFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.setoresFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$setoresPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.setoresFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$setoresPayload>
+        }
+        findFirst: {
+          args: Prisma.setoresFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$setoresPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.setoresFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$setoresPayload>
+        }
+        findMany: {
+          args: Prisma.setoresFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$setoresPayload>[]
+        }
+        create: {
+          args: Prisma.setoresCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$setoresPayload>
+        }
+        createMany: {
+          args: Prisma.setoresCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.setoresDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$setoresPayload>
+        }
+        update: {
+          args: Prisma.setoresUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$setoresPayload>
+        }
+        deleteMany: {
+          args: Prisma.setoresDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.setoresUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.setoresUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$setoresPayload>
+        }
+        aggregate: {
+          args: Prisma.SetoresAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSetores>
+        }
+        groupBy: {
+          args: Prisma.setoresGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SetoresGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.setoresCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SetoresCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -767,6 +834,15 @@ export const Conversa_participanteScalarFieldEnum = {
 export type Conversa_participanteScalarFieldEnum = (typeof Conversa_participanteScalarFieldEnum)[keyof typeof Conversa_participanteScalarFieldEnum]
 
 
+export const SetoresScalarFieldEnum = {
+  id: 'id',
+  setor: 'setor',
+  sigla_setor: 'sigla_setor'
+} as const
+
+export type SetoresScalarFieldEnum = (typeof SetoresScalarFieldEnum)[keyof typeof SetoresScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -793,6 +869,14 @@ export const cadastroOrderByRelevanceFieldEnum = {
 } as const
 
 export type cadastroOrderByRelevanceFieldEnum = (typeof cadastroOrderByRelevanceFieldEnum)[keyof typeof cadastroOrderByRelevanceFieldEnum]
+
+
+export const setoresOrderByRelevanceFieldEnum = {
+  setor: 'setor',
+  sigla_setor: 'sigla_setor'
+} as const
+
+export type setoresOrderByRelevanceFieldEnum = (typeof setoresOrderByRelevanceFieldEnum)[keyof typeof setoresOrderByRelevanceFieldEnum]
 
 
 
@@ -997,6 +1081,7 @@ export type GlobalOmitConfig = {
   login_evento?: Prisma.login_eventoOmit
   conversa?: Prisma.conversaOmit
   conversa_participante?: Prisma.conversa_participanteOmit
+  setores?: Prisma.setoresOmit
 }
 
 /* Types for Logging */

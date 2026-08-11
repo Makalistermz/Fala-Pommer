@@ -8,10 +8,12 @@ import { EmailModule } from './email/email.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from "@nestjs/config";
 import { ConversasModule } from './conversas/conversas.module';
+import { SetoresModule } from './setores/setores.module';
+import { NomeController } from './nome/nome.controller';
 
 @Module({
-  imports: [PrismaModule, UsuariosModule, RecuperacaoSenhaModule, EmailModule, AuthModule, ConfigModule.forRoot({isGlobal: true}), ConversasModule],
-  controllers: [AppController],
+  imports: [PrismaModule, UsuariosModule, RecuperacaoSenhaModule, EmailModule, AuthModule, ConfigModule.forRoot({isGlobal: true}), ConversasModule, SetoresModule],
+  controllers: [AppController, NomeController],
   providers: [AppService],
 })
 export class AppModule {}

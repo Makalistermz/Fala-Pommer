@@ -52,6 +52,12 @@ model conversa_participante {
   @@index([usuario_id], map: "fk_participante_usuario")
 }
 
+model setores {
+  id          Int    @id @default(autoincrement())
+  setor       String @db.VarChar(150)
+  sigla_setor String @db.VarChar(20)
+}
+
 enum cadastro_tipo_usuario {
   user
   admin

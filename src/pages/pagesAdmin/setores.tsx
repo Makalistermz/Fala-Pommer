@@ -1,19 +1,45 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ModalFeedback } from "../../components/ModalFeedback";
 
+type Setor = {
+    setor: string;
+    sigla_setor: string;
+}
+
 function Setores() {
+    const [setores, setSetores] = useState<Setor[]>([]);
     const [feedback, setFeedback] = useState({
-            aberto: false,
-            tipo: "erro" as "erro" | "sucesso",
-            mensagem: ""
-        });
+        aberto: false,
+        tipo: "erro" as "erro" | "sucesso",
+        mensagem: ""
+    });
+
+    useEffect(() => {
+        async function carregarSetores() {
+            try {
+                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`);
+
+                if (!resposta.ok) {
+                    throw new Error("Falha ao carregar os setores.");
+                }
+
+                const setoresCadastrados: Setor[] = await resposta.json();
+                setSetores(setoresCadastrados);
+            } catch (erro) {
+                console.error("Falha ao carregar os setores:", erro);
+            }
+        }
+
+        carregarSetores();
+    }, []);
 
     async function criar(
     event: React.SubmitEvent<HTMLFormElement>,
     ) {
         event.preventDefault(); //Evita que a página recarregue ao clicar no botão de envio
 
-        const dadosFormulario = new FormData(event.currentTarget);
+        const formulario = event.currentTarget;
+        const dadosFormulario = new FormData(formulario);
 
         const dados = Object.fromEntries(dadosFormulario.entries());
 
@@ -45,6 +71,9 @@ function Setores() {
                 tipo: "sucesso",
                 mensagem: "O setor foi cadastrado com sucesso"
             });
+
+            setSetores((setoresAtuais) => [...setoresAtuais, resultado]);
+            formulario.reset();
         } catch(erro) {
             console.error("Falha ao enviar o formulario:", erro);
 
@@ -80,8 +109,8 @@ function Setores() {
                             <input
                             name="setor"
                             id="setor"
-                            placeholder="Adicione o setor"
                             type="text"
+                            autoComplete="off"
                             required
                             />
                         </div>
@@ -90,8 +119,8 @@ function Setores() {
                             <input
                             name="sigla_setor"
                             id="sigla_setor"
-                            placeholder="Adicione a sigla do setor"
                             type="text"
+                            autoComplete="off"
                             required
                             />
                         </div>
@@ -111,14 +140,12 @@ function Setores() {
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>
-                                {/*adicionar quando tiver os valores */}
-                            </td>
-                            <td>
-                                {/*adicionar quando tiver os valores */}
-                            </td>
-                        </tr>
+                        {setores.map((setor) => (
+                            <tr key={`${setor.sigla_setor}-${setor.setor}`}>
+                                <td>{setor.sigla_setor}</td>
+                                <td>{setor.setor}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

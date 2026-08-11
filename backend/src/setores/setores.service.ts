@@ -6,6 +6,18 @@ import { CriarSetorDTO } from './dto/criar-setor-dto';
 export class SetoresService {
     constructor(private readonly prisma: PrismaService) {}
 
+    async listar() {
+        return this.prisma.setores.findMany({
+            select: {
+                setor: true,
+                sigla_setor: true,
+            },
+            orderBy: {
+                setor: 'asc',
+            },
+        });
+    }
+
     async criar(dados: CriarSetorDTO) {
 
         const setorExistente = await this.prisma.setores.findFirst({

@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { SetoresService } from './setores.service';
 import { CriarSetorDTO } from './dto/criar-setor-dto';
 
@@ -7,6 +7,11 @@ export class SetoresController {
     constructor (
         private readonly setoresService: SetoresService
     ) {}
+
+    @Get()
+        listar() {
+            return this.setoresService.listar();
+        }
 
     @Post()
         criar(@Body() dados: CriarSetorDTO) {

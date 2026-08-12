@@ -13,11 +13,16 @@ export class ConversasService {
         private readonly prisma: PrismaService
     ) {}
 
+    /*
+     * Lista as conversas privadas das quais
+     * o usuário autenticado participa.
+     */
     async listar(usuarioLogadoId: number) {
         const conversas =
             await this.prisma.conversa.findMany({
                 where: {
                     tipo: "privada",
+
                     conversa_participante: {
                         some: {
                             usuario_id: usuarioLogadoId
@@ -42,6 +47,21 @@ export class ConversasService {
                                 }
                             }
                         }
+                    },
+
+                    mensagens: {
+                        orderBy: {
+                            enviada_em: "desc"
+                        },
+
+                        take: 1,
+
+                        select: {
+                            id: true,
+                            conteudo: true,
+                            origem: true,
+                            enviada_em: true
+                        }
                     }
                 },
 
@@ -58,49 +78,93 @@ export class ConversasService {
                 return [];
             }
 
+            const ultimaMensagem =
+                conversa.mensagens[0] ?? null;
+
             return [{
                 id: conversa.id,
                 tipo: conversa.tipo,
                 criadaEm: conversa.criada_em,
-                contato
+                contato,
+
+                ultimaMensagem: ultimaMensagem
+                    ? {
+                        id: ultimaMensagem.id,
+                        conteudo: ultimaMensagem.conteudo,
+                        origem: ultimaMensagem.origem,
+                        enviadaEm: ultimaMensagem.enviada_em
+                    }
+                    : null
             }];
         });
     }
 
+    /*
+     * Somente o administrador pode iniciar
+     * uma conversa privada.
+     *
+     * O destinatário pode ser user, funcionário
+     * ou outro administrador.
+     */
     async criarOuBuscar(
         usuarioLogadoId: number,
         usuarioSelecionadoId: number
     ) {
-        if (usuarioLogadoId === usuarioSelecionadoId) {
+        const [usuarioLogado, usuarioSelecionado] =
+            await Promise.all([
+                this.prisma.cadastro.findUnique({
+                    where: {
+                        id: usuarioLogadoId
+                    },
+
+                    select: {
+                        id: true,
+                        nome: true,
+                        tipo_usuario: true
+                    }
+                }),
+
+                this.prisma.cadastro.findUnique({
+                    where: {
+                        id: usuarioSelecionadoId
+                    },
+
+                    select: {
+                        id: true,
+                        nome: true,
+                        tipo_usuario: true
+                    }
+                })
+            ]);
+
+        if (!usuarioLogado) {
+            throw new NotFoundException(
+                "Usuário autenticado não encontrado."
+            );
+        }
+
+        if (usuarioLogado.tipo_usuario !== "admin") {
+            throw new ForbiddenException(
+                "Somente administradores podem iniciar conversas privadas."
+            );
+        }
+
+        if (!usuarioSelecionado) {
+            throw new NotFoundException(
+                "Usuário selecionado não encontrado."
+            );
+        }
+
+        if (usuarioLogado.id === usuarioSelecionado.id) {
             throw new BadRequestException(
                 "Você não pode iniciar uma conversa consigo mesmo."
             );
         }
 
-        const usuarioSelecionado =
-            await this.prisma.cadastro.findUnique({
-                where: {
-                    id: usuarioSelecionadoId
-                },
-
-                select: {
-                    id: true,
-                    nome: true,
-                    tipo_usuario: true
-                }
-            });
-
-        if (!usuarioSelecionado) {
-            throw new NotFoundException(
-                "Usuário não encontrado."
-            );
-        }
-
-        if (usuarioSelecionado.tipo_usuario !== "user") {
-            throw new BadRequestException(
-                "Só é possível iniciar conversa com usuários."
-            );
-        }
+        const participantes = [
+            usuarioLogado.id,
+            usuarioSelecionado.id
+        ];
 
         const conversaExistente =
             await this.prisma.conversa.findFirst({
@@ -111,14 +175,14 @@ export class ConversasService {
                         {
                             conversa_participante: {
                                 some: {
-                                    usuario_id: usuarioLogadoId
+                                    usuario_id: usuarioLogado.id
                                 }
                             }
                         },
                         {
                             conversa_participante: {
                                 some: {
-                                    usuario_id: usuarioSelecionadoId
+                                    usuario_id: usuarioSelecionado.id
                                 }
                             }
                         },
@@ -126,10 +190,7 @@ export class ConversasService {
                             conversa_participante: {
                                 every: {
                                     usuario_id: {
-                                        in: [
-                                            usuarioLogadoId,
-                                            usuarioSelecionadoId
-                                        ]
+                                        in: participantes
                                     }
                                 }
                             }
@@ -152,7 +213,8 @@ export class ConversasService {
                 }
             });
 
-        const conversa = conversaExistente ??
+        const conversa =
+            conversaExistente ??
             await this.prisma.conversa.create({
                 data: {
                     tipo: "privada",
@@ -162,14 +224,14 @@ export class ConversasService {
                             {
                                 cadastro: {
                                     connect: {
-                                        id: usuarioLogadoId
+                                        id: usuarioLogado.id
                                     }
                                 }
                             },
                             {
                                 cadastro: {
                                     connect: {
-                                        id: usuarioSelecionadoId
+                                        id: usuarioSelecionado.id
                                     }
                                 }
                             }
@@ -192,39 +254,54 @@ export class ConversasService {
                 }
             });
 
-        const contato = conversa.conversa_participante
-            .find(
+        const contato =
+            conversa.conversa_participante.find(
                 (participante) =>
                     participante.usuario_id ===
-                    usuarioSelecionadoId
-            )!.cadastro;
+                    usuarioSelecionado.id
+            )?.cadastro;
+
+        if (!contato) {
+            throw new NotFoundException(
+                "Contato da conversa não encontrado."
+            );
+        }
 
         return {
             id: conversa.id,
             tipo: conversa.tipo,
             criadaEm: conversa.criada_em,
-            contato
+            contato,
+            ultimaMensagem: null
         };
     }
 
+    /*
+     * Lista atendimentos de setor.
+     *
+     * user: somente os próprios atendimentos.
+     * funcionário: atendimentos do seu setor.
+     * admin: todos os atendimentos.
+     */
     async listarAtendimentos(
         usuarioLogadoId: number
-        ) {
+    ) {
         const usuarioLogado =
             await this.prisma.cadastro.findUnique({
-            where: {
-                id: usuarioLogadoId
-            },
-            select: {
-                id: true,
-                tipo_usuario: true,
-                setor_id: true
-            }
+                where: {
+                    id: usuarioLogadoId
+                },
+
+                select: {
+                    id: true,
+                    tipo_usuario: true,
+                    setor_id: true
+                }
             });
 
         if (!usuarioLogado) {
             throw new NotFoundException(
-            "Usuário autenticado não encontrado."
+                "Usuário autenticado não encontrado."
             );
         }
 
@@ -237,75 +314,305 @@ export class ConversasService {
             filtro.usuario_id = usuarioLogado.id;
         }
 
-        if (usuarioLogado.tipo_usuario === "funcionario") {
+        if (
+            usuarioLogado.tipo_usuario ===
+            "funcionario"
+        ) {
             if (!usuarioLogado.setor_id) {
-            throw new BadRequestException(
-                "O funcionário não está vinculado a nenhum setor."
-            );
+                throw new BadRequestException(
+                    "O funcionário não está vinculado a nenhum setor."
+                );
             }
 
-            filtro.setor_id = usuarioLogado.setor_id;
+            filtro.setor_id =
+                usuarioLogado.setor_id;
         }
-
-        /*
-        * Quando o perfil for admin, o filtro permanece vazio.
-        * Dessa forma, o administrador visualiza todos os atendimentos.
-        */
 
         const atendimentos =
             await this.prisma.conversa_setor.findMany({
-            where: filtro,
+                where: filtro,
 
-            include: {
-                conversa: {
-                select: {
-                    id: true,
-                    tipo: true,
-                    criada_em: true,
+                include: {
+                    conversa: {
+                        select: {
+                            id: true,
+                            tipo: true,
+                            criada_em: true,
 
-                    mensagens: {
-                    orderBy: {
-                        enviada_em: "desc"
+                            mensagens: {
+                                orderBy: {
+                                    enviada_em: "desc"
+                                },
+
+                                take: 1,
+
+                                select: {
+                                    id: true,
+                                    conteudo: true,
+                                    origem: true,
+                                    enviada_em: true
+                                }
+                            }
+                        }
                     },
 
-                    take: 1,
+                    setor: {
+                        select: {
+                            id: true,
+                            setor: true,
+                            sigla_setor: true
+                        }
+                    },
 
-                    select: {
-                        id: true,
-                        conteudo: true,
-                        origem: true,
-                        enviada_em: true
+                    usuario: {
+                        select: {
+                            id: true,
+                            nome: true
+                        }
                     }
-                    }
-                }
                 },
 
-                setor: {
-                select: {
-                    id: true,
-                    setor: true,
-                    sigla_setor: true
+                orderBy: {
+                    criada_em: "desc"
                 }
-                },
-
-                usuario: {
-                select: {
-                    id: true,
-                    nome: true
-                }
-                }
-            },
-
-            orderBy: {
-                criada_em: "desc"
-            }
             });
 
         return atendimentos.map((atendimento) => {
             const ultimaMensagem =
-            atendimento.conversa.mensagens[0] ?? null;
+                atendimento.conversa.mensagens[0] ??
+                null;
 
             return {
+                id: atendimento.conversa.id,
+                tipo: atendimento.conversa.tipo,
+                criadaEm:
+                    atendimento.conversa.criada_em,
+
+                setor: {
+                    id: atendimento.setor.id,
+                    nome: atendimento.setor.setor,
+                    sigla:
+                        atendimento.setor.sigla_setor
+                },
+
+                usuario: atendimento.usuario,
+
+                ultimaMensagem: ultimaMensagem
+                    ? {
+                        id: ultimaMensagem.id,
+                        conteudo:
+                            ultimaMensagem.conteudo,
+                        origem:
+                            ultimaMensagem.origem,
+                        enviadaEm:
+                            ultimaMensagem.enviada_em
+                    }
+                    : null
+            };
+        });
+    }
+
+    /*
+     * Um user inicia atendimento com um setor.
+     */
+    async iniciarComoUsuario(
+        usuarioLogadoId: number,
+        setorId: number
+    ) {
+        const [usuario, setor] =
+            await Promise.all([
+                this.prisma.cadastro.findUnique({
+                    where: {
+                        id: usuarioLogadoId
+                    },
+
+                    select: {
+                        id: true,
+                        nome: true,
+                        tipo_usuario: true
+                    }
+                }),
+
+                this.prisma.setores.findUnique({
+                    where: {
+                        id: setorId
+                    },
+
+                    select: {
+                        id: true,
+                        setor: true,
+                        sigla_setor: true
+                    }
+                })
+            ]);
+
+        if (!usuario) {
+            throw new NotFoundException(
+                "Usuário autenticado não encontrado."
+            );
+        }
+
+        if (usuario.tipo_usuario !== "user") {
+            throw new ForbiddenException(
+                "Somente usuários podem iniciar atendimento com um setor."
+            );
+        }
+
+        if (!setor) {
+            throw new NotFoundException(
+                "Setor não encontrado."
+            );
+        }
+
+        return this.buscarOuCriarAtendimento(
+            setor.id,
+            usuario.id
+        );
+    }
+
+    /*
+     * Um funcionário inicia atendimento,
+     * em nome do setor, com um user.
+     */
+    async iniciarComoFuncionario(
+        funcionarioId: number,
+        usuarioSelecionadoId: number
+    ) {
+        const [funcionario, usuarioSelecionado] =
+            await Promise.all([
+                this.prisma.cadastro.findUnique({
+                    where: {
+                        id: funcionarioId
+                    },
+
+                    select: {
+                        id: true,
+                        tipo_usuario: true,
+                        setor_id: true
+                    }
+                }),
+
+                this.prisma.cadastro.findUnique({
+                    where: {
+                        id: usuarioSelecionadoId
+                    },
+
+                    select: {
+                        id: true,
+                        nome: true,
+                        tipo_usuario: true
+                    }
+                })
+            ]);
+
+        if (!funcionario) {
+            throw new NotFoundException(
+                "Funcionário autenticado não encontrado."
+            );
+        }
+
+        if (
+            funcionario.tipo_usuario !==
+            "funcionario"
+        ) {
+            throw new ForbiddenException(
+                "Somente funcionários podem iniciar esse atendimento."
+            );
+        }
+
+        if (!funcionario.setor_id) {
+            throw new BadRequestException(
+                "O funcionário não está vinculado a nenhum setor."
+            );
+        }
+
+        if (!usuarioSelecionado) {
+            throw new NotFoundException(
+                "Usuário não encontrado."
+            );
+        }
+
+        if (
+            usuarioSelecionado.tipo_usuario !==
+            "user"
+        ) {
+            throw new BadRequestException(
+                "O atendimento só pode ser iniciado com um usuário."
+            );
+        }
+
+        return this.buscarOuCriarAtendimento(
+            funcionario.setor_id,
+            usuarioSelecionado.id
+        );
+    }
+
+    /*
+     * Procura ou cria uma conversa única
+     * entre determinado setor e determinado user.
+     */
+    private async buscarOuCriarAtendimento(
+        setorId: number,
+        usuarioId: number
+    ) {
+        const atendimento =
+            await this.prisma.conversa_setor.upsert({
+                where: {
+                    setor_id_usuario_id: {
+                        setor_id: setorId,
+                        usuario_id: usuarioId
+                    }
+                },
+
+                update: {},
+
+                create: {
+                    conversa: {
+                        create: {
+                            tipo: "setor"
+                        }
+                    },
+
+                    setor: {
+                        connect: {
+                            id: setorId
+                        }
+                    },
+
+                    usuario: {
+                        connect: {
+                            id: usuarioId
+                        }
+                    }
+                },
+
+                include: {
+                    conversa: {
+                        select: {
+                            id: true,
+                            tipo: true,
+                            criada_em: true
+                        }
+                    },
+
+                    setor: {
+                        select: {
+                            id: true,
+                            setor: true,
+                            sigla_setor: true
+                        }
+                    },
+
+                    usuario: {
+                        select: {
+                            id: true,
+                            nome: true
+                        }
+                    }
+                }
+            });
+
+        return {
             id: atendimento.conversa.id,
             tipo: atendimento.conversa.tipo,
             criadaEm: atendimento.conversa.criada_em,
@@ -317,262 +624,87 @@ export class ConversasService {
             },
 
             usuario: atendimento.usuario,
-
-            ultimaMensagem: ultimaMensagem
-                ? {
-                    id: ultimaMensagem.id,
-                    conteudo: ultimaMensagem.conteudo,
-                    origem: ultimaMensagem.origem,
-                    enviadaEm: ultimaMensagem.enviada_em
-                }
-                : null
-            };
-        });
-    }
-
-    async iniciarComoUsuario(
-        usuarioLogadoId: number,
-        setorId: number
-        ) {
-        const [usuario, setor] = await Promise.all([
-            this.prisma.cadastro.findUnique({
-            where: {
-                id: usuarioLogadoId
-            },
-            select: {
-                id: true,
-                nome: true,
-                tipo_usuario: true
-            }
-            }),
-
-            this.prisma.setores.findUnique({
-            where: {
-                id: setorId
-            },
-            select: {
-                id: true,
-                setor: true,
-                sigla_setor: true
-            }
-            })
-        ]);
-
-        if (!usuario) {
-            throw new NotFoundException(
-            "Usuário autenticado não encontrado."
-            );
-        }
-
-        if (usuario.tipo_usuario !== "user") {
-            throw new ForbiddenException(
-            "Somente usuários podem iniciar atendimento com um setor."
-            );
-        }
-
-        if (!setor) {
-            throw new NotFoundException(
-            "Setor não encontrado."
-            );
-        }
-
-        return this.buscarOuCriarAtendimento(
-            setor.id,
-            usuario.id
-        );
-        }
-
-        async iniciarComoFuncionario(
-        funcionarioId: number,
-        usuarioSelecionadoId: number
-        ) {
-        const [funcionario, usuarioSelecionado] =
-            await Promise.all([
-            this.prisma.cadastro.findUnique({
-                where: {
-                id: funcionarioId
-                },
-                select: {
-                id: true,
-                tipo_usuario: true,
-                setor_id: true
-                }
-            }),
-
-            this.prisma.cadastro.findUnique({
-                where: {
-                id: usuarioSelecionadoId
-                },
-                select: {
-                id: true,
-                nome: true,
-                tipo_usuario: true
-                }
-            })
-            ]);
-
-        if (!funcionario) {
-            throw new NotFoundException(
-            "Funcionário autenticado não encontrado."
-            );
-        }
-
-        if (funcionario.tipo_usuario !== "funcionario") {
-            throw new ForbiddenException(
-            "Somente funcionários podem iniciar esse atendimento."
-            );
-        }
-
-        if (!funcionario.setor_id) {
-            throw new BadRequestException(
-            "O funcionário não está vinculado a nenhum setor."
-            );
-        }
-
-        if (!usuarioSelecionado) {
-            throw new NotFoundException(
-            "Usuário não encontrado."
-            );
-        }
-
-        if (usuarioSelecionado.tipo_usuario !== "user") {
-            throw new BadRequestException(
-            "O atendimento só pode ser iniciado com um usuário."
-            );
-        }
-
-        return this.buscarOuCriarAtendimento(
-            funcionario.setor_id,
-            usuarioSelecionado.id
-        );
-        }
-
-        private async buscarOuCriarAtendimento(
-        setorId: number,
-        usuarioId: number
-        ) {
-        const atendimento =
-            await this.prisma.conversa_setor.upsert({
-            where: {
-                setor_id_usuario_id: {
-                setor_id: setorId,
-                usuario_id: usuarioId
-                }
-            },
-
-            update: {},
-
-            create: {
-                conversa: {
-                create: {
-                    tipo: "setor"
-                }
-                },
-
-                setor: {
-                connect: {
-                    id: setorId
-                }
-                },
-
-                usuario: {
-                connect: {
-                    id: usuarioId
-                }
-                }
-            },
-
-            include: {
-                conversa: {
-                select: {
-                    id: true,
-                    tipo: true,
-                    criada_em: true
-                }
-                },
-
-                setor: {
-                select: {
-                    id: true,
-                    setor: true,
-                    sigla_setor: true
-                }
-                },
-
-                usuario: {
-                select: {
-                    id: true,
-                    nome: true
-                }
-                }
-            }
-            });
-
-        return {
-            id: atendimento.conversa.id,
-            tipo: atendimento.conversa.tipo,
-            criadaEm: atendimento.conversa.criada_em,
-
-            setor: {
-            id: atendimento.setor.id,
-            nome: atendimento.setor.setor,
-            sigla: atendimento.setor.sigla_setor
-            },
-
-            usuario: atendimento.usuario
+            ultimaMensagem: null
         };
     }
 
+    /*
+     * Envia mensagem em uma conversa privada
+     * ou em um atendimento de setor.
+     */
     async enviarMensagem(
         usuarioLogadoId: number,
         conversaId: number,
         conteudo: string
-        ) {
-        const contexto = await this.verificarAcessoConversaSetor(
-            usuarioLogadoId,
-            conversaId
-        );
+    ) {
+        const conteudoLimpo = conteudo.trim();
 
-        if (contexto.usuarioLogado.tipo_usuario === "admin") {
-            throw new ForbiddenException(
-            "Administradores não podem enviar mensagens em nome do setor."
+        if (!conteudoLimpo) {
+            throw new BadRequestException(
+                "A mensagem não pode estar vazia."
             );
         }
 
-        const origem =
-            contexto.usuarioLogado.tipo_usuario === "user"
-            ? "usuario"
-            : "setor";
+        const contexto =
+            await this.verificarAcessoConversa(
+                usuarioLogadoId,
+                conversaId
+            );
 
-        const mensagem = await this.prisma.mensagem.create({
-            data: {
-            conversa_id: conversaId,
-            remetente_id: usuarioLogadoId,
-            origem,
-            conteudo
-            },
+        let origem: "usuario" | "setor";
 
-            include: {
-            remetente: {
-                select: {
-                id: true,
-                nome: true
+        if (contexto.conversa.tipo === "privada") {
+            origem = "usuario";
+        } else {
+            if (
+                contexto.usuarioLogado.tipo_usuario ===
+                "admin"
+            ) {
+                throw new ForbiddenException(
+                    "O administrador deve usar uma conversa privada para enviar mensagens."
+                );
+            }
+
+            origem =
+                contexto.usuarioLogado.tipo_usuario ===
+                "user"
+                    ? "usuario"
+                    : "setor";
+        }
+
+        const mensagem =
+            await this.prisma.mensagem.create({
+                data: {
+                    conversa_id: conversaId,
+                    remetente_id: usuarioLogadoId,
+                    origem,
+                    conteudo: conteudoLimpo
+                },
+
+                include: {
+                    remetente: {
+                        select: {
+                            id: true,
+                            nome: true
+                        }
+                    }
                 }
-            }
-            }
-        });
+            });
+
+        const atendimento = contexto.atendimento;
 
         const remetenteExibido =
-            mensagem.origem === "setor"
-            ? {
-                tipo: "setor",
-                id: contexto.atendimento.setor.id,
-                nome: contexto.atendimento.setor.setor
+            mensagem.origem === "setor" &&
+            atendimento
+                ? {
+                    tipo: "setor" as const,
+                    id: atendimento.setor.id,
+                    nome: atendimento.setor.setor
                 }
-            : {
-                tipo: "usuario",
-                id: mensagem.remetente.id,
-                nome: mensagem.remetente.nome
+                : {
+                    tipo: "usuario" as const,
+                    id: mensagem.remetente.id,
+                    nome: mensagem.remetente.nome
                 };
 
         return {
@@ -583,151 +715,236 @@ export class ConversasService {
             enviadaEm: mensagem.enviada_em,
             remetente: remetenteExibido
         };
-        }
+    }
 
-        async listarMensagens(
+    /*
+     * Lista mensagens de uma conversa,
+     * validando se o usuário pode acessá-la.
+     */
+    async listarMensagens(
         usuarioLogadoId: number,
         conversaId: number
-        ) {
-        const contexto = await this.verificarAcessoConversaSetor(
-            usuarioLogadoId,
-            conversaId
-        );
+    ) {
+        const contexto =
+            await this.verificarAcessoConversa(
+                usuarioLogadoId,
+                conversaId
+            );
 
-        const mensagens = await this.prisma.mensagem.findMany({
-            where: {
-            conversa_id: conversaId
-            },
-
-            include: {
-            remetente: {
-                select: {
-                id: true,
-                nome: true
-                }
-            }
-            },
-
-            orderBy: {
-            enviada_em: "asc"
-            }
-        });
-
-        return mensagens.map((mensagem) => {
-            const remetenteExibido =
-            mensagem.origem === "setor"
-                ? {
-                    tipo: "setor",
-                    id: contexto.atendimento.setor.id,
-                    nome: contexto.atendimento.setor.setor
-                }
-                : {
-                    tipo: "usuario",
-                    id: mensagem.remetente.id,
-                    nome: mensagem.remetente.nome
-                };
-
-            const podeVerAutorReal =
-            contexto.usuarioLogado.tipo_usuario !== "user" ||
-            mensagem.origem === "usuario";
-
-            return {
-            id: mensagem.id,
-            conversaId: mensagem.conversa_id,
-            conteudo: mensagem.conteudo,
-            origem: mensagem.origem,
-            enviadaEm: mensagem.enviada_em,
-            remetente: remetenteExibido,
-
-            ...(podeVerAutorReal && {
-                autorReal: {
-                id: mensagem.remetente.id,
-                nome: mensagem.remetente.nome
-                }
-            })
-            };
-        });
-        }
-
-        private async verificarAcessoConversaSetor(
-        usuarioLogadoId: number,
-        conversaId: number
-        ) {
-        const [usuarioLogado, atendimento] =
-            await Promise.all([
-            this.prisma.cadastro.findUnique({
+        const mensagens =
+            await this.prisma.mensagem.findMany({
                 where: {
-                id: usuarioLogadoId
-                },
-                select: {
-                id: true,
-                tipo_usuario: true,
-                setor_id: true
-                }
-            }),
-
-            this.prisma.conversa_setor.findUnique({
-                where: {
-                conversa_id: conversaId
+                    conversa_id: conversaId
                 },
 
                 include: {
-                setor: {
-                    select: {
-                    id: true,
-                    setor: true,
-                    sigla_setor: true
+                    remetente: {
+                        select: {
+                            id: true,
+                            nome: true
+                        }
                     }
                 },
 
-                usuario: {
-                    select: {
-                    id: true,
-                    nome: true
+                orderBy: {
+                    enviada_em: "asc"
+                }
+            });
+
+        return mensagens.map((mensagem) => {
+            const atendimento =
+                contexto.atendimento;
+
+            const remetenteExibido =
+                mensagem.origem === "setor" &&
+                atendimento
+                    ? {
+                        tipo: "setor" as const,
+                        id: atendimento.setor.id,
+                        nome:
+                            atendimento.setor.setor
                     }
-                }
-                }
-            })
+                    : {
+                        tipo: "usuario" as const,
+                        id: mensagem.remetente.id,
+                        nome:
+                            mensagem.remetente.nome
+                    };
+
+            const podeVerAutorReal =
+                contexto.conversa.tipo === "privada" ||
+                contexto.usuarioLogado.tipo_usuario !==
+                    "user" ||
+                mensagem.origem === "usuario";
+
+            return {
+                id: mensagem.id,
+                conversaId: mensagem.conversa_id,
+                conteudo: mensagem.conteudo,
+                origem: mensagem.origem,
+                enviadaEm: mensagem.enviada_em,
+                remetente: remetenteExibido,
+
+                ...(podeVerAutorReal && {
+                    autorReal: {
+                        id: mensagem.remetente.id,
+                        nome:
+                            mensagem.remetente.nome
+                    }
+                })
+            };
+        });
+    }
+
+    /*
+     * Valida acesso tanto para conversa privada
+     * quanto para atendimento de setor.
+     */
+    private async verificarAcessoConversa(
+        usuarioLogadoId: number,
+        conversaId: number
+    ) {
+        const [usuarioLogado, conversa] =
+            await Promise.all([
+                this.prisma.cadastro.findUnique({
+                    where: {
+                        id: usuarioLogadoId
+                    },
+
+                    select: {
+                        id: true,
+                        nome: true,
+                        tipo_usuario: true,
+                        setor_id: true
+                    }
+                }),
+
+                this.prisma.conversa.findUnique({
+                    where: {
+                        id: conversaId
+                    },
+
+                    include: {
+                        conversa_participante: {
+                            select: {
+                                usuario_id: true
+                            }
+                        },
+
+                        atendimento_setor: {
+                            include: {
+                                setor: {
+                                    select: {
+                                        id: true,
+                                        setor: true,
+                                        sigla_setor: true
+                                    }
+                                },
+
+                                usuario: {
+                                    select: {
+                                        id: true,
+                                        nome: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
             ]);
 
         if (!usuarioLogado) {
             throw new NotFoundException(
-            "Usuário autenticado não encontrado."
+                "Usuário autenticado não encontrado."
             );
         }
 
-        if (!atendimento) {
+        if (!conversa) {
             throw new NotFoundException(
-            "Conversa de setor não encontrada."
+                "Conversa não encontrada."
             );
         }
 
-        if (
-            usuarioLogado.tipo_usuario === "user" &&
-            atendimento.usuario_id !== usuarioLogado.id
-        ) {
-            throw new ForbiddenException(
-            "Você não possui acesso a esta conversa."
-            );
-        }
+        /*
+         * Em conversa privada, somente os participantes
+         * podem visualizar e enviar mensagens.
+         */
+        if (conversa.tipo === "privada") {
+            const participaDaConversa =
+                conversa.conversa_participante.some(
+                    (participante) =>
+                        participante.usuario_id ===
+                        usuarioLogado.id
+                );
 
-        if (usuarioLogado.tipo_usuario === "funcionario") {
-            if (!usuarioLogado.setor_id) {
-            throw new ForbiddenException(
-                "Você não está vinculado a nenhum setor."
-            );
+            if (!participaDaConversa) {
+                throw new ForbiddenException(
+                    "Você não participa desta conversa privada."
+                );
             }
 
-            if (atendimento.setor_id !== usuarioLogado.setor_id) {
-            throw new ForbiddenException(
-                "Esta conversa pertence a outro setor."
-            );
-            }
+            return {
+                usuarioLogado,
+                conversa,
+                atendimento: null
+            };
         }
 
-        return {
-            usuarioLogado,
-            atendimento
-        };
+        /*
+         * Em atendimento de setor:
+         * user acessa somente o próprio atendimento;
+         * funcionário acessa somente seu setor;
+         * admin pode visualizar todos.
+         */
+        if (conversa.tipo === "setor") {
+            const atendimento =
+                conversa.atendimento_setor;
+
+            if (!atendimento) {
+                throw new NotFoundException(
+                    "Atendimento de setor não encontrado."
+                );
+            }
+
+            if (
+                usuarioLogado.tipo_usuario === "user" &&
+                atendimento.usuario_id !==
+                    usuarioLogado.id
+            ) {
+                throw new ForbiddenException(
+                    "Você não possui acesso a este atendimento."
+                );
+            }
+
+            if (
+                usuarioLogado.tipo_usuario ===
+                "funcionario"
+            ) {
+                if (!usuarioLogado.setor_id) {
+                    throw new ForbiddenException(
+                        "Você não está vinculado a nenhum setor."
+                    );
+                }
+
+                if (
+                    atendimento.setor_id !==
+                    usuarioLogado.setor_id
+                ) {
+                    throw new ForbiddenException(
+                        "Esta conversa pertence a outro setor."
+                    );
+                }
+            }
+
+            return {
+                usuarioLogado,
+                conversa,
+                atendimento
+            };
+        }
+
+        throw new BadRequestException(
+            "Mensagens para grupos ainda não foram implementadas."
+        );
     }
 }

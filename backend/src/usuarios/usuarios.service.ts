@@ -295,7 +295,10 @@ export class UsuariosService {
             );
         }
 
-        if (dados.setor_id != null) {
+        if (
+            dados.tipo_usuario === "funcionario" &&
+            dados.setor_id != null
+        ) {
             const setor =
                 await this.prisma.setores.findUnique({
                     where: {
@@ -329,7 +332,9 @@ export class UsuariosService {
                     dados.tipo_usuario,
 
                 setor_id:
-                    dados.setor_id ?? null
+                    dados.tipo_usuario === "funcionario"
+                        ? dados.setor_id ?? null
+                        : null
             },
 
             select: {

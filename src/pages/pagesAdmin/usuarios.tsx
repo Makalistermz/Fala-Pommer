@@ -76,7 +76,12 @@ function Usuarios() {
 
     useEffect(() => {
         async function carregarSetores() {
-            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`);
+            const token = localStorage.getItem("access_token");
+            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
             if (!resposta.ok) {
                 throw new Error("Não foi possível carregar os setores");
@@ -424,11 +429,17 @@ function Usuarios() {
                                     id="tipo-usuario"
                                     value={usuarioEmEdicao.tipo_usuario}
                                     onChange={(evento) => {
+                                        const tipoUsuario = evento.target.value;
+
                                         setUsuarioEmEdicao((usuarioAtual) =>
                                             usuarioAtual
-                                                ? { ...usuarioAtual, tipo_usuario: evento.target.value }
+                                                ? { ...usuarioAtual, tipo_usuario: tipoUsuario }
                                                 : null,
                                         );
+
+                                        if (tipoUsuario !== "funcionario") {
+                                            setSetorEmEdicao("");
+                                        }
                                     }}
                                 >
                                     <option value="user">Usuário</option>
@@ -437,21 +448,23 @@ function Usuarios() {
                                 </select>
                             </div>
 
-                            <div className="info__painel-lateral">
-                                <label htmlFor="setor-vinculado">Setor vinculado</label>
-                                <select
-                                    id="setor-vinculado"
-                                    value={setorEmEdicao}
-                                    onChange={(evento) => setSetorEmEdicao(evento.target.value)}
-                                >
-                                    <option value="" disabled>Selecione um setor</option>
-                                    {setores.map((setor) => (
-                                        <option key={setor.id} value={setor.id}>
-                                            {setor.sigla_setor} - {setor.setor}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+                            {usuarioEmEdicao.tipo_usuario === "funcionario" && (
+                                <div className="info__painel-lateral">
+                                    <label htmlFor="setor-vinculado">Setor vinculado</label>
+                                    <select
+                                        id="setor-vinculado"
+                                        value={setorEmEdicao}
+                                        onChange={(evento) => setSetorEmEdicao(evento.target.value)}
+                                    >
+                                        <option value="" disabled>Selecione um setor</option>
+                                        {setores.map((setor) => (
+                                            <option key={setor.id} value={setor.id}>
+                                                {setor.sigla_setor} - {setor.setor}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
 
                             <button
                                 type="button"

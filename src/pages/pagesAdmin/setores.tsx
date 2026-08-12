@@ -31,7 +31,12 @@ function Setores() {
     useEffect(() => {
         async function carregarSetores() {
             try {
-                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`);
+                const token = localStorage.getItem("access_token");
+                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
 
                 if (!resposta.ok) {
                     throw new Error("Falha ao carregar os setores.");
@@ -64,9 +69,11 @@ function Setores() {
         const dados = Object.fromEntries(dadosFormulario.entries());
 
         try {
+            const token = localStorage.getItem("access_token");
             const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`, {
                 method: 'POST',
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(dados),
@@ -112,9 +119,15 @@ function Setores() {
         setSetorSendoApagado(setorParaApagar.id);
 
         try {
+            const token = localStorage.getItem("access_token");
             const resposta = await fetch(
                 `${import.meta.env.VITE_API_URL}/setores/${setorParaApagar.id}`,
-                { method: "DELETE" },
+                {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
             );
             const resultado = await resposta.json();
 

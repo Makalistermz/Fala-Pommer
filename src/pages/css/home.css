@@ -737,6 +737,63 @@
     white-space: pre-wrap;
 }
 
+.mensagem-anexo {
+    display: block;
+    width: min(100%, 420px);
+    margin: 4px 0 8px;
+}
+
+.mensagem-anexo--imagem img,
+.mensagem-anexo--video {
+    display: block;
+    width: 100%;
+    max-height: 360px;
+    border-radius: 9px;
+    object-fit: contain;
+    background: #0f172a;
+}
+
+.mensagem-anexo--audio {
+    min-width: 280px;
+    height: 40px;
+}
+
+.mensagem-anexo--documento {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid rgba(19, 81, 180, 0.2);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.72);
+    color: #172033;
+    text-decoration: none;
+}
+
+.mensagem-anexo--documento > span:first-child {
+    font-size: 24px;
+}
+
+.mensagem-anexo--documento > span:last-child {
+    min-width: 0;
+}
+
+.mensagem-anexo--documento strong {
+    overflow: hidden;
+    margin: 0;
+    color: #172033;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mensagem-anexo--documento small {
+    display: block;
+    margin-top: 2px;
+    color: #667085;
+    font-size: 11px;
+}
+
 .mensagem-balao time {
     position: absolute;
     right: 9px;
@@ -1036,6 +1093,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.chat-input__audio button.gravando {
+    color: #ffffff;
+    background: #d92d20;
+    animation: gravando-audio-pulsar 1.1s ease-in-out infinite;
+}
+
+@keyframes gravando-audio-pulsar {
+    50% {
+        box-shadow: 0 0 0 6px rgba(217, 45, 32, 0.18);
+    }
 }
 
 .chat-input__audio button {

@@ -1,6 +1,6 @@
 import { Transform } from "class-transformer";
 import {
-    IsNotEmpty,
+    IsOptional,
     IsString,
     MaxLength
 } from "class-validator";
@@ -11,8 +11,8 @@ export class CriarMensagemDto {
         ? value.trim()
         : value
     )
+    @IsOptional()
     @IsString()
-    @IsNotEmpty()
     @MaxLength(4000)
-    conteudo!: string;
+    conteudo?: string;
 }

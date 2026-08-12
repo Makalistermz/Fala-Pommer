@@ -37,6 +37,8 @@ interface UltimaMensagem {
     id: number;
     conteudo: string;
     origem: "usuario" | "setor";
+    arquivoNome?: string | null;
+    arquivoTipo?: string | null;
     enviadaEm: string;
 }
 
@@ -86,6 +88,14 @@ interface MensagemChat {
         id: number;
         nome: string;
     };
+
+    arquivo?: {
+        nome: string;
+        url: string;
+        tipo: "documento" | "imagem" | "video" | "audio";
+        mime: string;
+        tamanho: number;
+    } | null;
 }
 
 function Home() {
@@ -135,6 +145,10 @@ function Home() {
     const inputMidiasRef = useRef<HTMLInputElement>(null);
 
     const inputAudiosRef = useRef<HTMLInputElement>(null);
+    const gravadorAudioRef = useRef<MediaRecorder | null>(null);
+    const fluxoAudioRef = useRef<MediaStream | null>(null);
+    const partesAudioRef = useRef<Blob[]>([]);
+    const [gravandoAudio, setGravandoAudio] = useState(false);
 
     const navigate = useNavigate();
 
@@ -376,24 +390,38 @@ function Home() {
         const conteudo = mensagem.trim();
         const token = localStorage.getItem("access_token");
 
-        if (!conteudo || !token || !conversaSelecionada || enviandoMensagem) {
+        if (
+            (!conteudo && !arquivoSelecionado) ||
+            !token ||
+            !conversaSelecionada ||
+            enviandoMensagem
+        ) {
             return;
         }
 
         setEnviandoMensagem(true);
 
         try {
+            const corpo = arquivoSelecionado
+                ? new FormData()
+                : JSON.stringify({ conteudo });
+
+            if (corpo instanceof FormData) {
+                if (conteudo) corpo.append("conteudo", conteudo);
+                corpo.append("arquivo", arquivoSelecionado!);
+            }
+
             const resposta = await fetch(
                 `${import.meta.env.VITE_API_URL}/conversas/${conversaSelecionada.id}/mensagens`,
                 {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    conteudo,
-                }),
+                headers: arquivoSelecionado
+                    ? { Authorization: `Bearer ${token}` }
+                    : {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                body: corpo,
                 },
             );
 
@@ -424,6 +452,8 @@ function Home() {
                     id: novaMensagem.id,
                     conteudo: novaMensagem.conteudo,
                     origem: novaMensagem.origem,
+                    arquivoNome: novaMensagem.arquivo?.nome,
+                    arquivoTipo: novaMensagem.arquivo?.tipo,
                     enviadaEm: novaMensagem.enviadaEm,
                     },
                 };
@@ -434,8 +464,14 @@ function Home() {
             );
 
             setMensagem("");
+            setArquivoSelecionado(null);
         } catch (erro) {
             console.error("Erro ao enviar mensagem:", erro);
+            window.alert(
+                erro instanceof Error
+                    ? erro.message
+                    : "Não foi possível enviar a mensagem.",
+            );
         } finally {
             setEnviandoMensagem(false);
         }
@@ -622,12 +658,75 @@ function Home() {
     function selecionarArquivo(event: ChangeEvent<HTMLInputElement>) {
         const arquivo = event.target.files?.[0];
 
-        if (arquivo) {
+        if (arquivo && arquivo.size > 25 * 1024 * 1024) {
+            window.alert("O arquivo deve ter no máximo 25 MB.");
+        } else if (arquivo) {
             setArquivoSelecionado(arquivo);
         }
 
         event.target.value = "";
     }
+
+    async function alternarGravacaoAudio() {
+        if (gravandoAudio) {
+            gravadorAudioRef.current?.stop();
+            setGravandoAudio(false);
+            return;
+        }
+
+        if (!navigator.mediaDevices?.getUserMedia || !("MediaRecorder" in window)) {
+            window.alert("A gravação de áudio não é suportada neste navegador.");
+            return;
+        }
+
+        try {
+            const fluxo = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const gravador = new MediaRecorder(fluxo);
+
+            fluxoAudioRef.current = fluxo;
+            gravadorAudioRef.current = gravador;
+            partesAudioRef.current = [];
+
+            gravador.ondataavailable = (evento) => {
+                if (evento.data.size > 0) {
+                    partesAudioRef.current.push(evento.data);
+                }
+            };
+
+            gravador.onstop = () => {
+                const audio = new Blob(partesAudioRef.current, {
+                    type: "audio/webm",
+                });
+
+                if (audio.size > 0) {
+                    setArquivoSelecionado(
+                        new File([audio], `audio-${Date.now()}.webm`, {
+                            type: "audio/webm",
+                        }),
+                    );
+                }
+
+                fluxo.getTracks().forEach((trilha) => trilha.stop());
+                fluxoAudioRef.current = null;
+                gravadorAudioRef.current = null;
+                partesAudioRef.current = [];
+            };
+
+            gravador.start();
+            setGravandoAudio(true);
+        } catch (erro) {
+            console.error("Erro ao acessar o microfone:", erro);
+            window.alert("Não foi possível acessar o microfone.");
+        }
+    }
+
+    useEffect(() => () => {
+        if (gravadorAudioRef.current?.state === "recording") {
+            gravadorAudioRef.current.stop();
+        }
+
+        fluxoAudioRef.current?.getTracks().forEach((trilha) => trilha.stop());
+    }, []);
 
     function formatarTamanhoArquivo(tamanho: number) {
         if (tamanho < 1024) {
@@ -639,6 +738,12 @@ function Home() {
         }
 
         return `${(tamanho / (1024 * 1024)).toFixed(1)} MB`;
+    }
+
+    function obterUrlArquivo(url: string) {
+        return url.startsWith("http")
+            ? url
+            : `${import.meta.env.VITE_API_URL}${url}`;
     }
 
     return (
@@ -810,7 +915,10 @@ function Home() {
                     <strong>{nomeDaConversa(conversa)}</strong>
 
                     <span>
-                    {conversa.ultimaMensagem?.conteudo ?? "Conversa iniciada"}
+                    {conversa.ultimaMensagem?.conteudo ||
+                        (conversa.ultimaMensagem?.arquivoNome
+                            ? `📎 ${conversa.ultimaMensagem.arquivoNome}`
+                            : "Conversa iniciada")}
                     </span>
                 </div>
                 </button>
@@ -1000,7 +1108,59 @@ function Home() {
                             >
                                 <strong>{item.remetente.nome}</strong>
 
-                                <p>{item.conteudo}</p>
+                                {item.arquivo?.tipo === "imagem" && (
+                                    <a
+                                        className="mensagem-anexo mensagem-anexo--imagem"
+                                        href={obterUrlArquivo(item.arquivo.url)}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        <img
+                                            src={obterUrlArquivo(item.arquivo.url)}
+                                            alt={item.arquivo.nome}
+                                        />
+                                    </a>
+                                )}
+
+                                {item.arquivo?.tipo === "video" && (
+                                    <video
+                                        className="mensagem-anexo mensagem-anexo--video"
+                                        controls
+                                        preload="metadata"
+                                    >
+                                        <source
+                                            src={obterUrlArquivo(item.arquivo.url)}
+                                            type={item.arquivo.mime}
+                                        />
+                                    </video>
+                                )}
+
+                                {item.arquivo?.tipo === "audio" && (
+                                    <audio
+                                        className="mensagem-anexo mensagem-anexo--audio"
+                                        controls
+                                        preload="metadata"
+                                        src={obterUrlArquivo(item.arquivo.url)}
+                                    />
+                                )}
+
+                                {item.arquivo?.tipo === "documento" && (
+                                    <a
+                                        className="mensagem-anexo mensagem-anexo--documento"
+                                        href={obterUrlArquivo(item.arquivo.url)}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        download={item.arquivo.nome}
+                                    >
+                                        <span aria-hidden="true">📄</span>
+                                        <span>
+                                            <strong>{item.arquivo.nome}</strong>
+                                            <small>{formatarTamanhoArquivo(item.arquivo.tamanho)}</small>
+                                        </span>
+                                    </a>
+                                )}
+
+                                {item.conteudo && <p>{item.conteudo}</p>}
 
                                 <time dateTime={item.enviadaEm}>
                                 {new Intl.DateTimeFormat("pt-BR", {
@@ -1144,7 +1304,7 @@ function Home() {
                         ref={inputDocumentosRef}
                         className="chat-input__arquivo-oculto"
                         type="file"
-                        accept=".pdf,.doc,.docx"
+                        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.csv,.txt"
                         onChange={selecionarArquivo}
                         />
 
@@ -1215,7 +1375,14 @@ function Home() {
                     </div>
 
                     <div className="chat-input__audio">
-                        <button type="button" aria-label="Enviar áudio">
+                        <button
+                        type="button"
+                        className={gravandoAudio ? "gravando" : undefined}
+                        aria-label={gravandoAudio ? "Parar gravação" : "Gravar áudio"}
+                        title={gravandoAudio ? "Parar gravação" : "Gravar áudio"}
+                        onClick={() => void alternarGravacaoAudio()}
+                        disabled={enviandoMensagem}
+                        >
                         <svg
                             width="16"
                             height="16"
@@ -1234,7 +1401,10 @@ function Home() {
                         type="button"
                         aria-label="Enviar mensagem"
                         onClick={() => void enviarMensagem()}
-                        disabled={!mensagem.trim() || enviandoMensagem}
+                        disabled={
+                            (!mensagem.trim() && !arquivoSelecionado) ||
+                            enviandoMensagem
+                        }
                         >
                         <svg
                             width="16"

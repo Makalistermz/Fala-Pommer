@@ -79,12 +79,17 @@ model conversa_setor {
 }
 
 model mensagem {
-  id           Int             @id @default(autoincrement())
-  conversa_id  Int
-  remetente_id Int
-  origem       mensagem_origem
-  conteudo     String          @db.Text
-  enviada_em   DateTime        @default(now()) @db.DateTime(0)
+  id              Int             @id @default(autoincrement())
+  conversa_id     Int
+  remetente_id    Int
+  origem          mensagem_origem
+  conteudo        String          @db.Text
+  arquivo_nome    String?         @db.VarChar(255)
+  arquivo_url     String?         @db.VarChar(500)
+  arquivo_tipo    String?         @db.VarChar(20)
+  arquivo_mime    String?         @db.VarChar(150)
+  arquivo_tamanho Int?
+  enviada_em      DateTime        @default(now()) @db.DateTime(0)
 
   conversa  conversa @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_mensagem_conversa")
   remetente cadastro @relation("RemetenteMensagem", fields: [remetente_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_mensagem_remetente")

@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     Body,
     Controller,
     Get,
@@ -7,10 +8,16 @@ import {
     ParseIntPipe,
     Post,
     Req,
-    UseGuards
+    UploadedFile,
+    UseGuards,
+    UseInterceptors
 } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 
-import { ConversasService } from "./conversas.service";
+import {
+    type ArquivoMensagemUpload,
+    ConversasService
+} from "./conversas.service";
 import { CriarConversaDto } from "./dto/criar-conversas.dto";
 import { IniciarConversaSetorDto } from "./dto/iniciar-conversas-setor.dto";
 import { CriarMensagemDto } from "./dto/criar-mensagem.dto";
@@ -127,16 +134,58 @@ export class ConversasController {
     @Post(":conversaId/mensagens")
     @HttpCode(201)
     @Perfis("user", "funcionario", "admin")
+    @UseInterceptors(FileInterceptor("arquivo", {
+        limits: {
+            fileSize: 25 * 1024 * 1024
+        },
+        fileFilter: (_requisicao, arquivo, callback) => {
+            const tiposPermitidos = new Set([
+                "application/pdf",
+                "application/msword",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "application/vnd.ms-excel",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "application/vnd.ms-powerpoint",
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                "text/csv",
+                "text/plain",
+                "image/jpeg",
+                "image/png",
+                "image/gif",
+                "image/webp",
+                "video/mp4",
+                "video/webm",
+                "video/quicktime",
+                "audio/mpeg",
+                "audio/ogg",
+                "audio/wav",
+                "audio/webm",
+                "audio/mp4"
+            ]);
+
+            if (!tiposPermitidos.has(arquivo.mimetype)) {
+                callback(
+                    new BadRequestException("Tipo de arquivo não permitido."),
+                    false
+                );
+                return;
+            }
+
+            callback(null, true);
+        }
+    }))
     enviarMensagem(
         @Req() requisicao: RequisicaoAutenticada,
         @Param("conversaId", ParseIntPipe)
         conversaId: number,
-        @Body() dados: CriarMensagemDto
+        @Body() dados: CriarMensagemDto,
+        @UploadedFile() arquivo?: ArquivoMensagemUpload
     ) {
         return this.conversasService.enviarMensagem(
             requisicao.usuario!.sub,
             conversaId,
-            dados.conteudo
+            dados.conteudo,
+            arquivo
         );
     }
 }

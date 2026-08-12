@@ -6,6 +6,16 @@ import {
 } from "@nestjs/common";
 
 import { PrismaService } from "../prisma/prisma.service";
+import { mkdir, unlink, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
+import { join } from "node:path";
+
+export type ArquivoMensagemUpload = {
+    originalname: string;
+    mimetype: string;
+    size: number;
+    buffer: Buffer;
+};
 
 @Injectable()
 export class ConversasService {
@@ -60,6 +70,8 @@ export class ConversasService {
                             id: true,
                             conteudo: true,
                             origem: true,
+                            arquivo_nome: true,
+                            arquivo_tipo: true,
                             enviada_em: true
                         }
                     }
@@ -92,6 +104,8 @@ export class ConversasService {
                         id: ultimaMensagem.id,
                         conteudo: ultimaMensagem.conteudo,
                         origem: ultimaMensagem.origem,
+                        arquivoNome: ultimaMensagem.arquivo_nome,
+                        arquivoTipo: ultimaMensagem.arquivo_tipo,
                         enviadaEm: ultimaMensagem.enviada_em
                     }
                     : null
@@ -350,6 +364,8 @@ export class ConversasService {
                                     id: true,
                                     conteudo: true,
                                     origem: true,
+                                    arquivo_nome: true,
+                                    arquivo_tipo: true,
                                     enviada_em: true
                                 }
                             }
@@ -404,6 +420,10 @@ export class ConversasService {
                             ultimaMensagem.conteudo,
                         origem:
                             ultimaMensagem.origem,
+                        arquivoNome:
+                            ultimaMensagem.arquivo_nome,
+                        arquivoTipo:
+                            ultimaMensagem.arquivo_tipo,
                         enviadaEm:
                             ultimaMensagem.enviada_em
                     }
@@ -635,13 +655,14 @@ export class ConversasService {
     async enviarMensagem(
         usuarioLogadoId: number,
         conversaId: number,
-        conteudo: string
+        conteudo?: string,
+        arquivo?: ArquivoMensagemUpload
     ) {
-        const conteudoLimpo = conteudo.trim();
+        const conteudoLimpo = conteudo?.trim() ?? "";
 
-        if (!conteudoLimpo) {
+        if (!conteudoLimpo && !arquivo) {
             throw new BadRequestException(
-                "A mensagem não pode estar vazia."
+                "A mensagem deve conter texto ou um arquivo."
             );
         }
 
@@ -672,13 +693,46 @@ export class ConversasService {
                     : "setor";
         }
 
-        const mensagem =
-            await this.prisma.mensagem.create({
+        let caminhoArquivo: string | null = null;
+        let dadosArquivo: {
+            nome: string;
+            url: string;
+            tipo: string;
+            mime: string;
+            tamanho: number;
+        } | null = null;
+
+        if (arquivo) {
+            const diretorioUploads = join(process.cwd(), "uploads", "chat");
+            const extensao = this.obterExtensaoArquivo(arquivo.mimetype);
+            const nomeArmazenado = `${randomUUID()}${extensao}`;
+
+            await mkdir(diretorioUploads, { recursive: true });
+            caminhoArquivo = join(diretorioUploads, nomeArmazenado);
+            await writeFile(caminhoArquivo, arquivo.buffer);
+
+            dadosArquivo = {
+                nome: arquivo.originalname.slice(0, 255),
+                url: `/uploads/chat/${nomeArmazenado}`,
+                tipo: this.identificarTipoArquivo(arquivo.mimetype),
+                mime: arquivo.mimetype,
+                tamanho: arquivo.size
+            };
+        }
+
+        try {
+            const mensagem =
+                await this.prisma.mensagem.create({
                 data: {
                     conversa_id: conversaId,
                     remetente_id: usuarioLogadoId,
                     origem,
-                    conteudo: conteudoLimpo
+                    conteudo: conteudoLimpo,
+                    arquivo_nome: dadosArquivo?.nome ?? null,
+                    arquivo_url: dadosArquivo?.url ?? null,
+                    arquivo_tipo: dadosArquivo?.tipo ?? null,
+                    arquivo_mime: dadosArquivo?.mime ?? null,
+                    arquivo_tamanho: dadosArquivo?.tamanho ?? null
                 },
 
                 include: {
@@ -689,32 +743,40 @@ export class ConversasService {
                         }
                     }
                 }
-            });
+                });
 
-        const atendimento = contexto.atendimento;
+            const atendimento = contexto.atendimento;
 
-        const remetenteExibido =
-            mensagem.origem === "setor" &&
-            atendimento
-                ? {
-                    tipo: "setor" as const,
-                    id: atendimento.setor.id,
-                    nome: atendimento.setor.setor
-                }
-                : {
-                    tipo: "usuario" as const,
-                    id: mensagem.remetente.id,
-                    nome: mensagem.remetente.nome
-                };
+            const remetenteExibido =
+                mensagem.origem === "setor" &&
+                atendimento
+                    ? {
+                        tipo: "setor" as const,
+                        id: atendimento.setor.id,
+                        nome: atendimento.setor.setor
+                    }
+                    : {
+                        tipo: "usuario" as const,
+                        id: mensagem.remetente.id,
+                        nome: mensagem.remetente.nome
+                    };
 
-        return {
-            id: mensagem.id,
-            conversaId: mensagem.conversa_id,
-            conteudo: mensagem.conteudo,
-            origem: mensagem.origem,
-            enviadaEm: mensagem.enviada_em,
-            remetente: remetenteExibido
-        };
+            return {
+                id: mensagem.id,
+                conversaId: mensagem.conversa_id,
+                conteudo: mensagem.conteudo,
+                origem: mensagem.origem,
+                enviadaEm: mensagem.enviada_em,
+                remetente: remetenteExibido,
+                arquivo: dadosArquivo
+            };
+        } catch (erro) {
+            if (caminhoArquivo) {
+                await unlink(caminhoArquivo).catch(() => undefined);
+            }
+
+            throw erro;
+        }
     }
 
     /*
@@ -784,6 +846,15 @@ export class ConversasService {
                 origem: mensagem.origem,
                 enviadaEm: mensagem.enviada_em,
                 remetente: remetenteExibido,
+                arquivo: mensagem.arquivo_url
+                    ? {
+                        nome: mensagem.arquivo_nome!,
+                        url: mensagem.arquivo_url,
+                        tipo: mensagem.arquivo_tipo!,
+                        mime: mensagem.arquivo_mime!,
+                        tamanho: mensagem.arquivo_tamanho!
+                    }
+                    : null,
 
                 ...(podeVerAutorReal && {
                     autorReal: {
@@ -794,6 +865,41 @@ export class ConversasService {
                 })
             };
         });
+    }
+
+    private identificarTipoArquivo(mime: string) {
+        if (mime.startsWith("image/")) return "imagem";
+        if (mime.startsWith("video/")) return "video";
+        if (mime.startsWith("audio/")) return "audio";
+        return "documento";
+    }
+
+    private obterExtensaoArquivo(mime: string) {
+        const extensoes: Record<string, string> = {
+            "application/pdf": ".pdf",
+            "application/msword": ".doc",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
+            "application/vnd.ms-excel": ".xls",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ".xlsx",
+            "application/vnd.ms-powerpoint": ".ppt",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation": ".pptx",
+            "text/csv": ".csv",
+            "text/plain": ".txt",
+            "image/jpeg": ".jpg",
+            "image/png": ".png",
+            "image/gif": ".gif",
+            "image/webp": ".webp",
+            "video/mp4": ".mp4",
+            "video/webm": ".webm",
+            "video/quicktime": ".mov",
+            "audio/mpeg": ".mp3",
+            "audio/ogg": ".ogg",
+            "audio/wav": ".wav",
+            "audio/webm": ".webm",
+            "audio/mp4": ".m4a"
+        };
+
+        return extensoes[mime] ?? ".bin";
     }
 
     /*

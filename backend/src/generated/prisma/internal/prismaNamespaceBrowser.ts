@@ -137,6 +137,11 @@ export const MensagemScalarFieldEnum = {
   remetente_id: 'remetente_id',
   origem: 'origem',
   conteudo: 'conteudo',
+  arquivo_nome: 'arquivo_nome',
+  arquivo_url: 'arquivo_url',
+  arquivo_tipo: 'arquivo_tipo',
+  arquivo_mime: 'arquivo_mime',
+  arquivo_tamanho: 'arquivo_tamanho',
   enviada_em: 'enviada_em'
 } as const
 
@@ -181,7 +186,11 @@ export type cadastroOrderByRelevanceFieldEnum = (typeof cadastroOrderByRelevance
 
 
 export const mensagemOrderByRelevanceFieldEnum = {
-  conteudo: 'conteudo'
+  conteudo: 'conteudo',
+  arquivo_nome: 'arquivo_nome',
+  arquivo_url: 'arquivo_url',
+  arquivo_tipo: 'arquivo_tipo',
+  arquivo_mime: 'arquivo_mime'
 } as const
 
 export type mensagemOrderByRelevanceFieldEnum = (typeof mensagemOrderByRelevanceFieldEnum)[keyof typeof mensagemOrderByRelevanceFieldEnum]

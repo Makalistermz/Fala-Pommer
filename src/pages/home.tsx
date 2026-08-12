@@ -9,6 +9,7 @@ import {
 } from "react";
 import { useNavigate } from "react-router";
 import EmojiPicker from "../assets/emojiPicker";
+import gsap from "gsap";
 
 type TipoUsuario = "user" | "admin" | "funcionario";
 
@@ -104,6 +105,8 @@ function Home() {
     const [enviandoMensagem, setEnviandoMensagem] = useState(false);
 
     const fimMensagensRef = useRef<HTMLDivElement>(null);
+    const balõesRef = useRef<Map<number, HTMLElement>>(new Map());
+    const idsAnimadosRef = useRef<Set<number>>(new Set());
 
     const [buscaUsuario, setBuscaUsuario] = useState("");
 
@@ -560,6 +563,48 @@ function Home() {
     });
 
     useEffect(() => {
+        idsAnimadosRef.current.clear();
+        balõesRef.current.clear();
+    }, [conversaSelecionada?.id]);
+
+    useEffect(() => {
+        if (carregandoMensagens) return;
+
+        const mensagensNovas = mensagensChat.filter(
+            (item) => !idsAnimadosRef.current.has(item.id),
+        );
+
+        const elementos = mensagensNovas
+            .map((item) => balõesRef.current.get(item.id))
+            .filter((elemento): elemento is HTMLElement => Boolean(elemento));
+
+        mensagensNovas.forEach((item) => idsAnimadosRef.current.add(item.id));
+
+        if (elementos.length > 0) {
+            gsap.fromTo(
+                elementos,
+                { opacity: 0, scale: 0.7, y: 10 },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.35,
+                    ease: "back.out(2)",
+                    stagger: 0.08,
+                },
+            );
+        }
+
+        const idsAtuais = new Set(mensagensChat.map((item) => item.id));
+
+        for (const id of balõesRef.current.keys()) {
+            if (!idsAtuais.has(id)) {
+                balõesRef.current.delete(id);
+            }
+        }
+    }, [mensagensChat, carregandoMensagens]);
+
+    useEffect(() => {
         fimMensagensRef.current?.scrollIntoView({
         behavior: "smooth",
         });
@@ -920,44 +965,55 @@ function Home() {
                 </header>
 
                 <div className="mensagens">
-                {carregandoMensagens && (
-                    <p className="mensagens__status">Carregando mensagens...</p>
-                )}
+                    {carregandoMensagens && (
+                        <p className="mensagens__status">Carregando mensagens...</p>
+                    )}
 
-                {!carregandoMensagens && mensagensChat.length === 0 && (
-                    <p className="mensagens__status">Nenhuma mensagem enviada.</p>
-                )}
+                    {!carregandoMensagens && mensagensChat.length === 0 && (
+                        <p className="mensagens__status">Nenhuma mensagem enviada.</p>
+                    )}
 
-                {!carregandoMensagens &&
-                    mensagensChat.map((item) => {
-                    const enviadaPorMim = mensagemFoiEnviadaPorMim(item);
+                    {!carregandoMensagens &&
+                        mensagensChat.map((item) => {
+                        const enviadaPorMim = mensagemFoiEnviadaPorMim(item);
 
-                    return (
-                        <div
-                        key={item.id}
-                        className={`mensagem-linha ${
-                            enviadaPorMim
-                            ? "mensagem-linha--enviada"
-                            : "mensagem-linha--recebida"
-                        }`}
-                        >
-                        <article className="mensagem-balao">
-                            <strong>{item.remetente.nome}</strong>
+                        return (
+                            <div
+                            key={item.id}
+                            className={`mensagem-linha ${
+                                enviadaPorMim
+                                ? "mensagem-linha--enviada"
+                                : "mensagem-linha--recebida"
+                            }`}
+                            >
+                            <article
+                                className="mensagem-balao"
+                                ref={(el) => {
+                                if (el) balõesRef.current.set(item.id, el);
+                                else balõesRef.current.delete(item.id);
+                                }}
+                                style={{
+                                transformOrigin: enviadaPorMim
+                                    ? "bottom right"
+                                    : "bottom left",
+                                }}
+                            >
+                                <strong>{item.remetente.nome}</strong>
 
-                            <p>{item.conteudo}</p>
+                                <p>{item.conteudo}</p>
 
-                            <time dateTime={item.enviadaEm}>
-                            {new Intl.DateTimeFormat("pt-BR", {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                            }).format(new Date(item.enviadaEm))}
-                            </time>
-                        </article>
-                        </div>
-                    );
-                    })}
+                                <time dateTime={item.enviadaEm}>
+                                {new Intl.DateTimeFormat("pt-BR", {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                }).format(new Date(item.enviadaEm))}
+                                </time>
+                            </article>
+                            </div>
+                        );
+                        })}
 
-                <div ref={fimMensagensRef} />
+                    <div ref={fimMensagensRef} />
                 </div>
 
                 {podeEnviarMensagem && (

@@ -9,8 +9,11 @@ import RotaProtegida from "./components/RotaProtegida";
 import Sectors from "./pages/sectors";
 import SemPermissao from "./components/SemPermissao";
 import Administracao from "./pages/administracao";
+import { initLenis } from "./library/lenis.ts"
 
 function App() {
+  initLenis();
+
   return (
     <Routes>
       <Route path="/" element={<Login />} />

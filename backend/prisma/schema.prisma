@@ -19,8 +19,12 @@ model cadastro {
   token_recuperacao           String?                 @db.VarChar(64)
   token_recuperacao_expira_em DateTime?
   tipo_usuario                cadastro_tipo_usuario   @default(user)
+  setor_id                    Int?
   conversa_participante       conversa_participante[]
   login_evento                login_evento[]
+  setor                       setores?                @relation(fields: [setor_id], references: [id], onDelete: SetNull, onUpdate: Restrict, map: "fk_cadastro_setor")
+
+  @@index([setor_id], map: "fk_cadastro_setor")
 }
 
 model login_evento {
@@ -53,9 +57,10 @@ model conversa_participante {
 }
 
 model setores {
-  id          Int    @id @default(autoincrement())
-  setor       String @db.VarChar(150)
-  sigla_setor String @db.VarChar(20)
+  id          Int        @id @default(autoincrement())
+  setor       String     @db.VarChar(150)
+  sigla_setor String     @db.VarChar(20)
+  cadastros   cadastro[]
 }
 
 enum cadastro_tipo_usuario {

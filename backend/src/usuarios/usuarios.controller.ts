@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
 import { CriarUsuarioDto } from "./dto/criar-usuario.dto";
+import { AtualizarUsuarioDto } from "./dto/atualizar-usuario.dto";
 import { UsuariosService } from "./usuarios.service";
 import { Perfis } from "src/auth/decorators/perfis.decorator";
 import { PerfisGuard } from "src/auth/guards/perfis.guard";
@@ -23,6 +24,16 @@ export class UsuariosController {
   @Perfis("admin")
   listarTodos() {
     return this.usuariosService.listarTodos();
+  }
+
+  @Patch(":id")
+  @UseGuards(AuthGuard, PerfisGuard)
+  @Perfis("admin")
+  atualizar(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() dados: AtualizarUsuarioDto,
+  ) {
+    return this.usuariosService.atualizar(id, dados);
   }
 
   @Delete(":id")

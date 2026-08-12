@@ -200,12 +200,14 @@ export type setoresWhereInput = {
   id?: Prisma.IntFilter<"setores"> | number
   setor?: Prisma.StringFilter<"setores"> | string
   sigla_setor?: Prisma.StringFilter<"setores"> | string
+  cadastros?: Prisma.CadastroListRelationFilter
 }
 
 export type setoresOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   setor?: Prisma.SortOrder
   sigla_setor?: Prisma.SortOrder
+  cadastros?: Prisma.cadastroOrderByRelationAggregateInput
   _relevance?: Prisma.setoresOrderByRelevanceInput
 }
 
@@ -216,6 +218,7 @@ export type setoresWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.setoresWhereInput | Prisma.setoresWhereInput[]
   setor?: Prisma.StringFilter<"setores"> | string
   sigla_setor?: Prisma.StringFilter<"setores"> | string
+  cadastros?: Prisma.CadastroListRelationFilter
 }, "id">
 
 export type setoresOrderByWithAggregationInput = {
@@ -241,23 +244,27 @@ export type setoresScalarWhereWithAggregatesInput = {
 export type setoresCreateInput = {
   setor: string
   sigla_setor: string
+  cadastros?: Prisma.cadastroCreateNestedManyWithoutSetorInput
 }
 
 export type setoresUncheckedCreateInput = {
   id?: number
   setor: string
   sigla_setor: string
+  cadastros?: Prisma.cadastroUncheckedCreateNestedManyWithoutSetorInput
 }
 
 export type setoresUpdateInput = {
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  cadastros?: Prisma.cadastroUpdateManyWithoutSetorNestedInput
 }
 
 export type setoresUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  cadastros?: Prisma.cadastroUncheckedUpdateManyWithoutSetorNestedInput
 }
 
 export type setoresCreateManyInput = {
@@ -275,6 +282,11 @@ export type setoresUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type SetoresNullableScalarRelationFilter = {
+  is?: Prisma.setoresWhereInput | null
+  isNot?: Prisma.setoresWhereInput | null
 }
 
 export type setoresOrderByRelevanceInput = {
@@ -309,12 +321,97 @@ export type setoresSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type setoresCreateNestedOneWithoutCadastrosInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutCadastrosInput, Prisma.setoresUncheckedCreateWithoutCadastrosInput>
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutCadastrosInput
+  connect?: Prisma.setoresWhereUniqueInput
+}
+
+export type setoresUpdateOneWithoutCadastrosNestedInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutCadastrosInput, Prisma.setoresUncheckedCreateWithoutCadastrosInput>
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutCadastrosInput
+  upsert?: Prisma.setoresUpsertWithoutCadastrosInput
+  disconnect?: Prisma.setoresWhereInput | boolean
+  delete?: Prisma.setoresWhereInput | boolean
+  connect?: Prisma.setoresWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.setoresUpdateToOneWithWhereWithoutCadastrosInput, Prisma.setoresUpdateWithoutCadastrosInput>, Prisma.setoresUncheckedUpdateWithoutCadastrosInput>
+}
+
+export type setoresCreateWithoutCadastrosInput = {
+  setor: string
+  sigla_setor: string
+}
+
+export type setoresUncheckedCreateWithoutCadastrosInput = {
+  id?: number
+  setor: string
+  sigla_setor: string
+}
+
+export type setoresCreateOrConnectWithoutCadastrosInput = {
+  where: Prisma.setoresWhereUniqueInput
+  create: Prisma.XOR<Prisma.setoresCreateWithoutCadastrosInput, Prisma.setoresUncheckedCreateWithoutCadastrosInput>
+}
+
+export type setoresUpsertWithoutCadastrosInput = {
+  update: Prisma.XOR<Prisma.setoresUpdateWithoutCadastrosInput, Prisma.setoresUncheckedUpdateWithoutCadastrosInput>
+  create: Prisma.XOR<Prisma.setoresCreateWithoutCadastrosInput, Prisma.setoresUncheckedCreateWithoutCadastrosInput>
+  where?: Prisma.setoresWhereInput
+}
+
+export type setoresUpdateToOneWithWhereWithoutCadastrosInput = {
+  where?: Prisma.setoresWhereInput
+  data: Prisma.XOR<Prisma.setoresUpdateWithoutCadastrosInput, Prisma.setoresUncheckedUpdateWithoutCadastrosInput>
+}
+
+export type setoresUpdateWithoutCadastrosInput = {
+  setor?: Prisma.StringFieldUpdateOperationsInput | string
+  sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type setoresUncheckedUpdateWithoutCadastrosInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  setor?: Prisma.StringFieldUpdateOperationsInput | string
+  sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+
+/**
+ * Count Type SetoresCountOutputType
+ */
+
+export type SetoresCountOutputType = {
+  cadastros: number
+}
+
+export type SetoresCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  cadastros?: boolean | SetoresCountOutputTypeCountCadastrosArgs
+}
+
+/**
+ * SetoresCountOutputType without action
+ */
+export type SetoresCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SetoresCountOutputType
+   */
+  select?: Prisma.SetoresCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * SetoresCountOutputType without action
+ */
+export type SetoresCountOutputTypeCountCadastrosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.cadastroWhereInput
+}
 
 
 export type setoresSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   setor?: boolean
   sigla_setor?: boolean
+  cadastros?: boolean | Prisma.setores$cadastrosArgs<ExtArgs>
+  _count?: boolean | Prisma.SetoresCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["setores"]>
 
 
@@ -326,10 +423,16 @@ export type setoresSelectScalar = {
 }
 
 export type setoresOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "setor" | "sigla_setor", ExtArgs["result"]["setores"]>
+export type setoresInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  cadastros?: boolean | Prisma.setores$cadastrosArgs<ExtArgs>
+  _count?: boolean | Prisma.SetoresCountOutputTypeDefaultArgs<ExtArgs>
+}
 
 export type $setoresPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "setores"
-  objects: {}
+  objects: {
+    cadastros: Prisma.$cadastroPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     setor: string
@@ -674,6 +777,7 @@ readonly fields: setoresFieldRefs;
  */
 export interface Prisma__setoresClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  cadastros<T extends Prisma.setores$cadastrosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.setores$cadastrosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -723,6 +827,10 @@ export type setoresFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   omit?: Prisma.setoresOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.setoresInclude<ExtArgs> | null
+  /**
    * Filter, which setores to fetch.
    */
   where: Prisma.setoresWhereUniqueInput
@@ -741,6 +849,10 @@ export type setoresFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.setoresOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.setoresInclude<ExtArgs> | null
+  /**
    * Filter, which setores to fetch.
    */
   where: Prisma.setoresWhereUniqueInput
@@ -758,6 +870,10 @@ export type setoresFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the setores
    */
   omit?: Prisma.setoresOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.setoresInclude<ExtArgs> | null
   /**
    * Filter, which setores to fetch.
    */
@@ -807,6 +923,10 @@ export type setoresFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions
    */
   omit?: Prisma.setoresOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.setoresInclude<ExtArgs> | null
+  /**
    * Filter, which setores to fetch.
    */
   where?: Prisma.setoresWhereInput
@@ -854,6 +974,10 @@ export type setoresFindManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the setores
    */
   omit?: Prisma.setoresOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.setoresInclude<ExtArgs> | null
   /**
    * Filter, which setores to fetch.
    */
@@ -903,6 +1027,10 @@ export type setoresCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.setoresOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.setoresInclude<ExtArgs> | null
+  /**
    * The data needed to create a setores.
    */
   data: Prisma.XOR<Prisma.setoresCreateInput, Prisma.setoresUncheckedCreateInput>
@@ -931,6 +1059,10 @@ export type setoresUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the setores
    */
   omit?: Prisma.setoresOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.setoresInclude<ExtArgs> | null
   /**
    * The data needed to update a setores.
    */
@@ -972,6 +1104,10 @@ export type setoresUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.setoresOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.setoresInclude<ExtArgs> | null
+  /**
    * The filter to search for the setores to update in case it exists.
    */
   where: Prisma.setoresWhereUniqueInput
@@ -998,6 +1134,10 @@ export type setoresDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   omit?: Prisma.setoresOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.setoresInclude<ExtArgs> | null
+  /**
    * Filter which setores to delete.
    */
   where: Prisma.setoresWhereUniqueInput
@@ -1018,6 +1158,30 @@ export type setoresDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
+ * setores.cadastros
+ */
+export type setores$cadastrosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the cadastro
+   */
+  select?: Prisma.cadastroSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the cadastro
+   */
+  omit?: Prisma.cadastroOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.cadastroInclude<ExtArgs> | null
+  where?: Prisma.cadastroWhereInput
+  orderBy?: Prisma.cadastroOrderByWithRelationInput | Prisma.cadastroOrderByWithRelationInput[]
+  cursor?: Prisma.cadastroWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CadastroScalarFieldEnum | Prisma.CadastroScalarFieldEnum[]
+}
+
+/**
  * setores without action
  */
 export type setoresDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1029,4 +1193,8 @@ export type setoresDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the setores
    */
   omit?: Prisma.setoresOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.setoresInclude<ExtArgs> | null
 }

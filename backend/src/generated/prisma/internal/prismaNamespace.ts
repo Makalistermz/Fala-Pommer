@@ -800,7 +800,8 @@ export const CadastroScalarFieldEnum = {
   senha: 'senha',
   token_recuperacao: 'token_recuperacao',
   token_recuperacao_expira_em: 'token_recuperacao_expira_em',
-  tipo_usuario: 'tipo_usuario'
+  tipo_usuario: 'tipo_usuario',
+  setor_id: 'setor_id'
 } as const
 
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]

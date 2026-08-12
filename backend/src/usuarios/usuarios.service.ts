@@ -1,6 +1,7 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { CriarUsuarioDto } from "./dto/criar-usuario.dto";
+import { AtualizarUsuarioDto } from "./dto/atualizar-usuario.dto";
 import * as bcrypt from 'bcrypt';
 import { cpf, cnpj } from 'cpf-cnpj-validator'
 
@@ -115,9 +116,63 @@ export class UsuariosService {
                 telefone: true,
                 email: true,
                 tipo_usuario: true,
+                setor_id: true,
             },
             orderBy: {
                 id: "asc",
+            },
+        });
+    }
+
+    async atualizar(id: number, dados: AtualizarUsuarioDto) {
+        const usuario = await this.prisma.cadastro.findUnique({
+            where: { id },
+            select: { id: true },
+        });
+
+        if (!usuario) {
+            throw new NotFoundException("Usuário não encontrado.");
+        }
+
+        const email = dados.email.trim().toLowerCase();
+        const usuarioComMesmoEmail = await this.prisma.cadastro.findFirst({
+            where: {
+                email,
+                id: { not: id },
+            },
+            select: { id: true },
+        });
+
+        if (usuarioComMesmoEmail) {
+            throw new ConflictException("Já existe outro usuário com este e-mail.");
+        }
+
+        if (dados.setor_id != null) {
+            const setor = await this.prisma.setores.findUnique({
+                where: { id: dados.setor_id },
+                select: { id: true },
+            });
+
+            if (!setor) {
+                throw new BadRequestException("Setor não encontrado.");
+            }
+        }
+
+        return this.prisma.cadastro.update({
+            where: { id },
+            data: {
+                telefone: dados.telefone.trim(),
+                email,
+                tipo_usuario: dados.tipo_usuario,
+                setor_id: dados.setor_id ?? null,
+            },
+            select: {
+                id: true,
+                nome: true,
+                telefone: true,
+                email: true,
+                tipo_usuario: true,
+                setor_id: true,
             },
         });
     }

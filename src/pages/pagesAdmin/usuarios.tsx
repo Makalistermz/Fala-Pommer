@@ -28,6 +28,7 @@ function Usuarios() {
     const [usuarioSendoApagado, setUsuarioSendoApagado] = useState<number | null>(null);
     const [usuarioEmEdicao, setUsuarioEmEdicao] = useState<Usuario | null>(null);
     const [setorEmEdicao, setSetorEmEdicao] = useState("");
+    const [salvandoAlteracoes, setSalvandoAlteracoes] = useState(false);
     const [feedback, setFeedback] = useState({
         aberto: false,
         tipo: "erro" as "erro" | "sucesso",
@@ -112,22 +113,64 @@ function Usuarios() {
         setSetorEmEdicao(usuario.setor_id ? String(usuario.setor_id) : "");
     }
 
-    function salvarAlteracoes() {
+    async function salvarAlteracoes() {
         if (!usuarioEmEdicao) return;
 
-        const usuarioAtualizado = {
-            ...usuarioEmEdicao,
-            setor_id: setorEmEdicao ? Number(setorEmEdicao) : null,
-        };
+        setSalvandoAlteracoes(true);
 
-        setUsuarios((usuariosAtuais) =>
-            usuariosAtuais.map((usuarioAtual) =>
-                usuarioAtual.id === usuarioAtualizado.id
-                    ? usuarioAtualizado
-                    : usuarioAtual,
-            ),
-        );
-        setUsuarioEmEdicao(null);
+        try {
+            const token = localStorage.getItem("access_token");
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/usuarios/${usuarioEmEdicao.id}`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        telefone: usuarioEmEdicao.telefone,
+                        email: usuarioEmEdicao.email,
+                        tipo_usuario: usuarioEmEdicao.tipo_usuario,
+                        setor_id: setorEmEdicao ? Number(setorEmEdicao) : null,
+                    }),
+                },
+            );
+
+            const resultado = await resposta.json();
+
+            if (!resposta.ok) {
+                const mensagem = Array.isArray(resultado.message)
+                    ? resultado.message.join(" ")
+                    : resultado.message;
+                throw new Error(mensagem ?? "Não foi possível salvar as alterações.");
+            }
+
+            const usuarioAtualizado = resultado as Usuario;
+            setUsuarios((usuariosAtuais) =>
+                usuariosAtuais.map((usuarioAtual) =>
+                    usuarioAtual.id === usuarioAtualizado.id
+                        ? usuarioAtualizado
+                        : usuarioAtual,
+                ),
+            );
+            setUsuarioEmEdicao(null);
+            setFeedback({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem: "As alterações do usuário foram salvas com sucesso.",
+            });
+        } catch (erro) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: erro instanceof Error
+                    ? erro.message
+                    : "Não foi possível salvar as alterações.",
+            });
+        } finally {
+            setSalvandoAlteracoes(false);
+        }
     }
 
     async function apagar() {
@@ -410,8 +453,13 @@ function Usuarios() {
                                 </select>
                             </div>
 
-                            <button type="button" onClick={salvarAlteracoes} className="botao__info-painel-lateral">
-                                Salvar alterações
+                            <button
+                                type="button"
+                                onClick={() => void salvarAlteracoes()}
+                                className="botao__info-painel-lateral"
+                                disabled={salvandoAlteracoes}
+                            >
+                                {salvandoAlteracoes ? "Salvando..." : "Salvar alterações"}
                             </button>
 
                         </section>

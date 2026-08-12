@@ -10,9 +10,20 @@ import {
 import { useNavigate } from "react-router";
 import EmojiPicker from "../assets/emojiPicker";
 
-interface UsuarioConversa {
+type TipoUsuario = "user" | "admin" | "funcionario";
+
+interface UsuarioBasico {
   id: number;
   nome: string;
+}
+
+interface UsuarioConversa extends UsuarioBasico {
+  tipoUsuario: TipoUsuario;
+  setor: {
+    id: number;
+    nome: string;
+    sigla: string;
+  } | null;
 }
 
 interface Setor {
@@ -28,7 +39,7 @@ interface UltimaMensagem {
   enviadaEm: string;
 }
 
-interface Conversa {
+interface ConversaSetor {
   id: number;
   tipo: "setor";
   criadaEm: string;
@@ -39,9 +50,23 @@ interface Conversa {
     sigla: string;
   };
 
-  usuario: UsuarioConversa;
+  usuario: UsuarioBasico;
   ultimaMensagem: UltimaMensagem | null;
 }
+
+interface ConversaPrivada {
+  id: number;
+  tipo: "privada";
+  criadaEm: string;
+  contato: {
+    id: number;
+    nome: string;
+    tipo_usuario: TipoUsuario;
+  };
+  ultimaMensagem: UltimaMensagem | null;
+}
+
+type Conversa = ConversaSetor | ConversaPrivada;
 
 interface MensagemChat {
   id: number;
@@ -131,7 +156,7 @@ function Home() {
   interface Usuario {
     sub: number;
     email: string;
-    tipo: "user" | "admin" | "funcionario";
+    tipo: TipoUsuario;
   }
 
   const [usuario, setUsuario] = useState<Usuario | null>(null);
@@ -180,22 +205,40 @@ function Home() {
       }
 
       try {
-        const resposta = await fetch(
-          `${import.meta.env.VITE_API_URL}/conversas/setor`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
 
-        if (!resposta.ok) {
+        const [respostaPrivadas, respostaSetores] = await Promise.all([
+          fetch(`${import.meta.env.VITE_API_URL}/conversas`, { headers }),
+          fetch(`${import.meta.env.VITE_API_URL}/conversas/setor`, { headers }),
+        ]);
+
+        if (!respostaPrivadas.ok || !respostaSetores.ok) {
           throw new Error("Não foi possível carregar as conversas.");
         }
 
-        const dados: Conversa[] = await resposta.json();
+        const [conversasPrivadas, conversasSetores] = await Promise.all([
+          respostaPrivadas.json() as Promise<ConversaPrivada[]>,
+          respostaSetores.json() as Promise<ConversaSetor[]>,
+        ]);
 
-        setConversas(dados);
+        const todasConversas: Conversa[] = [
+          ...conversasPrivadas,
+          ...conversasSetores,
+        ].sort((conversaA, conversaB) => {
+          const dataA = new Date(
+            conversaA.ultimaMensagem?.enviadaEm ?? conversaA.criadaEm,
+          ).getTime();
+
+          const dataB = new Date(
+            conversaB.ultimaMensagem?.enviadaEm ?? conversaB.criadaEm,
+          ).getTime();
+
+          return dataB - dataA;
+        });
+
+        setConversas(todasConversas);
       } catch (erro) {
         console.error("Erro ao carregar conversas:", erro);
       }
@@ -236,9 +279,11 @@ function Home() {
       const dados = await resposta.json();
 
       if (usuario.tipo === "user") {
-        setSetores(dados);
+        setSetores(dados as Setor[]);
+        setUsuarios([]);
       } else {
-        setUsuarios(dados);
+        setUsuarios(dados as UsuarioConversa[]);
+        setSetores([]);
       }
     } catch (erro) {
       console.error(erro);
@@ -247,27 +292,27 @@ function Home() {
     }
   }
 
-  async function selecionarUsuario(usuario: UsuarioConversa) {
+  async function selecionarUsuario(contato: UsuarioConversa) {
     const token = localStorage.getItem("access_token");
 
-    if (!token) {
+    if (!token || !usuario || usuario.tipo === "user") {
       return;
     }
 
     try {
-      const resposta = await fetch(
-        `${import.meta.env.VITE_API_URL}/conversas/setor/usuario`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            usuarioId: usuario.id,
-          }),
+      const rota =
+        usuario.tipo === "admin" ? "/conversas" : "/conversas/setor/usuario";
+
+      const resposta = await fetch(`${import.meta.env.VITE_API_URL}${rota}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify({
+          usuarioId: contato.id,
+        }),
+      });
 
       if (!resposta.ok) {
         const resultado = await resposta.json();
@@ -279,7 +324,7 @@ function Home() {
         );
       }
 
-      const conversa: Conversa = await resposta.json();
+      const conversa = (await resposta.json()) as Conversa;
       adicionarEAbrirConversa(conversa);
     } catch (erro) {
       console.error("Erro ao iniciar conversa:", erro);
@@ -364,19 +409,25 @@ function Home() {
       setMensagensChat((mensagensAtuais) => [...mensagensAtuais, novaMensagem]);
 
       setConversas((conversasAtuais) =>
-        conversasAtuais.map((conversa) =>
-          conversa.id === conversaSelecionada.id
-            ? {
-                ...conversa,
-                ultimaMensagem: {
-                  id: novaMensagem.id,
-                  conteudo: novaMensagem.conteudo,
-                  origem: novaMensagem.origem,
-                  enviadaEm: novaMensagem.enviadaEm,
-                },
-              }
-            : conversa,
-        ),
+        conversasAtuais.reduce<Conversa[]>((resultado, conversa) => {
+          if (conversa.id !== conversaSelecionada.id) {
+            resultado.push(conversa);
+            return resultado;
+          }
+
+          const conversaAtualizada: Conversa = {
+            ...conversa,
+            ultimaMensagem: {
+              id: novaMensagem.id,
+              conteudo: novaMensagem.conteudo,
+              origem: novaMensagem.origem,
+              enviadaEm: novaMensagem.enviadaEm,
+            },
+          };
+
+          resultado.unshift(conversaAtualizada);
+          return resultado;
+        }, []),
       );
 
       setMensagem("");
@@ -395,7 +446,11 @@ function Home() {
     setConversas((conversasAtuais) => {
       const jaExiste = conversasAtuais.some((item) => item.id === conversa.id);
 
-      return jaExiste ? conversasAtuais : [conversa, ...conversasAtuais];
+      return jaExiste
+        ? conversasAtuais.map((item) =>
+            item.id === conversa.id ? conversa : item,
+          )
+        : [conversa, ...conversasAtuais];
     });
 
     setNovaConversaAberta(false);
@@ -435,20 +490,65 @@ function Home() {
   }
 
   function nomeDaConversa(conversa: Conversa) {
+    if (conversa.tipo === "privada") {
+      return conversa.contato.nome;
+    }
+
     return usuario?.tipo === "user"
       ? conversa.setor.nome
       : conversa.usuario.nome;
   }
 
-  const conversasFiltradas = conversas.filter((conversa) => {
-    const texto = `
-            ${conversa.setor.nome}
-            ${conversa.setor.sigla}
-            ${conversa.usuario.nome}
-            `.toLowerCase();
+  function subtituloDaConversa(conversa: Conversa) {
+    if (conversa.tipo === "setor") {
+      return usuario?.tipo === "user"
+        ? conversa.setor.sigla
+        : conversa.setor.nome;
+    }
 
-    return texto.includes(buscaConversa.trim().toLowerCase());
+    if (conversa.contato.tipo_usuario === "funcionario") {
+      return "Conversa privada com funcionário";
+    }
+
+    if (conversa.contato.tipo_usuario === "admin") {
+      return "Conversa privada com administrador";
+    }
+
+    return "Conversa privada";
+  }
+
+  function mensagemFoiEnviadaPorMim(item: MensagemChat) {
+    if (!usuario || !conversaSelecionada) {
+      return false;
+    }
+
+    if (conversaSelecionada.tipo === "privada") {
+      const remetenteRealId = item.autorReal?.id ?? item.remetente.id;
+      return remetenteRealId === usuario.sub;
+    }
+
+    if (usuario.tipo === "user") {
+      return item.origem === "usuario" && item.remetente.id === usuario.sub;
+    }
+
+    if (usuario.tipo === "funcionario") {
+      return item.origem === "setor";
+    }
+
+    return false;
+  }
+
+  const conversasFiltradas = conversas.filter((conversa) => {
+    const texto =
+      conversa.tipo === "privada"
+        ? `${conversa.contato.nome} ${conversa.contato.tipo_usuario}`
+        : `${conversa.setor.nome} ${conversa.setor.sigla} ${conversa.usuario.nome}`;
+
+    return texto.toLowerCase().includes(buscaConversa.trim().toLowerCase());
   });
+
+  const podeEnviarMensagem =
+    conversaSelecionada?.tipo === "privada" || usuario?.tipo !== "admin";
 
   const setoresFiltrados = setores.filter((setor) => {
     const busca = buscaUsuario.trim().toLowerCase();
@@ -511,7 +611,7 @@ function Home() {
           </div>
 
           <div className="header-menu">
-            {usuario && usuario.tipo !== "admin" && (
+            {usuario && (
               <button
                 type="button"
                 className="header-menu-button"
@@ -715,7 +815,9 @@ function Home() {
               placeholder={
                 usuario?.tipo === "user"
                   ? "Pesquisar setor"
-                  : "Pesquisar usuário"
+                  : usuario?.tipo === "admin"
+                    ? "Pesquisar contato"
+                    : "Pesquisar usuário"
               }
               value={buscaUsuario}
               onChange={(event) => setBuscaUsuario(event.target.value)}
@@ -723,7 +825,11 @@ function Home() {
           </div>
 
           <div className="nova-conversa__titulo-lista">
-            {usuario?.tipo === "user" ? "SETORES" : "USUÁRIOS"}
+            {usuario?.tipo === "user"
+              ? "SETORES"
+              : usuario?.tipo === "admin"
+                ? "CONTATOS"
+                : "USUÁRIOS"}
           </div>
 
           <div className="nova-conversa__usuarios">
@@ -752,7 +858,7 @@ function Home() {
               ))}
 
             {!carregandoUsuarios &&
-              usuario?.tipo === "funcionario" &&
+              usuario?.tipo !== "user" &&
               usuariosFiltrados.map((usuario) => (
                 <button
                   key={usuario.id}
@@ -766,7 +872,13 @@ function Home() {
 
                   <div className="nova-conversa__dados">
                     <strong>{usuario.nome}</strong>
-                    <span>Usuário Fala Pommer</span>
+                    <span>
+                      {usuario.tipoUsuario === "funcionario"
+                        ? (usuario.setor?.nome ?? "Funcionário")
+                        : usuario.tipoUsuario === "admin"
+                          ? "Administrador"
+                          : "Usuário Fala Pommer"}
+                    </span>
                   </div>
                 </button>
               ))}
@@ -780,10 +892,10 @@ function Home() {
               )}
 
             {!carregandoUsuarios &&
-              usuario?.tipo === "funcionario" &&
+              usuario?.tipo !== "user" &&
               usuariosFiltrados.length === 0 && (
                 <p className="nova-conversa__mensagem">
-                  Nenhum usuário encontrado.
+                  Nenhum contato encontrado.
                 </p>
               )}
           </div>
@@ -802,11 +914,7 @@ function Home() {
                 <div className="chat-header__dados">
                   <strong>{nomeDaConversa(conversaSelecionada)}</strong>
 
-                  <span>
-                    {usuario?.tipo === "user"
-                      ? conversaSelecionada.setor.sigla
-                      : conversaSelecionada.setor.nome}
-                  </span>
+                  <span>{subtituloDaConversa(conversaSelecionada)}</span>
                 </div>
               </div>
             </header>
@@ -822,12 +930,7 @@ function Home() {
 
               {!carregandoMensagens &&
                 mensagensChat.map((item) => {
-                  const enviadaPorMim =
-                    usuario?.tipo === "user"
-                      ? item.origem === "usuario"
-                      : usuario?.tipo === "funcionario"
-                        ? item.origem === "setor"
-                        : false;
+                  const enviadaPorMim = mensagemFoiEnviadaPorMim(item);
 
                   return (
                     <div
@@ -857,7 +960,7 @@ function Home() {
               <div ref={fimMensagensRef} />
             </div>
 
-            {usuario?.tipo !== "admin" && (
+            {podeEnviarMensagem && (
               <footer className="chat-input">
                 {arquivoSelecionado && (
                   <div className="chat-input__arquivo">

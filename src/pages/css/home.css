@@ -655,6 +655,12 @@
     gap: 2px;
 }
 
+.chat-header__dados span {
+    color: #667085;
+    font-family: var(--fonte-dm-sans);
+    font-size: 13px;
+}
+
 .chat-header__dados strong {
     color: #172033;
     font-family: var(--fonte-poppins);
@@ -663,11 +669,81 @@
 }
 
 .mensagens {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 24px;
     min-height: 0;
     overflow-y: auto;
     background:
         radial-gradient(circle at top right, rgba(19, 81, 180, 0.04), transparent 36%),
         #f8faff;
+}
+
+.mensagens__status {
+    margin: auto;
+    color: #667085;
+    font-family: var(--fonte-dm-sans);
+    font-size: 14px;
+}
+
+.mensagem-linha {
+    display: flex;
+    width: 100%;
+}
+
+.mensagem-linha--recebida {
+    justify-content: flex-start;
+}
+
+.mensagem-linha--enviada {
+    justify-content: flex-end;
+}
+
+.mensagem-balao {
+    position: relative;
+    min-width: 110px;
+    max-width: min(70%, 620px);
+    padding: 9px 12px 7px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px 12px 12px 4px;
+    background: #ffffff;
+    box-shadow: 0 2px 5px rgba(15, 38, 73, 0.07);
+}
+
+.mensagem-linha--enviada .mensagem-balao {
+    border-color: #bdd3f5;
+    border-radius: 12px 12px 4px 12px;
+    background: #dceaff;
+}
+
+.mensagem-balao strong {
+    display: block;
+    margin-bottom: 3px;
+    color: #1351b4;
+    font-family: var(--fonte-dm-sans);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.mensagem-balao p {
+    margin: 0;
+    padding-right: 50px;
+    color: #172033;
+    font-family: var(--fonte-dm-sans);
+    font-size: 14px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.mensagem-balao time {
+    position: absolute;
+    right: 9px;
+    bottom: 6px;
+    color: #667085;
+    font-family: var(--fonte-dm-sans);
+    font-size: 10px;
 }
 
 .chat-input {
@@ -977,6 +1053,11 @@
     background: #1351b4;
 }
 
+.chat-input__enviar button:disabled {
+    background: #a8b8d0;
+    cursor: not-allowed;
+}
+
 .chat-input__enviar button:hover {
     background: #0d397d;
 }
@@ -1041,6 +1122,14 @@
         border: 0;
         border-radius: 0;
         box-shadow: none;
+    }
+
+    .mensagens {
+        padding: 16px 12px;
+    }
+
+    .mensagem-balao {
+        max-width: 85%;
     }
 
     .conversas {

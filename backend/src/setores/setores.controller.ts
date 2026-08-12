@@ -1,25 +1,47 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
-import { SetoresService } from './setores.service';
-import { CriarSetorDTO } from './dto/criar-setor-dto';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseIntPipe,
+    Post,
+    UseGuards
+} from "@nestjs/common";
 
-@Controller('setores')
+import { SetoresService } from "./setores.service";
+import { CriarSetorDTO } from "./dto/criar-setor-dto";
+
+import { AuthGuard } from "../auth/auth.guard";
+import { PerfisGuard } from "../auth/guards/perfis.guard";
+import { Perfis } from "../auth/decorators/perfis.decorator";
+
+@Controller("setores")
+@UseGuards(AuthGuard, PerfisGuard)
 export class SetoresController {
-    constructor (
+    constructor(
         private readonly setoresService: SetoresService
     ) {}
 
     @Get()
-        listar() {
-            return this.setoresService.listar();
-        }
+    @Perfis("user", "funcionario", "admin")
+    listar() {
+        return this.setoresService.listar();
+    }
 
     @Post()
-        criar(@Body() dados: CriarSetorDTO) {
-            return this.setoresService.criar(dados);
-        }
+    @Perfis("admin")
+    criar(
+        @Body() dados: CriarSetorDTO
+    ) {
+        return this.setoresService.criar(dados);
+    }
 
-    @Delete(':id')
-        apagar(@Param('id', ParseIntPipe) id: number) {
-            return this.setoresService.apagar(id);
-        }
+    @Delete(":id")
+    @Perfis("admin")
+    apagar(
+        @Param("id", ParseIntPipe) id: number
+    ) {
+        return this.setoresService.apagar(id);
+    }
 }

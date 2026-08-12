@@ -25,7 +25,7 @@ export class SetoresService {
             where: {
                 OR: [
                     {setor: dados.setor},
-                    {sigla_setor: dados.setor}
+                    { sigla_setor: dados.sigla_setor }
                 ],
             },
         });

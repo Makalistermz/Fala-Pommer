@@ -201,6 +201,7 @@ export type setoresWhereInput = {
   setor?: Prisma.StringFilter<"setores"> | string
   sigla_setor?: Prisma.StringFilter<"setores"> | string
   cadastros?: Prisma.CadastroListRelationFilter
+  atendimentos?: Prisma.Conversa_setorListRelationFilter
 }
 
 export type setoresOrderByWithRelationInput = {
@@ -208,6 +209,7 @@ export type setoresOrderByWithRelationInput = {
   setor?: Prisma.SortOrder
   sigla_setor?: Prisma.SortOrder
   cadastros?: Prisma.cadastroOrderByRelationAggregateInput
+  atendimentos?: Prisma.conversa_setorOrderByRelationAggregateInput
   _relevance?: Prisma.setoresOrderByRelevanceInput
 }
 
@@ -219,6 +221,7 @@ export type setoresWhereUniqueInput = Prisma.AtLeast<{
   setor?: Prisma.StringFilter<"setores"> | string
   sigla_setor?: Prisma.StringFilter<"setores"> | string
   cadastros?: Prisma.CadastroListRelationFilter
+  atendimentos?: Prisma.Conversa_setorListRelationFilter
 }, "id">
 
 export type setoresOrderByWithAggregationInput = {
@@ -245,6 +248,7 @@ export type setoresCreateInput = {
   setor: string
   sigla_setor: string
   cadastros?: Prisma.cadastroCreateNestedManyWithoutSetorInput
+  atendimentos?: Prisma.conversa_setorCreateNestedManyWithoutSetorInput
 }
 
 export type setoresUncheckedCreateInput = {
@@ -252,12 +256,14 @@ export type setoresUncheckedCreateInput = {
   setor: string
   sigla_setor: string
   cadastros?: Prisma.cadastroUncheckedCreateNestedManyWithoutSetorInput
+  atendimentos?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutSetorInput
 }
 
 export type setoresUpdateInput = {
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
   cadastros?: Prisma.cadastroUpdateManyWithoutSetorNestedInput
+  atendimentos?: Prisma.conversa_setorUpdateManyWithoutSetorNestedInput
 }
 
 export type setoresUncheckedUpdateInput = {
@@ -265,6 +271,7 @@ export type setoresUncheckedUpdateInput = {
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
   cadastros?: Prisma.cadastroUncheckedUpdateManyWithoutSetorNestedInput
+  atendimentos?: Prisma.conversa_setorUncheckedUpdateManyWithoutSetorNestedInput
 }
 
 export type setoresCreateManyInput = {
@@ -287,6 +294,11 @@ export type setoresUncheckedUpdateManyInput = {
 export type SetoresNullableScalarRelationFilter = {
   is?: Prisma.setoresWhereInput | null
   isNot?: Prisma.setoresWhereInput | null
+}
+
+export type SetoresScalarRelationFilter = {
+  is?: Prisma.setoresWhereInput
+  isNot?: Prisma.setoresWhereInput
 }
 
 export type setoresOrderByRelevanceInput = {
@@ -337,15 +349,31 @@ export type setoresUpdateOneWithoutCadastrosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.setoresUpdateToOneWithWhereWithoutCadastrosInput, Prisma.setoresUpdateWithoutCadastrosInput>, Prisma.setoresUncheckedUpdateWithoutCadastrosInput>
 }
 
+export type setoresCreateNestedOneWithoutAtendimentosInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutAtendimentosInput, Prisma.setoresUncheckedCreateWithoutAtendimentosInput>
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutAtendimentosInput
+  connect?: Prisma.setoresWhereUniqueInput
+}
+
+export type setoresUpdateOneRequiredWithoutAtendimentosNestedInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutAtendimentosInput, Prisma.setoresUncheckedCreateWithoutAtendimentosInput>
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutAtendimentosInput
+  upsert?: Prisma.setoresUpsertWithoutAtendimentosInput
+  connect?: Prisma.setoresWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.setoresUpdateToOneWithWhereWithoutAtendimentosInput, Prisma.setoresUpdateWithoutAtendimentosInput>, Prisma.setoresUncheckedUpdateWithoutAtendimentosInput>
+}
+
 export type setoresCreateWithoutCadastrosInput = {
   setor: string
   sigla_setor: string
+  atendimentos?: Prisma.conversa_setorCreateNestedManyWithoutSetorInput
 }
 
 export type setoresUncheckedCreateWithoutCadastrosInput = {
   id?: number
   setor: string
   sigla_setor: string
+  atendimentos?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutSetorInput
 }
 
 export type setoresCreateOrConnectWithoutCadastrosInput = {
@@ -367,12 +395,56 @@ export type setoresUpdateToOneWithWhereWithoutCadastrosInput = {
 export type setoresUpdateWithoutCadastrosInput = {
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  atendimentos?: Prisma.conversa_setorUpdateManyWithoutSetorNestedInput
 }
 
 export type setoresUncheckedUpdateWithoutCadastrosInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  atendimentos?: Prisma.conversa_setorUncheckedUpdateManyWithoutSetorNestedInput
+}
+
+export type setoresCreateWithoutAtendimentosInput = {
+  setor: string
+  sigla_setor: string
+  cadastros?: Prisma.cadastroCreateNestedManyWithoutSetorInput
+}
+
+export type setoresUncheckedCreateWithoutAtendimentosInput = {
+  id?: number
+  setor: string
+  sigla_setor: string
+  cadastros?: Prisma.cadastroUncheckedCreateNestedManyWithoutSetorInput
+}
+
+export type setoresCreateOrConnectWithoutAtendimentosInput = {
+  where: Prisma.setoresWhereUniqueInput
+  create: Prisma.XOR<Prisma.setoresCreateWithoutAtendimentosInput, Prisma.setoresUncheckedCreateWithoutAtendimentosInput>
+}
+
+export type setoresUpsertWithoutAtendimentosInput = {
+  update: Prisma.XOR<Prisma.setoresUpdateWithoutAtendimentosInput, Prisma.setoresUncheckedUpdateWithoutAtendimentosInput>
+  create: Prisma.XOR<Prisma.setoresCreateWithoutAtendimentosInput, Prisma.setoresUncheckedCreateWithoutAtendimentosInput>
+  where?: Prisma.setoresWhereInput
+}
+
+export type setoresUpdateToOneWithWhereWithoutAtendimentosInput = {
+  where?: Prisma.setoresWhereInput
+  data: Prisma.XOR<Prisma.setoresUpdateWithoutAtendimentosInput, Prisma.setoresUncheckedUpdateWithoutAtendimentosInput>
+}
+
+export type setoresUpdateWithoutAtendimentosInput = {
+  setor?: Prisma.StringFieldUpdateOperationsInput | string
+  sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  cadastros?: Prisma.cadastroUpdateManyWithoutSetorNestedInput
+}
+
+export type setoresUncheckedUpdateWithoutAtendimentosInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  setor?: Prisma.StringFieldUpdateOperationsInput | string
+  sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  cadastros?: Prisma.cadastroUncheckedUpdateManyWithoutSetorNestedInput
 }
 
 
@@ -382,10 +454,12 @@ export type setoresUncheckedUpdateWithoutCadastrosInput = {
 
 export type SetoresCountOutputType = {
   cadastros: number
+  atendimentos: number
 }
 
 export type SetoresCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cadastros?: boolean | SetoresCountOutputTypeCountCadastrosArgs
+  atendimentos?: boolean | SetoresCountOutputTypeCountAtendimentosArgs
 }
 
 /**
@@ -405,12 +479,20 @@ export type SetoresCountOutputTypeCountCadastrosArgs<ExtArgs extends runtime.Typ
   where?: Prisma.cadastroWhereInput
 }
 
+/**
+ * SetoresCountOutputType without action
+ */
+export type SetoresCountOutputTypeCountAtendimentosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.conversa_setorWhereInput
+}
+
 
 export type setoresSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   setor?: boolean
   sigla_setor?: boolean
   cadastros?: boolean | Prisma.setores$cadastrosArgs<ExtArgs>
+  atendimentos?: boolean | Prisma.setores$atendimentosArgs<ExtArgs>
   _count?: boolean | Prisma.SetoresCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["setores"]>
 
@@ -425,6 +507,7 @@ export type setoresSelectScalar = {
 export type setoresOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "setor" | "sigla_setor", ExtArgs["result"]["setores"]>
 export type setoresInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cadastros?: boolean | Prisma.setores$cadastrosArgs<ExtArgs>
+  atendimentos?: boolean | Prisma.setores$atendimentosArgs<ExtArgs>
   _count?: boolean | Prisma.SetoresCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -432,6 +515,7 @@ export type $setoresPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "setores"
   objects: {
     cadastros: Prisma.$cadastroPayload<ExtArgs>[]
+    atendimentos: Prisma.$conversa_setorPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -778,6 +862,7 @@ readonly fields: setoresFieldRefs;
 export interface Prisma__setoresClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   cadastros<T extends Prisma.setores$cadastrosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.setores$cadastrosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  atendimentos<T extends Prisma.setores$atendimentosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.setores$atendimentosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_setorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1179,6 +1264,30 @@ export type setores$cadastrosArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.CadastroScalarFieldEnum | Prisma.CadastroScalarFieldEnum[]
+}
+
+/**
+ * setores.atendimentos
+ */
+export type setores$atendimentosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the conversa_setor
+   */
+  select?: Prisma.conversa_setorSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the conversa_setor
+   */
+  omit?: Prisma.conversa_setorOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.conversa_setorInclude<ExtArgs> | null
+  where?: Prisma.conversa_setorWhereInput
+  orderBy?: Prisma.conversa_setorOrderByWithRelationInput | Prisma.conversa_setorOrderByWithRelationInput[]
+  cursor?: Prisma.conversa_setorWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Conversa_setorScalarFieldEnum | Prisma.Conversa_setorScalarFieldEnum[]
 }
 
 /**

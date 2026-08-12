@@ -20,7 +20,16 @@ export type cadastro_tipo_usuario = (typeof cadastro_tipo_usuario)[keyof typeof 
 
 export const conversa_tipo = {
   privada: 'privada',
-  grupo: 'grupo'
+  grupo: 'grupo',
+  setor: 'setor'
 } as const
 
 export type conversa_tipo = (typeof conversa_tipo)[keyof typeof conversa_tipo]
+
+
+export const mensagem_origem = {
+  usuario: 'usuario',
+  setor: 'setor'
+} as const
+
+export type mensagem_origem = (typeof mensagem_origem)[keyof typeof mensagem_origem]

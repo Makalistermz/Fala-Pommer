@@ -223,6 +223,23 @@ export type Enumconversa_tipoWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumconversa_tipoFilter<$PrismaModel>
 }
 
+export type Enummensagem_origemFilter<$PrismaModel = never> = {
+  equals?: $Enums.mensagem_origem | Prisma.Enummensagem_origemFieldRefInput<$PrismaModel>
+  in?: $Enums.mensagem_origem[]
+  notIn?: $Enums.mensagem_origem[]
+  not?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel> | $Enums.mensagem_origem
+}
+
+export type Enummensagem_origemWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.mensagem_origem | Prisma.Enummensagem_origemFieldRefInput<$PrismaModel>
+  in?: $Enums.mensagem_origem[]
+  notIn?: $Enums.mensagem_origem[]
+  not?: Prisma.NestedEnummensagem_origemWithAggregatesFilter<$PrismaModel> | $Enums.mensagem_origem
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel>
+  _max?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[]
@@ -447,6 +464,23 @@ export type NestedEnumconversa_tipoWithAggregatesFilter<$PrismaModel = never> = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumconversa_tipoFilter<$PrismaModel>
   _max?: Prisma.NestedEnumconversa_tipoFilter<$PrismaModel>
+}
+
+export type NestedEnummensagem_origemFilter<$PrismaModel = never> = {
+  equals?: $Enums.mensagem_origem | Prisma.Enummensagem_origemFieldRefInput<$PrismaModel>
+  in?: $Enums.mensagem_origem[]
+  notIn?: $Enums.mensagem_origem[]
+  not?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel> | $Enums.mensagem_origem
+}
+
+export type NestedEnummensagem_origemWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.mensagem_origem | Prisma.Enummensagem_origemFieldRefInput<$PrismaModel>
+  in?: $Enums.mensagem_origem[]
+  notIn?: $Enums.mensagem_origem[]
+  not?: Prisma.NestedEnummensagem_origemWithAggregatesFilter<$PrismaModel> | $Enums.mensagem_origem
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel>
+  _max?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel>
 }
 
 

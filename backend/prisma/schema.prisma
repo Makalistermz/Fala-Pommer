@@ -9,20 +9,25 @@ datasource db {
 }
 
 model cadastro {
-  id                          Int                     @id @default(autoincrement())
-  nome                        String                  @db.VarChar(150)
-  data_nascimento             DateTime                @db.Date
-  cpf                         String                  @db.VarChar(20)
-  telefone                    String                  @db.VarChar(20)
-  email                       String                  @db.VarChar(150)
-  senha                       String                  @db.VarChar(255)
-  token_recuperacao           String?                 @db.VarChar(64)
+  id                          Int                   @id @default(autoincrement())
+  nome                        String                @db.VarChar(150)
+  data_nascimento             DateTime              @db.Date
+  cpf                         String                @db.VarChar(20)
+  telefone                    String                @db.VarChar(20)
+  email                       String                @db.VarChar(150)
+  senha                       String                @db.VarChar(255)
+  token_recuperacao           String?               @db.VarChar(64)
   token_recuperacao_expira_em DateTime?
-  tipo_usuario                cadastro_tipo_usuario   @default(user)
+  tipo_usuario                cadastro_tipo_usuario @default(user)
   setor_id                    Int?
-  conversa_participante       conversa_participante[]
-  login_evento                login_evento[]
-  setor                       setores?                @relation(fields: [setor_id], references: [id], onDelete: SetNull, onUpdate: Restrict, map: "fk_cadastro_setor")
+
+  conversa_participante conversa_participante[]
+  login_evento          login_evento[]
+
+  setor setores? @relation(fields: [setor_id], references: [id], onDelete: SetNull, onUpdate: Restrict, map: "fk_cadastro_setor")
+
+  conversas_atendidas conversa_setor[] @relation("UsuarioAtendido")
+  mensagens_enviadas  mensagem[]       @relation("RemetenteMensagem")
 
   @@index([setor_id], map: "fk_cadastro_setor")
 }
@@ -39,10 +44,13 @@ model login_evento {
 }
 
 model conversa {
-  id                    Int                     @id @default(autoincrement())
-  tipo                  conversa_tipo           @default(privada)
-  criada_em             DateTime                @default(now()) @db.DateTime(0)
+  id        Int           @id @default(autoincrement())
+  tipo      conversa_tipo @default(privada)
+  criada_em DateTime      @default(now()) @db.DateTime(0)
+
   conversa_participante conversa_participante[]
+  atendimento_setor     conversa_setor?
+  mensagens             mensagem[]
 }
 
 model conversa_participante {
@@ -56,11 +64,41 @@ model conversa_participante {
   @@index([usuario_id], map: "fk_participante_usuario")
 }
 
+model conversa_setor {
+  conversa_id Int      @id
+  setor_id    Int
+  usuario_id  Int
+  criada_em   DateTime @default(now()) @db.DateTime(0)
+
+  conversa conversa @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_conversa_setor_conversa")
+  setor    setores  @relation(fields: [setor_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_conversa_setor_setor")
+  usuario  cadastro @relation("UsuarioAtendido", fields: [usuario_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_conversa_setor_usuario")
+
+  @@unique([setor_id, usuario_id], map: "uq_conversa_setor_usuario")
+  @@index([usuario_id], map: "idx_conversa_setor_usuario")
+}
+
+model mensagem {
+  id           Int             @id @default(autoincrement())
+  conversa_id  Int
+  remetente_id Int
+  origem       mensagem_origem
+  conteudo     String          @db.Text
+  enviada_em   DateTime        @default(now()) @db.DateTime(0)
+
+  conversa  conversa @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_mensagem_conversa")
+  remetente cadastro @relation("RemetenteMensagem", fields: [remetente_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_mensagem_remetente")
+
+  @@index([conversa_id, enviada_em], map: "idx_mensagem_conversa_data")
+  @@index([remetente_id], map: "idx_mensagem_remetente")
+}
+
 model setores {
-  id          Int        @id @default(autoincrement())
-  setor       String     @db.VarChar(150)
-  sigla_setor String     @db.VarChar(20)
-  cadastros   cadastro[]
+  id           Int              @id @default(autoincrement())
+  setor        String           @db.VarChar(150)
+  sigla_setor  String           @db.VarChar(20)
+  cadastros    cadastro[]
+  atendimentos conversa_setor[]
 }
 
 enum cadastro_tipo_usuario {
@@ -72,4 +110,10 @@ enum cadastro_tipo_usuario {
 enum conversa_tipo {
   privada
   grupo
+  setor
+}
+
+enum mensagem_origem {
+  usuario
+  setor
 }

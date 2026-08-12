@@ -60,6 +60,16 @@ export type conversa = Prisma.conversaModel
  */
 export type conversa_participante = Prisma.conversa_participanteModel
 /**
+ * Model conversa_setor
+ * 
+ */
+export type conversa_setor = Prisma.conversa_setorModel
+/**
+ * Model mensagem
+ * 
+ */
+export type mensagem = Prisma.mensagemModel
+/**
  * Model setores
  * 
  */

@@ -55,6 +55,8 @@ export const ModelName = {
   login_evento: 'login_evento',
   conversa: 'conversa',
   conversa_participante: 'conversa_participante',
+  conversa_setor: 'conversa_setor',
+  mensagem: 'mensagem',
   setores: 'setores'
 } as const
 
@@ -119,6 +121,28 @@ export const Conversa_participanteScalarFieldEnum = {
 export type Conversa_participanteScalarFieldEnum = (typeof Conversa_participanteScalarFieldEnum)[keyof typeof Conversa_participanteScalarFieldEnum]
 
 
+export const Conversa_setorScalarFieldEnum = {
+  conversa_id: 'conversa_id',
+  setor_id: 'setor_id',
+  usuario_id: 'usuario_id',
+  criada_em: 'criada_em'
+} as const
+
+export type Conversa_setorScalarFieldEnum = (typeof Conversa_setorScalarFieldEnum)[keyof typeof Conversa_setorScalarFieldEnum]
+
+
+export const MensagemScalarFieldEnum = {
+  id: 'id',
+  conversa_id: 'conversa_id',
+  remetente_id: 'remetente_id',
+  origem: 'origem',
+  conteudo: 'conteudo',
+  enviada_em: 'enviada_em'
+} as const
+
+export type MensagemScalarFieldEnum = (typeof MensagemScalarFieldEnum)[keyof typeof MensagemScalarFieldEnum]
+
+
 export const SetoresScalarFieldEnum = {
   id: 'id',
   setor: 'setor',
@@ -154,6 +178,13 @@ export const cadastroOrderByRelevanceFieldEnum = {
 } as const
 
 export type cadastroOrderByRelevanceFieldEnum = (typeof cadastroOrderByRelevanceFieldEnum)[keyof typeof cadastroOrderByRelevanceFieldEnum]
+
+
+export const mensagemOrderByRelevanceFieldEnum = {
+  conteudo: 'conteudo'
+} as const
+
+export type mensagemOrderByRelevanceFieldEnum = (typeof mensagemOrderByRelevanceFieldEnum)[keyof typeof mensagemOrderByRelevanceFieldEnum]
 
 
 export const setoresOrderByRelevanceFieldEnum = {

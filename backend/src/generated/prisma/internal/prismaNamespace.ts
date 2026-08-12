@@ -401,6 +401,8 @@ export const ModelName = {
   login_evento: 'login_evento',
   conversa: 'conversa',
   conversa_participante: 'conversa_participante',
+  conversa_setor: 'conversa_setor',
+  mensagem: 'mensagem',
   setores: 'setores'
 } as const
 
@@ -417,7 +419,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "login_evento" | "conversa" | "conversa_participante" | "setores"
+    modelProps: "cadastro" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -685,6 +687,138 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    conversa_setor: {
+      payload: Prisma.$conversa_setorPayload<ExtArgs>
+      fields: Prisma.conversa_setorFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.conversa_setorFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_setorPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.conversa_setorFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_setorPayload>
+        }
+        findFirst: {
+          args: Prisma.conversa_setorFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_setorPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.conversa_setorFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_setorPayload>
+        }
+        findMany: {
+          args: Prisma.conversa_setorFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_setorPayload>[]
+        }
+        create: {
+          args: Prisma.conversa_setorCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_setorPayload>
+        }
+        createMany: {
+          args: Prisma.conversa_setorCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.conversa_setorDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_setorPayload>
+        }
+        update: {
+          args: Prisma.conversa_setorUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_setorPayload>
+        }
+        deleteMany: {
+          args: Prisma.conversa_setorDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.conversa_setorUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.conversa_setorUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_setorPayload>
+        }
+        aggregate: {
+          args: Prisma.Conversa_setorAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateConversa_setor>
+        }
+        groupBy: {
+          args: Prisma.conversa_setorGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Conversa_setorGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.conversa_setorCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Conversa_setorCountAggregateOutputType> | number
+        }
+      }
+    }
+    mensagem: {
+      payload: Prisma.$mensagemPayload<ExtArgs>
+      fields: Prisma.mensagemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.mensagemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mensagemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.mensagemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mensagemPayload>
+        }
+        findFirst: {
+          args: Prisma.mensagemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mensagemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.mensagemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mensagemPayload>
+        }
+        findMany: {
+          args: Prisma.mensagemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mensagemPayload>[]
+        }
+        create: {
+          args: Prisma.mensagemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mensagemPayload>
+        }
+        createMany: {
+          args: Prisma.mensagemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.mensagemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mensagemPayload>
+        }
+        update: {
+          args: Prisma.mensagemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mensagemPayload>
+        }
+        deleteMany: {
+          args: Prisma.mensagemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.mensagemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.mensagemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$mensagemPayload>
+        }
+        aggregate: {
+          args: Prisma.MensagemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMensagem>
+        }
+        groupBy: {
+          args: Prisma.mensagemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MensagemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.mensagemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MensagemCountAggregateOutputType> | number
+        }
+      }
+    }
     setores: {
       payload: Prisma.$setoresPayload<ExtArgs>
       fields: Prisma.setoresFieldRefs
@@ -835,6 +969,28 @@ export const Conversa_participanteScalarFieldEnum = {
 export type Conversa_participanteScalarFieldEnum = (typeof Conversa_participanteScalarFieldEnum)[keyof typeof Conversa_participanteScalarFieldEnum]
 
 
+export const Conversa_setorScalarFieldEnum = {
+  conversa_id: 'conversa_id',
+  setor_id: 'setor_id',
+  usuario_id: 'usuario_id',
+  criada_em: 'criada_em'
+} as const
+
+export type Conversa_setorScalarFieldEnum = (typeof Conversa_setorScalarFieldEnum)[keyof typeof Conversa_setorScalarFieldEnum]
+
+
+export const MensagemScalarFieldEnum = {
+  id: 'id',
+  conversa_id: 'conversa_id',
+  remetente_id: 'remetente_id',
+  origem: 'origem',
+  conteudo: 'conteudo',
+  enviada_em: 'enviada_em'
+} as const
+
+export type MensagemScalarFieldEnum = (typeof MensagemScalarFieldEnum)[keyof typeof MensagemScalarFieldEnum]
+
+
 export const SetoresScalarFieldEnum = {
   id: 'id',
   setor: 'setor',
@@ -870,6 +1026,13 @@ export const cadastroOrderByRelevanceFieldEnum = {
 } as const
 
 export type cadastroOrderByRelevanceFieldEnum = (typeof cadastroOrderByRelevanceFieldEnum)[keyof typeof cadastroOrderByRelevanceFieldEnum]
+
+
+export const mensagemOrderByRelevanceFieldEnum = {
+  conteudo: 'conteudo'
+} as const
+
+export type mensagemOrderByRelevanceFieldEnum = (typeof mensagemOrderByRelevanceFieldEnum)[keyof typeof mensagemOrderByRelevanceFieldEnum]
 
 
 export const setoresOrderByRelevanceFieldEnum = {
@@ -918,6 +1081,13 @@ export type Enumcadastro_tipo_usuarioFieldRefInput<$PrismaModel> = FieldRefInput
  * Reference to a field of type 'conversa_tipo'
  */
 export type Enumconversa_tipoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'conversa_tipo'>
+    
+
+
+/**
+ * Reference to a field of type 'mensagem_origem'
+ */
+export type Enummensagem_origemFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'mensagem_origem'>
     
 
 
@@ -1082,6 +1252,8 @@ export type GlobalOmitConfig = {
   login_evento?: Prisma.login_eventoOmit
   conversa?: Prisma.conversaOmit
   conversa_participante?: Prisma.conversa_participanteOmit
+  conversa_setor?: Prisma.conversa_setorOmit
+  mensagem?: Prisma.mensagemOmit
   setores?: Prisma.setoresOmit
 }
 

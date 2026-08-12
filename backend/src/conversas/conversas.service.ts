@@ -522,4 +522,212 @@ export class ConversasService {
             usuario: atendimento.usuario
         };
     }
+
+    async enviarMensagem(
+        usuarioLogadoId: number,
+        conversaId: number,
+        conteudo: string
+        ) {
+        const contexto = await this.verificarAcessoConversaSetor(
+            usuarioLogadoId,
+            conversaId
+        );
+
+        if (contexto.usuarioLogado.tipo_usuario === "admin") {
+            throw new ForbiddenException(
+            "Administradores não podem enviar mensagens em nome do setor."
+            );
+        }
+
+        const origem =
+            contexto.usuarioLogado.tipo_usuario === "user"
+            ? "usuario"
+            : "setor";
+
+        const mensagem = await this.prisma.mensagem.create({
+            data: {
+            conversa_id: conversaId,
+            remetente_id: usuarioLogadoId,
+            origem,
+            conteudo
+            },
+
+            include: {
+            remetente: {
+                select: {
+                id: true,
+                nome: true
+                }
+            }
+            }
+        });
+
+        const remetenteExibido =
+            mensagem.origem === "setor"
+            ? {
+                tipo: "setor",
+                id: contexto.atendimento.setor.id,
+                nome: contexto.atendimento.setor.setor
+                }
+            : {
+                tipo: "usuario",
+                id: mensagem.remetente.id,
+                nome: mensagem.remetente.nome
+                };
+
+        return {
+            id: mensagem.id,
+            conversaId: mensagem.conversa_id,
+            conteudo: mensagem.conteudo,
+            origem: mensagem.origem,
+            enviadaEm: mensagem.enviada_em,
+            remetente: remetenteExibido
+        };
+        }
+
+        async listarMensagens(
+        usuarioLogadoId: number,
+        conversaId: number
+        ) {
+        const contexto = await this.verificarAcessoConversaSetor(
+            usuarioLogadoId,
+            conversaId
+        );
+
+        const mensagens = await this.prisma.mensagem.findMany({
+            where: {
+            conversa_id: conversaId
+            },
+
+            include: {
+            remetente: {
+                select: {
+                id: true,
+                nome: true
+                }
+            }
+            },
+
+            orderBy: {
+            enviada_em: "asc"
+            }
+        });
+
+        return mensagens.map((mensagem) => {
+            const remetenteExibido =
+            mensagem.origem === "setor"
+                ? {
+                    tipo: "setor",
+                    id: contexto.atendimento.setor.id,
+                    nome: contexto.atendimento.setor.setor
+                }
+                : {
+                    tipo: "usuario",
+                    id: mensagem.remetente.id,
+                    nome: mensagem.remetente.nome
+                };
+
+            const podeVerAutorReal =
+            contexto.usuarioLogado.tipo_usuario !== "user" ||
+            mensagem.origem === "usuario";
+
+            return {
+            id: mensagem.id,
+            conversaId: mensagem.conversa_id,
+            conteudo: mensagem.conteudo,
+            origem: mensagem.origem,
+            enviadaEm: mensagem.enviada_em,
+            remetente: remetenteExibido,
+
+            ...(podeVerAutorReal && {
+                autorReal: {
+                id: mensagem.remetente.id,
+                nome: mensagem.remetente.nome
+                }
+            })
+            };
+        });
+        }
+
+        private async verificarAcessoConversaSetor(
+        usuarioLogadoId: number,
+        conversaId: number
+        ) {
+        const [usuarioLogado, atendimento] =
+            await Promise.all([
+            this.prisma.cadastro.findUnique({
+                where: {
+                id: usuarioLogadoId
+                },
+                select: {
+                id: true,
+                tipo_usuario: true,
+                setor_id: true
+                }
+            }),
+
+            this.prisma.conversa_setor.findUnique({
+                where: {
+                conversa_id: conversaId
+                },
+
+                include: {
+                setor: {
+                    select: {
+                    id: true,
+                    setor: true,
+                    sigla_setor: true
+                    }
+                },
+
+                usuario: {
+                    select: {
+                    id: true,
+                    nome: true
+                    }
+                }
+                }
+            })
+            ]);
+
+        if (!usuarioLogado) {
+            throw new NotFoundException(
+            "Usuário autenticado não encontrado."
+            );
+        }
+
+        if (!atendimento) {
+            throw new NotFoundException(
+            "Conversa de setor não encontrada."
+            );
+        }
+
+        if (
+            usuarioLogado.tipo_usuario === "user" &&
+            atendimento.usuario_id !== usuarioLogado.id
+        ) {
+            throw new ForbiddenException(
+            "Você não possui acesso a esta conversa."
+            );
+        }
+
+        if (usuarioLogado.tipo_usuario === "funcionario") {
+            if (!usuarioLogado.setor_id) {
+            throw new ForbiddenException(
+                "Você não está vinculado a nenhum setor."
+            );
+            }
+
+            if (atendimento.setor_id !== usuarioLogado.setor_id) {
+            throw new ForbiddenException(
+                "Esta conversa pertence a outro setor."
+            );
+            }
+        }
+
+        return {
+            usuarioLogado,
+            atendimento
+        };
+    }
 }

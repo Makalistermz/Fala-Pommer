@@ -5,12 +5,15 @@ import {
     HttpCode,
     Post,
     Req,
-    UseGuards
+    UseGuards,
+    Param,
+    ParseIntPipe
 } from "@nestjs/common";
 
 import { ConversasService } from "./conversas.service";
 import { CriarConversaDto } from "./dto/criar-conversas.dto";
 import { IniciarConversaSetorDto } from "./dto/iniciar-conversas-setor.dto";
+import { CriarMensagemDto } from "./dto/criar-mensagem.dto";
 
 import {
     AuthGuard,
@@ -110,6 +113,35 @@ export class ConversasController {
         return this.conversasService.iniciarComoFuncionario(
         requisicao.usuario!.sub,
         dados.usuarioId
+        );
+    }
+
+    @Get(":conversaId/mensagens")
+    @Perfis("user", "funcionario", "admin")
+    listarMensagens(
+    @Req() requisicao: RequisicaoAutenticada,
+    @Param("conversaId", ParseIntPipe)
+    conversaId: number
+    ) {
+    return this.conversasService.listarMensagens(
+        requisicao.usuario!.sub,
+        conversaId
+    );
+    }
+
+    @Post(":conversaId/mensagens")
+    @HttpCode(201)
+    @Perfis("user", "funcionario")
+    enviarMensagem(
+    @Req() requisicao: RequisicaoAutenticada,
+    @Param("conversaId", ParseIntPipe)
+    conversaId: number,
+    @Body() dados: CriarMensagemDto
+    ) {
+        return this.conversasService.enviarMensagem(
+            requisicao.usuario!.sub,
+            conversaId,
+            dados.conteudo
         );
     }
 }

@@ -3,6 +3,7 @@ import somNovaMensagem from "../assets/audio/notificacao.mp3";
 import "./css/home.css";
 import {
     useEffect,
+    useLayoutEffect,
     useRef,
     useState,
     type ChangeEvent,
@@ -160,7 +161,8 @@ function Home() {
 
     const [enviandoMensagem, setEnviandoMensagem] = useState(false);
 
-    const fimMensagensRef = useRef<HTMLDivElement>(null);
+    const mensagensContainerRef = useRef<HTMLDivElement>(null);
+    const rolagemInicialPendenteRef = useRef(false);
     const balõesRef = useRef<Map<number, HTMLElement>>(new Map());
     const idsAnimadosRef = useRef<Set<number>>(new Set());
     const conversaAbertaIdRef = useRef<number | null>(null);
@@ -766,6 +768,7 @@ function Home() {
         conversaAbertaIdRef.current = conversa.id;
         ultimaMensagemChatIdRef.current = 0;
         historicoChatCarregadoRef.current = false;
+        rolagemInicialPendenteRef.current = true;
         setConversaSelecionada(conversa);
         setChatMobileAberto(true);
         setMensagensChat([]);
@@ -1059,11 +1062,35 @@ function Home() {
         }
     }, [mensagensChat, carregandoMensagens]);
 
-    useEffect(() => {
-        fimMensagensRef.current?.scrollIntoView({
-        behavior: "smooth",
+    useLayoutEffect(() => {
+        const container = mensagensContainerRef.current;
+
+        if (!container || carregandoMensagens) {
+            return;
+        }
+
+        if (rolagemInicialPendenteRef.current) {
+            rolagemInicialPendenteRef.current = false;
+
+            const rolarParaOFim = () => {
+                container.scrollTop = container.scrollHeight;
+            };
+
+            rolarParaOFim();
+            const quadro = window.requestAnimationFrame(rolarParaOFim);
+            const esperaMidia = window.setTimeout(rolarParaOFim, 150);
+
+            return () => {
+                window.cancelAnimationFrame(quadro);
+                window.clearTimeout(esperaMidia);
+            };
+        }
+
+        container.scrollTo({
+            top: container.scrollHeight,
+            behavior: "smooth",
         });
-    }, [mensagensChat]);
+    }, [mensagensChat, carregandoMensagens]);
 
     function adicionarEmoji(emoji: string) {
         setMensagem((mensagemAtual) => mensagemAtual + emoji);
@@ -1568,7 +1595,11 @@ function Home() {
                 </div>
                 </header>
 
-                <div className="mensagens" data-lenis-prevent>
+                <div
+                    ref={mensagensContainerRef}
+                    className="mensagens"
+                    data-lenis-prevent
+                >
                     {carregandoMensagens && (
                         <p className="mensagens__status">Carregando mensagens...</p>
                     )}
@@ -1673,7 +1704,6 @@ function Home() {
                         );
                         })}
 
-                    <div ref={fimMensagensRef} />
                 </div>
 
                 {podeEnviarMensagem && (

@@ -10,6 +10,11 @@ import {
 import { useNavigate } from "react-router";
 import EmojiPicker from "../assets/emojiPicker";
 import gsap from "gsap";
+import {
+    iniciarGravacaoAudio,
+    obterMensagemErroGravacaoAudio,
+    type GravadorAudioAtivo,
+} from "../library/gravadorAudio";
 
 type TipoUsuario = "user" | "admin" | "funcionario";
 
@@ -147,10 +152,11 @@ function Home() {
     const inputMidiasRef = useRef<HTMLInputElement>(null);
 
     const inputAudiosRef = useRef<HTMLInputElement>(null);
-    const gravadorAudioRef = useRef<MediaRecorder | null>(null);
-    const fluxoAudioRef = useRef<MediaStream | null>(null);
-    const partesAudioRef = useRef<Blob[]>([]);
+    const gravadorAudioRef = useRef<GravadorAudioAtivo | null>(null);
+    const processandoGravacaoAudioRef = useRef(false);
+    const cicloGravacaoAudioRef = useRef(0);
     const [gravandoAudio, setGravandoAudio] = useState(false);
+    const [processandoGravacaoAudio, setProcessandoGravacaoAudio] = useState(false);
 
     const navigate = useNavigate();
 
@@ -499,6 +505,7 @@ function Home() {
     }
 
     async function abrirConversa(conversa: Conversa) {
+        cancelarGravacaoAudio();
         setConversaSelecionada(conversa);
         setChatMobileAberto(true);
         setMensagensChat([]);
@@ -671,64 +678,87 @@ function Home() {
     }
 
     async function alternarGravacaoAudio() {
-        if (gravandoAudio) {
-            gravadorAudioRef.current?.stop();
-            setGravandoAudio(false);
+        const gravadorAtivo = gravadorAudioRef.current;
+
+        if (gravadorAtivo) {
+            const cicloAtual = cicloGravacaoAudioRef.current;
+            gravadorAudioRef.current = null;
+            processandoGravacaoAudioRef.current = true;
+            setProcessandoGravacaoAudio(true);
+
+            try {
+                const arquivo = await gravadorAtivo.parar();
+
+                if (cicloAtual !== cicloGravacaoAudioRef.current) {
+                    return;
+                }
+
+                if (arquivo.size > 25 * 1024 * 1024) {
+                    window.alert("A gravação deve ter no máximo 25 MB.");
+                    return;
+                }
+
+                setArquivoSelecionado(arquivo);
+            } catch (erro) {
+                if (cicloAtual === cicloGravacaoAudioRef.current) {
+                    console.error("Erro ao finalizar a gravação:", erro);
+                    window.alert(obterMensagemErroGravacaoAudio(erro));
+                }
+            } finally {
+                if (cicloAtual === cicloGravacaoAudioRef.current) {
+                    processandoGravacaoAudioRef.current = false;
+                    setProcessandoGravacaoAudio(false);
+                    setGravandoAudio(false);
+                }
+            }
+
             return;
         }
 
-        if (!navigator.mediaDevices?.getUserMedia || !("MediaRecorder" in window)) {
-            window.alert("A gravação de áudio não é suportada neste navegador.");
+        if (processandoGravacaoAudioRef.current) {
             return;
         }
+
+        const cicloAtual = ++cicloGravacaoAudioRef.current;
+        processandoGravacaoAudioRef.current = true;
+        setProcessandoGravacaoAudio(true);
 
         try {
-            const fluxo = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const gravador = new MediaRecorder(fluxo);
+            const gravador = await iniciarGravacaoAudio();
 
-            fluxoAudioRef.current = fluxo;
+            if (cicloAtual !== cicloGravacaoAudioRef.current) {
+                gravador.cancelar();
+                return;
+            }
+
             gravadorAudioRef.current = gravador;
-            partesAudioRef.current = [];
-
-            gravador.ondataavailable = (evento) => {
-                if (evento.data.size > 0) {
-                    partesAudioRef.current.push(evento.data);
-                }
-            };
-
-            gravador.onstop = () => {
-                const audio = new Blob(partesAudioRef.current, {
-                    type: "audio/webm",
-                });
-
-                if (audio.size > 0) {
-                    setArquivoSelecionado(
-                        new File([audio], `audio-${Date.now()}.webm`, {
-                            type: "audio/webm",
-                        }),
-                    );
-                }
-
-                fluxo.getTracks().forEach((trilha) => trilha.stop());
-                fluxoAudioRef.current = null;
-                gravadorAudioRef.current = null;
-                partesAudioRef.current = [];
-            };
-
-            gravador.start();
             setGravandoAudio(true);
         } catch (erro) {
-            console.error("Erro ao acessar o microfone:", erro);
-            window.alert("Não foi possível acessar o microfone.");
+            if (cicloAtual === cicloGravacaoAudioRef.current) {
+                console.error("Erro ao acessar o microfone:", erro);
+                window.alert(obterMensagemErroGravacaoAudio(erro));
+            }
+        } finally {
+            if (cicloAtual === cicloGravacaoAudioRef.current) {
+                processandoGravacaoAudioRef.current = false;
+                setProcessandoGravacaoAudio(false);
+            }
         }
     }
 
-    useEffect(() => () => {
-        if (gravadorAudioRef.current?.state === "recording") {
-            gravadorAudioRef.current.stop();
-        }
+    function cancelarGravacaoAudio() {
+        cicloGravacaoAudioRef.current += 1;
+        gravadorAudioRef.current?.cancelar();
+        gravadorAudioRef.current = null;
+        processandoGravacaoAudioRef.current = false;
+        setProcessandoGravacaoAudio(false);
+        setGravandoAudio(false);
+    }
 
-        fluxoAudioRef.current?.getTracks().forEach((trilha) => trilha.stop());
+    useEffect(() => () => {
+        cicloGravacaoAudioRef.current += 1;
+        gravadorAudioRef.current?.cancelar();
+        gravadorAudioRef.current = null;
     }, []);
 
     function formatarTamanhoArquivo(tamanho: number) {
@@ -1404,10 +1434,22 @@ function Home() {
                         <button
                         type="button"
                         className={gravandoAudio ? "gravando" : undefined}
-                        aria-label={gravandoAudio ? "Parar gravação" : "Gravar áudio"}
-                        title={gravandoAudio ? "Parar gravação" : "Gravar áudio"}
+                        aria-label={
+                            processandoGravacaoAudio
+                                ? "Processando áudio"
+                                : gravandoAudio
+                                    ? "Parar gravação"
+                                    : "Gravar áudio"
+                        }
+                        title={
+                            processandoGravacaoAudio
+                                ? "Processando áudio"
+                                : gravandoAudio
+                                    ? "Parar gravação"
+                                    : "Gravar áudio"
+                        }
                         onClick={() => void alternarGravacaoAudio()}
-                        disabled={enviandoMensagem}
+                        disabled={enviandoMensagem || processandoGravacaoAudio}
                         >
                         <svg
                             width="16"
@@ -1429,7 +1471,9 @@ function Home() {
                         onClick={() => void enviarMensagem()}
                         disabled={
                             (!mensagem.trim() && !arquivoSelecionado) ||
-                            enviandoMensagem
+                            enviandoMensagem ||
+                            gravandoAudio ||
+                            processandoGravacaoAudio
                         }
                         >
                         <svg

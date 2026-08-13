@@ -160,7 +160,10 @@ export class ConversasController {
                 "audio/ogg",
                 "audio/wav",
                 "audio/webm",
-                "audio/mp4"
+                "audio/mp4",
+                "audio/aac",
+                "audio/x-m4a",
+                "audio/3gpp"
             ]);
 
             if (!tiposPermitidos.has(arquivo.mimetype)) {

@@ -896,7 +896,10 @@ export class ConversasService {
             "audio/ogg": ".ogg",
             "audio/wav": ".wav",
             "audio/webm": ".webm",
-            "audio/mp4": ".m4a"
+            "audio/mp4": ".m4a",
+            "audio/aac": ".aac",
+            "audio/x-m4a": ".m4a",
+            "audio/3gpp": ".3gp"
         };
 
         return extensoes[mime] ?? ".bin";

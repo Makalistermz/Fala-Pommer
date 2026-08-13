@@ -1250,10 +1250,15 @@
         background: transparent;
         color: #172033;
         cursor: pointer;
+        transition: .3s;
+    }
+
+    .chat-header__voltar:hover {
+        background: #e7f0ff;
     }
 
     .chat-header__voltar:active {
-        background: #e7f0ff;
+        scale: .9;
     }
 
     .mensagem-anexo--audio {

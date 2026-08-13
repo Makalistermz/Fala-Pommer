@@ -17,6 +17,7 @@ import {
 } from "../library/gravadorAudio";
 
 type TipoUsuario = "user" | "admin" | "funcionario";
+type FiltroConversa = "todos" | "nao-lidas" | "grupos";
 
 interface UsuarioBasico {
     id: number;
@@ -133,7 +134,8 @@ function Home() {
 
     const [carregandoUsuarios, setCarregandoUsuarios] = useState(false);
 
-    const [filtroAtivo, setFiltroAtivo] = useState("todos");
+    const [filtroAtivo, setFiltroAtivo] =
+        useState<FiltroConversa>("todos");
 
     const [menuAberto, setMenuAberto] = useState(false);
 
@@ -642,6 +644,15 @@ function Home() {
     }
 
     const conversasFiltradas = conversas.filter((conversa) => {
+        const correspondeAoFiltro =
+            filtroAtivo === "nao-lidas"
+                ? conversa.mensagensNaoLidas > 0
+                : filtroAtivo !== "grupos";
+
+        if (!correspondeAoFiltro) {
+            return false;
+        }
+
         const texto =
         conversa.tipo === "privada"
             ? `${conversa.contato.nome} ${conversa.contato.tipo_usuario}`
@@ -949,38 +960,44 @@ function Home() {
 
             <div className="filtros">
             <div className="filtros-lista">
-                <div
+                <button
+                type="button"
                 className={`filtro-item filtro-todos ${
                     filtroAtivo === "todos" ? "ativo" : ""
                 }`}
                 onClick={() => setFiltroAtivo("todos")}
+                aria-pressed={filtroAtivo === "todos"}
                 >
                 <div className="filtro-conteudo">
                     <span className="filtro-texto">Todos</span>
                 </div>
-                </div>
+                </button>
 
-                <div
+                <button
+                type="button"
                 className={`filtro-item filtro-nao-lidas ${
                     filtroAtivo === "nao-lidas" ? "ativo" : ""
                 }`}
                 onClick={() => setFiltroAtivo("nao-lidas")}
+                aria-pressed={filtroAtivo === "nao-lidas"}
                 >
                 <div className="filtro-conteudo">
                     <span className="filtro-texto">Não lidas</span>
                 </div>
-                </div>
+                </button>
 
-                <div
+                <button
+                type="button"
                 className={`filtro-item filtro-grupos ${
                     filtroAtivo === "grupos" ? "ativo" : ""
                 }`}
                 onClick={() => setFiltroAtivo("grupos")}
+                aria-pressed={filtroAtivo === "grupos"}
                 >
                 <div className="filtro-conteudo">
                     <span className="filtro-texto">Grupos</span>
                 </div>
-                </div>
+                </button>
             </div>
             </div>
 
@@ -1030,9 +1047,15 @@ function Home() {
                 </button>
             ))}
 
-            {buscaConversa.trim() && conversasFiltradas.length === 0 && (
+            {conversasFiltradas.length === 0 && (
                 <p className="lista-conversas__vazia">
-                Nenhuma conversa encontrada.
+                {filtroAtivo === "nao-lidas"
+                    ? "Nenhuma conversa não lida."
+                    : filtroAtivo === "grupos"
+                        ? "Nenhum grupo disponível."
+                        : buscaConversa.trim()
+                            ? "Nenhuma conversa encontrada."
+                            : "Nenhuma conversa disponível."}
                 </p>
             )}
             </section>

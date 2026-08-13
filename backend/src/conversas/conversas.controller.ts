@@ -129,6 +129,24 @@ export class ConversasController {
     }
 
     /*
+     * Registra que o usuário leu todas as mensagens
+     * recebidas até o momento nesta conversa.
+     */
+    @Post(":conversaId/leitura")
+    @HttpCode(200)
+    @Perfis("user", "funcionario", "admin")
+    marcarComoLida(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Param("conversaId", ParseIntPipe)
+        conversaId: number
+    ) {
+        return this.conversasService.marcarComoLida(
+            requisicao.usuario!.sub,
+            conversaId
+        );
+    }
+
+    /*
      * Todos podem responder a uma conversa à qual possuem acesso.
      */
     @Post(":conversaId/mensagens")

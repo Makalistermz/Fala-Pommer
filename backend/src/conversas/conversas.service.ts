@@ -959,6 +959,68 @@ export class ConversasService {
         });
     }
 
+    async marcarComoLida(
+        usuarioLogadoId: number,
+        conversaId: number
+    ) {
+        await this.verificarAcessoConversa(
+            usuarioLogadoId,
+            conversaId
+        );
+
+        const ultimaMensagem =
+            await this.prisma.mensagem.findFirst({
+                where: {
+                    conversa_id: conversaId
+                },
+
+                orderBy: {
+                    id: "desc"
+                },
+
+                select: {
+                    id: true
+                }
+            });
+
+        const leitura =
+            await this.prisma.conversa_leitura.upsert({
+                where: {
+                    conversa_id_usuario_id: {
+                        conversa_id: conversaId,
+                        usuario_id: usuarioLogadoId
+                    }
+                },
+
+                update: {
+                    ultima_mensagem_lida_id:
+                        ultimaMensagem?.id ?? null,
+                    lida_em: new Date()
+                },
+
+                create: {
+                    conversa_id: conversaId,
+                    usuario_id: usuarioLogadoId,
+                    ultima_mensagem_lida_id:
+                        ultimaMensagem?.id ?? null
+                },
+
+                select: {
+                    conversa_id: true,
+                    ultima_mensagem_lida_id: true,
+                    lida_em: true
+                }
+            });
+
+        return {
+            conversaId: leitura.conversa_id,
+            ultimaMensagemLidaId:
+                leitura.ultima_mensagem_lida_id,
+            lidaEm: leitura.lida_em,
+            mensagensNaoLidas: 0
+        };
+    }
+
     private identificarTipoArquivo(mime: string) {
         if (mime.startsWith("image/")) return "imagem";
         if (mime.startsWith("video/")) return "video";

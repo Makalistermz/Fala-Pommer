@@ -346,6 +346,7 @@
 
 .conversa-dados {
     flex: 1;
+    min-width: 0;
 
     display: flex;
     align-items: start;
@@ -355,16 +356,51 @@
 }
 
 .conversa-dados strong {
+    max-width: 100%;
+    overflow: hidden;
     color: #172033;
     font-family: var(--fonte-dm-sans);
     font-size: 16px;
     font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.conversa-dados span {
+.conversa-dados > span {
+    max-width: 100%;
+    overflow: hidden;
     color: #6e7e99;
     font-family: var(--fonte-dm-sans);
     font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.conversa-item--nao-lida .conversa-dados strong {
+    font-weight: 700;
+}
+
+.conversa-item--nao-lida .conversa-dados > span {
+    color: #344054;
+    font-weight: 600;
+}
+
+.conversa-nao-lidas {
+    display: inline-flex;
+    min-width: 23px;
+    height: 23px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #168821;
+    color: #ffffff;
+    box-shadow: 0 3px 8px rgba(22, 136, 33, 0.24);
+    font-family: var(--fonte-dm-sans);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
 }
 
 .nova-conversa {

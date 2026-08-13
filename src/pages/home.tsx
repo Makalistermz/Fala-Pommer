@@ -59,6 +59,7 @@ interface ConversaSetor {
     };
 
     usuario: UsuarioBasico;
+    mensagensNaoLidas: number;
     ultimaMensagem: UltimaMensagem | null;
 }
 
@@ -71,6 +72,7 @@ interface ConversaPrivada {
         nome: string;
         tipo_usuario: TipoUsuario;
     };
+    mensagensNaoLidas: number;
     ultimaMensagem: UltimaMensagem | null;
 }
 
@@ -490,18 +492,64 @@ function Home() {
     );
 
     function adicionarEAbrirConversa(conversa: Conversa) {
-        setConversas((conversasAtuais) => {
-            const jaExiste = conversasAtuais.some((item) => item.id === conversa.id);
+        const conversaNormalizada: Conversa = {
+            ...conversa,
+            mensagensNaoLidas: conversa.mensagensNaoLidas ?? 0,
+        };
 
-        return jaExiste
-            ? conversasAtuais.map((item) =>
-                item.id === conversa.id ? conversa : item,
-            )
-            : [conversa, ...conversasAtuais];
+        setConversas((conversasAtuais) => {
+            const jaExiste = conversasAtuais.some(
+                (item) => item.id === conversaNormalizada.id,
+            );
+
+            return jaExiste
+                ? conversasAtuais.map((item) =>
+                    item.id === conversaNormalizada.id
+                        ? conversaNormalizada
+                        : item,
+                )
+                : [conversaNormalizada, ...conversasAtuais];
         });
 
         setNovaConversaAberta(false);
-        void abrirConversa(conversa);
+        void abrirConversa(conversaNormalizada);
+    }
+
+    async function marcarConversaComoLida(
+        conversaId: number,
+        token: string,
+    ) {
+        try {
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/leitura`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            );
+
+            if (!resposta.ok) {
+                throw new Error("Não foi possível marcar a conversa como lida.");
+            }
+
+            setConversas((conversasAtuais) =>
+                conversasAtuais.map((item) =>
+                    item.id === conversaId
+                        ? { ...item, mensagensNaoLidas: 0 }
+                        : item,
+                ),
+            );
+
+            setConversaSelecionada((conversaAtual) =>
+                conversaAtual?.id === conversaId
+                    ? { ...conversaAtual, mensagensNaoLidas: 0 }
+                    : conversaAtual,
+            );
+        } catch (erro) {
+            console.error("Erro ao marcar conversa como lida:", erro);
+        }
     }
 
     async function abrirConversa(conversa: Conversa) {
@@ -512,6 +560,11 @@ function Home() {
         setCarregandoMensagens(true);
 
         const token = localStorage.getItem("access_token");
+
+        if (!token) {
+            setCarregandoMensagens(false);
+            return;
+        }
 
         try {
             const resposta = await fetch(
@@ -530,6 +583,7 @@ function Home() {
             const dados: MensagemChat[] = await resposta.json();
 
             setMensagensChat(dados);
+            await marcarConversaComoLida(conversa.id, token);
         } catch (erro) {
             console.error(erro);
             setMensagensChat([]);
@@ -938,6 +992,10 @@ function Home() {
                 onClick={() => void abrirConversa(conversa)}
                 className={`conversa-item ${
                     conversaSelecionada?.id === conversa.id ? "contato-ativo" : ""
+                } ${
+                    conversa.mensagensNaoLidas > 0
+                        ? "conversa-item--nao-lida"
+                        : ""
                 }`}
                 >
                 <div className="conversa-avatar">
@@ -954,6 +1012,21 @@ function Home() {
                             : "Conversa iniciada")}
                     </span>
                 </div>
+
+                {conversa.mensagensNaoLidas > 0 && (
+                    <span
+                    className="conversa-nao-lidas"
+                    aria-label={`${conversa.mensagensNaoLidas} ${
+                        conversa.mensagensNaoLidas === 1
+                            ? "mensagem não lida"
+                            : "mensagens não lidas"
+                    }`}
+                    >
+                    {conversa.mensagensNaoLidas > 99
+                        ? "99+"
+                        : conversa.mensagensNaoLidas}
+                    </span>
+                )}
                 </button>
             ))}
 

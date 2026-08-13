@@ -108,6 +108,8 @@ function Home() {
     const [conversaSelecionada, setConversaSelecionada] =
         useState<Conversa | null>(null);
 
+    const [chatMobileAberto, setChatMobileAberto] = useState(false);
+
     const [mensagensChat, setMensagensChat] = useState<MensagemChat[]>([]);
 
     const [carregandoMensagens, setCarregandoMensagens] = useState(false);
@@ -498,6 +500,7 @@ function Home() {
 
     async function abrirConversa(conversa: Conversa) {
         setConversaSelecionada(conversa);
+        setChatMobileAberto(true);
         setMensagensChat([]);
         setCarregandoMensagens(true);
 
@@ -747,7 +750,7 @@ function Home() {
     }
 
     return (
-        <main className="home">
+        <main className={`home ${chatMobileAberto ? "home--chat-mobile-aberto" : ""}`}>
         <aside className="conversas">
             <header className="conversas-header">
             <div className="header-name">
@@ -1060,6 +1063,29 @@ function Home() {
             <>
                 <header className="chat-header">
                 <div className="chat-header__usuario">
+                    <button
+                    type="button"
+                    className="chat-header__voltar"
+                    aria-label="Voltar para as conversas"
+                    onClick={() => setChatMobileAberto(false)}
+                    >
+                    <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        aria-hidden="true"
+                    >
+                        <path
+                        d="M15 18l-6-6 6-6"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        />
+                    </svg>
+                    </button>
+
                     <div className="chat-header__avatar">
                     {nomeDaConversa(conversaSelecionada).charAt(0).toUpperCase()}
                     </div>

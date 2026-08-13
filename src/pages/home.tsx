@@ -1401,7 +1401,7 @@ function Home() {
                         </button>
 
                         {seletorEmojiAberto && (
-                        <div className="chat-input__emojis">
+                        <div className="chat-input__emojis" data-lenis-prevent>
                             <EmojiPicker
                             aoSelecionar={(emoji) => {
                                 adicionarEmoji(emoji);

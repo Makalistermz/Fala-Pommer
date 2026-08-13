@@ -1,4 +1,5 @@
 import brasao from "../assets/img/brasao.png";
+import somNovaMensagem from "../assets/audio/notificacao.mp3";
 import "./css/home.css";
 import {
     useEffect,
@@ -34,6 +35,12 @@ interface UsuarioConversa extends UsuarioBasico {
         nome: string;
         sigla: string;
     } | null;
+}
+
+interface UsuarioAutenticado {
+    sub: number;
+    email: string;
+    tipo: TipoUsuario;
 }
 
 interface Setor {
@@ -109,6 +116,32 @@ interface MensagemChat {
     } | null;
 }
 
+function mensagemFoiEnviadaPeloUsuario(
+    item: MensagemChat,
+    usuario: UsuarioAutenticado | null,
+    conversa: Conversa | null,
+) {
+    if (!usuario || !conversa) {
+        return false;
+    }
+
+    if (conversa.tipo === "privada") {
+        const remetenteRealId = item.autorReal?.id ?? item.remetente.id;
+        return remetenteRealId === usuario.sub;
+    }
+
+    if (usuario.tipo === "user") {
+        return item.origem === "usuario" && item.remetente.id === usuario.sub;
+    }
+
+    if (usuario.tipo === "funcionario") {
+        const remetenteRealId = item.autorReal?.id ?? item.remetente.id;
+        return item.origem === "setor" && remetenteRealId === usuario.sub;
+    }
+
+    return false;
+}
+
 function Home() {
     const [novaConversaAberta, setNovaConversaAberta] = useState(false);
 
@@ -132,6 +165,16 @@ function Home() {
     const idsAnimadosRef = useRef<Set<number>>(new Set());
     const conversaAbertaIdRef = useRef<number | null>(null);
     const ultimaMensagemChatIdRef = useRef(0);
+    const historicoChatCarregadoRef = useRef(false);
+    const somNotificacaoRef = useRef<HTMLAudioElement | null>(null);
+    const audioNotificacaoLiberadoRef = useRef(false);
+    const conversasSincronizadasRef = useRef(false);
+    const estadoConversasRef = useRef(
+        new Map<number, {
+            ultimaMensagemId: number | null;
+            mensagensNaoLidas: number;
+        }>(),
+    );
 
     const [buscaUsuario, setBuscaUsuario] = useState("");
 
@@ -169,6 +212,72 @@ function Home() {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const audio = new Audio(somNovaMensagem);
+        let liberando = false;
+
+        audio.preload = "auto";
+        audio.volume = 0.7;
+        somNotificacaoRef.current = audio;
+
+        function removerEventosDeLiberacao() {
+            window.removeEventListener("pointerdown", liberarAudio);
+            window.removeEventListener("keydown", liberarAudio);
+        }
+
+        async function liberarAudio() {
+            if (audioNotificacaoLiberadoRef.current || liberando) {
+                return;
+            }
+
+            liberando = true;
+
+            try {
+                audio.muted = true;
+                await audio.play();
+                audio.pause();
+                audio.currentTime = 0;
+                audio.muted = false;
+                audioNotificacaoLiberadoRef.current = true;
+                removerEventosDeLiberacao();
+            } catch {
+                audio.muted = false;
+            } finally {
+                liberando = false;
+            }
+        }
+
+        window.addEventListener("pointerdown", liberarAudio);
+        window.addEventListener("keydown", liberarAudio);
+
+        return () => {
+            removerEventosDeLiberacao();
+            audio.pause();
+            somNotificacaoRef.current = null;
+            audioNotificacaoLiberadoRef.current = false;
+        };
+    }, []);
+
+    function tocarSomDeNovaMensagem() {
+        const audio = somNotificacaoRef.current;
+
+        if (!audio) {
+            return;
+        }
+
+        audio.pause();
+        audio.currentTime = 0;
+        audio.muted = false;
+
+        void audio.play()
+            .then(() => {
+                audioNotificacaoLiberadoRef.current = true;
+            })
+            .catch(() => {
+                // O navegador ou WebView ainda aguarda interação do usuário.
+            });
+    }
+
     async function sair() {
         const token = localStorage.getItem("access_token");
 
@@ -187,13 +296,7 @@ function Home() {
         }
     }
 
-    interface Usuario {
-        sub: number;
-        email: string;
-        tipo: TipoUsuario;
-    }
-
-    const [usuario, setUsuario] = useState<Usuario | null>(null);
+    const [usuario, setUsuario] = useState<UsuarioAutenticado | null>(null);
 
     useEffect(() => {
         async function buscarPerfil() {
@@ -287,7 +390,45 @@ function Home() {
                 });
 
                 if (ativo) {
+                    const deveTocarNotificacao =
+                        conversasSincronizadasRef.current &&
+                        todasConversas.some((conversa) => {
+                            if (conversa.id === conversaAbertaId) {
+                                return false;
+                            }
+
+                            const estadoAnterior =
+                                estadoConversasRef.current.get(conversa.id);
+
+                            if (!estadoAnterior) {
+                                return conversa.mensagensNaoLidas > 0;
+                            }
+
+                            return (
+                                conversa.mensagensNaoLidas >
+                                    estadoAnterior.mensagensNaoLidas &&
+                                conversa.ultimaMensagem?.id !==
+                                    estadoAnterior.ultimaMensagemId
+                            );
+                        });
+
+                    estadoConversasRef.current = new Map(
+                        todasConversas.map((conversa) => [
+                            conversa.id,
+                            {
+                                ultimaMensagemId:
+                                    conversa.ultimaMensagem?.id ?? null,
+                                mensagensNaoLidas:
+                                    conversa.mensagensNaoLidas,
+                            },
+                        ]),
+                    );
+                    conversasSincronizadasRef.current = true;
                     setConversas(todasConversas);
+
+                    if (deveTocarNotificacao) {
+                        tocarSomDeNovaMensagem();
+                    }
                 }
             } catch (erro) {
                 console.error("Erro ao carregar conversas:", erro);
@@ -592,6 +733,15 @@ function Home() {
                 throw new Error("Não foi possível marcar a conversa como lida.");
             }
 
+            const leitura = await resposta.json() as {
+                ultimaMensagemLidaId: number | null;
+            };
+
+            estadoConversasRef.current.set(conversaId, {
+                ultimaMensagemId: leitura.ultimaMensagemLidaId,
+                mensagensNaoLidas: 0,
+            });
+
             setConversas((conversasAtuais) =>
                 conversasAtuais.map((item) =>
                     item.id === conversaId
@@ -601,7 +751,8 @@ function Home() {
             );
 
             setConversaSelecionada((conversaAtual) =>
-                conversaAtual?.id === conversaId
+                conversaAtual?.id === conversaId &&
+                conversaAtual.mensagensNaoLidas !== 0
                     ? { ...conversaAtual, mensagensNaoLidas: 0 }
                     : conversaAtual,
             );
@@ -614,6 +765,7 @@ function Home() {
         cancelarGravacaoAudio();
         conversaAbertaIdRef.current = conversa.id;
         ultimaMensagemChatIdRef.current = 0;
+        historicoChatCarregadoRef.current = false;
         setConversaSelecionada(conversa);
         setChatMobileAberto(true);
         setMensagensChat([]);
@@ -650,6 +802,7 @@ function Home() {
                 0,
                 ...dados.map((item) => item.id),
             );
+            historicoChatCarregadoRef.current = true;
             setMensagensChat(dados);
             await marcarConversaComoLida(conversa.id, token);
         } catch (erro) {
@@ -668,6 +821,7 @@ function Home() {
     function fecharChatMobile() {
         conversaAbertaIdRef.current = null;
         ultimaMensagemChatIdRef.current = 0;
+        historicoChatCarregadoRef.current = false;
         setChatMobileAberto(false);
     }
 
@@ -697,27 +851,6 @@ function Home() {
         }
 
         return "Conversa privada";
-    }
-
-    function mensagemFoiEnviadaPorMim(item: MensagemChat) {
-        if (!usuario || !conversaSelecionada) {
-            return false;
-        }
-
-        if (conversaSelecionada.tipo === "privada") {
-            const remetenteRealId = item.autorReal?.id ?? item.remetente.id;
-            return remetenteRealId === usuario.sub;
-        }
-
-        if (usuario.tipo === "user") {
-            return item.origem === "usuario" && item.remetente.id === usuario.sub;
-        }
-
-        if (usuario.tipo === "funcionario") {
-            return item.origem === "setor";
-        }
-
-        return false;
     }
 
     const conversasFiltradas = conversas.filter((conversa) => {
@@ -796,13 +929,42 @@ function Home() {
                     return;
                 }
 
+                const historicoJaCarregado =
+                    historicoChatCarregadoRef.current;
                 const mensagensNovas = dados.filter(
                     (item) => item.id > ultimaMensagemChatIdRef.current,
                 );
 
+                if (!historicoJaCarregado) {
+                    ultimaMensagemChatIdRef.current = Math.max(
+                        0,
+                        ...dados.map((item) => item.id),
+                    );
+                    historicoChatCarregadoRef.current = true;
+                    setMensagensChat(dados);
+
+                    const ultimaMensagem = dados.at(-1);
+
+                    if (ultimaMensagem) {
+                        atualizarConversaComMensagem(ultimaMensagem);
+                    }
+
+                    await marcarConversaComoLida(conversaId, token);
+                    return;
+                }
+
                 if (mensagensNovas.length === 0) {
                     return;
                 }
+
+                const recebeuMensagemDeOutraPessoa =
+                    mensagensNovas.some(
+                        (item) => !mensagemFoiEnviadaPeloUsuario(
+                            item,
+                            usuario,
+                            conversaSelecionada,
+                        ),
+                    );
 
                 ultimaMensagemChatIdRef.current = Math.max(
                     ultimaMensagemChatIdRef.current,
@@ -815,6 +977,10 @@ function Home() {
 
                 if (ultimaMensagem) {
                     atualizarConversaComMensagem(ultimaMensagem);
+                }
+
+                if (recebeuMensagemDeOutraPessoa) {
+                    tocarSomDeNovaMensagem();
                 }
 
                 await marcarConversaComoLida(conversaId, token);
@@ -849,7 +1015,7 @@ function Home() {
                 atualizarAoVoltarParaPagina,
             );
         };
-    }, [conversaSelecionada?.id, chatMobileAberto]);
+    }, [chatMobileAberto, conversaSelecionada, usuario]);
 
     useEffect(() => {
         idsAnimadosRef.current.clear();
@@ -1413,7 +1579,11 @@ function Home() {
 
                     {!carregandoMensagens &&
                         mensagensChat.map((item) => {
-                        const enviadaPorMim = mensagemFoiEnviadaPorMim(item);
+                        const enviadaPorMim = mensagemFoiEnviadaPeloUsuario(
+                            item,
+                            usuario,
+                            conversaSelecionada,
+                        );
 
                         return (
                             <div

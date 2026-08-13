@@ -57,7 +57,8 @@ export const ModelName = {
   conversa_participante: 'conversa_participante',
   conversa_setor: 'conversa_setor',
   mensagem: 'mensagem',
-  setores: 'setores'
+  setores: 'setores',
+  conversa_leitura: 'conversa_leitura'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -137,12 +138,12 @@ export const MensagemScalarFieldEnum = {
   remetente_id: 'remetente_id',
   origem: 'origem',
   conteudo: 'conteudo',
+  enviada_em: 'enviada_em',
   arquivo_nome: 'arquivo_nome',
   arquivo_url: 'arquivo_url',
   arquivo_tipo: 'arquivo_tipo',
   arquivo_mime: 'arquivo_mime',
-  arquivo_tamanho: 'arquivo_tamanho',
-  enviada_em: 'enviada_em'
+  arquivo_tamanho: 'arquivo_tamanho'
 } as const
 
 export type MensagemScalarFieldEnum = (typeof MensagemScalarFieldEnum)[keyof typeof MensagemScalarFieldEnum]
@@ -155,6 +156,16 @@ export const SetoresScalarFieldEnum = {
 } as const
 
 export type SetoresScalarFieldEnum = (typeof SetoresScalarFieldEnum)[keyof typeof SetoresScalarFieldEnum]
+
+
+export const Conversa_leituraScalarFieldEnum = {
+  conversa_id: 'conversa_id',
+  usuario_id: 'usuario_id',
+  ultima_mensagem_lida_id: 'ultima_mensagem_lida_id',
+  lida_em: 'lida_em'
+} as const
+
+export type Conversa_leituraScalarFieldEnum = (typeof Conversa_leituraScalarFieldEnum)[keyof typeof Conversa_leituraScalarFieldEnum]
 
 
 export const SortOrder = {

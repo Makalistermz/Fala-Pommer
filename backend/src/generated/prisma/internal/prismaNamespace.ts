@@ -403,7 +403,8 @@ export const ModelName = {
   conversa_participante: 'conversa_participante',
   conversa_setor: 'conversa_setor',
   mensagem: 'mensagem',
-  setores: 'setores'
+  setores: 'setores',
+  conversa_leitura: 'conversa_leitura'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores"
+    modelProps: "cadastro" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -885,6 +886,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    conversa_leitura: {
+      payload: Prisma.$conversa_leituraPayload<ExtArgs>
+      fields: Prisma.conversa_leituraFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.conversa_leituraFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_leituraPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.conversa_leituraFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_leituraPayload>
+        }
+        findFirst: {
+          args: Prisma.conversa_leituraFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_leituraPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.conversa_leituraFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_leituraPayload>
+        }
+        findMany: {
+          args: Prisma.conversa_leituraFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_leituraPayload>[]
+        }
+        create: {
+          args: Prisma.conversa_leituraCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_leituraPayload>
+        }
+        createMany: {
+          args: Prisma.conversa_leituraCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.conversa_leituraDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_leituraPayload>
+        }
+        update: {
+          args: Prisma.conversa_leituraUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_leituraPayload>
+        }
+        deleteMany: {
+          args: Prisma.conversa_leituraDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.conversa_leituraUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.conversa_leituraUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_leituraPayload>
+        }
+        aggregate: {
+          args: Prisma.Conversa_leituraAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateConversa_leitura>
+        }
+        groupBy: {
+          args: Prisma.conversa_leituraGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Conversa_leituraGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.conversa_leituraCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Conversa_leituraCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -985,12 +1052,12 @@ export const MensagemScalarFieldEnum = {
   remetente_id: 'remetente_id',
   origem: 'origem',
   conteudo: 'conteudo',
+  enviada_em: 'enviada_em',
   arquivo_nome: 'arquivo_nome',
   arquivo_url: 'arquivo_url',
   arquivo_tipo: 'arquivo_tipo',
   arquivo_mime: 'arquivo_mime',
-  arquivo_tamanho: 'arquivo_tamanho',
-  enviada_em: 'enviada_em'
+  arquivo_tamanho: 'arquivo_tamanho'
 } as const
 
 export type MensagemScalarFieldEnum = (typeof MensagemScalarFieldEnum)[keyof typeof MensagemScalarFieldEnum]
@@ -1003,6 +1070,16 @@ export const SetoresScalarFieldEnum = {
 } as const
 
 export type SetoresScalarFieldEnum = (typeof SetoresScalarFieldEnum)[keyof typeof SetoresScalarFieldEnum]
+
+
+export const Conversa_leituraScalarFieldEnum = {
+  conversa_id: 'conversa_id',
+  usuario_id: 'usuario_id',
+  ultima_mensagem_lida_id: 'ultima_mensagem_lida_id',
+  lida_em: 'lida_em'
+} as const
+
+export type Conversa_leituraScalarFieldEnum = (typeof Conversa_leituraScalarFieldEnum)[keyof typeof Conversa_leituraScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1264,6 +1341,7 @@ export type GlobalOmitConfig = {
   conversa_setor?: Prisma.conversa_setorOmit
   mensagem?: Prisma.mensagemOmit
   setores?: Prisma.setoresOmit
+  conversa_leitura?: Prisma.conversa_leituraOmit
 }
 
 /* Types for Logging */

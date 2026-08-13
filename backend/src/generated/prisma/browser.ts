@@ -52,3 +52,8 @@ export type mensagem = Prisma.mensagemModel
  * 
  */
 export type setores = Prisma.setoresModel
+/**
+ * Model conversa_leitura
+ * 
+ */
+export type conversa_leitura = Prisma.conversa_leituraModel

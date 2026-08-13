@@ -74,6 +74,16 @@ export class ConversasService {
                             arquivo_tipo: true,
                             enviada_em: true
                         }
+                    },
+
+                    conversa_leitura: {
+                        where: {
+                            usuario_id: usuarioLogadoId
+                        },
+
+                        select: {
+                            ultima_mensagem_lida_id: true
+                        }
                     }
                 },
 
@@ -81,6 +91,17 @@ export class ConversasService {
                     criada_em: "desc"
                 }
             });
+
+        const mensagensNaoLidas =
+            await this.contarMensagensNaoLidas(
+                usuarioLogadoId,
+                conversas.map((conversa) => ({
+                    id: conversa.id,
+                    ultimaMensagemLidaId:
+                        conversa.conversa_leitura[0]
+                            ?.ultima_mensagem_lida_id ?? null
+                }))
+            );
 
         return conversas.flatMap((conversa) => {
             const contato =
@@ -98,6 +119,8 @@ export class ConversasService {
                 tipo: conversa.tipo,
                 criadaEm: conversa.criada_em,
                 contato,
+                mensagensNaoLidas:
+                    mensagensNaoLidas.get(conversa.id) ?? 0,
 
                 ultimaMensagem: ultimaMensagem
                     ? {
@@ -368,6 +391,16 @@ export class ConversasService {
                                     arquivo_tipo: true,
                                     enviada_em: true
                                 }
+                            },
+
+                            conversa_leitura: {
+                                where: {
+                                    usuario_id: usuarioLogadoId
+                                },
+
+                                select: {
+                                    ultima_mensagem_lida_id: true
+                                }
                             }
                         }
                     },
@@ -393,6 +426,18 @@ export class ConversasService {
                 }
             });
 
+        const mensagensNaoLidas =
+            await this.contarMensagensNaoLidas(
+                usuarioLogadoId,
+                atendimentos.map((atendimento) => ({
+                    id: atendimento.conversa.id,
+                    ultimaMensagemLidaId:
+                        atendimento.conversa
+                            .conversa_leitura[0]
+                            ?.ultima_mensagem_lida_id ?? null
+                }))
+            );
+
         return atendimentos.map((atendimento) => {
             const ultimaMensagem =
                 atendimento.conversa.mensagens[0] ??
@@ -412,6 +457,10 @@ export class ConversasService {
                 },
 
                 usuario: atendimento.usuario,
+                mensagensNaoLidas:
+                    mensagensNaoLidas.get(
+                        atendimento.conversa.id
+                    ) ?? 0,
 
                 ultimaMensagem: ultimaMensagem
                     ? {
@@ -430,6 +479,49 @@ export class ConversasService {
                     : null
             };
         });
+    }
+
+    private async contarMensagensNaoLidas(
+        usuarioLogadoId: number,
+        conversas: Array<{
+            id: number;
+            ultimaMensagemLidaId: number | null;
+        }>
+    ) {
+        if (conversas.length === 0) {
+            return new Map<number, number>();
+        }
+
+        const contagens =
+            await this.prisma.mensagem.groupBy({
+                by: ["conversa_id"],
+
+                where: {
+                    OR: conversas.map((conversa) => ({
+                        conversa_id: conversa.id,
+                        remetente_id: {
+                            not: usuarioLogadoId
+                        },
+
+                        ...(conversa.ultimaMensagemLidaId !== null && {
+                            id: {
+                                gt: conversa.ultimaMensagemLidaId
+                            }
+                        })
+                    }))
+                },
+
+                _count: {
+                    _all: true
+                }
+            });
+
+        return new Map(
+            contagens.map((contagem) => [
+                contagem.conversa_id,
+                contagem._count._all
+            ])
+        );
     }
 
     /*

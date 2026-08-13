@@ -1072,7 +1072,7 @@ function Home() {
                 </div>
                 </header>
 
-                <div className="mensagens">
+                <div className="mensagens" data-lenis-prevent>
                     {carregandoMensagens && (
                         <p className="mensagens__status">Carregando mensagens...</p>
                     )}

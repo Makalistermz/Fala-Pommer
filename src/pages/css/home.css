@@ -670,9 +670,9 @@
 
 .mensagens {
     display: flex;
-    flex-direction: column;
-    gap: 7px;
+    flex-direction: column;;
     padding: 24px;
+    gap: 7px;
     min-height: 0;
     overflow-y: auto;
     background:
@@ -797,7 +797,7 @@
 .mensagem-balao time {
     position: absolute;
     right: 9px;
-    bottom: 6px;
+    bottom: 2px;
     color: #667085;
     font-family: var(--fonte-dm-sans);
     font-size: 10px;

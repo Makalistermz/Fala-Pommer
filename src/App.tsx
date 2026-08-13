@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router";
+import { useEffect } from "react";
 import "./App.css";
 import Login from "./pages/login";
 import Cadastro from "./pages/cadastro";
@@ -12,7 +13,13 @@ import Administracao from "./pages/administracao";
 import { initLenis } from "./library/lenis.ts"
 
 function App() {
-  initLenis();
+    useEffect(() => {
+      const lenis = initLenis();
+
+      return () => {
+        lenis.destroy();
+      };
+    }, []);
 
   return (
     <Routes>

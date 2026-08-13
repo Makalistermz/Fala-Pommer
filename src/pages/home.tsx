@@ -19,6 +19,9 @@ import {
 type TipoUsuario = "user" | "admin" | "funcionario";
 type FiltroConversa = "todos" | "nao-lidas" | "grupos";
 
+const INTERVALO_CONVERSAS_MS = 5_000;
+const INTERVALO_MENSAGENS_MS = 3_000;
+
 interface UsuarioBasico {
     id: number;
     nome: string;
@@ -127,6 +130,8 @@ function Home() {
     const fimMensagensRef = useRef<HTMLDivElement>(null);
     const balõesRef = useRef<Map<number, HTMLElement>>(new Map());
     const idsAnimadosRef = useRef<Set<number>>(new Set());
+    const conversaAbertaIdRef = useRef<number | null>(null);
+    const ultimaMensagemChatIdRef = useRef(0);
 
     const [buscaUsuario, setBuscaUsuario] = useState("");
 
@@ -226,12 +231,21 @@ function Home() {
     }, []);
 
     useEffect(() => {
+        let ativo = true;
+        let buscando = false;
+
         async function buscarConversas() {
+            if (buscando || document.visibilityState === "hidden") {
+                return;
+            }
+
             const token = localStorage.getItem("access_token");
 
             if (!token) {
                 return;
             }
+
+            buscando = true;
 
             try {
                 const headers = {
@@ -252,10 +266,15 @@ function Home() {
                     respostaSetores.json() as Promise<ConversaSetor[]>,
                 ]);
 
+                const conversaAbertaId = conversaAbertaIdRef.current;
                 const todasConversas: Conversa[] = [
                     ...conversasPrivadas,
                     ...conversasSetores,
-                ].sort((conversaA, conversaB) => {
+                ].map((conversa) =>
+                    conversa.id === conversaAbertaId
+                        ? { ...conversa, mensagensNaoLidas: 0 }
+                        : conversa,
+                ).sort((conversaA, conversaB) => {
                 const dataA = new Date(
                     conversaA.ultimaMensagem?.enviadaEm ?? conversaA.criadaEm,
                 ).getTime();
@@ -267,13 +286,42 @@ function Home() {
                 return dataB - dataA;
                 });
 
-                setConversas(todasConversas);
+                if (ativo) {
+                    setConversas(todasConversas);
+                }
             } catch (erro) {
                 console.error("Erro ao carregar conversas:", erro);
+            } finally {
+                buscando = false;
             }
         }
 
-        buscarConversas();
+        function atualizarAoVoltarParaPagina() {
+            if (document.visibilityState === "visible") {
+                void buscarConversas();
+            }
+        }
+
+        void buscarConversas();
+
+        const intervalo = window.setInterval(
+            () => void buscarConversas(),
+            INTERVALO_CONVERSAS_MS,
+        );
+
+        document.addEventListener(
+            "visibilitychange",
+            atualizarAoVoltarParaPagina,
+        );
+
+        return () => {
+            ativo = false;
+            window.clearInterval(intervalo);
+            document.removeEventListener(
+                "visibilitychange",
+                atualizarAoVoltarParaPagina,
+            );
+        };
     }, []);
 
     async function abrirNovaConversa() {
@@ -398,6 +446,33 @@ function Home() {
         }
     }
 
+    function atualizarConversaComMensagem(novaMensagem: MensagemChat) {
+        setConversas((conversasAtuais) =>
+            conversasAtuais.reduce<Conversa[]>((resultado, conversa) => {
+                if (conversa.id !== novaMensagem.conversaId) {
+                    resultado.push(conversa);
+                    return resultado;
+                }
+
+                const conversaAtualizada: Conversa = {
+                    ...conversa,
+                    mensagensNaoLidas: 0,
+                    ultimaMensagem: {
+                        id: novaMensagem.id,
+                        conteudo: novaMensagem.conteudo,
+                        origem: novaMensagem.origem,
+                        arquivoNome: novaMensagem.arquivo?.nome,
+                        arquivoTipo: novaMensagem.arquivo?.tipo,
+                        enviadaEm: novaMensagem.enviadaEm,
+                    },
+                };
+
+                resultado.unshift(conversaAtualizada);
+                return resultado;
+            }, []),
+        );
+    }
+
     async function enviarMensagem() {
         const conteudo = mensagem.trim();
         const token = localStorage.getItem("access_token");
@@ -449,31 +524,12 @@ function Home() {
 
             const novaMensagem = resultado as MensagemChat;
 
-            setMensagensChat((mensagensAtuais) => [...mensagensAtuais, novaMensagem]);
-
-            setConversas((conversasAtuais) =>
-                conversasAtuais.reduce<Conversa[]>((resultado, conversa) => {
-                if (conversa.id !== conversaSelecionada.id) {
-                    resultado.push(conversa);
-                    return resultado;
-                }
-
-                const conversaAtualizada: Conversa = {
-                    ...conversa,
-                    ultimaMensagem: {
-                    id: novaMensagem.id,
-                    conteudo: novaMensagem.conteudo,
-                    origem: novaMensagem.origem,
-                    arquivoNome: novaMensagem.arquivo?.nome,
-                    arquivoTipo: novaMensagem.arquivo?.tipo,
-                    enviadaEm: novaMensagem.enviadaEm,
-                    },
-                };
-
-                resultado.unshift(conversaAtualizada);
-                return resultado;
-                }, []),
+            ultimaMensagemChatIdRef.current = Math.max(
+                ultimaMensagemChatIdRef.current,
+                novaMensagem.id,
             );
+            setMensagensChat((mensagensAtuais) => [...mensagensAtuais, novaMensagem]);
+            atualizarConversaComMensagem(novaMensagem);
 
             setMensagem("");
             setArquivoSelecionado(null);
@@ -556,6 +612,8 @@ function Home() {
 
     async function abrirConversa(conversa: Conversa) {
         cancelarGravacaoAudio();
+        conversaAbertaIdRef.current = conversa.id;
+        ultimaMensagemChatIdRef.current = 0;
         setConversaSelecionada(conversa);
         setChatMobileAberto(true);
         setMensagensChat([]);
@@ -584,14 +642,33 @@ function Home() {
 
             const dados: MensagemChat[] = await resposta.json();
 
+            if (conversaAbertaIdRef.current !== conversa.id) {
+                return;
+            }
+
+            ultimaMensagemChatIdRef.current = Math.max(
+                0,
+                ...dados.map((item) => item.id),
+            );
             setMensagensChat(dados);
             await marcarConversaComoLida(conversa.id, token);
         } catch (erro) {
             console.error(erro);
-            setMensagensChat([]);
+
+            if (conversaAbertaIdRef.current === conversa.id) {
+                setMensagensChat([]);
+            }
         } finally {
-            setCarregandoMensagens(false);
+            if (conversaAbertaIdRef.current === conversa.id) {
+                setCarregandoMensagens(false);
+            }
         }
+    }
+
+    function fecharChatMobile() {
+        conversaAbertaIdRef.current = null;
+        ultimaMensagemChatIdRef.current = 0;
+        setChatMobileAberto(false);
     }
 
     function nomeDaConversa(conversa: Conversa) {
@@ -672,6 +749,107 @@ function Home() {
             setor.sigla_setor.toLowerCase().includes(busca)
         );
     });
+
+    useEffect(() => {
+        const conversaId = conversaSelecionada?.id;
+
+        if (!conversaId || !chatMobileAberto) {
+            return;
+        }
+
+        let ativo = true;
+        let buscando = false;
+
+        async function buscarNovasMensagens() {
+            if (buscando || document.visibilityState === "hidden") {
+                return;
+            }
+
+            const token = localStorage.getItem("access_token");
+
+            if (!token) {
+                return;
+            }
+
+            buscando = true;
+
+            try {
+                const resposta = await fetch(
+                    `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/mensagens`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível atualizar as mensagens.");
+                }
+
+                const dados = await resposta.json() as MensagemChat[];
+
+                if (
+                    !ativo ||
+                    conversaAbertaIdRef.current !== conversaId
+                ) {
+                    return;
+                }
+
+                const mensagensNovas = dados.filter(
+                    (item) => item.id > ultimaMensagemChatIdRef.current,
+                );
+
+                if (mensagensNovas.length === 0) {
+                    return;
+                }
+
+                ultimaMensagemChatIdRef.current = Math.max(
+                    ultimaMensagemChatIdRef.current,
+                    ...mensagensNovas.map((item) => item.id),
+                );
+
+                setMensagensChat(dados);
+
+                const ultimaMensagem = dados.at(-1);
+
+                if (ultimaMensagem) {
+                    atualizarConversaComMensagem(ultimaMensagem);
+                }
+
+                await marcarConversaComoLida(conversaId, token);
+            } catch (erro) {
+                console.error("Erro ao atualizar mensagens:", erro);
+            } finally {
+                buscando = false;
+            }
+        }
+
+        function atualizarAoVoltarParaPagina() {
+            if (document.visibilityState === "visible") {
+                void buscarNovasMensagens();
+            }
+        }
+
+        const intervalo = window.setInterval(
+            () => void buscarNovasMensagens(),
+            INTERVALO_MENSAGENS_MS,
+        );
+
+        document.addEventListener(
+            "visibilitychange",
+            atualizarAoVoltarParaPagina,
+        );
+
+        return () => {
+            ativo = false;
+            window.clearInterval(intervalo);
+            document.removeEventListener(
+                "visibilitychange",
+                atualizarAoVoltarParaPagina,
+            );
+        };
+    }, [conversaSelecionada?.id, chatMobileAberto]);
 
     useEffect(() => {
         idsAnimadosRef.current.clear();
@@ -1193,7 +1371,7 @@ function Home() {
                     type="button"
                     className="chat-header__voltar"
                     aria-label="Voltar para as conversas"
-                    onClick={() => setChatMobileAberto(false)}
+                    onClick={fecharChatMobile}
                     >
                     <svg
                         width="24"

@@ -241,7 +241,12 @@ function VisaoGeral() {
     useEffect(() => {
         async function carregarQuantSetores() {
             try {
-                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`);
+                const token = localStorage.getItem("access_token");
+                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
 
                 if (!resposta.ok) {
                     throw new Error("Não foi possível buscar os setores.");

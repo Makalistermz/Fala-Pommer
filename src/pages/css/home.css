@@ -675,9 +675,9 @@
     gap: 7px;
     min-height: 0;
     overflow-y: auto;
-    background:
-        radial-gradient(circle at top right, rgba(19, 81, 180, 0.04), transparent 36%),
-        #f8faff;
+    background-image: url(../../assets/img/background-mensagens.png);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .mensagens__status {
@@ -1173,6 +1173,23 @@
 
     .filtros-lista {
         gap: 8px;
+    }
+
+    .mensagem-anexo--audio {
+        width: 100%;
+        max-width: 100%;
+        min-width: 200px;
+        height: 40px;
+    }
+
+    .mensagem-balao {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 770px) {
+    .mensagem-anexo--audio {
+        min-width: 150px;
     }
 }
 

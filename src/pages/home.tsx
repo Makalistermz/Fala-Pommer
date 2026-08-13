@@ -23,6 +23,9 @@ type FiltroConversa = "todos" | "nao-lidas" | "grupos";
 
 const INTERVALO_CONVERSAS_MS = 5_000;
 const INTERVALO_MENSAGENS_MS = 3_000;
+const INTERVALO_CONSULTA_DIGITACAO_MS = 1_500;
+const INTERVALO_RENOVACAO_DIGITACAO_MS = 2_000;
+const TEMPO_PARAR_DIGITACAO_MS = 2_500;
 
 interface UsuarioBasico {
     id: number;
@@ -42,6 +45,11 @@ interface UsuarioAutenticado {
     sub: number;
     email: string;
     tipo: TipoUsuario;
+}
+
+interface UsuarioDigitando {
+    id: number;
+    nome: string;
 }
 
 interface Setor {
@@ -156,6 +164,8 @@ function Home() {
     const [chatMobileAberto, setChatMobileAberto] = useState(false);
 
     const [mensagensChat, setMensagensChat] = useState<MensagemChat[]>([]);
+    const [usuariosDigitando, setUsuariosDigitando] =
+        useState<UsuarioDigitando[]>([]);
 
     const [carregandoMensagens, setCarregandoMensagens] = useState(false);
 
@@ -177,6 +187,11 @@ function Home() {
             mensagensNaoLidas: number;
         }>(),
     );
+    const indicadorDigitandoRef = useRef<HTMLDivElement>(null);
+    const conversaDigitandoIdRef = useRef<number | null>(null);
+    const digitacaoAtivaRef = useRef(false);
+    const intervaloDigitacaoRef = useRef<number | null>(null);
+    const timeoutDigitacaoRef = useRef<number | null>(null);
 
     const [buscaUsuario, setBuscaUsuario] = useState("");
 
@@ -257,6 +272,69 @@ function Home() {
             audio.pause();
             somNotificacaoRef.current = null;
             audioNotificacaoLiberadoRef.current = false;
+        };
+    }, []);
+
+    useEffect(() => {
+        function encerrarDigitacaoAoOcultar() {
+            if (document.visibilityState !== "hidden") {
+                return;
+            }
+
+            const conversaId = conversaDigitandoIdRef.current;
+            const estavaDigitando = digitacaoAtivaRef.current;
+
+            if (intervaloDigitacaoRef.current !== null) {
+                window.clearInterval(intervaloDigitacaoRef.current);
+                intervaloDigitacaoRef.current = null;
+            }
+
+            if (timeoutDigitacaoRef.current !== null) {
+                window.clearTimeout(timeoutDigitacaoRef.current);
+                timeoutDigitacaoRef.current = null;
+            }
+
+            conversaDigitandoIdRef.current = null;
+            digitacaoAtivaRef.current = false;
+
+            if (conversaId !== null && estavaDigitando) {
+                const token = localStorage.getItem("access_token");
+
+                if (token) {
+                    void fetch(
+                        `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/digitando`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${token}`,
+                            },
+                            body: JSON.stringify({ digitando: false }),
+                            keepalive: true,
+                        },
+                    ).catch(() => undefined);
+                }
+            }
+        }
+
+        document.addEventListener(
+            "visibilitychange",
+            encerrarDigitacaoAoOcultar,
+        );
+
+        return () => {
+            document.removeEventListener(
+                "visibilitychange",
+                encerrarDigitacaoAoOcultar,
+            );
+
+            if (intervaloDigitacaoRef.current !== null) {
+                window.clearInterval(intervaloDigitacaoRef.current);
+            }
+
+            if (timeoutDigitacaoRef.current !== null) {
+                window.clearTimeout(timeoutDigitacaoRef.current);
+            }
         };
     }, []);
 
@@ -589,6 +667,95 @@ function Home() {
         }
     }
 
+    async function enviarStatusDigitacao(
+        conversaId: number,
+        digitando: boolean,
+    ) {
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+            return;
+        }
+
+        try {
+            await fetch(
+                `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/digitando`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ digitando }),
+                },
+            );
+        } catch (erro) {
+            console.error("Erro ao atualizar status de digitação:", erro);
+        }
+    }
+
+    function limparTemporizadoresDigitacao() {
+        if (intervaloDigitacaoRef.current !== null) {
+            window.clearInterval(intervaloDigitacaoRef.current);
+            intervaloDigitacaoRef.current = null;
+        }
+
+        if (timeoutDigitacaoRef.current !== null) {
+            window.clearTimeout(timeoutDigitacaoRef.current);
+            timeoutDigitacaoRef.current = null;
+        }
+    }
+
+    function pararDeInformarDigitacao() {
+        const conversaId = conversaDigitandoIdRef.current;
+        const estavaDigitando = digitacaoAtivaRef.current;
+
+        limparTemporizadoresDigitacao();
+        conversaDigitandoIdRef.current = null;
+        digitacaoAtivaRef.current = false;
+
+        if (conversaId !== null && estavaDigitando) {
+            void enviarStatusDigitacao(conversaId, false);
+        }
+    }
+
+    function informarDigitacao(conteudo: string) {
+        const conversaId = conversaSelecionada?.id;
+
+        if (!conversaId || !conteudo) {
+            pararDeInformarDigitacao();
+            return;
+        }
+
+        if (
+            conversaDigitandoIdRef.current !== null &&
+            conversaDigitandoIdRef.current !== conversaId
+        ) {
+            pararDeInformarDigitacao();
+        }
+
+        conversaDigitandoIdRef.current = conversaId;
+
+        if (!digitacaoAtivaRef.current) {
+            digitacaoAtivaRef.current = true;
+            void enviarStatusDigitacao(conversaId, true);
+
+            intervaloDigitacaoRef.current = window.setInterval(
+                () => void enviarStatusDigitacao(conversaId, true),
+                INTERVALO_RENOVACAO_DIGITACAO_MS,
+            );
+        }
+
+        if (timeoutDigitacaoRef.current !== null) {
+            window.clearTimeout(timeoutDigitacaoRef.current);
+        }
+
+        timeoutDigitacaoRef.current = window.setTimeout(
+            pararDeInformarDigitacao,
+            TEMPO_PARAR_DIGITACAO_MS,
+        );
+    }
+
     function atualizarConversaComMensagem(novaMensagem: MensagemChat) {
         setConversas((conversasAtuais) =>
             conversasAtuais.reduce<Conversa[]>((resultado, conversa) => {
@@ -628,6 +795,8 @@ function Home() {
         ) {
             return;
         }
+
+        pararDeInformarDigitacao();
 
         setEnviandoMensagem(true);
 
@@ -764,12 +933,14 @@ function Home() {
     }
 
     async function abrirConversa(conversa: Conversa) {
+        pararDeInformarDigitacao();
         cancelarGravacaoAudio();
         conversaAbertaIdRef.current = conversa.id;
         ultimaMensagemChatIdRef.current = 0;
         historicoChatCarregadoRef.current = false;
         rolagemInicialPendenteRef.current = true;
         setConversaSelecionada(conversa);
+        setUsuariosDigitando([]);
         setChatMobileAberto(true);
         setMensagensChat([]);
         setCarregandoMensagens(true);
@@ -822,10 +993,12 @@ function Home() {
     }
 
     function fecharChatMobile() {
+        pararDeInformarDigitacao();
         conversaAbertaIdRef.current = null;
         ultimaMensagemChatIdRef.current = 0;
         historicoChatCarregadoRef.current = false;
         setChatMobileAberto(false);
+        setUsuariosDigitando([]);
     }
 
     function nomeDaConversa(conversa: Conversa) {
@@ -885,6 +1058,124 @@ function Home() {
             setor.sigla_setor.toLowerCase().includes(busca)
         );
     });
+
+    useEffect(() => {
+        const conversaId = conversaSelecionada?.id;
+
+        if (!conversaId || !chatMobileAberto) {
+            setUsuariosDigitando([]);
+            return;
+        }
+
+        let ativo = true;
+        let buscando = false;
+
+        async function buscarUsuariosDigitando() {
+            if (buscando || document.visibilityState === "hidden") {
+                return;
+            }
+
+            const token = localStorage.getItem("access_token");
+
+            if (!token) {
+                return;
+            }
+
+            buscando = true;
+
+            try {
+                const resposta = await fetch(
+                    `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/digitando`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
+                );
+
+                if (!resposta.ok) {
+                    return;
+                }
+
+                const dados = await resposta.json() as {
+                    usuarios: UsuarioDigitando[];
+                };
+
+                if (ativo) {
+                    setUsuariosDigitando((usuariosAtuais) => {
+                        const naoMudou =
+                            usuariosAtuais.length === dados.usuarios.length &&
+                            usuariosAtuais.every((item, indice) =>
+                                item.id === dados.usuarios[indice]?.id &&
+                                item.nome === dados.usuarios[indice]?.nome,
+                            );
+
+                        return naoMudou
+                            ? usuariosAtuais
+                            : dados.usuarios;
+                    });
+                }
+            } catch (erro) {
+                console.error("Erro ao consultar digitação:", erro);
+            } finally {
+                buscando = false;
+            }
+        }
+
+        void buscarUsuariosDigitando();
+
+        const intervalo = window.setInterval(
+            () => void buscarUsuariosDigitando(),
+            INTERVALO_CONSULTA_DIGITACAO_MS,
+        );
+
+        return () => {
+            ativo = false;
+            window.clearInterval(intervalo);
+        };
+    }, [chatMobileAberto, conversaSelecionada?.id]);
+
+    useLayoutEffect(() => {
+        const indicador = indicadorDigitandoRef.current;
+
+        if (!indicador || usuariosDigitando.length === 0) {
+            return;
+        }
+
+        const pontos = indicador.querySelectorAll(".digitando-ponto");
+
+        // ANIMAÇÃO GSAP DO BALÃO "DIGITANDO"
+        // Altere scale, y, duration, stagger e ease aqui para personalizar.
+        const contextoGsap = gsap.context(() => {
+            gsap.fromTo(
+                indicador,
+                { opacity: 0, scale: 0.85, y: 6 },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.28,
+                    ease: "back.out(1.8)",
+                },
+            );
+
+            gsap.fromTo(
+                pontos,
+                { y: 0, opacity: 0.35 },
+                {
+                    y: -3,
+                    opacity: 1,
+                    duration: 0.45,
+                    stagger: 0.14,
+                    ease: "sine.inOut",
+                    repeat: -1,
+                    yoyo: true,
+                },
+            );
+        }, indicador);
+
+        return () => contextoGsap.revert();
+    }, [usuariosDigitando]);
 
     useEffect(() => {
         const conversaId = conversaSelecionada?.id;
@@ -1090,7 +1381,7 @@ function Home() {
             top: container.scrollHeight,
             behavior: "smooth",
         });
-    }, [mensagensChat, carregandoMensagens]);
+    }, [mensagensChat, carregandoMensagens, usuariosDigitando.length]);
 
     function adicionarEmoji(emoji: string) {
         setMensagem((mensagemAtual) => mensagemAtual + emoji);
@@ -1604,7 +1895,9 @@ function Home() {
                         <p className="mensagens__status">Carregando mensagens...</p>
                     )}
 
-                    {!carregandoMensagens && mensagensChat.length === 0 && (
+                    {!carregandoMensagens &&
+                    mensagensChat.length === 0 &&
+                    usuariosDigitando.length === 0 && (
                         <p className="mensagens__status">Nenhuma mensagem enviada.</p>
                     )}
 
@@ -1703,6 +1996,30 @@ function Home() {
                             </div>
                         );
                         })}
+
+                    {!carregandoMensagens && usuariosDigitando.length > 0 && (
+                        <div className="mensagem-linha mensagem-linha--recebida">
+                            <div
+                            ref={indicadorDigitandoRef}
+                            className="mensagem-balao mensagem-balao--digitando"
+                            role="status"
+                            aria-label={
+                                usuariosDigitando.length === 1
+                                    ? `${usuariosDigitando[0].nome} está digitando`
+                                    : `${usuariosDigitando.length} pessoas estão digitando`
+                            }
+                            >
+                            <span className="digitando-pontos" aria-hidden="true">
+                                {[0, 1, 2].map((ponto) => (
+                                    <span
+                                    key={ponto}
+                                    className="digitando-ponto"
+                                    />
+                                ))}
+                            </span>
+                            </div>
+                        </div>
+                    )}
 
                 </div>
 
@@ -1894,7 +2211,13 @@ function Home() {
                         placeholder="Digite uma mensagem"
                         autoComplete="off"
                         value={mensagem}
-                        onChange={(event) => setMensagem(event.target.value)}
+                        onChange={(event) => {
+                            const novoConteudo = event.target.value;
+
+                            setMensagem(novoConteudo);
+                            informarDigitacao(novoConteudo.trim());
+                        }}
+                        onBlur={pararDeInformarDigitacao}
                         onKeyDown={(event) => {
                             if (event.key === "Enter") {
                             event.preventDefault();

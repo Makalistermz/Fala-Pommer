@@ -17,8 +17,20 @@ export type ArquivoMensagemUpload = {
     buffer: Buffer;
 };
 
+const TEMPO_EXPIRACAO_DIGITACAO_MS = 5_000;
+
+type EstadoDigitacao = {
+    conversaId: number;
+    usuarioId: number;
+    nome: string;
+    expiraEm: number;
+};
+
 @Injectable()
 export class ConversasService {
+    private readonly usuariosDigitando =
+        new Map<string, EstadoDigitacao>();
+
     constructor(
         private readonly prisma: PrismaService
     ) {}
@@ -837,6 +849,13 @@ export class ConversasService {
                 }
                 });
 
+            this.usuariosDigitando.delete(
+                this.obterChaveDigitacao(
+                    conversaId,
+                    usuarioLogadoId
+                )
+            );
+
             const atendimento = contexto.atendimento;
 
             const remetenteExibido =
@@ -1019,6 +1038,103 @@ export class ConversasService {
             lidaEm: leitura.lida_em,
             mensagensNaoLidas: 0
         };
+    }
+
+    async atualizarDigitacao(
+        usuarioLogadoId: number,
+        conversaId: number,
+        digitando: boolean
+    ) {
+        const contexto =
+            await this.verificarAcessoConversa(
+                usuarioLogadoId,
+                conversaId
+            );
+
+        if (
+            contexto.conversa.tipo === "setor" &&
+            contexto.usuarioLogado.tipo_usuario === "admin"
+        ) {
+            throw new ForbiddenException(
+                "O administrador não pode responder neste atendimento."
+            );
+        }
+
+        this.removerDigitacoesExpiradas();
+
+        const chave = this.obterChaveDigitacao(
+            conversaId,
+            usuarioLogadoId
+        );
+
+        if (digitando) {
+            const nomeExibido =
+                contexto.conversa.tipo === "setor" &&
+                contexto.usuarioLogado.tipo_usuario === "funcionario"
+                    ? contexto.atendimento?.setor.setor ??
+                        contexto.usuarioLogado.nome
+                    : contexto.usuarioLogado.nome;
+
+            this.usuariosDigitando.set(chave, {
+                conversaId,
+                usuarioId: usuarioLogadoId,
+                nome: nomeExibido,
+                expiraEm:
+                    Date.now() +
+                    TEMPO_EXPIRACAO_DIGITACAO_MS
+            });
+        } else {
+            this.usuariosDigitando.delete(chave);
+        }
+
+        return {
+            conversaId,
+            digitando
+        };
+    }
+
+    async listarDigitando(
+        usuarioLogadoId: number,
+        conversaId: number
+    ) {
+        await this.verificarAcessoConversa(
+            usuarioLogadoId,
+            conversaId
+        );
+
+        this.removerDigitacoesExpiradas();
+
+        const usuarios = Array.from(
+            this.usuariosDigitando.values()
+        )
+            .filter((estado) =>
+                estado.conversaId === conversaId &&
+                estado.usuarioId !== usuarioLogadoId
+            )
+            .map((estado) => ({
+                id: estado.usuarioId,
+                nome: estado.nome
+            }));
+
+        return { usuarios };
+    }
+
+    private removerDigitacoesExpiradas() {
+        const agora = Date.now();
+
+        for (const [chave, estado] of
+            this.usuariosDigitando.entries()) {
+            if (estado.expiraEm <= agora) {
+                this.usuariosDigitando.delete(chave);
+            }
+        }
+    }
+
+    private obterChaveDigitacao(
+        conversaId: number,
+        usuarioId: number
+    ) {
+        return `${conversaId}:${usuarioId}`;
     }
 
     private identificarTipoArquivo(mime: string) {

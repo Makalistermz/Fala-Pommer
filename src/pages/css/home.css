@@ -758,6 +758,30 @@
     background: #dceaff;
 }
 
+.mensagem-balao--digitando {
+    display: flex;
+    min-width: 58px;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+}
+
+.digitando-pontos {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #6e7e99;
+}
+
+.digitando-ponto {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
 .mensagem-balao strong {
     display: block;
     margin-bottom: 3px;

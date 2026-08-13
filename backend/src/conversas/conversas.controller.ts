@@ -21,6 +21,7 @@ import {
 import { CriarConversaDto } from "./dto/criar-conversas.dto";
 import { IniciarConversaSetorDto } from "./dto/iniciar-conversas-setor.dto";
 import { CriarMensagemDto } from "./dto/criar-mensagem.dto";
+import { AtualizarDigitacaoDto } from "./dto/atualizar-digitacao.dto";
 
 import {
     AuthGuard,
@@ -143,6 +144,35 @@ export class ConversasController {
         return this.conversasService.marcarComoLida(
             requisicao.usuario!.sub,
             conversaId
+        );
+    }
+
+    @Get(":conversaId/digitando")
+    @Perfis("user", "funcionario", "admin")
+    listarDigitando(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Param("conversaId", ParseIntPipe)
+        conversaId: number
+    ) {
+        return this.conversasService.listarDigitando(
+            requisicao.usuario!.sub,
+            conversaId
+        );
+    }
+
+    @Post(":conversaId/digitando")
+    @HttpCode(200)
+    @Perfis("user", "funcionario", "admin")
+    atualizarDigitacao(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Param("conversaId", ParseIntPipe)
+        conversaId: number,
+        @Body() dados: AtualizarDigitacaoDto
+    ) {
+        return this.conversasService.atualizarDigitacao(
+            requisicao.usuario!.sub,
+            conversaId,
+            dados.digitando
         );
     }
 

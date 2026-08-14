@@ -1,11 +1,11 @@
 import { useState, type ReactNode } from "react";
 import { Link } from "react-router";
 import brasao from "../assets/img/brasao.png";
-import "./css/administracao.css";
-import VisaoGeral from "./pagesAdmin/visaoGeral";
+import MeuPerfil from "./configPages/meu-perfil";
 import RelatoriosLogs from "./pagesAdmin/relatoriosLogs";
 import Setores from "./pagesAdmin/setores";
 import Usuarios from "./pagesAdmin/usuarios";
+import "./css/configuracao.css";
 
 type ItemMenu = {
     id: string;
@@ -64,7 +64,7 @@ function Configuracao() {
     function renderizarConteudo() {
         switch (itemAtivo) {
             case "meu-perfil":
-                return <VisaoGeral />;
+                return <MeuPerfil />;
 
             case "conta-seguranca":
                 return <Usuarios />;

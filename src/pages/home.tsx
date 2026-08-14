@@ -562,7 +562,10 @@ function Home() {
         }
 
         try {
-            const rota = usuario.tipo === "user" ? "/setores" : "/usuarios/conversas";
+            const rota =
+                usuario.tipo === "user"
+                    ? "/setores/com-funcionarios"
+                    : "/usuarios/conversas";
 
             const resposta = await fetch(`${import.meta.env.VITE_API_URL}${rota}`, {
                 headers: {

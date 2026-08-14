@@ -40,6 +40,23 @@ export class ConversasService {
      * o usuário autenticado participa.
      */
     async listar(usuarioLogadoId: number) {
+        const usuarioLogado =
+            await this.prisma.cadastro.findUnique({
+                where: {
+                    id: usuarioLogadoId
+                },
+
+                select: {
+                    tipo_usuario: true
+                }
+            });
+
+        if (!usuarioLogado) {
+            throw new NotFoundException(
+                "Usuário autenticado não encontrado."
+            );
+        }
+
         const conversas =
             await this.prisma.conversa.findMany({
                 where: {
@@ -49,7 +66,18 @@ export class ConversasService {
                         some: {
                             usuario_id: usuarioLogadoId
                         }
-                    }
+                    },
+
+                    mensagens:
+                        usuarioLogado.tipo_usuario === "user"
+                            ? {
+                                some: {
+                                    remetente: {
+                                        tipo_usuario: "admin"
+                                    }
+                                }
+                            }
+                            : undefined
                 },
 
                 include: {
@@ -557,9 +585,14 @@ export class ConversasService {
                     }
                 }),
 
-                this.prisma.setores.findUnique({
+                this.prisma.setores.findFirst({
                     where: {
-                        id: setorId
+                        id: setorId,
+                        cadastros: {
+                            some: {
+                                tipo_usuario: "funcionario"
+                            }
+                        }
                     },
 
                     select: {
@@ -584,7 +617,7 @@ export class ConversasService {
 
         if (!setor) {
             throw new NotFoundException(
-                "Setor não encontrado."
+                "Setor não encontrado ou sem funcionário vinculado."
             );
         }
 
@@ -779,6 +812,31 @@ export class ConversasService {
         let origem: "usuario" | "setor";
 
         if (contexto.conversa.tipo === "privada") {
+            if (
+                contexto.usuarioLogado.tipo_usuario ===
+                "user"
+            ) {
+                const mensagemDeAdministrador =
+                    await this.prisma.mensagem.findFirst({
+                        where: {
+                            conversa_id: conversaId,
+                            remetente: {
+                                tipo_usuario: "admin"
+                            }
+                        },
+
+                        select: {
+                            id: true
+                        }
+                    });
+
+                if (!mensagemDeAdministrador) {
+                    throw new ForbiddenException(
+                        "Você só pode responder depois que um administrador enviar uma mensagem."
+                    );
+                }
+            }
+
             origem = "usuario";
         } else {
             if (

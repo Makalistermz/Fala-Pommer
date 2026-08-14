@@ -106,9 +106,10 @@ interface MensagemChat {
     enviadaEm: string;
 
     remetente: {
-        tipo: "usuario" | "setor";
+        tipo: "usuario" | "setor" | "admin";
         id: number;
         nome: string;
+        tipoUsuario?: TipoUsuario;
     };
 
     autorReal?: {
@@ -135,6 +136,11 @@ function mensagemFoiEnviadaPeloUsuario(
     }
 
     if (conversa.tipo === "privada") {
+        const remetenteRealId = item.autorReal?.id ?? item.remetente.id;
+        return remetenteRealId === usuario.sub;
+    }
+
+    if (usuario.tipo === "admin") {
         const remetenteRealId = item.autorReal?.id ?? item.remetente.id;
         return remetenteRealId === usuario.sub;
     }
@@ -1050,8 +1056,7 @@ function Home() {
         return texto.toLowerCase().includes(buscaConversa.trim().toLowerCase());
     });
 
-    const podeEnviarMensagem =
-        conversaSelecionada?.tipo === "privada" || usuario?.tipo !== "admin";
+    const podeEnviarMensagem = conversaSelecionada !== null;
 
     const setoresFiltrados = setores.filter((setor) => {
         const busca = buscaUsuario.trim().toLowerCase();
@@ -1933,7 +1938,15 @@ function Home() {
                                     : "bottom left",
                                 }}
                             >
-                                <strong>{item.remetente.nome}</strong>
+                                <header className="mensagem-balao__cabecalho">
+                                    <strong>{item.remetente.nome}</strong>
+
+                                    {item.remetente.tipo === "admin" && (
+                                        <span className="mensagem-balao__perfil">
+                                            Administrador
+                                        </span>
+                                    )}
+                                </header>
 
                                 {item.arquivo?.tipo === "imagem" && (
                                     <a

@@ -839,20 +839,11 @@ export class ConversasService {
 
             origem = "usuario";
         } else {
-            if (
-                contexto.usuarioLogado.tipo_usuario ===
-                "admin"
-            ) {
-                throw new ForbiddenException(
-                    "O administrador deve usar uma conversa privada para enviar mensagens."
-                );
-            }
-
             origem =
                 contexto.usuarioLogado.tipo_usuario ===
-                "user"
-                    ? "usuario"
-                    : "setor";
+                "funcionario"
+                    ? "setor"
+                    : "usuario";
         }
 
         let caminhoArquivo: string | null = null;
@@ -901,7 +892,8 @@ export class ConversasService {
                     remetente: {
                         select: {
                             id: true,
-                            nome: true
+                            nome: true,
+                            tipo_usuario: true
                         }
                     }
                 }
@@ -925,9 +917,15 @@ export class ConversasService {
                         nome: atendimento.setor.setor
                     }
                     : {
-                        tipo: "usuario" as const,
+                        tipo:
+                            mensagem.remetente.tipo_usuario ===
+                            "admin"
+                                ? "admin" as const
+                                : "usuario" as const,
                         id: mensagem.remetente.id,
-                        nome: mensagem.remetente.nome
+                        nome: mensagem.remetente.nome,
+                        tipoUsuario:
+                            mensagem.remetente.tipo_usuario
                     };
 
             return {
@@ -972,7 +970,8 @@ export class ConversasService {
                     remetente: {
                         select: {
                             id: true,
-                            nome: true
+                            nome: true,
+                            tipo_usuario: true
                         }
                     }
                 },
@@ -996,10 +995,16 @@ export class ConversasService {
                             atendimento.setor.setor
                     }
                     : {
-                        tipo: "usuario" as const,
+                        tipo:
+                            mensagem.remetente.tipo_usuario ===
+                            "admin"
+                                ? "admin" as const
+                                : "usuario" as const,
                         id: mensagem.remetente.id,
                         nome:
-                            mensagem.remetente.nome
+                            mensagem.remetente.nome,
+                        tipoUsuario:
+                            mensagem.remetente.tipo_usuario
                     };
 
             const podeVerAutorReal =

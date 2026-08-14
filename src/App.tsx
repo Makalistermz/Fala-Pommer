@@ -29,6 +29,16 @@ function App() {
       <Route path="/RedefinirSenha" element={<RedefinirSenha />} />
       <Route path="/SemPermissao" element={<SemPermissao />} />
 
+      <Route 
+        element={
+          <RotaProtegida
+            perfisPermitidos={["admin"]}
+          />
+        }
+      >
+        <Route path="/administracao" element={<Administracao />} />
+      </Route>
+
       <Route
         element={
           <RotaProtegida
@@ -37,7 +47,6 @@ function App() {
         }
       >
         <Route path="/home" element={<Home />} />
-        <Route path="/administracao" element={<Administracao />} />
       </Route>
 
       <Route

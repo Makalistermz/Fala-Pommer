@@ -2368,7 +2368,7 @@ function Home() {
                 )}
 
                 <div className="menu-modal-item menu-modal-configuracoes">
-                    <a href="#" target="_blank" className="menu-modal-button">
+                    <a href="/configuracao" target="_blank" className="menu-modal-button">
                     <svg
                         width="16"
                         height="16"

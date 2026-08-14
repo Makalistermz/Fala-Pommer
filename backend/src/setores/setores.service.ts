@@ -19,6 +19,26 @@ export class SetoresService {
         });
     }
 
+    async listarComFuncionarios() {
+        return this.prisma.setores.findMany({
+            where: {
+                cadastros: {
+                    some: {
+                        tipo_usuario: 'funcionario',
+                    },
+                },
+            },
+            select: {
+                id: true,
+                setor: true,
+                sigla_setor: true,
+            },
+            orderBy: {
+                setor: 'asc',
+            },
+        });
+    }
+
     async criar(dados: CriarSetorDTO) {
 
         const setorExistente = await this.prisma.setores.findFirst({

@@ -29,6 +29,12 @@ export class SetoresController {
         return this.setoresService.listar();
     }
 
+    @Get("com-funcionarios")
+    @Perfis("user")
+    listarComFuncionarios() {
+        return this.setoresService.listarComFuncionarios();
+    }
+
     @Post()
     @Perfis("admin")
     criar(

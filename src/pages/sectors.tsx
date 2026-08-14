@@ -1,7 +1,67 @@
+import { useState } from "react";
 import brasao from "../assets/img/brasao.png";
 import "./css/home.css";
 
+interface Setor {
+    id: number;
+    setor: string;
+    sigla_setor: string;
+}
+
 function Sectors() {
+    const [novaConversaAberta, setNovaConversaAberta] = useState(false);
+    const [setores, setSetores] = useState<Setor[]>([]);
+    const [buscaSetor, setBuscaSetor] = useState("");
+    const [carregandoSetores, setCarregandoSetores] = useState(false);
+    const [erroSetores, setErroSetores] = useState("");
+
+    async function abrirNovaConversa() {
+        setNovaConversaAberta(true);
+        setBuscaSetor("");
+        setErroSetores("");
+        setCarregandoSetores(true);
+
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+            setErroSetores("Não foi possível carregar os setores.");
+            setCarregandoSetores(false);
+            return;
+        }
+
+        try {
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/setores/com-funcionarios`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            );
+
+            if (!resposta.ok) {
+                throw new Error("Não foi possível carregar os setores.");
+            }
+
+            setSetores((await resposta.json()) as Setor[]);
+        } catch (erro) {
+            setErroSetores(
+                erro instanceof Error
+                    ? erro.message
+                    : "Não foi possível carregar os setores.",
+            );
+        } finally {
+            setCarregandoSetores(false);
+        }
+    }
+
+    const termoBusca = buscaSetor.trim().toLowerCase();
+    const setoresFiltrados = setores.filter(
+        (setor) =>
+            setor.setor.toLowerCase().includes(termoBusca) ||
+            setor.sigla_setor.toLowerCase().includes(termoBusca),
+    );
+
     return (
         <main className="home">
             <aside className="conversas">
@@ -22,6 +82,8 @@ function Sectors() {
                             type="button"
                             className="header-menu-button"
                             aria-label="Nova conversa"
+                            aria-expanded={novaConversaAberta}
+                            onClick={() => void abrirNovaConversa()}
                         >
                             <span className="header-menu-icon">
                                 <svg
@@ -140,13 +202,20 @@ function Sectors() {
                     </p>
                 </section>
 
-                <section className="nova-conversa" aria-hidden="true">
+                <section
+                    className={`nova-conversa ${
+                        novaConversaAberta ? "nova-conversa--aberta" : ""
+                    }`}
+                    aria-hidden={!novaConversaAberta}
+                    aria-label="Selecionar setor"
+                >
                     <header className="nova-conversa__header">
                         <button
                             type="button"
                             className="nova-conversa__voltar"
                             aria-label="Voltar"
-                            tabIndex={-1}
+                            tabIndex={novaConversaAberta ? 0 : -1}
+                            onClick={() => setNovaConversaAberta(false)}
                         >
                             <svg
                                 width="22"
@@ -180,16 +249,56 @@ function Sectors() {
                             type="search"
                             placeholder="Pesquisar setor"
                             aria-label="Pesquisar setor"
-                            tabIndex={-1}
+                            autoComplete="off"
+                            value={buscaSetor}
+                            tabIndex={novaConversaAberta ? 0 : -1}
+                            onChange={(event) => setBuscaSetor(event.target.value)}
                         />
                     </div>
 
                     <div className="nova-conversa__titulo-lista">SETORES</div>
 
                     <div className="nova-conversa__usuarios">
-                        <p className="nova-conversa__mensagem">
-                            Nenhum setor encontrado.
-                        </p>
+                        {carregandoSetores && (
+                            <p className="nova-conversa__mensagem">
+                                Carregando...
+                            </p>
+                        )}
+
+                        {!carregandoSetores && erroSetores && (
+                            <p className="nova-conversa__mensagem" role="alert">
+                                {erroSetores}
+                            </p>
+                        )}
+
+                        {!carregandoSetores &&
+                            !erroSetores &&
+                            setoresFiltrados.map((setor) => (
+                                <button
+                                    key={setor.id}
+                                    type="button"
+                                    className="nova-conversa__usuario"
+                                    tabIndex={novaConversaAberta ? 0 : -1}
+                                >
+                                    <div className="nova-conversa__avatar">
+                                        {setor.sigla_setor.charAt(0).toUpperCase()}
+                                    </div>
+
+                                    <div className="nova-conversa__dados">
+                                        <strong>{setor.setor}</strong>
+                                        <span>{setor.sigla_setor}</span>
+                                    </div>
+                                </button>
+                            ))}
+
+                        {!carregandoSetores &&
+                            !erroSetores &&
+                            setoresFiltrados.length === 0 && (
+                                <p className="nova-conversa__mensagem">
+                                    Nenhum setor com funcionário vinculado foi
+                                    encontrado.
+                                </p>
+                            )}
                     </div>
                 </section>
             </aside>

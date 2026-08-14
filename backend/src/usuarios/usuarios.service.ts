@@ -9,6 +9,7 @@ import {
 import { PrismaService } from "../prisma/prisma.service";
 import { CriarUsuarioDto } from "./dto/criar-usuario.dto";
 import { AtualizarUsuarioDto } from "./dto/atualizar-usuario.dto";
+import { AtualizarMeuPerfilDto } from "./dto/atualizar-meu-perfil.dto";
 
 import * as bcrypt from "bcrypt";
 
@@ -231,6 +232,100 @@ export class UsuariosService {
                 }
                 : null
         }));
+    }
+
+    async listarMeuPerfil(id: number) {
+        return this.prisma.cadastro.findUnique({
+            where: {
+                id: id,
+            },
+            select: {
+                id: true,
+                nome: true,
+                telefone: true,
+                email: true,
+                tipo_usuario: true,
+                setor: {
+                    select: {
+                        id: true,
+                        setor: true,
+                        sigla_setor: true,
+                    },
+                },
+            }
+        })
+    }
+
+    async atualizarMeuPerfil(
+        id: number,
+        dados: AtualizarMeuPerfilDto
+    ) {
+        const usuario =
+            await this.prisma.cadastro.findUnique({
+                where: {
+                    id
+                },
+
+                select: {
+                    id: true
+                }
+            });
+
+        if (!usuario) {
+            throw new NotFoundException(
+                "Usuário não encontrado."
+            );
+        }
+
+        const email =
+            dados.email.trim().toLowerCase();
+
+        const usuarioComMesmoEmail =
+            await this.prisma.cadastro.findFirst({
+                where: {
+                    email,
+                    id: {
+                        not: id
+                    }
+                },
+
+                select: {
+                    id: true
+                }
+            });
+
+        if (usuarioComMesmoEmail) {
+            throw new ConflictException(
+                "Já existe outro usuário com este e-mail."
+            );
+        }
+
+        return this.prisma.cadastro.update({
+            where: {
+                id
+            },
+
+            data: {
+                nome: dados.nome.trim(),
+                email,
+                telefone: dados.telefone.trim()
+            },
+
+            select: {
+                id: true,
+                nome: true,
+                telefone: true,
+                email: true,
+                tipo_usuario: true,
+                setor: {
+                    select: {
+                        id: true,
+                        setor: true,
+                        sigla_setor: true
+                    }
+                }
+            }
+        });
     }
 
     async listarTodos() {

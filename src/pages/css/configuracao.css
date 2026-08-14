@@ -72,6 +72,7 @@
     color: #1351b4;
     font-size: 13px;
     font-weight: 700;
+    text-transform: uppercase;
 }
 
 .meu-perfil__alterar-foto,
@@ -196,6 +197,13 @@
     background: #0d4196;
     box-shadow: 0 7px 16px rgba(19, 81, 180, 0.2);
     transform: translateY(-1px);
+}
+
+.meu-perfil__salvar:disabled,
+.meu-perfil__cancelar:disabled {
+    cursor: not-allowed;
+    opacity: 0.58;
+    transform: none;
 }
 
 .meu-perfil__cancelar {

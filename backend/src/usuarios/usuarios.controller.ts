@@ -13,6 +13,7 @@ import {
 
 import { CriarUsuarioDto } from "./dto/criar-usuario.dto";
 import { AtualizarUsuarioDto } from "./dto/atualizar-usuario.dto";
+import { AtualizarMeuPerfilDto } from "./dto/atualizar-meu-perfil.dto";
 import { UsuariosService } from "./usuarios.service";
 
 import { Perfis } from "../auth/decorators/perfis.decorator";
@@ -40,6 +41,29 @@ export class UsuariosController {
                 requisicao.usuario!.sub
             );
     }
+
+    @Get("me")
+    @UseGuards(AuthGuard)
+    listarMeuPerfil(
+        @Req() requisicao: RequisicaoAutenticada,
+    ) {
+        return this.usuariosService.listarMeuPerfil(
+            requisicao.usuario!.sub,
+        );
+    }
+
+    @Patch("me")
+    @UseGuards(AuthGuard)
+    atualizarMeuPerfil(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Body() dados: AtualizarMeuPerfilDto
+    ) {
+        return this.usuariosService.atualizarMeuPerfil(
+            requisicao.usuario!.sub,
+            dados
+        );
+    }
+
 
     @Get()
     @UseGuards(AuthGuard, PerfisGuard)

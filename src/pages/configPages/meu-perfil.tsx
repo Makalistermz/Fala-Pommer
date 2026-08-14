@@ -1,3 +1,19 @@
+import { useEffect, useState } from "react";
+import { ModalFeedback } from "../../components/ModalFeedback";
+
+interface Perfil {
+    id: number;
+    nome: string;
+    email: string;
+    telefone: string;
+    tipo_usuario: "user" | "admin" | "funcionario";
+    setor: {
+        id: number;
+        setor: string;
+        sigla_setor: string;
+    } | null;
+}
+
 const preferencias = [
     {
         id: "notificacoes",
@@ -30,23 +46,173 @@ const preferencias = [
     },
 ];
 
+function formatarTelefone(valor: string) {
+    const numeros = valor.replace(/\D/g, "").slice(0, 11);
+
+    if (numeros.length === 0) {
+        return "";
+    }
+
+    if (numeros.length <= 2) {
+        return `(${numeros}`;
+    }
+
+    const ddd = numeros.slice(0, 2);
+    const quantidadePrimeiraParte = numeros.length === 11 ? 5 : 4;
+    const primeiraParte = numeros.slice(2, 2 + quantidadePrimeiraParte);
+    const segundaParte = numeros.slice(2 + quantidadePrimeiraParte);
+
+    return `(${ddd}) ${primeiraParte}${
+        segundaParte ? `-${segundaParte}` : ""
+    }`;
+}
+
 function MeuPerfil() {
+    const [perfil, setPerfil] = useState<Perfil | null>(null);
+    const [formulario, setFormulario] = useState({
+        nome: "",
+        email: "",
+        telefone: "",
+    });
+    const [salvando, setSalvando] = useState(false);
+    const [feedback, setFeedback] = useState({
+        aberto: false,
+        tipo: "erro" as "erro" | "sucesso",
+        mensagem: "",
+    });
+
+    useEffect(() => {
+        async function carregarPerfil() {
+            const token = localStorage.getItem("access_token");
+
+            if (!token) {
+                return
+            }
+
+            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/me`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            );
+
+            if (!resposta.ok) {
+                throw new Error("Não foi possível carregar o perfil.");
+            }
+
+            const dados: Perfil = await resposta.json();
+            setPerfil(dados);
+            setFormulario({
+                nome: dados.nome,
+                email: dados.email,
+                telefone: formatarTelefone(dados.telefone),
+            });
+        }
+
+        carregarPerfil().catch(console.error);
+    }, []);
+
+    function cancelarAlteracoes() {
+        if (!perfil) {
+            return;
+        }
+
+        setFormulario({
+            nome: perfil.nome,
+            email: perfil.email,
+            telefone: formatarTelefone(perfil.telefone),
+        });
+    }
+
+    async function salvarAlteracoes() {
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: "Sua sessão expirou. Entre novamente para continuar.",
+            });
+            return;
+        }
+
+        setSalvando(true);
+
+        try {
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/usuarios/me`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        nome: formulario.nome,
+                        email: formulario.email,
+                        telefone: formulario.telefone.replace(/\D/g, ""),
+                    }),
+                },
+            );
+
+            const resultado = await resposta.json() as
+                | Perfil
+                | { message?: string | string[] };
+
+            if (!resposta.ok) {
+                const mensagem = "message" in resultado
+                    ? resultado.message
+                    : undefined;
+
+                throw new Error(
+                    Array.isArray(mensagem)
+                        ? mensagem.join(" ")
+                        : mensagem ?? "Não foi possível salvar as alterações.",
+                );
+            }
+
+            const perfilAtualizado = resultado as Perfil;
+            setPerfil(perfilAtualizado);
+            setFormulario({
+                nome: perfilAtualizado.nome,
+                email: perfilAtualizado.email,
+                telefone: formatarTelefone(perfilAtualizado.telefone),
+            });
+            setFeedback({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem: "As alterações foram salvas com sucesso.",
+            });
+        } catch (erro) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: erro instanceof Error
+                    ? erro.message
+                    : "Não foi possível salvar as alterações.",
+            });
+        } finally {
+            setSalvando(false);
+        }
+    }
+
     return (
         <main className="meu-perfil">
             <div className="meu-perfil__grade">
                 <section className="meu-perfil__cartao meu-perfil__cartao--dados">
                     <header className="meu-perfil__resumo">
                         <div className="meu-perfil__avatar" aria-hidden="true">
-                            MZ
+                            {perfil?.nome.charAt(0).toUpperCase()}
                         </div>
 
                         <div className="meu-perfil__identidade">
                             <strong className="meu-perfil__nome">
-                                Makalister Zager
+                                {perfil?.nome ?? "Carregando..."}
                             </strong>
 
                             <span className="meu-perfil__perfil">
-                                Funcionário
+                                {perfil?.tipo_usuario}
                             </span>
 
                             <button
@@ -64,13 +230,25 @@ function MeuPerfil() {
 
                     <div className="meu-perfil__divisor" />
 
-                    <div className="meu-perfil__formulario">
+                    <form
+                        className="meu-perfil__formulario"
+                        onSubmit={(evento) => {
+                            evento.preventDefault();
+                            void salvarAlteracoes();
+                        }}
+                    >
                         <div className="meu-perfil__campo">
                             <label htmlFor="nome_completo">Nome completo</label>
                             <input
                                 id="nome_completo"
                                 type="text"
-                                defaultValue="Makalister Zager"
+                                value={formulario.nome}
+                                onChange={(evento) =>
+                                    setFormulario((dadosAtuais) => ({
+                                        ...dadosAtuais,
+                                        nome: evento.target.value,
+                                    }))
+                                }
                             />
                         </div>
 
@@ -79,7 +257,13 @@ function MeuPerfil() {
                             <input
                                 id="e-mail"
                                 type="email"
-                                defaultValue="makalister@pmsmj.es.gov.br"
+                                value={formulario.email}
+                                onChange={(evento) =>
+                                    setFormulario((dadosAtuais) => ({
+                                        ...dadosAtuais,
+                                        email: evento.target.value,
+                                    }))
+                                }
                             />
                         </div>
 
@@ -88,7 +272,17 @@ function MeuPerfil() {
                             <input
                                 id="telefone"
                                 type="tel"
-                                defaultValue="(27) 99999-9999"
+                                inputMode="numeric"
+                                maxLength={15}
+                                value={formulario.telefone}
+                                onChange={(evento) =>
+                                    setFormulario((dadosAtuais) => ({
+                                        ...dadosAtuais,
+                                        telefone: formatarTelefone(
+                                            evento.target.value,
+                                        ),
+                                    }))
+                                }
                             />
                         </div>
 
@@ -97,30 +291,36 @@ function MeuPerfil() {
                             <input
                                 id="setor"
                                 type="text"
-                                defaultValue="Secretaria de Administração"
+                                value={perfil?.setor?.setor ?? ""}
+                                readOnly
                             />
                         </div>
 
                         <div className="meu-perfil__acoes">
                             <button
                                 className="meu-perfil__salvar"
-                                type="button"
+                                type="submit"
+                                disabled={salvando || !perfil}
                             >
                                 <svg viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M5 3h12l3 3v15H4V4a1 1 0 0 1 1-1Z" />
                                     <path d="M8 3v6h8V3M8 21v-7h8v7" />
                                 </svg>
-                                <span>Salvar alterações</span>
+                                <span>
+                                    {salvando ? "Salvando..." : "Salvar alterações"}
+                                </span>
                             </button>
 
                             <button
                                 className="meu-perfil__cancelar"
                                 type="button"
+                                onClick={cancelarAlteracoes}
+                                disabled={salvando || !perfil}
                             >
                                 Cancelar
                             </button>
                         </div>
-                    </div>
+                    </form>
                 </section>
 
                 <aside className="meu-perfil__lateral">
@@ -188,6 +388,18 @@ function MeuPerfil() {
                     </section>
                 </aside>
             </div>
+
+            <ModalFeedback
+                aberto={feedback.aberto}
+                tipo={feedback.tipo}
+                mensagem={feedback.mensagem}
+                aoFechar={() =>
+                    setFeedback((estadoAtual) => ({
+                        ...estadoAtual,
+                        aberto: false,
+                    }))
+                }
+            />
         </main>
     );
 }

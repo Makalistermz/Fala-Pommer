@@ -1942,6 +1942,12 @@ function Home() {
                                 <header className="mensagem-balao__cabecalho">
                                     <strong>{item.remetente.nome}</strong>
 
+                                    {item.remetente.tipo === "setor" && (
+                                        <span className="mensagem-balao__perfil">
+                                            {item.remetente.sigla_setor}
+                                        </span>
+                                    )}
+
                                     {item.remetente.tipo === "admin" && (
                                         <span className="mensagem-balao__perfil">
                                             Administrador

@@ -914,8 +914,10 @@ export class ConversasService {
                 atendimento
                     ? {
                         tipo: "setor" as const,
-                        id: atendimento.setor.id,
-                        nome: atendimento.setor.setor
+                        id: mensagem.remetente.id,
+                        nome: mensagem.remetente.nome,
+                        sigla_setor: atendimento.setor.sigla_setor,
+                        tipo_usuario: mensagem.remetente.tipo_usuario
                     }
                     : {
                         tipo:
@@ -991,9 +993,10 @@ export class ConversasService {
                 atendimento
                     ? {
                         tipo: "setor" as const,
-                        id: atendimento.setor.id,
-                        nome:
-                            atendimento.setor.setor
+                        id: mensagem.remetente.id,
+                        nome: mensagem.remetente.nome,
+                        sigla_setor: atendimento.setor.sigla_setor,
+                        tipo_usuario: mensagem.remetente.tipo_usuario
                     }
                     : {
                         tipo:

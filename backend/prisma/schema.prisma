@@ -20,6 +20,7 @@ model cadastro {
   token_recuperacao_expira_em DateTime?
   tipo_usuario                cadastro_tipo_usuario   @default(user)
   setor_id                    Int?
+  foto_perfil_url             String?                 @db.VarChar(500)
   setor                       setores?                @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
   conversa_leitura            conversa_leitura[]
   conversa_participante       conversa_participante[]

@@ -88,7 +88,8 @@ export const CadastroScalarFieldEnum = {
   token_recuperacao: 'token_recuperacao',
   token_recuperacao_expira_em: 'token_recuperacao_expira_em',
   tipo_usuario: 'tipo_usuario',
-  setor_id: 'setor_id'
+  setor_id: 'setor_id',
+  foto_perfil_url: 'foto_perfil_url'
 } as const
 
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]
@@ -190,7 +191,8 @@ export const cadastroOrderByRelevanceFieldEnum = {
   telefone: 'telefone',
   email: 'email',
   senha: 'senha',
-  token_recuperacao: 'token_recuperacao'
+  token_recuperacao: 'token_recuperacao',
+  foto_perfil_url: 'foto_perfil_url'
 } as const
 
 export type cadastroOrderByRelevanceFieldEnum = (typeof cadastroOrderByRelevanceFieldEnum)[keyof typeof cadastroOrderByRelevanceFieldEnum]

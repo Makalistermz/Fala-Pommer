@@ -12,7 +12,10 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: process.env.FRONTEND_URL,
+    origin: [
+      process.env.FRONTEND_URL ?? "http://localhost:5173",
+      "http://192.168.103.81:5173",
+    ],
     credentials: true
   });
 
@@ -22,8 +25,8 @@ async function bootstrap() {
       forbidNonWhitelisted: true, 
       transform: true,
     }),
-  ),
+  );
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3000, "0.0.0.0");
 }
 bootstrap();

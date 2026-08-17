@@ -336,6 +336,10 @@ function MeuPerfil() {
                                         role="switch"
                                         aria-checked="true"
                                         aria-label={preferencia.label}
+                                        onClick={(e) => {
+                                                        e.currentTarget.classList.toggle('meu-perfil__switch--ativo');
+                                                    }
+                                                }
                                     >
                                         <span />
                                     </span>

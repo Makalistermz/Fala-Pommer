@@ -111,6 +111,7 @@ interface MensagemChat {
         id: number;
         nome: string;
         tipoUsuario?: TipoUsuario;
+        sigla_setor?: string;
     };
 
     autorReal?: {

@@ -330,6 +330,7 @@
 }
 
 .conversa-avatar {
+    position: relative;
     width: 44px;
     height: 44px;
     flex: 0 0 44px;
@@ -343,6 +344,7 @@
     font-family: var(--fonte-poppins);
     font-size: 16px;
     font-weight: 600;
+    overflow: hidden;
 }
 
 .conversa-dados {
@@ -538,6 +540,7 @@
 /* AVATAR */
 
 .nova-conversa__avatar {
+    position: relative;
     width: 44px;
     height: 44px;
     flex: 0 0 44px;
@@ -551,6 +554,7 @@
     font-family: var(--fonte-poppins);
     font-size: 16px;
     font-weight: 600;
+    overflow: hidden;
 }
 
 /* DADOS */
@@ -673,6 +677,7 @@
 }
 
 .chat-header__avatar {
+    position: relative;
     width: 46px;
     height: 46px;
     flex-shrink: 0;
@@ -688,6 +693,19 @@
     font-family: var(--fonte-dm-sans);
     font-size: 18px;
     font-weight: 600;
+    overflow: hidden;
+}
+
+.conversa-avatar img,
+.nova-conversa__avatar img,
+.chat-header__avatar img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .chat-header__dados {

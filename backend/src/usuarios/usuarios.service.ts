@@ -214,6 +214,7 @@ export class UsuariosService {
                     id: true,
                     nome: true,
                     tipo_usuario: true,
+                    foto_perfil_url: true,
 
                     setor: {
                         select: {
@@ -233,6 +234,7 @@ export class UsuariosService {
             id: usuario.id,
             nome: usuario.nome,
             tipoUsuario: usuario.tipo_usuario,
+            foto_perfil_url: usuario.foto_perfil_url,
 
             setor: usuario.setor
                 ? {

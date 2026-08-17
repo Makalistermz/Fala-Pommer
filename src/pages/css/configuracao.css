@@ -31,6 +31,7 @@
 }
 
 .meu-perfil__avatar {
+    position: relative;
     display: grid;
     width: clamp(92px, 9vw, 116px);
     height: clamp(92px, 9vw, 116px);
@@ -47,10 +48,13 @@
 }
 
 .meu-perfil__avatar img {
+    position: absolute;
+    inset: 0;
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
 }
 
 .meu-perfil__identidade {

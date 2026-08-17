@@ -283,13 +283,15 @@ function MeuPerfil() {
                 <section className="meu-perfil__cartao meu-perfil__cartao--dados">
                     <header className="meu-perfil__resumo">
                         <div className="meu-perfil__avatar">
-                            {perfil?.foto_perfil_url ? (
+                            {perfil?.nome.charAt(0).toUpperCase()}
+                            {perfil?.foto_perfil_url && (
                                 <img
                                     src={obterUrlFoto(perfil.foto_perfil_url)}
                                     alt={`Foto de perfil de ${perfil.nome}`}
+                                    onError={(evento) =>
+                                        evento.currentTarget.remove()
+                                    }
                                 />
-                            ) : (
-                                perfil?.nome.charAt(0).toUpperCase()
                             )}
                         </div>
 

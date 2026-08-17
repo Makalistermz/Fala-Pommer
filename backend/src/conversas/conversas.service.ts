@@ -94,7 +94,8 @@ export class ConversasService {
                                 select: {
                                     id: true,
                                     nome: true,
-                                    tipo_usuario: true
+                                    tipo_usuario: true,
+                                    foto_perfil_url: true
                                 }
                             }
                         }
@@ -283,7 +284,8 @@ export class ConversasService {
                                 select: {
                                     id: true,
                                     nome: true,
-                                    tipo_usuario: true
+                                    tipo_usuario: true,
+                                    foto_perfil_url: true
                                 }
                             }
                         }
@@ -324,7 +326,8 @@ export class ConversasService {
                                 select: {
                                     id: true,
                                     nome: true,
-                                    tipo_usuario: true
+                                    tipo_usuario: true,
+                                    foto_perfil_url: true
                                 }
                             }
                         }
@@ -457,7 +460,8 @@ export class ConversasService {
                     usuario: {
                         select: {
                             id: true,
-                            nome: true
+                            nome: true,
+                            foto_perfil_url: true
                         }
                     }
                 },
@@ -764,7 +768,8 @@ export class ConversasService {
                     usuario: {
                         select: {
                             id: true,
-                            nome: true
+                            nome: true,
+                            foto_perfil_url: true
                         }
                     }
                 }

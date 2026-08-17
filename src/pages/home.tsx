@@ -31,6 +31,7 @@ const TEMPO_PARAR_DIGITACAO_MS = 2_500;
 interface UsuarioBasico {
     id: number;
     nome: string;
+    foto_perfil_url: string | null;
 }
 
 interface UsuarioConversa extends UsuarioBasico {
@@ -92,6 +93,7 @@ interface ConversaPrivada {
         id: number;
         nome: string;
         tipo_usuario: TipoUsuario;
+        foto_perfil_url: string | null;
     };
     mensagensNaoLidas: number;
     ultimaMensagem: UltimaMensagem | null;
@@ -1022,6 +1024,16 @@ function Home() {
         : conversa.usuario.nome;
     }
 
+    function fotoDaConversa(conversa: Conversa) {
+        if (conversa.tipo === "privada") {
+            return conversa.contato.foto_perfil_url;
+        }
+
+        return usuario?.tipo === "user"
+            ? null
+            : conversa.usuario.foto_perfil_url;
+    }
+
     function subtituloDaConversa(conversa: Conversa) {
         if (conversa.tipo === "setor") {
             return usuario?.tipo === "user"
@@ -1516,6 +1528,26 @@ function Home() {
             : `${import.meta.env.VITE_API_URL}${url}`;
     }
 
+    function renderizarAvatar(
+        nome: string,
+        fotoUrl?: string | null
+    ) {
+        return (
+            <>
+                <span aria-hidden="true">
+                    {nome.charAt(0).toUpperCase()}
+                </span>
+                {fotoUrl && (
+                    <img
+                        src={obterUrlArquivo(fotoUrl)}
+                        alt=""
+                        onError={(evento) => evento.currentTarget.remove()}
+                    />
+                )}
+            </>
+        );
+    }
+
     return (
         <main className={`home ${chatMobileAberto ? "home--chat-mobile-aberto" : ""}`}>
         <aside className="conversas">
@@ -1688,7 +1720,10 @@ function Home() {
                 }`}
                 >
                 <div className="conversa-avatar">
-                    {nomeDaConversa(conversa).charAt(0).toUpperCase()}
+                    {renderizarAvatar(
+                        nomeDaConversa(conversa),
+                        fotoDaConversa(conversa)
+                    )}
                 </div>
 
                 <div className="conversa-dados">
@@ -1821,7 +1856,10 @@ function Home() {
                     onClick={() => void selecionarUsuario(usuario)}
                     >
                     <div className="nova-conversa__avatar">
-                        {usuario.nome.charAt(0).toUpperCase()}
+                        {renderizarAvatar(
+                            usuario.nome,
+                            usuario.foto_perfil_url
+                        )}
                     </div>
 
                     <div className="nova-conversa__dados">
@@ -1885,7 +1923,10 @@ function Home() {
                     </button>
 
                     <div className="chat-header__avatar">
-                    {nomeDaConversa(conversaSelecionada).charAt(0).toUpperCase()}
+                    {renderizarAvatar(
+                        nomeDaConversa(conversaSelecionada),
+                        fotoDaConversa(conversaSelecionada)
+                    )}
                     </div>
 
                     <div className="chat-header__dados">

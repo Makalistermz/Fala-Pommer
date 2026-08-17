@@ -1,3 +1,4 @@
+// Contém as regras de autenticação dos usuários.
 import {
     Injectable,
     UnauthorizedException

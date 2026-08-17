@@ -1,3 +1,4 @@
+// Exibe a área principal de conversas do sistema.
 import brasao from "../assets/img/brasao.png";
 import somNovaMensagem from "../assets/audio/notificacao.mp3";
 import "./css/home.css";

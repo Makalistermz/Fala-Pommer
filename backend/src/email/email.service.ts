@@ -1,3 +1,4 @@
+// Envia os e-mails usados pelo sistema.
 import { Injectable } from "@nestjs/common";
 import * as nodemailer from "nodemailer";
 

@@ -1,3 +1,4 @@
+// Informa quando o usuário não possui acesso à página.
 import brasao from "../assets/img/brasao.png";
 import "./SemPermissao.css";
 import { Link, useNavigate } from "react-router";

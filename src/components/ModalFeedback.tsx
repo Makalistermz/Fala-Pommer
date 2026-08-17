@@ -1,3 +1,4 @@
+// Exibe mensagens de retorno para o usuário.
 import "./ModalFeedback.css";
 
 type ModalFeedbackProps = {

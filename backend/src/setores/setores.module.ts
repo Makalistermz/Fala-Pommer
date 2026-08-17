@@ -1,3 +1,4 @@
+// Registra os recursos usados no módulo de setores.
 import { Module } from '@nestjs/common';
 import { SetoresService } from './setores.service';
 import { SetoresController } from './setores.controller';

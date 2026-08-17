@@ -1,3 +1,4 @@
+// Fornece as operações básicas da aplicação.
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

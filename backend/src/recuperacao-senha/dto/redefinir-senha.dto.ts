@@ -1,3 +1,4 @@
+// Valida os dados usados para definir uma nova senha.
 import {
     IsNotEmpty,
     IsString,

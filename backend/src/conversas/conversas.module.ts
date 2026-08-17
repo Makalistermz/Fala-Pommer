@@ -1,3 +1,4 @@
+// Registra os recursos usados no módulo de conversas.
 import { Module } from "@nestjs/common";
 
 import { PrismaModule } from "../prisma/prisma.module";

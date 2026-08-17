@@ -1,3 +1,4 @@
+// Define as rotas da API relacionadas às conversas.
 import {
     BadRequestException,
     Body,

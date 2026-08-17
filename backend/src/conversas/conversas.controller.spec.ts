@@ -1,3 +1,4 @@
+// Testa o comportamento do controlador de conversas.
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConversasController } from './conversas.controller';
 

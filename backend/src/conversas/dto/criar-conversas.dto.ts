@@ -1,3 +1,4 @@
+// Valida os dados usados para criar uma conversa.
 import { IsInt, Min } from "class-validator";
 
 export class CriarConversaDto {

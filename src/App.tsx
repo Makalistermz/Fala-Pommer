@@ -1,3 +1,4 @@
+// Define as rotas disponíveis na aplicação.
 import { Routes, Route } from "react-router";
 import { useEffect } from "react";
 import "./App.css";

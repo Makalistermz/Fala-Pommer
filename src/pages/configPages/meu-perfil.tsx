@@ -1,3 +1,4 @@
+// Permite visualizar e atualizar os dados do perfil.
 import { useEffect, useState } from "react";
 import { ModalFeedback } from "../../components/ModalFeedback";
 

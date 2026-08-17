@@ -1,3 +1,4 @@
+// Exibe o formulário de acesso ao sistema.
 import brasao from "../assets/img/brasao.png";
 import { useState } from "react";
 import imagemLogin from "../assets/img/imagem-pagina-login.png";

@@ -1,3 +1,4 @@
+// Testa as regras do serviço de autenticação.
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 

@@ -1,3 +1,4 @@
+// Valida o e-mail informado na solicitação de recuperação.
 import { Transform } from "class-transformer";
 import { IsEmail, IsNotEmpty, isString, IsString, minLength, MinLength } from "class-validator";
 

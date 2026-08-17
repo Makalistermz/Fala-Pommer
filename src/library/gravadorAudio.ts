@@ -1,3 +1,4 @@
+// Reúne as funções usadas para gravar mensagens de áudio.
 const FORMATOS_PREFERIDOS = [
     "audio/webm;codecs=opus",
     "audio/mp4",

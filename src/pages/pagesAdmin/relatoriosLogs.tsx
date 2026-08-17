@@ -1,3 +1,4 @@
+// Exibe os registros de acesso para consulta administrativa.
 import { useEffect, useState } from "react";
 
 type RelatorioLog = {

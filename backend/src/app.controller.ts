@@ -1,3 +1,4 @@
+// Define a rota inicial da API.
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 

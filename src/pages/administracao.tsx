@@ -1,3 +1,4 @@
+// Organiza as páginas disponíveis na área administrativa.
 import { useState, type ReactNode } from "react";
 import { Link } from "react-router";
 import brasao from "../assets/img/brasao.png";

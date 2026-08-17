@@ -1,3 +1,4 @@
+// Exibe o formulário para redefinir a senha do usuário.
 import { Link, useSearchParams } from "react-router";
 import { ModalFeedback } from "../components/ModalFeedback";
 import "./css/RedefinirSenha.css";

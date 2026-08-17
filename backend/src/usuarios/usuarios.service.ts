@@ -1,3 +1,4 @@
+// Contém as regras de negócio relacionadas aos usuários.
 import {
     BadRequestException,
     ConflictException,

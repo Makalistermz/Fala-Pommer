@@ -1,3 +1,4 @@
+// Disponibiliza a conexão com o banco de dados.
 import "dotenv/config";
 
 import {

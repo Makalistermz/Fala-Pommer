@@ -1,3 +1,4 @@
+// Exibe o formulário de cadastro de usuário.
 import React, { useState } from "react";
 import imagemCadastro from "../assets/img/imagem-pagina-cadastro.png";
 import { ModalFeedback } from "../components/ModalFeedback";

@@ -1,3 +1,4 @@
+// Registra os recursos do módulo de recuperação de senha.
 import { Module } from "@nestjs/common";
 import { RecuperacaoSenhaController } from "./recuperacao-senha.controller";
 import { RecuperacaoSenhaService } from "./recuperacao-senha.service";

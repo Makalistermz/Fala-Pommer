@@ -1,3 +1,4 @@
+// Valida os dados usados para criar ou atualizar um setor.
 import {
     IsString,
     IsNotEmpty

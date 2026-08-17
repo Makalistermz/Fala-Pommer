@@ -1,3 +1,4 @@
+// Valida os dados enviados no login.
 import { Transform } from "class-transformer";
 import {
     IsEmail,

@@ -1,3 +1,4 @@
+// Verifica o token de acesso das rotas protegidas.
 import {
     CanActivate,
     ExecutionContext,

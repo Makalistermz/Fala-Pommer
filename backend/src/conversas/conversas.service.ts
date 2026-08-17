@@ -1,3 +1,4 @@
+// Contém as regras de negócio relacionadas às conversas.
 import {
     BadRequestException,
     ForbiddenException,

@@ -1,3 +1,4 @@
+// Exibe o seletor de emojis usado nas mensagens.
 import { useEffect, useRef } from "react";
 import { Picker } from "emoji-picker-element";
 import ptBR from "emoji-picker-element/i18n/pt_BR";

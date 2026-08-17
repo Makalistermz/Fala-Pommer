@@ -1,3 +1,4 @@
+// Valida os dados usados para enviar uma mensagem.
 import { Transform } from "class-transformer";
 import {
     IsOptional,

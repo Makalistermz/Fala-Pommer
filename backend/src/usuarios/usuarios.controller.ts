@@ -1,3 +1,4 @@
+// Define as rotas da API relacionadas aos usuários.
 import {
     Body,
     Controller,

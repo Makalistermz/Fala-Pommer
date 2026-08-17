@@ -1,3 +1,4 @@
+// Define quais perfis podem acessar uma rota.
 import { SetMetadata } from "@nestjs/common";
 
 export type TipoUsuario =

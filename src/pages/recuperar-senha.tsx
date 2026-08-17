@@ -1,3 +1,4 @@
+// Exibe o formulário para solicitar a recuperação de senha.
 import { useState } from "react";
 import { Link } from "react-router";
 import imagemRecuperacao from "../assets/img/imagem-recuperar-senha.png";

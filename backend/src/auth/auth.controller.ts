@@ -1,3 +1,4 @@
+// Define as rotas usadas para autenticar os usuários.
 import {
     Body,
     Controller,

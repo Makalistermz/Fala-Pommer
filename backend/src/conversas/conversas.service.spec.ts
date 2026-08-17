@@ -1,3 +1,4 @@
+// Testa as regras do serviço de conversas.
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConversasService } from './conversas.service';
 

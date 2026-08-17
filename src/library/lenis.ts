@@ -1,3 +1,4 @@
+// Configura a rolagem suave das páginas.
 import Lenis from "lenis";
 
 export const initLenis = () => {

@@ -1,3 +1,4 @@
+// Contém as regras usadas na recuperação de senha.
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { randomBytes, createHash } from "node:crypto";
 import { PrismaService } from "../prisma/prisma.service";

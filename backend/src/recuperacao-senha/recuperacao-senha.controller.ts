@@ -1,3 +1,4 @@
+// Define as rotas usadas para recuperar e redefinir senhas.
 import {
     Body,
     Controller,

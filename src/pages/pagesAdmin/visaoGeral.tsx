@@ -1,3 +1,4 @@
+// Exibe um resumo geral das informações administrativas.
 import { useEffect, useMemo, useState, useRef } from "react";
 import { Bar, Line } from "react-chartjs-2";
 import gsap from 'gsap';

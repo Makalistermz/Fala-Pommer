@@ -1,3 +1,4 @@
+// Verifica se o usuário possui um dos perfis permitidos.
 import {
     CanActivate,
     ExecutionContext,

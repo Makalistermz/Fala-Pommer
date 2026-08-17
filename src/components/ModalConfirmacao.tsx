@@ -1,3 +1,4 @@
+// Solicita a confirmação do usuário antes de uma ação.
 import { useEffect } from "react";
 import "./ModalConfirmacao.css";
 

@@ -1,3 +1,4 @@
+// Define as rotas da API relacionadas aos setores.
 import {
     Body,
     Controller,

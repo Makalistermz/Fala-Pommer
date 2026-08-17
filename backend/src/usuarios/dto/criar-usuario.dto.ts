@@ -1,3 +1,4 @@
+// Valida os dados usados para criar um usuário.
 import {
   IsDateString,
   IsEmail,

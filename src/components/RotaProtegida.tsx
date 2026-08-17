@@ -1,3 +1,4 @@
+// Protege páginas que exigem autenticação ou perfil específico.
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router";
 

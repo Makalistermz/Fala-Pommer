@@ -1,3 +1,4 @@
+// Registra os recursos usados no módulo de autenticação.
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import {

@@ -1,3 +1,4 @@
+// Valida os dados usados para atualizar um usuário.
 import {
   IsEmail,
   IsIn,

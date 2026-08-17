@@ -25,16 +25,6 @@ const preferencias = [
         ),
     },
     {
-        id: "sons",
-        label: "Sons da conversa",
-        icon: (
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 9v6h4l5 4V5L9 9H5Z" />
-                <path d="M17 8.5a5 5 0 0 1 0 7M19.5 6a8.5 8.5 0 0 1 0 12" />
-            </svg>
-        ),
-    },
-    {
         id: "leitura",
         label: "Confirmação de leitura",
         icon: (

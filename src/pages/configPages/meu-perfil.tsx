@@ -14,28 +14,6 @@ interface Perfil {
     } | null;
 }
 
-const preferencias = [
-    {
-        id: "notificacoes",
-        label: "Notificações de mensagens",
-        icon: (
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 5.75A2.75 2.75 0 0 1 7.75 3h8.5A2.75 2.75 0 0 1 19 5.75v6.5A2.75 2.75 0 0 1 16.25 15H9l-4 3v-12.25Z" />
-            </svg>
-        ),
-    },
-    {
-        id: "leitura",
-        label: "Confirmação de leitura",
-        icon: (
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="m3.5 12.5 4 4L14 8" />
-                <path d="m10 14.5 2 2L20.5 8" />
-            </svg>
-        ),
-    },
-];
-
 function formatarTelefone(valor: string) {
     const numeros = valor.replace(/\D/g, "").slice(0, 11);
 
@@ -314,40 +292,6 @@ function MeuPerfil() {
                 </section>
 
                 <aside className="meu-perfil__lateral">
-                    <section className="meu-perfil__cartao meu-perfil__preferencias">
-                        <h2>Preferências rápidas</h2>
-
-                        <div className="meu-perfil__preferencias-lista">
-                            {preferencias.map((preferencia) => (
-                                <div
-                                    className="meu-perfil__preferencia"
-                                    key={preferencia.id}
-                                >
-                                    <span className="meu-perfil__preferencia-icone">
-                                        {preferencia.icon}
-                                    </span>
-
-                                    <span className="meu-perfil__preferencia-texto">
-                                        {preferencia.label}
-                                    </span>
-
-                                    <span
-                                        className="meu-perfil__switch meu-perfil__switch--ativo"
-                                        role="switch"
-                                        aria-checked="true"
-                                        aria-label={preferencia.label}
-                                        onClick={(e) => {
-                                                        e.currentTarget.classList.toggle('meu-perfil__switch--ativo');
-                                                    }
-                                                }
-                                    >
-                                        <span />
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-
                     <section className="meu-perfil__cartao meu-perfil__seguranca">
                         <h2>Segurança da conta</h2>
 

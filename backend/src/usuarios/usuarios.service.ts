@@ -13,6 +13,16 @@ import { AtualizarUsuarioDto } from "./dto/atualizar-usuario.dto";
 import { AtualizarMeuPerfilDto } from "./dto/atualizar-meu-perfil.dto";
 
 import * as bcrypt from "bcrypt";
+import { randomUUID } from "node:crypto";
+import { mkdir, unlink, writeFile } from "node:fs/promises";
+import { join } from "node:path";
+
+export type ArquivoFotoPerfilUpload = {
+    originalname: string;
+    mimetype: string;
+    size: number;
+    buffer: Buffer;
+};
 
 @Injectable()
 export class UsuariosService {
@@ -246,6 +256,7 @@ export class UsuariosService {
                 telefone: true,
                 email: true,
                 tipo_usuario: true,
+                foto_perfil_url: true,
                 setor: {
                     select: {
                         id: true,
@@ -318,6 +329,7 @@ export class UsuariosService {
                 telefone: true,
                 email: true,
                 tipo_usuario: true,
+                foto_perfil_url: true,
                 setor: {
                     select: {
                         id: true,
@@ -327,6 +339,80 @@ export class UsuariosService {
                 }
             }
         });
+    }
+
+    async atualizarFotoPerfil(
+        id: number,
+        foto?: ArquivoFotoPerfilUpload
+    ) {
+        if (!foto) {
+            throw new BadRequestException(
+                "Selecione uma foto para enviar."
+            );
+        }
+
+        const usuario = await this.prisma.cadastro.findUnique({
+            where: { id },
+            select: { id: true }
+        });
+
+        if (!usuario) {
+            throw new NotFoundException(
+                "Usuário não encontrado."
+            );
+        }
+
+        const extensoes: Record<string, string> = {
+            "image/jpeg": ".jpg",
+            "image/png": ".png",
+            "image/webp": ".webp"
+        };
+        const extensao = extensoes[foto.mimetype];
+
+        if (!extensao) {
+            throw new BadRequestException(
+                "Formato de imagem não permitido."
+            );
+        }
+
+        const diretorioUploads = join(
+            process.cwd(),
+            "uploads",
+            "perfis"
+        );
+        const nomeArquivo = `${randomUUID()}${extensao}`;
+        const caminhoArquivo = join(diretorioUploads, nomeArquivo);
+        const urlFoto = `/uploads/perfis/${nomeArquivo}`;
+
+        await mkdir(diretorioUploads, { recursive: true });
+        await writeFile(caminhoArquivo, foto.buffer);
+
+        try {
+            return await this.prisma.cadastro.update({
+                where: { id },
+                data: {
+                    foto_perfil_url: urlFoto
+                },
+                select: {
+                    id: true,
+                    nome: true,
+                    telefone: true,
+                    email: true,
+                    tipo_usuario: true,
+                    foto_perfil_url: true,
+                    setor: {
+                        select: {
+                            id: true,
+                            setor: true,
+                            sigla_setor: true
+                        }
+                    }
+                }
+            });
+        } catch (erro) {
+            await unlink(caminhoArquivo).catch(() => undefined);
+            throw erro;
+        }
     }
 
     async listarTodos() {

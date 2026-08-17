@@ -1,5 +1,10 @@
 // Permite visualizar e atualizar os dados do perfil.
-import { useEffect, useState } from "react";
+import {
+    type ChangeEvent,
+    useEffect,
+    useRef,
+    useState
+} from "react";
 import { ModalFeedback } from "../../components/ModalFeedback";
 
 interface Perfil {
@@ -8,6 +13,7 @@ interface Perfil {
     email: string;
     telefone: string;
     tipo_usuario: "user" | "admin" | "funcionario";
+    foto_perfil_url: string | null;
     setor: {
         id: number;
         setor: string;
@@ -36,7 +42,14 @@ function formatarTelefone(valor: string) {
     }`;
 }
 
+function obterUrlFoto(url: string) {
+    return url.startsWith("http://") || url.startsWith("https://")
+        ? url
+        : `${import.meta.env.VITE_API_URL}${url}`;
+}
+
 function MeuPerfil() {
+    const inputFotoRef = useRef<HTMLInputElement>(null);
     const [perfil, setPerfil] = useState<Perfil | null>(null);
     const [formulario, setFormulario] = useState({
         nome: "",
@@ -44,6 +57,7 @@ function MeuPerfil() {
         telefone: "",
     });
     const [salvando, setSalvando] = useState(false);
+    const [enviandoFoto, setEnviandoFoto] = useState(false);
     const [feedback, setFeedback] = useState({
         aberto: false,
         tipo: "erro" as "erro" | "sucesso",
@@ -92,6 +106,103 @@ function MeuPerfil() {
             email: perfil.email,
             telefone: formatarTelefone(perfil.telefone),
         });
+    }
+
+    async function enviarFoto(evento: ChangeEvent<HTMLInputElement>) {
+        const input = evento.currentTarget;
+        const foto = input.files?.[0];
+
+        if (!foto) {
+            return;
+        }
+
+        const tiposPermitidos = new Set([
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ]);
+
+        if (!tiposPermitidos.has(foto.type)) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: "A foto deve estar nos formatos JPEG, PNG ou WebP."
+            });
+            input.value = "";
+            return;
+        }
+
+        if (foto.size > 5 * 1024 * 1024) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: "A foto deve ter no máximo 5 MB."
+            });
+            input.value = "";
+            return;
+        }
+
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: "Sua sessão expirou. Entre novamente para continuar."
+            });
+            input.value = "";
+            return;
+        }
+
+        const corpo = new FormData();
+        corpo.append("foto", foto);
+        setEnviandoFoto(true);
+
+        try {
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/usuarios/me/foto`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: corpo
+                }
+            );
+            const resultado = await resposta.json() as
+                | Perfil
+                | { message?: string | string[] };
+
+            if (!resposta.ok) {
+                const mensagem = "message" in resultado
+                    ? resultado.message
+                    : undefined;
+
+                throw new Error(
+                    Array.isArray(mensagem)
+                        ? mensagem.join(" ")
+                        : mensagem ?? "Não foi possível alterar a foto."
+                );
+            }
+
+            setPerfil(resultado as Perfil);
+            setFeedback({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem: "Foto de perfil alterada com sucesso."
+            });
+        } catch (erro) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: erro instanceof Error
+                    ? erro.message
+                    : "Não foi possível alterar a foto."
+            });
+        } finally {
+            setEnviandoFoto(false);
+            input.value = "";
+        }
     }
 
     async function salvarAlteracoes() {
@@ -171,8 +282,15 @@ function MeuPerfil() {
             <div className="meu-perfil__grade">
                 <section className="meu-perfil__cartao meu-perfil__cartao--dados">
                     <header className="meu-perfil__resumo">
-                        <div className="meu-perfil__avatar" aria-hidden="true">
-                            {perfil?.nome.charAt(0).toUpperCase()}
+                        <div className="meu-perfil__avatar">
+                            {perfil?.foto_perfil_url ? (
+                                <img
+                                    src={obterUrlFoto(perfil.foto_perfil_url)}
+                                    alt={`Foto de perfil de ${perfil.nome}`}
+                                />
+                            ) : (
+                                perfil?.nome.charAt(0).toUpperCase()
+                            )}
                         </div>
 
                         <div className="meu-perfil__identidade">
@@ -187,13 +305,25 @@ function MeuPerfil() {
                             <button
                                 className="meu-perfil__alterar-foto"
                                 type="button"
+                                onClick={() => inputFotoRef.current?.click()}
+                                disabled={enviandoFoto || !perfil}
                             >
                                 <svg viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M4 7.5h3l1.4-2h7.2l1.4 2h3a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9.5a2 2 0 0 1 2-2Z" />
                                     <circle cx="12" cy="13.5" r="3.5" />
                                 </svg>
-                                <span>Alterar foto</span>
+                                <span>
+                                    {enviandoFoto ? "Enviando..." : "Alterar foto"}
+                                </span>
                             </button>
+
+                            <input
+                                ref={inputFotoRef}
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                hidden
+                                onChange={(evento) => void enviarFoto(evento)}
+                            />
                         </div>
                     </header>
 

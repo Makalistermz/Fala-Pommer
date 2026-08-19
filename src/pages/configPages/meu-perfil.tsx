@@ -6,6 +6,7 @@ import {
     useState
 } from "react";
 import { ModalFeedback } from "../../components/ModalFeedback";
+import Cropper, { type Area, type Point } from "react-easy-crop";
 
 interface Perfil {
     id: number;
@@ -48,6 +49,56 @@ function obterUrlFoto(url: string) {
         : `${import.meta.env.VITE_API_URL}${url}`;
 }
 
+function carregarImagem(origem: string) {
+    return new Promise<HTMLImageElement>((resolve, reject) => {
+        const imagem = new Image();
+
+        imagem.onload = () => resolve(imagem);
+        imagem.onerror = () => reject(
+            new Error("Não foi possível processar a imagem selecionada.")
+        );
+        imagem.src = origem;
+    });
+}
+
+async function criarImagemRecortada(
+    origem: string,
+    area: Area,
+    tipo: string,
+) {
+    const imagem = await carregarImagem(origem);
+    const canvas = document.createElement("canvas");
+    const contexto = canvas.getContext("2d");
+
+    if (!contexto) {
+        throw new Error("Não foi possível recortar a imagem.");
+    }
+
+    canvas.width = area.width;
+    canvas.height = area.height;
+    contexto.drawImage(
+        imagem,
+        area.x,
+        area.y,
+        area.width,
+        area.height,
+        0,
+        0,
+        area.width,
+        area.height,
+    );
+
+    return new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob(
+            (blob) => blob
+                ? resolve(blob)
+                : reject(new Error("Não foi possível recortar a imagem.")),
+            tipo,
+            0.9,
+        );
+    });
+}
+
 function MeuPerfil() {
     const inputFotoRef = useRef<HTMLInputElement>(null);
     const [perfil, setPerfil] = useState<Perfil | null>(null);
@@ -63,6 +114,13 @@ function MeuPerfil() {
         tipo: "erro" as "erro" | "sucesso",
         mensagem: "",
     });
+
+    const [image, setImage] = useState<string | null>(null);
+    const [tipoImagem, setTipoImagem] = useState("");
+    const [nomeImagem, setNomeImagem] = useState("");
+    const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1);
+    const [areaRecortada, setAreaRecortada] = useState<Area | null>(null);
 
     useEffect(() => {
         async function carregarPerfil() {
@@ -108,7 +166,7 @@ function MeuPerfil() {
         });
     }
 
-    async function enviarFoto(evento: ChangeEvent<HTMLInputElement>) {
+    function selecionarFoto(evento: ChangeEvent<HTMLInputElement>) {
         const input = evento.currentTarget;
         const foto = input.files?.[0];
 
@@ -142,6 +200,49 @@ function MeuPerfil() {
             return;
         }
 
+        const leitor = new FileReader();
+
+        leitor.onload = () => {
+            if (typeof leitor.result !== "string") {
+                return;
+            }
+
+            setImage(leitor.result);
+            setTipoImagem(foto.type);
+            setNomeImagem(foto.name);
+            setCrop({ x: 0, y: 0 });
+            setZoom(1);
+            setAreaRecortada(null);
+        };
+        leitor.onerror = () => {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: "Não foi possível ler a imagem selecionada."
+            });
+            input.value = "";
+        };
+        leitor.readAsDataURL(foto);
+    }
+
+    function fecharRecorte() {
+        setImage(null);
+        setTipoImagem("");
+        setNomeImagem("");
+        setCrop({ x: 0, y: 0 });
+        setZoom(1);
+        setAreaRecortada(null);
+
+        if (inputFotoRef.current) {
+            inputFotoRef.current.value = "";
+        }
+    }
+
+    async function enviarFotoRecortada() {
+        if (!image || !areaRecortada) {
+            return;
+        }
+
         const token = localStorage.getItem("access_token");
 
         if (!token) {
@@ -150,15 +251,25 @@ function MeuPerfil() {
                 tipo: "erro",
                 mensagem: "Sua sessão expirou. Entre novamente para continuar."
             });
-            input.value = "";
             return;
         }
 
-        const corpo = new FormData();
-        corpo.append("foto", foto);
         setEnviandoFoto(true);
 
         try {
+            const fotoRecortada = await criarImagemRecortada(
+                image,
+                areaRecortada,
+                tipoImagem,
+            );
+            const arquivoRecortado = new File(
+                [fotoRecortada],
+                nomeImagem,
+                { type: tipoImagem },
+            );
+            const corpo = new FormData();
+            corpo.append("foto", arquivoRecortado);
+
             const resposta = await fetch(
                 `${import.meta.env.VITE_API_URL}/usuarios/me/foto`,
                 {
@@ -186,6 +297,7 @@ function MeuPerfil() {
             }
 
             setPerfil(resultado as Perfil);
+            fecharRecorte();
             setFeedback({
                 aberto: true,
                 tipo: "sucesso",
@@ -201,7 +313,6 @@ function MeuPerfil() {
             });
         } finally {
             setEnviandoFoto(false);
-            input.value = "";
         }
     }
 
@@ -324,8 +435,77 @@ function MeuPerfil() {
                                 type="file"
                                 accept="image/jpeg,image/png,image/webp"
                                 hidden
-                                onChange={(evento) => void enviarFoto(evento)}
+                                onChange={selecionarFoto}
                             />
+
+                            {image ? (
+                                <div
+                                    className="meu-perfil__recorte-fundo"
+                                    role="dialog"
+                                    aria-modal="true"
+                                    aria-labelledby="titulo-recorte-foto"
+                                >
+                                    <div className="meu-perfil__recorte-modal">
+                                        <h2 id="titulo-recorte-foto">
+                                            Ajustar foto
+                                        </h2>
+
+                                        <div className="meu-perfil__recorte-area">
+                                            <Cropper
+                                                image={image}
+                                                crop={crop}
+                                                zoom={zoom}
+                                                aspect={1}
+                                                cropShape="round"
+                                                onCropChange={setCrop}
+                                                onCropComplete={(_, areaPixels) =>
+                                                    setAreaRecortada(areaPixels)
+                                                }
+                                                onZoomChange={setZoom}
+                                            />
+                                        </div>
+
+                                        <label
+                                            className="meu-perfil__recorte-zoom"
+                                            htmlFor="zoom-foto"
+                                        >
+                                            Zoom
+                                            <input
+                                                id="zoom-foto"
+                                                type="range"
+                                                min={1}
+                                                max={3}
+                                                step={0.1}
+                                                value={zoom}
+                                                onChange={(evento) =>
+                                                    setZoom(Number(evento.target.value))
+                                                }
+                                            />
+                                        </label>
+
+                                        <div className="meu-perfil__recorte-acoes">
+                                            <button
+                                                type="button"
+                                                className="meu-perfil__cancelar"
+                                                onClick={fecharRecorte}
+                                                disabled={enviandoFoto}
+                                            >
+                                                Cancelar
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="meu-perfil__salvar"
+                                                onClick={() => void enviarFotoRecortada()}
+                                                disabled={enviandoFoto || !areaRecortada}
+                                            >
+                                                {enviandoFoto
+                                                    ? "Enviando..."
+                                                    : "Confirmar"}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : null}
                         </div>
                     </header>
 

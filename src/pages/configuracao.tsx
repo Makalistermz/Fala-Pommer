@@ -3,9 +3,9 @@ import { useState, type ReactNode, useEffect } from "react";
 import { Link } from "react-router";
 import brasao from "../assets/img/brasao.png";
 import MeuPerfil from "./configPages/meu-perfil";
+import ContaSeguranca from "./configPages/conta-seguranca";
 import RelatoriosLogs from "./pagesAdmin/relatoriosLogs";
 import Setores from "./pagesAdmin/setores";
-import Usuarios from "./pagesAdmin/usuarios";
 import "./css/configuracao.css";
 
 type ItemMenu = {
@@ -75,7 +75,7 @@ function Configuracao() {
                 return <MeuPerfil />;
 
             case "conta-seguranca":
-                return <Usuarios />;
+                return <ContaSeguranca />;
 
             case "aparencia":
                 return <Setores />;

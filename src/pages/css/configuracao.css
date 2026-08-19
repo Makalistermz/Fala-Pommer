@@ -632,7 +632,7 @@
     background-color: #ffffff;
     box-shadow: 0 1px 3px rgba(16, 24, 40, 0.28);
     content: "";
-    transition: .4s;
+    animation: toggleEffects 0.55s ease-out;
 }
 
 .conta-seguranca__alternador--ativo {
@@ -642,6 +642,59 @@
 
 .conta-seguranca__alternador--ativo::after {
     left: 23px;
+    animation: toggleEffectsActive 0.55s ease-out;
+}
+
+@keyframes toggleEffectsActive {
+    0% {
+        left: 3px;
+        transform: scaleX(1);
+    }
+
+    45% {
+        transform: scaleX(1.25);
+    }
+
+    65% {
+        left: 25px;
+        transform: scaleX(0.92);
+    }
+
+    82% {
+        left: 20px;
+        transform: scaleX(1.08);
+    }
+
+    100% {
+        left: 23px;
+        transform: scaleX(1);
+    }
+}
+
+@keyframes toggleEffects {
+    0% {
+        left: 23px;
+        transform: scaleX(1);
+    }
+
+    45% {
+        transform: scaleX(1.25);
+    }
+
+    65% {
+        left: 1px;
+        transform: scaleX(0.92);
+    }
+
+    82% {
+        left: 6px;
+        transform: scaleX(1.08);
+    }
+
+    100% {
+        left: 3px;
+        transform: scaleX(1);
+    }
 }
 
 @media (max-width: 1120px) {

@@ -18,7 +18,7 @@
     background: linear-gradient(145deg, #dceaff, #b9d2fb);
     color: #1351b4;
     font-family: var(--fonte-poppins);
-    font-size: clamp(32px, 3.5vw, 46px);
+    font-size: clamp(12px, 3.5vw, 26px);
     font-weight: 600;
     letter-spacing: -0.04em;
     overflow: hidden;
@@ -48,7 +48,7 @@
 
 .admin-profile-role {
     padding: 5px 10px;
-    font-size: 12px;
+    font-size: 10px;
     text-transform: uppercase;
     text-align: center;
     background: #e7f0ff;

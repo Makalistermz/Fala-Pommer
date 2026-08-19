@@ -1,3 +1,73 @@
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: var(--branco);
+}
+
+.admin-profile-avatar {
+    position: relative;
+    display: grid;
+    width: clamp(32px, 9vw, 48px);
+    height: clamp(32px, 9vw, 48px);
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #dceaff, #b9d2fb);
+    color: #1351b4;
+    font-family: var(--fonte-poppins);
+    font-size: clamp(32px, 3.5vw, 46px);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    overflow: hidden;
+}
+
+.admin-profile-image {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.admin-profile-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    color: black;
+}
+
+.admin-profile-name {
+    font-size: 13px;
+}
+
+.admin-profile-role {
+    padding: 5px 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-align: center;
+    background: #e7f0ff;
+    color: #1351b4;
+    font-weight: 700;
+    border-radius: 7px;
+}
+
+.menu-fechado .admin-profile-info {
+    display: none;
+}
+
+.menu-fechado .admin-profile {
+    justify-content: center;
+    gap: 0;
+    padding: 4px;
+    background-color: transparent;
+}
+
 .meu-perfil {
     width: 100%;
     max-width: 1240px;

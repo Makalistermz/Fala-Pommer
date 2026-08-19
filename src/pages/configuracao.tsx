@@ -1,5 +1,5 @@
 // Organiza as opções disponíveis na área de configurações.
-import { useState, type ReactNode } from "react";
+import { useState, type ReactNode, useEffect } from "react";
 import { Link } from "react-router";
 import brasao from "../assets/img/brasao.png";
 import MeuPerfil from "./configPages/meu-perfil";
@@ -13,6 +13,12 @@ type ItemMenu = {
     label: string;
     icon: ReactNode;
 };
+
+interface Perfil {
+    nome: string;
+    tipo_usuario: "user" | "admin" | "funcionario";
+    foto_perfil_url: string | null;
+}
 
 const itensMenu: ItemMenu[] = [
     {
@@ -61,6 +67,7 @@ const itensMenu: ItemMenu[] = [
 function Configuracao() {
     const [menuAberto, setMenuAberto] = useState(true);
     const [itemAtivo, setItemAtivo] = useState("meu-perfil");
+    const [perfil, setPerfil] = useState<Perfil | null>(null);
 
     function renderizarConteudo() {
         switch (itemAtivo) {
@@ -78,6 +85,39 @@ function Configuracao() {
         }
     }
 
+    useEffect(() => {
+            async function carregarPerfil() {
+                const token = localStorage.getItem("access_token");
+    
+                if (!token) {
+                    return
+                }
+    
+                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/me`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
+                );
+    
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível carregar o perfil.");
+                }
+    
+                const dados: Perfil = await resposta.json();
+                setPerfil(dados);
+            }
+    
+            carregarPerfil().catch(console.error);
+        }, []);
+
+        function obterUrlFoto(url: string) {
+            return url.startsWith("http://") || url.startsWith("https://")
+            ? url
+            : `${import.meta.env.VITE_API_URL}${url}`;
+        }
+
     return (
         <div className={`administracao ${menuAberto ? "menu-aberto" : "menu-fechado"}`}>
             <aside className="admin-sidebar" aria-label="Menu de administração">
@@ -85,7 +125,7 @@ function Configuracao() {
                     <img className="admin-logo" src={brasao} alt="Fala Pommer" />
                     <div className="admin-brand">
                         <strong>Fala Pommer</strong>
-                        <span>Administração</span>
+                        <span>Configurações</span>
                     </div>
 
                     <button
@@ -104,6 +144,33 @@ function Configuracao() {
 
                 <nav className="admin-nav">
                     <span className="admin-nav-title">MENU</span>
+                    <div className="admin-profile">
+                        <div className="admin-profile-avatar">
+                            {perfil?.nome.charAt(0).toUpperCase()}
+                                {perfil?.foto_perfil_url && (
+                                    <img
+                                        className="admin-profile-image"
+                                        src={obterUrlFoto(perfil.foto_perfil_url)}
+                                        alt={`Foto de perfil de ${perfil.nome}`}
+                                        onError={(evento) =>
+                                            evento.currentTarget.remove()
+                                        }
+                                    />
+                                )}
+                        </div>
+                        <div className="admin-profile-info">
+                            <strong className="admin-profile-name">
+                                {perfil?.nome ?? "Carregando..."}
+                            </strong>
+
+                            <div className="container-admin-profile-role">
+                                <span className="admin-profile-role">
+                                    {perfil?.tipo_usuario}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
                     {itensMenu.map((item) => (
                         <button
                             key={item.id}
@@ -134,7 +201,7 @@ function Configuracao() {
             <main className="admin-content">
                 <header className="admin-content-header">
                     <div>
-                        <span className="admin-eyebrow">PAINEL ADMINISTRATIVO</span>
+                        <span className="admin-eyebrow">PAINEL DE CONFIGURAÇÕES</span>
                         <h1>{itensMenu.find((item) => item.id === itemAtivo)?.label}</h1>
                     </div>
                 </header>

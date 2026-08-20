@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import brasao from "../assets/img/brasao.png";
 import MeuPerfil from "./configPages/meu-perfil";
 import ContaSeguranca from "./configPages/conta-seguranca";
-import RelatoriosLogs from "./pagesAdmin/relatoriosLogs";
+import Acessibilidade from "./configPages/acessibilidade";
 import Setores from "./pagesAdmin/setores";
 import "./css/configuracao.css";
 
@@ -81,7 +81,7 @@ function Configuracao() {
                 return <Setores />;
 
             case "acessibilidade":
-                return <RelatoriosLogs />
+                return <Acessibilidade />
         }
     }
 

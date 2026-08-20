@@ -1,7 +1,21 @@
+import { useState } from "react";
 import { useNavegacaoAudio } from "../../components/NavegacaoAudioContext";
+import {
+    aplicarAltoContraste,
+    obterPreferenciaAltoContraste,
+} from "../../library/altoContraste";
 
 function Acessibilidade() {
     const { navegacaoAudioAtiva, setNavegacaoAudioAtiva } = useNavegacaoAudio();
+    const [altoContrasteAtivo, setAltoContrasteAtivo] = useState(
+        obterPreferenciaAltoContraste
+    );
+
+    function alternarAltoContraste() {
+        const proximoEstado = !altoContrasteAtivo;
+        setAltoContrasteAtivo(proximoEstado);
+        aplicarAltoContraste(proximoEstado);
+    }
 
     function alternarNavegacaoAudio() {
         const proximoEstado = !navegacaoAudioAtiva;
@@ -27,18 +41,22 @@ function Acessibilidade() {
                         </div>
 
                         <div className="acessibilidade__conteudo">
-                            <strong className="acessibilidade__titulo">Alto contraste</strong>
-                            <span className="acessibilidade__descricao">Ajusta o contraste para proporcionar maior legibilidade e conforto visual.</span>
+                            <strong id="alto-contraste-titulo" className="acessibilidade__titulo">Alto contraste</strong>
+                            <span id="alto-contraste-descricao" className="acessibilidade__descricao">Ajusta o contraste para proporcionar maior legibilidade e conforto visual.</span>
                         </div>
 
                         <span className="acessibilidade__indicador">
-                            <span 
-                            className="acessibilidade__alternador" 
-                            aria-hidden="true"
-                            onClick={(e) => {
-                                            e.currentTarget.classList.toggle('acessibilidade__alternador--ativo');
-                                        }
-                                    }
+                            <button
+                                type="button"
+                                role="switch"
+                                aria-checked={altoContrasteAtivo}
+                                aria-labelledby="alto-contraste-titulo"
+                                aria-describedby="alto-contraste-descricao"
+                                data-audio-text="Alto contraste"
+                                className={`acessibilidade__alternador ${
+                                    altoContrasteAtivo ? "acessibilidade__alternador--ativo" : ""
+                                }`}
+                                onClick={alternarAltoContraste}
                             />
                         </span>
                     </div>

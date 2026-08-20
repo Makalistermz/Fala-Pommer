@@ -5,9 +5,11 @@ import { BrowserRouter } from "react-router";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import App from "./App.tsx";
 import { NavegacaoAudioProvider } from "./components/NavegacaoAudioProvider.tsx";
+import { inicializarAltoContraste } from "./library/altoContraste.ts";
 import "./index.css";
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+inicializarAltoContraste();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

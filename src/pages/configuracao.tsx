@@ -4,8 +4,8 @@ import { Link } from "react-router";
 import brasao from "../assets/img/brasao.png";
 import MeuPerfil from "./configPages/meu-perfil";
 import ContaSeguranca from "./configPages/conta-seguranca";
+import Aparencia from "./configPages/aparencia";
 import Acessibilidade from "./configPages/acessibilidade";
-import Setores from "./pagesAdmin/setores";
 import "./css/configuracao.css";
 
 type ItemMenu = {
@@ -78,7 +78,7 @@ function Configuracao() {
                 return <ContaSeguranca />;
 
             case "aparencia":
-                return <Setores />;
+                return <Aparencia />;
 
             case "acessibilidade":
                 return <Acessibilidade />

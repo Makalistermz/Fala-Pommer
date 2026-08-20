@@ -95,6 +95,7 @@ export function NavegacaoAudioProvider({ children }: PropsWithChildren) {
     const temporizadorRef = useRef<number | null>(null);
     const elementoAtivoRef = useRef<Element | null>(null);
     const textoAtivoRef = useRef("");
+    const falaAtivaRef = useRef<SpeechSynthesisUtterance | null>(null);
 
     useEffect(() => {
         localStorage.setItem(CHAVE_NAVEGACAO_AUDIO, String(navegacaoAudioAtiva));
@@ -103,15 +104,43 @@ export function NavegacaoAudioProvider({ children }: PropsWithChildren) {
     useEffect(() => {
         if (!navegacaoAudioAtiva || !("speechSynthesis" in window)) return;
 
-        const limparLeitura = () => {
+        const cancelarFala = () => {
             if (temporizadorRef.current !== null) {
                 window.clearTimeout(temporizadorRef.current);
                 temporizadorRef.current = null;
             }
 
             window.speechSynthesis.cancel();
+            falaAtivaRef.current = null;
+        };
+
+        const limparLeitura = () => {
+            cancelarFala();
             elementoAtivoRef.current = null;
             textoAtivoRef.current = "";
+        };
+
+        const falar = (texto: string, velocidade: number, atraso = 0) => {
+            cancelarFala();
+
+            const fala = new SpeechSynthesisUtterance(texto);
+            fala.lang = "pt-BR";
+            fala.rate = velocidade;
+            falaAtivaRef.current = fala;
+
+            const liberarFala = () => {
+                if (falaAtivaRef.current === fala) {
+                    falaAtivaRef.current = null;
+                }
+            };
+
+            fala.onend = liberarFala;
+            fala.onerror = liberarFala;
+
+            temporizadorRef.current = window.setTimeout(() => {
+                window.speechSynthesis.speak(fala);
+                temporizadorRef.current = null;
+            }, atraso);
         };
 
         const aoEntrarNoElemento = (evento: PointerEvent) => {
@@ -135,13 +164,7 @@ export function NavegacaoAudioProvider({ children }: PropsWithChildren) {
             elementoAtivoRef.current = resultado.elemento;
             textoAtivoRef.current = resultado.texto;
 
-            temporizadorRef.current = window.setTimeout(() => {
-                const fala = new SpeechSynthesisUtterance(resultado.texto);
-                fala.lang = "pt-BR";
-                fala.rate = 0.95;
-                window.speechSynthesis.speak(fala);
-                temporizadorRef.current = null;
-            }, ATRASO_LEITURA_MS);
+            falar(resultado.texto, 0.95, ATRASO_LEITURA_MS);
         };
 
         const aoSairDoElemento = (evento: PointerEvent) => {
@@ -155,12 +178,45 @@ export function NavegacaoAudioProvider({ children }: PropsWithChildren) {
             limparLeitura();
         };
 
+        const aoDigitar = (evento: KeyboardEvent) => {
+            const elemento = evento.target;
+            const campoDeTexto =
+                elemento instanceof HTMLInputElement ||
+                elemento instanceof HTMLTextAreaElement ||
+                (elemento instanceof HTMLElement && elemento.isContentEditable);
+
+            if (!campoDeTexto) return;
+            if (elemento.closest('[data-audio-teclado="false"]')) return;
+            if (elemento instanceof HTMLInputElement && elemento.type === "password") return;
+            if (evento.isComposing || evento.ctrlKey || evento.altKey || evento.metaKey) return;
+
+            let texto = "";
+
+            if (evento.key === "Backspace" || evento.key === "Delete") {
+                texto = "apagar";
+            } else if (evento.key === "Enter") {
+                texto = "nova linha";
+            } else if (evento.key === " ") {
+                texto = "espaço";
+            } else if (evento.key.length === 1) {
+                texto = evento.key;
+            }
+
+            texto = normalizarTexto(texto);
+            if (!texto) return;
+
+            limparLeitura();
+            falar(texto, 1);
+        };
+
         document.addEventListener("pointerover", aoEntrarNoElemento);
         document.addEventListener("pointerout", aoSairDoElemento);
+        document.addEventListener("keydown", aoDigitar);
 
         return () => {
             document.removeEventListener("pointerover", aoEntrarNoElemento);
             document.removeEventListener("pointerout", aoSairDoElemento);
+            document.removeEventListener("keydown", aoDigitar);
             limparLeitura();
         };
     }, [navegacaoAudioAtiva]);

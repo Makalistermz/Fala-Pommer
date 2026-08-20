@@ -1,4 +1,20 @@
+import { useNavegacaoAudio } from "../../components/NavegacaoAudioContext";
+
 function Acessibilidade() {
+    const { navegacaoAudioAtiva, setNavegacaoAudioAtiva } = useNavegacaoAudio();
+
+    function alternarNavegacaoAudio() {
+        const proximoEstado = !navegacaoAudioAtiva;
+        setNavegacaoAudioAtiva(proximoEstado);
+
+        if (proximoEstado && "speechSynthesis" in window) {
+            window.speechSynthesis.cancel();
+            const fala = new SpeechSynthesisUtterance("Navegação por áudio ativada");
+            fala.lang = "pt-BR";
+            window.speechSynthesis.speak(fala);
+        }
+    }
+
     return (
         <>
             <main className="acessibilidade">
@@ -58,7 +74,7 @@ function Acessibilidade() {
                     <div className="acessibilidade__acao">
                         <div className="acessibilidade__icone">
                             <svg width="22" height="22" fill="currentColor" className="bi bi-soundwave" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8.5 2a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-1 0v-11a.5.5 0 0 1 .5-.5m-2 2a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5m-6 1.5A.5.5 0 0 1 5 6v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m8 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m-10 1A.5.5 0 0 1 3 7v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5m12 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5"/>
+                                <path fillRule="evenodd" d="M8.5 2a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-1 0v-11a.5.5 0 0 1 .5-.5m-2 2a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5m4 0a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5m-6 1.5A.5.5 0 0 1 5 6v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m8 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m-10 1A.5.5 0 0 1 3 7v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5m12 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5"/>
                             </svg>
                         </div>
 
@@ -68,13 +84,15 @@ function Acessibilidade() {
                         </div>
 
                         <span className="acessibilidade__indicador">
-                            <span 
-                            className="acessibilidade__alternador" 
-                            aria-hidden="true"
-                            onClick={(e) => {
-                                            e.currentTarget.classList.toggle('acessibilidade__alternador--ativo');
-                                        }
-                                    }
+                            <button
+                                type="button"
+                                role="switch"
+                                aria-checked={navegacaoAudioAtiva}
+                                aria-label="Navegação por áudio"
+                                className={`acessibilidade__alternador ${
+                                    navegacaoAudioAtiva ? "acessibilidade__alternador--ativo" : ""
+                                }`}
+                                onClick={alternarNavegacaoAudio}
                             />
                         </span>
                     </div>

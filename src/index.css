@@ -17,6 +17,431 @@
   --padding-padrao-coluna: 15px;
 }
 
+/* O tema claro continua sendo o visual padrão. */
+html.tema-escuro:not(.alto-contraste) {
+  color-scheme: dark;
+  --azul-claro: #172d4d;
+  --tema-fundo: #0b1220;
+  --tema-superficie: #111b2c;
+  --tema-superficie-elevada: #17243a;
+  --tema-superficie-interativa: #1d2d46;
+  --tema-borda: #2b3b55;
+  --tema-texto: #edf2f8;
+  --tema-texto-secundario: #9eacc0;
+  --tema-destaque: #72a7ff;
+}
+
+html.tema-escuro:not(.alto-contraste),
+html.tema-escuro:not(.alto-contraste) body,
+html.tema-escuro:not(.alto-contraste) #root {
+  background: var(--tema-fundo);
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(.conversas-header, .nova-conversa__header) {
+  background: var(--azul-claro);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(.menu-modal-button, .admin-profile-name) {
+  color: white;
+}
+
+html.tema-escuro:not(.alto-contraste) .admin-profile-role {
+  background: #172f52;
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .seguranca-icone-sair {
+  background-color: rgba(255, 0, 0, 0.336) !important;
+  color: red !important;
+}
+
+html.tema-escuro:not(.alto-contraste) .conta-seguranca__item--sessoes:hover .icone-seta-sair {
+  background-color: rgba(255, 0, 0, 0.336) !important;
+}
+
+html.tema-escuro:not(.alto-contraste) .conta-seguranca__item--sessoes {
+  border-color: rgba(255, 0, 0, 0.336) !important;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(.setores__botao-apagar, .usuarios__botao-apagar) {
+  background: rgb(255, 53, 53);
+  color: black;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(.admin-nav-item.ativo, .admin-profile-role) {
+  background: var(--tema-superficie-elevada);
+  color: white;
+}
+
+html.tema-escuro:not(.alto-contraste) .admin-nav-item:hover {
+  background: var(--tema-borda);
+}
+
+html.tema-escuro:not(.alto-contraste) .admin-sidebar {
+  background: var(--azul-claro);
+}
+
+/* Conversas */
+html.tema-escuro:not(.alto-contraste) .home {
+  background: var(--tema-fundo);
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .conversas,
+  .chat,
+  .menu-modal,
+  .nova-conversa,
+  .chat-header,
+  .chat-input,
+  .menu-arquivos
+) {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 22%);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .pesquisa-container,
+  .nova-conversa__pesquisa,
+  .chat-input__conteudo,
+  .chat-input__arquivo,
+  .mensagem-anexo--documento
+) {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .pesquisa-container:focus-within,
+  .chat-input__conteudo:focus-within
+) {
+  border-color: var(--tema-destaque);
+  background: var(--tema-superficie-interativa);
+  box-shadow: 0 0 0 3px rgb(114 167 255 / 16%);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .pesquisa-input,
+  .nova-conversa__pesquisa input,
+  .chat-input__campo input
+) {
+  background: transparent;
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .pesquisa-input,
+  .nova-conversa__pesquisa input,
+  .chat-input__campo input
+)::placeholder {
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .conversa-dados strong,
+  .nova-conversa__dados strong,
+  .chat-header__dados strong,
+  .chat-vazio h2,
+  .mensagem-balao p,
+  .mensagem-anexo--documento,
+  .mensagem-anexo--documento strong,
+  .chat-input__arquivo-dados strong,
+  .menu-arquivos__item
+) {
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .conversa-dados > span,
+  .nova-conversa__dados span,
+  .nova-conversa__titulo-lista,
+  .nova-conversa__mensagem,
+  .lista-conversas__vazia,
+  .chat-header__dados span,
+  .chat-vazio p,
+  .mensagens__status,
+  .mensagem-balao time,
+  .mensagem-anexo--documento small,
+  .chat-input__arquivo-dados span,
+  .chat-input__arquivo-remover
+) {
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .filtro-item {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .filtro-item:hover,
+  .conversa-item:hover,
+  .nova-conversa__usuario:hover,
+  .menu-modal-button:hover
+) {
+  border-color: #41618d;
+  background: var(--tema-superficie-interativa);
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .conversa-item.contato-ativo {
+  border-color: #416da8;
+  background: #182f50;
+}
+
+html.tema-escuro:not(.alto-contraste) .conversa-item--nao-lida .conversa-dados > span {
+  color: #cbd6e5;
+}
+
+html.tema-escuro:not(.alto-contraste) .nova-conversa__dados {
+  border-color: var(--tema-borda);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-vazio {
+  background:
+    radial-gradient(circle at 50% 45%, rgb(70 125 210 / 16%), transparent 34%),
+    var(--tema-superficie);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-vazio__icone {
+  border-color: #355b91;
+  background: #172f52;
+  color: var(--tema-destaque);
+  box-shadow: 0 12px 25px rgb(0 0 0 / 20%);
+}
+
+html.tema-escuro:not(.alto-contraste) .mensagem-balao {
+  border-color: #34435a;
+  background: #1b2739;
+  box-shadow: 0 2px 7px rgb(0 0 0 / 18%);
+}
+
+html.tema-escuro:not(.alto-contraste) .mensagem-linha--enviada .mensagem-balao {
+  border-color: #315d99;
+  background: #19385f;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(.mensagem-balao strong, .mensagem-balao__perfil) {
+  color: #8ab6ff;
+}
+
+html.tema-escuro:not(.alto-contraste) .mensagem-balao__perfil {
+  background: #203d65;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__emojis {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie) !important;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__emojis emoji-picker {
+  --background: var(--tema-superficie);
+  --border-color: var(--tema-borda);
+  --button-hover-background: rgb(114 167 255 / 12%);
+  --button-active-background: rgb(114 167 255 / 20%);
+  --input-font-color: var(--tema-texto);
+}
+
+/* Administração e configurações */
+html.tema-escuro:not(.alto-contraste) .administracao {
+  background: var(--tema-fundo);
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .admin-profile,
+  .meu-perfil__cartao,
+  .meu-perfil__recorte-modal,
+  .conta-seguranca__item,
+  .acessibilidade__item,
+  .aparencia,
+  .aparencia__opcao-tema,
+  .cards,
+  .grafico-card,
+  .usuarios,
+  .setores,
+  .relatorios-logs,
+  .usuarios__painel-lateral
+) {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie);
+  color: var(--tema-texto);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 18%);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .admin-content-header h1,
+  .meu-perfil,
+  .meu-perfil__nome,
+  .meu-perfil__preferencias h2,
+  .meu-perfil__seguranca h2,
+  .meu-perfil__preferencia-texto,
+  .meu-perfil__seguranca-info p,
+  .conta-seguranca__acao,
+  .conta-seguranca__titulo,
+  .acessibilidade__acao,
+  .acessibilidade__titulo,
+  .aparencia__titulo,
+  .aparencia__rotulo,
+  .info-cards strong,
+  .grafico-card-header h2,
+  .usuarios__header h2,
+  .setores__header h2,
+  .relatorios-logs__header h2,
+  .relatorios-logs__usuario
+) {
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .admin-eyebrow,
+  .meu-perfil__campo label,
+  .conta-seguranca__descricao,
+  .acessibilidade__descricao,
+  .info-cards small,
+  .grafico-card-legenda,
+  .grafico-status,
+  .usuarios__header p,
+  .setores__header p,
+  .relatorios-logs__header p,
+  .relatorios-logs__mensagem
+) {
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .meu-perfil__campo input,
+  .usuarios__pesquisa input,
+  .info__painel-lateral input,
+  .info__painel-lateral select,
+  .campo-form-setor input
+) {
+  border-color: #40516b;
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .meu-perfil__alterar-foto,
+  .meu-perfil__alterar-senha,
+  .meu-perfil__cancelar,
+  .usuarios__botao-editar,
+  .relatorios-logs__paginacao button
+) {
+  border-color: #4777b8;
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .meu-perfil__alterar-foto:hover,
+  .meu-perfil__alterar-senha:hover,
+  .meu-perfil__cancelar:hover,
+  .usuarios__botao-editar:hover,
+  .relatorios-logs__paginacao button:hover:not(:disabled)
+) {
+  background: #1d3d67;
+  color: #ffffff;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .usuarios__tabela,
+  .setores__tabela,
+  .relatorios-logs__tabela
+) {
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .usuarios__tabela th,
+  .setores__tabela th,
+  .relatorios-logs__tabela th,
+  .relatorios-logs__paginacao
+) {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .usuarios__tabela td,
+  .setores__tabela td,
+  .relatorios-logs__tabela td,
+  .usuarios__header,
+  .usuarios__pesquisa,
+  .setores__header,
+  .relatorios-logs__header,
+  .header__painel-lateral,
+  .meu-perfil__divisor
+) {
+  border-color: var(--tema-borda);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .usuarios__tabela tbody tr:hover,
+  .setores__tabela tbody tr:hover,
+  .relatorios-logs__tabela tbody tr:hover
+) {
+  background: var(--tema-superficie-interativa);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .meu-perfil__perfil,
+  .meu-perfil__preferencia-icone,
+  .conta-seguranca__icone,
+  .acessibilidade__icone,
+  .grafico-card-header > strong,
+  .usuarios__header > strong,
+  .setores__header > strong,
+  .relatorios-logs__header > strong
+) {
+  background: #172f52;
+  color: var(--tema-destaque);
+}
+
+/* Modais */
+html.tema-escuro:not(.alto-contraste) :is(
+  .sem-permissao,
+  .modal-feedback,
+  .modal-confirmacao
+) {
+  background: var(--tema-superficie);
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-feedback h2,
+  .modal-confirmacao h2
+) {
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-feedback p,
+  .modal-confirmacao p
+) {
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste):has(
+  :is(.login, .cadastro, .recuperacao, .redefinir)
+) {
+  color-scheme: light;
+  background: #ffffff;
+  color: #172033;
+}
+
+html.tema-escuro:not(.alto-contraste):has(
+  :is(.login, .cadastro, .recuperacao, .redefinir)
+) :is(body, #root) {
+  background: #ffffff;
+  color: #172033;
+}
+
 html.alto-contraste {
   color-scheme: light;
   --azul-escuro: #003478;

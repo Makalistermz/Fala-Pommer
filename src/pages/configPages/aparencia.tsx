@@ -4,9 +4,14 @@ import {
     obterPlanoFundoConversa,
     type PlanoFundoConversa,
 } from "../../library/planoFundoConversa";
+import {
+    aplicarTemaAparencia,
+    obterTemaAparencia,
+    type TemaAparencia,
+} from "../../library/temaAparencia";
 
 function Aparencia() {
-    const [temaSelecionado, setTemaSelecionado] = useState<"claro" | "escuro">("claro");
+    const [temaSelecionado, setTemaSelecionado] = useState<TemaAparencia>(obterTemaAparencia);
     const [planoFundoSelecionado, setPlanoFundoSelecionado] = useState(
         obterPlanoFundoConversa
     );
@@ -14,6 +19,11 @@ function Aparencia() {
     function selecionarPlanoFundo(plano: PlanoFundoConversa) {
         setPlanoFundoSelecionado(plano);
         aplicarPlanoFundoConversa(plano);
+    }
+
+    function selecionarTema(tema: TemaAparencia) {
+        setTemaSelecionado(tema);
+        aplicarTemaAparencia(tema);
     }
 
     return (
@@ -26,7 +36,7 @@ function Aparencia() {
                 <div className="aparencia__opcoes-tema">
                     <div
                         className="aparencia__opcao-tema"
-                        onClick={() => setTemaSelecionado("claro")}
+                        onClick={() => selecionarTema("claro")}
                     >
                         <div className="aparencia__preview aparencia__preview--claro">
                             <span className="aparencia__preview-amostra">
@@ -62,14 +72,14 @@ function Aparencia() {
                                 id="tema-claro"
                                 value="claro"
                                 checked={temaSelecionado === "claro"}
-                                onChange={() => setTemaSelecionado("claro")}
+                                onChange={() => selecionarTema("claro")}
                             />
                             <span className="aparencia__rotulo">Claro</span>
                         </div>
                     </div>
                     <div
                         className="aparencia__opcao-tema"
-                        onClick={() => setTemaSelecionado("escuro")}
+                        onClick={() => selecionarTema("escuro")}
                     >
                         <div className="aparencia__preview aparencia__preview--escuro">
                             <span className="aparencia__preview-amostra">
@@ -105,7 +115,7 @@ function Aparencia() {
                                 id="tema-escuro"
                                 value="escuro"
                                 checked={temaSelecionado === "escuro"}
-                                onChange={() => setTemaSelecionado("escuro")}
+                                onChange={() => selecionarTema("escuro")}
                             />
                             <span className="aparencia__rotulo">Escuro</span>
                         </div>

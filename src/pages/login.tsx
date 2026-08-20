@@ -1,6 +1,6 @@
 // Exibe o formulário de acesso ao sistema.
 import brasao from "../assets/img/brasao.png";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import imagemLogin from "../assets/img/imagem-pagina-login.png";
 import "./css/LoginCadastro.css";
 import "./css/RecuperarSenha.css";
@@ -32,6 +32,8 @@ interface GoogleUser {
 }
 
 function Login() {
+  const googleButtonContainerRef = useRef<HTMLDivElement>(null);
+  const [googleButtonWidth, setGoogleButtonWidth] = useState(430);
   const [feedback, setFeedback] = useState({
     aberto: false,
     tipo: "erro" as "erro" | "sucesso",
@@ -39,6 +41,22 @@ function Login() {
   });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const container = googleButtonContainerRef.current;
+    if (!container) return;
+
+    const atualizarLargura = () => {
+      setGoogleButtonWidth(Math.min(430, Math.floor(container.clientWidth)));
+    };
+
+    atualizarLargura();
+
+    const observer = new ResizeObserver(atualizarLargura);
+    observer.observe(container);
+
+    return () => observer.disconnect();
+  }, []);
 
   async function entrar(
       event: React.SubmitEvent<HTMLFormElement>
@@ -176,14 +194,19 @@ function Login() {
         <div className="login__google">
             <p className="">Ou continue com</p>
 
-            <GoogleLogin
-              onSuccess={handleSuccess}
-              onError={handleError}
-              theme="outline"
-              shape="rectangular"
-              text="signin_with"
-              width={430}
-            />
+            <div
+              className="login__google-botao"
+              ref={googleButtonContainerRef}
+            >
+              <GoogleLogin
+                onSuccess={handleSuccess}
+                onError={handleError}
+                theme="outline"
+                shape="rectangular"
+                text="signin_with"
+                width={googleButtonWidth}
+              />
+            </div>
         </div>
 
           <p className="login__cadastro">

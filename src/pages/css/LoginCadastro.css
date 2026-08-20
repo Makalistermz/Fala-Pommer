@@ -132,6 +132,18 @@ body {
     align-items: center;
 }
 
+.login__google-botao {
+  display: flex;
+  width: 100%;
+  max-width: 430px;
+  justify-content: center;
+  margin-inline: auto;
+}
+
+.login__google-botao > div {
+  margin-inline: auto;
+}
+
 .login__google p {
     padding: 5px;
     font-size: 13px;

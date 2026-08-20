@@ -4,17 +4,30 @@ import {
     aplicarAltoContraste,
     obterPreferenciaAltoContraste,
 } from "../../library/altoContraste";
+import {
+    aplicarTextoAmpliado,
+    obterPreferenciaTextoAmpliado,
+} from "../../library/textoAmpliado";
 
 function Acessibilidade() {
     const { navegacaoAudioAtiva, setNavegacaoAudioAtiva } = useNavegacaoAudio();
     const [altoContrasteAtivo, setAltoContrasteAtivo] = useState(
         obterPreferenciaAltoContraste
     );
+    const [textoAmpliadoAtivo, setTextoAmpliadoAtivo] = useState(
+        obterPreferenciaTextoAmpliado
+    );
 
     function alternarAltoContraste() {
         const proximoEstado = !altoContrasteAtivo;
         setAltoContrasteAtivo(proximoEstado);
         aplicarAltoContraste(proximoEstado);
+    }
+
+    function alternarTextoAmpliado() {
+        const proximoEstado = !textoAmpliadoAtivo;
+        setTextoAmpliadoAtivo(proximoEstado);
+        aplicarTextoAmpliado(proximoEstado);
     }
 
     function alternarNavegacaoAudio() {
@@ -71,18 +84,22 @@ function Acessibilidade() {
                         </div>
 
                         <div className="acessibilidade__conteudo">
-                            <strong className="acessibilidade__titulo">Texto ampliado</strong>
-                            <span className="acessibilidade__descricao">Redimensiona os textos do aplicativo para melhorar a visualização.</span>
+                            <strong id="texto-ampliado-titulo" className="acessibilidade__titulo">Texto ampliado</strong>
+                            <span id="texto-ampliado-descricao" className="acessibilidade__descricao">Redimensiona os textos do aplicativo para melhorar a visualização.</span>
                         </div>
 
                         <span className="acessibilidade__indicador">
-                            <span 
-                            className="acessibilidade__alternador" 
-                            aria-hidden="true"
-                            onClick={(e) => {
-                                            e.currentTarget.classList.toggle('acessibilidade__alternador--ativo');
-                                        }
-                                    }
+                            <button
+                                type="button"
+                                role="switch"
+                                aria-checked={textoAmpliadoAtivo}
+                                aria-labelledby="texto-ampliado-titulo"
+                                aria-describedby="texto-ampliado-descricao"
+                                data-audio-text="Texto ampliado"
+                                className={`acessibilidade__alternador ${
+                                    textoAmpliadoAtivo ? "acessibilidade__alternador--ativo" : ""
+                                }`}
+                                onClick={alternarTextoAmpliado}
                             />
                         </span>
                     </div>

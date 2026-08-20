@@ -219,3 +219,56 @@ html.alto-contraste body ::selection {
   background: #ffcc00;
   color: #000000;
 }
+
+html.texto-ampliado body :where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  strong,
+  small,
+  label,
+  legend,
+  a,
+  button,
+  li,
+  dt,
+  dd,
+  time
+):not(:has(h1, h2, h3, h4, h5, h6, p, span, strong, small, label, legend, a, button, li, dt, dd, time)) {
+  font-size: 125% !important;
+}
+
+html.texto-ampliado body :where(input, textarea, select, option) {
+  font-size: 125% !important;
+}
+
+html.texto-ampliado body :where(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  label,
+  legend,
+  li,
+  dt,
+  dd
+) {
+  overflow-wrap: anywhere;
+}
+
+html.texto-ampliado body :where(
+  .conversa-avatar,
+  .nova-conversa__avatar,
+  .chat-header__avatar,
+  .admin-profile-avatar
+) {
+  font-size: 125% !important;
+}

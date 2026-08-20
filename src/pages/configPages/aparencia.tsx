@@ -1,7 +1,20 @@
 import { useState } from "react";
+import {
+    aplicarPlanoFundoConversa,
+    obterPlanoFundoConversa,
+    type PlanoFundoConversa,
+} from "../../library/planoFundoConversa";
 
 function Aparencia() {
     const [temaSelecionado, setTemaSelecionado] = useState<"claro" | "escuro">("claro");
+    const [planoFundoSelecionado, setPlanoFundoSelecionado] = useState(
+        obterPlanoFundoConversa
+    );
+
+    function selecionarPlanoFundo(plano: PlanoFundoConversa) {
+        setPlanoFundoSelecionado(plano);
+        aplicarPlanoFundoConversa(plano);
+    }
 
     return (
         <main className="aparencia">
@@ -107,23 +120,48 @@ function Aparencia() {
                 </div>
 
                 <div className="aparencia__opcoes-cor">
-                    <div className="aparencia__opcao-cor aparencia__opcao-cor--1">
+                    <div
+                        className={`aparencia__opcao-cor aparencia__opcao-cor--1 ${
+                            planoFundoSelecionado === 1 ? "aparencia__opcao-cor--selecionada" : ""
+                        }`}
+                        onClick={() => selecionarPlanoFundo(1)}
+                    >
                         <span className="aparencia__amostra-cor"/>
                     </div>
 
-                    <div className="aparencia__opcao-cor aparencia__opcao-cor--2">
+                    <div
+                        className={`aparencia__opcao-cor aparencia__opcao-cor--2 ${
+                            planoFundoSelecionado === 2 ? "aparencia__opcao-cor--selecionada" : ""
+                        }`}
+                        onClick={() => selecionarPlanoFundo(2)}
+                    >
                         <span className="aparencia__amostra-cor"/>
                     </div>
 
-                    <div className="aparencia__opcao-cor aparencia__opcao-cor--3">
+                    <div
+                        className={`aparencia__opcao-cor aparencia__opcao-cor--3 ${
+                            planoFundoSelecionado === 3 ? "aparencia__opcao-cor--selecionada" : ""
+                        }`}
+                        onClick={() => selecionarPlanoFundo(3)}
+                    >
                         <span className="aparencia__amostra-cor"/>
                     </div>
 
-                    <div className="aparencia__opcao-cor aparencia__opcao-cor--4">
+                    <div
+                        className={`aparencia__opcao-cor aparencia__opcao-cor--4 ${
+                            planoFundoSelecionado === 4 ? "aparencia__opcao-cor--selecionada" : ""
+                        }`}
+                        onClick={() => selecionarPlanoFundo(4)}
+                    >
                         <span className="aparencia__amostra-cor"/>
                     </div>
 
-                    <div className="aparencia__opcao-cor aparencia__opcao-cor--5">
+                    <div
+                        className={`aparencia__opcao-cor aparencia__opcao-cor--5 ${
+                            planoFundoSelecionado === 5 ? "aparencia__opcao-cor--selecionada" : ""
+                        }`}
+                        onClick={() => selecionarPlanoFundo(5)}
+                    >
                         <span className="aparencia__amostra-cor"/>
                     </div>
                 </div>

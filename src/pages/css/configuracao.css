@@ -910,6 +910,10 @@
     outline: 3px solid #005CC8;
 }
 
+.aparencia__opcao-cor--selecionada {
+    outline: 3px solid #005CC8;
+}
+
 .aparencia__opcao-cor--1 {
     background-image: url(../../assets/img/background-mensagens.png);
     background-size: cover;

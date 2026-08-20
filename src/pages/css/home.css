@@ -739,6 +739,26 @@
     background-size: cover;
 }
 
+html.plano-fundo-conversa-1 .mensagens {
+    background-image: url(../../assets/img/background-mensagens.png);
+}
+
+html.plano-fundo-conversa-2 .mensagens {
+    background-image: url(../../assets/img/background-mensagens2.png);
+}
+
+html.plano-fundo-conversa-3 .mensagens {
+    background-image: url(../../assets/img/background-mensagens3.png);
+}
+
+html.plano-fundo-conversa-4 .mensagens {
+    background-image: url(../../assets/img/background-mensagens4.png);
+}
+
+html.plano-fundo-conversa-5 .mensagens {
+    background-image: url(../../assets/img/background-mensagens5.png);
+}
+
 .mensagens__status {
     margin: auto;
     color: #667085;

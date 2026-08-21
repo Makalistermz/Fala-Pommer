@@ -18,6 +18,9 @@ const DIGITOS_CODIGO = 6;
 const VALIDADE_CODIGO_MS = 5 * 60 * 1000;
 const INTERVALO_REENVIO_MS = 60 * 1000;
 const MAXIMO_TENTATIVAS = 5;
+const MAXIMO_REENVIOS = 3;
+const JANELA_DESAFIOS_MS = 15 * 60 * 1000;
+const MAXIMO_DESAFIOS_POR_JANELA = 5;
 const SALT_ROUNDS = 10;
 const QUANTIDADE_CODIGOS_RECUPERACAO = 8;
 const TAMANHO_CODIGO_RECUPERACAO = 8;
@@ -337,9 +340,12 @@ export class TwoFactorEmailService {
       throw new BadRequestException('Usuário inválido.');
     }
 
+    const agora = new Date();
+
+    await this.validarLimiteCriacaoDesafio(usuarioId, finalidade, agora);
+
     const token = randomBytes(32).toString('hex');
     const codigo = this.gerarCodigo();
-    const agora = new Date();
     const expiraEm = new Date(agora.getTime() + VALIDADE_CODIGO_MS);
 
     const tokenHash = this.gerarHashToken(token);
@@ -403,6 +409,13 @@ export class TwoFactorEmailService {
       );
     }
 
+    if (desafio.reenvios >= MAXIMO_REENVIOS) {
+      throw new HttpException(
+        'Limite de reenvios atingido. Inicie uma nova verificação mais tarde.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+
     const codigo = this.gerarCodigo();
     const codigoHash = await bcrypt.hash(codigo, SALT_ROUNDS);
     const expiraEm = new Date(agora.getTime() + VALIDADE_CODIGO_MS);
@@ -419,6 +432,9 @@ export class TwoFactorEmailService {
         tentativas: {
           lt: MAXIMO_TENTATIVAS,
         },
+        reenvios: {
+          lt: MAXIMO_REENVIOS,
+        },
         ultimo_envio_em: {
           lte: limiteReenvio,
         },
@@ -427,6 +443,9 @@ export class TwoFactorEmailService {
         codigo_hash: codigoHash,
         expira_em: expiraEm,
         ultimo_envio_em: agora,
+        reenvios: {
+          increment: 1,
+        },
       },
     });
 
@@ -722,6 +741,55 @@ export class TwoFactorEmailService {
     }
 
     return usuario;
+  }
+
+  private async validarLimiteCriacaoDesafio(
+    usuarioId: number,
+    finalidade: desafio_2fa_finalidade,
+    agora: Date,
+  ): Promise<void> {
+    const inicioJanela = new Date(agora.getTime() - JANELA_DESAFIOS_MS);
+    const [desafioMaisRecente, quantidadeNaJanela] = await Promise.all([
+      this.prisma.desafio_login_2fa.findFirst({
+        where: {
+          usuario_id: usuarioId,
+          finalidade,
+        },
+        orderBy: {
+          ultimo_envio_em: 'desc',
+        },
+        select: {
+          ultimo_envio_em: true,
+        },
+      }),
+      this.prisma.desafio_login_2fa.count({
+        where: {
+          usuario_id: usuarioId,
+          finalidade,
+          criado_em: {
+            gte: inicioJanela,
+          },
+        },
+      }),
+    ]);
+
+    if (
+      desafioMaisRecente &&
+      desafioMaisRecente.ultimo_envio_em.getTime() + INTERVALO_REENVIO_MS >
+        agora.getTime()
+    ) {
+      throw new HttpException(
+        'Aguarde antes de solicitar outro código.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+
+    if (quantidadeNaJanela >= MAXIMO_DESAFIOS_POR_JANELA) {
+      throw new HttpException(
+        'Limite de solicitações atingido. Tente novamente mais tarde.',
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
   }
 
   private async validarSenha(senha: string, senhaHash: string): Promise<void> {

@@ -1237,6 +1237,7 @@ export const Desafio_login_2faScalarFieldEnum = {
   token_hash: 'token_hash',
   codigo_hash: 'codigo_hash',
   tentativas: 'tentativas',
+  reenvios: 'reenvios',
   expira_em: 'expira_em',
   usado_em: 'usado_em',
   criado_em: 'criado_em',

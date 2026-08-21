@@ -142,6 +142,7 @@ model desafio_login_2fa {
   token_hash      String                 @unique(map: "uq_desafio_login_token") @db.Char(64)
   codigo_hash     String                 @db.VarChar(255)
   tentativas      Int                    @default(0) @db.UnsignedTinyInt
+  reenvios        Int                    @default(0) @db.UnsignedTinyInt
   expira_em       DateTime
   usado_em        DateTime?
   criado_em       DateTime               @default(now())
@@ -150,6 +151,7 @@ model desafio_login_2fa {
 
   @@index([expira_em], map: "idx_desafio_login_expiracao")
   @@index([usuario_id], map: "idx_desafio_login_usuario")
+  @@index([usuario_id, finalidade, criado_em], map: "idx_desafio_2fa_limite")
 }
 
 enum desafio_2fa_finalidade {

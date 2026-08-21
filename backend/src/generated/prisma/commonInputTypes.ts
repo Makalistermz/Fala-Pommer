@@ -253,6 +253,23 @@ export type Enummensagem_origemWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel>
 }
 
+export type Enumdesafio_2fa_finalidadeFilter<$PrismaModel = never> = {
+  equals?: $Enums.desafio_2fa_finalidade | Prisma.Enumdesafio_2fa_finalidadeFieldRefInput<$PrismaModel>
+  in?: $Enums.desafio_2fa_finalidade[]
+  notIn?: $Enums.desafio_2fa_finalidade[]
+  not?: Prisma.NestedEnumdesafio_2fa_finalidadeFilter<$PrismaModel> | $Enums.desafio_2fa_finalidade
+}
+
+export type Enumdesafio_2fa_finalidadeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.desafio_2fa_finalidade | Prisma.Enumdesafio_2fa_finalidadeFieldRefInput<$PrismaModel>
+  in?: $Enums.desafio_2fa_finalidade[]
+  notIn?: $Enums.desafio_2fa_finalidade[]
+  not?: Prisma.NestedEnumdesafio_2fa_finalidadeWithAggregatesFilter<$PrismaModel> | $Enums.desafio_2fa_finalidade
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumdesafio_2fa_finalidadeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumdesafio_2fa_finalidadeFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[]
@@ -507,6 +524,23 @@ export type NestedEnummensagem_origemWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel>
   _max?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel>
+}
+
+export type NestedEnumdesafio_2fa_finalidadeFilter<$PrismaModel = never> = {
+  equals?: $Enums.desafio_2fa_finalidade | Prisma.Enumdesafio_2fa_finalidadeFieldRefInput<$PrismaModel>
+  in?: $Enums.desafio_2fa_finalidade[]
+  notIn?: $Enums.desafio_2fa_finalidade[]
+  not?: Prisma.NestedEnumdesafio_2fa_finalidadeFilter<$PrismaModel> | $Enums.desafio_2fa_finalidade
+}
+
+export type NestedEnumdesafio_2fa_finalidadeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.desafio_2fa_finalidade | Prisma.Enumdesafio_2fa_finalidadeFieldRefInput<$PrismaModel>
+  in?: $Enums.desafio_2fa_finalidade[]
+  notIn?: $Enums.desafio_2fa_finalidade[]
+  not?: Prisma.NestedEnumdesafio_2fa_finalidadeWithAggregatesFilter<$PrismaModel> | $Enums.desafio_2fa_finalidade
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumdesafio_2fa_finalidadeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumdesafio_2fa_finalidadeFilter<$PrismaModel>
 }
 
 

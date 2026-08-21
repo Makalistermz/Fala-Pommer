@@ -136,18 +136,26 @@ model codigo_recuperacao_2fa {
 }
 
 model desafio_login_2fa {
-  id          Int       @id @default(autoincrement())
-  usuario_id  Int
-  token_hash  String    @unique(map: "uq_desafio_login_token") @db.Char(64)
-  codigo_hash String    @db.VarChar(255)
-  tentativas  Int       @default(0) @db.UnsignedTinyInt
-  expira_em   DateTime
-  usado_em    DateTime?
-  criado_em   DateTime  @default(now())
-  cadastro    cadastro  @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_desafio_login_2fa_usuario")
+  id              Int                    @id @default(autoincrement())
+  usuario_id      Int
+  finalidade      desafio_2fa_finalidade @default(login)
+  token_hash      String                 @unique(map: "uq_desafio_login_token") @db.Char(64)
+  codigo_hash     String                 @db.VarChar(255)
+  tentativas      Int                    @default(0) @db.UnsignedTinyInt
+  expira_em       DateTime
+  usado_em        DateTime?
+  criado_em       DateTime               @default(now())
+  ultimo_envio_em DateTime               @default(now())
+  cadastro        cadastro               @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_desafio_login_2fa_usuario")
 
   @@index([expira_em], map: "idx_desafio_login_expiracao")
   @@index([usuario_id], map: "idx_desafio_login_usuario")
+}
+
+enum desafio_2fa_finalidade {
+  ativacao
+  login
+  desativacao
 }
 
 enum cadastro_tipo_usuario {

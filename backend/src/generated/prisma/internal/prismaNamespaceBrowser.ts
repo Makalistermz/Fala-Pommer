@@ -187,12 +187,14 @@ export type Codigo_recuperacao_2faScalarFieldEnum = (typeof Codigo_recuperacao_2
 export const Desafio_login_2faScalarFieldEnum = {
   id: 'id',
   usuario_id: 'usuario_id',
+  finalidade: 'finalidade',
   token_hash: 'token_hash',
   codigo_hash: 'codigo_hash',
   tentativas: 'tentativas',
   expira_em: 'expira_em',
   usado_em: 'usado_em',
-  criado_em: 'criado_em'
+  criado_em: 'criado_em',
+  ultimo_envio_em: 'ultimo_envio_em'
 } as const
 
 export type Desafio_login_2faScalarFieldEnum = (typeof Desafio_login_2faScalarFieldEnum)[keyof typeof Desafio_login_2faScalarFieldEnum]

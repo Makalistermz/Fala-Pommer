@@ -41,34 +41,40 @@ export type Desafio_login_2faSumAggregateOutputType = {
 export type Desafio_login_2faMinAggregateOutputType = {
   id: number | null
   usuario_id: number | null
+  finalidade: $Enums.desafio_2fa_finalidade | null
   token_hash: string | null
   codigo_hash: string | null
   tentativas: number | null
   expira_em: Date | null
   usado_em: Date | null
   criado_em: Date | null
+  ultimo_envio_em: Date | null
 }
 
 export type Desafio_login_2faMaxAggregateOutputType = {
   id: number | null
   usuario_id: number | null
+  finalidade: $Enums.desafio_2fa_finalidade | null
   token_hash: string | null
   codigo_hash: string | null
   tentativas: number | null
   expira_em: Date | null
   usado_em: Date | null
   criado_em: Date | null
+  ultimo_envio_em: Date | null
 }
 
 export type Desafio_login_2faCountAggregateOutputType = {
   id: number
   usuario_id: number
+  finalidade: number
   token_hash: number
   codigo_hash: number
   tentativas: number
   expira_em: number
   usado_em: number
   criado_em: number
+  ultimo_envio_em: number
   _all: number
 }
 
@@ -88,34 +94,40 @@ export type Desafio_login_2faSumAggregateInputType = {
 export type Desafio_login_2faMinAggregateInputType = {
   id?: true
   usuario_id?: true
+  finalidade?: true
   token_hash?: true
   codigo_hash?: true
   tentativas?: true
   expira_em?: true
   usado_em?: true
   criado_em?: true
+  ultimo_envio_em?: true
 }
 
 export type Desafio_login_2faMaxAggregateInputType = {
   id?: true
   usuario_id?: true
+  finalidade?: true
   token_hash?: true
   codigo_hash?: true
   tentativas?: true
   expira_em?: true
   usado_em?: true
   criado_em?: true
+  ultimo_envio_em?: true
 }
 
 export type Desafio_login_2faCountAggregateInputType = {
   id?: true
   usuario_id?: true
+  finalidade?: true
   token_hash?: true
   codigo_hash?: true
   tentativas?: true
   expira_em?: true
   usado_em?: true
   criado_em?: true
+  ultimo_envio_em?: true
   _all?: true
 }
 
@@ -208,12 +220,14 @@ export type desafio_login_2faGroupByArgs<ExtArgs extends runtime.Types.Extension
 export type Desafio_login_2faGroupByOutputType = {
   id: number
   usuario_id: number
+  finalidade: $Enums.desafio_2fa_finalidade
   token_hash: string
   codigo_hash: string
   tentativas: number
   expira_em: Date
   usado_em: Date | null
   criado_em: Date
+  ultimo_envio_em: Date
   _count: Desafio_login_2faCountAggregateOutputType | null
   _avg: Desafio_login_2faAvgAggregateOutputType | null
   _sum: Desafio_login_2faSumAggregateOutputType | null
@@ -242,24 +256,28 @@ export type desafio_login_2faWhereInput = {
   NOT?: Prisma.desafio_login_2faWhereInput | Prisma.desafio_login_2faWhereInput[]
   id?: Prisma.IntFilter<"desafio_login_2fa"> | number
   usuario_id?: Prisma.IntFilter<"desafio_login_2fa"> | number
+  finalidade?: Prisma.Enumdesafio_2fa_finalidadeFilter<"desafio_login_2fa"> | $Enums.desafio_2fa_finalidade
   token_hash?: Prisma.StringFilter<"desafio_login_2fa"> | string
   codigo_hash?: Prisma.StringFilter<"desafio_login_2fa"> | string
   tentativas?: Prisma.IntFilter<"desafio_login_2fa"> | number
   expira_em?: Prisma.DateTimeFilter<"desafio_login_2fa"> | Date | string
   usado_em?: Prisma.DateTimeNullableFilter<"desafio_login_2fa"> | Date | string | null
   criado_em?: Prisma.DateTimeFilter<"desafio_login_2fa"> | Date | string
+  ultimo_envio_em?: Prisma.DateTimeFilter<"desafio_login_2fa"> | Date | string
   cadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }
 
 export type desafio_login_2faOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
+  finalidade?: Prisma.SortOrder
   token_hash?: Prisma.SortOrder
   codigo_hash?: Prisma.SortOrder
   tentativas?: Prisma.SortOrder
   expira_em?: Prisma.SortOrder
   usado_em?: Prisma.SortOrderInput | Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  ultimo_envio_em?: Prisma.SortOrder
   cadastro?: Prisma.cadastroOrderByWithRelationInput
   _relevance?: Prisma.desafio_login_2faOrderByRelevanceInput
 }
@@ -271,23 +289,27 @@ export type desafio_login_2faWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.desafio_login_2faWhereInput[]
   NOT?: Prisma.desafio_login_2faWhereInput | Prisma.desafio_login_2faWhereInput[]
   usuario_id?: Prisma.IntFilter<"desafio_login_2fa"> | number
+  finalidade?: Prisma.Enumdesafio_2fa_finalidadeFilter<"desafio_login_2fa"> | $Enums.desafio_2fa_finalidade
   codigo_hash?: Prisma.StringFilter<"desafio_login_2fa"> | string
   tentativas?: Prisma.IntFilter<"desafio_login_2fa"> | number
   expira_em?: Prisma.DateTimeFilter<"desafio_login_2fa"> | Date | string
   usado_em?: Prisma.DateTimeNullableFilter<"desafio_login_2fa"> | Date | string | null
   criado_em?: Prisma.DateTimeFilter<"desafio_login_2fa"> | Date | string
+  ultimo_envio_em?: Prisma.DateTimeFilter<"desafio_login_2fa"> | Date | string
   cadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }, "id" | "token_hash">
 
 export type desafio_login_2faOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
+  finalidade?: Prisma.SortOrder
   token_hash?: Prisma.SortOrder
   codigo_hash?: Prisma.SortOrder
   tentativas?: Prisma.SortOrder
   expira_em?: Prisma.SortOrder
   usado_em?: Prisma.SortOrderInput | Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  ultimo_envio_em?: Prisma.SortOrder
   _count?: Prisma.desafio_login_2faCountOrderByAggregateInput
   _avg?: Prisma.desafio_login_2faAvgOrderByAggregateInput
   _max?: Prisma.desafio_login_2faMaxOrderByAggregateInput
@@ -301,85 +323,101 @@ export type desafio_login_2faScalarWhereWithAggregatesInput = {
   NOT?: Prisma.desafio_login_2faScalarWhereWithAggregatesInput | Prisma.desafio_login_2faScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"desafio_login_2fa"> | number
   usuario_id?: Prisma.IntWithAggregatesFilter<"desafio_login_2fa"> | number
+  finalidade?: Prisma.Enumdesafio_2fa_finalidadeWithAggregatesFilter<"desafio_login_2fa"> | $Enums.desafio_2fa_finalidade
   token_hash?: Prisma.StringWithAggregatesFilter<"desafio_login_2fa"> | string
   codigo_hash?: Prisma.StringWithAggregatesFilter<"desafio_login_2fa"> | string
   tentativas?: Prisma.IntWithAggregatesFilter<"desafio_login_2fa"> | number
   expira_em?: Prisma.DateTimeWithAggregatesFilter<"desafio_login_2fa"> | Date | string
   usado_em?: Prisma.DateTimeNullableWithAggregatesFilter<"desafio_login_2fa"> | Date | string | null
   criado_em?: Prisma.DateTimeWithAggregatesFilter<"desafio_login_2fa"> | Date | string
+  ultimo_envio_em?: Prisma.DateTimeWithAggregatesFilter<"desafio_login_2fa"> | Date | string
 }
 
 export type desafio_login_2faCreateInput = {
+  finalidade?: $Enums.desafio_2fa_finalidade
   token_hash: string
   codigo_hash: string
   tentativas?: number
   expira_em: Date | string
   usado_em?: Date | string | null
   criado_em?: Date | string
+  ultimo_envio_em?: Date | string
   cadastro: Prisma.cadastroCreateNestedOneWithoutDesafio_login_2faInput
 }
 
 export type desafio_login_2faUncheckedCreateInput = {
   id?: number
   usuario_id: number
+  finalidade?: $Enums.desafio_2fa_finalidade
   token_hash: string
   codigo_hash: string
   tentativas?: number
   expira_em: Date | string
   usado_em?: Date | string | null
   criado_em?: Date | string
+  ultimo_envio_em?: Date | string
 }
 
 export type desafio_login_2faUpdateInput = {
+  finalidade?: Prisma.Enumdesafio_2fa_finalidadeFieldUpdateOperationsInput | $Enums.desafio_2fa_finalidade
   token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_hash?: Prisma.StringFieldUpdateOperationsInput | string
   tentativas?: Prisma.IntFieldUpdateOperationsInput | number
   expira_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ultimo_envio_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cadastro?: Prisma.cadastroUpdateOneRequiredWithoutDesafio_login_2faNestedInput
 }
 
 export type desafio_login_2faUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
+  finalidade?: Prisma.Enumdesafio_2fa_finalidadeFieldUpdateOperationsInput | $Enums.desafio_2fa_finalidade
   token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_hash?: Prisma.StringFieldUpdateOperationsInput | string
   tentativas?: Prisma.IntFieldUpdateOperationsInput | number
   expira_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ultimo_envio_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type desafio_login_2faCreateManyInput = {
   id?: number
   usuario_id: number
+  finalidade?: $Enums.desafio_2fa_finalidade
   token_hash: string
   codigo_hash: string
   tentativas?: number
   expira_em: Date | string
   usado_em?: Date | string | null
   criado_em?: Date | string
+  ultimo_envio_em?: Date | string
 }
 
 export type desafio_login_2faUpdateManyMutationInput = {
+  finalidade?: Prisma.Enumdesafio_2fa_finalidadeFieldUpdateOperationsInput | $Enums.desafio_2fa_finalidade
   token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_hash?: Prisma.StringFieldUpdateOperationsInput | string
   tentativas?: Prisma.IntFieldUpdateOperationsInput | number
   expira_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ultimo_envio_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type desafio_login_2faUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
+  finalidade?: Prisma.Enumdesafio_2fa_finalidadeFieldUpdateOperationsInput | $Enums.desafio_2fa_finalidade
   token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_hash?: Prisma.StringFieldUpdateOperationsInput | string
   tentativas?: Prisma.IntFieldUpdateOperationsInput | number
   expira_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ultimo_envio_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type Desafio_login_2faListRelationFilter = {
@@ -401,12 +439,14 @@ export type desafio_login_2faOrderByRelevanceInput = {
 export type desafio_login_2faCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
+  finalidade?: Prisma.SortOrder
   token_hash?: Prisma.SortOrder
   codigo_hash?: Prisma.SortOrder
   tentativas?: Prisma.SortOrder
   expira_em?: Prisma.SortOrder
   usado_em?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  ultimo_envio_em?: Prisma.SortOrder
 }
 
 export type desafio_login_2faAvgOrderByAggregateInput = {
@@ -418,23 +458,27 @@ export type desafio_login_2faAvgOrderByAggregateInput = {
 export type desafio_login_2faMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
+  finalidade?: Prisma.SortOrder
   token_hash?: Prisma.SortOrder
   codigo_hash?: Prisma.SortOrder
   tentativas?: Prisma.SortOrder
   expira_em?: Prisma.SortOrder
   usado_em?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  ultimo_envio_em?: Prisma.SortOrder
 }
 
 export type desafio_login_2faMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
+  finalidade?: Prisma.SortOrder
   token_hash?: Prisma.SortOrder
   codigo_hash?: Prisma.SortOrder
   tentativas?: Prisma.SortOrder
   expira_em?: Prisma.SortOrder
   usado_em?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  ultimo_envio_em?: Prisma.SortOrder
 }
 
 export type desafio_login_2faSumOrderByAggregateInput = {
@@ -485,23 +529,31 @@ export type desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput = {
   deleteMany?: Prisma.desafio_login_2faScalarWhereInput | Prisma.desafio_login_2faScalarWhereInput[]
 }
 
+export type Enumdesafio_2fa_finalidadeFieldUpdateOperationsInput = {
+  set?: $Enums.desafio_2fa_finalidade
+}
+
 export type desafio_login_2faCreateWithoutCadastroInput = {
+  finalidade?: $Enums.desafio_2fa_finalidade
   token_hash: string
   codigo_hash: string
   tentativas?: number
   expira_em: Date | string
   usado_em?: Date | string | null
   criado_em?: Date | string
+  ultimo_envio_em?: Date | string
 }
 
 export type desafio_login_2faUncheckedCreateWithoutCadastroInput = {
   id?: number
+  finalidade?: $Enums.desafio_2fa_finalidade
   token_hash: string
   codigo_hash: string
   tentativas?: number
   expira_em: Date | string
   usado_em?: Date | string | null
   criado_em?: Date | string
+  ultimo_envio_em?: Date | string
 }
 
 export type desafio_login_2faCreateOrConnectWithoutCadastroInput = {
@@ -536,51 +588,61 @@ export type desafio_login_2faScalarWhereInput = {
   NOT?: Prisma.desafio_login_2faScalarWhereInput | Prisma.desafio_login_2faScalarWhereInput[]
   id?: Prisma.IntFilter<"desafio_login_2fa"> | number
   usuario_id?: Prisma.IntFilter<"desafio_login_2fa"> | number
+  finalidade?: Prisma.Enumdesafio_2fa_finalidadeFilter<"desafio_login_2fa"> | $Enums.desafio_2fa_finalidade
   token_hash?: Prisma.StringFilter<"desafio_login_2fa"> | string
   codigo_hash?: Prisma.StringFilter<"desafio_login_2fa"> | string
   tentativas?: Prisma.IntFilter<"desafio_login_2fa"> | number
   expira_em?: Prisma.DateTimeFilter<"desafio_login_2fa"> | Date | string
   usado_em?: Prisma.DateTimeNullableFilter<"desafio_login_2fa"> | Date | string | null
   criado_em?: Prisma.DateTimeFilter<"desafio_login_2fa"> | Date | string
+  ultimo_envio_em?: Prisma.DateTimeFilter<"desafio_login_2fa"> | Date | string
 }
 
 export type desafio_login_2faCreateManyCadastroInput = {
   id?: number
+  finalidade?: $Enums.desafio_2fa_finalidade
   token_hash: string
   codigo_hash: string
   tentativas?: number
   expira_em: Date | string
   usado_em?: Date | string | null
   criado_em?: Date | string
+  ultimo_envio_em?: Date | string
 }
 
 export type desafio_login_2faUpdateWithoutCadastroInput = {
+  finalidade?: Prisma.Enumdesafio_2fa_finalidadeFieldUpdateOperationsInput | $Enums.desafio_2fa_finalidade
   token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_hash?: Prisma.StringFieldUpdateOperationsInput | string
   tentativas?: Prisma.IntFieldUpdateOperationsInput | number
   expira_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ultimo_envio_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type desafio_login_2faUncheckedUpdateWithoutCadastroInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  finalidade?: Prisma.Enumdesafio_2fa_finalidadeFieldUpdateOperationsInput | $Enums.desafio_2fa_finalidade
   token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_hash?: Prisma.StringFieldUpdateOperationsInput | string
   tentativas?: Prisma.IntFieldUpdateOperationsInput | number
   expira_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ultimo_envio_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type desafio_login_2faUncheckedUpdateManyWithoutCadastroInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  finalidade?: Prisma.Enumdesafio_2fa_finalidadeFieldUpdateOperationsInput | $Enums.desafio_2fa_finalidade
   token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   codigo_hash?: Prisma.StringFieldUpdateOperationsInput | string
   tentativas?: Prisma.IntFieldUpdateOperationsInput | number
   expira_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ultimo_envio_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -588,12 +650,14 @@ export type desafio_login_2faUncheckedUpdateManyWithoutCadastroInput = {
 export type desafio_login_2faSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   usuario_id?: boolean
+  finalidade?: boolean
   token_hash?: boolean
   codigo_hash?: boolean
   tentativas?: boolean
   expira_em?: boolean
   usado_em?: boolean
   criado_em?: boolean
+  ultimo_envio_em?: boolean
   cadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["desafio_login_2fa"]>
 
@@ -602,15 +666,17 @@ export type desafio_login_2faSelect<ExtArgs extends runtime.Types.Extensions.Int
 export type desafio_login_2faSelectScalar = {
   id?: boolean
   usuario_id?: boolean
+  finalidade?: boolean
   token_hash?: boolean
   codigo_hash?: boolean
   tentativas?: boolean
   expira_em?: boolean
   usado_em?: boolean
   criado_em?: boolean
+  ultimo_envio_em?: boolean
 }
 
-export type desafio_login_2faOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "usuario_id" | "token_hash" | "codigo_hash" | "tentativas" | "expira_em" | "usado_em" | "criado_em", ExtArgs["result"]["desafio_login_2fa"]>
+export type desafio_login_2faOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "usuario_id" | "finalidade" | "token_hash" | "codigo_hash" | "tentativas" | "expira_em" | "usado_em" | "criado_em" | "ultimo_envio_em", ExtArgs["result"]["desafio_login_2fa"]>
 export type desafio_login_2faInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }
@@ -623,12 +689,14 @@ export type $desafio_login_2faPayload<ExtArgs extends runtime.Types.Extensions.I
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     usuario_id: number
+    finalidade: $Enums.desafio_2fa_finalidade
     token_hash: string
     codigo_hash: string
     tentativas: number
     expira_em: Date
     usado_em: Date | null
     criado_em: Date
+    ultimo_envio_em: Date
   }, ExtArgs["result"]["desafio_login_2fa"]>
   composites: {}
 }
@@ -1001,12 +1069,14 @@ export interface Prisma__desafio_login_2faClient<T, Null = never, ExtArgs extend
 export interface desafio_login_2faFieldRefs {
   readonly id: Prisma.FieldRef<"desafio_login_2fa", 'Int'>
   readonly usuario_id: Prisma.FieldRef<"desafio_login_2fa", 'Int'>
+  readonly finalidade: Prisma.FieldRef<"desafio_login_2fa", 'desafio_2fa_finalidade'>
   readonly token_hash: Prisma.FieldRef<"desafio_login_2fa", 'String'>
   readonly codigo_hash: Prisma.FieldRef<"desafio_login_2fa", 'String'>
   readonly tentativas: Prisma.FieldRef<"desafio_login_2fa", 'Int'>
   readonly expira_em: Prisma.FieldRef<"desafio_login_2fa", 'DateTime'>
   readonly usado_em: Prisma.FieldRef<"desafio_login_2fa", 'DateTime'>
   readonly criado_em: Prisma.FieldRef<"desafio_login_2fa", 'DateTime'>
+  readonly ultimo_envio_em: Prisma.FieldRef<"desafio_login_2fa", 'DateTime'>
 }
     
 

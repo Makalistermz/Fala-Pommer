@@ -1233,12 +1233,14 @@ export type Codigo_recuperacao_2faScalarFieldEnum = (typeof Codigo_recuperacao_2
 export const Desafio_login_2faScalarFieldEnum = {
   id: 'id',
   usuario_id: 'usuario_id',
+  finalidade: 'finalidade',
   token_hash: 'token_hash',
   codigo_hash: 'codigo_hash',
   tentativas: 'tentativas',
   expira_em: 'expira_em',
   usado_em: 'usado_em',
-  criado_em: 'criado_em'
+  criado_em: 'criado_em',
+  ultimo_envio_em: 'ultimo_envio_em'
 } as const
 
 export type Desafio_login_2faScalarFieldEnum = (typeof Desafio_login_2faScalarFieldEnum)[keyof typeof Desafio_login_2faScalarFieldEnum]
@@ -1359,6 +1361,13 @@ export type Enumconversa_tipoFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'mensagem_origem'
  */
 export type Enummensagem_origemFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'mensagem_origem'>
+    
+
+
+/**
+ * Reference to a field of type 'desafio_2fa_finalidade'
+ */
+export type Enumdesafio_2fa_finalidadeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'desafio_2fa_finalidade'>
     
 
 

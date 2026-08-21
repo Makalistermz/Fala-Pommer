@@ -9,6 +9,15 @@
 * 🟢 You can import this file directly.
 */
 
+export const desafio_2fa_finalidade = {
+  ativacao: 'ativacao',
+  login: 'login',
+  desativacao: 'desativacao'
+} as const
+
+export type desafio_2fa_finalidade = (typeof desafio_2fa_finalidade)[keyof typeof desafio_2fa_finalidade]
+
+
 export const cadastro_tipo_usuario = {
   user: 'user',
   admin: 'admin',

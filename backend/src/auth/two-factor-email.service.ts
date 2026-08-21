@@ -4,12 +4,14 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { createHash, randomBytes, randomInt } from 'node:crypto';
 import * as bcrypt from 'bcrypt';
 
 import { desafio_2fa_finalidade } from '../generated/prisma/enums';
+import { EmailService } from '../email/email.service';
 import { PrismaService } from '../prisma/prisma.service';
 
 const DIGITOS_CODIGO = 6;
@@ -28,7 +30,199 @@ export interface DesafioDoisFatoresCriado {
 
 @Injectable()
 export class TwoFactorEmailService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly emailService: EmailService,
+  ) {}
+
+  async obterStatus(usuarioId: number): Promise<{ ativo: boolean }> {
+    const usuario = await this.prisma.cadastro.findUnique({
+      where: {
+        id: usuarioId,
+      },
+      select: {
+        dois_fatores_email_ativo: true,
+      },
+    });
+
+    if (!usuario) {
+      throw new UnauthorizedException('Usuário inválido.');
+    }
+
+    return {
+      ativo: usuario.dois_fatores_email_ativo,
+    };
+  }
+
+  async iniciarAtivacao(usuarioId: number, senha: string) {
+    const usuario = await this.obterUsuarioConfiguracao(usuarioId);
+
+    await this.validarSenha(senha, usuario.senha);
+
+    if (usuario.dois_fatores_email_ativo) {
+      throw new BadRequestException(
+        'A verificação em duas etapas já está ativa.',
+      );
+    }
+
+    const desafio = await this.criarDesafio(usuario.id, 'ativacao');
+
+    await this.enviarDesafioPorEmail(
+      usuario.email,
+      desafio.codigo,
+      usuario.id,
+      'ativacao',
+    );
+
+    return this.criarRespostaDesafio(
+      desafio.token,
+      usuario.email,
+      desafio.expiraEm,
+    );
+  }
+
+  async confirmarAtivacao(usuarioId: number, token: string, codigo: string) {
+    const status = await this.obterStatus(usuarioId);
+
+    if (status.ativo) {
+      throw new BadRequestException(
+        'A verificação em duas etapas já está ativa.',
+      );
+    }
+
+    await this.verificarCodigo(token, codigo, 'ativacao', usuarioId);
+
+    const resultado = await this.prisma.cadastro.updateMany({
+      where: {
+        id: usuarioId,
+        dois_fatores_email_ativo: false,
+      },
+      data: {
+        dois_fatores_email_ativo: true,
+        dois_fatores_email_confirmado_em: new Date(),
+      },
+    });
+
+    if (resultado.count !== 1) {
+      throw new BadRequestException(
+        'Não foi possível ativar a verificação em duas etapas.',
+      );
+    }
+
+    return {
+      mensagem: 'Verificação em duas etapas ativada com sucesso.',
+    };
+  }
+
+  async solicitarDesativacao(usuarioId: number, senha: string) {
+    const usuario = await this.obterUsuarioConfiguracao(usuarioId);
+
+    await this.validarSenha(senha, usuario.senha);
+
+    if (!usuario.dois_fatores_email_ativo) {
+      throw new BadRequestException(
+        'A verificação em duas etapas não está ativa.',
+      );
+    }
+
+    const desafio = await this.criarDesafio(usuario.id, 'desativacao');
+
+    await this.enviarDesafioPorEmail(
+      usuario.email,
+      desafio.codigo,
+      usuario.id,
+      'desativacao',
+    );
+
+    return this.criarRespostaDesafio(
+      desafio.token,
+      usuario.email,
+      desafio.expiraEm,
+    );
+  }
+
+  async confirmarDesativacao(usuarioId: number, token: string, codigo: string) {
+    const status = await this.obterStatus(usuarioId);
+
+    if (!status.ativo) {
+      throw new BadRequestException(
+        'A verificação em duas etapas não está ativa.',
+      );
+    }
+
+    await this.verificarCodigo(token, codigo, 'desativacao', usuarioId);
+
+    await this.prisma.$transaction(async (transacao) => {
+      const resultado = await transacao.cadastro.updateMany({
+        where: {
+          id: usuarioId,
+          dois_fatores_email_ativo: true,
+        },
+        data: {
+          dois_fatores_email_ativo: false,
+          dois_fatores_email_confirmado_em: null,
+        },
+      });
+
+      if (resultado.count !== 1) {
+        throw new BadRequestException(
+          'Não foi possível desativar a verificação em duas etapas.',
+        );
+      }
+
+      await transacao.desafio_login_2fa.updateMany({
+        where: {
+          usuario_id: usuarioId,
+          usado_em: null,
+        },
+        data: {
+          usado_em: new Date(),
+        },
+      });
+
+      await transacao.codigo_recuperacao_2fa.deleteMany({
+        where: {
+          usuario_id: usuarioId,
+        },
+      });
+    });
+
+    return {
+      mensagem: 'Verificação em duas etapas desativada com sucesso.',
+    };
+  }
+
+  async reenviarCodigoConfiguracao(
+    usuarioId: number,
+    token: string,
+    finalidade: desafio_2fa_finalidade,
+  ) {
+    if (finalidade === 'login') {
+      throw new BadRequestException('Finalidade do desafio inválida.');
+    }
+
+    const usuario = await this.obterUsuarioConfiguracao(usuarioId);
+
+    if (
+      (finalidade === 'ativacao' && usuario.dois_fatores_email_ativo) ||
+      (finalidade === 'desativacao' && !usuario.dois_fatores_email_ativo)
+    ) {
+      throw new BadRequestException(
+        'O desafio não corresponde ao estado atual.',
+      );
+    }
+
+    const desafio = await this.reenviarCodigo(token, finalidade, usuarioId);
+
+    await this.enviarDesafioPorEmail(
+      usuario.email,
+      desafio.codigo,
+      usuario.id,
+      finalidade,
+    );
+
+    return this.criarRespostaDesafio(token, usuario.email, desafio.expiraEm);
+  }
 
   async criarDesafio(
     usuarioId: number,
@@ -80,6 +274,7 @@ export class TwoFactorEmailService {
   async reenviarCodigo(
     token: string,
     finalidade: desafio_2fa_finalidade,
+    usuarioIdEsperado?: number,
   ): Promise<Omit<DesafioDoisFatoresCriado, 'token'>> {
     const agora = new Date();
     const tokenHash = this.gerarHashToken(token);
@@ -90,7 +285,7 @@ export class TwoFactorEmailService {
       },
     });
 
-    this.validarDesafio(desafio, finalidade, agora);
+    this.validarDesafio(desafio, finalidade, agora, usuarioIdEsperado);
 
     const proximoEnvioEm = new Date(
       desafio.ultimo_envio_em.getTime() + INTERVALO_REENVIO_MS,
@@ -147,6 +342,7 @@ export class TwoFactorEmailService {
     token: string,
     codigo: string,
     finalidade: desafio_2fa_finalidade,
+    usuarioIdEsperado?: number,
   ): Promise<{ usuarioId: number }> {
     const agora = new Date();
     const tokenHash = this.gerarHashToken(token);
@@ -157,7 +353,7 @@ export class TwoFactorEmailService {
       },
     });
 
-    this.validarDesafio(desafio, finalidade, agora);
+    this.validarDesafio(desafio, finalidade, agora, usuarioIdEsperado);
 
     const formatoValido = new RegExp(`^\\d{${DIGITOS_CODIGO}}$`).test(codigo);
     const codigoCorreto =
@@ -238,9 +434,12 @@ export class TwoFactorEmailService {
     } | null,
     finalidade: desafio_2fa_finalidade,
     agora: Date,
+    usuarioIdEsperado?: number,
   ): asserts desafio {
     if (
       !desafio ||
+      (usuarioIdEsperado !== undefined &&
+        desafio.usuario_id !== usuarioIdEsperado) ||
       desafio.finalidade !== finalidade ||
       desafio.usado_em !== null ||
       desafio.expira_em.getTime() <= agora.getTime() ||
@@ -248,6 +447,77 @@ export class TwoFactorEmailService {
     ) {
       throw new UnauthorizedException(MENSAGEM_DESAFIO_INVALIDO);
     }
+  }
+
+  private async obterUsuarioConfiguracao(usuarioId: number) {
+    const usuario = await this.prisma.cadastro.findUnique({
+      where: {
+        id: usuarioId,
+      },
+      select: {
+        id: true,
+        email: true,
+        senha: true,
+        dois_fatores_email_ativo: true,
+      },
+    });
+
+    if (!usuario) {
+      throw new UnauthorizedException('Usuário inválido.');
+    }
+
+    return usuario;
+  }
+
+  private async validarSenha(senha: string, senhaHash: string): Promise<void> {
+    const senhaCorreta = await bcrypt.compare(senha, senhaHash);
+
+    if (!senhaCorreta) {
+      throw new UnauthorizedException('Senha inválida.');
+    }
+  }
+
+  private async enviarDesafioPorEmail(
+    email: string,
+    codigo: string,
+    usuarioId: number,
+    finalidade: desafio_2fa_finalidade,
+  ): Promise<void> {
+    try {
+      await this.emailService.enviarCodigoDoisFatores(email, codigo);
+    } catch {
+      await this.invalidarDesafiosPendentes(usuarioId, finalidade);
+
+      throw new ServiceUnavailableException(
+        'Não foi possível enviar o código de verificação.',
+      );
+    }
+  }
+
+  private criarRespostaDesafio(token: string, email: string, expiraEm: Date) {
+    return {
+      mensagem: 'Código de verificação enviado para o seu e-mail.',
+      token,
+      email_mascarado: this.mascararEmail(email),
+      expira_em: expiraEm,
+    };
+  }
+
+  private mascararEmail(email: string): string {
+    const separador = email.lastIndexOf('@');
+
+    if (separador <= 0) {
+      return '***';
+    }
+
+    const nome = email.slice(0, separador);
+    const dominio = email.slice(separador + 1);
+    const nomeMascarado =
+      nome.length === 1
+        ? `${nome[0]}***`
+        : `${nome[0]}***${nome[nome.length - 1]}`;
+
+    return `${nomeMascarado}@${dominio}`;
   }
 
   private async registrarTentativaInvalida(

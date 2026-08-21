@@ -12,11 +12,14 @@ import { UsuariosModule } from "../usuarios/usuarios.module";
 import { AuthGuard } from "./auth.guard";
 import { PerfisGuard } from "./guards/perfis.guard";
 import { PrismaModule } from "../prisma/prisma.module";
+import { EmailModule } from "../email/email.module";
+import { TwoFactorEmailService } from "./two-factor-email.service";
 
 @Module({
     imports: [
         UsuariosModule,
         PrismaModule,
+        EmailModule,
         ConfigModule,
 
         JwtModule.registerAsync({
@@ -36,7 +39,12 @@ import { PrismaModule } from "../prisma/prisma.module";
         })
     ],
     controllers: [AuthController],
-    providers: [AuthService, AuthGuard, PerfisGuard],
+    providers: [
+        AuthService,
+        AuthGuard,
+        PerfisGuard,
+        TwoFactorEmailService
+    ],
     exports: [AuthService, AuthGuard, PerfisGuard]
 })
 export class AuthModule {}

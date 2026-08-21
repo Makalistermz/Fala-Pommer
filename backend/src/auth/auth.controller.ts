@@ -23,12 +23,95 @@ import { LoginDto } from "./dto/login.dto";
 import { Perfis } from "./decorators/perfis.decorator";
 import { PerfisGuard } from "./guards/perfis.guard";
 import { get } from "http";
+import { TwoFactorEmailService } from "./two-factor-email.service";
+import { SenhaDoisFatoresDto } from "./dto/senha-2fa.dto";
+import { CodigoDoisFatoresDto } from "./dto/codigo-2fa.dto";
+import { ReenviarDoisFatoresDto } from "./dto/reenviar-2fa.dto";
 
 @Controller("auth")
 export class AuthController {
     constructor(
-        private readonly authService: AuthService
+        private readonly authService: AuthService,
+        private readonly twoFactorEmailService: TwoFactorEmailService
     ) {}
+
+    @Get("2fa/status")
+    @UseGuards(AuthGuard)
+    statusDoisFatores(
+        @Req() requisicao: RequisicaoAutenticada
+    ) {
+        return this.twoFactorEmailService.obterStatus(
+            requisicao.usuario!.sub
+        );
+    }
+
+    @Post("2fa/setup")
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(AuthGuard)
+    configurarDoisFatores(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Body() dados: SenhaDoisFatoresDto
+    ) {
+        return this.twoFactorEmailService.iniciarAtivacao(
+            requisicao.usuario!.sub,
+            dados.senha
+        );
+    }
+
+    @Post("2fa/confirm")
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(AuthGuard)
+    confirmarDoisFatores(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Body() dados: CodigoDoisFatoresDto
+    ) {
+        return this.twoFactorEmailService.confirmarAtivacao(
+            requisicao.usuario!.sub,
+            dados.token,
+            dados.codigo
+        );
+    }
+
+    @Post("2fa/disable/request")
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(AuthGuard)
+    solicitarDesativacaoDoisFatores(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Body() dados: SenhaDoisFatoresDto
+    ) {
+        return this.twoFactorEmailService.solicitarDesativacao(
+            requisicao.usuario!.sub,
+            dados.senha
+        );
+    }
+
+    @Post("2fa/disable")
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(AuthGuard)
+    desativarDoisFatores(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Body() dados: CodigoDoisFatoresDto
+    ) {
+        return this.twoFactorEmailService.confirmarDesativacao(
+            requisicao.usuario!.sub,
+            dados.token,
+            dados.codigo
+        );
+    }
+
+    @Post("2fa/resend")
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(AuthGuard)
+    reenviarCodigoDoisFatores(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Body() dados: ReenviarDoisFatoresDto
+    ) {
+        return this.twoFactorEmailService.reenviarCodigoConfiguracao(
+            requisicao.usuario!.sub,
+            dados.token,
+            dados.finalidade
+        );
+    }
 
     @Get("perfil")
     @UseGuards(AuthGuard)

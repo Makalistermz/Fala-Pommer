@@ -287,4 +287,45 @@ export class EmailService {
             console.log("Erro ao enviar o e-mail", erro);
         }
     }
+
+    async enviarCodigoDoisFatores(email: string, codigo: string) {
+        await this.transporter.sendMail({
+            from: `"Fala Pommer" <${process.env.SMTP_USER}>`,
+            to: email,
+            subject: "Código de verificação | Fala Pommer",
+            text: `Seu código de verificação é ${codigo}. Ele expira em 5 minutos e pode ser utilizado apenas uma vez.`,
+            html: `
+                <!DOCTYPE html>
+                <html lang="pt-BR">
+                <body style="margin: 0; padding: 24px; background-color: #f2f4f7; font-family: Arial, Helvetica, sans-serif; color: #252525;">
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                        <tr>
+                            <td align="center">
+                                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width: 560px; background-color: #ffffff; border-radius: 12px; padding: 32px;">
+                                    <tr>
+                                        <td>
+                                            <h1 style="margin: 0 0 16px; color: #1351b4; font-size: 24px;">Verificação em duas etapas</h1>
+                                            <p style="margin: 0 0 24px; color: #475467; font-size: 16px; line-height: 1.5;">
+                                                Use o código abaixo para continuar:
+                                            </p>
+                                            <p style="margin: 0 0 24px; color: #101828; font-size: 36px; font-weight: 700; letter-spacing: 8px; text-align: center;">
+                                                ${codigo}
+                                            </p>
+                                            <p style="margin: 0 0 12px; color: #667085; font-size: 14px; line-height: 1.5;">
+                                                Este código expira em 5 minutos e pode ser utilizado apenas uma vez.
+                                            </p>
+                                            <p style="margin: 0; color: #667085; font-size: 14px; line-height: 1.5;">
+                                                Se você não solicitou este código, ignore esta mensagem.
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </body>
+                </html>
+            `
+        });
+    }
 }

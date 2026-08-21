@@ -590,7 +590,7 @@ function ContaSeguranca() {
             {etapaModal === "codigos-recuperacao" && (
               <div>
                 <h2 id="duas-etapas-titulo">Guarde seus códigos de recuperação</h2>
-                <p>Estes códigos serão exibidos somente agora. Guarde-os em um local seguro; cada um pode ser usado uma única vez.</p>
+                <p>Estes códigos serão exibidos somente agora. Guarde-os em um local seguro, cada um pode ser usado uma única vez.</p>
                 <div className="duas-etapas-modal__codigos" aria-label="Códigos de recuperação">
                   {codigosRecuperacao.map((codigoAtual) => (
                     <code key={codigoAtual}>{codigoAtual}</code>

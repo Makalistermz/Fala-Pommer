@@ -9,27 +9,28 @@ datasource db {
 }
 
 model cadastro {
-  id                          Int                      @id @default(autoincrement())
-  nome                        String                   @db.VarChar(150)
-  data_nascimento             DateTime                 @db.Date
-  cpf                         String                   @db.VarChar(20)
-  telefone                    String                   @db.VarChar(20)
-  email                       String                   @db.VarChar(150)
-  senha                       String                   @db.VarChar(255)
-  token_recuperacao           String?                  @db.VarChar(64)
-  token_recuperacao_expira_em DateTime?
-  tipo_usuario                cadastro_tipo_usuario    @default(user)
-  setor_id                    Int?
-  foto_perfil_url             String?                  @db.VarChar(500)
-  autenticacao_totp           autenticacao_totp?
-  setor                       setores?                 @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
-  codigo_recuperacao_2fa      codigo_recuperacao_2fa[]
-  conversa_leitura            conversa_leitura[]
-  conversa_participante       conversa_participante[]
-  conversas_atendidas         conversa_setor[]         @relation("UsuarioAtendido")
-  desafio_login_2fa           desafio_login_2fa[]
-  login_evento                login_evento[]
-  mensagens_enviadas          mensagem[]               @relation("RemetenteMensagem")
+  id                               Int                      @id @default(autoincrement())
+  nome                             String                   @db.VarChar(150)
+  data_nascimento                  DateTime                 @db.Date
+  cpf                              String                   @db.VarChar(20)
+  telefone                         String                   @db.VarChar(20)
+  email                            String                   @db.VarChar(150)
+  senha                            String                   @db.VarChar(255)
+  token_recuperacao                String?                  @db.VarChar(64)
+  token_recuperacao_expira_em      DateTime?
+  tipo_usuario                     cadastro_tipo_usuario    @default(user)
+  setor_id                         Int?
+  foto_perfil_url                  String?                  @db.VarChar(500)
+  dois_fatores_email_ativo         Boolean                  @default(false)
+  dois_fatores_email_confirmado_em DateTime?
+  setor                            setores?                 @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
+  codigo_recuperacao_2fa           codigo_recuperacao_2fa[]
+  conversa_leitura                 conversa_leitura[]
+  conversa_participante            conversa_participante[]
+  conversas_atendidas              conversa_setor[]         @relation("UsuarioAtendido")
+  desafio_login_2fa                desafio_login_2fa[]
+  login_evento                     login_evento[]
+  mensagens_enviadas               mensagem[]               @relation("RemetenteMensagem")
 
   @@index([setor_id], map: "fk_cadastro_setor")
 }
@@ -122,17 +123,6 @@ model conversa_leitura {
   @@index([usuario_id], map: "idx_conversa_leitura_usuario")
 }
 
-model autenticacao_totp {
-  usuario_id             Int       @id
-  segredo_criptografado  String    @db.Text
-  ativo                  Boolean   @default(false)
-  confirmado_em          DateTime?
-  ultimo_passo_utilizado BigInt?
-  criado_em              DateTime  @default(now())
-  atualizado_em          DateTime  @default(now())
-  cadastro               cadastro  @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_autenticacao_totp_usuario")
-}
-
 model codigo_recuperacao_2fa {
   id          Int       @id @default(autoincrement())
   usuario_id  Int
@@ -146,14 +136,15 @@ model codigo_recuperacao_2fa {
 }
 
 model desafio_login_2fa {
-  id         Int       @id @default(autoincrement())
-  usuario_id Int
-  token_hash String    @unique(map: "uq_desafio_login_token") @db.Char(64)
-  tentativas Int       @default(0) @db.UnsignedTinyInt
-  expira_em  DateTime
-  usado_em   DateTime?
-  criado_em  DateTime  @default(now())
-  cadastro   cadastro  @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_desafio_login_2fa_usuario")
+  id          Int       @id @default(autoincrement())
+  usuario_id  Int
+  token_hash  String    @unique(map: "uq_desafio_login_token") @db.Char(64)
+  codigo_hash String    @db.VarChar(255)
+  tentativas  Int       @default(0) @db.UnsignedTinyInt
+  expira_em   DateTime
+  usado_em    DateTime?
+  criado_em   DateTime  @default(now())
+  cadastro    cadastro  @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_desafio_login_2fa_usuario")
 
   @@index([expira_em], map: "idx_desafio_login_expiracao")
   @@index([usuario_id], map: "idx_desafio_login_usuario")

@@ -59,7 +59,6 @@ export const ModelName = {
   mensagem: 'mensagem',
   setores: 'setores',
   conversa_leitura: 'conversa_leitura',
-  autenticacao_totp: 'autenticacao_totp',
   codigo_recuperacao_2fa: 'codigo_recuperacao_2fa',
   desafio_login_2fa: 'desafio_login_2fa'
 } as const
@@ -92,7 +91,9 @@ export const CadastroScalarFieldEnum = {
   token_recuperacao_expira_em: 'token_recuperacao_expira_em',
   tipo_usuario: 'tipo_usuario',
   setor_id: 'setor_id',
-  foto_perfil_url: 'foto_perfil_url'
+  foto_perfil_url: 'foto_perfil_url',
+  dois_fatores_email_ativo: 'dois_fatores_email_ativo',
+  dois_fatores_email_confirmado_em: 'dois_fatores_email_confirmado_em'
 } as const
 
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]
@@ -172,19 +173,6 @@ export const Conversa_leituraScalarFieldEnum = {
 export type Conversa_leituraScalarFieldEnum = (typeof Conversa_leituraScalarFieldEnum)[keyof typeof Conversa_leituraScalarFieldEnum]
 
 
-export const Autenticacao_totpScalarFieldEnum = {
-  usuario_id: 'usuario_id',
-  segredo_criptografado: 'segredo_criptografado',
-  ativo: 'ativo',
-  confirmado_em: 'confirmado_em',
-  ultimo_passo_utilizado: 'ultimo_passo_utilizado',
-  criado_em: 'criado_em',
-  atualizado_em: 'atualizado_em'
-} as const
-
-export type Autenticacao_totpScalarFieldEnum = (typeof Autenticacao_totpScalarFieldEnum)[keyof typeof Autenticacao_totpScalarFieldEnum]
-
-
 export const Codigo_recuperacao_2faScalarFieldEnum = {
   id: 'id',
   usuario_id: 'usuario_id',
@@ -200,6 +188,7 @@ export const Desafio_login_2faScalarFieldEnum = {
   id: 'id',
   usuario_id: 'usuario_id',
   token_hash: 'token_hash',
+  codigo_hash: 'codigo_hash',
   tentativas: 'tentativas',
   expira_em: 'expira_em',
   usado_em: 'usado_em',
@@ -257,13 +246,6 @@ export const setoresOrderByRelevanceFieldEnum = {
 export type setoresOrderByRelevanceFieldEnum = (typeof setoresOrderByRelevanceFieldEnum)[keyof typeof setoresOrderByRelevanceFieldEnum]
 
 
-export const autenticacao_totpOrderByRelevanceFieldEnum = {
-  segredo_criptografado: 'segredo_criptografado'
-} as const
-
-export type autenticacao_totpOrderByRelevanceFieldEnum = (typeof autenticacao_totpOrderByRelevanceFieldEnum)[keyof typeof autenticacao_totpOrderByRelevanceFieldEnum]
-
-
 export const codigo_recuperacao_2faOrderByRelevanceFieldEnum = {
   codigo_hash: 'codigo_hash'
 } as const
@@ -272,7 +254,8 @@ export type codigo_recuperacao_2faOrderByRelevanceFieldEnum = (typeof codigo_rec
 
 
 export const desafio_login_2faOrderByRelevanceFieldEnum = {
-  token_hash: 'token_hash'
+  token_hash: 'token_hash',
+  codigo_hash: 'codigo_hash'
 } as const
 
 export type desafio_login_2faOrderByRelevanceFieldEnum = (typeof desafio_login_2faOrderByRelevanceFieldEnum)[keyof typeof desafio_login_2faOrderByRelevanceFieldEnum]

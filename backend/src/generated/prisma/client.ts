@@ -80,11 +80,6 @@ export type setores = Prisma.setoresModel
  */
 export type conversa_leitura = Prisma.conversa_leituraModel
 /**
- * Model autenticacao_totp
- * 
- */
-export type autenticacao_totp = Prisma.autenticacao_totpModel
-/**
  * Model codigo_recuperacao_2fa
  * 
  */

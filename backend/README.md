@@ -31,6 +31,19 @@
 $ npm install
 ```
 
+## Environment variables
+
+Copy `.env.example` to `.env` and configure the values for your environment.
+The TOTP secret is encrypted at rest with AES-256-GCM. Generate a dedicated
+32-byte Base64 key with:
+
+```bash
+node -e "console.log(require('node:crypto').randomBytes(32).toString('base64'))"
+```
+
+Store the result in `TOTP_ENCRYPTION_KEY`. Do not reuse `JWT_SECRET` as the
+encryption key.
+
 ## Compile and run the project
 
 ```bash

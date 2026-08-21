@@ -12,6 +12,7 @@ import { UsuariosModule } from "../usuarios/usuarios.module";
 import { AuthGuard } from "./auth.guard";
 import { PerfisGuard } from "./guards/perfis.guard";
 import { PrismaModule } from "../prisma/prisma.module";
+import { Seguranca2faService } from "./seguranca-2fa.service";
 
 @Module({
     imports: [
@@ -36,7 +37,7 @@ import { PrismaModule } from "../prisma/prisma.module";
         })
     ],
     controllers: [AuthController],
-    providers: [AuthService, AuthGuard, PerfisGuard],
-    exports: [AuthService, AuthGuard, PerfisGuard]
+    providers: [AuthService, AuthGuard, PerfisGuard, Seguranca2faService],
+    exports: [AuthService, AuthGuard, PerfisGuard, Seguranca2faService]
 })
 export class AuthModule {}

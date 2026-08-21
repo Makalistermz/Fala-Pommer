@@ -58,7 +58,10 @@ export const ModelName = {
   conversa_setor: 'conversa_setor',
   mensagem: 'mensagem',
   setores: 'setores',
-  conversa_leitura: 'conversa_leitura'
+  conversa_leitura: 'conversa_leitura',
+  autenticacao_totp: 'autenticacao_totp',
+  codigo_recuperacao_2fa: 'codigo_recuperacao_2fa',
+  desafio_login_2fa: 'desafio_login_2fa'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -169,6 +172,43 @@ export const Conversa_leituraScalarFieldEnum = {
 export type Conversa_leituraScalarFieldEnum = (typeof Conversa_leituraScalarFieldEnum)[keyof typeof Conversa_leituraScalarFieldEnum]
 
 
+export const Autenticacao_totpScalarFieldEnum = {
+  usuario_id: 'usuario_id',
+  segredo_criptografado: 'segredo_criptografado',
+  ativo: 'ativo',
+  confirmado_em: 'confirmado_em',
+  ultimo_passo_utilizado: 'ultimo_passo_utilizado',
+  criado_em: 'criado_em',
+  atualizado_em: 'atualizado_em'
+} as const
+
+export type Autenticacao_totpScalarFieldEnum = (typeof Autenticacao_totpScalarFieldEnum)[keyof typeof Autenticacao_totpScalarFieldEnum]
+
+
+export const Codigo_recuperacao_2faScalarFieldEnum = {
+  id: 'id',
+  usuario_id: 'usuario_id',
+  codigo_hash: 'codigo_hash',
+  usado_em: 'usado_em',
+  criado_em: 'criado_em'
+} as const
+
+export type Codigo_recuperacao_2faScalarFieldEnum = (typeof Codigo_recuperacao_2faScalarFieldEnum)[keyof typeof Codigo_recuperacao_2faScalarFieldEnum]
+
+
+export const Desafio_login_2faScalarFieldEnum = {
+  id: 'id',
+  usuario_id: 'usuario_id',
+  token_hash: 'token_hash',
+  tentativas: 'tentativas',
+  expira_em: 'expira_em',
+  usado_em: 'usado_em',
+  criado_em: 'criado_em'
+} as const
+
+export type Desafio_login_2faScalarFieldEnum = (typeof Desafio_login_2faScalarFieldEnum)[keyof typeof Desafio_login_2faScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -215,4 +255,25 @@ export const setoresOrderByRelevanceFieldEnum = {
 } as const
 
 export type setoresOrderByRelevanceFieldEnum = (typeof setoresOrderByRelevanceFieldEnum)[keyof typeof setoresOrderByRelevanceFieldEnum]
+
+
+export const autenticacao_totpOrderByRelevanceFieldEnum = {
+  segredo_criptografado: 'segredo_criptografado'
+} as const
+
+export type autenticacao_totpOrderByRelevanceFieldEnum = (typeof autenticacao_totpOrderByRelevanceFieldEnum)[keyof typeof autenticacao_totpOrderByRelevanceFieldEnum]
+
+
+export const codigo_recuperacao_2faOrderByRelevanceFieldEnum = {
+  codigo_hash: 'codigo_hash'
+} as const
+
+export type codigo_recuperacao_2faOrderByRelevanceFieldEnum = (typeof codigo_recuperacao_2faOrderByRelevanceFieldEnum)[keyof typeof codigo_recuperacao_2faOrderByRelevanceFieldEnum]
+
+
+export const desafio_login_2faOrderByRelevanceFieldEnum = {
+  token_hash: 'token_hash'
+} as const
+
+export type desafio_login_2faOrderByRelevanceFieldEnum = (typeof desafio_login_2faOrderByRelevanceFieldEnum)[keyof typeof desafio_login_2faOrderByRelevanceFieldEnum]
 

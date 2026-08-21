@@ -57,3 +57,18 @@ export type setores = Prisma.setoresModel
  * 
  */
 export type conversa_leitura = Prisma.conversa_leituraModel
+/**
+ * Model autenticacao_totp
+ * 
+ */
+export type autenticacao_totp = Prisma.autenticacao_totpModel
+/**
+ * Model codigo_recuperacao_2fa
+ * 
+ */
+export type codigo_recuperacao_2fa = Prisma.codigo_recuperacao_2faModel
+/**
+ * Model desafio_login_2fa
+ * 
+ */
+export type desafio_login_2fa = Prisma.desafio_login_2faModel

@@ -404,7 +404,10 @@ export const ModelName = {
   conversa_setor: 'conversa_setor',
   mensagem: 'mensagem',
   setores: 'setores',
-  conversa_leitura: 'conversa_leitura'
+  conversa_leitura: 'conversa_leitura',
+  autenticacao_totp: 'autenticacao_totp',
+  codigo_recuperacao_2fa: 'codigo_recuperacao_2fa',
+  desafio_login_2fa: 'desafio_login_2fa'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -420,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura"
+    modelProps: "cadastro" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "autenticacao_totp" | "codigo_recuperacao_2fa" | "desafio_login_2fa"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -952,6 +955,204 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    autenticacao_totp: {
+      payload: Prisma.$autenticacao_totpPayload<ExtArgs>
+      fields: Prisma.autenticacao_totpFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.autenticacao_totpFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$autenticacao_totpPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.autenticacao_totpFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$autenticacao_totpPayload>
+        }
+        findFirst: {
+          args: Prisma.autenticacao_totpFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$autenticacao_totpPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.autenticacao_totpFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$autenticacao_totpPayload>
+        }
+        findMany: {
+          args: Prisma.autenticacao_totpFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$autenticacao_totpPayload>[]
+        }
+        create: {
+          args: Prisma.autenticacao_totpCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$autenticacao_totpPayload>
+        }
+        createMany: {
+          args: Prisma.autenticacao_totpCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.autenticacao_totpDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$autenticacao_totpPayload>
+        }
+        update: {
+          args: Prisma.autenticacao_totpUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$autenticacao_totpPayload>
+        }
+        deleteMany: {
+          args: Prisma.autenticacao_totpDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.autenticacao_totpUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.autenticacao_totpUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$autenticacao_totpPayload>
+        }
+        aggregate: {
+          args: Prisma.Autenticacao_totpAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAutenticacao_totp>
+        }
+        groupBy: {
+          args: Prisma.autenticacao_totpGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Autenticacao_totpGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.autenticacao_totpCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Autenticacao_totpCountAggregateOutputType> | number
+        }
+      }
+    }
+    codigo_recuperacao_2fa: {
+      payload: Prisma.$codigo_recuperacao_2faPayload<ExtArgs>
+      fields: Prisma.codigo_recuperacao_2faFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.codigo_recuperacao_2faFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$codigo_recuperacao_2faPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.codigo_recuperacao_2faFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$codigo_recuperacao_2faPayload>
+        }
+        findFirst: {
+          args: Prisma.codigo_recuperacao_2faFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$codigo_recuperacao_2faPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.codigo_recuperacao_2faFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$codigo_recuperacao_2faPayload>
+        }
+        findMany: {
+          args: Prisma.codigo_recuperacao_2faFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$codigo_recuperacao_2faPayload>[]
+        }
+        create: {
+          args: Prisma.codigo_recuperacao_2faCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$codigo_recuperacao_2faPayload>
+        }
+        createMany: {
+          args: Prisma.codigo_recuperacao_2faCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.codigo_recuperacao_2faDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$codigo_recuperacao_2faPayload>
+        }
+        update: {
+          args: Prisma.codigo_recuperacao_2faUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$codigo_recuperacao_2faPayload>
+        }
+        deleteMany: {
+          args: Prisma.codigo_recuperacao_2faDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.codigo_recuperacao_2faUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.codigo_recuperacao_2faUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$codigo_recuperacao_2faPayload>
+        }
+        aggregate: {
+          args: Prisma.Codigo_recuperacao_2faAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCodigo_recuperacao_2fa>
+        }
+        groupBy: {
+          args: Prisma.codigo_recuperacao_2faGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Codigo_recuperacao_2faGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.codigo_recuperacao_2faCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Codigo_recuperacao_2faCountAggregateOutputType> | number
+        }
+      }
+    }
+    desafio_login_2fa: {
+      payload: Prisma.$desafio_login_2faPayload<ExtArgs>
+      fields: Prisma.desafio_login_2faFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.desafio_login_2faFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$desafio_login_2faPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.desafio_login_2faFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$desafio_login_2faPayload>
+        }
+        findFirst: {
+          args: Prisma.desafio_login_2faFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$desafio_login_2faPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.desafio_login_2faFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$desafio_login_2faPayload>
+        }
+        findMany: {
+          args: Prisma.desafio_login_2faFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$desafio_login_2faPayload>[]
+        }
+        create: {
+          args: Prisma.desafio_login_2faCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$desafio_login_2faPayload>
+        }
+        createMany: {
+          args: Prisma.desafio_login_2faCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.desafio_login_2faDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$desafio_login_2faPayload>
+        }
+        update: {
+          args: Prisma.desafio_login_2faUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$desafio_login_2faPayload>
+        }
+        deleteMany: {
+          args: Prisma.desafio_login_2faDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.desafio_login_2faUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.desafio_login_2faUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$desafio_login_2faPayload>
+        }
+        aggregate: {
+          args: Prisma.Desafio_login_2faAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDesafio_login_2fa>
+        }
+        groupBy: {
+          args: Prisma.desafio_login_2faGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Desafio_login_2faGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.desafio_login_2faCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Desafio_login_2faCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1083,6 +1284,43 @@ export const Conversa_leituraScalarFieldEnum = {
 export type Conversa_leituraScalarFieldEnum = (typeof Conversa_leituraScalarFieldEnum)[keyof typeof Conversa_leituraScalarFieldEnum]
 
 
+export const Autenticacao_totpScalarFieldEnum = {
+  usuario_id: 'usuario_id',
+  segredo_criptografado: 'segredo_criptografado',
+  ativo: 'ativo',
+  confirmado_em: 'confirmado_em',
+  ultimo_passo_utilizado: 'ultimo_passo_utilizado',
+  criado_em: 'criado_em',
+  atualizado_em: 'atualizado_em'
+} as const
+
+export type Autenticacao_totpScalarFieldEnum = (typeof Autenticacao_totpScalarFieldEnum)[keyof typeof Autenticacao_totpScalarFieldEnum]
+
+
+export const Codigo_recuperacao_2faScalarFieldEnum = {
+  id: 'id',
+  usuario_id: 'usuario_id',
+  codigo_hash: 'codigo_hash',
+  usado_em: 'usado_em',
+  criado_em: 'criado_em'
+} as const
+
+export type Codigo_recuperacao_2faScalarFieldEnum = (typeof Codigo_recuperacao_2faScalarFieldEnum)[keyof typeof Codigo_recuperacao_2faScalarFieldEnum]
+
+
+export const Desafio_login_2faScalarFieldEnum = {
+  id: 'id',
+  usuario_id: 'usuario_id',
+  token_hash: 'token_hash',
+  tentativas: 'tentativas',
+  expira_em: 'expira_em',
+  usado_em: 'usado_em',
+  criado_em: 'criado_em'
+} as const
+
+export type Desafio_login_2faScalarFieldEnum = (typeof Desafio_login_2faScalarFieldEnum)[keyof typeof Desafio_login_2faScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1131,6 +1369,27 @@ export const setoresOrderByRelevanceFieldEnum = {
 export type setoresOrderByRelevanceFieldEnum = (typeof setoresOrderByRelevanceFieldEnum)[keyof typeof setoresOrderByRelevanceFieldEnum]
 
 
+export const autenticacao_totpOrderByRelevanceFieldEnum = {
+  segredo_criptografado: 'segredo_criptografado'
+} as const
+
+export type autenticacao_totpOrderByRelevanceFieldEnum = (typeof autenticacao_totpOrderByRelevanceFieldEnum)[keyof typeof autenticacao_totpOrderByRelevanceFieldEnum]
+
+
+export const codigo_recuperacao_2faOrderByRelevanceFieldEnum = {
+  codigo_hash: 'codigo_hash'
+} as const
+
+export type codigo_recuperacao_2faOrderByRelevanceFieldEnum = (typeof codigo_recuperacao_2faOrderByRelevanceFieldEnum)[keyof typeof codigo_recuperacao_2faOrderByRelevanceFieldEnum]
+
+
+export const desafio_login_2faOrderByRelevanceFieldEnum = {
+  token_hash: 'token_hash'
+} as const
+
+export type desafio_login_2faOrderByRelevanceFieldEnum = (typeof desafio_login_2faOrderByRelevanceFieldEnum)[keyof typeof desafio_login_2faOrderByRelevanceFieldEnum]
+
+
 
 /**
  * Field references
@@ -1176,6 +1435,20 @@ export type Enumconversa_tipoFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'mensagem_origem'
  */
 export type Enummensagem_origemFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'mensagem_origem'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'BigInt'
+ */
+export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
     
 
 
@@ -1344,6 +1617,9 @@ export type GlobalOmitConfig = {
   mensagem?: Prisma.mensagemOmit
   setores?: Prisma.setoresOmit
   conversa_leitura?: Prisma.conversa_leituraOmit
+  autenticacao_totp?: Prisma.autenticacao_totpOmit
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faOmit
+  desafio_login_2fa?: Prisma.desafio_login_2faOmit
 }
 
 /* Types for Logging */

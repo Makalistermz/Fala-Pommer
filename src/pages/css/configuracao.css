@@ -1036,6 +1036,18 @@
 }
 
 @media (max-width: 600px) {
+    .acessibilidade__acao {
+        grid-template-columns: 1fr;
+    }
+
+    .acessibilidade__titulo {
+        font-size: 14px;
+    }
+
+    .acessibilidade__descricao {
+        font-size: 12px;
+    }
+
     .conta-seguranca {
         gap: 14px;
     }
@@ -1046,7 +1058,7 @@
     }
 
     .conta-seguranca__acao {
-        grid-template-columns: 48px minmax(0, 1fr) 40px;
+        grid-template-columns: 1fr;
         gap: 12px;
     }
 
@@ -1056,11 +1068,11 @@
     }
 
     .conta-seguranca__titulo {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .conta-seguranca__descricao {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .conta-seguranca__alternador {

@@ -20,7 +20,7 @@ function ContaSeguranca() {
             navigate("/");
         }
     }
-
+  //fazer verificação de dois fatores
     return (
         <main className="conta-seguranca">
             <section className="conta-seguranca__item conta-seguranca__item--senha">

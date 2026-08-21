@@ -1129,6 +1129,10 @@
         --admin-sidebar-width: 72px;
     }
 
+    .administracao.menu-aberto .admin-content {
+        margin-left: 72px;
+    }
+
     .admin-sidebar-header {
         padding-inline: 14px;
     }

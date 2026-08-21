@@ -126,6 +126,67 @@ body {
   background-color: #0c4195;
 }
 
+.login__botao:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.login-2fa {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-2fa__aviso {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #c8daf8;
+  border-radius: 8px;
+  background: #eff5ff;
+  color: #1b365d;
+  line-height: 1.45;
+}
+
+.login-2fa__aviso span {
+  color: #53657d;
+  font-size: 14px;
+}
+
+.login-2fa__acoes {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.login-2fa__acoes button {
+  padding: 2px;
+  border: 0;
+  background: transparent;
+  color: #1351b4;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-2fa__acoes button:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.login-2fa__acoes button:disabled {
+  color: #8993a2;
+  cursor: not-allowed;
+}
+
+.login-2fa__acoes button:focus-visible {
+  outline: 3px solid rgb(19 81 180 / 22%);
+  outline-offset: 3px;
+}
+
 .login__google {
     display: flex;
     flex-direction: column;

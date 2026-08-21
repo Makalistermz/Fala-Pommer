@@ -10,6 +10,7 @@ import {
 import { createHash, randomBytes, randomInt } from 'node:crypto';
 import * as bcrypt from 'bcrypt';
 
+import type { Prisma } from '../generated/prisma/client';
 import { desafio_2fa_finalidade } from '../generated/prisma/enums';
 import { EmailService } from '../email/email.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -340,18 +341,35 @@ export class TwoFactorEmailService {
       throw new BadRequestException('Usuário inválido.');
     }
 
-    const agora = new Date();
+    return this.prisma.$transaction(async (transacao) => {
+      const usuariosBloqueados = await transacao.$queryRaw<
+        Array<{ id: number }>
+      >`
+        SELECT id
+        FROM cadastro
+        WHERE id = ${usuarioId}
+        FOR UPDATE
+      `;
 
-    await this.validarLimiteCriacaoDesafio(usuarioId, finalidade, agora);
+      if (usuariosBloqueados.length !== 1) {
+        throw new BadRequestException('Usuário inválido.');
+      }
 
-    const token = randomBytes(32).toString('hex');
-    const codigo = this.gerarCodigo();
-    const expiraEm = new Date(agora.getTime() + VALIDADE_CODIGO_MS);
+      const agora = new Date();
 
-    const tokenHash = this.gerarHashToken(token);
-    const codigoHash = await bcrypt.hash(codigo, SALT_ROUNDS);
+      await this.validarLimiteCriacaoDesafio(
+        transacao,
+        usuarioId,
+        finalidade,
+        agora,
+      );
 
-    await this.prisma.$transaction(async (transacao) => {
+      const token = randomBytes(32).toString('hex');
+      const codigo = this.gerarCodigo();
+      const expiraEm = new Date(agora.getTime() + VALIDADE_CODIGO_MS);
+      const tokenHash = this.gerarHashToken(token);
+      const codigoHash = await bcrypt.hash(codigo, SALT_ROUNDS);
+
       await transacao.desafio_login_2fa.updateMany({
         where: {
           usuario_id: usuarioId,
@@ -373,13 +391,13 @@ export class TwoFactorEmailService {
           ultimo_envio_em: agora,
         },
       });
-    });
 
-    return {
-      token,
-      codigo,
-      expiraEm,
-    };
+      return {
+        token,
+        codigo,
+        expiraEm,
+      };
+    });
   }
 
   async reenviarCodigo(
@@ -744,13 +762,14 @@ export class TwoFactorEmailService {
   }
 
   private async validarLimiteCriacaoDesafio(
+    transacao: Prisma.TransactionClient,
     usuarioId: number,
     finalidade: desafio_2fa_finalidade,
     agora: Date,
   ): Promise<void> {
     const inicioJanela = new Date(agora.getTime() - JANELA_DESAFIOS_MS);
     const [desafioMaisRecente, quantidadeNaJanela] = await Promise.all([
-      this.prisma.desafio_login_2fa.findFirst({
+      transacao.desafio_login_2fa.findFirst({
         where: {
           usuario_id: usuarioId,
           finalidade,
@@ -762,7 +781,7 @@ export class TwoFactorEmailService {
           ultimo_envio_em: true,
         },
       }),
-      this.prisma.desafio_login_2fa.count({
+      transacao.desafio_login_2fa.count({
         where: {
           usuario_id: usuarioId,
           finalidade,

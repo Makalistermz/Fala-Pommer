@@ -10,13 +10,9 @@ import { EmailService } from '../email/email.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { TwoFactorEmailService } from './two-factor-email.service';
 
-jest.mock('bcrypt', () => ({
-  hash: jest.fn(),
-  compare: jest.fn(),
-}));
-
 const AGORA = new Date('2026-08-21T15:00:00.000Z');
 const TOKEN = 'a'.repeat(64);
+const OUTRO_TOKEN = 'b'.repeat(64);
 
 describe('TwoFactorEmailService', () => {
   const desafioDelegate = {
@@ -40,6 +36,7 @@ describe('TwoFactorEmailService', () => {
     desafio_login_2fa: desafioDelegate,
     cadastro: cadastroDelegate,
     codigo_recuperacao_2fa: codigoRecuperacaoDelegate,
+    $queryRaw: jest.fn(),
     $transaction: jest.fn(),
   };
   const emailMock = {
@@ -47,6 +44,9 @@ describe('TwoFactorEmailService', () => {
   };
 
   let service: TwoFactorEmailService;
+  let hashCodigoValido: string;
+  let hashSenhaValida: string;
+  let hashCodigoRecuperacao: string;
 
   function criarDesafioSalvo(
     alteracoes: Partial<{
@@ -68,7 +68,7 @@ describe('TwoFactorEmailService', () => {
       usuario_id: 7,
       finalidade: 'login' as const,
       token_hash: 'token-hash',
-      codigo_hash: 'hash:123456',
+      codigo_hash: hashCodigoValido,
       tentativas: 0,
       reenvios: 0,
       expira_em: new Date(AGORA.getTime() + 5 * 60 * 1000),
@@ -79,17 +79,19 @@ describe('TwoFactorEmailService', () => {
     };
   }
 
+  beforeAll(async () => {
+    [hashCodigoValido, hashSenhaValida, hashCodigoRecuperacao] =
+      await Promise.all([
+        bcrypt.hash('123456', 4),
+        bcrypt.hash('Senha!123', 4),
+        bcrypt.hash('ABCD-EFGH', 4),
+      ]);
+  });
+
   beforeEach(() => {
     jest.useFakeTimers();
     jest.setSystemTime(AGORA);
     jest.clearAllMocks();
-
-    (bcrypt.hash as jest.Mock).mockImplementation(
-      async (valor: string) => `hash:${valor}`,
-    );
-    (bcrypt.compare as jest.Mock).mockImplementation(
-      async (valor: string, hash: string) => hash === `hash:${valor}`,
-    );
 
     desafioDelegate.findFirst.mockResolvedValue(null);
     desafioDelegate.count.mockResolvedValue(0);
@@ -100,6 +102,7 @@ describe('TwoFactorEmailService', () => {
     codigoRecuperacaoDelegate.deleteMany.mockResolvedValue({ count: 1 });
     codigoRecuperacaoDelegate.createMany.mockResolvedValue({ count: 8 });
     emailMock.enviarCodigoDoisFatores.mockResolvedValue(undefined);
+    prismaMock.$queryRaw.mockResolvedValue([{ id: 7 }]);
     prismaMock.$transaction.mockImplementation(async (operacao) =>
       operacao(prismaMock),
     );
@@ -118,7 +121,7 @@ describe('TwoFactorEmailService', () => {
     cadastroDelegate.findUnique.mockResolvedValue({
       id: 7,
       email: 'usuario@exemplo.com',
-      senha: 'hash:Senha!123',
+      senha: hashSenhaValida,
       dois_fatores_email_ativo: false,
     });
 
@@ -141,6 +144,23 @@ describe('TwoFactorEmailService', () => {
     );
   });
 
+  it('bloqueia a linha do usuário antes de validar e criar o desafio', async () => {
+    await service.criarDesafio(7, 'login');
+
+    const [consulta, usuarioId] = prismaMock.$queryRaw.mock.calls[0] as [
+      TemplateStringsArray,
+      number,
+    ];
+    expect(consulta.join(' ')).toContain('FOR UPDATE');
+    expect(usuarioId).toBe(7);
+    expect(prismaMock.$queryRaw.mock.invocationCallOrder[0]).toBeLessThan(
+      desafioDelegate.findFirst.mock.invocationCallOrder[0],
+    );
+    expect(desafioDelegate.findFirst.mock.invocationCallOrder[0]).toBeLessThan(
+      desafioDelegate.create.mock.invocationCallOrder[0],
+    );
+  });
+
   it('impede um novo desafio antes de 60 segundos', async () => {
     desafioDelegate.findFirst.mockResolvedValue({
       ultimo_envio_em: new Date(AGORA.getTime() - 30 * 1000),
@@ -149,7 +169,8 @@ describe('TwoFactorEmailService', () => {
     await expect(service.criarDesafio(7, 'login')).rejects.toMatchObject({
       status: 429,
     });
-    expect(prismaMock.$transaction).not.toHaveBeenCalled();
+    expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(1);
+    expect(desafioDelegate.create).not.toHaveBeenCalled();
   });
 
   it('limita a cinco novos desafios por finalidade em 15 minutos', async () => {
@@ -161,7 +182,8 @@ describe('TwoFactorEmailService', () => {
     await expect(service.criarDesafio(7, 'login')).rejects.toMatchObject({
       status: 429,
     });
-    expect(prismaMock.$transaction).not.toHaveBeenCalled();
+    expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(1);
+    expect(desafioDelegate.create).not.toHaveBeenCalled();
   });
 
   it('respeita o intervalo mínimo entre reenvios', async () => {
@@ -234,7 +256,6 @@ describe('TwoFactorEmailService', () => {
     await expect(
       service.verificarCodigo(TOKEN, '123456', 'login'),
     ).rejects.toBeInstanceOf(UnauthorizedException);
-    expect(bcrypt.compare).not.toHaveBeenCalled();
   });
 
   it('recusa código expirado', async () => {
@@ -287,20 +308,37 @@ describe('TwoFactorEmailService', () => {
     const dadosCriados = codigoRecuperacaoDelegate.createMany.mock.calls[0][0]
       .data as Array<{ codigo_hash: string }>;
     expect(dadosCriados).toHaveLength(8);
-    expect(
-      dadosCriados.every((item) => item.codigo_hash.startsWith('hash:')),
-    ).toBe(true);
+    await Promise.all(
+      dadosCriados.map(async (item, indice) => {
+        expect(item.codigo_hash).toMatch(/^\$2[aby]\$10\$/);
+        expect(item.codigo_hash).not.toContain(
+          resultado.codigos_recuperacao[indice],
+        );
+        await expect(
+          bcrypt.compare(
+            resultado.codigos_recuperacao[indice],
+            item.codigo_hash,
+          ),
+        ).resolves.toBe(true);
+      }),
+    );
   });
 
   it('consome uma única vez o código de recuperação no login', async () => {
-    desafioDelegate.findUnique.mockResolvedValue(criarDesafioSalvo());
-    codigoRecuperacaoDelegate.findMany.mockResolvedValue([
-      { id: 22, codigo_hash: 'hash:ABCD-EFGH' },
-    ]);
+    desafioDelegate.findUnique
+      .mockResolvedValueOnce(criarDesafioSalvo())
+      .mockResolvedValueOnce(criarDesafioSalvo({ id: 11 }));
+    codigoRecuperacaoDelegate.findMany
+      .mockResolvedValueOnce([{ id: 22, codigo_hash: hashCodigoRecuperacao }])
+      .mockResolvedValueOnce([]);
 
     await expect(
       service.verificarCodigoRecuperacao(TOKEN, 'abcd-efgh', 'login'),
     ).resolves.toEqual({ usuarioId: 7 });
+    await expect(
+      service.verificarCodigoRecuperacao(OUTRO_TOKEN, 'ABCD-EFGH', 'login'),
+    ).rejects.toBeInstanceOf(UnauthorizedException);
+    expect(codigoRecuperacaoDelegate.updateMany).toHaveBeenCalledTimes(1);
     expect(codigoRecuperacaoDelegate.updateMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({ id: 22, usado_em: null }),
@@ -337,7 +375,7 @@ describe('TwoFactorEmailService', () => {
     cadastroDelegate.findUnique.mockResolvedValue({
       id: 7,
       email: 'usuario@exemplo.com',
-      senha: 'hash:Senha!123',
+      senha: hashSenhaValida,
       dois_fatores_email_ativo: false,
     });
 

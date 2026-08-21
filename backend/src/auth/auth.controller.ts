@@ -27,6 +27,9 @@ import { TwoFactorEmailService } from "./two-factor-email.service";
 import { SenhaDoisFatoresDto } from "./dto/senha-2fa.dto";
 import { CodigoDoisFatoresDto } from "./dto/codigo-2fa.dto";
 import { ReenviarDoisFatoresDto } from "./dto/reenviar-2fa.dto";
+import { CodigoRecuperacaoDoisFatoresDto } from "./dto/codigo-recuperacao-2fa.dto";
+import { TokenDesafioDoisFatoresDto } from "./dto/token-desafio-2fa.dto";
+import { DesativarComCodigoRecuperacaoDto } from "./dto/desativar-recuperacao-2fa.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -34,6 +37,38 @@ export class AuthController {
         private readonly authService: AuthService,
         private readonly twoFactorEmailService: TwoFactorEmailService
     ) {}
+
+    @Post("2fa/login/confirm")
+    @HttpCode(HttpStatus.OK)
+    confirmarLoginDoisFatores(
+        @Body() dados: CodigoDoisFatoresDto
+    ) {
+        return this.authService.confirmarLoginDoisFatores(
+            dados.token,
+            dados.codigo
+        );
+    }
+
+    @Post("2fa/login/recovery")
+    @HttpCode(HttpStatus.OK)
+    confirmarLoginComCodigoRecuperacao(
+        @Body() dados: CodigoRecuperacaoDoisFatoresDto
+    ) {
+        return this.authService.confirmarLoginComCodigoRecuperacao(
+            dados.token,
+            dados.codigoRecuperacao
+        );
+    }
+
+    @Post("2fa/login/resend")
+    @HttpCode(HttpStatus.OK)
+    reenviarCodigoLoginDoisFatores(
+        @Body() dados: TokenDesafioDoisFatoresDto
+    ) {
+        return this.twoFactorEmailService.reenviarCodigoLogin(
+            dados.token
+        );
+    }
 
     @Get("2fa/status")
     @UseGuards(AuthGuard)
@@ -96,6 +131,20 @@ export class AuthController {
             requisicao.usuario!.sub,
             dados.token,
             dados.codigo
+        );
+    }
+
+    @Post("2fa/disable/recovery")
+    @HttpCode(HttpStatus.OK)
+    @UseGuards(AuthGuard)
+    desativarDoisFatoresComCodigoRecuperacao(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Body() dados: DesativarComCodigoRecuperacaoDto
+    ) {
+        return this.twoFactorEmailService.confirmarDesativacaoComCodigoRecuperacao(
+            requisicao.usuario!.sub,
+            dados.senha,
+            dados.codigoRecuperacao
         );
     }
 

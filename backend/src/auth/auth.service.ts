@@ -8,6 +8,7 @@ import { JwtService } from "@nestjs/jwt";
 import { UsuariosService } from "../usuarios/usuarios.service";
 import * as bcrypt from "bcrypt";
 import { PrismaService } from "../prisma/prisma.service";
+import { TwoFactorEmailService } from "./two-factor-email.service";
 
 const NOMES_MESES = [
     "Janeiro",
@@ -48,7 +49,8 @@ export class AuthService {
     constructor(
         private readonly usuariosService: UsuariosService,
         private readonly jwtService: JwtService,
-        private readonly prisma: PrismaService
+        private readonly prisma: PrismaService,
+        private readonly twoFactorEmailService: TwoFactorEmailService
     ) {}
 
     async signIn(email: string, senha: string) {
@@ -72,6 +74,85 @@ export class AuthService {
             );
         }
 
+        if (usuario.dois_fatores_email_ativo) {
+            const desafio =
+                await this.twoFactorEmailService.iniciarLogin(
+                    usuario.id
+                );
+
+            return {
+                requer_segunda_etapa: true,
+                ...desafio
+            };
+        }
+
+        return this.concluirLogin(usuario);
+    }
+
+    async confirmarLoginDoisFatores(
+        token: string,
+        codigo: string
+    ) {
+        const desafio =
+            await this.twoFactorEmailService.verificarCodigo(
+                token,
+                codigo,
+                "login"
+            );
+
+        return this.concluirLoginAposSegundoFator(
+            desafio.usuarioId
+        );
+    }
+
+    async confirmarLoginComCodigoRecuperacao(
+        token: string,
+        codigoRecuperacao: string
+    ) {
+        const desafio =
+            await this.twoFactorEmailService.verificarCodigoRecuperacao(
+                token,
+                codigoRecuperacao,
+                "login"
+            );
+
+        return this.concluirLoginAposSegundoFator(
+            desafio.usuarioId
+        );
+    }
+
+    private async concluirLoginAposSegundoFator(
+        usuarioId: number
+    ) {
+        const usuario = await this.prisma.cadastro.findFirst({
+            where: {
+                id: usuarioId,
+                dois_fatores_email_ativo: true
+            },
+            select: {
+                id: true,
+                nome: true,
+                email: true,
+                tipo_usuario: true
+            }
+        });
+
+        if (!usuario) {
+            throw new UnauthorizedException(
+                "Não foi possível concluir a autenticação."
+            );
+        }
+
+        return this.concluirLogin(usuario);
+    }
+
+    private async concluirLogin(usuario: {
+        id: number;
+        nome: string;
+        email: string;
+        tipo_usuario: "user" | "admin" | "funcionario";
+    }) {
+
         await this.prisma.login_evento.create({
             data: {
                 usuario_id: usuario.id,
@@ -88,6 +169,7 @@ export class AuthService {
             await this.jwtService.signAsync(payload);
 
         return {
+            requer_segunda_etapa: false,
             access_token: accessToken,
 
             usuario: {

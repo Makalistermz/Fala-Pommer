@@ -19,13 +19,24 @@ const VALIDADE_CODIGO_MS = 5 * 60 * 1000;
 const INTERVALO_REENVIO_MS = 60 * 1000;
 const MAXIMO_TENTATIVAS = 5;
 const SALT_ROUNDS = 10;
+const QUANTIDADE_CODIGOS_RECUPERACAO = 8;
+const TAMANHO_CODIGO_RECUPERACAO = 8;
+const CARACTERES_CODIGO_RECUPERACAO = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
 const MENSAGEM_DESAFIO_INVALIDO = 'O código informado é inválido ou expirou.';
+const MENSAGEM_CODIGO_RECUPERACAO_INVALIDO =
+  'O código de recuperação informado é inválido.';
 
 export interface DesafioDoisFatoresCriado {
   token: string;
   codigo: string;
   expiraEm: Date;
+}
+
+interface DesafioDoisFatoresReenviado {
+  codigo: string;
+  expiraEm: Date;
+  usuarioId: number;
 }
 
 @Injectable()
@@ -52,6 +63,51 @@ export class TwoFactorEmailService {
     return {
       ativo: usuario.dois_fatores_email_ativo,
     };
+  }
+
+  async iniciarLogin(usuarioId: number) {
+    const usuario = await this.obterUsuarioConfiguracao(usuarioId);
+
+    if (!usuario.dois_fatores_email_ativo) {
+      throw new BadRequestException(
+        'A verificação em duas etapas não está ativa.',
+      );
+    }
+
+    const desafio = await this.criarDesafio(usuario.id, 'login');
+
+    await this.enviarDesafioPorEmail(
+      usuario.email,
+      desafio.codigo,
+      usuario.id,
+      'login',
+    );
+
+    return this.criarRespostaDesafio(
+      desafio.token,
+      usuario.email,
+      desafio.expiraEm,
+    );
+  }
+
+  async reenviarCodigoLogin(token: string) {
+    const desafio = await this.reenviarCodigo(token, 'login');
+    const usuario = await this.obterUsuarioConfiguracao(desafio.usuarioId);
+
+    if (!usuario.dois_fatores_email_ativo) {
+      await this.invalidarDesafiosPendentes(usuario.id, 'login');
+
+      throw new UnauthorizedException(MENSAGEM_DESAFIO_INVALIDO);
+    }
+
+    await this.enviarDesafioPorEmail(
+      usuario.email,
+      desafio.codigo,
+      usuario.id,
+      'login',
+    );
+
+    return this.criarRespostaDesafio(token, usuario.email, desafio.expiraEm);
   }
 
   async iniciarAtivacao(usuarioId: number, senha: string) {
@@ -91,26 +147,48 @@ export class TwoFactorEmailService {
     }
 
     await this.verificarCodigo(token, codigo, 'ativacao', usuarioId);
+    const codigosRecuperacao = this.gerarCodigosRecuperacao();
+    const codigosHash = await Promise.all(
+      codigosRecuperacao.map((codigoRecuperacao) =>
+        bcrypt.hash(codigoRecuperacao, SALT_ROUNDS),
+      ),
+    );
 
-    const resultado = await this.prisma.cadastro.updateMany({
-      where: {
-        id: usuarioId,
-        dois_fatores_email_ativo: false,
-      },
-      data: {
-        dois_fatores_email_ativo: true,
-        dois_fatores_email_confirmado_em: new Date(),
-      },
+    await this.prisma.$transaction(async (transacao) => {
+      const resultado = await transacao.cadastro.updateMany({
+        where: {
+          id: usuarioId,
+          dois_fatores_email_ativo: false,
+        },
+        data: {
+          dois_fatores_email_ativo: true,
+          dois_fatores_email_confirmado_em: new Date(),
+        },
+      });
+
+      if (resultado.count !== 1) {
+        throw new BadRequestException(
+          'Não foi possível ativar a verificação em duas etapas.',
+        );
+      }
+
+      await transacao.codigo_recuperacao_2fa.deleteMany({
+        where: {
+          usuario_id: usuarioId,
+        },
+      });
+
+      await transacao.codigo_recuperacao_2fa.createMany({
+        data: codigosHash.map((codigoHash) => ({
+          usuario_id: usuarioId,
+          codigo_hash: codigoHash,
+        })),
+      });
     });
-
-    if (resultado.count !== 1) {
-      throw new BadRequestException(
-        'Não foi possível ativar a verificação em duas etapas.',
-      );
-    }
 
     return {
       mensagem: 'Verificação em duas etapas ativada com sucesso.',
+      codigos_recuperacao: codigosRecuperacao,
     };
   }
 
@@ -152,6 +230,33 @@ export class TwoFactorEmailService {
 
     await this.verificarCodigo(token, codigo, 'desativacao', usuarioId);
 
+    return this.desativarDoisFatoresDoUsuario(usuarioId);
+  }
+
+  async confirmarDesativacaoComCodigoRecuperacao(
+    usuarioId: number,
+    senha: string,
+    codigoRecuperacao: string,
+  ) {
+    const usuario = await this.obterUsuarioConfiguracao(usuarioId);
+
+    await this.validarSenha(senha, usuario.senha);
+
+    if (!usuario.dois_fatores_email_ativo) {
+      throw new BadRequestException(
+        'A verificação em duas etapas não está ativa.',
+      );
+    }
+
+    await this.consumirCodigoRecuperacaoDoUsuario(
+      usuario.id,
+      codigoRecuperacao,
+    );
+
+    return this.desativarDoisFatoresDoUsuario(usuarioId);
+  }
+
+  private async desativarDoisFatoresDoUsuario(usuarioId: number) {
     await this.prisma.$transaction(async (transacao) => {
       const resultado = await transacao.cadastro.updateMany({
         where: {
@@ -275,7 +380,7 @@ export class TwoFactorEmailService {
     token: string,
     finalidade: desafio_2fa_finalidade,
     usuarioIdEsperado?: number,
-  ): Promise<Omit<DesafioDoisFatoresCriado, 'token'>> {
+  ): Promise<DesafioDoisFatoresReenviado> {
     const agora = new Date();
     const tokenHash = this.gerarHashToken(token);
 
@@ -335,6 +440,7 @@ export class TwoFactorEmailService {
     return {
       codigo,
       expiraEm,
+      usuarioId: desafio.usuario_id,
     };
   }
 
@@ -391,6 +497,92 @@ export class TwoFactorEmailService {
     };
   }
 
+  async verificarCodigoRecuperacao(
+    token: string,
+    codigoRecuperacao: string,
+    finalidade: desafio_2fa_finalidade,
+    usuarioIdEsperado?: number,
+  ): Promise<{ usuarioId: number }> {
+    const agora = new Date();
+    const tokenHash = this.gerarHashToken(token);
+
+    const desafio = await this.prisma.desafio_login_2fa.findUnique({
+      where: {
+        token_hash: tokenHash,
+      },
+    });
+
+    this.validarDesafio(desafio, finalidade, agora, usuarioIdEsperado);
+
+    const codigosDisponiveis =
+      await this.prisma.codigo_recuperacao_2fa.findMany({
+        where: {
+          usuario_id: desafio.usuario_id,
+          usado_em: null,
+        },
+        select: {
+          id: true,
+          codigo_hash: true,
+        },
+      });
+
+    const codigoNormalizado = codigoRecuperacao.trim().toUpperCase();
+    const comparacoes = await Promise.all(
+      codigosDisponiveis.map((codigoSalvo) =>
+        bcrypt.compare(codigoNormalizado, codigoSalvo.codigo_hash),
+      ),
+    );
+    const indiceCorreto = comparacoes.findIndex(Boolean);
+
+    if (indiceCorreto === -1) {
+      await this.registrarTentativaInvalida(desafio.id, finalidade, agora);
+
+      throw new UnauthorizedException(MENSAGEM_DESAFIO_INVALIDO);
+    }
+
+    const codigoEncontrado = codigosDisponiveis[indiceCorreto];
+
+    await this.prisma.$transaction(async (transacao) => {
+      const desafioConsumido = await transacao.desafio_login_2fa.updateMany({
+        where: {
+          id: desafio.id,
+          finalidade,
+          usado_em: null,
+          expira_em: {
+            gt: agora,
+          },
+          tentativas: {
+            lt: MAXIMO_TENTATIVAS,
+          },
+        },
+        data: {
+          usado_em: agora,
+        },
+      });
+
+      const codigoConsumido = await transacao.codigo_recuperacao_2fa.updateMany(
+        {
+          where: {
+            id: codigoEncontrado.id,
+            usuario_id: desafio.usuario_id,
+            usado_em: null,
+          },
+          data: {
+            usado_em: agora,
+          },
+        },
+      );
+
+      if (desafioConsumido.count !== 1 || codigoConsumido.count !== 1) {
+        throw new UnauthorizedException(MENSAGEM_DESAFIO_INVALIDO);
+      }
+    });
+
+    return {
+      usuarioId: desafio.usuario_id,
+    };
+  }
+
   async invalidarDesafiosPendentes(
     usuarioId: number,
     finalidade?: desafio_2fa_finalidade,
@@ -411,6 +603,69 @@ export class TwoFactorEmailService {
     return randomInt(0, 10 ** DIGITOS_CODIGO)
       .toString()
       .padStart(DIGITOS_CODIGO, '0');
+  }
+
+  private gerarCodigosRecuperacao(): string[] {
+    const codigos = new Set<string>();
+
+    while (codigos.size < QUANTIDADE_CODIGOS_RECUPERACAO) {
+      let codigo = '';
+
+      for (let indice = 0; indice < TAMANHO_CODIGO_RECUPERACAO; indice += 1) {
+        codigo +=
+          CARACTERES_CODIGO_RECUPERACAO[
+            randomInt(0, CARACTERES_CODIGO_RECUPERACAO.length)
+          ];
+      }
+
+      codigos.add(`${codigo.slice(0, 4)}-${codigo.slice(4)}`);
+    }
+
+    return Array.from(codigos);
+  }
+
+  private async consumirCodigoRecuperacaoDoUsuario(
+    usuarioId: number,
+    codigoRecuperacao: string,
+  ): Promise<void> {
+    const codigosDisponiveis =
+      await this.prisma.codigo_recuperacao_2fa.findMany({
+        where: {
+          usuario_id: usuarioId,
+          usado_em: null,
+        },
+        select: {
+          id: true,
+          codigo_hash: true,
+        },
+      });
+
+    const codigoNormalizado = codigoRecuperacao.trim().toUpperCase();
+    const comparacoes = await Promise.all(
+      codigosDisponiveis.map((codigoSalvo) =>
+        bcrypt.compare(codigoNormalizado, codigoSalvo.codigo_hash),
+      ),
+    );
+    const indiceCorreto = comparacoes.findIndex(Boolean);
+
+    if (indiceCorreto === -1) {
+      throw new UnauthorizedException(MENSAGEM_CODIGO_RECUPERACAO_INVALIDO);
+    }
+
+    const resultado = await this.prisma.codigo_recuperacao_2fa.updateMany({
+      where: {
+        id: codigosDisponiveis[indiceCorreto].id,
+        usuario_id: usuarioId,
+        usado_em: null,
+      },
+      data: {
+        usado_em: new Date(),
+      },
+    });
+
+    if (resultado.count !== 1) {
+      throw new UnauthorizedException(MENSAGEM_CODIGO_RECUPERACAO_INVALIDO);
+    }
   }
 
   private gerarHashToken(token: string): string {

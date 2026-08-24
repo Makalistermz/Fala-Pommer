@@ -10,7 +10,7 @@ type Setor = {
     sigla_setor: string;
 }
 
-const ITENS_POR_PAGINA = 10;
+const ITENS_POR_PAGINA = 20;
 
 function Setores() {
     const [setores, setSetores] = useState<Setor[]>([]);

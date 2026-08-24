@@ -19,7 +19,7 @@ interface Setor {
     sigla_setor: string;
 }
 
-const ITENS_POR_PAGINA = 25;
+const ITENS_POR_PAGINA = 20;
 
 function Usuarios() {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);

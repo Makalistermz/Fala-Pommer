@@ -1475,7 +1475,10 @@ function Home() {
                     y: 0,
                     duration: 0.35,
                     ease: "back.out(2)",
-                    stagger: 0.08,
+                    stagger: {
+                        each: 0.08,
+                        from: "end",
+                    },
                 },
             );
         }

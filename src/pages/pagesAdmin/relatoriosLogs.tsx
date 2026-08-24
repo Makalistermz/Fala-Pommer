@@ -1,5 +1,6 @@
 // Exibe os registros de acesso para consulta administrativa.
 import { useEffect, useState } from "react";
+import { obterItensPaginacao } from "../../library/paginacao";
 
 type RelatorioLog = {
     id: number;
@@ -165,18 +166,24 @@ function RelatoriosLogs() {
                         Anterior
                     </button>
 
-                    {Array.from({ length: totalPaginas }, (_, indice) => {
-                        const pagina = indice + 1;
+                    {obterItensPaginacao(paginaAtual, totalPaginas).map((item) => {
+                        if (typeof item === "string") {
+                            return (
+                                <span key={item} aria-hidden="true">
+                                    …
+                                </span>
+                            );
+                        }
 
                         return (
                             <button
-                                key={pagina}
+                                key={item}
                                 type="button"
-                                onClick={() => setPaginaAtual(pagina)}
-                                aria-current={paginaAtual === pagina ? "page" : undefined}
-                                disabled={paginaAtual === pagina}
+                                onClick={() => setPaginaAtual(item)}
+                                aria-current={paginaAtual === item ? "page" : undefined}
+                                disabled={paginaAtual === item}
                             >
-                                {pagina}
+                                {item}
                             </button>
                         );
                     })}

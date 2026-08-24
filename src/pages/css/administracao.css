@@ -1089,6 +1089,15 @@
         transform 160ms ease;
 }
 
+.relatorios-logs__paginacao > span {
+    display: grid;
+    min-width: 24px;
+    height: 38px;
+    place-items: center;
+    color: #6e7e99;
+    font-weight: 700;
+}
+
 .relatorios-logs__paginacao button:hover:not(:disabled) {
     border-color: var(--rosa-escuro);
     background: #ef476e1a;

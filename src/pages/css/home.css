@@ -766,6 +766,24 @@ html.plano-fundo-conversa-5 .mensagens {
     font-size: 14px;
 }
 
+.mensagens__carregar-anteriores {
+    align-self: center;
+    padding: 7px 14px;
+    border: 1px solid #c8d7ee;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #24466f;
+    font-family: var(--fonte-dm-sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.mensagens__carregar-anteriores:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
 .mensagem-linha {
     display: flex;
     width: 100%;

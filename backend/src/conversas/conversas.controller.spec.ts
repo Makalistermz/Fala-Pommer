@@ -1,19 +1,38 @@
-// Testa o comportamento do controlador de conversas.
-import { Test, TestingModule } from '@nestjs/testing';
-import { ConversasController } from './conversas.controller';
+// Testa o encaminhamento dos filtros de mensagens pelo controlador.
+import { type RequisicaoAutenticada } from "../auth/auth.guard";
+import { ConversasController } from "./conversas.controller";
+import { ConversasService } from "./conversas.service";
 
-describe('ConversasController', () => {
-  let controller: ConversasController;
+describe("ConversasController", () => {
+  const conversasServiceMock = {
+    listarMensagens: jest.fn(),
+  };
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [ConversasController],
-    }).compile();
+  const controller = new ConversasController(
+    conversasServiceMock as unknown as ConversasService,
+  );
 
-    controller = module.get<ConversasController>(ConversasController);
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it("encaminha usuário, conversa e paginação ao serviço", () => {
+    const requisicao = {
+      usuario: {
+        sub: 7,
+      },
+    } as RequisicaoAutenticada;
+    const consulta = {
+      depoisDe: 100,
+      limite: 50,
+    };
+
+    controller.listarMensagens(requisicao, 15, consulta);
+
+    expect(conversasServiceMock.listarMensagens).toHaveBeenCalledWith(
+      7,
+      15,
+      consulta,
+    );
   });
 });

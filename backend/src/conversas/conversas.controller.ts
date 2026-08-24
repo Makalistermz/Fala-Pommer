@@ -8,6 +8,7 @@ import {
     Param,
     ParseIntPipe,
     Post,
+    Query,
     Req,
     UploadedFile,
     UseGuards,
@@ -23,6 +24,7 @@ import { CriarConversaDto } from "./dto/criar-conversas.dto";
 import { IniciarConversaSetorDto } from "./dto/iniciar-conversas-setor.dto";
 import { CriarMensagemDto } from "./dto/criar-mensagem.dto";
 import { AtualizarDigitacaoDto } from "./dto/atualizar-digitacao.dto";
+import { ListarMensagensDto } from "./dto/listar-mensagens.dto";
 
 import {
     AuthGuard,
@@ -122,11 +124,13 @@ export class ConversasController {
     listarMensagens(
         @Req() requisicao: RequisicaoAutenticada,
         @Param("conversaId", ParseIntPipe)
-        conversaId: number
+        conversaId: number,
+        @Query() consulta: ListarMensagensDto
     ) {
         return this.conversasService.listarMensagens(
             requisicao.usuario!.sub,
-            conversaId
+            conversaId,
+            consulta
         );
     }
 

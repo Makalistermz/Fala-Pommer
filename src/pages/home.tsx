@@ -27,6 +27,8 @@ const INTERVALO_MENSAGENS_MS = 3_000;
 const INTERVALO_CONSULTA_DIGITACAO_MS = 1_500;
 const INTERVALO_RENOVACAO_DIGITACAO_MS = 2_000;
 const TEMPO_PARAR_DIGITACAO_MS = 2_500;
+const LIMITE_HISTORICO_MENSAGENS = 50;
+const LIMITE_NOVAS_MENSAGENS = 100;
 
 interface UsuarioBasico {
     id: number;
@@ -180,11 +182,16 @@ function Home() {
         useState<UsuarioDigitando[]>([]);
 
     const [carregandoMensagens, setCarregandoMensagens] = useState(false);
+    const [carregandoMensagensAnteriores, setCarregandoMensagensAnteriores] =
+        useState(false);
+    const [temMensagensAnteriores, setTemMensagensAnteriores] =
+        useState(false);
 
     const [enviandoMensagem, setEnviandoMensagem] = useState(false);
 
     const mensagensContainerRef = useRef<HTMLDivElement>(null);
     const rolagemInicialPendenteRef = useRef(false);
+    const alturaAntesDoHistoricoRef = useRef<number | null>(null);
     const balõesRef = useRef<Map<number, HTMLElement>>(new Map());
     const idsAnimadosRef = useRef<Set<number>>(new Set());
     const conversaAbertaIdRef = useRef<number | null>(null);
@@ -887,7 +894,11 @@ function Home() {
                 ultimaMensagemChatIdRef.current,
                 novaMensagem.id,
             );
-            setMensagensChat((mensagensAtuais) => [...mensagensAtuais, novaMensagem]);
+            setMensagensChat((mensagensAtuais) =>
+                mensagensAtuais.some((item) => item.id === novaMensagem.id)
+                    ? mensagensAtuais
+                    : [...mensagensAtuais, novaMensagem],
+            );
             atualizarConversaComMensagem(novaMensagem);
 
             setMensagem("");
@@ -986,11 +997,14 @@ function Home() {
         ultimaMensagemChatIdRef.current = 0;
         historicoChatCarregadoRef.current = false;
         rolagemInicialPendenteRef.current = true;
+        alturaAntesDoHistoricoRef.current = null;
         setConversaSelecionada(conversa);
         setUsuariosDigitando([]);
         setChatMobileAberto(true);
         setMensagensChat([]);
         setCarregandoMensagens(true);
+        setCarregandoMensagensAnteriores(false);
+        setTemMensagensAnteriores(false);
 
         const token = localStorage.getItem("access_token");
 
@@ -1001,7 +1015,7 @@ function Home() {
 
         try {
             const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/conversas/${conversa.id}/mensagens`,
+                `${import.meta.env.VITE_API_URL}/conversas/${conversa.id}/mensagens?limite=${LIMITE_HISTORICO_MENSAGENS}`,
                 {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -1025,16 +1039,82 @@ function Home() {
             );
             historicoChatCarregadoRef.current = true;
             setMensagensChat(dados);
+            setTemMensagensAnteriores(
+                dados.length === LIMITE_HISTORICO_MENSAGENS,
+            );
             await marcarConversaComoLida(conversa.id, token);
         } catch (erro) {
             console.error(erro);
 
             if (conversaAbertaIdRef.current === conversa.id) {
                 setMensagensChat([]);
+                setTemMensagensAnteriores(false);
             }
         } finally {
             if (conversaAbertaIdRef.current === conversa.id) {
                 setCarregandoMensagens(false);
+            }
+        }
+    }
+
+    async function carregarMensagensAnteriores() {
+        const conversaId = conversaSelecionada?.id;
+        const primeiraMensagemId = mensagensChat[0]?.id;
+        const token = localStorage.getItem("access_token");
+
+        if (
+            !conversaId ||
+            !primeiraMensagemId ||
+            !token ||
+            carregandoMensagensAnteriores
+        ) {
+            return;
+        }
+
+        setCarregandoMensagensAnteriores(true);
+
+        try {
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/mensagens?antesDe=${primeiraMensagemId}&limite=${LIMITE_HISTORICO_MENSAGENS}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            );
+
+            if (!resposta.ok) {
+                throw new Error("Não foi possível carregar as mensagens anteriores.");
+            }
+
+            const dados = await resposta.json() as MensagemChat[];
+
+            if (conversaAbertaIdRef.current !== conversaId) {
+                return;
+            }
+
+            dados.forEach((item) => idsAnimadosRef.current.add(item.id));
+            alturaAntesDoHistoricoRef.current =
+                mensagensContainerRef.current?.scrollHeight ?? null;
+
+            setMensagensChat((mensagensAtuais) => {
+                const idsAtuais = new Set(
+                    mensagensAtuais.map((item) => item.id),
+                );
+                const mensagensAnteriores = dados.filter(
+                    (item) => !idsAtuais.has(item.id),
+                );
+
+                return [...mensagensAnteriores, ...mensagensAtuais];
+            });
+            setTemMensagensAnteriores(
+                dados.length === LIMITE_HISTORICO_MENSAGENS,
+            );
+        } catch (erro) {
+            console.error(erro);
+        } finally {
+            if (conversaAbertaIdRef.current === conversaId) {
+                setCarregandoMensagensAnteriores(false);
             }
         }
     }
@@ -1044,8 +1124,11 @@ function Home() {
         conversaAbertaIdRef.current = null;
         ultimaMensagemChatIdRef.current = 0;
         historicoChatCarregadoRef.current = false;
+        alturaAntesDoHistoricoRef.current = null;
         setChatMobileAberto(false);
         setUsuariosDigitando([]);
+        setCarregandoMensagensAnteriores(false);
+        setTemMensagensAnteriores(false);
     }
 
     function nomeDaConversa(conversa: Conversa) {
@@ -1244,7 +1327,11 @@ function Home() {
         let buscando = false;
 
         async function buscarNovasMensagens() {
-            if (buscando || document.visibilityState === "hidden") {
+            if (
+                buscando ||
+                document.visibilityState === "hidden" ||
+                !historicoChatCarregadoRef.current
+            ) {
                 return;
             }
 
@@ -1257,8 +1344,10 @@ function Home() {
             buscando = true;
 
             try {
+                const ultimaMensagemId =
+                    ultimaMensagemChatIdRef.current;
                 const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/mensagens`,
+                    `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/mensagens?depoisDe=${ultimaMensagemId}&limite=${LIMITE_NOVAS_MENSAGENS}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -1279,29 +1368,9 @@ function Home() {
                     return;
                 }
 
-                const historicoJaCarregado =
-                    historicoChatCarregadoRef.current;
                 const mensagensNovas = dados.filter(
                     (item) => item.id > ultimaMensagemChatIdRef.current,
                 );
-
-                if (!historicoJaCarregado) {
-                    ultimaMensagemChatIdRef.current = Math.max(
-                        0,
-                        ...dados.map((item) => item.id),
-                    );
-                    historicoChatCarregadoRef.current = true;
-                    setMensagensChat(dados);
-
-                    const ultimaMensagem = dados.at(-1);
-
-                    if (ultimaMensagem) {
-                        atualizarConversaComMensagem(ultimaMensagem);
-                    }
-
-                    await marcarConversaComoLida(conversaId, token);
-                    return;
-                }
 
                 if (mensagensNovas.length === 0) {
                     return;
@@ -1321,9 +1390,20 @@ function Home() {
                     ...mensagensNovas.map((item) => item.id),
                 );
 
-                setMensagensChat(dados);
+                setMensagensChat((mensagensAtuais) => {
+                    const idsAtuais = new Set(
+                        mensagensAtuais.map((item) => item.id),
+                    );
 
-                const ultimaMensagem = dados.at(-1);
+                    return [
+                        ...mensagensAtuais,
+                        ...mensagensNovas.filter(
+                            (item) => !idsAtuais.has(item.id),
+                        ),
+                    ];
+                });
+
+                const ultimaMensagem = mensagensNovas.at(-1);
 
                 if (ultimaMensagem) {
                     atualizarConversaComMensagem(ultimaMensagem);
@@ -1413,6 +1493,14 @@ function Home() {
         const container = mensagensContainerRef.current;
 
         if (!container || carregandoMensagens) {
+            return;
+        }
+
+        if (alturaAntesDoHistoricoRef.current !== null) {
+            const alturaAnterior = alturaAntesDoHistoricoRef.current;
+            alturaAntesDoHistoricoRef.current = null;
+            container.scrollTop +=
+                container.scrollHeight - alturaAnterior;
             return;
         }
 
@@ -1979,6 +2067,21 @@ function Home() {
                     {carregandoMensagens && (
                         <p className="mensagens__status">Carregando mensagens...</p>
                     )}
+
+                    {!carregandoMensagens &&
+                        mensagensChat.length > 0 &&
+                        temMensagensAnteriores && (
+                            <button
+                                type="button"
+                                className="mensagens__carregar-anteriores"
+                                onClick={carregarMensagensAnteriores}
+                                disabled={carregandoMensagensAnteriores}
+                            >
+                                {carregandoMensagensAnteriores
+                                    ? "Carregando..."
+                                    : "Carregar mensagens anteriores"}
+                            </button>
+                        )}
 
                     {!carregandoMensagens &&
                     mensagensChat.length === 0 &&

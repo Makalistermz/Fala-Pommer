@@ -960,18 +960,48 @@ export class ConversasService {
      */
     async listarMensagens(
         usuarioLogadoId: number,
-        conversaId: number
+        conversaId: number,
+        consulta: {
+            depoisDe?: number;
+            antesDe?: number;
+            limite?: number;
+        } = {}
     ) {
+        if (
+            consulta.depoisDe !== undefined &&
+            consulta.antesDe !== undefined
+        ) {
+            throw new BadRequestException(
+                "Informe apenas depoisDe ou antesDe."
+            );
+        }
+
         const contexto =
             await this.verificarAcessoConversa(
                 usuarioLogadoId,
                 conversaId
             );
 
+        const limite = consulta.limite ?? 50;
+        const ordemDecrescente =
+            consulta.depoisDe === undefined;
+
         const mensagens =
             await this.prisma.mensagem.findMany({
                 where: {
-                    conversa_id: conversaId
+                    conversa_id: conversaId,
+
+                    ...(consulta.depoisDe !== undefined && {
+                        id: {
+                            gt: consulta.depoisDe
+                        }
+                    }),
+
+                    ...(consulta.antesDe !== undefined && {
+                        id: {
+                            lt: consulta.antesDe
+                        }
+                    })
                 },
 
                 include: {
@@ -985,11 +1015,20 @@ export class ConversasService {
                 },
 
                 orderBy: {
-                    enviada_em: "asc"
-                }
+                    id: ordemDecrescente
+                        ? "desc"
+                        : "asc"
+                },
+
+                take: limite
             });
 
-        return mensagens.map((mensagem) => {
+        const mensagensEmOrdemCronologica =
+            ordemDecrescente
+                ? mensagens.reverse()
+                : mensagens;
+
+        return mensagensEmOrdemCronologica.map((mensagem) => {
             const atendimento =
                 contexto.atendimento;
 

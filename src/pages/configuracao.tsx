@@ -1,7 +1,7 @@
 // Organiza as opções disponíveis na área de configurações.
 import { useState, type ReactNode, useEffect } from "react";
 import { Link } from "react-router";
-import brasao from "../assets/img/brasao.png";
+import brasao from "../assets/img/brasao.webp";
 import MeuPerfil from "./configPages/meu-perfil";
 import ContaSeguranca from "./configPages/conta-seguranca";
 import Aparencia from "./configPages/aparencia";

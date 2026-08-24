@@ -1,5 +1,5 @@
 // Exibe a área principal de conversas do sistema.
-import brasao from "../assets/img/brasao.png";
+import brasao from "../assets/img/brasao.webp";
 import somNovaMensagem from "../assets/audio/notificacao.mp3";
 import "./css/home.css";
 import {

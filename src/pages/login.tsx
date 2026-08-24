@@ -1,5 +1,5 @@
 // Exibe o formulário de acesso e a segunda etapa de verificação.
-import brasao from "../assets/img/brasao.png";
+import brasao from "../assets/img/brasao.webp";
 import { useEffect, useRef, useState } from "react";
 import imagemLogin from "../assets/img/imagem-pagina-login.png";
 import "./css/LoginCadastro.css";

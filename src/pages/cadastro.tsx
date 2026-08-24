@@ -34,7 +34,8 @@ function Cadastro() {
     ) {
         event.preventDefault();
 
-        const dadosFormulario = new FormData(event.currentTarget);
+        const formulario = event.currentTarget;
+        const dadosFormulario = new FormData(formulario);
 
         const dados = Object.fromEntries(dadosFormulario.entries());
 
@@ -66,6 +67,9 @@ function Cadastro() {
                 tipo: "sucesso",
                 mensagem: "Seu cadastro foi realizado com sucesso."
             });
+
+            formulario.reset();
+            setForcaSenha("");
 
             console.log(resultado.mensagem);
         } catch (erro) {

@@ -398,6 +398,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   cadastro: 'cadastro',
+  erro_autenticacao: 'erro_autenticacao',
   login_evento: 'login_evento',
   conversa: 'conversa',
   conversa_participante: 'conversa_participante',
@@ -422,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa"
+    modelProps: "cadastro" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -489,6 +490,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.cadastroCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CadastroCountAggregateOutputType> | number
+        }
+      }
+    }
+    erro_autenticacao: {
+      payload: Prisma.$erro_autenticacaoPayload<ExtArgs>
+      fields: Prisma.erro_autenticacaoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.erro_autenticacaoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$erro_autenticacaoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.erro_autenticacaoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$erro_autenticacaoPayload>
+        }
+        findFirst: {
+          args: Prisma.erro_autenticacaoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$erro_autenticacaoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.erro_autenticacaoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$erro_autenticacaoPayload>
+        }
+        findMany: {
+          args: Prisma.erro_autenticacaoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$erro_autenticacaoPayload>[]
+        }
+        create: {
+          args: Prisma.erro_autenticacaoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$erro_autenticacaoPayload>
+        }
+        createMany: {
+          args: Prisma.erro_autenticacaoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.erro_autenticacaoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$erro_autenticacaoPayload>
+        }
+        update: {
+          args: Prisma.erro_autenticacaoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$erro_autenticacaoPayload>
+        }
+        deleteMany: {
+          args: Prisma.erro_autenticacaoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.erro_autenticacaoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.erro_autenticacaoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$erro_autenticacaoPayload>
+        }
+        aggregate: {
+          args: Prisma.Erro_autenticacaoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateErro_autenticacao>
+        }
+        groupBy: {
+          args: Prisma.erro_autenticacaoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Erro_autenticacaoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.erro_autenticacaoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Erro_autenticacaoCountAggregateOutputType> | number
         }
       }
     }
@@ -1145,6 +1212,16 @@ export const CadastroScalarFieldEnum = {
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]
 
 
+export const Erro_autenticacaoScalarFieldEnum = {
+  id: 'id',
+  usuario_id: 'usuario_id',
+  tipo: 'tipo',
+  criado_em: 'criado_em'
+} as const
+
+export type Erro_autenticacaoScalarFieldEnum = (typeof Erro_autenticacaoScalarFieldEnum)[keyof typeof Erro_autenticacaoScalarFieldEnum]
+
+
 export const Login_eventoScalarFieldEnum = {
   id: 'id',
   usuario_id: 'usuario_id',
@@ -1320,7 +1397,7 @@ export type desafio_login_2faOrderByRelevanceFieldEnum = (typeof desafio_login_2
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
+
 
 
 /**
@@ -1349,6 +1426,13 @@ export type Enumcadastro_tipo_usuarioFieldRefInput<$PrismaModel> = FieldRefInput
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
+
+
+/**
+ * Reference to a field of type 'erro_autenticacao_tipo'
+ */
+export type Enumerro_autenticacao_tipoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'erro_autenticacao_tipo'>
+
 
 
 /**
@@ -1530,6 +1614,7 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
   cadastro?: Prisma.cadastroOmit
+  erro_autenticacao?: Prisma.erro_autenticacaoOmit
   login_evento?: Prisma.login_eventoOmit
   conversa?: Prisma.conversaOmit
   conversa_participante?: Prisma.conversa_participanteOmit
@@ -1601,4 +1686,3 @@ export type PrismaAction =
  * `PrismaClient` proxy available in interactive transactions.
  */
 export type TransactionClient = Omit<DefaultPrismaClient, runtime.ITXClientDenyList>
-

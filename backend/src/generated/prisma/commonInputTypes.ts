@@ -219,6 +219,23 @@ export type BoolWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
+export type Enumerro_autenticacao_tipoFilter<$PrismaModel = never> = {
+  equals?: $Enums.erro_autenticacao_tipo | Prisma.Enumerro_autenticacao_tipoFieldRefInput<$PrismaModel>
+  in?: $Enums.erro_autenticacao_tipo[]
+  notIn?: $Enums.erro_autenticacao_tipo[]
+  not?: Prisma.NestedEnumerro_autenticacao_tipoFilter<$PrismaModel> | $Enums.erro_autenticacao_tipo
+}
+
+export type Enumerro_autenticacao_tipoWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.erro_autenticacao_tipo | Prisma.Enumerro_autenticacao_tipoFieldRefInput<$PrismaModel>
+  in?: $Enums.erro_autenticacao_tipo[]
+  notIn?: $Enums.erro_autenticacao_tipo[]
+  not?: Prisma.NestedEnumerro_autenticacao_tipoWithAggregatesFilter<$PrismaModel> | $Enums.erro_autenticacao_tipo
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumerro_autenticacao_tipoFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumerro_autenticacao_tipoFilter<$PrismaModel>
+}
+
 export type Enumconversa_tipoFilter<$PrismaModel = never> = {
   equals?: $Enums.conversa_tipo | Prisma.Enumconversa_tipoFieldRefInput<$PrismaModel>
   in?: $Enums.conversa_tipo[]
@@ -490,6 +507,23 @@ export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedBoolFilter<$PrismaModel>
   _max?: Prisma.NestedBoolFilter<$PrismaModel>
+}
+
+export type NestedEnumerro_autenticacao_tipoFilter<$PrismaModel = never> = {
+  equals?: $Enums.erro_autenticacao_tipo | Prisma.Enumerro_autenticacao_tipoFieldRefInput<$PrismaModel>
+  in?: $Enums.erro_autenticacao_tipo[]
+  notIn?: $Enums.erro_autenticacao_tipo[]
+  not?: Prisma.NestedEnumerro_autenticacao_tipoFilter<$PrismaModel> | $Enums.erro_autenticacao_tipo
+}
+
+export type NestedEnumerro_autenticacao_tipoWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.erro_autenticacao_tipo | Prisma.Enumerro_autenticacao_tipoFieldRefInput<$PrismaModel>
+  in?: $Enums.erro_autenticacao_tipo[]
+  notIn?: $Enums.erro_autenticacao_tipo[]
+  not?: Prisma.NestedEnumerro_autenticacao_tipoWithAggregatesFilter<$PrismaModel> | $Enums.erro_autenticacao_tipo
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumerro_autenticacao_tipoFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumerro_autenticacao_tipoFilter<$PrismaModel>
 }
 
 export type NestedEnumconversa_tipoFilter<$PrismaModel = never> = {

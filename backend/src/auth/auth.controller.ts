@@ -234,6 +234,13 @@ export class AuthController {
         return this.authService.obterRelatoriosLogs();
     }
 
+    @Get("relatorios-erros")
+    @UseGuards(AuthGuard, PerfisGuard)
+    @Perfis("admin")
+    obterRelatoriosErros() {
+        return this.authService.obterRelatoriosErros();
+    }
+
     @Post("logout")
     @HttpCode(HttpStatus.OK)
     @UseGuards(AuthGuard)

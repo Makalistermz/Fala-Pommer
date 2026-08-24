@@ -69,6 +69,11 @@ export class AuthService {
         );
 
         if (!senhaCorreta) {
+            await this.registrarErroAutenticacao(
+                usuario.id,
+                "login"
+            );
+
             throw new UnauthorizedException(
                 "Senha inválida."
             );
@@ -256,6 +261,46 @@ export class AuthService {
             entrada: serializarDataDeSaoPaulo(acesso.criado_em),
             saida: serializarDataDeSaoPaulo(acesso.saiu_em)
         }));
+    }
+
+    async obterRelatoriosErros() {
+        const erros = await this.prisma.erro_autenticacao.findMany({
+            orderBy: {
+                criado_em: "desc"
+            },
+            select: {
+                id: true,
+                tipo: true,
+                criado_em: true,
+                cadastro: {
+                    select: {
+                        nome: true,
+                        tipo_usuario: true
+                    }
+                }
+            }
+        });
+
+        return erros.map((erro) => ({
+            id: erro.id,
+            usuario: erro.cadastro.nome,
+            tipoUsuario: erro.cadastro.tipo_usuario,
+            erro: erro.tipo,
+            horario: serializarDataDeSaoPaulo(erro.criado_em)
+        }));
+    }
+
+    private registrarErroAutenticacao(
+        usuarioId: number,
+        tipo: "login" | "verificacao"
+    ) {
+        return this.prisma.erro_autenticacao.create({
+            data: {
+                usuario_id: usuarioId,
+                tipo,
+                criado_em: agoraEmSaoPaulo()
+            }
+        });
     }
 
     async obterLoginsPorMes(ano: number) {

@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   cadastro: 'cadastro',
+  erro_autenticacao: 'erro_autenticacao',
   login_evento: 'login_evento',
   conversa: 'conversa',
   conversa_participante: 'conversa_participante',
@@ -97,6 +98,16 @@ export const CadastroScalarFieldEnum = {
 } as const
 
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]
+
+
+export const Erro_autenticacaoScalarFieldEnum = {
+  id: 'id',
+  usuario_id: 'usuario_id',
+  tipo: 'tipo',
+  criado_em: 'criado_em'
+} as const
+
+export type Erro_autenticacaoScalarFieldEnum = (typeof Erro_autenticacaoScalarFieldEnum)[keyof typeof Erro_autenticacaoScalarFieldEnum]
 
 
 export const Login_eventoScalarFieldEnum = {

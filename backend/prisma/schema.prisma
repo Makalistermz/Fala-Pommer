@@ -29,10 +29,22 @@ model cadastro {
   conversa_participante            conversa_participante[]
   conversas_atendidas              conversa_setor[]         @relation("UsuarioAtendido")
   desafio_login_2fa                desafio_login_2fa[]
+  erro_autenticacao                erro_autenticacao[]
   login_evento                     login_evento[]
   mensagens_enviadas               mensagem[]               @relation("RemetenteMensagem")
 
   @@index([setor_id], map: "fk_cadastro_setor")
+}
+
+model erro_autenticacao {
+  id         Int                    @id @default(autoincrement())
+  usuario_id Int
+  tipo       erro_autenticacao_tipo
+  criado_em  DateTime               @default(now()) @db.DateTime(0)
+  cadastro   cadastro               @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_erro_autenticacao_usuario")
+
+  @@index([usuario_id], map: "idx_erro_autenticacao_usuario")
+  @@index([criado_em], map: "idx_erro_autenticacao_criado_em")
 }
 
 model login_evento {
@@ -175,4 +187,9 @@ enum conversa_tipo {
 enum mensagem_origem {
   usuario
   setor
+}
+
+enum erro_autenticacao_tipo {
+  login
+  verificacao
 }

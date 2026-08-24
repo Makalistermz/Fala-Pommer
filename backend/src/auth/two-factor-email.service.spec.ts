@@ -32,10 +32,14 @@ describe('TwoFactorEmailService', () => {
     deleteMany: jest.fn(),
     createMany: jest.fn(),
   };
+  const erroAutenticacaoDelegate = {
+    create: jest.fn(),
+  };
   const prismaMock = {
     desafio_login_2fa: desafioDelegate,
     cadastro: cadastroDelegate,
     codigo_recuperacao_2fa: codigoRecuperacaoDelegate,
+    erro_autenticacao: erroAutenticacaoDelegate,
     $queryRaw: jest.fn(),
     $transaction: jest.fn(),
   };
@@ -101,6 +105,7 @@ describe('TwoFactorEmailService', () => {
     codigoRecuperacaoDelegate.updateMany.mockResolvedValue({ count: 1 });
     codigoRecuperacaoDelegate.deleteMany.mockResolvedValue({ count: 1 });
     codigoRecuperacaoDelegate.createMany.mockResolvedValue({ count: 8 });
+    erroAutenticacaoDelegate.create.mockResolvedValue({});
     emailMock.enviarCodigoDoisFatores.mockResolvedValue(undefined);
     prismaMock.$queryRaw.mockResolvedValue([{ id: 7 }]);
     prismaMock.$transaction.mockImplementation(async (operacao) =>
@@ -246,6 +251,12 @@ describe('TwoFactorEmailService', () => {
         data: { tentativas: { increment: 1 } },
       }),
     );
+    expect(erroAutenticacaoDelegate.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        usuario_id: 7,
+        tipo: 'verificacao',
+      }),
+    });
   });
 
   it('bloqueia o desafio após cinco tentativas', async () => {

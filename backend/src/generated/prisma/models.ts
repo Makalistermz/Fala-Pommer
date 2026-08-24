@@ -9,6 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/cadastro.js'
+export type * from './models/erro_autenticacao.js'
 export type * from './models/login_evento.js'
 export type * from './models/conversa.js'
 export type * from './models/conversa_participante.js'

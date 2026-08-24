@@ -42,3 +42,11 @@ export const mensagem_origem = {
 } as const
 
 export type mensagem_origem = (typeof mensagem_origem)[keyof typeof mensagem_origem]
+
+
+export const erro_autenticacao_tipo = {
+  login: 'login',
+  verificacao: 'verificacao'
+} as const
+
+export type erro_autenticacao_tipo = (typeof erro_autenticacao_tipo)[keyof typeof erro_autenticacao_tipo]

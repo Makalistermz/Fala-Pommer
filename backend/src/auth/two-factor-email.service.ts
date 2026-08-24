@@ -26,10 +26,15 @@ const SALT_ROUNDS = 10;
 const QUANTIDADE_CODIGOS_RECUPERACAO = 8;
 const TAMANHO_CODIGO_RECUPERACAO = 8;
 const CARACTERES_CODIGO_RECUPERACAO = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const DIFERENCA_UTC_SAO_PAULO_EM_MS = 3 * 60 * 60 * 1000;
 
 const MENSAGEM_DESAFIO_INVALIDO = 'O código informado é inválido ou expirou.';
 const MENSAGEM_CODIGO_RECUPERACAO_INVALIDO =
   'O código de recuperação informado é inválido.';
+
+function agoraEmSaoPaulo() {
+  return new Date(Date.now() - DIFERENCA_UTC_SAO_PAULO_EM_MS);
+}
 
 export interface DesafioDoisFatoresCriado {
   token: string;
@@ -496,7 +501,15 @@ export class TwoFactorEmailService {
       },
     });
 
-    this.validarDesafio(desafio, finalidade, agora, usuarioIdEsperado);
+    try {
+      this.validarDesafio(desafio, finalidade, agora, usuarioIdEsperado);
+    } catch (erro) {
+      if (desafio) {
+        await this.registrarErroVerificacao(desafio.usuario_id);
+      }
+
+      throw erro;
+    }
 
     const formatoValido = new RegExp(`^\\d{${DIGITOS_CODIGO}}$`).test(codigo);
     const codigoCorreto =
@@ -504,6 +517,7 @@ export class TwoFactorEmailService {
 
     if (!codigoCorreto) {
       await this.registrarTentativaInvalida(desafio.id, finalidade, agora);
+      await this.registrarErroVerificacao(desafio.usuario_id);
 
       throw new UnauthorizedException(MENSAGEM_DESAFIO_INVALIDO);
     }
@@ -526,6 +540,7 @@ export class TwoFactorEmailService {
     });
 
     if (resultado.count !== 1) {
+      await this.registrarErroVerificacao(desafio.usuario_id);
       throw new UnauthorizedException(MENSAGEM_DESAFIO_INVALIDO);
     }
 
@@ -549,7 +564,15 @@ export class TwoFactorEmailService {
       },
     });
 
-    this.validarDesafio(desafio, finalidade, agora, usuarioIdEsperado);
+    try {
+      this.validarDesafio(desafio, finalidade, agora, usuarioIdEsperado);
+    } catch (erro) {
+      if (desafio) {
+        await this.registrarErroVerificacao(desafio.usuario_id);
+      }
+
+      throw erro;
+    }
 
     const codigosDisponiveis =
       await this.prisma.codigo_recuperacao_2fa.findMany({
@@ -573,47 +596,55 @@ export class TwoFactorEmailService {
 
     if (indiceCorreto === -1) {
       await this.registrarTentativaInvalida(desafio.id, finalidade, agora);
+      await this.registrarErroVerificacao(desafio.usuario_id);
 
       throw new UnauthorizedException(MENSAGEM_DESAFIO_INVALIDO);
     }
 
     const codigoEncontrado = codigosDisponiveis[indiceCorreto];
 
-    await this.prisma.$transaction(async (transacao) => {
-      const desafioConsumido = await transacao.desafio_login_2fa.updateMany({
-        where: {
-          id: desafio.id,
-          finalidade,
-          usado_em: null,
-          expira_em: {
-            gt: agora,
-          },
-          tentativas: {
-            lt: MAXIMO_TENTATIVAS,
-          },
-        },
-        data: {
-          usado_em: agora,
-        },
-      });
-
-      const codigoConsumido = await transacao.codigo_recuperacao_2fa.updateMany(
-        {
+    try {
+      await this.prisma.$transaction(async (transacao) => {
+        const desafioConsumido = await transacao.desafio_login_2fa.updateMany({
           where: {
-            id: codigoEncontrado.id,
-            usuario_id: desafio.usuario_id,
+            id: desafio.id,
+            finalidade,
             usado_em: null,
+            expira_em: {
+              gt: agora,
+            },
+            tentativas: {
+              lt: MAXIMO_TENTATIVAS,
+            },
           },
           data: {
             usado_em: agora,
           },
-        },
-      );
+        });
 
-      if (desafioConsumido.count !== 1 || codigoConsumido.count !== 1) {
-        throw new UnauthorizedException(MENSAGEM_DESAFIO_INVALIDO);
+        const codigoConsumido =
+          await transacao.codigo_recuperacao_2fa.updateMany({
+            where: {
+              id: codigoEncontrado.id,
+              usuario_id: desafio.usuario_id,
+              usado_em: null,
+            },
+            data: {
+              usado_em: agora,
+            },
+          });
+
+        if (desafioConsumido.count !== 1 || codigoConsumido.count !== 1) {
+          throw new UnauthorizedException(MENSAGEM_DESAFIO_INVALIDO);
+        }
+      });
+    } catch (erro) {
+      if (erro instanceof UnauthorizedException) {
+        await this.registrarErroVerificacao(desafio.usuario_id);
       }
-    });
+
+      throw erro;
+    }
 
     return {
       usuarioId: desafio.usuario_id,
@@ -711,6 +742,16 @@ export class TwoFactorEmailService {
     }
 
     return createHash('sha256').update(token).digest('hex');
+  }
+
+  private registrarErroVerificacao(usuarioId: number) {
+    return this.prisma.erro_autenticacao.create({
+      data: {
+        usuario_id: usuarioId,
+        tipo: 'verificacao',
+        criado_em: agoraEmSaoPaulo(),
+      },
+    });
   }
 
   private validarDesafio(

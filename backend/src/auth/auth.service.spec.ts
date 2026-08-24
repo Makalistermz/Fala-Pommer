@@ -25,6 +25,10 @@ describe('AuthService - autenticação em duas etapas', () => {
     login_evento: {
       create: jest.fn(),
     },
+    erro_autenticacao: {
+      create: jest.fn(),
+      findMany: jest.fn(),
+    },
   };
   const twoFactorMock = {
     iniciarLogin: jest.fn(),
@@ -47,6 +51,7 @@ describe('AuthService - autenticação em duas etapas', () => {
     jest.clearAllMocks();
     (bcrypt.compare as jest.Mock).mockResolvedValue(true);
     prismaMock.login_evento.create.mockResolvedValue({});
+    prismaMock.erro_autenticacao.create.mockResolvedValue({});
     jwtMock.signAsync.mockResolvedValue('jwt-final');
 
     service = new AuthService(
@@ -104,6 +109,36 @@ describe('AuthService - autenticação em duas etapas', () => {
       service.signIn(usuario.email, 'incorreta'),
     ).rejects.toBeInstanceOf(UnauthorizedException);
     expect(twoFactorMock.iniciarLogin).not.toHaveBeenCalled();
+    expect(prismaMock.erro_autenticacao.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        usuario_id: usuario.id,
+        tipo: 'login',
+      }),
+    });
+  });
+
+  it('lista os erros de autenticação com os dados do usuário', async () => {
+    prismaMock.erro_autenticacao.findMany.mockResolvedValue([
+      {
+        id: 12,
+        tipo: 'verificacao',
+        criado_em: new Date('2026-08-24T15:30:45.000Z'),
+        cadastro: {
+          nome: usuario.nome,
+          tipo_usuario: usuario.tipo_usuario,
+        },
+      },
+    ]);
+
+    await expect(service.obterRelatoriosErros()).resolves.toEqual([
+      expect.objectContaining({
+        id: 12,
+        usuario: usuario.nome,
+        tipoUsuario: usuario.tipo_usuario,
+        erro: 'verificacao',
+        horario: expect.any(String),
+      }),
+    ]);
   });
 
   it('emite o JWT somente depois de confirmar o código do segundo fator', async () => {

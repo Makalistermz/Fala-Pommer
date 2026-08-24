@@ -95,7 +95,10 @@ html.tema-escuro:not(.alto-contraste) :is(
   .nova-conversa,
   .chat-header,
   .chat-input,
-  .menu-arquivos
+  .menu-arquivos,
+  .visualizador-arquivo__janela,
+  .visualizador-arquivo__cabecalho,
+  .visualizador-arquivo__indisponivel
 ) {
   border-color: var(--tema-borda);
   background: var(--tema-superficie);
@@ -107,7 +110,7 @@ html.tema-escuro:not(.alto-contraste) :is(
   .nova-conversa__pesquisa,
   .chat-input__conteudo,
   .chat-input__arquivo,
-  .mensagem-anexo--documento
+  .mensagem-anexo--arquivo
 ) {
   border-color: var(--tema-borda);
   background: var(--tema-superficie-elevada);
@@ -146,10 +149,12 @@ html.tema-escuro:not(.alto-contraste) :is(
   .chat-header__dados strong,
   .chat-vazio h2,
   .mensagem-balao p,
-  .mensagem-anexo--documento,
-  .mensagem-anexo--documento strong,
+  .mensagem-anexo--arquivo,
+  .mensagem-anexo__dados strong,
   .chat-input__arquivo-dados strong,
-  .menu-arquivos__item
+  .menu-arquivos__item,
+  .visualizador-arquivo__dados strong,
+  .visualizador-arquivo__indisponivel
 ) {
   color: var(--tema-texto);
 }
@@ -164,9 +169,11 @@ html.tema-escuro:not(.alto-contraste) :is(
   .chat-vazio p,
   .mensagens__status,
   .mensagem-balao time,
-  .mensagem-anexo--documento small,
+  .mensagem-anexo__dados small,
   .chat-input__arquivo-dados span,
-  .chat-input__arquivo-remover
+  .chat-input__arquivo-remover,
+  .visualizador-arquivo__dados span,
+  .visualizador-arquivo__indisponivel p
 ) {
   color: var(--tema-texto-secundario);
 }

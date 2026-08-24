@@ -121,13 +121,15 @@ interface MensagemChat {
         nome: string;
     };
 
-    arquivo?: {
-        nome: string;
-        url: string;
-        tipo: "documento" | "imagem" | "video" | "audio";
-        mime: string;
-        tamanho: number;
-    } | null;
+    arquivo?: ArquivoMensagem | null;
+}
+
+interface ArquivoMensagem {
+    nome: string;
+    url: string;
+    tipo: "documento" | "imagem" | "video" | "audio";
+    mime: string;
+    tamanho: number;
 }
 
 function mensagemFoiEnviadaPeloUsuario(
@@ -224,6 +226,10 @@ function Home() {
         null,
     );
 
+    const [arquivoEmVisualizacao, setArquivoEmVisualizacao] =
+        useState<ArquivoMensagem | null>(null);
+    const botaoFecharVisualizadorRef = useRef<HTMLButtonElement>(null);
+
     const [seletorEmojiAberto, setSeletorEmojiAberto] = useState(false);
 
     const inputDocumentosRef = useRef<HTMLInputElement>(null);
@@ -238,6 +244,34 @@ function Home() {
     const [processandoGravacaoAudio, setProcessandoGravacaoAudio] = useState(false);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!arquivoEmVisualizacao) {
+            return;
+        }
+
+        const overflowAnterior = document.body.style.overflow;
+        const elementoComFocoAnterior = document.activeElement;
+        document.body.style.overflow = "hidden";
+        botaoFecharVisualizadorRef.current?.focus();
+
+        function fecharComEscape(evento: KeyboardEvent) {
+            if (evento.key === "Escape") {
+                setArquivoEmVisualizacao(null);
+            }
+        }
+
+        window.addEventListener("keydown", fecharComEscape);
+
+        return () => {
+            document.body.style.overflow = overflowAnterior;
+            window.removeEventListener("keydown", fecharComEscape);
+
+            if (elementoComFocoAnterior instanceof HTMLElement) {
+                elementoComFocoAnterior.focus();
+            }
+        };
+    }, [arquivoEmVisualizacao]);
 
     useEffect(() => {
         const audio = new Audio(somNovaMensagem);
@@ -1998,17 +2032,18 @@ function Home() {
                                 </header>
 
                                 {item.arquivo?.tipo === "imagem" && (
-                                    <a
+                                    <button
+                                        type="button"
                                         className="mensagem-anexo mensagem-anexo--imagem"
-                                        href={obterUrlArquivo(item.arquivo.url)}
-                                        target="_blank"
-                                        rel="noreferrer"
+                                        onClick={() => setArquivoEmVisualizacao(item.arquivo!)}
+                                        aria-label={`Visualizar ${item.arquivo.nome}`}
                                     >
                                         <img
                                             src={obterUrlArquivo(item.arquivo.url)}
                                             alt={item.arquivo.nome}
                                         />
-                                    </a>
+                                        <span className="mensagem-anexo__indicacao">Ampliar</span>
+                                    </button>
                                 )}
 
                                 {item.arquivo?.tipo === "video" && (
@@ -2034,19 +2069,18 @@ function Home() {
                                 )}
 
                                 {item.arquivo?.tipo === "documento" && (
-                                    <a
-                                        className="mensagem-anexo mensagem-anexo--documento"
-                                        href={obterUrlArquivo(item.arquivo.url)}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        download={item.arquivo.nome}
+                                    <button
+                                        type="button"
+                                        className="mensagem-anexo mensagem-anexo--arquivo mensagem-anexo--documento"
+                                        onClick={() => setArquivoEmVisualizacao(item.arquivo!)}
                                     >
-                                        <span aria-hidden="true">📄</span>
-                                        <span>
+                                        <span className="mensagem-anexo__icone" aria-hidden="true">📄</span>
+                                        <span className="mensagem-anexo__dados">
                                             <strong>{item.arquivo.nome}</strong>
                                             <small>{formatarTamanhoArquivo(item.arquivo.tamanho)}</small>
                                         </span>
-                                    </a>
+                                        <span className="mensagem-anexo__abrir" aria-hidden="true">›</span>
+                                    </button>
                                 )}
 
                                 {item.conteudo && <p>{item.conteudo}</p>}
@@ -2472,6 +2506,102 @@ function Home() {
                     <span className="menu-modal-texto">Sair</span>
                     </a>
                 </div>
+            </div>
+        )}
+
+        {arquivoEmVisualizacao && (
+            <div
+                className="visualizador-arquivo"
+                role="presentation"
+                onMouseDown={(evento) => {
+                    if (evento.target === evento.currentTarget) {
+                        setArquivoEmVisualizacao(null);
+                    }
+                }}
+            >
+                <section
+                    className="visualizador-arquivo__janela"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="visualizador-arquivo-titulo"
+                >
+                    <header className="visualizador-arquivo__cabecalho">
+                        <div className="visualizador-arquivo__dados">
+                            <strong id="visualizador-arquivo-titulo">
+                                {arquivoEmVisualizacao.nome}
+                            </strong>
+                            <span>
+                                {formatarTamanhoArquivo(arquivoEmVisualizacao.tamanho)}
+                            </span>
+                        </div>
+
+                        <div className="visualizador-arquivo__acoes">
+                            <a
+                                href={obterUrlArquivo(arquivoEmVisualizacao.url)}
+                                download={arquivoEmVisualizacao.nome}
+                                target="_blank"
+                                rel="noreferrer"
+                                aria-label={`Baixar ${arquivoEmVisualizacao.nome}`}
+                                title="Baixar arquivo"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14" />
+                                </svg>
+                            </a>
+                            <button
+                                ref={botaoFecharVisualizadorRef}
+                                type="button"
+                                onClick={() => setArquivoEmVisualizacao(null)}
+                                aria-label="Fechar visualização"
+                                title="Fechar"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="m6 6 12 12M18 6 6 18" />
+                                </svg>
+                            </button>
+                        </div>
+                    </header>
+
+                    <div
+                        className={`visualizador-arquivo__conteudo ${
+                            arquivoEmVisualizacao.tipo === "imagem"
+                                ? "visualizador-arquivo__conteudo--imagem"
+                                : ""
+                        }`}
+                    >
+                        {arquivoEmVisualizacao.tipo === "imagem" && (
+                            <img
+                                src={obterUrlArquivo(arquivoEmVisualizacao.url)}
+                                alt={arquivoEmVisualizacao.nome}
+                            />
+                        )}
+
+                        {arquivoEmVisualizacao.tipo === "documento" &&
+                            (arquivoEmVisualizacao.mime === "application/pdf" ||
+                            arquivoEmVisualizacao.mime.startsWith("text/") ? (
+                                <iframe
+                                    src={obterUrlArquivo(arquivoEmVisualizacao.url)}
+                                    title={`Visualização de ${arquivoEmVisualizacao.nome}`}
+                                />
+                            ) : (
+                                <div className="visualizador-arquivo__indisponivel">
+                                    <span aria-hidden="true">📄</span>
+                                    <strong>Pré-visualização não disponível</strong>
+                                    <p>
+                                        Este formato precisa ser aberto em um aplicativo compatível.
+                                    </p>
+                                    <a
+                                        href={obterUrlArquivo(arquivoEmVisualizacao.url)}
+                                        download={arquivoEmVisualizacao.nome}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        Baixar arquivo
+                                    </a>
+                                </div>
+                            ))}
+                    </div>
+                </section>
             </div>
         )}
         </main>

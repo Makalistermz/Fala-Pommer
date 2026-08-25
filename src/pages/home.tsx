@@ -2149,7 +2149,7 @@ function Home() {
 
                                     {item.remetente.tipo === "superAdmin" && (
                                         <span className="mensagem-balao__perfil">
-                                            Super administrador
+                                            Super admin
                                         </span>
                                     )}
                                 </header>

@@ -208,6 +208,15 @@ export class UsuariosService {
                         ? {
                             tipo_usuario: "user" as const
                         }
+                        : {}),
+
+                    ...(usuarioLogado.tipo_usuario ===
+                    "superAdmin"
+                        ? {
+                            tipo_usuario: {
+                                not: "superAdmin" as const
+                            }
+                        }
                         : {})
                 },
 

@@ -37,8 +37,9 @@ export class ConversasService {
     ) {}
 
     /*
-     * Lista as conversas privadas das quais
-     * o usuário autenticado participa.
+     * Lista as conversas privadas do usuário autenticado.
+     * O superAdmin também pode fiscalizar conversas entre
+     * perfis inferiores, desde que não exista outro superAdmin.
      */
     async listar(usuarioLogadoId: number) {
         const usuarioLogado =
@@ -63,11 +64,24 @@ export class ConversasService {
                 where: {
                     tipo: "privada",
 
-                    conversa_participante: {
-                        some: {
-                            usuario_id: usuarioLogadoId
-                        }
-                    },
+                    conversa_participante:
+                        usuarioLogado.tipo_usuario === "superAdmin"
+                            ? {
+                                none: {
+                                    usuario_id: {
+                                        not: usuarioLogadoId
+                                    },
+
+                                    cadastro: {
+                                        tipo_usuario: "superAdmin"
+                                    }
+                                }
+                            }
+                            : {
+                                some: {
+                                    usuario_id: usuarioLogadoId
+                                }
+                            },
 
                     mensagens:
                         usuarioLogado.tipo_usuario === "user"
@@ -85,12 +99,6 @@ export class ConversasService {
 
                 include: {
                     conversa_participante: {
-                        where: {
-                            usuario_id: {
-                                not: usuarioLogadoId
-                            }
-                        },
-
                         include: {
                             cadastro: {
                                 select: {
@@ -148,8 +156,43 @@ export class ConversasService {
             );
 
         return conversas.flatMap((conversa) => {
-            const contato =
-                conversa.conversa_participante[0]?.cadastro;
+            const participaDaConversa =
+                conversa.conversa_participante.some(
+                    (participante) =>
+                        participante.usuario_id ===
+                        usuarioLogadoId
+                );
+
+            const somenteLeitura =
+                usuarioLogado.tipo_usuario === "superAdmin" &&
+                !participaDaConversa;
+
+            const participantes =
+                conversa.conversa_participante.map(
+                    (participante) => participante.cadastro
+                );
+
+            const contatos =
+                conversa.conversa_participante
+                    .filter((participante) =>
+                        participante.usuario_id !==
+                        usuarioLogadoId
+                    )
+                    .map((participante) =>
+                        participante.cadastro
+                    );
+
+            const primeiroParticipante = participantes[0];
+
+            const contato = somenteLeitura && primeiroParticipante
+                ? {
+                    ...primeiroParticipante,
+                    nome: participantes
+                        .map((participante) => participante.nome)
+                        .join(" e "),
+                    foto_perfil_url: null
+                }
+                : contatos[0];
 
             if (!contato) {
                 return [];
@@ -163,8 +206,11 @@ export class ConversasService {
                 tipo: conversa.tipo,
                 criadaEm: conversa.criada_em,
                 contato,
+                somenteLeitura,
                 mensagensNaoLidas:
-                    mensagensNaoLidas.get(conversa.id) ?? 0,
+                    somenteLeitura
+                        ? 0
+                        : mensagensNaoLidas.get(conversa.id) ?? 0,
 
                 ultimaMensagem: ultimaMensagem
                     ? {
@@ -239,6 +285,15 @@ export class ConversasService {
         if (usuarioLogado.id === usuarioSelecionado.id) {
             throw new BadRequestException(
                 "Você não pode iniciar uma conversa consigo mesmo."
+            );
+        }
+
+        if (
+            usuarioLogado.tipo_usuario === "superAdmin" &&
+            usuarioSelecionado.tipo_usuario === "superAdmin"
+        ) {
+            throw new ForbiddenException(
+                "Não é permitido iniciar conversa privada com outro superadministrador."
             );
         }
 
@@ -355,6 +410,7 @@ export class ConversasService {
             tipo: conversa.tipo,
             criadaEm: conversa.criada_em,
             contato,
+            somenteLeitura: false,
             ultimaMensagem: null
         };
     }
@@ -826,6 +882,12 @@ export class ConversasService {
         let origem: "usuario" | "setor";
 
         if (contexto.conversa.tipo === "privada") {
+            if (contexto.somenteLeitura) {
+                throw new ForbiddenException(
+                    "Esta conversa está disponível somente para visualização."
+                );
+            }
+
             if (
                 contexto.usuarioLogado.tipo_usuario ===
                 "user"
@@ -1175,10 +1237,9 @@ export class ConversasService {
             );
 
         if (
+            contexto.somenteLeitura ||
             contexto.conversa.tipo === "setor" &&
-            (
-                contexto.usuarioLogado.tipo_usuario === "admin" || contexto.usuarioLogado.tipo_usuario === "superAdmin"
-            )
+            contexto.usuarioLogado.tipo_usuario === "admin"
         ) {
             throw new ForbiddenException(
                 "O administrador não pode responder neste atendimento."
@@ -1331,7 +1392,12 @@ export class ConversasService {
                     include: {
                         conversa_participante: {
                             select: {
-                                usuario_id: true
+                                usuario_id: true,
+                                cadastro: {
+                                    select: {
+                                        tipo_usuario: true
+                                    }
+                                }
                             }
                         },
 
@@ -1370,8 +1436,9 @@ export class ConversasService {
         }
 
         /*
-         * Em conversa privada, somente os participantes
-         * podem visualizar e enviar mensagens.
+         * Em conversa privada, os participantes possuem acesso normal.
+         * O superAdmin pode fiscalizar conversas entre perfis inferiores,
+         * mas nunca uma conversa que contenha outro superAdmin.
          */
         if (conversa.tipo === "privada") {
             const participaDaConversa =
@@ -1381,7 +1448,29 @@ export class ConversasService {
                         usuarioLogado.id
                 );
 
-            if (!participaDaConversa) {
+            const possuiOutroSuperAdmin =
+                conversa.conversa_participante.some(
+                    (participante) =>
+                        participante.usuario_id !==
+                            usuarioLogado.id &&
+                        participante.cadastro.tipo_usuario ===
+                            "superAdmin"
+                );
+
+            if (
+                usuarioLogado.tipo_usuario === "superAdmin" &&
+                possuiOutroSuperAdmin
+            ) {
+                throw new ForbiddenException(
+                    "Esta conversa privada pertence a outro superadministrador."
+                );
+            }
+
+            const podeFiscalizar =
+                usuarioLogado.tipo_usuario === "superAdmin" &&
+                !possuiOutroSuperAdmin;
+
+            if (!participaDaConversa && !podeFiscalizar) {
                 throw new ForbiddenException(
                     "Você não participa desta conversa privada."
                 );
@@ -1390,7 +1479,8 @@ export class ConversasService {
             return {
                 usuarioLogado,
                 conversa,
-                atendimento: null
+                atendimento: null,
+                somenteLeitura: !participaDaConversa
             };
         }
 
@@ -1449,7 +1539,8 @@ export class ConversasService {
             return {
                 usuarioLogado,
                 conversa,
-                atendimento
+                atendimento,
+                somenteLeitura: false
             };
         }
 

@@ -97,6 +97,7 @@ interface ConversaPrivada {
         tipo_usuario: TipoUsuario;
         foto_perfil_url: string | null;
     };
+    somenteLeitura: boolean;
     mensagensNaoLidas: number;
     ultimaMensagem: UltimaMensagem | null;
 }
@@ -1171,6 +1172,10 @@ function Home() {
                 : conversa.setor.nome;
         }
 
+        if (conversa.somenteLeitura) {
+            return "Visualização de segurança • somente leitura";
+        }
+
         if (conversa.contato.tipo_usuario === "funcionario") {
             return "Conversa privada com funcionário";
         }
@@ -1204,7 +1209,12 @@ function Home() {
         return texto.toLowerCase().includes(buscaConversa.trim().toLowerCase());
     });
 
-    const podeEnviarMensagem = conversaSelecionada !== null;
+    const podeEnviarMensagem =
+        conversaSelecionada !== null &&
+        !(
+            conversaSelecionada.tipo === "privada" &&
+            conversaSelecionada.somenteLeitura
+        );
 
     const setoresFiltrados = setores.filter((setor) => {
         const busca = buscaUsuario.trim().toLowerCase();

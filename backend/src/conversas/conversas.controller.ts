@@ -46,7 +46,7 @@ export class ConversasController {
      * Todos os perfis podem receber uma conversa privada do admin.
      */
     @Get()
-    @Perfis("user", "admin", "funcionario")
+    @Perfis("user", "admin", "funcionario", "superAdmin")
     listar(
         @Req() requisicao: RequisicaoAutenticada
     ) {
@@ -60,7 +60,7 @@ export class ConversasController {
      */
     @Post()
     @HttpCode(200)
-    @Perfis("admin")
+    @Perfis("admin", "superAdmin")
     criarOuBuscar(
         @Req() requisicao: RequisicaoAutenticada,
         @Body() dados: CriarConversaDto
@@ -75,7 +75,7 @@ export class ConversasController {
      * Lista os atendimentos de setor.
      */
     @Get("setor")
-    @Perfis("user", "funcionario", "admin")
+    @Perfis("user", "funcionario", "admin", "superAdmin")
     listarAtendimentos(
         @Req() requisicao: RequisicaoAutenticada
     ) {
@@ -120,7 +120,7 @@ export class ConversasController {
      * Lista mensagens de conversa privada ou de setor.
      */
     @Get(":conversaId/mensagens")
-    @Perfis("user", "funcionario", "admin")
+    @Perfis("user", "funcionario", "admin", "superAdmin")
     listarMensagens(
         @Req() requisicao: RequisicaoAutenticada,
         @Param("conversaId", ParseIntPipe)
@@ -140,7 +140,7 @@ export class ConversasController {
      */
     @Post(":conversaId/leitura")
     @HttpCode(200)
-    @Perfis("user", "funcionario", "admin")
+    @Perfis("user", "funcionario", "admin", "superAdmin")
     marcarComoLida(
         @Req() requisicao: RequisicaoAutenticada,
         @Param("conversaId", ParseIntPipe)
@@ -153,7 +153,7 @@ export class ConversasController {
     }
 
     @Get(":conversaId/digitando")
-    @Perfis("user", "funcionario", "admin")
+    @Perfis("user", "funcionario", "admin", "superAdmin")
     listarDigitando(
         @Req() requisicao: RequisicaoAutenticada,
         @Param("conversaId", ParseIntPipe)
@@ -167,7 +167,7 @@ export class ConversasController {
 
     @Post(":conversaId/digitando")
     @HttpCode(200)
-    @Perfis("user", "funcionario", "admin")
+    @Perfis("user", "funcionario", "admin", "superAdmin")
     atualizarDigitacao(
         @Req() requisicao: RequisicaoAutenticada,
         @Param("conversaId", ParseIntPipe)
@@ -186,7 +186,7 @@ export class ConversasController {
      */
     @Post(":conversaId/mensagens")
     @HttpCode(201)
-    @Perfis("user", "funcionario", "admin")
+    @Perfis("user", "funcionario", "admin", "superAdmin")
     @UseInterceptors(FileInterceptor("arquivo", {
         limits: {
             fileSize: 25 * 1024 * 1024

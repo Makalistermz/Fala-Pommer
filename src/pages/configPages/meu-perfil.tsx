@@ -13,7 +13,7 @@ interface Perfil {
     nome: string;
     email: string;
     telefone: string;
-    tipo_usuario: "user" | "admin" | "funcionario";
+    tipo_usuario: "user" | "admin" | "funcionario" | "superAdmin";
     foto_perfil_url: string | null;
     setor: {
         id: number;
@@ -412,7 +412,7 @@ function MeuPerfil() {
                             </strong>
 
                             <span className="meu-perfil__perfil">
-                                {perfil?.tipo_usuario}
+                                {perfil?.tipo_usuario === "superAdmin" ? "Super Administrador" : perfil?.tipo_usuario}
                             </span>
 
                             <button

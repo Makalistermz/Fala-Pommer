@@ -40,7 +40,7 @@ export class UsuariosController {
 
     @Get("conversas")
     @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin", "funcionario")
+    @Perfis("admin", "funcionario", "superAdmin")
     listarUsuariosParaConversa(
         @Req() requisicao: RequisicaoAutenticada
     ) {
@@ -111,14 +111,14 @@ export class UsuariosController {
 
     @Get()
     @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin")
+    @Perfis("admin", "superAdmin")
     listarTodos() {
         return this.usuariosService.listarTodos();
     }
 
     @Patch(":id")
     @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin")
+    @Perfis("admin", "superAdmin")
     atualizar(
         @Param("id", ParseIntPipe) id: number,
         @Body() dados: AtualizarUsuarioDto
@@ -131,7 +131,7 @@ export class UsuariosController {
 
     @Delete(":id")
     @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin")
+    @Perfis("admin", "superAdmin")
     apagar(
         @Param("id", ParseIntPipe) id: number
     ) {

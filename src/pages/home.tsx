@@ -19,7 +19,7 @@ import {
     type GravadorAudioAtivo,
 } from "../library/gravadorAudio";
 
-type TipoUsuario = "user" | "admin" | "funcionario";
+type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 type FiltroConversa = "todos" | "nao-lidas" | "grupos";
 
 const INTERVALO_CONVERSAS_MS = 5_000;
@@ -111,7 +111,7 @@ interface MensagemChat {
     enviadaEm: string;
 
     remetente: {
-        tipo: "usuario" | "setor" | "admin";
+        tipo: "usuario" | "setor" | "admin" | "superAdmin";
         id: number;
         nome: string;
         tipoUsuario?: TipoUsuario;
@@ -149,6 +149,11 @@ function mensagemFoiEnviadaPeloUsuario(
     }
 
     if (usuario.tipo === "admin") {
+        const remetenteRealId = item.autorReal?.id ?? item.remetente.id;
+        return remetenteRealId === usuario.sub;
+    }
+
+    if (usuario.tipo === "superAdmin") {
         const remetenteRealId = item.autorReal?.id ?? item.remetente.id;
         return remetenteRealId === usuario.sub;
     }
@@ -653,7 +658,7 @@ function Home() {
 
         try {
             const rota =
-                usuario.tipo === "admin" ? "/conversas" : "/conversas/setor/usuario";
+                ["admin", "superAdmin"].includes(usuario.tipo) ? "/conversas" : "/conversas/setor/usuario";
 
             const resposta = await fetch(`${import.meta.env.VITE_API_URL}${rota}`, {
                 method: "POST",
@@ -1164,6 +1169,10 @@ function Home() {
 
         if (conversa.contato.tipo_usuario === "admin") {
             return "Conversa privada com administrador";
+        }
+
+        if (conversa.contato.tipo_usuario === "superAdmin") {
+            return "Conversa privada com super administrador";
         }
 
         return "Conversa privada";
@@ -1929,7 +1938,7 @@ function Home() {
                 placeholder={
                     usuario?.tipo === "user"
                     ? "Pesquisar setor"
-                    : usuario?.tipo === "admin"
+                    : (usuario?.tipo === "admin" || usuario?.tipo === "superAdmin")
                         ? "Pesquisar contato"
                         : "Pesquisar usuário"
                 }
@@ -1941,7 +1950,7 @@ function Home() {
             <div className="nova-conversa__titulo-lista">
                 {usuario?.tipo === "user"
                 ? "SETORES"
-                : usuario?.tipo === "admin"
+                : (usuario?.tipo === "admin" || usuario?.tipo === "superAdmin")
                     ? "CONTATOS"
                     : "USUÁRIOS"}
             </div>
@@ -1994,6 +2003,8 @@ function Home() {
                             ? (usuario.setor?.nome ?? "Funcionário")
                             : usuario.tipoUsuario === "admin"
                             ? "Administrador"
+                            : usuario.tipoUsuario === "superAdmin"
+                            ? "Super Administrador" 
                             : "Usuário Fala Pommer"}
                         </span>
                     </div>
@@ -2133,6 +2144,12 @@ function Home() {
                                     {item.remetente.tipo === "admin" && (
                                         <span className="mensagem-balao__perfil">
                                             Administrador
+                                        </span>
+                                    )}
+
+                                    {item.remetente.tipo === "superAdmin" && (
+                                        <span className="mensagem-balao__perfil">
+                                            Super administrador
                                         </span>
                                     )}
                                 </header>
@@ -2524,7 +2541,7 @@ function Home() {
         {menuAberto && (
             <div className="menu-modal">
 
-                {(usuario?.tipo === "admin" || usuario?.tipo === "funcionario") && (
+                {(usuario?.tipo === "admin" || usuario?.tipo === "funcionario" || usuario?.tipo === "superAdmin") && (
                     <div className="menu-modal-item menu-modal-criar-grupo">
                         <a
                             href="#"
@@ -2540,7 +2557,7 @@ function Home() {
                     </div>
                 )}
 
-                {usuario?.tipo === "admin" && (
+                {usuario?.tipo === "superAdmin" && (
                     <div className="menu-modal-item menu-modal-administracao">
                         <a
                             href="/administracao"

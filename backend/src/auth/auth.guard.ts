@@ -11,7 +11,7 @@ import { Request } from "express";
 
 export type JwtPayload = {
     sub: number;
-    tipo: "user" | "admin" | "funcionario";
+    tipo: "user" | "admin" | "funcionario" | "superAdmin";
     iat: number;
     exp: number;
 };

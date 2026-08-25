@@ -25,7 +25,7 @@ export class SetoresController {
     ) {}
 
     @Get()
-    @Perfis("user", "funcionario", "admin")
+    @Perfis("user", "funcionario", "admin", "superAdmin")
     listar() {
         return this.setoresService.listar();
     }
@@ -37,7 +37,7 @@ export class SetoresController {
     }
 
     @Post()
-    @Perfis("admin")
+    @Perfis("admin", "superAdmin")
     criar(
         @Body() dados: CriarSetorDTO
     ) {
@@ -45,7 +45,7 @@ export class SetoresController {
     }
 
     @Delete(":id")
-    @Perfis("admin")
+    @Perfis("admin", "superAdmin")
     apagar(
         @Param("id", ParseIntPipe) id: number
     ) {

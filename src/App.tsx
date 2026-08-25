@@ -34,7 +34,7 @@ function App() {
       <Route
         element={
           <RotaProtegida
-            perfisPermitidos={["admin", "funcionario", "user"]}
+            perfisPermitidos={["admin", "funcionario", "user", "superAdmin"]}
           />
         }
       >
@@ -44,7 +44,7 @@ function App() {
       <Route 
         element={
           <RotaProtegida
-            perfisPermitidos={["admin"]}
+            perfisPermitidos={["superAdmin"]}
           />
         }
       >
@@ -54,7 +54,7 @@ function App() {
       <Route
         element={
           <RotaProtegida
-            perfisPermitidos={["admin", "funcionario"]}
+            perfisPermitidos={["admin", "funcionario", "superAdmin"]}
           />
         }
       >

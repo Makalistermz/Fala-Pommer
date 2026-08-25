@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router";
 
-type TipoUsuario = "user" | "admin" | "funcionario";
+type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 
 interface RotaProtegidaProps {
     perfisPermitidos: TipoUsuario[];

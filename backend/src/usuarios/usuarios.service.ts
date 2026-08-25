@@ -187,6 +187,7 @@ export class UsuariosService {
         }
 
         if (
+            usuarioLogado.tipo_usuario !== "superAdmin" &&
             usuarioLogado.tipo_usuario !== "admin" &&
             usuarioLogado.tipo_usuario !== "funcionario"
         ) {

@@ -17,8 +17,8 @@ export class AtualizarUsuarioDto {
   @IsEmail()
   email!: string;
 
-  @IsIn(["user", "admin", "funcionario"])
-  tipo_usuario!: "user" | "admin" | "funcionario";
+  @IsIn(["user", "admin", "funcionario", "superAdmin"])
+  tipo_usuario!: "user" | "admin" | "funcionario" | "superAdmin";
 
   @IsOptional()
   @IsInt()

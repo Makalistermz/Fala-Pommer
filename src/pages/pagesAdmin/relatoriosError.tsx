@@ -4,7 +4,7 @@ import { obterItensPaginacao } from "../../library/paginacao";
 type RelatorioErro = {
     id: number;
     usuario: string;
-    tipoUsuario: "admin" | "user" | "funcionario";
+    tipoUsuario: "admin" | "user" | "funcionario" | "superAdmin";
     erro: "login" | "verificacao";
     horario: string;
 };
@@ -20,6 +20,7 @@ const ITENS_POR_PAGINA = 20;
 
 const NOMES_PERFIS: Record<RelatorioErro["tipoUsuario"], string> = {
     admin: "Administrador",
+    superAdmin: "Super administrador",
     user: "Usuário",
     funcionario: "Funcionário",
 };

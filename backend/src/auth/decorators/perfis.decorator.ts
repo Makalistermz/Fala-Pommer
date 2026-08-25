@@ -4,7 +4,8 @@ import { SetMetadata } from "@nestjs/common";
 export type TipoUsuario =
     | "user"
     | "admin"
-    | "funcionario";
+    | "funcionario"
+    | "superAdmin";
 
 export const PERFIS_KEY = "perfis";
 

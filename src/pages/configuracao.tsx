@@ -16,7 +16,7 @@ type ItemMenu = {
 
 interface Perfil {
     nome: string;
-    tipo_usuario: "user" | "admin" | "funcionario";
+    tipo_usuario: "user" | "admin" | "funcionario" | "superAdmin";
     foto_perfil_url: string | null;
 }
 
@@ -165,7 +165,7 @@ function Configuracao() {
 
                             <div className="container-admin-profile-role">
                                 <span className="admin-profile-role">
-                                    {perfil?.tipo_usuario}
+                                    {perfil?.tipo_usuario === "superAdmin" ? "Super Admin" : perfil?.tipo_usuario}
                                 </span>
                             </div>
                         </div>

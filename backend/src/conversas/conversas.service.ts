@@ -74,7 +74,9 @@ export class ConversasService {
                             ? {
                                 some: {
                                     remetente: {
-                                        tipo_usuario: "admin"
+                                        tipo_usuario: {
+                                            in: ["superAdmin", "admin"]
+                                        }
                                     }
                                 }
                             }
@@ -222,7 +224,7 @@ export class ConversasService {
             );
         }
 
-        if (usuarioLogado.tipo_usuario !== "admin") {
+        if (usuarioLogado.tipo_usuario !== "admin" && usuarioLogado.tipo_usuario !== "superAdmin") {
             throw new ForbiddenException(
                 "Somente administradores podem iniciar conversas privadas."
             );
@@ -827,7 +829,9 @@ export class ConversasService {
                         where: {
                             conversa_id: conversaId,
                             remetente: {
-                                tipo_usuario: "admin"
+                                tipo_usuario: {
+                                    in: ["superAdmin", "admin"]
+                                }
                             }
                         },
 
@@ -926,10 +930,11 @@ export class ConversasService {
                     }
                     : {
                         tipo:
-                            mensagem.remetente.tipo_usuario ===
-                            "admin"
-                                ? "admin" as const
-                                : "usuario" as const,
+                            mensagem.remetente.tipo_usuario === "admin" 
+                                ? "admin" as const 
+                            : mensagem.remetente.tipo_usuario === "superAdmin" 
+                                ? "superAdmin" as const 
+                            : "usuario" as const,
                         id: mensagem.remetente.id,
                         nome: mensagem.remetente.nome,
                         tipoUsuario:
@@ -1044,10 +1049,11 @@ export class ConversasService {
                     }
                     : {
                         tipo:
-                            mensagem.remetente.tipo_usuario ===
-                            "admin"
-                                ? "admin" as const
-                                : "usuario" as const,
+                            mensagem.remetente.tipo_usuario === "admin" 
+                                ? "admin" as const 
+                            : mensagem.remetente.tipo_usuario === "superAdmin" 
+                                ? "superAdmin" as const 
+                            : "usuario" as const,
                         id: mensagem.remetente.id,
                         nome:
                             mensagem.remetente.nome,
@@ -1164,7 +1170,9 @@ export class ConversasService {
 
         if (
             contexto.conversa.tipo === "setor" &&
-            contexto.usuarioLogado.tipo_usuario === "admin"
+            (
+                contexto.usuarioLogado.tipo_usuario === "admin" || contexto.usuarioLogado.tipo_usuario === "superAdmin"
+            )
         ) {
             throw new ForbiddenException(
                 "O administrador não pode responder neste atendimento."

@@ -41,7 +41,7 @@ type RespostaLoginsMensais = {
 };
 
 type QuantUsuarioCategoria = {
-    tipo_usuario: "admin" | "user" | "funcionario";
+    tipo_usuario: "admin" | "user" | "funcionario" | "superAdmin";
     _count: {
         id: number;
     };
@@ -319,6 +319,7 @@ function VisaoGeral() {
 
     const dadosUsuarios: ChartData<"bar"> = {
         labels: [
+            "superAdmin",
             "Admin",
             "Usuário",
             "Funcionário"
@@ -326,10 +327,11 @@ function VisaoGeral() {
 
         datasets: [
             {
-                label: "Administradores",
+                label: "Super administradores",
 
                 data: [
-                    obterQuantidadeCategoria("admin"),     // Admin
+                    obterQuantidadeCategoria("superAdmin"), //super admin
+                    null,     // Admin
                     null,  // Usuário
                     null   // Funcionário
                 ],
@@ -341,9 +343,26 @@ function VisaoGeral() {
                 skipNull: true
             },
             {
+                label: "Administradores",
+
+                data: [
+                    null,  // super admin
+                    obterQuantidadeCategoria("admin"),     // Admin
+                    null,  // Usuário
+                    null   // Funcionário
+                ],
+
+                backgroundColor: "rgba(175, 122, 52, 0.25)",
+                borderColor: "rgb(175, 111, 52)",
+                borderWidth: 1,
+                borderRadius: 6,
+                skipNull: true
+            },
+            {
                 label: "Usuários",
 
                 data: [
+                    null,  //super admin
                     null,  // Admin
                     obterQuantidadeCategoria("user"),     // Usuário
                     null   // Funcionário
@@ -359,6 +378,7 @@ function VisaoGeral() {
                 label: "Funcionários",
 
                 data: [
+                    null,  //super admin
                     null,  // Admin
                     null,  // Usuário
                     obterQuantidadeCategoria("funcionario")   // Funcionário

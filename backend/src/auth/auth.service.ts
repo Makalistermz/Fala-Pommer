@@ -155,7 +155,7 @@ export class AuthService {
         id: number;
         nome: string;
         email: string;
-        tipo_usuario: "user" | "admin" | "funcionario";
+        tipo_usuario: "user" | "admin" | "funcionario" | "superAdmin";
     }) {
 
         await this.prisma.login_evento.create({

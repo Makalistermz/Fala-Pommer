@@ -453,6 +453,7 @@ function Usuarios() {
                                     <option value="user">Usuário</option>
                                     <option value="funcionario">Funcionário</option>
                                     <option value="admin">Administrador</option>
+                                    <option value="superAdmin">Super administrador</option>
                                 </select>
                             </div>
 

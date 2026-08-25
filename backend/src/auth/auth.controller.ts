@@ -172,7 +172,7 @@ export class AuthController {
 
     @Get("area-administrativa")
     @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin")
+    @Perfis("superAdmin")
     areaAdministrativa() {
         return {
             mensagem: "Bem-vindo à área administrativa."
@@ -181,7 +181,7 @@ export class AuthController {
 
     @Get("area-prefeitura")
     @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin", "funcionario")
+    @Perfis("admin", "funcionario", "superAdmin")
     areaPrefeitura() {
         return{
             mensagem: "Bem-vindo à área da prefeitura"
@@ -190,7 +190,7 @@ export class AuthController {
 
     @Get("logins-por-mes")
     @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin", "funcionario")
+    @Perfis("admin", "funcionario", "superAdmin")
     loginsPorMes(@Query("ano") ano?: string) {
         const anoAtual = Number(
             new Intl.DateTimeFormat("pt-BR", {
@@ -215,28 +215,28 @@ export class AuthController {
 
     @Get("quantidade-usuarios")
     @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin", "funcionario")
+    @Perfis("admin", "funcionario", "superAdmin")
     obterQuantUsuarios() {
         return this.authService.obterQuantUsuarios();
     }
 
     @Get("quantidade-usuarios-categoria")
     @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin", "funcionario")
+    @Perfis("admin", "funcionario", "superAdmin")
     obterQuantUsuarioCategoria() {
         return this.authService.obterQuantUsuarioCategoria();
     }
 
     @Get("relatorios-logs")
     @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin", "funcionario")
+    @Perfis("admin", "funcionario", "superAdmin")
     obterRelatoriosLogs() {
         return this.authService.obterRelatoriosLogs();
     }
 
     @Get("relatorios-erros")
     @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin")
+    @Perfis("superAdmin")
     obterRelatoriosErros() {
         return this.authService.obterRelatoriosErros();
     }

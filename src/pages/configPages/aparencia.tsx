@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NotificacaoConfiguracao } from "../../components/NotificacaoConfiguracao";
 import {
     aplicarPlanoFundoConversa,
     obterPlanoFundoConversa,
@@ -15,19 +16,29 @@ function Aparencia() {
     const [planoFundoSelecionado, setPlanoFundoSelecionado] = useState(
         obterPlanoFundoConversa
     );
+    const [notificacaoAtivadaId, setNotificacaoAtivadaId] = useState(0);
 
     function selecionarPlanoFundo(plano: PlanoFundoConversa) {
+        if (plano !== planoFundoSelecionado) {
+            setNotificacaoAtivadaId((idAtual) => idAtual + 1);
+        }
+
         setPlanoFundoSelecionado(plano);
         aplicarPlanoFundoConversa(plano);
     }
 
     function selecionarTema(tema: TemaAparencia) {
+        if (tema !== temaSelecionado) {
+            setNotificacaoAtivadaId((idAtual) => idAtual + 1);
+        }
+
         setTemaSelecionado(tema);
         aplicarTemaAparencia(tema);
     }
 
     return (
-        <main className="aparencia">
+        <>
+            <main className="aparencia">
             <section className="aparencia__secao aparencia__secao--tema">
                 <div className="aparencia__cabecalho">
                     <strong className="aparencia__titulo">Tema</strong>
@@ -176,7 +187,16 @@ function Aparencia() {
                     </div>
                 </div>
             </section>
-        </main>
+            </main>
+
+            {notificacaoAtivadaId > 0 && (
+                <NotificacaoConfiguracao
+                    key={notificacaoAtivadaId}
+                    estado="ativado"
+                    aoFechar={() => setNotificacaoAtivadaId(0)}
+                />
+            )}
+        </>
     )
 }
 

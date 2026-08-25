@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavegacaoAudio } from "../../components/NavegacaoAudioContext";
+import { NotificacaoConfiguracao } from "../../components/NotificacaoConfiguracao";
 import {
     aplicarAltoContraste,
     obterPreferenciaAltoContraste,
@@ -17,22 +18,39 @@ function Acessibilidade() {
     const [textoAmpliadoAtivo, setTextoAmpliadoAtivo] = useState(
         obterPreferenciaTextoAmpliado
     );
+    const [notificacao, setNotificacao] = useState<{
+        id: number;
+        estado: "ativado" | "desativado";
+    } | null>(null);
+
+    function mostrarNotificacao(ativado: boolean) {
+        setNotificacao((notificacaoAtual) => ({
+            id: (notificacaoAtual?.id ?? 0) + 1,
+            estado: ativado ? "ativado" : "desativado",
+        }));
+    }
 
     function alternarAltoContraste() {
         const proximoEstado = !altoContrasteAtivo;
         setAltoContrasteAtivo(proximoEstado);
         aplicarAltoContraste(proximoEstado);
+
+        mostrarNotificacao(proximoEstado);
     }
 
     function alternarTextoAmpliado() {
         const proximoEstado = !textoAmpliadoAtivo;
         setTextoAmpliadoAtivo(proximoEstado);
         aplicarTextoAmpliado(proximoEstado);
+
+        mostrarNotificacao(proximoEstado);
     }
 
     function alternarNavegacaoAudio() {
         const proximoEstado = !navegacaoAudioAtiva;
         setNavegacaoAudioAtiva(proximoEstado);
+
+        mostrarNotificacao(proximoEstado);
 
         if (proximoEstado && "speechSynthesis" in window) {
             window.speechSynthesis.cancel();
@@ -133,6 +151,14 @@ function Acessibilidade() {
                     </div>
                 </section>
             </main>
+
+            {notificacao && (
+                <NotificacaoConfiguracao
+                    key={notificacao.id}
+                    estado={notificacao.estado}
+                    aoFechar={() => setNotificacao(null)}
+                />
+            )}
         </>
     )
 }

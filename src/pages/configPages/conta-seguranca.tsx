@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { ModalFeedback } from "../../components/ModalFeedback";
+import { NotificacaoConfiguracao } from "../../components/NotificacaoConfiguracao";
 
 type EtapaModal =
   | "senha-ativacao"
@@ -66,11 +67,22 @@ function ContaSeguranca() {
   const [codigosRecuperacao, setCodigosRecuperacao] = useState<string[]>([]);
   const [erroModal, setErroModal] = useState("");
   const [segundosReenvio, setSegundosReenvio] = useState(0);
+  const [notificacao, setNotificacao] = useState<{
+    id: number;
+    estado: "ativado" | "desativado";
+  } | null>(null);
   const [feedback, setFeedback] = useState({
     aberto: false,
     tipo: "erro" as "erro" | "sucesso",
     mensagem: "",
   });
+
+  function mostrarNotificacao(estado: "ativado" | "desativado") {
+    setNotificacao((notificacaoAtual) => ({
+      id: (notificacaoAtual?.id ?? 0) + 1,
+      estado,
+    }));
+  }
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -235,6 +247,7 @@ function ContaSeguranca() {
       });
 
       setAtivo(true);
+      mostrarNotificacao("ativado");
       setCodigosRecuperacao(resultado.codigos_recuperacao || []);
       setEtapaModal("codigos-recuperacao");
       setCodigo("");
@@ -292,7 +305,7 @@ function ContaSeguranca() {
     setErroModal("");
 
     try {
-      const resultado = await requisicaoAutenticada("/auth/2fa/disable", {
+      await requisicaoAutenticada("/auth/2fa/disable", {
         method: "POST",
         body: JSON.stringify({
           token: desafio.token,
@@ -302,13 +315,7 @@ function ContaSeguranca() {
 
       setAtivo(false);
       limparModal();
-      setFeedback({
-        aberto: true,
-        tipo: "sucesso",
-        mensagem:
-          resultado.mensagem ||
-          "A verificação em duas etapas foi desativada.",
-      });
+      mostrarNotificacao("desativado");
     } catch (erro) {
       mostrarErroModal(erro);
     } finally {
@@ -324,7 +331,7 @@ function ContaSeguranca() {
     setErroModal("");
 
     try {
-      const resultado = await requisicaoAutenticada(
+      await requisicaoAutenticada(
         "/auth/2fa/disable/recovery",
         {
           method: "POST",
@@ -334,13 +341,7 @@ function ContaSeguranca() {
 
       setAtivo(false);
       limparModal();
-      setFeedback({
-        aberto: true,
-        tipo: "sucesso",
-        mensagem:
-          resultado.mensagem ||
-          "A verificação em duas etapas foi desativada.",
-      });
+      mostrarNotificacao("desativado");
     } catch (erro) {
       mostrarErroModal(erro);
     } finally {
@@ -604,6 +605,14 @@ function ContaSeguranca() {
             )}
           </section>
         </div>
+      )}
+
+      {notificacao && (
+        <NotificacaoConfiguracao
+          key={notificacao.id}
+          estado={notificacao.estado}
+          aoFechar={() => setNotificacao(null)}
+        />
       )}
 
       <ModalFeedback

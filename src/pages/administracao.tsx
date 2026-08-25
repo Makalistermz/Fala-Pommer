@@ -90,7 +90,7 @@ function Administracao() {
 
     return (
         <div className={`administracao ${menuAberto ? "menu-aberto" : "menu-fechado"}`}>
-            <aside className="admin-sidebar" aria-label="Menu de administração">
+            <aside className="admin-sidebar" aria-label="Menu de administração" data-lenis-prevent>
                 <div className="admin-sidebar-header">
                     <img className="admin-logo" src={brasao} alt="Fala Pommer" />
                     <div className="admin-brand">

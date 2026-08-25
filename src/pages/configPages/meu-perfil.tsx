@@ -572,7 +572,7 @@ function MeuPerfil() {
                             <input
                                 id="setor"
                                 type="text"
-                                value={perfil?.setor?.setor ?? ""}
+                                value={perfil?.setor?.setor ?? "Nenhum setor associado"}
                                 readOnly
                             />
                         </div>

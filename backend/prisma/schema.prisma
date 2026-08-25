@@ -172,12 +172,6 @@ enum desafio_2fa_finalidade {
   desativacao
 }
 
-enum cadastro_tipo_usuario {
-  user
-  admin
-  funcionario
-}
-
 enum conversa_tipo {
   privada
   grupo
@@ -192,4 +186,11 @@ enum mensagem_origem {
 enum erro_autenticacao_tipo {
   login
   verificacao
+}
+
+enum cadastro_tipo_usuario {
+  user
+  admin
+  funcionario
+  superAdmin
 }

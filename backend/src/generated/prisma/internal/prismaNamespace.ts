@@ -1397,7 +1397,7 @@ export type desafio_login_2faOrderByRelevanceFieldEnum = (typeof desafio_login_2
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-
+    
 
 
 /**
@@ -1432,7 +1432,7 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'erro_autenticacao_tipo'
  */
 export type Enumerro_autenticacao_tipoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'erro_autenticacao_tipo'>
-
+    
 
 
 /**
@@ -1686,3 +1686,4 @@ export type PrismaAction =
  * `PrismaClient` proxy available in interactive transactions.
  */
 export type TransactionClient = Omit<DefaultPrismaClient, runtime.ITXClientDenyList>
+

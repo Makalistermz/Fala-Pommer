@@ -18,15 +18,6 @@ export const desafio_2fa_finalidade = {
 export type desafio_2fa_finalidade = (typeof desafio_2fa_finalidade)[keyof typeof desafio_2fa_finalidade]
 
 
-export const cadastro_tipo_usuario = {
-  user: 'user',
-  admin: 'admin',
-  funcionario: 'funcionario'
-} as const
-
-export type cadastro_tipo_usuario = (typeof cadastro_tipo_usuario)[keyof typeof cadastro_tipo_usuario]
-
-
 export const conversa_tipo = {
   privada: 'privada',
   grupo: 'grupo',
@@ -50,3 +41,13 @@ export const erro_autenticacao_tipo = {
 } as const
 
 export type erro_autenticacao_tipo = (typeof erro_autenticacao_tipo)[keyof typeof erro_autenticacao_tipo]
+
+
+export const cadastro_tipo_usuario = {
+  user: 'user',
+  admin: 'admin',
+  funcionario: 'funcionario',
+  superAdmin: 'superAdmin'
+} as const
+
+export type cadastro_tipo_usuario = (typeof cadastro_tipo_usuario)[keyof typeof cadastro_tipo_usuario]

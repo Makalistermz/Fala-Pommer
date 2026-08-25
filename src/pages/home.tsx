@@ -1702,7 +1702,7 @@ function Home() {
 
     return (
         <main className={`home ${chatMobileAberto ? "home--chat-mobile-aberto" : ""}`}>
-        <aside className="conversas">
+        <aside className="conversas" data-lenis-prevent>
             <header className="conversas-header">
             <div className="header-name">
                 <img

@@ -64,24 +64,34 @@ export class ConversasService {
                 where: {
                     tipo: "privada",
 
-                    conversa_participante:
-                        usuarioLogado.tipo_usuario === "superAdmin"
-                            ? {
-                                none: {
-                                    usuario_id: {
-                                        not: usuarioLogadoId
-                                    },
-
-                                    cadastro: {
-                                        tipo_usuario: "superAdmin"
+                    ...(usuarioLogado.tipo_usuario === "superAdmin"
+                        ? {
+                            OR: [
+                                {
+                                    conversa_participante: {
+                                        some: {
+                                            usuario_id: usuarioLogadoId
+                                        }
+                                    }
+                                },
+                                {
+                                    conversa_participante: {
+                                        none: {
+                                            cadastro: {
+                                                tipo_usuario: "superAdmin" as const
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                            : {
+                            ]
+                        }
+                        : {
+                            conversa_participante: {
                                 some: {
                                     usuario_id: usuarioLogadoId
                                 }
-                            },
+                            }
+                        }),
 
                     mensagens:
                         usuarioLogado.tipo_usuario === "user"
@@ -285,15 +295,6 @@ export class ConversasService {
         if (usuarioLogado.id === usuarioSelecionado.id) {
             throw new BadRequestException(
                 "Você não pode iniciar uma conversa consigo mesmo."
-            );
-        }
-
-        if (
-            usuarioLogado.tipo_usuario === "superAdmin" &&
-            usuarioSelecionado.tipo_usuario === "superAdmin"
-        ) {
-            throw new ForbiddenException(
-                "Não é permitido iniciar conversa privada com outro superadministrador."
             );
         }
 
@@ -1459,7 +1460,8 @@ export class ConversasService {
 
             if (
                 usuarioLogado.tipo_usuario === "superAdmin" &&
-                possuiOutroSuperAdmin
+                possuiOutroSuperAdmin &&
+                !participaDaConversa
             ) {
                 throw new ForbiddenException(
                     "Esta conversa privada pertence a outro superadministrador."

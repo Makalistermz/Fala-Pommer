@@ -215,7 +215,7 @@ describe("ConversasService", () => {
     expect(prismaMock.mensagem.findMany).not.toHaveBeenCalled();
   });
 
-  it("filtra da lista do superAdmin as conversas privadas de outros superAdmins", async () => {
+  it("lista conversas próprias e conversas inferiores para o superAdmin", async () => {
     prismaMock.cadastro.findUnique.mockResolvedValue({
       id: 9,
       nome: "Super administrador",
@@ -229,15 +229,44 @@ describe("ConversasService", () => {
     expect(prismaMock.conversa.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({
-          conversa_participante: {
-            none: {
-              usuario_id: { not: 9 },
-              cadastro: { tipo_usuario: "superAdmin" },
+          OR: [
+            {
+              conversa_participante: {
+                some: { usuario_id: 9 },
+              },
             },
-          },
+            {
+              conversa_participante: {
+                none: {
+                  cadastro: { tipo_usuario: "superAdmin" },
+                },
+              },
+            },
+          ],
         }),
       }),
     );
+  });
+
+  it("permite conversa privada entre dois superAdmins quando o solicitante participa", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 9,
+      nome: "Super administrador",
+      tipo_usuario: "superAdmin",
+      setor_id: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "privada",
+      conversa_participante: [
+        { usuario_id: 9, cadastro: { tipo_usuario: "superAdmin" } },
+        { usuario_id: 7, cadastro: { tipo_usuario: "superAdmin" } },
+      ],
+      atendimento_setor: null,
+    });
+    prismaMock.mensagem.findMany.mockResolvedValue([]);
+
+    await expect(service.listarMensagens(9, 10)).resolves.toEqual([]);
   });
 
   it("mantém a fiscalização de conversas privadas somente para leitura", async () => {

@@ -364,7 +364,7 @@ export class ConversasService {
      *
      * user: somente os próprios atendimentos.
      * funcionário: atendimentos do seu setor.
-     * admin: todos os atendimentos.
+     * superAdmin: todos os atendimentos.
      */
     async listarAtendimentos(
         usuarioLogadoId: number
@@ -385,6 +385,12 @@ export class ConversasService {
         if (!usuarioLogado) {
             throw new NotFoundException(
                 "Usuário autenticado não encontrado."
+            );
+        }
+
+        if (usuarioLogado.tipo_usuario === "admin") {
+            throw new ForbiddenException(
+                "Somente o superadministrador pode visualizar todos os atendimentos."
             );
         }
 
@@ -1392,7 +1398,7 @@ export class ConversasService {
          * Em atendimento de setor:
          * user acessa somente o próprio atendimento;
          * funcionário acessa somente seu setor;
-         * admin pode visualizar todos.
+         * superAdmin pode visualizar todos.
          */
         if (conversa.tipo === "setor") {
             const atendimento =
@@ -1401,6 +1407,12 @@ export class ConversasService {
             if (!atendimento) {
                 throw new NotFoundException(
                     "Atendimento de setor não encontrado."
+                );
+            }
+
+            if (usuarioLogado.tipo_usuario === "admin") {
+                throw new ForbiddenException(
+                    "Somente o superadministrador pode visualizar este atendimento."
                 );
             }
 

@@ -1,5 +1,5 @@
 // Testa a paginação e a busca incremental de mensagens.
-import { BadRequestException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { ConversasService } from "./conversas.service";
 
@@ -131,6 +131,42 @@ describe("ConversasService", () => {
       }),
     ).rejects.toBeInstanceOf(BadRequestException);
 
+    expect(prismaMock.mensagem.findMany).not.toHaveBeenCalled();
+  });
+
+  it("impede admin de listar atendimentos de setor", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      nome: "Administrador",
+      tipo_usuario: "admin",
+      setor_id: null,
+    });
+
+    await expect(service.listarAtendimentos(1)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
+  });
+
+  it("impede admin de abrir atendimento de setor pelo ID", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      nome: "Administrador",
+      tipo_usuario: "admin",
+      setor_id: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "setor",
+      conversa_participante: [],
+      atendimento_setor: {
+        setor_id: 2,
+        usuario_id: 3,
+      },
+    });
+
+    await expect(service.listarMensagens(1, 10)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
     expect(prismaMock.mensagem.findMany).not.toHaveBeenCalled();
   });
 });

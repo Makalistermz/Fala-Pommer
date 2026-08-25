@@ -75,7 +75,7 @@ export class ConversasController {
      * Lista os atendimentos de setor.
      */
     @Get("setor")
-    @Perfis("user", "funcionario", "admin", "superAdmin")
+    @Perfis("user", "funcionario", "superAdmin")
     listarAtendimentos(
         @Req() requisicao: RequisicaoAutenticada
     ) {

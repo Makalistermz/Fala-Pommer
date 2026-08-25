@@ -470,6 +470,10 @@ function Home() {
     }, []);
 
     useEffect(() => {
+        if (!usuario) {
+            return;
+        }
+
         let ativo = true;
         let buscando = false;
 
@@ -493,16 +497,20 @@ function Home() {
 
                 const [respostaPrivadas, respostaSetores] = await Promise.all([
                     fetch(`${import.meta.env.VITE_API_URL}/conversas`, { headers }),
-                    fetch(`${import.meta.env.VITE_API_URL}/conversas/setor`, { headers }),
+                    usuario.tipo === "admin"
+                        ? Promise.resolve(null)
+                        : fetch(`${import.meta.env.VITE_API_URL}/conversas/setor`, { headers }),
                 ]);
 
-                if (!respostaPrivadas.ok || !respostaSetores.ok) {
+                if (!respostaPrivadas.ok || (respostaSetores && !respostaSetores.ok)) {
                     throw new Error("Não foi possível carregar as conversas.");
                 }
 
                 const [conversasPrivadas, conversasSetores] = await Promise.all([
                     respostaPrivadas.json() as Promise<ConversaPrivada[]>,
-                    respostaSetores.json() as Promise<ConversaSetor[]>,
+                    respostaSetores
+                        ? respostaSetores.json() as Promise<ConversaSetor[]>
+                        : Promise.resolve([] as ConversaSetor[]),
                 ]);
 
                 const conversaAbertaId = conversaAbertaIdRef.current;
@@ -599,7 +607,7 @@ function Home() {
                 atualizarAoVoltarParaPagina,
             );
         };
-    }, []);
+    }, [usuario]);
 
     async function abrirNovaConversa() {
         if (!usuario) {

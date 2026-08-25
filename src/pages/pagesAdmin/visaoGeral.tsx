@@ -319,7 +319,7 @@ function VisaoGeral() {
 
     const dadosUsuarios: ChartData<"bar"> = {
         labels: [
-            "superAdmin",
+            "Super Administrador",
             "Admin",
             "Usuário",
             "Funcionário"

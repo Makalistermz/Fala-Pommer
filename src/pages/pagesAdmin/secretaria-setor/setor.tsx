@@ -1,8 +1,8 @@
 // Permite consultar e gerenciar os setores cadastrados.
 import { useEffect, useState } from "react";
-import { obterItensPaginacao } from "../../library/paginacao";
-import { ModalConfirmacao } from "../../components/ModalConfirmacao";
-import { ModalFeedback } from "../../components/ModalFeedback";
+import { obterItensPaginacao } from "../../../library/paginacao";
+import { ModalConfirmacao } from "../../../components/ModalConfirmacao";
+import { ModalFeedback } from "../../../components/ModalFeedback";
 
 type Setor = {
     id: number;

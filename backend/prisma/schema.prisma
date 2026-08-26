@@ -166,6 +166,12 @@ model desafio_login_2fa {
   @@index([usuario_id, finalidade, criado_em], map: "idx_desafio_2fa_limite")
 }
 
+model secretaria {
+  id               Int    @id @default(autoincrement())
+  secretaria       String @db.VarChar(150)
+  sigla_secretaria String @db.VarChar(100)
+}
+
 enum desafio_2fa_finalidade {
   ativacao
   login

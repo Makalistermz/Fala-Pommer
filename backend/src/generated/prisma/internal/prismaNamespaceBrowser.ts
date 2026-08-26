@@ -61,7 +61,8 @@ export const ModelName = {
   setores: 'setores',
   conversa_leitura: 'conversa_leitura',
   codigo_recuperacao_2fa: 'codigo_recuperacao_2fa',
-  desafio_login_2fa: 'desafio_login_2fa'
+  desafio_login_2fa: 'desafio_login_2fa',
+  secretaria: 'secretaria'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -212,6 +213,15 @@ export const Desafio_login_2faScalarFieldEnum = {
 export type Desafio_login_2faScalarFieldEnum = (typeof Desafio_login_2faScalarFieldEnum)[keyof typeof Desafio_login_2faScalarFieldEnum]
 
 
+export const SecretariaScalarFieldEnum = {
+  id: 'id',
+  secretaria: 'secretaria',
+  sigla_secretaria: 'sigla_secretaria'
+} as const
+
+export type SecretariaScalarFieldEnum = (typeof SecretariaScalarFieldEnum)[keyof typeof SecretariaScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -273,4 +283,12 @@ export const desafio_login_2faOrderByRelevanceFieldEnum = {
 } as const
 
 export type desafio_login_2faOrderByRelevanceFieldEnum = (typeof desafio_login_2faOrderByRelevanceFieldEnum)[keyof typeof desafio_login_2faOrderByRelevanceFieldEnum]
+
+
+export const secretariaOrderByRelevanceFieldEnum = {
+  secretaria: 'secretaria',
+  sigla_secretaria: 'sigla_secretaria'
+} as const
+
+export type secretariaOrderByRelevanceFieldEnum = (typeof secretariaOrderByRelevanceFieldEnum)[keyof typeof secretariaOrderByRelevanceFieldEnum]
 

@@ -94,3 +94,8 @@ export type codigo_recuperacao_2fa = Prisma.codigo_recuperacao_2faModel
  * 
  */
 export type desafio_login_2fa = Prisma.desafio_login_2faModel
+/**
+ * Model secretaria
+ * 
+ */
+export type secretaria = Prisma.secretariaModel

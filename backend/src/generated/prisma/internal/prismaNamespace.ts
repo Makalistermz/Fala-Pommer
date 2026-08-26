@@ -407,7 +407,8 @@ export const ModelName = {
   setores: 'setores',
   conversa_leitura: 'conversa_leitura',
   codigo_recuperacao_2fa: 'codigo_recuperacao_2fa',
-  desafio_login_2fa: 'desafio_login_2fa'
+  desafio_login_2fa: 'desafio_login_2fa',
+  secretaria: 'secretaria'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -423,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa"
+    modelProps: "cadastro" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1153,6 +1154,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    secretaria: {
+      payload: Prisma.$secretariaPayload<ExtArgs>
+      fields: Prisma.secretariaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.secretariaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$secretariaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.secretariaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$secretariaPayload>
+        }
+        findFirst: {
+          args: Prisma.secretariaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$secretariaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.secretariaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$secretariaPayload>
+        }
+        findMany: {
+          args: Prisma.secretariaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$secretariaPayload>[]
+        }
+        create: {
+          args: Prisma.secretariaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$secretariaPayload>
+        }
+        createMany: {
+          args: Prisma.secretariaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.secretariaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$secretariaPayload>
+        }
+        update: {
+          args: Prisma.secretariaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$secretariaPayload>
+        }
+        deleteMany: {
+          args: Prisma.secretariaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.secretariaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.secretariaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$secretariaPayload>
+        }
+        aggregate: {
+          args: Prisma.SecretariaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSecretaria>
+        }
+        groupBy: {
+          args: Prisma.secretariaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SecretariaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.secretariaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SecretariaCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1324,6 +1391,15 @@ export const Desafio_login_2faScalarFieldEnum = {
 export type Desafio_login_2faScalarFieldEnum = (typeof Desafio_login_2faScalarFieldEnum)[keyof typeof Desafio_login_2faScalarFieldEnum]
 
 
+export const SecretariaScalarFieldEnum = {
+  id: 'id',
+  secretaria: 'secretaria',
+  sigla_secretaria: 'sigla_secretaria'
+} as const
+
+export type SecretariaScalarFieldEnum = (typeof SecretariaScalarFieldEnum)[keyof typeof SecretariaScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1385,6 +1461,14 @@ export const desafio_login_2faOrderByRelevanceFieldEnum = {
 } as const
 
 export type desafio_login_2faOrderByRelevanceFieldEnum = (typeof desafio_login_2faOrderByRelevanceFieldEnum)[keyof typeof desafio_login_2faOrderByRelevanceFieldEnum]
+
+
+export const secretariaOrderByRelevanceFieldEnum = {
+  secretaria: 'secretaria',
+  sigla_secretaria: 'sigla_secretaria'
+} as const
+
+export type secretariaOrderByRelevanceFieldEnum = (typeof secretariaOrderByRelevanceFieldEnum)[keyof typeof secretariaOrderByRelevanceFieldEnum]
 
 
 
@@ -1624,6 +1708,7 @@ export type GlobalOmitConfig = {
   conversa_leitura?: Prisma.conversa_leituraOmit
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faOmit
   desafio_login_2fa?: Prisma.desafio_login_2faOmit
+  secretaria?: Prisma.secretariaOmit
 }
 
 /* Types for Logging */

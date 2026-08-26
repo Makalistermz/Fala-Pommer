@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { obterItensPaginacao } from "../../../library/paginacao";
 import { ModalFeedback } from "../../../components/ModalFeedback";
 
 function Secretaria() {
-    const [paginaAtual, setPaginaAtual] = useState(1);
     const [feedback, setFeedback] = useState({
         aberto: false,
         tipo: "erro" as "erro" | "sucesso",

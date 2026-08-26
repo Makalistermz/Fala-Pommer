@@ -1361,7 +1361,7 @@ html.tema-escuro:not(.alto-contraste) .criar-sectors__pasta--ativa::before {
     }
 
     .setores {
-        border-radius: 0 0 12px 12px;
+        border-radius: 0 0 12px 0px;
     }
 
     .setores__header h2 {
@@ -1440,6 +1440,10 @@ html.tema-escuro:not(.alto-contraste) .criar-sectors__pasta--ativa::before {
     .admin-content {
         padding-right: 10px;
         padding-left: 22px;
+    }
+
+    .setores {
+        border-radius: 0 0 12px 12px;
     }
 
     .admin-content-header {

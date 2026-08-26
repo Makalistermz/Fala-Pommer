@@ -13,6 +13,7 @@ import SemPermissao from "./components/SemPermissao";
 import Administracao from "./pages/administracao";
 import { initLenis } from "./library/lenis.ts"
 import Configuracao from "./pages/configuracao.tsx"
+import NaoEncontrada from "./pages/naoEncontrada.tsx";
 
 function App() {
     useEffect(() => {
@@ -30,6 +31,7 @@ function App() {
       <Route path="/recuperar-senha" element={<RecuperarSenha />} />
       <Route path="/RedefinirSenha" element={<RedefinirSenha />} />
       <Route path="/SemPermissao" element={<SemPermissao />} />
+      <Route path="*" element={<NaoEncontrada />} />
 
       <Route
         element={

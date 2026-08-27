@@ -475,6 +475,8 @@ function Home() {
             return;
         }
 
+        const usuarioAtual = usuario;
+
         let ativo = true;
         let buscando = false;
 
@@ -498,7 +500,7 @@ function Home() {
 
                 const [respostaPrivadas, respostaSetores] = await Promise.all([
                     fetch(`${import.meta.env.VITE_API_URL}/conversas`, { headers }),
-                    usuario.tipo === "admin"
+                    usuarioAtual.tipo === "admin" || usuarioAtual.tipo === "superAdmin"
                         ? Promise.resolve(null)
                         : fetch(`${import.meta.env.VITE_API_URL}/conversas/setor`, { headers }),
                 ]);

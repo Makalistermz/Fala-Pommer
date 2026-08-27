@@ -50,16 +50,6 @@ export class SecretariaService {
     }
 
     async deletar(id: number) {
-        const setoresVinculados = await this.prisma.setores.count({
-            where: { secretaria_id: id },
-        });
-
-        if (setoresVinculados > 0) {
-            throw new ConflictException(
-                'Não é possível apagar uma secretaria que possui setores vinculados.',
-            );
-        }
-
         const resultado = await this.prisma.secretaria.deleteMany({
             where: { id },
         });

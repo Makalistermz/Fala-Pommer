@@ -10,10 +10,12 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from "@nestjs/config";
 import { ConversasModule } from './conversas/conversas.module';
 import { SetoresModule } from './setores/setores.module';
+import { SecretariaService } from './secretaria/secretaria.service';
+import { SecretariaModule } from './secretaria/secretaria.module';
 
 @Module({
-  imports: [PrismaModule, UsuariosModule, RecuperacaoSenhaModule, EmailModule, AuthModule, ConfigModule.forRoot({isGlobal: true}), ConversasModule, SetoresModule],
+  imports: [PrismaModule, UsuariosModule, RecuperacaoSenhaModule, EmailModule, AuthModule, ConfigModule.forRoot({isGlobal: true}), ConversasModule, SetoresModule, SecretariaModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SecretariaService],
 })
 export class AppModule {}

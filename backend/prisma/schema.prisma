@@ -114,11 +114,15 @@ model mensagem {
 }
 
 model setores {
-  id           Int              @id @default(autoincrement())
-  setor        String           @db.VarChar(150)
-  sigla_setor  String           @db.VarChar(20)
-  cadastros    cadastro[]
-  atendimentos conversa_setor[]
+  id                 Int              @id @default(autoincrement())
+  setor              String           @db.VarChar(150)
+  sigla_setor        String           @db.VarChar(20)
+  secretaria_id      Int
+  secretaria_relacao secretaria       @relation(fields: [secretaria_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_setores_secretaria")
+  cadastros          cadastro[]
+  atendimentos       conversa_setor[]
+
+  @@index([secretaria_id], map: "idx_setores_secretaria")
 }
 
 model conversa_leitura {
@@ -167,9 +171,10 @@ model desafio_login_2fa {
 }
 
 model secretaria {
-  id               Int    @id @default(autoincrement())
-  secretaria       String @db.VarChar(150)
-  sigla_secretaria String @db.VarChar(100)
+  id                 Int       @id @default(autoincrement())
+  secretaria         String    @db.VarChar(150)
+  sigla_secretaria   String    @db.VarChar(100)
+  setores_vinculados setores[]
 }
 
 enum desafio_2fa_finalidade {

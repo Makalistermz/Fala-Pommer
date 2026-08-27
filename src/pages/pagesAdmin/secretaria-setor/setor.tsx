@@ -8,12 +8,21 @@ type Setor = {
     id: number;
     setor: string;
     sigla_setor: string;
+    secretaria_id: number;
+    secretaria_relacao: Secretaria;
+}
+
+type Secretaria = {
+    id: number;
+    secretaria: string;
+    sigla_secretaria: string;
 }
 
 const ITENS_POR_PAGINA = 20;
 
 function Setores() {
     const [setores, setSetores] = useState<Setor[]>([]);
+    const [secretarias, setSecretarias] = useState<Secretaria[]>([]);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [setorParaApagar, setSetorParaApagar] = useState<Setor | null>(null);
     const [setorSendoApagado, setSetorSendoApagado] = useState<number | null>(null);
@@ -31,27 +40,37 @@ function Setores() {
     );
 
     useEffect(() => {
-        async function carregarSetores() {
+        async function carregarDados() {
             try {
                 const token = localStorage.getItem("access_token");
-                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                const headers = {
+                    Authorization: `Bearer ${token}`,
+                };
+                const [respostaSetores, respostaSecretarias] = await Promise.all([
+                    fetch(`${import.meta.env.VITE_API_URL}/setores`, { headers }),
+                    fetch(`${import.meta.env.VITE_API_URL}/secretaria`, { headers }),
+                ]);
 
-                if (!resposta.ok) {
-                    throw new Error("Falha ao carregar os setores.");
+                if (!respostaSetores.ok || !respostaSecretarias.ok) {
+                    throw new Error("Falha ao carregar os setores e secretarias.");
                 }
 
-                const setoresCadastrados: Setor[] = await resposta.json();
+                const setoresCadastrados: Setor[] = await respostaSetores.json();
+                const secretariasCadastradas: Secretaria[] =
+                    await respostaSecretarias.json();
                 setSetores(setoresCadastrados);
+                setSecretarias(secretariasCadastradas);
             } catch (erro) {
-                console.error("Falha ao carregar os setores:", erro);
+                console.error("Falha ao carregar setores e secretarias:", erro);
+                setFeedback({
+                    aberto: true,
+                    tipo: "erro",
+                    mensagem: "Não foi possível carregar os setores e secretarias.",
+                });
             }
         }
 
-        carregarSetores();
+        void carregarDados();
     }, []);
 
     useEffect(() => {
@@ -180,9 +199,20 @@ function Setores() {
                         <div className="campo-form-setor campo-form-setor--secretaria">
                             <label htmlFor="campo-add-secretaria">Secretaria</label>
                             <select
-                                name="campo-add-secretaria"
+                                name="secretaria_id"
                                 id="campo-add-secretaria"
-                            ></select>
+                                defaultValue=""
+                                required
+                            >
+                                <option value="" disabled>
+                                    Selecione uma secretaria
+                                </option>
+                                {secretarias.map((secretaria) => (
+                                    <option key={secretaria.id} value={secretaria.id}>
+                                        {secretaria.sigla_secretaria} - {secretaria.secretaria}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="campo-form-setor">
                             <label htmlFor="setor">Setor{obrigatorio}</label>
@@ -216,6 +246,7 @@ function Setores() {
                         <tr>
                             <th scope="col">Sigla</th>
                             <th scope="col">Setor</th>
+                            <th scope="col">Secretaria</th>
                             <th scope="col">Ações</th>
                         </tr>
                     </thead>
@@ -225,6 +256,7 @@ function Setores() {
                             <tr key={setor.id}>
                                 <td>{setor.sigla_setor}</td>
                                 <td>{setor.setor}</td>
+                                <td>{setor.secretaria_relacao.sigla_secretaria}</td>
                                 <td className="setores__acoes">
                                     <button
                                         className="setores__botao-apagar"

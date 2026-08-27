@@ -1347,7 +1347,8 @@ export type MensagemScalarFieldEnum = (typeof MensagemScalarFieldEnum)[keyof typ
 export const SetoresScalarFieldEnum = {
   id: 'id',
   setor: 'setor',
-  sigla_setor: 'sigla_setor'
+  sigla_setor: 'sigla_setor',
+  secretaria_id: 'secretaria_id'
 } as const
 
 export type SetoresScalarFieldEnum = (typeof SetoresScalarFieldEnum)[keyof typeof SetoresScalarFieldEnum]

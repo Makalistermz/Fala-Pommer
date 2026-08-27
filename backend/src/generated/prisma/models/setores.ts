@@ -28,56 +28,66 @@ export type AggregateSetores = {
 
 export type SetoresAvgAggregateOutputType = {
   id: number | null
+  secretaria_id: number | null
 }
 
 export type SetoresSumAggregateOutputType = {
   id: number | null
+  secretaria_id: number | null
 }
 
 export type SetoresMinAggregateOutputType = {
   id: number | null
   setor: string | null
   sigla_setor: string | null
+  secretaria_id: number | null
 }
 
 export type SetoresMaxAggregateOutputType = {
   id: number | null
   setor: string | null
   sigla_setor: string | null
+  secretaria_id: number | null
 }
 
 export type SetoresCountAggregateOutputType = {
   id: number
   setor: number
   sigla_setor: number
+  secretaria_id: number
   _all: number
 }
 
 
 export type SetoresAvgAggregateInputType = {
   id?: true
+  secretaria_id?: true
 }
 
 export type SetoresSumAggregateInputType = {
   id?: true
+  secretaria_id?: true
 }
 
 export type SetoresMinAggregateInputType = {
   id?: true
   setor?: true
   sigla_setor?: true
+  secretaria_id?: true
 }
 
 export type SetoresMaxAggregateInputType = {
   id?: true
   setor?: true
   sigla_setor?: true
+  secretaria_id?: true
 }
 
 export type SetoresCountAggregateInputType = {
   id?: true
   setor?: true
   sigla_setor?: true
+  secretaria_id?: true
   _all?: true
 }
 
@@ -171,6 +181,7 @@ export type SetoresGroupByOutputType = {
   id: number
   setor: string
   sigla_setor: string
+  secretaria_id: number | null
   _count: SetoresCountAggregateOutputType | null
   _avg: SetoresAvgAggregateOutputType | null
   _sum: SetoresSumAggregateOutputType | null
@@ -200,16 +211,20 @@ export type setoresWhereInput = {
   id?: Prisma.IntFilter<"setores"> | number
   setor?: Prisma.StringFilter<"setores"> | string
   sigla_setor?: Prisma.StringFilter<"setores"> | string
+  secretaria_id?: Prisma.IntNullableFilter<"setores"> | number | null
   cadastros?: Prisma.CadastroListRelationFilter
   atendimentos?: Prisma.Conversa_setorListRelationFilter
+  secretaria?: Prisma.XOR<Prisma.SecretariaNullableScalarRelationFilter, Prisma.secretariaWhereInput> | null
 }
 
 export type setoresOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   setor?: Prisma.SortOrder
   sigla_setor?: Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrderInput | Prisma.SortOrder
   cadastros?: Prisma.cadastroOrderByRelationAggregateInput
   atendimentos?: Prisma.conversa_setorOrderByRelationAggregateInput
+  secretaria?: Prisma.secretariaOrderByWithRelationInput
   _relevance?: Prisma.setoresOrderByRelevanceInput
 }
 
@@ -220,14 +235,17 @@ export type setoresWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.setoresWhereInput | Prisma.setoresWhereInput[]
   setor?: Prisma.StringFilter<"setores"> | string
   sigla_setor?: Prisma.StringFilter<"setores"> | string
+  secretaria_id?: Prisma.IntNullableFilter<"setores"> | number | null
   cadastros?: Prisma.CadastroListRelationFilter
   atendimentos?: Prisma.Conversa_setorListRelationFilter
+  secretaria?: Prisma.XOR<Prisma.SecretariaNullableScalarRelationFilter, Prisma.secretariaWhereInput> | null
 }, "id">
 
 export type setoresOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   setor?: Prisma.SortOrder
   sigla_setor?: Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.setoresCountOrderByAggregateInput
   _avg?: Prisma.setoresAvgOrderByAggregateInput
   _max?: Prisma.setoresMaxOrderByAggregateInput
@@ -242,6 +260,7 @@ export type setoresScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"setores"> | number
   setor?: Prisma.StringWithAggregatesFilter<"setores"> | string
   sigla_setor?: Prisma.StringWithAggregatesFilter<"setores"> | string
+  secretaria_id?: Prisma.IntNullableWithAggregatesFilter<"setores"> | number | null
 }
 
 export type setoresCreateInput = {
@@ -249,12 +268,14 @@ export type setoresCreateInput = {
   sigla_setor: string
   cadastros?: Prisma.cadastroCreateNestedManyWithoutSetorInput
   atendimentos?: Prisma.conversa_setorCreateNestedManyWithoutSetorInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutSetoresInput
 }
 
 export type setoresUncheckedCreateInput = {
   id?: number
   setor: string
   sigla_setor: string
+  secretaria_id?: number | null
   cadastros?: Prisma.cadastroUncheckedCreateNestedManyWithoutSetorInput
   atendimentos?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutSetorInput
 }
@@ -264,12 +285,14 @@ export type setoresUpdateInput = {
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
   cadastros?: Prisma.cadastroUpdateManyWithoutSetorNestedInput
   atendimentos?: Prisma.conversa_setorUpdateManyWithoutSetorNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutSetoresNestedInput
 }
 
 export type setoresUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cadastros?: Prisma.cadastroUncheckedUpdateManyWithoutSetorNestedInput
   atendimentos?: Prisma.conversa_setorUncheckedUpdateManyWithoutSetorNestedInput
 }
@@ -278,6 +301,7 @@ export type setoresCreateManyInput = {
   id?: number
   setor: string
   sigla_setor: string
+  secretaria_id?: number | null
 }
 
 export type setoresUpdateManyMutationInput = {
@@ -289,6 +313,7 @@ export type setoresUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type SetoresNullableScalarRelationFilter = {
@@ -311,26 +336,41 @@ export type setoresCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   setor?: Prisma.SortOrder
   sigla_setor?: Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrder
 }
 
 export type setoresAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrder
 }
 
 export type setoresMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   setor?: Prisma.SortOrder
   sigla_setor?: Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrder
 }
 
 export type setoresMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   setor?: Prisma.SortOrder
   sigla_setor?: Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrder
 }
 
 export type setoresSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrder
+}
+
+export type SetoresListRelationFilter = {
+  every?: Prisma.setoresWhereInput
+  some?: Prisma.setoresWhereInput
+  none?: Prisma.setoresWhereInput
+}
+
+export type setoresOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type setoresCreateNestedOneWithoutCadastrosInput = {
@@ -363,16 +403,60 @@ export type setoresUpdateOneRequiredWithoutAtendimentosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.setoresUpdateToOneWithWhereWithoutAtendimentosInput, Prisma.setoresUpdateWithoutAtendimentosInput>, Prisma.setoresUncheckedUpdateWithoutAtendimentosInput>
 }
 
+export type setoresCreateNestedManyWithoutSecretariaInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutSecretariaInput, Prisma.setoresUncheckedCreateWithoutSecretariaInput> | Prisma.setoresCreateWithoutSecretariaInput[] | Prisma.setoresUncheckedCreateWithoutSecretariaInput[]
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutSecretariaInput | Prisma.setoresCreateOrConnectWithoutSecretariaInput[]
+  createMany?: Prisma.setoresCreateManySecretariaInputEnvelope
+  connect?: Prisma.setoresWhereUniqueInput | Prisma.setoresWhereUniqueInput[]
+}
+
+export type setoresUncheckedCreateNestedManyWithoutSecretariaInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutSecretariaInput, Prisma.setoresUncheckedCreateWithoutSecretariaInput> | Prisma.setoresCreateWithoutSecretariaInput[] | Prisma.setoresUncheckedCreateWithoutSecretariaInput[]
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutSecretariaInput | Prisma.setoresCreateOrConnectWithoutSecretariaInput[]
+  createMany?: Prisma.setoresCreateManySecretariaInputEnvelope
+  connect?: Prisma.setoresWhereUniqueInput | Prisma.setoresWhereUniqueInput[]
+}
+
+export type setoresUpdateManyWithoutSecretariaNestedInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutSecretariaInput, Prisma.setoresUncheckedCreateWithoutSecretariaInput> | Prisma.setoresCreateWithoutSecretariaInput[] | Prisma.setoresUncheckedCreateWithoutSecretariaInput[]
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutSecretariaInput | Prisma.setoresCreateOrConnectWithoutSecretariaInput[]
+  upsert?: Prisma.setoresUpsertWithWhereUniqueWithoutSecretariaInput | Prisma.setoresUpsertWithWhereUniqueWithoutSecretariaInput[]
+  createMany?: Prisma.setoresCreateManySecretariaInputEnvelope
+  set?: Prisma.setoresWhereUniqueInput | Prisma.setoresWhereUniqueInput[]
+  disconnect?: Prisma.setoresWhereUniqueInput | Prisma.setoresWhereUniqueInput[]
+  delete?: Prisma.setoresWhereUniqueInput | Prisma.setoresWhereUniqueInput[]
+  connect?: Prisma.setoresWhereUniqueInput | Prisma.setoresWhereUniqueInput[]
+  update?: Prisma.setoresUpdateWithWhereUniqueWithoutSecretariaInput | Prisma.setoresUpdateWithWhereUniqueWithoutSecretariaInput[]
+  updateMany?: Prisma.setoresUpdateManyWithWhereWithoutSecretariaInput | Prisma.setoresUpdateManyWithWhereWithoutSecretariaInput[]
+  deleteMany?: Prisma.setoresScalarWhereInput | Prisma.setoresScalarWhereInput[]
+}
+
+export type setoresUncheckedUpdateManyWithoutSecretariaNestedInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutSecretariaInput, Prisma.setoresUncheckedCreateWithoutSecretariaInput> | Prisma.setoresCreateWithoutSecretariaInput[] | Prisma.setoresUncheckedCreateWithoutSecretariaInput[]
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutSecretariaInput | Prisma.setoresCreateOrConnectWithoutSecretariaInput[]
+  upsert?: Prisma.setoresUpsertWithWhereUniqueWithoutSecretariaInput | Prisma.setoresUpsertWithWhereUniqueWithoutSecretariaInput[]
+  createMany?: Prisma.setoresCreateManySecretariaInputEnvelope
+  set?: Prisma.setoresWhereUniqueInput | Prisma.setoresWhereUniqueInput[]
+  disconnect?: Prisma.setoresWhereUniqueInput | Prisma.setoresWhereUniqueInput[]
+  delete?: Prisma.setoresWhereUniqueInput | Prisma.setoresWhereUniqueInput[]
+  connect?: Prisma.setoresWhereUniqueInput | Prisma.setoresWhereUniqueInput[]
+  update?: Prisma.setoresUpdateWithWhereUniqueWithoutSecretariaInput | Prisma.setoresUpdateWithWhereUniqueWithoutSecretariaInput[]
+  updateMany?: Prisma.setoresUpdateManyWithWhereWithoutSecretariaInput | Prisma.setoresUpdateManyWithWhereWithoutSecretariaInput[]
+  deleteMany?: Prisma.setoresScalarWhereInput | Prisma.setoresScalarWhereInput[]
+}
+
 export type setoresCreateWithoutCadastrosInput = {
   setor: string
   sigla_setor: string
   atendimentos?: Prisma.conversa_setorCreateNestedManyWithoutSetorInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutSetoresInput
 }
 
 export type setoresUncheckedCreateWithoutCadastrosInput = {
   id?: number
   setor: string
   sigla_setor: string
+  secretaria_id?: number | null
   atendimentos?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutSetorInput
 }
 
@@ -396,12 +480,14 @@ export type setoresUpdateWithoutCadastrosInput = {
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
   atendimentos?: Prisma.conversa_setorUpdateManyWithoutSetorNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutSetoresNestedInput
 }
 
 export type setoresUncheckedUpdateWithoutCadastrosInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   atendimentos?: Prisma.conversa_setorUncheckedUpdateManyWithoutSetorNestedInput
 }
 
@@ -409,12 +495,14 @@ export type setoresCreateWithoutAtendimentosInput = {
   setor: string
   sigla_setor: string
   cadastros?: Prisma.cadastroCreateNestedManyWithoutSetorInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutSetoresInput
 }
 
 export type setoresUncheckedCreateWithoutAtendimentosInput = {
   id?: number
   setor: string
   sigla_setor: string
+  secretaria_id?: number | null
   cadastros?: Prisma.cadastroUncheckedCreateNestedManyWithoutSetorInput
 }
 
@@ -438,13 +526,93 @@ export type setoresUpdateWithoutAtendimentosInput = {
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
   cadastros?: Prisma.cadastroUpdateManyWithoutSetorNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutSetoresNestedInput
 }
 
 export type setoresUncheckedUpdateWithoutAtendimentosInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cadastros?: Prisma.cadastroUncheckedUpdateManyWithoutSetorNestedInput
+}
+
+export type setoresCreateWithoutSecretariaInput = {
+  setor: string
+  sigla_setor: string
+  cadastros?: Prisma.cadastroCreateNestedManyWithoutSetorInput
+  atendimentos?: Prisma.conversa_setorCreateNestedManyWithoutSetorInput
+}
+
+export type setoresUncheckedCreateWithoutSecretariaInput = {
+  id?: number
+  setor: string
+  sigla_setor: string
+  cadastros?: Prisma.cadastroUncheckedCreateNestedManyWithoutSetorInput
+  atendimentos?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutSetorInput
+}
+
+export type setoresCreateOrConnectWithoutSecretariaInput = {
+  where: Prisma.setoresWhereUniqueInput
+  create: Prisma.XOR<Prisma.setoresCreateWithoutSecretariaInput, Prisma.setoresUncheckedCreateWithoutSecretariaInput>
+}
+
+export type setoresCreateManySecretariaInputEnvelope = {
+  data: Prisma.setoresCreateManySecretariaInput | Prisma.setoresCreateManySecretariaInput[]
+  skipDuplicates?: boolean
+}
+
+export type setoresUpsertWithWhereUniqueWithoutSecretariaInput = {
+  where: Prisma.setoresWhereUniqueInput
+  update: Prisma.XOR<Prisma.setoresUpdateWithoutSecretariaInput, Prisma.setoresUncheckedUpdateWithoutSecretariaInput>
+  create: Prisma.XOR<Prisma.setoresCreateWithoutSecretariaInput, Prisma.setoresUncheckedCreateWithoutSecretariaInput>
+}
+
+export type setoresUpdateWithWhereUniqueWithoutSecretariaInput = {
+  where: Prisma.setoresWhereUniqueInput
+  data: Prisma.XOR<Prisma.setoresUpdateWithoutSecretariaInput, Prisma.setoresUncheckedUpdateWithoutSecretariaInput>
+}
+
+export type setoresUpdateManyWithWhereWithoutSecretariaInput = {
+  where: Prisma.setoresScalarWhereInput
+  data: Prisma.XOR<Prisma.setoresUpdateManyMutationInput, Prisma.setoresUncheckedUpdateManyWithoutSecretariaInput>
+}
+
+export type setoresScalarWhereInput = {
+  AND?: Prisma.setoresScalarWhereInput | Prisma.setoresScalarWhereInput[]
+  OR?: Prisma.setoresScalarWhereInput[]
+  NOT?: Prisma.setoresScalarWhereInput | Prisma.setoresScalarWhereInput[]
+  id?: Prisma.IntFilter<"setores"> | number
+  setor?: Prisma.StringFilter<"setores"> | string
+  sigla_setor?: Prisma.StringFilter<"setores"> | string
+  secretaria_id?: Prisma.IntNullableFilter<"setores"> | number | null
+}
+
+export type setoresCreateManySecretariaInput = {
+  id?: number
+  setor: string
+  sigla_setor: string
+}
+
+export type setoresUpdateWithoutSecretariaInput = {
+  setor?: Prisma.StringFieldUpdateOperationsInput | string
+  sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  cadastros?: Prisma.cadastroUpdateManyWithoutSetorNestedInput
+  atendimentos?: Prisma.conversa_setorUpdateManyWithoutSetorNestedInput
+}
+
+export type setoresUncheckedUpdateWithoutSecretariaInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  setor?: Prisma.StringFieldUpdateOperationsInput | string
+  sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  cadastros?: Prisma.cadastroUncheckedUpdateManyWithoutSetorNestedInput
+  atendimentos?: Prisma.conversa_setorUncheckedUpdateManyWithoutSetorNestedInput
+}
+
+export type setoresUncheckedUpdateManyWithoutSecretariaInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  setor?: Prisma.StringFieldUpdateOperationsInput | string
+  sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -491,8 +659,10 @@ export type setoresSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   setor?: boolean
   sigla_setor?: boolean
+  secretaria_id?: boolean
   cadastros?: boolean | Prisma.setores$cadastrosArgs<ExtArgs>
   atendimentos?: boolean | Prisma.setores$atendimentosArgs<ExtArgs>
+  secretaria?: boolean | Prisma.setores$secretariaArgs<ExtArgs>
   _count?: boolean | Prisma.SetoresCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["setores"]>
 
@@ -502,12 +672,14 @@ export type setoresSelectScalar = {
   id?: boolean
   setor?: boolean
   sigla_setor?: boolean
+  secretaria_id?: boolean
 }
 
-export type setoresOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "setor" | "sigla_setor", ExtArgs["result"]["setores"]>
+export type setoresOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "setor" | "sigla_setor" | "secretaria_id", ExtArgs["result"]["setores"]>
 export type setoresInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cadastros?: boolean | Prisma.setores$cadastrosArgs<ExtArgs>
   atendimentos?: boolean | Prisma.setores$atendimentosArgs<ExtArgs>
+  secretaria?: boolean | Prisma.setores$secretariaArgs<ExtArgs>
   _count?: boolean | Prisma.SetoresCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -516,11 +688,13 @@ export type $setoresPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     cadastros: Prisma.$cadastroPayload<ExtArgs>[]
     atendimentos: Prisma.$conversa_setorPayload<ExtArgs>[]
+    secretaria: Prisma.$secretariaPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     setor: string
     sigla_setor: string
+    secretaria_id: number | null
   }, ExtArgs["result"]["setores"]>
   composites: {}
 }
@@ -863,6 +1037,7 @@ export interface Prisma__setoresClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   cadastros<T extends Prisma.setores$cadastrosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.setores$cadastrosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   atendimentos<T extends Prisma.setores$atendimentosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.setores$atendimentosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_setorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  secretaria<T extends Prisma.setores$secretariaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.setores$secretariaArgs<ExtArgs>>): Prisma.Prisma__secretariaClient<runtime.Types.Result.GetResult<Prisma.$secretariaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -895,6 +1070,7 @@ export interface setoresFieldRefs {
   readonly id: Prisma.FieldRef<"setores", 'Int'>
   readonly setor: Prisma.FieldRef<"setores", 'String'>
   readonly sigla_setor: Prisma.FieldRef<"setores", 'String'>
+  readonly secretaria_id: Prisma.FieldRef<"setores", 'Int'>
 }
     
 
@@ -1288,6 +1464,25 @@ export type setores$atendimentosArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.Conversa_setorScalarFieldEnum | Prisma.Conversa_setorScalarFieldEnum[]
+}
+
+/**
+ * setores.secretaria
+ */
+export type setores$secretariaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the secretaria
+   */
+  select?: Prisma.secretariaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the secretaria
+   */
+  omit?: Prisma.secretariaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.secretariaInclude<ExtArgs> | null
+  where?: Prisma.secretariaWhereInput
 }
 
 /**

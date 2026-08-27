@@ -8,12 +8,22 @@ type Setor = {
     id: number;
     setor: string;
     sigla_setor: string;
+    secretaria_id: number | null;
+    secretaria: Secretaria | null;
+}
+
+type Secretaria = {
+    id: number;
+    secretaria: string;
+    sigla_secretaria: string;
 }
 
 const ITENS_POR_PAGINA = 20;
 
 function Setores() {
     const [setores, setSetores] = useState<Setor[]>([]);
+    const [secretarias, setSecretarias] = useState<Secretaria[]>([]);
+    const [carregandoSecretarias, setCarregandoSecretarias] = useState(true);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [setorParaApagar, setSetorParaApagar] = useState<Setor | null>(null);
     const [setorSendoApagado, setSetorSendoApagado] = useState<number | null>(null);
@@ -55,6 +65,40 @@ function Setores() {
     }, []);
 
     useEffect(() => {
+        async function carregarSecretarias() {
+            try {
+                const token = localStorage.getItem("access_token");
+                const resposta = await fetch(
+                    `${import.meta.env.VITE_API_URL}/secretaria`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Falha ao carregar as secretarias.");
+                }
+
+                const secretariasCadastradas: Secretaria[] = await resposta.json();
+                setSecretarias(secretariasCadastradas);
+            } catch (erro) {
+                console.error("Falha ao carregar as secretarias:", erro);
+                setFeedback({
+                    aberto: true,
+                    tipo: "erro",
+                    mensagem: "Não foi possível carregar as secretarias.",
+                });
+            } finally {
+                setCarregandoSecretarias(false);
+            }
+        }
+
+        void carregarSecretarias();
+    }, []);
+
+    useEffect(() => {
         if (totalPaginas > 0 && paginaAtual > totalPaginas) {
             setPaginaAtual(totalPaginas);
         }
@@ -67,8 +111,13 @@ function Setores() {
 
         const formulario = event.currentTarget;
         const dadosFormulario = new FormData(formulario);
+        const secretariaId = dadosFormulario.get("secretaria_id");
 
-        const dados = Object.fromEntries(dadosFormulario.entries());
+        const dados = {
+            setor: String(dadosFormulario.get("setor") ?? ""),
+            sigla_setor: String(dadosFormulario.get("sigla_setor") ?? ""),
+            secretaria_id: secretariaId ? Number(secretariaId) : null,
+        };
 
         try {
             const token = localStorage.getItem("access_token");
@@ -178,11 +227,27 @@ function Setores() {
                 <form method="POST" className="setor-form" onSubmit={criar}>
                     <div className="container-campo-setor">
                         <div className="campo-form-setor campo-form-setor--secretaria">
-                            <label htmlFor="campo-add-secretaria">Secretaria</label>
+                            <label htmlFor="campo-add-secretaria">Secretaria{obrigatorio}</label>
                             <select
-                                name="campo-add-secretaria"
+                                name="secretaria_id"
                                 id="campo-add-secretaria"
-                            ></select>
+                                defaultValue=""
+                                disabled={carregandoSecretarias}
+                            >
+                                <option value="">
+                                    {carregandoSecretarias
+                                        ? "Carregando secretarias..."
+                                        : secretarias.length === 0
+                                            ? "Sem secretaria cadastrada"
+                                            : "Sem secretaria"}
+                                </option>
+
+                                {secretarias.map((secretaria) => (
+                                    <option key={secretaria.id} value={secretaria.id}>
+                                        {secretaria.sigla_secretaria} — {secretaria.secretaria}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="campo-form-setor">
                             <label htmlFor="setor">Setor{obrigatorio}</label>
@@ -206,7 +271,12 @@ function Setores() {
                         </div>
                     </div>
 
-                    <button className="botao-enviar-setor" type="submit">Enviar</button>
+                    <button
+                        className="botao-enviar-setor"
+                        type="submit"
+                    >
+                        Enviar
+                    </button>
                 </form>
             </div>
 
@@ -216,6 +286,7 @@ function Setores() {
                         <tr>
                             <th scope="col">Sigla</th>
                             <th scope="col">Setor</th>
+                            <th scope="col">Secretaria</th>
                             <th scope="col">Ações</th>
                         </tr>
                     </thead>
@@ -225,6 +296,11 @@ function Setores() {
                             <tr key={setor.id}>
                                 <td>{setor.sigla_setor}</td>
                                 <td>{setor.setor}</td>
+                                <td>
+                                    {setor.secretaria
+                                        ? `${setor.secretaria.sigla_secretaria} — ${setor.secretaria.secretaria}`
+                                        : "Sem secretaria"}
+                                </td>
                                 <td className="setores__acoes">
                                     <button
                                         className="setores__botao-apagar"

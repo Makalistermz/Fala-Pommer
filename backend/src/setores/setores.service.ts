@@ -13,10 +13,25 @@ export class SetoresService {
                 id: true,
                 setor: true,
                 sigla_setor: true,
+                secretaria_id: true,
+                secretaria: {
+                    select: {
+                        id: true,
+                        secretaria: true,
+                        sigla_secretaria: true,
+                    },
+                },
             },
-            orderBy: {
-                setor: 'asc',
-            },
+            orderBy: [
+                {
+                    secretaria: {
+                        secretaria: 'asc', 
+                    },
+                },
+                {
+                    setor: "asc",
+                },
+            ],
         });
     }
 
@@ -41,7 +56,6 @@ export class SetoresService {
     }
 
     async criar(dados: CriarSetorDTO) {
-
         const setorExistente = await this.prisma.setores.findFirst({
             where: {
                 OR: [
@@ -55,15 +69,39 @@ export class SetoresService {
             throw new ConflictException("O setor ou a sigla informada já existe no sistema.");
         }
 
+        if (dados.secretaria_id != null) {
+            const secretariaExistente = await this.prisma.secretaria.findUnique({
+                where: {
+                    id: dados.secretaria_id,
+                },
+                select: {
+                    id: true,
+                },
+            });
+
+            if (!secretariaExistente) {
+                throw new NotFoundException('Secretaria não encontrada.');
+            }
+        }
+
         const setorCriado = await this.prisma.setores.create({
             data: {
                 setor: dados.setor,
                 sigla_setor: dados.sigla_setor,
+                secretaria_id: dados.secretaria_id ?? null,
             },
             select: {
                 id: true,
                 setor: true,
                 sigla_setor: true,
+                secretaria_id: true,
+                secretaria: {
+                    select: {
+                        id: true,
+                        secretaria: true,
+                        sigla_secretaria: true,
+                    },
+                },
             },
         });
 

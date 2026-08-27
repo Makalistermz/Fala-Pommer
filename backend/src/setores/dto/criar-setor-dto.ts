@@ -1,7 +1,11 @@
 // Valida os dados usados para criar ou atualizar um setor.
+import { Type } from "class-transformer";
 import {
     IsString,
-    IsNotEmpty
+    IsNotEmpty,
+    IsInt,
+    IsOptional,
+    Min
 } from "class-validator";
 
 export class CriarSetorDTO {
@@ -12,4 +16,10 @@ export class CriarSetorDTO {
     @IsString()
     @IsNotEmpty()
     sigla_setor!: string;
+
+    @Type(() => Number)
+    @IsOptional()
+    @IsInt()
+    @Min(1)
+    secretaria_id?: number | null;
 }

@@ -177,8 +177,15 @@ function Setores() {
             <div className="formulario-setor">
                 <form method="POST" className="setor-form" onSubmit={criar}>
                     <div className="container-campo-setor">
+                        <div className="campo-form-setor campo-form-setor--secretaria">
+                            <label htmlFor="campo-add-secretaria">Secretaria</label>
+                            <select
+                                name="campo-add-secretaria"
+                                id="campo-add-secretaria"
+                            ></select>
+                        </div>
                         <div className="campo-form-setor">
-                            <label htmlFor="setor" >Setor{obrigatorio}</label>
+                            <label htmlFor="setor">Setor{obrigatorio}</label>
                             <input
                             name="setor"
                             id="setor"

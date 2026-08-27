@@ -325,7 +325,8 @@ html.tema-escuro:not(.alto-contraste) :is(
   .usuarios__pesquisa input,
   .info__painel-lateral input,
   .info__painel-lateral select,
-  .campo-form-setor input
+  .campo-form-setor input,
+  .campo-form-setor select
 ) {
   border-color: #40516b;
   background: var(--tema-superficie-elevada);

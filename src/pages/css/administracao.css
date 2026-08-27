@@ -874,7 +874,6 @@
 
 .criar-sectors__conteudo {
     position: relative;
-    z-index: 1;
     width: 100%;
     min-width: 0;
     margin-top: -1px;
@@ -1094,19 +1093,33 @@ html.tema-escuro:not(.alto-contraste) .criar-sectors__pasta--ativa::before {
     gap: 5px;
 }
 
+.campo-form-setor--secretaria {
+    grid-column: 1 / -1;
+}
+
 .campo-form-setor label {
     font-family: var(--fonte-dm-sans);
     font-weight: 600;
 }
 
-.campo-form-setor input {
+.campo-form-setor input,
+.campo-form-setor select {
+    width: 100%;
     height: 40px;
     padding: 10px;
     border: 1px solid rgba(0, 0, 0, 0.25);
     border-radius: 10px;
+    background-color: #ffffff;
+    color: #344054;
+    font: inherit;
 }
 
-.campo-form-setor input:focus {
+.campo-form-setor select {
+    cursor: pointer;
+}
+
+.campo-form-setor input:focus,
+.campo-form-setor select:focus {
     outline-color: #1351b4b9;
     box-shadow: 0 0 0 4px rgb(19 81 180 / 15%);
 }

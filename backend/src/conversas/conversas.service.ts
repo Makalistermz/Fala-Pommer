@@ -528,7 +528,14 @@ export class ConversasService {
                         select: {
                             id: true,
                             setor: true,
-                            sigla_setor: true
+                            sigla_setor: true,
+                            secretaria: {
+                                select: {
+                                    id: true,
+                                    secretaria: true,
+                                    sigla_secretaria: true
+                                }
+                            }
                         }
                     },
 
@@ -563,6 +570,8 @@ export class ConversasService {
                 atendimento.conversa.mensagens[0] ??
                 null;
 
+            const secretaria = atendimento.setor.secretaria
+
             return {
                 id: atendimento.conversa.id,
                 tipo: atendimento.conversa.tipo,
@@ -595,6 +604,14 @@ export class ConversasService {
                             ultimaMensagem.arquivo_tipo,
                         enviadaEm:
                             ultimaMensagem.enviada_em
+                    }
+                    : null,
+
+                secretaria: secretaria
+                    ? {
+                        id: secretaria.id,
+                        nome: secretaria.secretaria,
+                        sigla: secretaria.sigla_secretaria
                     }
                     : null
             };

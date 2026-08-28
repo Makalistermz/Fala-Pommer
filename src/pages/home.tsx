@@ -82,6 +82,12 @@ interface ConversaSetor {
         sigla: string;
     };
 
+    secretaria: {
+        id: number;
+        nome: string;
+        sigla: string;
+    }
+
     usuario: UsuarioBasico;
     mensagensNaoLidas: number;
     ultimaMensagem: UltimaMensagem | null;
@@ -1164,8 +1170,8 @@ function Home() {
     function subtituloDaConversa(conversa: Conversa) {
         if (conversa.tipo === "setor") {
             return usuario?.tipo === "user"
-                ? conversa.setor.sigla
-                : conversa.setor.nome;
+                ? conversa.secretaria.nome
+                : conversa.setor.nome
         }
 
         if (conversa.somenteLeitura) {

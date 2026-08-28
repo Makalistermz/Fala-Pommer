@@ -93,6 +93,7 @@ export const CadastroScalarFieldEnum = {
   token_recuperacao_expira_em: 'token_recuperacao_expira_em',
   tipo_usuario: 'tipo_usuario',
   setor_id: 'setor_id',
+  secretaria_id: 'secretaria_id',
   foto_perfil_url: 'foto_perfil_url',
   dois_fatores_email_ativo: 'dois_fatores_email_ativo',
   dois_fatores_email_confirmado_em: 'dois_fatores_email_confirmado_em'

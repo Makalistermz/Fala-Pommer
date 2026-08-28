@@ -20,10 +20,12 @@ model cadastro {
   token_recuperacao_expira_em      DateTime?
   tipo_usuario                     cadastro_tipo_usuario    @default(user)
   setor_id                         Int?
+  secretaria_id                    Int?
   foto_perfil_url                  String?                  @db.VarChar(500)
   dois_fatores_email_ativo         Boolean                  @default(false)
   dois_fatores_email_confirmado_em DateTime?
   setor                            setores?                 @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
+  secretaria                       secretaria?              @relation(fields: [secretaria_id], references: [id], onDelete: SetNull, onUpdate: Restrict, map: "fk_cadastro_secretaria")
   codigo_recuperacao_2fa           codigo_recuperacao_2fa[]
   conversa_leitura                 conversa_leitura[]
   conversa_participante            conversa_participante[]
@@ -34,6 +36,7 @@ model cadastro {
   mensagens_enviadas               mensagem[]               @relation("RemetenteMensagem")
 
   @@index([setor_id], map: "fk_cadastro_setor")
+  @@index([secretaria_id], map: "fk_cadastro_secretaria")
 }
 
 model erro_autenticacao {
@@ -174,6 +177,7 @@ model secretaria {
   id               Int       @id @default(autoincrement())
   secretaria       String    @db.VarChar(150)
   sigla_secretaria String    @db.VarChar(100)
+  cadastros        cadastro[]
   setores          setores[]
 }
 

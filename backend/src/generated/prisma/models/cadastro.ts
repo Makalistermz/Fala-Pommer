@@ -29,11 +29,13 @@ export type AggregateCadastro = {
 export type CadastroAvgAggregateOutputType = {
   id: number | null
   setor_id: number | null
+  secretaria_id: number | null
 }
 
 export type CadastroSumAggregateOutputType = {
   id: number | null
   setor_id: number | null
+  secretaria_id: number | null
 }
 
 export type CadastroMinAggregateOutputType = {
@@ -48,6 +50,7 @@ export type CadastroMinAggregateOutputType = {
   token_recuperacao_expira_em: Date | null
   tipo_usuario: $Enums.cadastro_tipo_usuario | null
   setor_id: number | null
+  secretaria_id: number | null
   foto_perfil_url: string | null
   dois_fatores_email_ativo: boolean | null
   dois_fatores_email_confirmado_em: Date | null
@@ -65,6 +68,7 @@ export type CadastroMaxAggregateOutputType = {
   token_recuperacao_expira_em: Date | null
   tipo_usuario: $Enums.cadastro_tipo_usuario | null
   setor_id: number | null
+  secretaria_id: number | null
   foto_perfil_url: string | null
   dois_fatores_email_ativo: boolean | null
   dois_fatores_email_confirmado_em: Date | null
@@ -82,6 +86,7 @@ export type CadastroCountAggregateOutputType = {
   token_recuperacao_expira_em: number
   tipo_usuario: number
   setor_id: number
+  secretaria_id: number
   foto_perfil_url: number
   dois_fatores_email_ativo: number
   dois_fatores_email_confirmado_em: number
@@ -92,11 +97,13 @@ export type CadastroCountAggregateOutputType = {
 export type CadastroAvgAggregateInputType = {
   id?: true
   setor_id?: true
+  secretaria_id?: true
 }
 
 export type CadastroSumAggregateInputType = {
   id?: true
   setor_id?: true
+  secretaria_id?: true
 }
 
 export type CadastroMinAggregateInputType = {
@@ -111,6 +118,7 @@ export type CadastroMinAggregateInputType = {
   token_recuperacao_expira_em?: true
   tipo_usuario?: true
   setor_id?: true
+  secretaria_id?: true
   foto_perfil_url?: true
   dois_fatores_email_ativo?: true
   dois_fatores_email_confirmado_em?: true
@@ -128,6 +136,7 @@ export type CadastroMaxAggregateInputType = {
   token_recuperacao_expira_em?: true
   tipo_usuario?: true
   setor_id?: true
+  secretaria_id?: true
   foto_perfil_url?: true
   dois_fatores_email_ativo?: true
   dois_fatores_email_confirmado_em?: true
@@ -145,6 +154,7 @@ export type CadastroCountAggregateInputType = {
   token_recuperacao_expira_em?: true
   tipo_usuario?: true
   setor_id?: true
+  secretaria_id?: true
   foto_perfil_url?: true
   dois_fatores_email_ativo?: true
   dois_fatores_email_confirmado_em?: true
@@ -249,6 +259,7 @@ export type CadastroGroupByOutputType = {
   token_recuperacao_expira_em: Date | null
   tipo_usuario: $Enums.cadastro_tipo_usuario
   setor_id: number | null
+  secretaria_id: number | null
   foto_perfil_url: string | null
   dois_fatores_email_ativo: boolean
   dois_fatores_email_confirmado_em: Date | null
@@ -289,10 +300,12 @@ export type cadastroWhereInput = {
   token_recuperacao_expira_em?: Prisma.DateTimeNullableFilter<"cadastro"> | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFilter<"cadastro"> | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.IntNullableFilter<"cadastro"> | number | null
+  secretaria_id?: Prisma.IntNullableFilter<"cadastro"> | number | null
   foto_perfil_url?: Prisma.StringNullableFilter<"cadastro"> | string | null
   dois_fatores_email_ativo?: Prisma.BoolFilter<"cadastro"> | boolean
   dois_fatores_email_confirmado_em?: Prisma.DateTimeNullableFilter<"cadastro"> | Date | string | null
   setor?: Prisma.XOR<Prisma.SetoresNullableScalarRelationFilter, Prisma.setoresWhereInput> | null
+  secretaria?: Prisma.XOR<Prisma.SecretariaNullableScalarRelationFilter, Prisma.secretariaWhereInput> | null
   codigo_recuperacao_2fa?: Prisma.Codigo_recuperacao_2faListRelationFilter
   conversa_leitura?: Prisma.Conversa_leituraListRelationFilter
   conversa_participante?: Prisma.Conversa_participanteListRelationFilter
@@ -315,10 +328,12 @@ export type cadastroOrderByWithRelationInput = {
   token_recuperacao_expira_em?: Prisma.SortOrderInput | Prisma.SortOrder
   tipo_usuario?: Prisma.SortOrder
   setor_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrderInput | Prisma.SortOrder
   foto_perfil_url?: Prisma.SortOrderInput | Prisma.SortOrder
   dois_fatores_email_ativo?: Prisma.SortOrder
   dois_fatores_email_confirmado_em?: Prisma.SortOrderInput | Prisma.SortOrder
   setor?: Prisma.setoresOrderByWithRelationInput
+  secretaria?: Prisma.secretariaOrderByWithRelationInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faOrderByRelationAggregateInput
   conversa_leitura?: Prisma.conversa_leituraOrderByRelationAggregateInput
   conversa_participante?: Prisma.conversa_participanteOrderByRelationAggregateInput
@@ -345,10 +360,12 @@ export type cadastroWhereUniqueInput = Prisma.AtLeast<{
   token_recuperacao_expira_em?: Prisma.DateTimeNullableFilter<"cadastro"> | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFilter<"cadastro"> | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.IntNullableFilter<"cadastro"> | number | null
+  secretaria_id?: Prisma.IntNullableFilter<"cadastro"> | number | null
   foto_perfil_url?: Prisma.StringNullableFilter<"cadastro"> | string | null
   dois_fatores_email_ativo?: Prisma.BoolFilter<"cadastro"> | boolean
   dois_fatores_email_confirmado_em?: Prisma.DateTimeNullableFilter<"cadastro"> | Date | string | null
   setor?: Prisma.XOR<Prisma.SetoresNullableScalarRelationFilter, Prisma.setoresWhereInput> | null
+  secretaria?: Prisma.XOR<Prisma.SecretariaNullableScalarRelationFilter, Prisma.secretariaWhereInput> | null
   codigo_recuperacao_2fa?: Prisma.Codigo_recuperacao_2faListRelationFilter
   conversa_leitura?: Prisma.Conversa_leituraListRelationFilter
   conversa_participante?: Prisma.Conversa_participanteListRelationFilter
@@ -371,6 +388,7 @@ export type cadastroOrderByWithAggregationInput = {
   token_recuperacao_expira_em?: Prisma.SortOrderInput | Prisma.SortOrder
   tipo_usuario?: Prisma.SortOrder
   setor_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrderInput | Prisma.SortOrder
   foto_perfil_url?: Prisma.SortOrderInput | Prisma.SortOrder
   dois_fatores_email_ativo?: Prisma.SortOrder
   dois_fatores_email_confirmado_em?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -396,6 +414,7 @@ export type cadastroScalarWhereWithAggregatesInput = {
   token_recuperacao_expira_em?: Prisma.DateTimeNullableWithAggregatesFilter<"cadastro"> | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioWithAggregatesFilter<"cadastro"> | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.IntNullableWithAggregatesFilter<"cadastro"> | number | null
+  secretaria_id?: Prisma.IntNullableWithAggregatesFilter<"cadastro"> | number | null
   foto_perfil_url?: Prisma.StringNullableWithAggregatesFilter<"cadastro"> | string | null
   dois_fatores_email_ativo?: Prisma.BoolWithAggregatesFilter<"cadastro"> | boolean
   dois_fatores_email_confirmado_em?: Prisma.DateTimeNullableWithAggregatesFilter<"cadastro"> | Date | string | null
@@ -415,6 +434,7 @@ export type cadastroCreateInput = {
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -437,6 +457,7 @@ export type cadastroUncheckedCreateInput = {
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
   setor_id?: number | null
+  secretaria_id?: number | null
   foto_perfil_url?: string | null
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
@@ -464,6 +485,7 @@ export type cadastroUpdateInput = {
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -486,6 +508,7 @@ export type cadastroUncheckedUpdateInput = {
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -511,6 +534,7 @@ export type cadastroCreateManyInput = {
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
   setor_id?: number | null
+  secretaria_id?: number | null
   foto_perfil_url?: string | null
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
@@ -543,6 +567,7 @@ export type cadastroUncheckedUpdateManyInput = {
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -566,6 +591,7 @@ export type cadastroCountOrderByAggregateInput = {
   token_recuperacao_expira_em?: Prisma.SortOrder
   tipo_usuario?: Prisma.SortOrder
   setor_id?: Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrder
   foto_perfil_url?: Prisma.SortOrder
   dois_fatores_email_ativo?: Prisma.SortOrder
   dois_fatores_email_confirmado_em?: Prisma.SortOrder
@@ -574,6 +600,7 @@ export type cadastroCountOrderByAggregateInput = {
 export type cadastroAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   setor_id?: Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrder
 }
 
 export type cadastroMaxOrderByAggregateInput = {
@@ -588,6 +615,7 @@ export type cadastroMaxOrderByAggregateInput = {
   token_recuperacao_expira_em?: Prisma.SortOrder
   tipo_usuario?: Prisma.SortOrder
   setor_id?: Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrder
   foto_perfil_url?: Prisma.SortOrder
   dois_fatores_email_ativo?: Prisma.SortOrder
   dois_fatores_email_confirmado_em?: Prisma.SortOrder
@@ -605,6 +633,7 @@ export type cadastroMinOrderByAggregateInput = {
   token_recuperacao_expira_em?: Prisma.SortOrder
   tipo_usuario?: Prisma.SortOrder
   setor_id?: Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrder
   foto_perfil_url?: Prisma.SortOrder
   dois_fatores_email_ativo?: Prisma.SortOrder
   dois_fatores_email_confirmado_em?: Prisma.SortOrder
@@ -613,6 +642,7 @@ export type cadastroMinOrderByAggregateInput = {
 export type cadastroSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   setor_id?: Prisma.SortOrder
+  secretaria_id?: Prisma.SortOrder
 }
 
 export type CadastroScalarRelationFilter = {
@@ -824,6 +854,48 @@ export type cadastroUpdateOneRequiredWithoutDesafio_login_2faNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.cadastroUpdateToOneWithWhereWithoutDesafio_login_2faInput, Prisma.cadastroUpdateWithoutDesafio_login_2faInput>, Prisma.cadastroUncheckedUpdateWithoutDesafio_login_2faInput>
 }
 
+export type cadastroCreateNestedManyWithoutSecretariaInput = {
+  create?: Prisma.XOR<Prisma.cadastroCreateWithoutSecretariaInput, Prisma.cadastroUncheckedCreateWithoutSecretariaInput> | Prisma.cadastroCreateWithoutSecretariaInput[] | Prisma.cadastroUncheckedCreateWithoutSecretariaInput[]
+  connectOrCreate?: Prisma.cadastroCreateOrConnectWithoutSecretariaInput | Prisma.cadastroCreateOrConnectWithoutSecretariaInput[]
+  createMany?: Prisma.cadastroCreateManySecretariaInputEnvelope
+  connect?: Prisma.cadastroWhereUniqueInput | Prisma.cadastroWhereUniqueInput[]
+}
+
+export type cadastroUncheckedCreateNestedManyWithoutSecretariaInput = {
+  create?: Prisma.XOR<Prisma.cadastroCreateWithoutSecretariaInput, Prisma.cadastroUncheckedCreateWithoutSecretariaInput> | Prisma.cadastroCreateWithoutSecretariaInput[] | Prisma.cadastroUncheckedCreateWithoutSecretariaInput[]
+  connectOrCreate?: Prisma.cadastroCreateOrConnectWithoutSecretariaInput | Prisma.cadastroCreateOrConnectWithoutSecretariaInput[]
+  createMany?: Prisma.cadastroCreateManySecretariaInputEnvelope
+  connect?: Prisma.cadastroWhereUniqueInput | Prisma.cadastroWhereUniqueInput[]
+}
+
+export type cadastroUpdateManyWithoutSecretariaNestedInput = {
+  create?: Prisma.XOR<Prisma.cadastroCreateWithoutSecretariaInput, Prisma.cadastroUncheckedCreateWithoutSecretariaInput> | Prisma.cadastroCreateWithoutSecretariaInput[] | Prisma.cadastroUncheckedCreateWithoutSecretariaInput[]
+  connectOrCreate?: Prisma.cadastroCreateOrConnectWithoutSecretariaInput | Prisma.cadastroCreateOrConnectWithoutSecretariaInput[]
+  upsert?: Prisma.cadastroUpsertWithWhereUniqueWithoutSecretariaInput | Prisma.cadastroUpsertWithWhereUniqueWithoutSecretariaInput[]
+  createMany?: Prisma.cadastroCreateManySecretariaInputEnvelope
+  set?: Prisma.cadastroWhereUniqueInput | Prisma.cadastroWhereUniqueInput[]
+  disconnect?: Prisma.cadastroWhereUniqueInput | Prisma.cadastroWhereUniqueInput[]
+  delete?: Prisma.cadastroWhereUniqueInput | Prisma.cadastroWhereUniqueInput[]
+  connect?: Prisma.cadastroWhereUniqueInput | Prisma.cadastroWhereUniqueInput[]
+  update?: Prisma.cadastroUpdateWithWhereUniqueWithoutSecretariaInput | Prisma.cadastroUpdateWithWhereUniqueWithoutSecretariaInput[]
+  updateMany?: Prisma.cadastroUpdateManyWithWhereWithoutSecretariaInput | Prisma.cadastroUpdateManyWithWhereWithoutSecretariaInput[]
+  deleteMany?: Prisma.cadastroScalarWhereInput | Prisma.cadastroScalarWhereInput[]
+}
+
+export type cadastroUncheckedUpdateManyWithoutSecretariaNestedInput = {
+  create?: Prisma.XOR<Prisma.cadastroCreateWithoutSecretariaInput, Prisma.cadastroUncheckedCreateWithoutSecretariaInput> | Prisma.cadastroCreateWithoutSecretariaInput[] | Prisma.cadastroUncheckedCreateWithoutSecretariaInput[]
+  connectOrCreate?: Prisma.cadastroCreateOrConnectWithoutSecretariaInput | Prisma.cadastroCreateOrConnectWithoutSecretariaInput[]
+  upsert?: Prisma.cadastroUpsertWithWhereUniqueWithoutSecretariaInput | Prisma.cadastroUpsertWithWhereUniqueWithoutSecretariaInput[]
+  createMany?: Prisma.cadastroCreateManySecretariaInputEnvelope
+  set?: Prisma.cadastroWhereUniqueInput | Prisma.cadastroWhereUniqueInput[]
+  disconnect?: Prisma.cadastroWhereUniqueInput | Prisma.cadastroWhereUniqueInput[]
+  delete?: Prisma.cadastroWhereUniqueInput | Prisma.cadastroWhereUniqueInput[]
+  connect?: Prisma.cadastroWhereUniqueInput | Prisma.cadastroWhereUniqueInput[]
+  update?: Prisma.cadastroUpdateWithWhereUniqueWithoutSecretariaInput | Prisma.cadastroUpdateWithWhereUniqueWithoutSecretariaInput[]
+  updateMany?: Prisma.cadastroUpdateManyWithWhereWithoutSecretariaInput | Prisma.cadastroUpdateManyWithWhereWithoutSecretariaInput[]
+  deleteMany?: Prisma.cadastroScalarWhereInput | Prisma.cadastroScalarWhereInput[]
+}
+
 export type cadastroCreateWithoutErro_autenticacaoInput = {
   nome: string
   data_nascimento: Date | string
@@ -838,6 +910,7 @@ export type cadastroCreateWithoutErro_autenticacaoInput = {
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -859,6 +932,7 @@ export type cadastroUncheckedCreateWithoutErro_autenticacaoInput = {
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
   setor_id?: number | null
+  secretaria_id?: number | null
   foto_perfil_url?: string | null
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
@@ -901,6 +975,7 @@ export type cadastroUpdateWithoutErro_autenticacaoInput = {
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -922,6 +997,7 @@ export type cadastroUncheckedUpdateWithoutErro_autenticacaoInput = {
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -948,6 +1024,7 @@ export type cadastroCreateWithoutLogin_eventoInput = {
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -969,6 +1046,7 @@ export type cadastroUncheckedCreateWithoutLogin_eventoInput = {
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
   setor_id?: number | null
+  secretaria_id?: number | null
   foto_perfil_url?: string | null
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
@@ -1011,6 +1089,7 @@ export type cadastroUpdateWithoutLogin_eventoInput = {
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -1032,6 +1111,7 @@ export type cadastroUncheckedUpdateWithoutLogin_eventoInput = {
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1058,6 +1138,7 @@ export type cadastroCreateWithoutConversa_participanteInput = {
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
@@ -1079,6 +1160,7 @@ export type cadastroUncheckedCreateWithoutConversa_participanteInput = {
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
   setor_id?: number | null
+  secretaria_id?: number | null
   foto_perfil_url?: string | null
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
@@ -1121,6 +1203,7 @@ export type cadastroUpdateWithoutConversa_participanteInput = {
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
@@ -1142,6 +1225,7 @@ export type cadastroUncheckedUpdateWithoutConversa_participanteInput = {
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1168,6 +1252,7 @@ export type cadastroCreateWithoutConversas_atendidasInput = {
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -1189,6 +1274,7 @@ export type cadastroUncheckedCreateWithoutConversas_atendidasInput = {
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
   setor_id?: number | null
+  secretaria_id?: number | null
   foto_perfil_url?: string | null
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
@@ -1231,6 +1317,7 @@ export type cadastroUpdateWithoutConversas_atendidasInput = {
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -1252,6 +1339,7 @@ export type cadastroUncheckedUpdateWithoutConversas_atendidasInput = {
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1278,6 +1366,7 @@ export type cadastroCreateWithoutMensagens_enviadasInput = {
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -1299,6 +1388,7 @@ export type cadastroUncheckedCreateWithoutMensagens_enviadasInput = {
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
   setor_id?: number | null
+  secretaria_id?: number | null
   foto_perfil_url?: string | null
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
@@ -1341,6 +1431,7 @@ export type cadastroUpdateWithoutMensagens_enviadasInput = {
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -1362,6 +1453,7 @@ export type cadastroUncheckedUpdateWithoutMensagens_enviadasInput = {
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1387,6 +1479,7 @@ export type cadastroCreateWithoutSetorInput = {
   foto_perfil_url?: string | null
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -1408,6 +1501,7 @@ export type cadastroUncheckedCreateWithoutSetorInput = {
   token_recuperacao?: string | null
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
+  secretaria_id?: number | null
   foto_perfil_url?: string | null
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
@@ -1462,6 +1556,7 @@ export type cadastroScalarWhereInput = {
   token_recuperacao_expira_em?: Prisma.DateTimeNullableFilter<"cadastro"> | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFilter<"cadastro"> | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.IntNullableFilter<"cadastro"> | number | null
+  secretaria_id?: Prisma.IntNullableFilter<"cadastro"> | number | null
   foto_perfil_url?: Prisma.StringNullableFilter<"cadastro"> | string | null
   dois_fatores_email_ativo?: Prisma.BoolFilter<"cadastro"> | boolean
   dois_fatores_email_confirmado_em?: Prisma.DateTimeNullableFilter<"cadastro"> | Date | string | null
@@ -1481,6 +1576,7 @@ export type cadastroCreateWithoutConversa_leituraInput = {
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
@@ -1502,6 +1598,7 @@ export type cadastroUncheckedCreateWithoutConversa_leituraInput = {
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
   setor_id?: number | null
+  secretaria_id?: number | null
   foto_perfil_url?: string | null
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
@@ -1544,6 +1641,7 @@ export type cadastroUpdateWithoutConversa_leituraInput = {
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
@@ -1565,6 +1663,7 @@ export type cadastroUncheckedUpdateWithoutConversa_leituraInput = {
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1591,6 +1690,7 @@ export type cadastroCreateWithoutCodigo_recuperacao_2faInput = {
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
@@ -1612,6 +1712,7 @@ export type cadastroUncheckedCreateWithoutCodigo_recuperacao_2faInput = {
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
   setor_id?: number | null
+  secretaria_id?: number | null
   foto_perfil_url?: string | null
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
@@ -1654,6 +1755,7 @@ export type cadastroUpdateWithoutCodigo_recuperacao_2faInput = {
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
@@ -1675,6 +1777,7 @@ export type cadastroUncheckedUpdateWithoutCodigo_recuperacao_2faInput = {
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1701,6 +1804,7 @@ export type cadastroCreateWithoutDesafio_login_2faInput = {
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -1722,6 +1826,7 @@ export type cadastroUncheckedCreateWithoutDesafio_login_2faInput = {
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
   setor_id?: number | null
+  secretaria_id?: number | null
   foto_perfil_url?: string | null
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
@@ -1764,6 +1869,7 @@ export type cadastroUpdateWithoutDesafio_login_2faInput = {
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -1785,6 +1891,7 @@ export type cadastroUncheckedUpdateWithoutDesafio_login_2faInput = {
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
   setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1795,6 +1902,81 @@ export type cadastroUncheckedUpdateWithoutDesafio_login_2faInput = {
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
+}
+
+export type cadastroCreateWithoutSecretariaInput = {
+  nome: string
+  data_nascimento: Date | string
+  cpf: string
+  telefone: string
+  email: string
+  senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
+  foto_perfil_url?: string | null
+  dois_fatores_email_ativo?: boolean
+  dois_fatores_email_confirmado_em?: Date | string | null
+  setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
+  conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
+  conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
+  desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
+  erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
+  login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
+  mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
+}
+
+export type cadastroUncheckedCreateWithoutSecretariaInput = {
+  id?: number
+  nome: string
+  data_nascimento: Date | string
+  cpf: string
+  telefone: string
+  email: string
+  senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
+  setor_id?: number | null
+  foto_perfil_url?: string | null
+  dois_fatores_email_ativo?: boolean
+  dois_fatores_email_confirmado_em?: Date | string | null
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
+  conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
+  conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
+  desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
+  erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
+  login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
+  mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
+}
+
+export type cadastroCreateOrConnectWithoutSecretariaInput = {
+  where: Prisma.cadastroWhereUniqueInput
+  create: Prisma.XOR<Prisma.cadastroCreateWithoutSecretariaInput, Prisma.cadastroUncheckedCreateWithoutSecretariaInput>
+}
+
+export type cadastroCreateManySecretariaInputEnvelope = {
+  data: Prisma.cadastroCreateManySecretariaInput | Prisma.cadastroCreateManySecretariaInput[]
+  skipDuplicates?: boolean
+}
+
+export type cadastroUpsertWithWhereUniqueWithoutSecretariaInput = {
+  where: Prisma.cadastroWhereUniqueInput
+  update: Prisma.XOR<Prisma.cadastroUpdateWithoutSecretariaInput, Prisma.cadastroUncheckedUpdateWithoutSecretariaInput>
+  create: Prisma.XOR<Prisma.cadastroCreateWithoutSecretariaInput, Prisma.cadastroUncheckedCreateWithoutSecretariaInput>
+}
+
+export type cadastroUpdateWithWhereUniqueWithoutSecretariaInput = {
+  where: Prisma.cadastroWhereUniqueInput
+  data: Prisma.XOR<Prisma.cadastroUpdateWithoutSecretariaInput, Prisma.cadastroUncheckedUpdateWithoutSecretariaInput>
+}
+
+export type cadastroUpdateManyWithWhereWithoutSecretariaInput = {
+  where: Prisma.cadastroScalarWhereInput
+  data: Prisma.XOR<Prisma.cadastroUpdateManyMutationInput, Prisma.cadastroUncheckedUpdateManyWithoutSecretariaInput>
 }
 
 export type cadastroCreateManySetorInput = {
@@ -1808,6 +1990,7 @@ export type cadastroCreateManySetorInput = {
   token_recuperacao?: string | null
   token_recuperacao_expira_em?: Date | string | null
   tipo_usuario?: $Enums.cadastro_tipo_usuario
+  secretaria_id?: number | null
   foto_perfil_url?: string | null
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: Date | string | null
@@ -1826,6 +2009,7 @@ export type cadastroUpdateWithoutSetorInput = {
   foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -1847,6 +2031,7 @@ export type cadastroUncheckedUpdateWithoutSetorInput = {
   token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1871,6 +2056,90 @@ export type cadastroUncheckedUpdateManyWithoutSetorInput = {
   token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type cadastroCreateManySecretariaInput = {
+  id?: number
+  nome: string
+  data_nascimento: Date | string
+  cpf: string
+  telefone: string
+  email: string
+  senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
+  setor_id?: number | null
+  foto_perfil_url?: string | null
+  dois_fatores_email_ativo?: boolean
+  dois_fatores_email_confirmado_em?: Date | string | null
+}
+
+export type cadastroUpdateWithoutSecretariaInput = {
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  data_nascimento?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cpf?: Prisma.StringFieldUpdateOperationsInput | string
+  telefone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
+  conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
+  conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
+  desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
+  erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
+  login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
+  mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
+}
+
+export type cadastroUncheckedUpdateWithoutSecretariaInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  data_nascimento?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cpf?: Prisma.StringFieldUpdateOperationsInput | string
+  telefone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
+  conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
+  conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
+  desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
+  login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
+  mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
+}
+
+export type cadastroUncheckedUpdateManyWithoutSecretariaInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  data_nascimento?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cpf?: Prisma.StringFieldUpdateOperationsInput | string
+  telefone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1982,10 +2251,12 @@ export type cadastroSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   token_recuperacao_expira_em?: boolean
   tipo_usuario?: boolean
   setor_id?: boolean
+  secretaria_id?: boolean
   foto_perfil_url?: boolean
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: boolean
   setor?: boolean | Prisma.cadastro$setorArgs<ExtArgs>
+  secretaria?: boolean | Prisma.cadastro$secretariaArgs<ExtArgs>
   codigo_recuperacao_2fa?: boolean | Prisma.cadastro$codigo_recuperacao_2faArgs<ExtArgs>
   conversa_leitura?: boolean | Prisma.cadastro$conversa_leituraArgs<ExtArgs>
   conversa_participante?: boolean | Prisma.cadastro$conversa_participanteArgs<ExtArgs>
@@ -2011,14 +2282,16 @@ export type cadastroSelectScalar = {
   token_recuperacao_expira_em?: boolean
   tipo_usuario?: boolean
   setor_id?: boolean
+  secretaria_id?: boolean
   foto_perfil_url?: boolean
   dois_fatores_email_ativo?: boolean
   dois_fatores_email_confirmado_em?: boolean
 }
 
-export type cadastroOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "data_nascimento" | "cpf" | "telefone" | "email" | "senha" | "token_recuperacao" | "token_recuperacao_expira_em" | "tipo_usuario" | "setor_id" | "foto_perfil_url" | "dois_fatores_email_ativo" | "dois_fatores_email_confirmado_em", ExtArgs["result"]["cadastro"]>
+export type cadastroOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "data_nascimento" | "cpf" | "telefone" | "email" | "senha" | "token_recuperacao" | "token_recuperacao_expira_em" | "tipo_usuario" | "setor_id" | "secretaria_id" | "foto_perfil_url" | "dois_fatores_email_ativo" | "dois_fatores_email_confirmado_em", ExtArgs["result"]["cadastro"]>
 export type cadastroInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   setor?: boolean | Prisma.cadastro$setorArgs<ExtArgs>
+  secretaria?: boolean | Prisma.cadastro$secretariaArgs<ExtArgs>
   codigo_recuperacao_2fa?: boolean | Prisma.cadastro$codigo_recuperacao_2faArgs<ExtArgs>
   conversa_leitura?: boolean | Prisma.cadastro$conversa_leituraArgs<ExtArgs>
   conversa_participante?: boolean | Prisma.cadastro$conversa_participanteArgs<ExtArgs>
@@ -2034,6 +2307,7 @@ export type $cadastroPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   name: "cadastro"
   objects: {
     setor: Prisma.$setoresPayload<ExtArgs> | null
+    secretaria: Prisma.$secretariaPayload<ExtArgs> | null
     codigo_recuperacao_2fa: Prisma.$codigo_recuperacao_2faPayload<ExtArgs>[]
     conversa_leitura: Prisma.$conversa_leituraPayload<ExtArgs>[]
     conversa_participante: Prisma.$conversa_participantePayload<ExtArgs>[]
@@ -2055,6 +2329,7 @@ export type $cadastroPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     token_recuperacao_expira_em: Date | null
     tipo_usuario: $Enums.cadastro_tipo_usuario
     setor_id: number | null
+    secretaria_id: number | null
     foto_perfil_url: string | null
     dois_fatores_email_ativo: boolean
     dois_fatores_email_confirmado_em: Date | null
@@ -2399,6 +2674,7 @@ readonly fields: cadastroFieldRefs;
 export interface Prisma__cadastroClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   setor<T extends Prisma.cadastro$setorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$setorArgs<ExtArgs>>): Prisma.Prisma__setoresClient<runtime.Types.Result.GetResult<Prisma.$setoresPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  secretaria<T extends Prisma.cadastro$secretariaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$secretariaArgs<ExtArgs>>): Prisma.Prisma__secretariaClient<runtime.Types.Result.GetResult<Prisma.$secretariaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   codigo_recuperacao_2fa<T extends Prisma.cadastro$codigo_recuperacao_2faArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$codigo_recuperacao_2faArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$codigo_recuperacao_2faPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversa_leitura<T extends Prisma.cadastro$conversa_leituraArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$conversa_leituraArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_leituraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversa_participante<T extends Prisma.cadastro$conversa_participanteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$conversa_participanteArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_participantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2447,6 +2723,7 @@ export interface cadastroFieldRefs {
   readonly token_recuperacao_expira_em: Prisma.FieldRef<"cadastro", 'DateTime'>
   readonly tipo_usuario: Prisma.FieldRef<"cadastro", 'cadastro_tipo_usuario'>
   readonly setor_id: Prisma.FieldRef<"cadastro", 'Int'>
+  readonly secretaria_id: Prisma.FieldRef<"cadastro", 'Int'>
   readonly foto_perfil_url: Prisma.FieldRef<"cadastro", 'String'>
   readonly dois_fatores_email_ativo: Prisma.FieldRef<"cadastro", 'Boolean'>
   readonly dois_fatores_email_confirmado_em: Prisma.FieldRef<"cadastro", 'DateTime'>
@@ -2814,6 +3091,25 @@ export type cadastro$setorArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   include?: Prisma.setoresInclude<ExtArgs> | null
   where?: Prisma.setoresWhereInput
+}
+
+/**
+ * cadastro.secretaria
+ */
+export type cadastro$secretariaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the secretaria
+   */
+  select?: Prisma.secretariaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the secretaria
+   */
+  omit?: Prisma.secretariaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.secretariaInclude<ExtArgs> | null
+  where?: Prisma.secretariaWhereInput
 }
 
 /**

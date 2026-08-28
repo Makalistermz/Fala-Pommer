@@ -11,6 +11,7 @@ interface Usuario {
     email: string;
     tipo_usuario: string;
     setor_id?: number | null;
+    secretaria_id?: number | null;
 }
 
 interface Setor {
@@ -19,17 +20,25 @@ interface Setor {
     sigla_setor: string;
 }
 
+interface Secretaria {
+    id: number;
+    secretaria: string;
+    sigla_secretaria: string;
+}
+
 const ITENS_POR_PAGINA = 20;
 
 function Usuarios() {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
     const [setores, setSetores] = useState<Setor[]>([]);
+    const [secretarias, setSecretarias] = useState<Secretaria[]>([]);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [pesquisa, setPesquisa] = useState("");
     const [usuarioParaApagar, setUsuarioParaApagar] = useState<Usuario | null>(null);
     const [usuarioSendoApagado, setUsuarioSendoApagado] = useState<number | null>(null);
     const [usuarioEmEdicao, setUsuarioEmEdicao] = useState<Usuario | null>(null);
     const [setorEmEdicao, setSetorEmEdicao] = useState("");
+    const [secretariaEmEdicao, setSecretariaEmEdicao] = useState("");
     const [salvandoAlteracoes, setSalvandoAlteracoes] = useState(false);
     const [feedback, setFeedback] = useState({
         aberto: false,
@@ -97,6 +106,26 @@ function Usuarios() {
     }, []);
 
     useEffect(() => {
+        async function carregarSecretarias() {
+            const token = localStorage.getItem("access_token");
+            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/secretaria`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!resposta.ok) {
+                throw new Error("Não foi possível carregar as secretarias");
+            }
+
+            const dados: Secretaria[] = await resposta.json();
+            setSecretarias(dados);
+        }
+
+        carregarSecretarias().catch(console.error);
+    }, []);
+
+    useEffect(() => {
         if (totalPaginas > 0 && paginaAtual > totalPaginas) {
             setPaginaAtual(totalPaginas);
         }
@@ -118,6 +147,7 @@ function Usuarios() {
     function abrirEdicao(usuario: Usuario) {
         setUsuarioEmEdicao({ ...usuario });
         setSetorEmEdicao(usuario.setor_id ? String(usuario.setor_id) : "");
+        setSecretariaEmEdicao(usuario.secretaria_id ? String(usuario.secretaria_id) : "");
     }
 
     async function salvarAlteracoes() {
@@ -140,6 +170,9 @@ function Usuarios() {
                         email: usuarioEmEdicao.email,
                         tipo_usuario: usuarioEmEdicao.tipo_usuario,
                         setor_id: setorEmEdicao ? Number(setorEmEdicao) : null,
+                        secretaria_id: secretariaEmEdicao
+                            ? Number(secretariaEmEdicao)
+                            : null,
                     }),
                 },
             );
@@ -448,6 +481,10 @@ function Usuarios() {
                                         if (tipoUsuario !== "funcionario") {
                                             setSetorEmEdicao("");
                                         }
+
+                                        if (tipoUsuario !== "admin") {
+                                            setSecretariaEmEdicao("");
+                                        }
                                     }}
                                 >
                                     <option value="user">Usuário</option>
@@ -469,6 +506,24 @@ function Usuarios() {
                                         {setores.map((setor) => (
                                             <option key={setor.id} value={setor.id}>
                                                 {setor.sigla_setor} - {setor.setor}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
+
+                            {usuarioEmEdicao.tipo_usuario === "admin" && (
+                                <div className="info__painel-lateral">
+                                    <label htmlFor="secretaria-vinculada">Secretaria vinculada</label>
+                                    <select
+                                        id="secretaria-vinculada"
+                                        value={secretariaEmEdicao}
+                                        onChange={(evento) => setSecretariaEmEdicao(evento.target.value)}
+                                    >
+                                        <option value="" disabled>Selecione uma secretaria</option>
+                                        {secretarias.map((secretaria) => (
+                                            <option key={secretaria.id} value={secretaria.id}>
+                                                {secretaria.sigla_secretaria} - {secretaria.secretaria}
                                             </option>
                                         ))}
                                     </select>

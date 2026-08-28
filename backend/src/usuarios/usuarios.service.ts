@@ -267,6 +267,13 @@ export class UsuariosService {
                         sigla_setor: true,
                     },
                 },
+                secretaria: {
+                    select: {
+                        id: true,
+                        secretaria: true,
+                        sigla_secretaria: true,
+                    },
+                },
             }
         })
     }
@@ -339,7 +346,14 @@ export class UsuariosService {
                         setor: true,
                         sigla_setor: true
                     }
-                }
+                },
+                secretaria: {
+                    select: {
+                        id: true,
+                        secretaria: true,
+                        sigla_secretaria: true
+                    }
+                },
             }
         });
     }
@@ -426,7 +440,8 @@ export class UsuariosService {
                 telefone: true,
                 email: true,
                 tipo_usuario: true,
-                setor_id: true
+                setor_id: true,
+                secretaria_id: true,
             },
 
             orderBy: {
@@ -502,6 +517,28 @@ export class UsuariosService {
             }
         }
 
+        if (
+            dados.tipo_usuario === "admin" &&
+            dados.secretaria_id != null
+        ) {
+            const secretaria =
+                await this.prisma.secretaria.findUnique({
+                    where: {
+                        id: dados.secretaria_id
+                    },
+
+                    select: {
+                        id: true
+                    }
+                });
+
+            if (!secretaria) {
+                throw new BadRequestException(
+                    "Secretaria não encontrada."
+                );
+            }
+        }
+
         return this.prisma.cadastro.update({
             where: {
                 id
@@ -519,6 +556,11 @@ export class UsuariosService {
                 setor_id:
                     dados.tipo_usuario === "funcionario"
                         ? dados.setor_id ?? null
+                        : null,
+
+                secretaria_id:
+                    dados.tipo_usuario === "admin"
+                        ? dados.secretaria_id ?? null
                         : null
             },
 
@@ -528,7 +570,8 @@ export class UsuariosService {
                 telefone: true,
                 email: true,
                 tipo_usuario: true,
-                setor_id: true
+                setor_id: true,
+                secretaria_id: true
             }
         });
     }

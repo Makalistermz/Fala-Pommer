@@ -24,4 +24,9 @@ export class AtualizarUsuarioDto {
   @IsInt()
   @Min(1)
   setor_id?: number | null;
+
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  secretaria_id?: number | null;
 }

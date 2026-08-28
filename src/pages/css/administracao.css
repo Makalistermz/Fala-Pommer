@@ -1405,6 +1405,12 @@ html.tema-escuro:not(.alto-contraste) .criar-sectors__pasta--ativa::before {
     opacity: 1;
 }
 
+@media (max-width: 1000px) {
+    .container-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 800px) {
     .container-campo-setor {
         grid-template-columns: 1fr;
@@ -1518,11 +1524,6 @@ html.tema-escuro:not(.alto-contraste) .criar-sectors__pasta--ativa::before {
 
     .admin-welcome {
         min-height: 260px;
-    }
-
-    .container-cards {
-        grid-template-rows: 1fr 1fr;
-        grid-template-columns: 1fr;
     }
 
     .grafico-card {

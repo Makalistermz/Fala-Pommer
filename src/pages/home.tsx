@@ -1313,7 +1313,6 @@ function Home() {
         const pontos = indicador.querySelectorAll(".digitando-ponto");
 
         // ANIMAÇÃO GSAP DO BALÃO "DIGITANDO"
-        // Altere scale, y, duration, stagger e ease aqui para personalizar.
         const contextoGsap = gsap.context(() => {
             gsap.fromTo(
                 indicador,

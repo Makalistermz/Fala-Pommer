@@ -31,8 +31,13 @@ describe("ConversasService", () => {
       findUnique: jest.fn(),
       findMany: jest.fn(),
     },
+    conversa_setor: {
+      findMany: jest.fn(),
+    },
     mensagem: {
       findMany: jest.fn(),
+      groupBy: jest.fn(),
+      create: jest.fn(),
     },
   };
 
@@ -52,6 +57,8 @@ describe("ConversasService", () => {
       conversa_participante: [{ usuario_id: 1 }],
       atendimento_setor: null,
     });
+    prismaMock.conversa_setor.findMany.mockResolvedValue([]);
+    prismaMock.mensagem.groupBy.mockResolvedValue([]);
     service = new ConversasService(
       prismaMock as unknown as PrismaService,
     );
@@ -135,25 +142,47 @@ describe("ConversasService", () => {
     expect(prismaMock.mensagem.findMany).not.toHaveBeenCalled();
   });
 
-  it("impede admin de listar atendimentos de setor", async () => {
+  it("lista para o admin somente atendimentos dos setores da sua secretaria", async () => {
     prismaMock.cadastro.findUnique.mockResolvedValue({
       id: 1,
       nome: "Administrador",
       tipo_usuario: "admin",
       setor_id: null,
+      secretaria_id: 7,
     });
 
-    await expect(service.listarAtendimentos(1)).rejects.toBeInstanceOf(
-      ForbiddenException,
+    await expect(service.listarAtendimentos(1)).resolves.toEqual([]);
+    expect(prismaMock.conversa_setor.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: {
+          setor: {
+            secretaria_id: 7,
+          },
+        },
+      }),
     );
   });
 
-  it("impede admin de abrir atendimento de setor pelo ID", async () => {
+  it("retorna lista vazia para admin sem secretaria", async () => {
     prismaMock.cadastro.findUnique.mockResolvedValue({
       id: 1,
       nome: "Administrador",
       tipo_usuario: "admin",
       setor_id: null,
+      secretaria_id: null,
+    });
+
+    await expect(service.listarAtendimentos(1)).resolves.toEqual([]);
+    expect(prismaMock.conversa_setor.findMany).not.toHaveBeenCalled();
+  });
+
+  it("permite admin abrir atendimento de setor da sua secretaria", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      nome: "Administrador",
+      tipo_usuario: "admin",
+      setor_id: null,
+      secretaria_id: 7,
     });
     prismaMock.conversa.findUnique.mockResolvedValue({
       id: 10,
@@ -162,6 +191,48 @@ describe("ConversasService", () => {
       atendimento_setor: {
         setor_id: 2,
         usuario_id: 3,
+        setor: {
+          id: 2,
+          setor: "Atendimento",
+          sigla_setor: "ATD",
+          secretaria_id: 7,
+        },
+        usuario: {
+          id: 3,
+          nome: "Munícipe",
+        },
+      },
+    });
+    prismaMock.mensagem.findMany.mockResolvedValue([]);
+
+    await expect(service.listarMensagens(1, 10)).resolves.toEqual([]);
+  });
+
+  it("impede admin sem secretaria de abrir atendimento diretamente", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      nome: "Administrador",
+      tipo_usuario: "admin",
+      setor_id: null,
+      secretaria_id: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "setor",
+      conversa_participante: [],
+      atendimento_setor: {
+        setor_id: 2,
+        usuario_id: 3,
+        setor: {
+          id: 2,
+          setor: "Atendimento",
+          sigla_setor: "ATD",
+          secretaria_id: 7,
+        },
+        usuario: {
+          id: 3,
+          nome: "Munícipe",
+        },
       },
     });
 
@@ -169,6 +240,145 @@ describe("ConversasService", () => {
       ForbiddenException,
     );
     expect(prismaMock.mensagem.findMany).not.toHaveBeenCalled();
+  });
+
+  it("impede admin de abrir atendimento de setor de outra secretaria", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      nome: "Administrador",
+      tipo_usuario: "admin",
+      setor_id: null,
+      secretaria_id: 7,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "setor",
+      conversa_participante: [],
+      atendimento_setor: {
+        setor_id: 2,
+        usuario_id: 3,
+        setor: {
+          id: 2,
+          setor: "Atendimento",
+          sigla_setor: "ATD",
+          secretaria_id: 8,
+        },
+        usuario: {
+          id: 3,
+          nome: "Munícipe",
+        },
+      },
+    });
+
+    await expect(service.listarMensagens(1, 10)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
+    expect(prismaMock.mensagem.findMany).not.toHaveBeenCalled();
+  });
+
+  it("permite admin enviar mensagem em atendimento de setor da sua secretaria", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      nome: "Administrador",
+      tipo_usuario: "admin",
+      setor_id: null,
+      secretaria_id: 7,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "setor",
+      conversa_participante: [],
+      atendimento_setor: {
+        setor_id: 2,
+        usuario_id: 3,
+        setor: {
+          id: 2,
+          setor: "Atendimento",
+          sigla_setor: "ATD",
+          secretaria_id: 7,
+        },
+        usuario: {
+          id: 3,
+          nome: "Munícipe",
+        },
+      },
+    });
+    prismaMock.mensagem.create.mockResolvedValue({
+      id: 20,
+      conversa_id: 10,
+      remetente_id: 1,
+      origem: "usuario",
+      conteudo: "Resposta do administrador",
+      enviada_em: new Date("2026-08-28T12:00:00.000Z"),
+      arquivo_nome: null,
+      arquivo_url: null,
+      arquivo_tipo: null,
+      arquivo_mime: null,
+      arquivo_tamanho: null,
+      remetente: {
+        id: 1,
+        nome: "Administrador",
+        tipo_usuario: "admin",
+      },
+    });
+
+    await expect(
+      service.enviarMensagem(1, 10, "Resposta do administrador"),
+    ).resolves.toEqual(
+      expect.objectContaining({
+        id: 20,
+        conversaId: 10,
+        origem: "usuario",
+        remetente: expect.objectContaining({
+          tipo: "admin",
+          id: 1,
+        }),
+      }),
+    );
+    expect(prismaMock.mensagem.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          conversa_id: 10,
+          remetente_id: 1,
+          origem: "usuario",
+          conteudo: "Resposta do administrador",
+        }),
+      }),
+    );
+  });
+
+  it("permite admin sinalizar digitação em atendimento da sua secretaria", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      nome: "Administrador",
+      tipo_usuario: "admin",
+      setor_id: null,
+      secretaria_id: 7,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "setor",
+      conversa_participante: [],
+      atendimento_setor: {
+        setor_id: 2,
+        usuario_id: 3,
+        setor: {
+          id: 2,
+          setor: "Atendimento",
+          sigla_setor: "ATD",
+          secretaria_id: 7,
+        },
+        usuario: {
+          id: 3,
+          nome: "Munícipe",
+        },
+      },
+    });
+
+    await expect(service.atualizarDigitacao(1, 10, true)).resolves.toEqual({
+      conversaId: 10,
+      digitando: true,
+    });
   });
 
   it("permite superAdmin fiscalizar conversa privada entre perfis inferiores", async () => {

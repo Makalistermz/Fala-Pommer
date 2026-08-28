@@ -421,6 +421,7 @@ export class ConversasService {
      *
      * user: somente os próprios atendimentos.
      * funcionário: atendimentos do seu setor.
+     * admin: atendimentos dos setores da sua secretaria.
      * superAdmin: todos os atendimentos.
      */
     async listarAtendimentos(
@@ -435,7 +436,8 @@ export class ConversasService {
                 select: {
                     id: true,
                     tipo_usuario: true,
-                    setor_id: true
+                    setor_id: true,
+                    secretaria_id: true
                 }
             });
 
@@ -445,15 +447,12 @@ export class ConversasService {
             );
         }
 
-        if (usuarioLogado.tipo_usuario === "admin") {
-            throw new ForbiddenException(
-                "Somente o superadministrador pode visualizar todos os atendimentos."
-            );
-        }
-
         const filtro: {
             usuario_id?: number;
             setor_id?: number;
+            setor?: {
+                secretaria_id: number;
+            };
         } = {};
 
         if (usuarioLogado.tipo_usuario === "user") {
@@ -472,6 +471,17 @@ export class ConversasService {
 
             filtro.setor_id =
                 usuarioLogado.setor_id;
+        }
+
+        if (usuarioLogado.tipo_usuario === "admin") {
+            if (!usuarioLogado.secretaria_id) {
+                return [];
+            }
+
+            filtro.setor = {
+                secretaria_id:
+                    usuarioLogado.secretaria_id
+            };
         }
 
         const atendimentos =
@@ -1237,13 +1247,9 @@ export class ConversasService {
                 conversaId
             );
 
-        if (
-            contexto.somenteLeitura ||
-            contexto.conversa.tipo === "setor" &&
-            contexto.usuarioLogado.tipo_usuario === "admin"
-        ) {
+        if (contexto.somenteLeitura) {
             throw new ForbiddenException(
-                "O administrador não pode responder neste atendimento."
+                "Esta conversa está disponível somente para visualização."
             );
         }
 
@@ -1381,7 +1387,8 @@ export class ConversasService {
                         id: true,
                         nome: true,
                         tipo_usuario: true,
-                        setor_id: true
+                        setor_id: true,
+                        secretaria_id: true
                     }
                 }),
 
@@ -1408,7 +1415,8 @@ export class ConversasService {
                                     select: {
                                         id: true,
                                         setor: true,
-                                        sigla_setor: true
+                                        sigla_setor: true,
+                                        secretaria_id: true
                                     }
                                 },
 
@@ -1490,6 +1498,7 @@ export class ConversasService {
          * Em atendimento de setor:
          * user acessa somente o próprio atendimento;
          * funcionário acessa somente seu setor;
+         * admin acessa os setores da sua secretaria;
          * superAdmin pode visualizar todos.
          */
         if (conversa.tipo === "setor") {
@@ -1499,12 +1508,6 @@ export class ConversasService {
             if (!atendimento) {
                 throw new NotFoundException(
                     "Atendimento de setor não encontrado."
-                );
-            }
-
-            if (usuarioLogado.tipo_usuario === "admin") {
-                throw new ForbiddenException(
-                    "Somente o superadministrador pode visualizar este atendimento."
                 );
             }
 
@@ -1534,6 +1537,23 @@ export class ConversasService {
                 ) {
                     throw new ForbiddenException(
                         "Esta conversa pertence a outro setor."
+                    );
+                }
+            }
+
+            if (usuarioLogado.tipo_usuario === "admin") {
+                if (!usuarioLogado.secretaria_id) {
+                    throw new ForbiddenException(
+                        "Você não está vinculado a nenhuma secretaria."
+                    );
+                }
+
+                if (
+                    atendimento.setor.secretaria_id !==
+                    usuarioLogado.secretaria_id
+                ) {
+                    throw new ForbiddenException(
+                        "Esta conversa pertence a um setor de outra secretaria."
                     );
                 }
             }

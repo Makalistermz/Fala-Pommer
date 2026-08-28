@@ -475,8 +475,6 @@ function Home() {
             return;
         }
 
-        const usuarioAtual = usuario;
-
         let ativo = true;
         let buscando = false;
 
@@ -500,20 +498,16 @@ function Home() {
 
                 const [respostaPrivadas, respostaSetores] = await Promise.all([
                     fetch(`${import.meta.env.VITE_API_URL}/conversas`, { headers }),
-                    usuarioAtual.tipo === "admin" || usuarioAtual.tipo === "superAdmin"
-                        ? Promise.resolve(null)
-                        : fetch(`${import.meta.env.VITE_API_URL}/conversas/setor`, { headers }),
+                    fetch(`${import.meta.env.VITE_API_URL}/conversas/setor`, { headers }),
                 ]);
 
-                if (!respostaPrivadas.ok || (respostaSetores && !respostaSetores.ok)) {
+                if (!respostaPrivadas.ok || !respostaSetores.ok) {
                     throw new Error("Não foi possível carregar as conversas.");
                 }
 
                 const [conversasPrivadas, conversasSetores] = await Promise.all([
                     respostaPrivadas.json() as Promise<ConversaPrivada[]>,
-                    respostaSetores
-                        ? respostaSetores.json() as Promise<ConversaSetor[]>
-                        : Promise.resolve([] as ConversaSetor[]),
+                    respostaSetores.json() as Promise<ConversaSetor[]>,
                 ]);
 
                 const conversaAbertaId = conversaAbertaIdRef.current;

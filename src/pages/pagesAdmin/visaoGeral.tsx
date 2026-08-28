@@ -152,6 +152,7 @@ function VisaoGeral() {
     const [carregando, setCarregando] = useState(true);
     const [quantUsuarios, setQuantUsuarios] = useState(0);
     const [quantSetores, setQuantSetores] = useState(0);
+    const [quantSecretarias, setQuantSecretarias] = useState(0);
     const [quantUsuariosCategoria, setQuantUsuariosCategoria] = useState<QuantUsuarioCategoria[]>([]);
     const [erro, setErro] = useState("");
     const anoAtual = Number(
@@ -237,6 +238,30 @@ function VisaoGeral() {
         }
 
         void carregarQuantUsuarios();
+    }, []);
+
+    useEffect(() => {
+        async function carregarQuantSecretarias() {
+            try {
+                const token = localStorage.getItem("access_token");
+                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/secretaria`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível buscar as secretarias.");
+                }
+
+                const secretaria = await resposta.json() as unknown[];
+                setQuantSecretarias(secretaria.length);
+            } catch (erro) {
+                console.error("Erro ao buscar quantidade de secretarias:", erro);
+            }
+        }
+
+        void carregarQuantSecretarias();
     }, []);
 
     useEffect(() => {
@@ -405,6 +430,19 @@ function VisaoGeral() {
                     <div className="info-cards">
                         <small>USUÁRIOS</small>
                         <NumberCounter endValue={quantUsuarios} />
+                    </div>
+                </div>
+
+                <div className="cards card-setores">
+                    <div className="icone-card">
+                        <svg width="24" height="24" fill="white" className="bi bi-building" viewBox="0 0 16 16">
+                            <path d="M4 2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zM4 5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM7.5 5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zM4.5 8a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm2.5.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/>
+                            <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm11 0H3v14h3v-2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V15h3z"/>
+                        </svg>
+                    </div>
+                    <div className="info-cards">
+                        <small>SECRETARIAS</small>
+                        <NumberCounter endValue={quantSecretarias} />
                     </div>
                 </div>
 

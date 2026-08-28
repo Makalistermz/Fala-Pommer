@@ -346,8 +346,8 @@ function VisaoGeral() {
         labels: [
             "Super Administrador",
             "Administrador",
-            "Usuário",
-            "Funcionário"
+            "Funcionário",
+            "Usuário"
         ],
 
         datasets: [
@@ -357,8 +357,8 @@ function VisaoGeral() {
                 data: [
                     obterQuantidadeCategoria("superAdmin"), //super admin
                     null,     // Admin
-                    null,  // Usuário
-                    null   // Funcionário
+                    null,  // Funcionário
+                    null   // Usuário
                 ],
 
                 backgroundColor: "rgba(52, 99, 175, 0.25)",
@@ -373,28 +373,12 @@ function VisaoGeral() {
                 data: [
                     null,  // super admin
                     obterQuantidadeCategoria("admin"),     // Admin
-                    null,  // Usuário
-                    null   // Funcionário
+                    null,  // Funcionário
+                    null   // Usuário
                 ],
 
                 backgroundColor: "rgba(175, 122, 52, 0.25)",
                 borderColor: "rgb(175, 111, 52)",
-                borderWidth: 1,
-                borderRadius: 6,
-                skipNull: true
-            },
-            {
-                label: "Usuários",
-
-                data: [
-                    null,  //super admin
-                    null,  // Admin
-                    obterQuantidadeCategoria("user"),     // Usuário
-                    null   // Funcionário
-                ],
-
-                backgroundColor: "rgba(187, 17, 17, 0.25)",
-                borderColor: "rgb(187, 17, 17)",
                 borderWidth: 1,
                 borderRadius: 6,
                 skipNull: true
@@ -405,12 +389,28 @@ function VisaoGeral() {
                 data: [
                     null,  //super admin
                     null,  // Admin
-                    null,  // Usuário
-                    obterQuantidadeCategoria("funcionario")   // Funcionário
+                    obterQuantidadeCategoria("funcionario"),   // Funcionário
+                    null  // Usuário
                 ],
 
                 backgroundColor: "rgba(26, 151, 10, 0.25)",
                 borderColor: "rgb(26, 151, 10)",
+                borderWidth: 1,
+                borderRadius: 6,
+                skipNull: true
+            },
+            {
+                label: "Usuários",
+
+                data: [
+                    null,  //super admin
+                    null,  // Admin
+                    null,   // Funcionário
+                    obterQuantidadeCategoria("user")    // Usuário
+                ],
+
+                backgroundColor: "rgba(187, 17, 17, 0.25)",
+                borderColor: "rgb(187, 17, 17)",
                 borderWidth: 1,
                 borderRadius: 6,
                 skipNull: true

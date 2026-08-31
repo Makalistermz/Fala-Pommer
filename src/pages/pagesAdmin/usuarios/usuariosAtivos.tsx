@@ -42,13 +42,16 @@ function obterAvisoDesativacao(usuario: Usuario) {
     return "Ao desativar esta conta, todas as sessões abertas serão encerradas imediatamente.";
 }
 
-function UsuariosAtivos() {
+interface UsuariosAtivosProps {
+    exibirDesativados?: boolean;
+}
+
+function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
     const [setores, setSetores] = useState<Setor[]>([]);
     const [secretarias, setSecretarias] = useState<Secretaria[]>([]);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [pesquisa, setPesquisa] = useState("");
-    const [filtroStatus, setFiltroStatus] = useState<"todos" | "ativos" | "desativados">("todos");
     const [usuarioParaAlterarStatus, setUsuarioParaAlterarStatus] = useState<Usuario | null>(null);
     const [motivoDesativacao, setMotivoDesativacao] = useState("");
     const [usuarioSendoAlterado, setUsuarioSendoAlterado] = useState<number | null>(null);
@@ -70,10 +73,9 @@ function UsuariosAtivos() {
             usuario.telefone.toLocaleLowerCase("pt-BR").includes(termoPesquisa) ||
             usuario.email.toLocaleLowerCase("pt-BR").includes(termoPesquisa);
 
-        const correspondeStatus =
-            filtroStatus === "todos" ||
-            (filtroStatus === "ativos" && !usuario.desativado_em) ||
-            (filtroStatus === "desativados" && Boolean(usuario.desativado_em));
+        const correspondeStatus = exibirDesativados
+            ? Boolean(usuario.desativado_em)
+            : !usuario.desativado_em;
 
         return correspondePesquisa && correspondeStatus;
     });
@@ -319,25 +321,20 @@ function UsuariosAtivos() {
             <header className="usuarios__header">
                 <div>
                     <span>CONTROLE DE USUÁRIOS</span>
-                    <h2 id="titulo-usuarios">Alterar cargo e setor do usuário</h2>
-                    <p>Ajuste o cargo e o setor de atuação do usuário no sistema.</p>
+                    <h2 id="titulo-usuarios">
+                        {exibirDesativados
+                            ? "Usuários desativados"
+                            : "Alterar informações do usuário"}
+                    </h2>
+                    <p>
+                        {exibirDesativados
+                            ? "Consulte e reative usuários desativados."
+                            : "Ajuste o cargo e o setor/secretaria de atuação do usuário no sistema."}
+                    </p>
                 </div>
             </header>
 
             <div className="usuarios__pesquisa">
-                <label htmlFor="filtro-status-usuarios">Status</label>
-                <select
-                    id="filtro-status-usuarios"
-                    value={filtroStatus}
-                    onChange={(evento) => {
-                        setFiltroStatus(evento.target.value as typeof filtroStatus);
-                        setPaginaAtual(1);
-                    }}
-                >
-                    <option value="todos">Todos</option>
-                    <option value="ativos">Ativos</option>
-                    <option value="desativados">Desativados</option>
-                </select>
                 <input
                     type="search"
                     value={pesquisa}
@@ -373,9 +370,12 @@ function UsuariosAtivos() {
                                         ? " usuarios__linha--desativada"
                                         : ""
                                 }`}
-                                tabIndex={0}
-                                onClick={() => abrirEdicao(usuario)}
+                                tabIndex={exibirDesativados ? undefined : 0}
+                                onClick={() => {
+                                    if (!exibirDesativados) abrirEdicao(usuario);
+                                }}
                                 onKeyDown={(evento) => {
+                                    if (exibirDesativados) return;
                                     if (evento.target !== evento.currentTarget) return;
 
                                     if (evento.key === "Enter" || evento.key === " ") {
@@ -404,16 +404,18 @@ function UsuariosAtivos() {
                                 </td>
                                 <td className="usuarios__acoes">
                                     <div className="usuarios__acoes-botoes">
-                                        <button
-                                            className="usuarios__botao-editar"
-                                            type="button"
-                                            onClick={(evento) => {
-                                                evento.stopPropagation();
-                                                abrirEdicao(usuario);
-                                            }}
-                                        >
-                                            Editar
-                                        </button>
+                                        {!exibirDesativados && (
+                                            <button
+                                                className="usuarios__botao-editar"
+                                                type="button"
+                                                onClick={(evento) => {
+                                                    evento.stopPropagation();
+                                                    abrirEdicao(usuario);
+                                                }}
+                                            >
+                                                Editar
+                                            </button>
+                                        )}
 
                                         <button
                                             className={usuario.desativado_em

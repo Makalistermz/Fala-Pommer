@@ -1,7 +1,7 @@
+import UsuariosAtivos from "./usuariosAtivos";
+
 function UsuariosDesativados() {
-    return (
-        <h1>Teste1</h1>
-    )
+    return <UsuariosAtivos exibirDesativados />;
 }
 
 export default UsuariosDesativados;

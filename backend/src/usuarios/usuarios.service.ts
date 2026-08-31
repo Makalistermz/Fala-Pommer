@@ -170,7 +170,7 @@ export class UsuariosService {
                 tipo_usuario_anterior: true,
             },
             orderBy: {
-                id: 'desc'
+                criado_em: 'asc'
             }
         });
     }

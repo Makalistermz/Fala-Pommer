@@ -1765,6 +1765,37 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
         padding: 26px 18px 26px 38px;
     }
 
+    .gerenciar-user__pastas {
+        gap: 4px;
+    }
+
+    .gerenciar-user__pasta {
+        min-height: 58px;
+        flex: 1 1 0;
+        gap: 6px;
+        padding: 12px 8px 9px;
+        font-size: 13px;
+        line-height: 1.25;
+        text-align: center;
+        overflow-wrap: anywhere;
+    }
+
+    .gerenciar-user__pasta span {
+        min-width: 0;
+    }
+
+    .gerenciar-user__pasta--ativa {
+        min-height: 63px;
+    }
+
+    .gerenciar-user__pasta::before {
+        width: 56px;
+    }
+
+    .gerenciar-user__pasta::after {
+        margin-left: 2px;
+    }
+
     .criar-sectors__pastas {
         gap: 5px;
         padding-right: 4px;
@@ -1876,6 +1907,37 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     .admin-content {
         padding-right: 10px;
         padding-left: 22px;
+    }
+
+    .gerenciar-user__pastas {
+        gap: 3px;
+    }
+
+    .gerenciar-user__pasta {
+        min-height: 68px;
+        flex: 1 1 0;
+        gap: 0;
+        padding: 12px 4px 9px;
+        font-size: 11px;
+        line-height: 1.25;
+        text-align: center;
+        overflow-wrap: anywhere;
+    }
+
+    .gerenciar-user__pasta span {
+        min-width: 0;
+    }
+
+    .gerenciar-user__pasta--ativa {
+        min-height: 73px;
+    }
+
+    .gerenciar-user__pasta::before {
+        width: 38px;
+    }
+
+    .gerenciar-user__pasta::after {
+        display: none;
     }
 
     .secretaria {

@@ -45,6 +45,8 @@ describe('AuthService - autenticação em duas etapas', () => {
     senha: 'hash-da-senha',
     tipo_usuario: 'user' as const,
     dois_fatores_email_ativo: true,
+    desativado_em: null,
+    versao_token: 0,
   };
 
   beforeEach(() => {

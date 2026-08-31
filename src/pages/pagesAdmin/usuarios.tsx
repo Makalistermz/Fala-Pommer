@@ -330,6 +330,11 @@ function Usuarios() {
                                         >
                                             Editar
                                         </button>
+
+                                        <button className="usuarios__botao-desativar">
+                                            Desativar
+                                        </button>
+
                                         <button
                                             className="usuarios__botao-apagar"
                                             type="button"

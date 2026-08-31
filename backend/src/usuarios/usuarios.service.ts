@@ -576,6 +576,249 @@ export class UsuariosService {
         });
     }
 
+    async desativarUsuario(
+        id: number,
+        administradorId: number,
+        motivo: string
+    ) {
+        const motivoNormalizado = motivo.trim();
+
+        if (
+            motivoNormalizado.length < 3 ||
+            motivoNormalizado.length > 500
+        ) {
+            throw new BadRequestException(
+                "O motivo da desativação deve ter entre 3 e 500 caracteres."
+            );
+        }
+
+        return this.prisma.$transaction(async (transacao) => {
+            const [administrador, usuario] = await Promise.all([
+                transacao.cadastro.findUnique({
+                    where: {
+                        id: administradorId
+                    },
+                    select: {
+                        id: true
+                    }
+                }),
+                transacao.cadastro.findUnique({
+                    where: {
+                        id
+                    },
+                    select: {
+                        id: true,
+                        tipo_usuario: true,
+                        setor_id: true,
+                        secretaria_id: true,
+                        desativado_em: true
+                    }
+                })
+            ]);
+
+            if (!administrador) {
+                throw new NotFoundException(
+                    "Administrador não encontrado."
+                );
+            }
+
+            if (!usuario) {
+                throw new NotFoundException(
+                    "Usuário não encontrado."
+                );
+            }
+
+            if (usuario.desativado_em) {
+                throw new ConflictException(
+                    "O usuário já está desativado."
+                );
+            }
+
+            const desativadoEm = new Date();
+
+            const alteracao = await transacao.cadastro.updateMany({
+                where: {
+                    id,
+                    desativado_em: null
+                },
+                data: {
+                    desativado_em: desativadoEm,
+                    desativado_por: administradorId,
+                    motivo_desativacao: motivoNormalizado,
+                    ...(usuario.tipo_usuario === "funcionario"
+                        ? {
+                            tipo_usuario: "user" as const,
+                            setor_id: null
+                        }
+                        : {}),
+                    versao_token: {
+                        increment: 1
+                    },
+                    token_recuperacao: null,
+                    token_recuperacao_expira_em: null
+                }
+            });
+
+            if (alteracao.count === 0) {
+                throw new ConflictException(
+                    "O usuário foi alterado por outra operação."
+                );
+            }
+
+            await transacao.login_evento.updateMany({
+                where: {
+                    usuario_id: id,
+                    saiu_em: null
+                },
+                data: {
+                    saiu_em: desativadoEm
+                }
+            });
+
+            await transacao.desafio_login_2fa.updateMany({
+                where: {
+                    usuario_id: id,
+                    usado_em: null
+                },
+                data: {
+                    usado_em: desativadoEm
+                }
+            });
+
+            await transacao.historico_administrativo.create({
+                data: {
+                    administrador_id: administradorId,
+                    usuario_alvo_id: id,
+                    acao: "usuario_desativado",
+                    motivo: motivoNormalizado,
+                    tipo_usuario_anterior: usuario.tipo_usuario,
+                    setor_id_anterior: usuario.setor_id,
+                    secretaria_id_anterior: usuario.secretaria_id,
+                    criado_em: desativadoEm
+                }
+            });
+
+            return transacao.cadastro.findUniqueOrThrow({
+                where: {
+                    id
+                },
+                select: {
+                    id: true,
+                    tipo_usuario: true,
+                    setor_id: true,
+                    desativado_em: true,
+                    desativado_por: true,
+                    motivo_desativacao: true,
+                    versao_token: true
+                }
+            });
+        });
+    }
+
+    async reativarUsuario(
+        id: number,
+        administradorId: number
+    ) {
+        return this.prisma.$transaction(async (transacao) => {
+            const [administrador, usuario] = await Promise.all([
+                transacao.cadastro.findUnique({
+                    where: {
+                        id: administradorId
+                    },
+                    select: {
+                        id: true
+                    }
+                }),
+                transacao.cadastro.findUnique({
+                    where: {
+                        id
+                    },
+                    select: {
+                        id: true,
+                        tipo_usuario: true,
+                        setor_id: true,
+                        secretaria_id: true,
+                        desativado_em: true
+                    }
+                })
+            ]);
+
+            if (!administrador) {
+                throw new NotFoundException(
+                    "Administrador não encontrado."
+                );
+            }
+
+            if (!usuario) {
+                throw new NotFoundException(
+                    "Usuário não encontrado."
+                );
+            }
+
+            if (!usuario.desativado_em) {
+                throw new ConflictException(
+                    "O usuário já está ativo."
+                );
+            }
+
+            const reativadoEm = new Date();
+
+            const alteracao = await transacao.cadastro.updateMany({
+                where: {
+                    id,
+                    desativado_em: {
+                        not: null
+                    }
+                },
+                data: {
+                    desativado_em: null,
+                    desativado_por: null,
+                    motivo_desativacao: null,
+                    tipo_usuario: "user",
+                    setor_id: null,
+                    secretaria_id: null,
+                    versao_token: {
+                        increment: 1
+                    }
+                }
+            });
+
+            if (alteracao.count === 0) {
+                throw new ConflictException(
+                    "O usuário foi alterado por outra operação."
+                );
+            }
+
+            await transacao.historico_administrativo.create({
+                data: {
+                    administrador_id: administradorId,
+                    usuario_alvo_id: id,
+                    acao: "usuario_reativado",
+                    tipo_usuario_anterior: usuario.tipo_usuario,
+                    setor_id_anterior: usuario.setor_id,
+                    secretaria_id_anterior: usuario.secretaria_id,
+                    criado_em: reativadoEm
+                }
+            });
+
+            return transacao.cadastro.findUniqueOrThrow({
+                where: {
+                    id
+                },
+                select: {
+                    id: true,
+                    tipo_usuario: true,
+                    setor_id: true,
+                    secretaria_id: true,
+                    desativado_em: true,
+                    versao_token: true,
+                    dois_fatores_email_ativo: true,
+                    dois_fatores_email_confirmado_em: true
+                }
+            });
+        });
+    }
+
     async apagar(id: number) {
         const resultado =
             await this.prisma.cadastro.deleteMany({

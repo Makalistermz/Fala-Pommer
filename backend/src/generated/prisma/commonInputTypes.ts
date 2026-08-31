@@ -287,6 +287,40 @@ export type Enumdesafio_2fa_finalidadeWithAggregatesFilter<$PrismaModel = never>
   _max?: Prisma.NestedEnumdesafio_2fa_finalidadeFilter<$PrismaModel>
 }
 
+export type Enumhistorico_administrativo_acaoFilter<$PrismaModel = never> = {
+  equals?: $Enums.historico_administrativo_acao | Prisma.Enumhistorico_administrativo_acaoFieldRefInput<$PrismaModel>
+  in?: $Enums.historico_administrativo_acao[]
+  notIn?: $Enums.historico_administrativo_acao[]
+  not?: Prisma.NestedEnumhistorico_administrativo_acaoFilter<$PrismaModel> | $Enums.historico_administrativo_acao
+}
+
+export type Enumcadastro_tipo_usuarioNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.cadastro_tipo_usuario | Prisma.Enumcadastro_tipo_usuarioFieldRefInput<$PrismaModel> | null
+  in?: $Enums.cadastro_tipo_usuario[] | null
+  notIn?: $Enums.cadastro_tipo_usuario[] | null
+  not?: Prisma.NestedEnumcadastro_tipo_usuarioNullableFilter<$PrismaModel> | $Enums.cadastro_tipo_usuario | null
+}
+
+export type Enumhistorico_administrativo_acaoWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.historico_administrativo_acao | Prisma.Enumhistorico_administrativo_acaoFieldRefInput<$PrismaModel>
+  in?: $Enums.historico_administrativo_acao[]
+  notIn?: $Enums.historico_administrativo_acao[]
+  not?: Prisma.NestedEnumhistorico_administrativo_acaoWithAggregatesFilter<$PrismaModel> | $Enums.historico_administrativo_acao
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumhistorico_administrativo_acaoFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumhistorico_administrativo_acaoFilter<$PrismaModel>
+}
+
+export type Enumcadastro_tipo_usuarioNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.cadastro_tipo_usuario | Prisma.Enumcadastro_tipo_usuarioFieldRefInput<$PrismaModel> | null
+  in?: $Enums.cadastro_tipo_usuario[] | null
+  notIn?: $Enums.cadastro_tipo_usuario[] | null
+  not?: Prisma.NestedEnumcadastro_tipo_usuarioNullableWithAggregatesFilter<$PrismaModel> | $Enums.cadastro_tipo_usuario | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumcadastro_tipo_usuarioNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumcadastro_tipo_usuarioNullableFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[]
@@ -575,6 +609,40 @@ export type NestedEnumdesafio_2fa_finalidadeWithAggregatesFilter<$PrismaModel = 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumdesafio_2fa_finalidadeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumdesafio_2fa_finalidadeFilter<$PrismaModel>
+}
+
+export type NestedEnumhistorico_administrativo_acaoFilter<$PrismaModel = never> = {
+  equals?: $Enums.historico_administrativo_acao | Prisma.Enumhistorico_administrativo_acaoFieldRefInput<$PrismaModel>
+  in?: $Enums.historico_administrativo_acao[]
+  notIn?: $Enums.historico_administrativo_acao[]
+  not?: Prisma.NestedEnumhistorico_administrativo_acaoFilter<$PrismaModel> | $Enums.historico_administrativo_acao
+}
+
+export type NestedEnumcadastro_tipo_usuarioNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.cadastro_tipo_usuario | Prisma.Enumcadastro_tipo_usuarioFieldRefInput<$PrismaModel> | null
+  in?: $Enums.cadastro_tipo_usuario[] | null
+  notIn?: $Enums.cadastro_tipo_usuario[] | null
+  not?: Prisma.NestedEnumcadastro_tipo_usuarioNullableFilter<$PrismaModel> | $Enums.cadastro_tipo_usuario | null
+}
+
+export type NestedEnumhistorico_administrativo_acaoWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.historico_administrativo_acao | Prisma.Enumhistorico_administrativo_acaoFieldRefInput<$PrismaModel>
+  in?: $Enums.historico_administrativo_acao[]
+  notIn?: $Enums.historico_administrativo_acao[]
+  not?: Prisma.NestedEnumhistorico_administrativo_acaoWithAggregatesFilter<$PrismaModel> | $Enums.historico_administrativo_acao
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumhistorico_administrativo_acaoFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumhistorico_administrativo_acaoFilter<$PrismaModel>
+}
+
+export type NestedEnumcadastro_tipo_usuarioNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.cadastro_tipo_usuario | Prisma.Enumcadastro_tipo_usuarioFieldRefInput<$PrismaModel> | null
+  in?: $Enums.cadastro_tipo_usuario[] | null
+  notIn?: $Enums.cadastro_tipo_usuario[] | null
+  not?: Prisma.NestedEnumcadastro_tipo_usuarioNullableWithAggregatesFilter<$PrismaModel> | $Enums.cadastro_tipo_usuario | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumcadastro_tipo_usuarioNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumcadastro_tipo_usuarioNullableFilter<$PrismaModel>
 }
 
 

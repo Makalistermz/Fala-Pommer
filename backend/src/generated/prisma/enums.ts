@@ -51,3 +51,11 @@ export const cadastro_tipo_usuario = {
 } as const
 
 export type cadastro_tipo_usuario = (typeof cadastro_tipo_usuario)[keyof typeof cadastro_tipo_usuario]
+
+
+export const historico_administrativo_acao = {
+  usuario_desativado: 'usuario_desativado',
+  usuario_reativado: 'usuario_reativado'
+} as const
+
+export type historico_administrativo_acao = (typeof historico_administrativo_acao)[keyof typeof historico_administrativo_acao]

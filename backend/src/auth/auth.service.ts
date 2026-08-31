@@ -79,6 +79,12 @@ export class AuthService {
             );
         }
 
+        if (usuario.desativado_em) {
+            throw new UnauthorizedException(
+                "Esta conta está desativada."
+            );
+        }
+
         if (usuario.dois_fatores_email_ativo) {
             const desafio =
                 await this.twoFactorEmailService.iniciarLogin(
@@ -132,13 +138,15 @@ export class AuthService {
         const usuario = await this.prisma.cadastro.findFirst({
             where: {
                 id: usuarioId,
-                dois_fatores_email_ativo: true
+                dois_fatores_email_ativo: true,
+                desativado_em: null
             },
             select: {
                 id: true,
                 nome: true,
                 email: true,
-                tipo_usuario: true
+                tipo_usuario: true,
+                versao_token: true
             }
         });
 
@@ -156,6 +164,7 @@ export class AuthService {
         nome: string;
         email: string;
         tipo_usuario: "user" | "admin" | "funcionario" | "superAdmin";
+        versao_token: number;
     }) {
 
         await this.prisma.login_evento.create({
@@ -167,7 +176,8 @@ export class AuthService {
 
         const payload = {
             sub: usuario.id,
-            tipo: usuario.tipo_usuario
+            tipo: usuario.tipo_usuario,
+            ver: usuario.versao_token
         };
 
         const accessToken =

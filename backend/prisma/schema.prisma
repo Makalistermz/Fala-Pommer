@@ -9,34 +9,44 @@ datasource db {
 }
 
 model cadastro {
-  id                               Int                      @id @default(autoincrement())
-  nome                             String                   @db.VarChar(150)
-  data_nascimento                  DateTime                 @db.Date
-  cpf                              String                   @db.VarChar(20)
-  telefone                         String                   @db.VarChar(20)
-  email                            String                   @db.VarChar(150)
-  senha                            String                   @db.VarChar(255)
-  token_recuperacao                String?                  @db.VarChar(64)
+  id                               Int                        @id @default(autoincrement())
+  nome                             String                     @db.VarChar(150)
+  data_nascimento                  DateTime                   @db.Date
+  cpf                              String                     @db.VarChar(20)
+  telefone                         String                     @db.VarChar(20)
+  email                            String                     @db.VarChar(150)
+  senha                            String                     @db.VarChar(255)
+  token_recuperacao                String?                    @db.VarChar(64)
   token_recuperacao_expira_em      DateTime?
-  tipo_usuario                     cadastro_tipo_usuario    @default(user)
+  tipo_usuario                     cadastro_tipo_usuario      @default(user)
   setor_id                         Int?
   secretaria_id                    Int?
-  foto_perfil_url                  String?                  @db.VarChar(500)
-  dois_fatores_email_ativo         Boolean                  @default(false)
+  foto_perfil_url                  String?                    @db.VarChar(500)
+  dois_fatores_email_ativo         Boolean                    @default(false)
   dois_fatores_email_confirmado_em DateTime?
-  setor                            setores?                 @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
-  secretaria                       secretaria?              @relation(fields: [secretaria_id], references: [id], onDelete: SetNull, onUpdate: Restrict, map: "fk_cadastro_secretaria")
+  desativado_em                    DateTime?                  @db.DateTime(3)
+  desativado_por                   Int?
+  motivo_desativacao               String?                    @db.VarChar(500)
+  versao_token                     Int                        @default(0) @db.UnsignedInt
+  setor                            setores?                   @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
+  secretaria                       secretaria?                @relation(fields: [secretaria_id], references: [id], onDelete: SetNull, onUpdate: Restrict, map: "fk_cadastro_secretaria")
+  responsavel_desativacao          cadastro?                  @relation("CadastroDesativadoPor", fields: [desativado_por], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_cadastro_desativado_por")
+  desativacoes_realizadas          cadastro[]                 @relation("CadastroDesativadoPor")
+  historicos_como_administrador    historico_administrativo[] @relation("HistoricoAdministrador")
+  historicos_como_usuario_alvo     historico_administrativo[] @relation("HistoricoUsuarioAlvo")
   codigo_recuperacao_2fa           codigo_recuperacao_2fa[]
   conversa_leitura                 conversa_leitura[]
   conversa_participante            conversa_participante[]
-  conversas_atendidas              conversa_setor[]         @relation("UsuarioAtendido")
+  conversas_atendidas              conversa_setor[]           @relation("UsuarioAtendido")
   desafio_login_2fa                desafio_login_2fa[]
   erro_autenticacao                erro_autenticacao[]
   login_evento                     login_evento[]
-  mensagens_enviadas               mensagem[]               @relation("RemetenteMensagem")
+  mensagens_enviadas               mensagem[]                 @relation("RemetenteMensagem")
 
   @@index([setor_id], map: "fk_cadastro_setor")
   @@index([secretaria_id], map: "fk_cadastro_secretaria")
+  @@index([desativado_em, id], map: "idx_cadastro_status_id")
+  @@index([desativado_por], map: "idx_cadastro_desativado_por")
 }
 
 model erro_autenticacao {
@@ -174,11 +184,28 @@ model desafio_login_2fa {
 }
 
 model secretaria {
-  id               Int       @id @default(autoincrement())
-  secretaria       String    @db.VarChar(150)
-  sigla_secretaria String    @db.VarChar(100)
+  id               Int        @id @default(autoincrement())
+  secretaria       String     @db.VarChar(150)
+  sigla_secretaria String     @db.VarChar(100)
   cadastros        cadastro[]
   setores          setores[]
+}
+
+model historico_administrativo {
+  id                     Int                           @id @default(autoincrement())
+  administrador_id       Int
+  usuario_alvo_id        Int
+  acao                   historico_administrativo_acao
+  motivo                 String?                       @db.VarChar(500)
+  tipo_usuario_anterior  cadastro_tipo_usuario?
+  setor_id_anterior      Int?
+  secretaria_id_anterior Int?
+  criado_em              DateTime                      @default(now()) @db.DateTime(3)
+  administrador          cadastro                      @relation("HistoricoAdministrador", fields: [administrador_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_historico_administrador")
+  usuario_alvo           cadastro                      @relation("HistoricoUsuarioAlvo", fields: [usuario_alvo_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_historico_usuario_alvo")
+
+  @@index([administrador_id, criado_em], map: "idx_historico_administrador_data")
+  @@index([usuario_alvo_id, criado_em], map: "idx_historico_usuario_data")
 }
 
 enum desafio_2fa_finalidade {
@@ -208,4 +235,9 @@ enum cadastro_tipo_usuario {
   admin
   funcionario
   superAdmin
+}
+
+enum historico_administrativo_acao {
+  usuario_desativado
+  usuario_reativado
 }

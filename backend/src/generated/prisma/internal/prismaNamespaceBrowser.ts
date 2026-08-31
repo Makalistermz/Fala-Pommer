@@ -62,7 +62,8 @@ export const ModelName = {
   conversa_leitura: 'conversa_leitura',
   codigo_recuperacao_2fa: 'codigo_recuperacao_2fa',
   desafio_login_2fa: 'desafio_login_2fa',
-  secretaria: 'secretaria'
+  secretaria: 'secretaria',
+  historico_administrativo: 'historico_administrativo'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -96,7 +97,11 @@ export const CadastroScalarFieldEnum = {
   secretaria_id: 'secretaria_id',
   foto_perfil_url: 'foto_perfil_url',
   dois_fatores_email_ativo: 'dois_fatores_email_ativo',
-  dois_fatores_email_confirmado_em: 'dois_fatores_email_confirmado_em'
+  dois_fatores_email_confirmado_em: 'dois_fatores_email_confirmado_em',
+  desativado_em: 'desativado_em',
+  desativado_por: 'desativado_por',
+  motivo_desativacao: 'motivo_desativacao',
+  versao_token: 'versao_token'
 } as const
 
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]
@@ -224,6 +229,21 @@ export const SecretariaScalarFieldEnum = {
 export type SecretariaScalarFieldEnum = (typeof SecretariaScalarFieldEnum)[keyof typeof SecretariaScalarFieldEnum]
 
 
+export const Historico_administrativoScalarFieldEnum = {
+  id: 'id',
+  administrador_id: 'administrador_id',
+  usuario_alvo_id: 'usuario_alvo_id',
+  acao: 'acao',
+  motivo: 'motivo',
+  tipo_usuario_anterior: 'tipo_usuario_anterior',
+  setor_id_anterior: 'setor_id_anterior',
+  secretaria_id_anterior: 'secretaria_id_anterior',
+  criado_em: 'criado_em'
+} as const
+
+export type Historico_administrativoScalarFieldEnum = (typeof Historico_administrativoScalarFieldEnum)[keyof typeof Historico_administrativoScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -247,7 +267,8 @@ export const cadastroOrderByRelevanceFieldEnum = {
   email: 'email',
   senha: 'senha',
   token_recuperacao: 'token_recuperacao',
-  foto_perfil_url: 'foto_perfil_url'
+  foto_perfil_url: 'foto_perfil_url',
+  motivo_desativacao: 'motivo_desativacao'
 } as const
 
 export type cadastroOrderByRelevanceFieldEnum = (typeof cadastroOrderByRelevanceFieldEnum)[keyof typeof cadastroOrderByRelevanceFieldEnum]
@@ -293,4 +314,11 @@ export const secretariaOrderByRelevanceFieldEnum = {
 } as const
 
 export type secretariaOrderByRelevanceFieldEnum = (typeof secretariaOrderByRelevanceFieldEnum)[keyof typeof secretariaOrderByRelevanceFieldEnum]
+
+
+export const historico_administrativoOrderByRelevanceFieldEnum = {
+  motivo: 'motivo'
+} as const
+
+export type historico_administrativoOrderByRelevanceFieldEnum = (typeof historico_administrativoOrderByRelevanceFieldEnum)[keyof typeof historico_administrativoOrderByRelevanceFieldEnum]
 

@@ -77,3 +77,8 @@ export type desafio_login_2fa = Prisma.desafio_login_2faModel
  * 
  */
 export type secretaria = Prisma.secretariaModel
+/**
+ * Model historico_administrativo
+ * 
+ */
+export type historico_administrativo = Prisma.historico_administrativoModel

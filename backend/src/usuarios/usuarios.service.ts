@@ -148,6 +148,33 @@ export class UsuariosService {
         });
     }
 
+    async chamarHistorico() {
+        return await this.prisma.historico_administrativo.findMany({
+            select: {
+                id: true,
+                administrador: {
+                    select: {
+                        id: true,
+                        nome: true,
+                    },
+                },
+                usuario_alvo: {
+                    select: {
+                        id: true,
+                        nome: true,
+                    },
+                },
+                acao: true,
+                motivo: true,
+                criado_em: true,
+                tipo_usuario_anterior: true,
+            },
+            orderBy: {
+                id: 'desc'
+            }
+        });
+    }
+
     async buscarPorEmail(
         email: string
     ) {

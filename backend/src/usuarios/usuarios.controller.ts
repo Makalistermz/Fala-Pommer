@@ -108,6 +108,13 @@ export class UsuariosController {
         );
     }
 
+    @Get("historico-administrativo")
+    @UseGuards(AuthGuard, PerfisGuard)
+    @Perfis("superAdmin")
+    chamarHistorico() {
+        return this.usuariosService.chamarHistorico();
+    }
+
 
     @Get()
     @UseGuards(AuthGuard, PerfisGuard)

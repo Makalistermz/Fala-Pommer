@@ -543,8 +543,25 @@
 .usuarios__pesquisa {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
     padding: 16px 20px;
     border-bottom: 1px solid #e5eaf0;
+}
+
+.usuarios__pesquisa label {
+    color: #475467;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.usuarios__pesquisa select {
+    padding: 10px 34px 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #344054;
+    font: inherit;
 }
 
 .usuarios__pesquisa input {
@@ -602,6 +619,32 @@
 
 .usuarios__linha {
     cursor: pointer;
+}
+
+.usuarios__linha--desativada {
+    background: #fff8f7;
+    color: #5f6368;
+}
+
+.usuarios__status {
+    display: inline-flex;
+    align-items: center;
+    min-width: 82px;
+    justify-content: center;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.usuarios__status--ativa {
+    background: #e7f6ec;
+    color: #146c2e;
+}
+
+.usuarios__status--desativada {
+    background: #fde9e7;
+    color: #b3261e;
 }
 
 .usuarios__linha:focus-visible {
@@ -669,6 +712,75 @@
     outline-offset: 2px;
 }
 
+.usuarios__botao-ativar {
+    padding: 7px 12px;
+    border: 1px solid #16753a;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #16753a;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background-color 160ms ease,
+        color 160ms ease,
+        transform 160ms ease;
+}
+
+.usuarios__botao-ativar:hover:not(:disabled) {
+    background: #16753a;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.usuarios__botao-desativar:disabled,
+.usuarios__botao-ativar:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.usuarios__modal-motivo {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 100%;
+    margin-top: 14px;
+    text-align: left;
+}
+
+.usuarios__modal-motivo label {
+    color: #344054;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.usuarios__modal-motivo label span {
+    color: #b3261e;
+}
+
+.usuarios__modal-motivo textarea {
+    min-height: 96px;
+    padding: 10px 12px;
+    border: 1px solid #98a2b3;
+    border-radius: 8px;
+    color: #344054;
+    font: inherit;
+    resize: vertical;
+}
+
+.usuarios__modal-motivo textarea:focus {
+    border-color: #1351b4;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(19, 81, 180, 0.14);
+}
+
+.usuarios__modal-motivo small {
+    align-self: flex-end;
+    color: #667085;
+    font-size: 12px;
+}
+
 .usuarios__painel-fundo {
     position: fixed;
     inset: 0;
@@ -717,14 +829,21 @@
 }
 
 .info__painel-lateral input,
-.info__painel-lateral select {
+.info__painel-lateral select,
+.info__painel-lateral textarea {
     padding: 5px;
     border-radius: 5px;
     border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
+.info__painel-lateral textarea {
+    min-height: 88px;
+    resize: vertical;
+}
+
 .info__painel-lateral input:focus,
-.info__painel-lateral select:focus {
+.info__painel-lateral select:focus,
+.info__painel-lateral textarea:focus {
     outline-color: #1351b4b9;
     box-shadow: 0 0 0 4px rgb(19 81 180 / 15%);
 }
@@ -1216,8 +1335,7 @@ html.tema-escuro:not(.alto-contraste) .criar-sectors__pasta--ativa::before {
     white-space: nowrap;
 }
 
-.setores__botao-apagar,
-.usuarios__botao-apagar {
+.setores__botao-apagar {
     padding: 7px 12px;
     border: 1px solid #d92d20;
     border-radius: 8px;
@@ -1233,21 +1351,18 @@ html.tema-escuro:not(.alto-contraste) .criar-sectors__pasta--ativa::before {
         transform 160ms ease;
 }
 
-.setores__botao-apagar:hover:not(:disabled),
-.usuarios__botao-apagar:hover:not(:disabled) {
+.setores__botao-apagar:hover:not(:disabled) {
     background: #d92d20;
     color: #ffffff;
     transform: translateY(-1px);
 }
 
-.setores__botao-apagar:focus-visible,
-.usuarios__botao-apagar:focus-visible {
+.setores__botao-apagar:focus-visible {
     outline: 3px solid rgba(217, 45, 32, 0.2);
     outline-offset: 2px;
 }
 
-.setores__botao-apagar:disabled,
-.usuarios__botao-apagar:disabled {
+.setores__botao-apagar:disabled {
     cursor: wait;
     opacity: 0.55;
 }

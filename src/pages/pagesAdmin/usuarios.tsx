@@ -12,6 +12,8 @@ interface Usuario {
     tipo_usuario: string;
     setor_id?: number | null;
     secretaria_id?: number | null;
+    desativado_em?: string | null;
+    motivo_desativacao?: string | null;
 }
 
 interface Setor {
@@ -28,14 +30,28 @@ interface Secretaria {
 
 const ITENS_POR_PAGINA = 20;
 
+function obterAvisoDesativacao(usuario: Usuario) {
+    if (usuario.tipo_usuario === "funcionario") {
+        return "Ao desativar, este funcionário perderá o vínculo com o setor, será alterado para usuário comum e todas as sessões serão encerradas.";
+    }
+
+    if (usuario.tipo_usuario === "admin") {
+        return "Ao desativar, este admin perderá o vínculo com a secretaria, será alterado para usuário comum e todas as sessões serão encerradas.";
+    }
+
+    return "Ao desativar esta conta, todas as sessões abertas serão encerradas imediatamente.";
+}
+
 function Usuarios() {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
     const [setores, setSetores] = useState<Setor[]>([]);
     const [secretarias, setSecretarias] = useState<Secretaria[]>([]);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [pesquisa, setPesquisa] = useState("");
-    const [usuarioParaApagar, setUsuarioParaApagar] = useState<Usuario | null>(null);
-    const [usuarioSendoApagado, setUsuarioSendoApagado] = useState<number | null>(null);
+    const [filtroStatus, setFiltroStatus] = useState<"todos" | "ativos" | "desativados">("todos");
+    const [usuarioParaAlterarStatus, setUsuarioParaAlterarStatus] = useState<Usuario | null>(null);
+    const [motivoDesativacao, setMotivoDesativacao] = useState("");
+    const [usuarioSendoAlterado, setUsuarioSendoAlterado] = useState<number | null>(null);
     const [usuarioEmEdicao, setUsuarioEmEdicao] = useState<Usuario | null>(null);
     const [setorEmEdicao, setSetorEmEdicao] = useState("");
     const [secretariaEmEdicao, setSecretariaEmEdicao] = useState("");
@@ -47,12 +63,20 @@ function Usuarios() {
     });
 
     const termoPesquisa = pesquisa.trim().toLocaleLowerCase("pt-BR");
-    const usuariosFiltrados = usuarios.filter((usuario) =>
-        String(usuario.id).includes(termoPesquisa) ||
-        usuario.nome.toLocaleLowerCase("pt-BR").includes(termoPesquisa) ||
-        usuario.telefone.toLocaleLowerCase("pt-BR").includes(termoPesquisa) ||
-        usuario.email.toLocaleLowerCase("pt-BR").includes(termoPesquisa)
-    );
+    const usuariosFiltrados = usuarios.filter((usuario) => {
+        const correspondePesquisa =
+            String(usuario.id).includes(termoPesquisa) ||
+            usuario.nome.toLocaleLowerCase("pt-BR").includes(termoPesquisa) ||
+            usuario.telefone.toLocaleLowerCase("pt-BR").includes(termoPesquisa) ||
+            usuario.email.toLocaleLowerCase("pt-BR").includes(termoPesquisa);
+
+        const correspondeStatus =
+            filtroStatus === "todos" ||
+            (filtroStatus === "ativos" && !usuario.desativado_em) ||
+            (filtroStatus === "desativados" && Boolean(usuario.desativado_em));
+
+        return correspondePesquisa && correspondeStatus;
+    });
 
     const totalPaginas = Math.ceil(usuariosFiltrados.length / ITENS_POR_PAGINA);
     const inicioPagina = (paginaAtual - 1) * ITENS_POR_PAGINA;
@@ -213,39 +237,69 @@ function Usuarios() {
         }
     }
 
-    async function apagar() {
-        if (!usuarioParaApagar) return;
+    async function alterarStatus() {
+        if (!usuarioParaAlterarStatus) return;
 
-        setUsuarioSendoApagado(usuarioParaApagar.id);
+        const estaDesativado = Boolean(usuarioParaAlterarStatus.desativado_em);
+        const motivo = motivoDesativacao.trim();
+
+        if (!estaDesativado && motivo.length < 3) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: "Informe um motivo com pelo menos 3 caracteres.",
+            });
+            return;
+        }
+
+        setUsuarioSendoAlterado(usuarioParaAlterarStatus.id);
 
         try {
             const token = localStorage.getItem("access_token");
+            const acao = estaDesativado ? "ativar" : "desativar";
             const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/usuarios/${usuarioParaApagar.id}`,
+                `${import.meta.env.VITE_API_URL}/usuarios/${usuarioParaAlterarStatus.id}/${acao}`,
                 {
-                    method: "DELETE",
+                    method: "PATCH",
                     headers: {
                         Authorization: `Bearer ${token}`,
+                        ...(!estaDesativado
+                            ? { "Content-Type": "application/json" }
+                            : {}),
                     },
+                    ...(!estaDesativado
+                        ? { body: JSON.stringify({ motivo }) }
+                        : {}),
                 },
             );
+
             const resultado = await resposta.json();
 
             if (!resposta.ok) {
+                const mensagem = Array.isArray(resultado.message)
+                    ? resultado.message.join(" ")
+                    : resultado.message;
                 throw new Error(
-                    resultado.message ?? "Não foi possível apagar o usuário.",
+                    mensagem ?? `Não foi possível ${acao} o usuário.`,
                 );
             }
 
+            const usuarioAtualizado = resultado as Partial<Usuario> & { id: number };
             setUsuarios((usuariosAtuais) =>
-                usuariosAtuais.filter(
-                    (usuarioAtual) => usuarioAtual.id !== usuarioParaApagar.id,
+                usuariosAtuais.map((usuarioAtual) =>
+                    usuarioAtual.id === usuarioAtualizado.id
+                        ? { ...usuarioAtual, ...usuarioAtualizado }
+                        : usuarioAtual,
                 ),
             );
+            setUsuarioParaAlterarStatus(null);
+            setMotivoDesativacao("");
             setFeedback({
                 aberto: true,
                 tipo: "sucesso",
-                mensagem: "O usuário foi apagado com sucesso",
+                mensagem: estaDesativado
+                    ? "O usuário foi reativado como usuário comum."
+                    : "O usuário foi desativado e suas sessões foram encerradas.",
             });
         } catch (erro) {
             setFeedback({
@@ -253,11 +307,10 @@ function Usuarios() {
                 tipo: "erro",
                 mensagem: erro instanceof Error
                     ? erro.message
-                    : "Não foi possível apagar o usuário.",
+                    : "Não foi possível alterar o status do usuário.",
             });
         } finally {
-            setUsuarioSendoApagado(null);
-            setUsuarioParaApagar(null);
+            setUsuarioSendoAlterado(null);
         }
     }
 
@@ -272,6 +325,19 @@ function Usuarios() {
             </header>
 
             <div className="usuarios__pesquisa">
+                <label htmlFor="filtro-status-usuarios">Status</label>
+                <select
+                    id="filtro-status-usuarios"
+                    value={filtroStatus}
+                    onChange={(evento) => {
+                        setFiltroStatus(evento.target.value as typeof filtroStatus);
+                        setPaginaAtual(1);
+                    }}
+                >
+                    <option value="todos">Todos</option>
+                    <option value="ativos">Ativos</option>
+                    <option value="desativados">Desativados</option>
+                </select>
                 <input
                     type="search"
                     value={pesquisa}
@@ -293,6 +359,7 @@ function Usuarios() {
                             <th scope="col">Telefone</th>
                             <th scope="col">Email</th>
                             <th scope="col">Tipo de Usuário</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Ações</th>
                         </tr>
                     </thead>
@@ -301,7 +368,11 @@ function Usuarios() {
                         {usuariosPaginados.map((usuario) => (
                             <tr
                                 key={usuario.id}
-                                className="usuarios__linha"
+                                className={`usuarios__linha${
+                                    usuario.desativado_em
+                                        ? " usuarios__linha--desativada"
+                                        : ""
+                                }`}
                                 tabIndex={0}
                                 onClick={() => abrirEdicao(usuario)}
                                 onKeyDown={(evento) => {
@@ -318,6 +389,19 @@ function Usuarios() {
                                 <td>{usuario.telefone}</td>
                                 <td>{usuario.email}</td>
                                 <td>{usuario.tipo_usuario}</td>
+                                <td>
+                                    <span
+                                        className={`usuarios__status usuarios__status--${
+                                            usuario.desativado_em
+                                                ? "desativada"
+                                                : "ativa"
+                                        }`}
+                                    >
+                                        {usuario.desativado_em
+                                            ? "Desativado"
+                                            : "Ativo"}
+                                    </span>
+                                </td>
                                 <td className="usuarios__acoes">
                                     <div className="usuarios__acoes-botoes">
                                         <button
@@ -331,23 +415,25 @@ function Usuarios() {
                                             Editar
                                         </button>
 
-                                        <button className="usuarios__botao-desativar">
-                                            Desativar
-                                        </button>
-
                                         <button
-                                            className="usuarios__botao-apagar"
+                                            className={usuario.desativado_em
+                                                ? "usuarios__botao-ativar"
+                                                : "usuarios__botao-desativar"}
                                             type="button"
                                             onClick={(evento) => {
                                                 evento.stopPropagation();
-                                                setUsuarioParaApagar(usuario);
+                                                setUsuarioParaAlterarStatus(usuario);
+                                                setMotivoDesativacao("");
                                             }}
-                                            disabled={usuarioSendoApagado === usuario.id}
+                                            disabled={usuarioSendoAlterado === usuario.id}
                                         >
-                                            {usuarioSendoApagado === usuario.id
-                                                ? "Apagando..."
-                                                : "Apagar"}
+                                            {usuarioSendoAlterado === usuario.id
+                                                ? "Processando..."
+                                                : usuario.desativado_em
+                                                    ? "Ativar"
+                                                    : "Desativar"}
                                         </button>
+
                                     </div>
                                 </td>
                             </tr>
@@ -436,6 +522,27 @@ function Usuarios() {
                                 <label htmlFor="">Nome</label>
                                 <input type="text" value={usuarioEmEdicao.nome} readOnly />
                             </div>
+
+                            <div className="info__painel-lateral">
+                                <label>Status</label>
+                                <input
+                                    type="text"
+                                    value={usuarioEmEdicao.desativado_em
+                                        ? "Desativado"
+                                        : "Ativo"}
+                                    readOnly
+                                />
+                            </div>
+
+                            {usuarioEmEdicao.desativado_em && (
+                                <div className="info__painel-lateral">
+                                    <label>Motivo da desativação</label>
+                                    <textarea
+                                        value={usuarioEmEdicao.motivo_desativacao ?? ""}
+                                        readOnly
+                                    />
+                                </div>
+                            )}
 
                             <div className="info__painel-lateral">
                                 <label htmlFor="telefone">Telefone</label>
@@ -552,15 +659,48 @@ function Usuarios() {
             )}
 
             <ModalConfirmacao
-                aberto={usuarioParaApagar !== null}
-                titulo="Apagar usuário?"
-                mensagem={usuarioParaApagar
-                    ? `Deseja realmente apagar o usuário ${usuarioParaApagar.nome}?`
+                aberto={usuarioParaAlterarStatus !== null}
+                titulo={usuarioParaAlterarStatus?.desativado_em
+                    ? "Reativar usuário?"
+                    : "Desativar usuário?"}
+                mensagem={usuarioParaAlterarStatus
+                    ? usuarioParaAlterarStatus.desativado_em
+                        ? `Deseja reativar ${usuarioParaAlterarStatus.nome} como usuário comum?`
+                        : obterAvisoDesativacao(usuarioParaAlterarStatus)
                     : ""}
-                carregando={usuarioSendoApagado !== null}
-                aoCancelar={() => setUsuarioParaApagar(null)}
-                aoConfirmar={() => void apagar()}
-            />
+                carregando={usuarioSendoAlterado !== null}
+                textoConfirmar={usuarioParaAlterarStatus?.desativado_em
+                    ? "Ativar"
+                    : "Desativar"}
+                textoCarregando="Processando..."
+                confirmarDesabilitado={Boolean(
+                    usuarioParaAlterarStatus &&
+                    !usuarioParaAlterarStatus.desativado_em &&
+                    motivoDesativacao.trim().length < 3
+                )}
+                aoCancelar={() => {
+                    setUsuarioParaAlterarStatus(null);
+                    setMotivoDesativacao("");
+                }}
+                aoConfirmar={() => void alterarStatus()}
+            >
+                {usuarioParaAlterarStatus && !usuarioParaAlterarStatus.desativado_em && (
+                    <div className="usuarios__modal-motivo">
+                        <label htmlFor="motivo-desativacao">
+                            Motivo da desativação <span aria-hidden="true">*</span>
+                        </label>
+                        <textarea
+                            id="motivo-desativacao"
+                            value={motivoDesativacao}
+                            onChange={(evento) => setMotivoDesativacao(evento.target.value)}
+                            maxLength={500}
+                            required
+                            placeholder="Informe o motivo da desativação"
+                        />
+                        <small>{motivoDesativacao.length}/500 caracteres</small>
+                    </div>
+                )}
+            </ModalConfirmacao>
 
             <ModalFeedback
                 aberto={feedback.aberto}

@@ -1,5 +1,8 @@
 // Solicita a confirmação do usuário antes de uma ação.
-import { useEffect } from "react";
+import {
+    type ReactNode,
+    useEffect
+} from "react";
 import "./ModalConfirmacao.css";
 
 type ModalConfirmacaoProps = {
@@ -7,6 +10,10 @@ type ModalConfirmacaoProps = {
     titulo: string;
     mensagem: string;
     carregando?: boolean;
+    textoConfirmar?: string;
+    textoCarregando?: string;
+    confirmarDesabilitado?: boolean;
+    children?: ReactNode;
     aoCancelar: () => void;
     aoConfirmar: () => void;
 };
@@ -16,6 +23,10 @@ export function ModalConfirmacao({
     titulo,
     mensagem,
     carregando = false,
+    textoConfirmar = "Apagar",
+    textoCarregando = "Apagando...",
+    confirmarDesabilitado = false,
+    children,
     aoCancelar,
     aoConfirmar,
 }: ModalConfirmacaoProps) {
@@ -52,6 +63,7 @@ export function ModalConfirmacao({
 
                 <h2 id="modal-confirmacao-titulo">{titulo}</h2>
                 <p id="modal-confirmacao-mensagem">{mensagem}</p>
+                {children}
 
                 <div className="modal-confirmacao__acoes">
                     <button
@@ -67,9 +79,9 @@ export function ModalConfirmacao({
                         className="modal-confirmacao__confirmar"
                         type="button"
                         onClick={aoConfirmar}
-                        disabled={carregando}
+                        disabled={carregando || confirmarDesabilitado}
                     >
-                        {carregando ? "Apagando..." : "Apagar"}
+                        {carregando ? textoCarregando : textoConfirmar}
                     </button>
                 </div>
             </div>

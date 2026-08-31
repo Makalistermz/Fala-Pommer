@@ -53,14 +53,16 @@ export class AuthGuard implements CanActivate {
                 },
                 select: {
                     desativado_em: true,
-                    versao_token: true
+                    versao_token: true,
+                    tipo_usuario: true
                 }
             });
 
             if (
                 !usuario ||
                 usuario.desativado_em ||
-                payload.ver !== usuario.versao_token
+                payload.ver !== usuario.versao_token ||
+                payload.tipo !== usuario.tipo_usuario
             ) {
                 throw new UnauthorizedException();
             }

@@ -3,7 +3,6 @@ import {
     BadRequestException,
     Body,
     Controller,
-    Delete,
     Get,
     Param,
     ParseIntPipe,
@@ -147,24 +146,17 @@ export class UsuariosController {
 
     @Patch(":id")
     @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin", "superAdmin")
+    @Perfis("superAdmin")
     atualizar(
+        @Req() requisicao: RequisicaoAutenticada,
         @Param("id", ParseIntPipe) id: number,
         @Body() dados: AtualizarUsuarioDto
     ) {
         return this.usuariosService.atualizar(
             id,
+            requisicao.usuario!.sub,
             dados
         );
-    }
-
-    @Delete(":id")
-    @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin", "superAdmin")
-    apagar(
-        @Param("id", ParseIntPipe) id: number
-    ) {
-        return this.usuariosService.apagar(id);
     }
 
     @Post()

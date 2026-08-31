@@ -199,6 +199,8 @@ export class UsuariosService {
         const usuarios =
             await this.prisma.cadastro.findMany({
                 where: {
+                    desativado_em: null,
+
                     id: {
                         not: usuarioLogado.id
                     },
@@ -442,6 +444,8 @@ export class UsuariosService {
                 tipo_usuario: true,
                 setor_id: true,
                 secretaria_id: true,
+                desativado_em: true,
+                motivo_desativacao: true,
             },
 
             orderBy: {
@@ -452,127 +456,182 @@ export class UsuariosService {
 
     async atualizar(
         id: number,
+        responsavelId: number,
         dados: AtualizarUsuarioDto
     ) {
-        const usuario =
-            await this.prisma.cadastro.findUnique({
-                where: {
-                    id
-                },
-
-                select: {
-                    id: true
-                }
-            });
-
-        if (!usuario) {
-            throw new NotFoundException(
-                "Usuário não encontrado."
-            );
-        }
-
-        const email =
-            dados.email.trim().toLowerCase();
-
-        const usuarioComMesmoEmail =
-            await this.prisma.cadastro.findFirst({
-                where: {
-                    email,
-
-                    id: {
-                        not: id
+        return this.prisma.$transaction(async (transacao) => {
+            const [responsavel, usuario] = await Promise.all([
+                transacao.cadastro.findUnique({
+                    where: {
+                        id: responsavelId
+                    },
+                    select: {
+                        id: true,
+                        tipo_usuario: true,
+                        desativado_em: true
                     }
-                },
+                }),
+                transacao.cadastro.findUnique({
+                    where: {
+                        id
+                    },
+                    select: {
+                        id: true,
+                        tipo_usuario: true,
+                        desativado_em: true
+                    }
+                })
+            ]);
 
-                select: {
-                    id: true
+            if (
+                !responsavel ||
+                responsavel.desativado_em ||
+                responsavel.tipo_usuario !== "superAdmin"
+            ) {
+                throw new ForbiddenException(
+                    "Você não possui permissão para editar usuários."
+                );
+            }
+
+            if (!usuario) {
+                throw new NotFoundException(
+                    "Usuário não encontrado."
+                );
+            }
+
+            if (usuario.desativado_em) {
+                throw new ConflictException(
+                    "Reative o usuário antes de alterar seus dados."
+                );
+            }
+
+            if (
+                id === responsavelId &&
+                dados.tipo_usuario !== "superAdmin"
+            ) {
+                throw new ForbiddenException(
+                    "Um super administrador não pode alterar o próprio cargo."
+                );
+            }
+
+            if (
+                usuario.tipo_usuario === "superAdmin" &&
+                dados.tipo_usuario !== "superAdmin"
+            ) {
+                const superAdministradoresAtivos =
+                    await transacao.$queryRaw<Array<{ id: number }>>`
+                        SELECT id
+                        FROM cadastro
+                        WHERE tipo_usuario = 'superAdmin'
+                          AND desativado_em IS NULL
+                        FOR UPDATE
+                    `;
+
+                if (superAdministradoresAtivos.length <= 1) {
+                    throw new ConflictException(
+                        "O último super administrador ativo não pode perder o cargo."
+                    );
                 }
-            });
+            }
 
-        if (usuarioComMesmoEmail) {
-            throw new ConflictException(
-                "Já existe outro usuário com este e-mail."
-            );
-        }
+            const email = dados.email.trim().toLowerCase();
 
-        if (
-            dados.tipo_usuario === "funcionario" &&
-            dados.setor_id != null
-        ) {
-            const setor =
-                await this.prisma.setores.findUnique({
+            const usuarioComMesmoEmail =
+                await transacao.cadastro.findFirst({
+                    where: {
+                        email,
+                        id: {
+                            not: id
+                        }
+                    },
+                    select: {
+                        id: true
+                    }
+                });
+
+            if (usuarioComMesmoEmail) {
+                throw new ConflictException(
+                    "Já existe outro usuário com este e-mail."
+                );
+            }
+
+            if (
+                dados.tipo_usuario === "funcionario" &&
+                dados.setor_id != null
+            ) {
+                const setor = await transacao.setores.findUnique({
                     where: {
                         id: dados.setor_id
                     },
-
                     select: {
                         id: true
                     }
                 });
 
-            if (!setor) {
-                throw new BadRequestException(
-                    "Setor não encontrado."
-                );
+                if (!setor) {
+                    throw new BadRequestException(
+                        "Setor não encontrado."
+                    );
+                }
             }
-        }
 
-        if (
-            dados.tipo_usuario === "admin" &&
-            dados.secretaria_id != null
-        ) {
-            const secretaria =
-                await this.prisma.secretaria.findUnique({
+            if (
+                dados.tipo_usuario === "admin" &&
+                dados.secretaria_id != null
+            ) {
+                const secretaria = await transacao.secretaria.findUnique({
                     where: {
                         id: dados.secretaria_id
                     },
-
                     select: {
                         id: true
                     }
                 });
 
-            if (!secretaria) {
-                throw new BadRequestException(
-                    "Secretaria não encontrada."
-                );
+                if (!secretaria) {
+                    throw new BadRequestException(
+                        "Secretaria não encontrada."
+                    );
+                }
             }
-        }
 
-        return this.prisma.cadastro.update({
-            where: {
-                id
-            },
+            const cargoAlterado =
+                usuario.tipo_usuario !== dados.tipo_usuario;
 
-            data: {
-                telefone:
-                    dados.telefone.trim(),
-
-                email,
-
-                tipo_usuario:
-                    dados.tipo_usuario,
-
-                setor_id:
-                    dados.tipo_usuario === "funcionario"
-                        ? dados.setor_id ?? null
-                        : null,
-
-                secretaria_id:
-                    dados.tipo_usuario === "admin"
-                        ? dados.secretaria_id ?? null
-                        : null
-            },
-
-            select: {
-                id: true,
-                nome: true,
-                telefone: true,
-                email: true,
-                tipo_usuario: true,
-                setor_id: true,
-                secretaria_id: true
-            }
+            return transacao.cadastro.update({
+                where: {
+                    id
+                },
+                data: {
+                    telefone: dados.telefone.trim(),
+                    email,
+                    tipo_usuario: dados.tipo_usuario,
+                    setor_id:
+                        dados.tipo_usuario === "funcionario"
+                            ? dados.setor_id ?? null
+                            : null,
+                    secretaria_id:
+                        dados.tipo_usuario === "admin"
+                            ? dados.secretaria_id ?? null
+                            : null,
+                    ...(cargoAlterado
+                        ? {
+                            versao_token: {
+                                increment: 1
+                            }
+                        }
+                        : {})
+                },
+                select: {
+                    id: true,
+                    nome: true,
+                    telefone: true,
+                    email: true,
+                    tipo_usuario: true,
+                    setor_id: true,
+                    secretaria_id: true
+                }
+            });
         });
     }
 
@@ -593,6 +652,13 @@ export class UsuariosService {
         }
 
         return this.prisma.$transaction(async (transacao) => {
+            await transacao.$queryRaw<Array<{ id: number }>>`
+                SELECT id
+                FROM cadastro
+                WHERE id = ${id}
+                FOR UPDATE
+            `;
+
             const [administrador, usuario] = await Promise.all([
                 transacao.cadastro.findUnique({
                     where: {
@@ -654,6 +720,7 @@ export class UsuariosService {
                         id: true,
                         tipo_usuario: true,
                         setor_id: true,
+                        secretaria_id: true,
                         desativado_em: true,
                         desativado_por: true,
                         motivo_desativacao: true,
@@ -695,7 +762,12 @@ export class UsuariosService {
                             tipo_usuario: "user" as const,
                             setor_id: null
                         }
-                        : {}),
+                        : usuario.tipo_usuario === "admin"
+                            ? {
+                                tipo_usuario: "user" as const,
+                                secretaria_id: null
+                            }
+                            : {}),
                     versao_token: {
                         increment: 1
                     },
@@ -705,6 +777,27 @@ export class UsuariosService {
             });
 
             if (alteracao.count === 0) {
+                const usuarioAtual =
+                    await transacao.cadastro.findUnique({
+                        where: {
+                            id
+                        },
+                        select: {
+                            id: true,
+                            tipo_usuario: true,
+                            setor_id: true,
+                            secretaria_id: true,
+                            desativado_em: true,
+                            desativado_por: true,
+                            motivo_desativacao: true,
+                            versao_token: true
+                        }
+                    });
+
+                if (usuarioAtual?.desativado_em) {
+                    return usuarioAtual;
+                }
+
                 throw new ConflictException(
                     "O usuário foi alterado por outra operação."
                 );
@@ -751,6 +844,7 @@ export class UsuariosService {
                     id: true,
                     tipo_usuario: true,
                     setor_id: true,
+                    secretaria_id: true,
                     desativado_em: true,
                     desativado_por: true,
                     motivo_desativacao: true,
@@ -875,23 +969,4 @@ export class UsuariosService {
         });
     }
 
-    async apagar(id: number) {
-        const resultado =
-            await this.prisma.cadastro.deleteMany({
-                where: {
-                    id
-                }
-            });
-
-        if (resultado.count === 0) {
-            throw new NotFoundException(
-                "Usuário não encontrado."
-            );
-        }
-
-        return {
-            mensagem:
-                "Usuário apagado com sucesso."
-        };
-    }
 }

@@ -497,7 +497,7 @@
 .usuarios {
     overflow: hidden;
     border: 1px solid #e5eaf0;
-    border-radius: 16px;
+    border-radius: 0px 0px 16px 16px;
     background: #ffffff;
     box-shadow: 0 8px 25px rgba(15, 38, 73, 0.08);
 }
@@ -1029,6 +1029,127 @@
     display: none;
 }
 
+.gerenciar-user {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    flex-direction: column;
+}
+
+.gerenciar-user__pastas {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    width: 100%;
+    padding: 14px 0px 0;
+}
+
+.gerenciar-user__pasta {
+    position: relative;
+    display: inline-flex;
+    width: auto;
+    min-width: 0;
+    min-height: 56px;
+    flex: 0 1 180px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px clamp(12px, 2vw, 20px) 11px;
+    border: 1px solid #d8e1ee;
+    border-bottom-color: #cbd6e6;
+    border-radius: 10px 18px 0 0;
+    background: #edf2f8;
+    box-shadow: 0 -3px 12px rgba(15, 38, 73, 0.04);
+    color: #52647d;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition:
+        border-color 180ms ease,
+        background-color 180ms ease,
+        box-shadow 180ms ease,
+        color 180ms ease,
+        transform 180ms ease;
+}
+
+.gerenciar-user__pasta::before {
+    position: absolute;
+    top: -10px;
+    left: -1px;
+    width: 76px;
+    height: 18px;
+    border: 1px solid #d8e1ee;
+    border-bottom: 0;
+    border-radius: 9px 14px 0 0;
+    background: inherit;
+    content: "";
+    transition: border-color 180ms ease;
+}
+
+.gerenciar-user__pasta::after {
+    flex: 0 0 auto;
+    width: 9px;
+    height: 9px;
+    margin-left: 12px;
+    border-radius: 50%;
+    background: #a8b4c5;
+    box-shadow: 0 0 0 4px rgba(168, 180, 197, 0.16);
+    content: "";
+    transition: background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.gerenciar-user__pasta:hover {
+    border-color: #91add5;
+    background: #e3edfb;
+    color: #1351b4;
+    transform: translateY(-3px);
+}
+
+.gerenciar-user__pasta:hover::before {
+    border-color: #91add5;
+}
+
+.gerenciar-user__pasta:focus-visible {
+    z-index: 2;
+    outline: 3px solid rgba(19, 81, 180, 0.28);
+    outline-offset: 3px;
+}
+
+.gerenciar-user__pasta--ativa {
+    z-index: 1;
+    min-height: 61px;
+    border-color: #1351b4;
+    border-bottom-color: #ffffff;
+    background: #ffffff;
+    box-shadow: 0 -7px 20px rgba(19, 81, 180, 0.12);
+    color: #1351b4;
+    transform: none;
+}
+
+.gerenciar-user__pasta--ativa::before {
+    border-color: #1351b4;
+}
+
+.gerenciar-user__pasta--ativa::after {
+    background: #06a77d;
+    box-shadow: 0 0 0 4px rgba(6, 167, 125, 0.16);
+}
+
+.gerenciar-user__conteudo {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    margin-top: -1px;
+}
+
+.gerenciar-user__conteudo:empty {
+    display: none;
+}
+
 html.tema-escuro:not(.alto-contraste) .criar-sectors__pasta {
     border-color: var(--tema-borda);
     background: var(--tema-superficie-elevada);
@@ -1054,6 +1175,34 @@ html.tema-escuro:not(.alto-contraste) .criar-sectors__pasta--ativa {
 }
 
 html.tema-escuro:not(.alto-contraste) .criar-sectors__pasta--ativa::before {
+    border-color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta {
+    border-color: var(--tema-borda);
+    background: var(--tema-superficie-elevada);
+    color: var(--tema-texto-secundario);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.16);
+}
+
+html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta::before {
+    border-color: var(--tema-borda);
+}
+
+html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta:hover {
+    border-color: #6088c1;
+    background: var(--tema-superficie-interativa);
+    color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa {
+    border-color: var(--tema-destaque);
+    border-bottom-color: var(--tema-superficie);
+    background: var(--tema-superficie);
+    color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     border-color: var(--tema-destaque);
 }
 

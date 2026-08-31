@@ -7,7 +7,7 @@ import VisaoGeral from "./pagesAdmin/visaoGeral";
 import RelatoriosLogs from "./pagesAdmin/relatoriosLogs";
 import RelatorioError from "./pagesAdmin/relatoriosError";
 import CriarSectors from "./pagesAdmin/criarSectors";
-import Usuarios from "./pagesAdmin/usuarios";
+import CriarUsers from "./pagesAdmin/usuarios";
 
 type ItemMenu = {
     id: string;
@@ -85,7 +85,7 @@ function Administracao() {
                 return <VisaoGeral />;
 
             case "usuarios":
-                return <Usuarios />;
+                return <CriarUsers />;
 
             case "criarSectors":
                 return <CriarSectors />;

@@ -1,5 +1,6 @@
 // Permite consultar e gerenciar os usuários cadastrados.
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { obterItensPaginacao } from "../../../library/paginacao";
 import { ModalConfirmacao } from "../../../components/ModalConfirmacao";
 import { ModalFeedback } from "../../../components/ModalFeedback";
@@ -46,12 +47,20 @@ interface UsuariosAtivosProps {
     exibirDesativados?: boolean;
 }
 
+interface TooltipMotivo {
+    motivo: string | null;
+    top: number;
+    left: number;
+    abrirAbaixo: boolean;
+}
+
 function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
     const [setores, setSetores] = useState<Setor[]>([]);
     const [secretarias, setSecretarias] = useState<Secretaria[]>([]);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [pesquisa, setPesquisa] = useState("");
+    const [tooltipMotivo, setTooltipMotivo] = useState<TooltipMotivo | null>(null);
     const [usuarioParaAlterarStatus, setUsuarioParaAlterarStatus] = useState<Usuario | null>(null);
     const [motivoDesativacao, setMotivoDesativacao] = useState("");
     const [usuarioSendoAlterado, setUsuarioSendoAlterado] = useState<number | null>(null);
@@ -374,6 +383,30 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                                 onClick={() => {
                                     if (!exibirDesativados) abrirEdicao(usuario);
                                 }}
+                                onMouseEnter={(evento) => {
+                                    if (!exibirDesativados) return;
+
+                                    const status = evento.currentTarget.querySelector<HTMLElement>(
+                                        ".usuarios__status",
+                                    );
+
+                                    if (!status) return;
+
+                                    const posicao = status.getBoundingClientRect();
+                                    const abrirAbaixo = posicao.top < 180;
+
+                                    setTooltipMotivo({
+                                        motivo: usuario.motivo_desativacao ?? null,
+                                        top: abrirAbaixo
+                                            ? posicao.bottom + 8
+                                            : posicao.top - 8,
+                                        left: posicao.left + posicao.width / 2,
+                                        abrirAbaixo,
+                                    });
+                                }}
+                                onMouseLeave={() => {
+                                    if (exibirDesativados) setTooltipMotivo(null);
+                                }}
                                 onKeyDown={(evento) => {
                                     if (exibirDesativados) return;
                                     if (evento.target !== evento.currentTarget) return;
@@ -443,6 +476,26 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                     </tbody>
                 </table>
             </div>
+
+            {exibirDesativados && tooltipMotivo && createPortal(
+                <span
+                    className={`usuarios__tooltip${
+                        tooltipMotivo.abrirAbaixo
+                            ? " usuarios__tooltip--abaixo"
+                            : ""
+                    }`}
+                    role="tooltip"
+                    style={{
+                        top: tooltipMotivo.top,
+                        left: tooltipMotivo.left,
+                    }}
+                >
+                    {tooltipMotivo.motivo
+                        ? `Motivo: ${tooltipMotivo.motivo}`
+                        : "Motivo não informado"}
+                </span>,
+                document.body,
+            )}
 
             {totalPaginas > 1 && (
                 <nav

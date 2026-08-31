@@ -652,6 +652,26 @@
     outline-offset: -3px;
 }
 
+.usuarios__tooltip {
+    position: fixed;
+    transform: translate(-50%, -100%);
+    display: block;
+    width: max-content;
+    max-width: min(300px, calc(100vw - 24px));
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #222;
+    color: #fff;
+    font-size: 0.875rem;
+    white-space: normal;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.usuarios__tooltip--abaixo {
+    transform: translateX(-50%);
+}
+
 .usuarios__acoes-botoes {
     display: flex;
     align-items: center;

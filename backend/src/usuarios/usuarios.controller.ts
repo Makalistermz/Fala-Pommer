@@ -19,6 +19,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { CriarUsuarioDto } from "./dto/criar-usuario.dto";
 import { AtualizarUsuarioDto } from "./dto/atualizar-usuario.dto";
 import { AtualizarMeuPerfilDto } from "./dto/atualizar-meu-perfil.dto";
+import { DesativarUsuarioDto } from "./dto/desativar-usuario.dto";
 import {
     type ArquivoFotoPerfilUpload,
     UsuariosService
@@ -114,6 +115,34 @@ export class UsuariosController {
     @Perfis("admin", "superAdmin")
     listarTodos() {
         return this.usuariosService.listarTodos();
+    }
+
+    @Patch(":id/desativar")
+    @UseGuards(AuthGuard, PerfisGuard)
+    @Perfis("superAdmin")
+    desativar(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Param("id", ParseIntPipe) id: number,
+        @Body() dados: DesativarUsuarioDto
+    ) {
+        return this.usuariosService.desativarUsuario(
+            id,
+            requisicao.usuario!.sub,
+            dados.motivo
+        );
+    }
+
+    @Patch(":id/ativar")
+    @UseGuards(AuthGuard, PerfisGuard)
+    @Perfis("superAdmin")
+    ativar(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Param("id", ParseIntPipe) id: number
+    ) {
+        return this.usuariosService.reativarUsuario(
+            id,
+            requisicao.usuario!.sub
+        );
     }
 
     @Patch(":id")

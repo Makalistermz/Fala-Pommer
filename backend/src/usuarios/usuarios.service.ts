@@ -599,7 +599,9 @@ export class UsuariosService {
                         id: administradorId
                     },
                     select: {
-                        id: true
+                        id: true,
+                        tipo_usuario: true,
+                        desativado_em: true
                     }
                 }),
                 transacao.cadastro.findUnique({
@@ -622,6 +624,21 @@ export class UsuariosService {
                 );
             }
 
+            if (
+                administrador.tipo_usuario !== "superAdmin" ||
+                administrador.desativado_em
+            ) {
+                throw new ForbiddenException(
+                    "Somente um super administrador ativo pode desativar usuários."
+                );
+            }
+
+            if (id === administradorId) {
+                throw new ForbiddenException(
+                    "Um super administrador não pode desativar a própria conta."
+                );
+            }
+
             if (!usuario) {
                 throw new NotFoundException(
                     "Usuário não encontrado."
@@ -629,9 +646,37 @@ export class UsuariosService {
             }
 
             if (usuario.desativado_em) {
-                throw new ConflictException(
-                    "O usuário já está desativado."
-                );
+                return transacao.cadastro.findUniqueOrThrow({
+                    where: {
+                        id
+                    },
+                    select: {
+                        id: true,
+                        tipo_usuario: true,
+                        setor_id: true,
+                        desativado_em: true,
+                        desativado_por: true,
+                        motivo_desativacao: true,
+                        versao_token: true
+                    }
+                });
+            }
+
+            if (usuario.tipo_usuario === "superAdmin") {
+                const superAdministradoresAtivos =
+                    await transacao.$queryRaw<Array<{ id: number }>>`
+                        SELECT id
+                        FROM cadastro
+                        WHERE tipo_usuario = 'superAdmin'
+                          AND desativado_em IS NULL
+                        FOR UPDATE
+                    `;
+
+                if (superAdministradoresAtivos.length <= 1) {
+                    throw new ConflictException(
+                        "O último super administrador ativo não pode ser desativado."
+                    );
+                }
             }
 
             const desativadoEm = new Date();
@@ -726,7 +771,9 @@ export class UsuariosService {
                         id: administradorId
                     },
                     select: {
-                        id: true
+                        id: true,
+                        tipo_usuario: true,
+                        desativado_em: true
                     }
                 }),
                 transacao.cadastro.findUnique({
@@ -746,6 +793,15 @@ export class UsuariosService {
             if (!administrador) {
                 throw new NotFoundException(
                     "Administrador não encontrado."
+                );
+            }
+
+            if (
+                administrador.tipo_usuario !== "superAdmin" ||
+                administrador.desativado_em
+            ) {
+                throw new ForbiddenException(
+                    "Somente um super administrador ativo pode reativar usuários."
                 );
             }
 

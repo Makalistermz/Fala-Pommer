@@ -360,6 +360,417 @@
     color: rgba(0, 0, 0, 0.8);
 }
 
+.usuarios-desativados-card {
+    min-height: 320px;
+    padding: 38px;
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 190px minmax(280px, 1fr) minmax(370px, 1.2fr);
+    align-items: center;
+    gap: 38px;
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: 26px;
+    box-shadow:
+        0 22px 50px rgba(19, 81, 180, 0.08),
+        0 4px 12px rgba(15, 35, 70, 0.04);
+    overflow: hidden;
+    animation: aparecer-card 0.6s ease both;
+}
+
+/* Indicador circular */
+
+.indicador-desativados {
+    width: 190px;
+    height: 190px;
+    position: relative;
+    display: grid;
+    place-items: center;
+    margin-left: 20px;
+}
+
+.grafico-circular {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    filter: drop-shadow(0 8px 12px rgba(19, 81, 180, 0.12));
+}
+
+.circulo-fundo,
+.circulo-progresso {
+    fill: none;
+    stroke-width: 10;
+}
+
+.circulo-fundo {
+    stroke: var(--azul-claro);
+}
+
+.circulo-progresso {
+    stroke: var(--azul-principal);
+    stroke-linecap: round;
+    animation: preencher-circulo 1.2s ease-out both;
+}
+
+.icone-usuario-desativado {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    display: grid;
+    place-items: center;
+}
+
+.icone-usuario-desativado svg {
+    width: 72px;
+    height: 72px;
+    overflow: visible;
+}
+
+.icone-usuario-desativado svg > circle:first-of-type {
+    fill: var(--azul-principal);
+    stroke: none;
+}
+
+.icone-usuario-desativado svg > path:first-of-type {
+    fill: var(--azul-principal);
+    stroke: var(--azul-principal);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.icone-usuario-desativado svg > circle:last-of-type {
+    fill: var(--vermelho-desativado);
+    stroke: var(--branco);
+    stroke-width: 1.5;
+}
+
+.icone-usuario-desativado svg > path:last-of-type {
+    fill: none;
+    stroke: var(--branco);
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+/* Informações centrais */
+
+.informacoes-desativados {
+    min-width: 0;
+    margin-left: 40px;
+}
+
+.categoria-card {
+    margin: 0 0 10px;
+    color: var(--azul-principal);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+.informacoes-desativados h2 {
+    margin: 0;
+    color: var(--texto-principal);
+    font-size: clamp(1.35rem, 2vw, 1.8rem);
+    font-weight: 750;
+    line-height: 1.2;
+}
+
+.quantidade-desativados {
+    display: block;
+    margin: 14px 0 16px;
+    color: var(--azul-escuro);
+    font-size: clamp(4rem, 7vw, 6rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+}
+
+.detalhes-desativados {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.porcentagem-desativados {
+    color: var(--texto-secundario);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.variacao-desativados {
+    min-height: 34px;
+    padding: 7px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--verde-sucesso);
+    background: var(--verde-fundo);
+    border: 1px solid rgba(22, 132, 71, 0.18);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.variacao-desativados span {
+    font-size: 1.1rem;
+}
+
+/* Histórico */
+
+.historico-desativados {
+    min-width: 0;
+    padding-left: 38px;
+    border-left: 1px solid var(--borda);
+}
+
+.cabecalho-historico {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.titulo-historico {
+    margin: 0 0 4px;
+    color: var(--texto-principal);
+    font-size: 1.05rem;
+    font-weight: 750;
+}
+
+.descricao-historico {
+    color: var(--texto-secundario);
+    font-size: 0.8rem;
+}
+
+.status-historico {
+    padding: 6px 10px;
+    color: var(--verde-sucesso);
+    background: var(--verde-fundo);
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.grafico-historico {
+    width: 100%;
+    height: 125px;
+    margin-top: 12px;
+    overflow: visible;
+}
+
+.linha-grafico {
+    fill: none;
+    stroke: var(--azul-principal);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 700;
+    stroke-dashoffset: 700;
+    animation: desenhar-linha 1.4s 0.25s ease forwards;
+}
+
+.pontos-grafico circle {
+    fill: var(--branco);
+    stroke: var(--azul-principal);
+    stroke-width: 4;
+    opacity: 0;
+    animation: mostrar-pontos 0.4s 1.1s ease forwards;
+}
+
+.meses-grafico {
+    margin-top: -6px;
+    display: flex;
+    justify-content: space-between;
+    color: var(--texto-secundario);
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+.botao-ver-usuarios {
+    width: 100%;
+    min-height: 48px;
+    margin-top: 22px;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--azul-principal);
+    background: transparent;
+    border: 1.5px solid var(--azul-principal);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 750;
+    cursor: pointer;
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.botao-ver-usuarios svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.2s ease;
+}
+
+.botao-ver-usuarios:hover {
+    color: var(--branco);
+    background: var(--azul-principal);
+    box-shadow: 0 8px 18px rgba(19, 81, 180, 0.2);
+    transform: translateY(-2px);
+}
+
+.botao-ver-usuarios:hover svg {
+    transform: translateX(4px);
+}
+
+.botao-ver-usuarios:active {
+    transform: translateY(0);
+}
+
+.botao-ver-usuarios:focus-visible {
+    outline: 3px solid rgba(19, 81, 180, 0.25);
+    outline-offset: 3px;
+}
+
+/* Animações */
+
+@keyframes aparecer-card {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes preencher-circulo {
+    from {
+        stroke-dashoffset: 100;
+    }
+
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes desenhar-linha {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes mostrar-pontos {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+        transform-origin: center;
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Tablet */
+
+@media (max-width: 960px) {
+    body {
+        padding: 24px;
+    }
+
+    .usuarios-desativados-card {
+        grid-template-columns: 170px 1fr;
+        gap: 30px;
+        padding: 32px;
+    }
+
+    .indicador-desativados {
+        width: 170px;
+        height: 170px;
+    }
+
+    .historico-desativados {
+        grid-column: 1 / -1;
+        padding: 30px 0 0;
+        border-left: 0;
+        border-top: 1px solid var(--borda);
+    }
+}
+
+/* Celular */
+
+@media (max-width: 600px) {
+    body {
+        padding: 16px;
+        place-items: start center;
+    }
+
+    .usuarios-desativados-card {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 26px 20px;
+        border-radius: 20px;
+        text-align: center;
+    }
+
+    .indicador-desativados {
+        width: 155px;
+        height: 155px;
+        margin: 0 auto;
+    }
+
+    .informacoes-desativados h2 {
+        font-size: 1.35rem;
+    }
+
+    .quantidade-desativados {
+        font-size: 4.4rem;
+    }
+
+    .detalhes-desativados {
+        justify-content: center;
+    }
+
+    .historico-desativados {
+        width: 100%;
+        padding-top: 24px;
+    }
+
+    .cabecalho-historico {
+        text-align: left;
+    }
+
+    .grafico-historico {
+        height: 105px;
+    }
+}
+
+/* Acessibilidade */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
 .grafico-card {
     margin-top: 24px;
     padding: 24px;

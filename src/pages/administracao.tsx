@@ -82,7 +82,7 @@ function Administracao() {
     function renderizarConteudo() {
         switch (itemAtivo) {
             case "visao-geral":
-                return <VisaoGeral />;
+                return <VisaoGeral onVerUsuarios={() => setItemAtivo("usuarios")} />;
 
             case "usuarios":
                 return <CriarUsers />;

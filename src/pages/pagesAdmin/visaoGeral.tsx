@@ -16,6 +16,7 @@ import {
     type ChartOptions,
     BarElement,
 } from "chart.js";
+import UsuariosDesativados from "./usuarios/usuariosDesativados";
 
 ChartJS.register(
     CategoryScale,
@@ -50,6 +51,10 @@ type QuantUsuarioCategoria = {
 interface CounterProps {
     endValue: number;
     duration?: number;
+}
+
+interface VisaoGeralProps {
+    onVerUsuarios: () => void;
 }
 
 export const NumberCounter: React.FC<CounterProps> = ({ endValue, duration = 2 }) => {
@@ -147,10 +152,11 @@ const opcoesUsuarios: ChartOptions<"bar"> = {
     }
 };
 
-function VisaoGeral() {
+function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
     const [resultado, setResultado] = useState<RespostaLoginsMensais | null>(null);
     const [carregando, setCarregando] = useState(true);
     const [quantUsuarios, setQuantUsuarios] = useState(0);
+    const [quantUsuariosDesativados, setQuantUsuariosDesativados] = useState(0);
     const [quantSetores, setQuantSetores] = useState(0);
     const [quantSecretarias, setQuantSecretarias] = useState(0);
     const [quantUsuariosCategoria, setQuantUsuariosCategoria] = useState<QuantUsuarioCategoria[]>([]);
@@ -311,12 +317,42 @@ function VisaoGeral() {
                 const dados = await resposta.json() as QuantUsuarioCategoria[];
                 setQuantUsuariosCategoria(dados);
             } catch (erro) {
-                console.log("Erro ao buscar quantidade de usuarios po categoria:", erro);
+                console.log("Erro ao buscar quantidade de usuarios por categoria:", erro);
             }
         }
 
         void carregarQuantUsuariosCategoria();
     }, []);
+
+    useEffect(() => {
+        async function carregarUsuariosDesativados() {
+            const token = localStorage.getItem("access_token");
+
+            if (!token) return;
+
+            try {
+                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/usuarios`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        },
+                    },
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível buscar os usuários desativados.");
+                }
+
+                const dados = await resposta.json();
+                const quantidade = dados.filter(usuario => usuario.desativado_em).length;
+                setQuantUsuariosDesativados(quantidade);
+            } catch (erro) {
+                console.log("Erro ao buscar quantidade de usuarios desativados:", erro)
+            }
+        }
+
+        void carregarUsuariosDesativados();
+    }, [])
 
     function obterQuantidadeCategoria(
         tipo: QuantUsuarioCategoria["tipo_usuario"],
@@ -459,6 +495,178 @@ function VisaoGeral() {
                     </div>
                 </div>
             </div>
+
+            <section className="usuarios-desativados-card" aria-labelledby="titulo-desativados">
+
+                <div className="indicador-desativados">
+                    <svg
+                        className="grafico-circular"
+                        viewBox="0 0 120 120"
+                        role="img"
+                        aria-label="8,4% dos usuários estão desativados"
+                    >
+                        <circle
+                            className="circulo-fundo"
+                            cx="60"
+                            cy="60"
+                            r="52"
+                        />
+
+                        <circle
+                            className="circulo-progresso"
+                            cx="60"
+                            cy="60"
+                            r="52"
+                            pathLength="100"
+                            stroke-dasharray="84 16"
+                        />
+                    </svg>
+
+                    <div className="icone-usuario-desativado">
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <circle cx="10" cy="7" r="4"></circle>
+                            <path d="M3 21v-2a7 7 0 0 1 7-7c1.2 0 2.4.3 3.4.8"></path>
+                            <circle cx="18" cy="18" r="4"></circle>
+                            <path d="M16.5 18h3"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <div className="informacoes-desativados">
+                    <p className="categoria-card">CONTROLE DE ACESSOS</p>
+
+                    <h2 id="titulo-desativados">
+                        Usuários desativados
+                    </h2>
+
+                    <strong className="quantidade-desativados">
+                        {quantUsuariosDesativados}
+                    </strong>
+
+                    <div className="detalhes-desativados">
+                        <span className="porcentagem-desativados">
+                            8,4% do total
+                        </span>
+
+                        <span className="variacao-desativados">
+                            <span aria-hidden="true">↓</span>
+                            12 este mês
+                        </span>
+                    </div>
+                </div>
+
+                <div className="historico-desativados">
+                    <div className="cabecalho-historico">
+                        <div>
+                            <p className="titulo-historico">
+                                Últimos 6 meses
+                            </p>
+
+                            <span className="descricao-historico">
+                                Histórico de desativações
+                            </span>
+                        </div>
+
+                        <span className="status-historico">
+                            Diminuindo
+                        </span>
+                    </div>
+
+                    <svg
+                        className="grafico-historico"
+                        viewBox="0 0 360 130"
+                        role="img"
+                        aria-label="Gráfico de usuários desativados nos últimos seis meses"
+                    >
+                        <defs>
+                            <linearGradient
+                                id="preenchimentoGrafico"
+                                x1="0"
+                                y1="0"
+                                x2="0"
+                                y2="1"
+                            >
+                                <stop
+                                    offset="0%"
+                                    stop-color="#1351b4"
+                                    stop-opacity="0.25"
+                                />
+
+                                <stop
+                                    offset="100%"
+                                    stop-color="#1351b4"
+                                    stop-opacity="0"
+                                />
+                            </linearGradient>
+                        </defs>
+
+                        <path
+                            className="area-grafico"
+                            d="
+                                M 15 80
+                                L 80 35
+                                L 145 50
+                                L 210 75
+                                L 275 68
+                                L 345 100
+                                L 345 115
+                                L 15 115
+                                Z
+                            "
+                            fill="url(#preenchimentoGrafico)"
+                        />
+
+                        <polyline
+                            className="linha-grafico"
+                            points="
+                                15,80
+                                80,35
+                                145,50
+                                210,75
+                                275,68
+                                345,100
+                            "
+                        />
+
+                        <g className="pontos-grafico">
+                            <circle cx="15" cy="80" r="5"></circle>
+                            <circle cx="80" cy="35" r="5"></circle>
+                            <circle cx="145" cy="50" r="5"></circle>
+                            <circle cx="210" cy="75" r="5"></circle>
+                            <circle cx="275" cy="68" r="5"></circle>
+                            <circle cx="345" cy="100" r="5"></circle>
+                        </g>
+                    </svg>
+
+                    <div className="meses-grafico" aria-hidden="true">
+                        <span>Mar</span>
+                        <span>Abr</span>
+                        <span>Mai</span>
+                        <span>Jun</span>
+                        <span>Jul</span>
+                        <span>Ago</span>
+                    </div>
+
+                    <button 
+                        className="botao-ver-usuarios" 
+                        type="button"
+                        onClick={onVerUsuarios}
+                    >
+                        <span>Ver usuários</span>
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <path d="M9 18l6-6-6-6"></path>
+                        </svg>
+                    </button>
+                </div>
+
+            </section>
 
             <div className="grafico-card">
                 <div className="grafico-card-header">

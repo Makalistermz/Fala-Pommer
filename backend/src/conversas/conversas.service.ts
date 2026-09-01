@@ -416,6 +416,265 @@ export class ConversasService {
         };
     }
 
+    async listarGrupos(
+        usuarioLogadoId: number
+    ) {
+        const usuarioLogado =
+            await this.prisma.cadastro.findUnique({
+                where: {
+                    id: usuarioLogadoId
+                },
+
+                select: {
+                    id: true,
+                    tipo_usuario: true
+                }
+            });
+
+        if (!usuarioLogado) {
+            throw new NotFoundException(
+                "Usuário autenticado não encontrado."
+            );
+        }
+
+        if (usuarioLogado.tipo_usuario === "user") {
+            throw new ForbiddenException(
+                "Usuários comuns não possuem acesso a grupos."
+            );
+        }
+
+        const grupos =
+            await this.prisma.conversa.findMany({
+                where: {
+                    tipo: "grupo",
+                    ...(usuarioLogado.tipo_usuario !== "superAdmin"
+                        ? {
+                            conversa_participante: {
+                                some: {
+                                    usuario_id: usuarioLogado.id
+                                }
+                            }
+                        }
+                        : {})
+                },
+
+                include: {
+                    conversa_participante: {
+                        include: {
+                            cadastro: {
+                                select: {
+                                    id: true,
+                                    nome: true,
+                                    tipo_usuario: true,
+                                    foto_perfil_url: true
+                                }
+                            }
+                        }
+                    },
+                    mensagens: {
+                        orderBy: {
+                            enviada_em: "desc"
+                        },
+                        take: 1,
+                        select: {
+                            id: true,
+                            conteudo: true,
+                            origem: true,
+                            arquivo_nome: true,
+                            arquivo_tipo: true,
+                            enviada_em: true
+                        }
+                    },
+                    conversa_leitura: {
+                        where: {
+                            usuario_id: usuarioLogado.id
+                        },
+                        select: {
+                            ultima_mensagem_lida_id: true
+                        }
+                    }
+                },
+
+                orderBy: {
+                    criada_em: "desc"
+                }
+            });
+
+        const gruposDoUsuario = grupos.filter((grupo) =>
+            grupo.conversa_participante.some((participante) =>
+                participante.usuario_id === usuarioLogado.id
+            )
+        );
+
+        const mensagensNaoLidas =
+            await this.contarMensagensNaoLidas(
+                usuarioLogado.id,
+                gruposDoUsuario.map((grupo) => ({
+                    id: grupo.id,
+                    ultimaMensagemLidaId:
+                        grupo.conversa_leitura[0]
+                            ?.ultima_mensagem_lida_id ?? null
+                }))
+            );
+
+        return grupos.map((grupo) => {
+            const participaDaConversa =
+                grupo.conversa_participante.some(
+                    (participante) =>
+                        participante.usuario_id === usuarioLogado.id
+                );
+            const ultimaMensagem = grupo.mensagens[0] ?? null;
+
+            return {
+                id: grupo.id,
+                tipo: "grupo" as const,
+                nome: grupo.nome ?? "Grupo sem nome",
+                criadaEm: grupo.criada_em,
+                participantes: grupo.conversa_participante.map(
+                    (participante) => participante.cadastro
+                ),
+                totalParticipantes:
+                    grupo.conversa_participante.length,
+                somenteLeitura: !participaDaConversa,
+                mensagensNaoLidas: participaDaConversa
+                    ? mensagensNaoLidas.get(grupo.id) ?? 0
+                    : 0,
+                ultimaMensagem: ultimaMensagem
+                    ? {
+                        id: ultimaMensagem.id,
+                        conteudo: ultimaMensagem.conteudo,
+                        origem: ultimaMensagem.origem,
+                        arquivoNome: ultimaMensagem.arquivo_nome,
+                        arquivoTipo: ultimaMensagem.arquivo_tipo,
+                        enviadaEm: ultimaMensagem.enviada_em
+                    }
+                    : null
+            };
+        });
+    }
+
+    async criarGrupo(
+        usuarioLogadoId: number,
+        nome: string,
+        participanteIds: number[]
+    ) {
+        const nomeLimpo = nome.trim();
+        const contatosSelecionados = Array.from(
+            new Set(participanteIds)
+        );
+
+        if (nomeLimpo.length < 3 || nomeLimpo.length > 120) {
+            throw new BadRequestException(
+                "O nome do grupo deve ter entre 3 e 120 caracteres."
+            );
+        }
+
+        if (
+            contatosSelecionados.length < 2 ||
+            contatosSelecionados.includes(usuarioLogadoId)
+        ) {
+            throw new BadRequestException(
+                "Selecione pelo menos dois contatos diferentes de você."
+            );
+        }
+
+        const usuarioLogado =
+            await this.prisma.cadastro.findUnique({
+                where: {
+                    id: usuarioLogadoId
+                },
+                select: {
+                    id: true,
+                    tipo_usuario: true
+                }
+            });
+
+        if (!usuarioLogado) {
+            throw new NotFoundException(
+                "Usuário autenticado não encontrado."
+            );
+        }
+
+        if (usuarioLogado.tipo_usuario === "user") {
+            throw new ForbiddenException(
+                "Usuários comuns não podem criar grupos."
+            );
+        }
+
+        const contatos =
+            await this.prisma.cadastro.findMany({
+                where: {
+                    id: {
+                        in: contatosSelecionados
+                    },
+                    desativado_em: null,
+                    tipo_usuario: {
+                        not: "user"
+                    }
+                },
+                select: {
+                    id: true
+                }
+            });
+
+        if (contatos.length !== contatosSelecionados.length) {
+            throw new BadRequestException(
+                "Um ou mais contatos não podem participar de grupos."
+            );
+        }
+
+        const todosParticipantes = [
+            usuarioLogado.id,
+            ...contatosSelecionados
+        ];
+
+        const grupo =
+            await this.prisma.conversa.create({
+                data: {
+                    tipo: "grupo",
+                    nome: nomeLimpo,
+                    conversa_participante: {
+                        create: todosParticipantes.map((usuarioId) => ({
+                            cadastro: {
+                                connect: {
+                                    id: usuarioId
+                                }
+                            }
+                        }))
+                    }
+                },
+                include: {
+                    conversa_participante: {
+                        include: {
+                            cadastro: {
+                                select: {
+                                    id: true,
+                                    nome: true,
+                                    tipo_usuario: true,
+                                    foto_perfil_url: true
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+        return {
+            id: grupo.id,
+            tipo: "grupo" as const,
+            nome: grupo.nome!,
+            criadaEm: grupo.criada_em,
+            participantes: grupo.conversa_participante.map(
+                (participante) => participante.cadastro
+            ),
+            totalParticipantes:
+                grupo.conversa_participante.length,
+            somenteLeitura: false,
+            mensagensNaoLidas: 0,
+            ultimaMensagem: null
+        };
+    }
+
     /*
      * Lista atendimentos de setor.
      *
@@ -909,13 +1168,13 @@ export class ConversasService {
 
         let origem: "usuario" | "setor";
 
-        if (contexto.conversa.tipo === "privada") {
-            if (contexto.somenteLeitura) {
-                throw new ForbiddenException(
-                    "Esta conversa está disponível somente para visualização."
-                );
-            }
+        if (contexto.somenteLeitura) {
+            throw new ForbiddenException(
+                "Esta conversa está disponível somente para visualização."
+            );
+        }
 
+        if (contexto.conversa.tipo === "privada") {
             if (
                 contexto.usuarioLogado.tipo_usuario ===
                 "user"
@@ -944,12 +1203,14 @@ export class ConversasService {
             }
 
             origem = "usuario";
-        } else {
+        } else if (contexto.conversa.tipo === "setor") {
             origem =
                 contexto.usuarioLogado.tipo_usuario ===
                 "funcionario"
                     ? "setor"
                     : "usuario";
+        } else {
+            origem = "usuario";
         }
 
         let caminhoArquivo: string | null = null;
@@ -1583,8 +1844,36 @@ export class ConversasService {
             };
         }
 
-        throw new BadRequestException(
-            "Mensagens para grupos ainda não foram implementadas."
-        );
+        if (conversa.tipo === "grupo") {
+            if (usuarioLogado.tipo_usuario === "user") {
+                throw new ForbiddenException(
+                    "Usuários comuns não possuem acesso a grupos."
+                );
+            }
+
+            const participaDaConversa =
+                conversa.conversa_participante.some(
+                    (participante) =>
+                        participante.usuario_id === usuarioLogado.id
+                );
+
+            if (
+                !participaDaConversa &&
+                usuarioLogado.tipo_usuario !== "superAdmin"
+            ) {
+                throw new ForbiddenException(
+                    "Você não participa deste grupo."
+                );
+            }
+
+            return {
+                usuarioLogado,
+                conversa,
+                atendimento: null,
+                somenteLeitura: !participaDaConversa
+            };
+        }
+
+        throw new BadRequestException("Tipo de conversa inválido.");
     }
 }

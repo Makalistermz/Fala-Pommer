@@ -1024,7 +1024,7 @@ html.plano-fundo-conversa-5 .mensagens {
 
 .modal-grupo__janela {
     display: grid;
-    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+    grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
     width: min(620px, 100%);
     max-height: min(720px, 100%);
     overflow: hidden;
@@ -1155,11 +1155,75 @@ html.plano-fundo-conversa-5 .mensagens {
     stroke-linecap: round;
 }
 
+.modal-grupo__nome {
+    display: block;
+    padding: 17px 20px 0;
+}
+
+.modal-grupo__nome > span {
+    display: block;
+    margin: 0 0 6px 2px;
+    color: #344054;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.modal-grupo__nome > div {
+    display: flex;
+    min-height: 46px;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 13px;
+    border: 1px solid #d5dce8;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #667085;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.modal-grupo__nome > div:focus-within {
+    border-color: #1351b4;
+    box-shadow: 0 0 0 3px rgba(19, 81, 180, 0.12);
+}
+
+.modal-grupo__nome svg {
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.modal-grupo__nome input {
+    min-width: 0;
+    flex: 1;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #172033;
+    font-family: var(--fonte-dm-sans);
+    font-size: 14px;
+}
+
+.modal-grupo__nome input::placeholder {
+    color: #98a2b3;
+}
+
+.modal-grupo__nome small {
+    flex: 0 0 auto;
+    color: #98a2b3;
+    font-size: 10px;
+}
+
 .modal-grupo__pesquisa {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 18px 20px 8px;
+    margin: 12px 20px 8px;
     padding: 12px 14px;
     border: 1px solid #d5dce8;
     border-radius: 10px;
@@ -1381,6 +1445,22 @@ html.plano-fundo-conversa-5 .mensagens {
     gap: 7px;
     color: #667085;
     font-size: 13px;
+}
+
+.modal-grupo__resumo {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.modal-grupo__erro {
+    max-width: 360px;
+    overflow: hidden;
+    color: #b42318;
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .modal-grupo__contador svg {

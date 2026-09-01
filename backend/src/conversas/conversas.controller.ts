@@ -25,6 +25,7 @@ import { IniciarConversaSetorDto } from "./dto/iniciar-conversas-setor.dto";
 import { CriarMensagemDto } from "./dto/criar-mensagem.dto";
 import { AtualizarDigitacaoDto } from "./dto/atualizar-digitacao.dto";
 import { ListarMensagensDto } from "./dto/listar-mensagens.dto";
+import { CriarGrupoDto } from "./dto/criar-grupo.dto";
 
 import {
     AuthGuard,
@@ -68,6 +69,34 @@ export class ConversasController {
         return this.conversasService.criarOuBuscar(
             requisicao.usuario!.sub,
             dados.usuarioId
+        );
+    }
+
+    /*
+     * Grupos são restritos aos perfis internos do sistema.
+     * O serviço garante que usuários comuns nunca sejam participantes.
+     */
+    @Get("grupos")
+    @Perfis("funcionario", "admin", "superAdmin")
+    listarGrupos(
+        @Req() requisicao: RequisicaoAutenticada
+    ) {
+        return this.conversasService.listarGrupos(
+            requisicao.usuario!.sub
+        );
+    }
+
+    @Post("grupos")
+    @HttpCode(201)
+    @Perfis("funcionario", "admin", "superAdmin")
+    criarGrupo(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Body() dados: CriarGrupoDto
+    ) {
+        return this.conversasService.criarGrupo(
+            requisicao.usuario!.sub,
+            dados.nome,
+            dados.participanteIds
         );
     }
 

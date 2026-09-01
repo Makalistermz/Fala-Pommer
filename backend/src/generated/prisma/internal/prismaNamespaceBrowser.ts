@@ -130,6 +130,7 @@ export type Login_eventoScalarFieldEnum = (typeof Login_eventoScalarFieldEnum)[k
 export const ConversaScalarFieldEnum = {
   id: 'id',
   tipo: 'tipo',
+  nome: 'nome',
   criada_em: 'criada_em'
 } as const
 
@@ -272,6 +273,13 @@ export const cadastroOrderByRelevanceFieldEnum = {
 } as const
 
 export type cadastroOrderByRelevanceFieldEnum = (typeof cadastroOrderByRelevanceFieldEnum)[keyof typeof cadastroOrderByRelevanceFieldEnum]
+
+
+export const conversaOrderByRelevanceFieldEnum = {
+  nome: 'nome'
+} as const
+
+export type conversaOrderByRelevanceFieldEnum = (typeof conversaOrderByRelevanceFieldEnum)[keyof typeof conversaOrderByRelevanceFieldEnum]
 
 
 export const mensagemOrderByRelevanceFieldEnum = {

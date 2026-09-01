@@ -108,7 +108,24 @@ interface ConversaPrivada {
     ultimaMensagem: UltimaMensagem | null;
 }
 
-type Conversa = ConversaSetor | ConversaPrivada;
+interface ConversaGrupo {
+    id: number;
+    tipo: "grupo";
+    nome: string;
+    criadaEm: string;
+    participantes: Array<{
+        id: number;
+        nome: string;
+        tipo_usuario: TipoUsuario;
+        foto_perfil_url: string | null;
+    }>;
+    totalParticipantes: number;
+    somenteLeitura: boolean;
+    mensagensNaoLidas: number;
+    ultimaMensagem: UltimaMensagem | null;
+}
+
+type Conversa = ConversaSetor | ConversaPrivada | ConversaGrupo;
 
 interface MensagemChat {
     id: number;
@@ -150,6 +167,11 @@ function mensagemFoiEnviadaPeloUsuario(
         return false;
     }
 
+    if (conversa.tipo === "grupo") {
+        const remetenteRealId = item.autorReal?.id ?? item.remetente.id;
+        return remetenteRealId === usuario.sub;
+    }
+
     if (conversa.tipo === "privada") {
         const remetenteRealId = item.autorReal?.id ?? item.remetente.id;
         return remetenteRealId === usuario.sub;
@@ -181,6 +203,7 @@ function Home() {
     const [novaConversaAberta, setNovaConversaAberta] = useState(false);
 
     const [modalGrupoAberto, setModalGrupoAberto] = useState(false);
+    const [nomeGrupo, setNomeGrupo] = useState("");
     const [contatosGrupo, setContatosGrupo] = useState<UsuarioConversa[]>([]);
     const [contatosGrupoSelecionados, setContatosGrupoSelecionados] =
         useState<Set<number>>(new Set());
@@ -188,6 +211,8 @@ function Home() {
     const [carregandoContatosGrupo, setCarregandoContatosGrupo] =
         useState(false);
     const [erroContatosGrupo, setErroContatosGrupo] = useState("");
+    const [erroCriacaoGrupo, setErroCriacaoGrupo] = useState("");
+    const [criandoGrupo, setCriandoGrupo] = useState(false);
     const botaoFecharModalGrupoRef = useRef<HTMLButtonElement>(null);
 
     const [usuarios, setUsuarios] = useState<UsuarioConversa[]>([]);
@@ -521,6 +546,7 @@ function Home() {
 
         let ativo = true;
         let buscando = false;
+        const tipoUsuarioLogado = usuario.tipo;
 
         async function buscarConversas() {
             if (buscando || document.visibilityState === "hidden") {
@@ -540,24 +566,35 @@ function Home() {
                     Authorization: `Bearer ${token}`,
                 };
 
-                const [respostaPrivadas, respostaSetores] = await Promise.all([
+                const [respostaPrivadas, respostaSetores, respostaGrupos] = await Promise.all([
                     fetch(`${import.meta.env.VITE_API_URL}/conversas`, { headers }),
                     fetch(`${import.meta.env.VITE_API_URL}/conversas/setor`, { headers }),
+                    tipoUsuarioLogado === "user"
+                        ? Promise.resolve(null)
+                        : fetch(`${import.meta.env.VITE_API_URL}/conversas/grupos`, { headers }),
                 ]);
 
-                if (!respostaPrivadas.ok || !respostaSetores.ok) {
+                if (
+                    !respostaPrivadas.ok ||
+                    !respostaSetores.ok ||
+                    (respostaGrupos !== null && !respostaGrupos.ok)
+                ) {
                     throw new Error("Não foi possível carregar as conversas.");
                 }
 
-                const [conversasPrivadas, conversasSetores] = await Promise.all([
+                const [conversasPrivadas, conversasSetores, conversasGrupos] = await Promise.all([
                     respostaPrivadas.json() as Promise<ConversaPrivada[]>,
                     respostaSetores.json() as Promise<ConversaSetor[]>,
+                    respostaGrupos === null
+                        ? Promise.resolve([] as ConversaGrupo[])
+                        : respostaGrupos.json() as Promise<ConversaGrupo[]>,
                 ]);
 
                 const conversaAbertaId = conversaAbertaIdRef.current;
                 const todasConversas: Conversa[] = [
                     ...conversasPrivadas,
                     ...conversasSetores,
+                    ...conversasGrupos,
                 ].map((conversa) =>
                     conversa.id === conversaAbertaId
                         ? { ...conversa, mensagensNaoLidas: 0 }
@@ -705,10 +742,13 @@ function Home() {
 
         setMenuAberto(false);
         setModalGrupoAberto(true);
+        setNomeGrupo("");
         setBuscaContatoGrupo("");
         setContatosGrupo([]);
         setContatosGrupoSelecionados(new Set());
         setErroContatosGrupo("");
+        setErroCriacaoGrupo("");
+        setCriandoGrupo(false);
         setCarregandoContatosGrupo(true);
 
         const token = localStorage.getItem("access_token");
@@ -746,7 +786,76 @@ function Home() {
         }
     }
 
+    async function criarGrupo() {
+        const nomeLimpo = nomeGrupo.trim();
+
+        if (
+            nomeLimpo.length < 3 ||
+            contatosGrupoSelecionados.size < 2 ||
+            criandoGrupo
+        ) {
+            return;
+        }
+
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+            setErroCriacaoGrupo("Não foi possível criar o grupo.");
+            return;
+        }
+
+        setCriandoGrupo(true);
+        setErroCriacaoGrupo("");
+
+        try {
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/conversas/grupos`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        nome: nomeLimpo,
+                        participanteIds: Array.from(
+                            contatosGrupoSelecionados,
+                        ),
+                    }),
+                },
+            );
+
+            if (!resposta.ok) {
+                const resultado = await resposta.json().catch(() => null) as {
+                    message?: string | string[];
+                } | null;
+                const mensagemErro = Array.isArray(resultado?.message)
+                    ? resultado.message.join(", ")
+                    : resultado?.message;
+
+                throw new Error(
+                    mensagemErro ?? "Não foi possível criar o grupo.",
+                );
+            }
+
+            const grupo = await resposta.json() as ConversaGrupo;
+
+            setModalGrupoAberto(false);
+            adicionarEAbrirConversa(grupo);
+        } catch (erro) {
+            console.error("Erro ao criar grupo:", erro);
+            setErroCriacaoGrupo(
+                erro instanceof Error
+                    ? erro.message
+                    : "Não foi possível criar o grupo.",
+            );
+        } finally {
+            setCriandoGrupo(false);
+        }
+    }
+
     function alternarContatoGrupo(contatoId: number) {
+        setErroCriacaoGrupo("");
         setContatosGrupoSelecionados((selecionadosAtuais) => {
             const novosSelecionados = new Set(selecionadosAtuais);
 
@@ -1261,6 +1370,10 @@ function Home() {
     }
 
     function nomeDaConversa(conversa: Conversa) {
+        if (conversa.tipo === "grupo") {
+            return conversa.nome;
+        }
+
         if (conversa.tipo === "privada") {
             return conversa.contato.nome;
         }
@@ -1271,6 +1384,10 @@ function Home() {
     }
 
     function fotoDaConversa(conversa: Conversa) {
+        if (conversa.tipo === "grupo") {
+            return null;
+        }
+
         if (conversa.tipo === "privada") {
             return conversa.contato.foto_perfil_url;
         }
@@ -1281,6 +1398,12 @@ function Home() {
     }
 
     function subtituloDaConversa(conversa: Conversa) {
+        if (conversa.tipo === "grupo") {
+            return conversa.somenteLeitura
+                ? `${conversa.totalParticipantes} participantes • somente leitura`
+                : `${conversa.totalParticipantes} participantes`;
+        }
+
         if (conversa.tipo === "setor") {
             return usuario?.tipo === "user"
                 ? conversa.secretaria.nome
@@ -1310,16 +1433,21 @@ function Home() {
         const correspondeAoFiltro =
             filtroAtivo === "nao-lidas"
                 ? conversa.mensagensNaoLidas > 0
-                : filtroAtivo !== "grupos";
+                : filtroAtivo === "grupos"
+                    ? conversa.tipo === "grupo"
+                    : true;
 
         if (!correspondeAoFiltro) {
             return false;
         }
 
-        const texto =
-        conversa.tipo === "privada"
+        const texto = conversa.tipo === "privada"
             ? `${conversa.contato.nome} ${conversa.contato.tipo_usuario}`
-            : `${conversa.setor.nome} ${conversa.setor.sigla} ${conversa.usuario.nome}`;
+            : conversa.tipo === "grupo"
+                ? `${conversa.nome} ${conversa.participantes
+                    .map((participante) => participante.nome)
+                    .join(" ")}`
+                : `${conversa.setor.nome} ${conversa.setor.sigla} ${conversa.usuario.nome}`;
 
         return texto.toLowerCase().includes(buscaConversa.trim().toLowerCase());
     });
@@ -1327,7 +1455,8 @@ function Home() {
     const podeEnviarMensagem =
         conversaSelecionada !== null &&
         !(
-            conversaSelecionada.tipo === "privada" &&
+            (conversaSelecionada.tipo === "privada" ||
+                conversaSelecionada.tipo === "grupo") &&
             conversaSelecionada.somenteLeitura
         );
 
@@ -2817,6 +2946,30 @@ function Home() {
                         </button>
                     </header>
 
+                    <label className="modal-grupo__nome">
+                        <span>Nome do grupo</span>
+                        <div>
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M4 19.5V17a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2.5" />
+                                <circle cx="10" cy="6.5" r="3.5" />
+                                <path d="M17 8h4M19 6v4" />
+                            </svg>
+                            <input
+                                type="text"
+                                value={nomeGrupo}
+                                onChange={(evento) => {
+                                    setNomeGrupo(evento.target.value);
+                                    setErroCriacaoGrupo("");
+                                }}
+                                placeholder="Ex.: Equipe de atendimento"
+                                minLength={3}
+                                maxLength={120}
+                                autoComplete="off"
+                            />
+                            <small>{nomeGrupo.trim().length}/120</small>
+                        </div>
+                    </label>
+
                     <div className="modal-grupo__pesquisa">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
                             <circle cx="11" cy="11" r="7" />
@@ -2918,30 +3071,45 @@ function Home() {
                     </div>
 
                     <footer className="modal-grupo__rodape">
-                        <span className={
-                            contatosGrupoSelecionados.size > 0
-                                ? "modal-grupo__contador modal-grupo__contador--ativo"
-                                : "modal-grupo__contador"
-                        } aria-live="polite">
-                            <svg viewBox="0 0 20 20" aria-hidden="true">
-                                <path d="M13.5 16v-1.25A2.75 2.75 0 0 0 10.75 12h-4.5a2.75 2.75 0 0 0-2.75 2.75V16" />
-                                <circle cx="8.5" cy="6.5" r="2.5" />
-                                <path d="M14.5 7v5M12 9.5h5" />
-                            </svg>
-                            {contatosGrupoSelecionados.size === 0
-                                ? "Selecione pelo menos 2 contatos"
-                                : contatosGrupoSelecionados.size === 1
-                                    ? "Selecione mais 1 contato"
-                                    : `${contatosGrupoSelecionados.size} contatos selecionados`}
-                        </span>
+                        <div className="modal-grupo__resumo">
+                            <span className={
+                                contatosGrupoSelecionados.size > 0
+                                    ? "modal-grupo__contador modal-grupo__contador--ativo"
+                                    : "modal-grupo__contador"
+                            } aria-live="polite">
+                                <svg viewBox="0 0 20 20" aria-hidden="true">
+                                    <path d="M13.5 16v-1.25A2.75 2.75 0 0 0 10.75 12h-4.5a2.75 2.75 0 0 0-2.75 2.75V16" />
+                                    <circle cx="8.5" cy="6.5" r="2.5" />
+                                    <path d="M14.5 7v5M12 9.5h5" />
+                                </svg>
+                                {contatosGrupoSelecionados.size === 0
+                                    ? "Selecione pelo menos 2 contatos"
+                                    : contatosGrupoSelecionados.size === 1
+                                        ? "Selecione mais 1 contato"
+                                        : `${contatosGrupoSelecionados.size} contatos selecionados`}
+                            </span>
+                            {erroCriacaoGrupo && (
+                                <span className="modal-grupo__erro" role="alert">
+                                    {erroCriacaoGrupo}
+                                </span>
+                            )}
+                        </div>
                         <button
                             type="button"
-                            disabled={contatosGrupoSelecionados.size < 2}
-                            onClick={() => setModalGrupoAberto(false)}
+                            disabled={
+                                nomeGrupo.trim().length < 3 ||
+                                contatosGrupoSelecionados.size < 2 ||
+                                criandoGrupo
+                            }
+                            onClick={() => void criarGrupo()}
                         >
-                            {contatosGrupoSelecionados.size < 2
-                                ? "Selecione 2 contatos"
-                                : "Concluir seleção"}
+                            {criandoGrupo
+                                ? "Criando..."
+                                : nomeGrupo.trim().length < 3
+                                    ? "Informe o nome"
+                                    : contatosGrupoSelecionados.size < 2
+                                        ? "Selecione 2 contatos"
+                                        : "Criar grupo"}
                         </button>
                     </footer>
                 </section>

@@ -37,18 +37,21 @@ export type ConversaSumAggregateOutputType = {
 export type ConversaMinAggregateOutputType = {
   id: number | null
   tipo: $Enums.conversa_tipo | null
+  nome: string | null
   criada_em: Date | null
 }
 
 export type ConversaMaxAggregateOutputType = {
   id: number | null
   tipo: $Enums.conversa_tipo | null
+  nome: string | null
   criada_em: Date | null
 }
 
 export type ConversaCountAggregateOutputType = {
   id: number
   tipo: number
+  nome: number
   criada_em: number
   _all: number
 }
@@ -65,18 +68,21 @@ export type ConversaSumAggregateInputType = {
 export type ConversaMinAggregateInputType = {
   id?: true
   tipo?: true
+  nome?: true
   criada_em?: true
 }
 
 export type ConversaMaxAggregateInputType = {
   id?: true
   tipo?: true
+  nome?: true
   criada_em?: true
 }
 
 export type ConversaCountAggregateInputType = {
   id?: true
   tipo?: true
+  nome?: true
   criada_em?: true
   _all?: true
 }
@@ -170,6 +176,7 @@ export type conversaGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type ConversaGroupByOutputType = {
   id: number
   tipo: $Enums.conversa_tipo
+  nome: string | null
   criada_em: Date
   _count: ConversaCountAggregateOutputType | null
   _avg: ConversaAvgAggregateOutputType | null
@@ -199,6 +206,7 @@ export type conversaWhereInput = {
   NOT?: Prisma.conversaWhereInput | Prisma.conversaWhereInput[]
   id?: Prisma.IntFilter<"conversa"> | number
   tipo?: Prisma.Enumconversa_tipoFilter<"conversa"> | $Enums.conversa_tipo
+  nome?: Prisma.StringNullableFilter<"conversa"> | string | null
   criada_em?: Prisma.DateTimeFilter<"conversa"> | Date | string
   conversa_leitura?: Prisma.Conversa_leituraListRelationFilter
   conversa_participante?: Prisma.Conversa_participanteListRelationFilter
@@ -209,11 +217,13 @@ export type conversaWhereInput = {
 export type conversaOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   tipo?: Prisma.SortOrder
+  nome?: Prisma.SortOrderInput | Prisma.SortOrder
   criada_em?: Prisma.SortOrder
   conversa_leitura?: Prisma.conversa_leituraOrderByRelationAggregateInput
   conversa_participante?: Prisma.conversa_participanteOrderByRelationAggregateInput
   atendimento_setor?: Prisma.conversa_setorOrderByWithRelationInput
   mensagens?: Prisma.mensagemOrderByRelationAggregateInput
+  _relevance?: Prisma.conversaOrderByRelevanceInput
 }
 
 export type conversaWhereUniqueInput = Prisma.AtLeast<{
@@ -222,6 +232,7 @@ export type conversaWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.conversaWhereInput[]
   NOT?: Prisma.conversaWhereInput | Prisma.conversaWhereInput[]
   tipo?: Prisma.Enumconversa_tipoFilter<"conversa"> | $Enums.conversa_tipo
+  nome?: Prisma.StringNullableFilter<"conversa"> | string | null
   criada_em?: Prisma.DateTimeFilter<"conversa"> | Date | string
   conversa_leitura?: Prisma.Conversa_leituraListRelationFilter
   conversa_participante?: Prisma.Conversa_participanteListRelationFilter
@@ -232,6 +243,7 @@ export type conversaWhereUniqueInput = Prisma.AtLeast<{
 export type conversaOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   tipo?: Prisma.SortOrder
+  nome?: Prisma.SortOrderInput | Prisma.SortOrder
   criada_em?: Prisma.SortOrder
   _count?: Prisma.conversaCountOrderByAggregateInput
   _avg?: Prisma.conversaAvgOrderByAggregateInput
@@ -246,11 +258,13 @@ export type conversaScalarWhereWithAggregatesInput = {
   NOT?: Prisma.conversaScalarWhereWithAggregatesInput | Prisma.conversaScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"conversa"> | number
   tipo?: Prisma.Enumconversa_tipoWithAggregatesFilter<"conversa"> | $Enums.conversa_tipo
+  nome?: Prisma.StringNullableWithAggregatesFilter<"conversa"> | string | null
   criada_em?: Prisma.DateTimeWithAggregatesFilter<"conversa"> | Date | string
 }
 
 export type conversaCreateInput = {
   tipo?: $Enums.conversa_tipo
+  nome?: string | null
   criada_em?: Date | string
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutConversaInput
@@ -261,6 +275,7 @@ export type conversaCreateInput = {
 export type conversaUncheckedCreateInput = {
   id?: number
   tipo?: $Enums.conversa_tipo
+  nome?: string | null
   criada_em?: Date | string
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutConversaInput
@@ -270,6 +285,7 @@ export type conversaUncheckedCreateInput = {
 
 export type conversaUpdateInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutConversaNestedInput
@@ -280,6 +296,7 @@ export type conversaUpdateInput = {
 export type conversaUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutConversaNestedInput
@@ -290,23 +307,33 @@ export type conversaUncheckedUpdateInput = {
 export type conversaCreateManyInput = {
   id?: number
   tipo?: $Enums.conversa_tipo
+  nome?: string | null
   criada_em?: Date | string
 }
 
 export type conversaUpdateManyMutationInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type conversaUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type conversaOrderByRelevanceInput = {
+  fields: Prisma.conversaOrderByRelevanceFieldEnum | Prisma.conversaOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type conversaCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tipo?: Prisma.SortOrder
+  nome?: Prisma.SortOrder
   criada_em?: Prisma.SortOrder
 }
 
@@ -317,12 +344,14 @@ export type conversaAvgOrderByAggregateInput = {
 export type conversaMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tipo?: Prisma.SortOrder
+  nome?: Prisma.SortOrder
   criada_em?: Prisma.SortOrder
 }
 
 export type conversaMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tipo?: Prisma.SortOrder
+  nome?: Prisma.SortOrder
   criada_em?: Prisma.SortOrder
 }
 
@@ -397,6 +426,7 @@ export type conversaUpdateOneRequiredWithoutConversa_leituraNestedInput = {
 
 export type conversaCreateWithoutConversa_participanteInput = {
   tipo?: $Enums.conversa_tipo
+  nome?: string | null
   criada_em?: Date | string
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorCreateNestedOneWithoutConversaInput
@@ -406,6 +436,7 @@ export type conversaCreateWithoutConversa_participanteInput = {
 export type conversaUncheckedCreateWithoutConversa_participanteInput = {
   id?: number
   tipo?: $Enums.conversa_tipo
+  nome?: string | null
   criada_em?: Date | string
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorUncheckedCreateNestedOneWithoutConversaInput
@@ -430,6 +461,7 @@ export type conversaUpdateToOneWithWhereWithoutConversa_participanteInput = {
 
 export type conversaUpdateWithoutConversa_participanteInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUpdateOneWithoutConversaNestedInput
@@ -439,6 +471,7 @@ export type conversaUpdateWithoutConversa_participanteInput = {
 export type conversaUncheckedUpdateWithoutConversa_participanteInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUncheckedUpdateOneWithoutConversaNestedInput
@@ -447,6 +480,7 @@ export type conversaUncheckedUpdateWithoutConversa_participanteInput = {
 
 export type conversaCreateWithoutAtendimento_setorInput = {
   tipo?: $Enums.conversa_tipo
+  nome?: string | null
   criada_em?: Date | string
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutConversaInput
@@ -456,6 +490,7 @@ export type conversaCreateWithoutAtendimento_setorInput = {
 export type conversaUncheckedCreateWithoutAtendimento_setorInput = {
   id?: number
   tipo?: $Enums.conversa_tipo
+  nome?: string | null
   criada_em?: Date | string
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutConversaInput
@@ -480,6 +515,7 @@ export type conversaUpdateToOneWithWhereWithoutAtendimento_setorInput = {
 
 export type conversaUpdateWithoutAtendimento_setorInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutConversaNestedInput
@@ -489,6 +525,7 @@ export type conversaUpdateWithoutAtendimento_setorInput = {
 export type conversaUncheckedUpdateWithoutAtendimento_setorInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutConversaNestedInput
@@ -497,6 +534,7 @@ export type conversaUncheckedUpdateWithoutAtendimento_setorInput = {
 
 export type conversaCreateWithoutMensagensInput = {
   tipo?: $Enums.conversa_tipo
+  nome?: string | null
   criada_em?: Date | string
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutConversaInput
@@ -506,6 +544,7 @@ export type conversaCreateWithoutMensagensInput = {
 export type conversaUncheckedCreateWithoutMensagensInput = {
   id?: number
   tipo?: $Enums.conversa_tipo
+  nome?: string | null
   criada_em?: Date | string
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutConversaInput
@@ -530,6 +569,7 @@ export type conversaUpdateToOneWithWhereWithoutMensagensInput = {
 
 export type conversaUpdateWithoutMensagensInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutConversaNestedInput
@@ -539,6 +579,7 @@ export type conversaUpdateWithoutMensagensInput = {
 export type conversaUncheckedUpdateWithoutMensagensInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutConversaNestedInput
@@ -547,6 +588,7 @@ export type conversaUncheckedUpdateWithoutMensagensInput = {
 
 export type conversaCreateWithoutConversa_leituraInput = {
   tipo?: $Enums.conversa_tipo
+  nome?: string | null
   criada_em?: Date | string
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorCreateNestedOneWithoutConversaInput
@@ -556,6 +598,7 @@ export type conversaCreateWithoutConversa_leituraInput = {
 export type conversaUncheckedCreateWithoutConversa_leituraInput = {
   id?: number
   tipo?: $Enums.conversa_tipo
+  nome?: string | null
   criada_em?: Date | string
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorUncheckedCreateNestedOneWithoutConversaInput
@@ -580,6 +623,7 @@ export type conversaUpdateToOneWithWhereWithoutConversa_leituraInput = {
 
 export type conversaUpdateWithoutConversa_leituraInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUpdateOneWithoutConversaNestedInput
@@ -589,6 +633,7 @@ export type conversaUpdateWithoutConversa_leituraInput = {
 export type conversaUncheckedUpdateWithoutConversa_leituraInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUncheckedUpdateOneWithoutConversaNestedInput
@@ -647,6 +692,7 @@ export type ConversaCountOutputTypeCountMensagensArgs<ExtArgs extends runtime.Ty
 export type conversaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   tipo?: boolean
+  nome?: boolean
   criada_em?: boolean
   conversa_leitura?: boolean | Prisma.conversa$conversa_leituraArgs<ExtArgs>
   conversa_participante?: boolean | Prisma.conversa$conversa_participanteArgs<ExtArgs>
@@ -660,10 +706,11 @@ export type conversaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type conversaSelectScalar = {
   id?: boolean
   tipo?: boolean
+  nome?: boolean
   criada_em?: boolean
 }
 
-export type conversaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tipo" | "criada_em", ExtArgs["result"]["conversa"]>
+export type conversaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tipo" | "nome" | "criada_em", ExtArgs["result"]["conversa"]>
 export type conversaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   conversa_leitura?: boolean | Prisma.conversa$conversa_leituraArgs<ExtArgs>
   conversa_participante?: boolean | Prisma.conversa$conversa_participanteArgs<ExtArgs>
@@ -683,6 +730,7 @@ export type $conversaPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     tipo: $Enums.conversa_tipo
+    nome: string | null
     criada_em: Date
   }, ExtArgs["result"]["conversa"]>
   composites: {}
@@ -1059,6 +1107,7 @@ export interface Prisma__conversaClient<T, Null = never, ExtArgs extends runtime
 export interface conversaFieldRefs {
   readonly id: Prisma.FieldRef<"conversa", 'Int'>
   readonly tipo: Prisma.FieldRef<"conversa", 'conversa_tipo'>
+  readonly nome: Prisma.FieldRef<"conversa", 'String'>
   readonly criada_em: Prisma.FieldRef<"conversa", 'DateTime'>
 }
     

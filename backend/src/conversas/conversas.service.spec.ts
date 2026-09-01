@@ -26,10 +26,12 @@ describe("ConversasService", () => {
   const prismaMock = {
     cadastro: {
       findUnique: jest.fn(),
+      findMany: jest.fn(),
     },
     conversa: {
       findUnique: jest.fn(),
       findMany: jest.fn(),
+      create: jest.fn(),
     },
     conversa_setor: {
       findMany: jest.fn(),
@@ -499,6 +501,233 @@ describe("ConversasService", () => {
     await expect(
       service.enviarMensagem(9, 10, "Mensagem indevida"),
     ).rejects.toBeInstanceOf(ForbiddenException);
+  });
+
+  it("cria grupo com o nome escolhido e inclui o criador", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      tipo_usuario: "admin",
+    });
+    prismaMock.cadastro.findMany.mockResolvedValue([
+      { id: 2 },
+      { id: 3 },
+    ]);
+    prismaMock.conversa.create.mockResolvedValue({
+      id: 30,
+      tipo: "grupo",
+      nome: "Equipe de atendimento",
+      criada_em: new Date("2026-09-01T12:00:00.000Z"),
+      conversa_participante: [
+        { usuario_id: 1, cadastro: { id: 1, nome: "Admin" } },
+        { usuario_id: 2, cadastro: { id: 2, nome: "Contato A" } },
+        { usuario_id: 3, cadastro: { id: 3, nome: "Contato B" } },
+      ],
+    });
+
+    await expect(
+      service.criarGrupo(1, "  Equipe de atendimento  ", [2, 3]),
+    ).resolves.toEqual(
+      expect.objectContaining({
+        id: 30,
+        tipo: "grupo",
+        nome: "Equipe de atendimento",
+        totalParticipantes: 3,
+      }),
+    );
+
+    expect(prismaMock.conversa.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          tipo: "grupo",
+          nome: "Equipe de atendimento",
+          conversa_participante: {
+            create: [
+              { cadastro: { connect: { id: 1 } } },
+              { cadastro: { connect: { id: 2 } } },
+              { cadastro: { connect: { id: 3 } } },
+            ],
+          },
+        }),
+      }),
+    );
+  });
+
+  it("impede adicionar usuário comum ao grupo", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      tipo_usuario: "admin",
+    });
+    prismaMock.cadastro.findMany.mockResolvedValue([
+      { id: 2 },
+    ]);
+
+    await expect(
+      service.criarGrupo(1, "Grupo interno", [2, 3]),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prismaMock.conversa.create).not.toHaveBeenCalled();
+  });
+
+  it("lista para funcionário somente os grupos dos quais participa", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      tipo_usuario: "funcionario",
+    });
+    prismaMock.conversa.findMany.mockResolvedValue([]);
+
+    await expect(service.listarGrupos(1)).resolves.toEqual([]);
+    expect(prismaMock.conversa.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: {
+          tipo: "grupo",
+          conversa_participante: {
+            some: { usuario_id: 1 },
+          },
+        },
+      }),
+    );
+  });
+
+  it("permite que superAdmin visualize grupo sem participar", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 9,
+      nome: "Super administrador",
+      tipo_usuario: "superAdmin",
+      setor_id: null,
+      secretaria_id: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 30,
+      tipo: "grupo",
+      conversa_participante: [
+        { usuario_id: 2, cadastro: { tipo_usuario: "admin" } },
+        { usuario_id: 3, cadastro: { tipo_usuario: "funcionario" } },
+      ],
+      atendimento_setor: null,
+    });
+    prismaMock.mensagem.findMany.mockResolvedValue([]);
+
+    await expect(service.listarMensagens(9, 30)).resolves.toEqual([]);
+  });
+
+  it("mantém superAdmin não participante em somente leitura", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 9,
+      nome: "Super administrador",
+      tipo_usuario: "superAdmin",
+      setor_id: null,
+      secretaria_id: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 30,
+      tipo: "grupo",
+      conversa_participante: [
+        { usuario_id: 2, cadastro: { tipo_usuario: "admin" } },
+        { usuario_id: 3, cadastro: { tipo_usuario: "funcionario" } },
+      ],
+      atendimento_setor: null,
+    });
+
+    await expect(
+      service.enviarMensagem(9, 30, "Mensagem indevida"),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+    expect(prismaMock.mensagem.create).not.toHaveBeenCalled();
+  });
+
+  it("permite que participante envie mensagem no grupo como usuário", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 3,
+      nome: "Funcionário participante",
+      tipo_usuario: "funcionario",
+      setor_id: 2,
+      secretaria_id: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 30,
+      tipo: "grupo",
+      conversa_participante: [
+        { usuario_id: 2, cadastro: { tipo_usuario: "admin" } },
+        { usuario_id: 3, cadastro: { tipo_usuario: "funcionario" } },
+      ],
+      atendimento_setor: null,
+    });
+    prismaMock.mensagem.create.mockResolvedValue({
+      id: 31,
+      conversa_id: 30,
+      remetente_id: 3,
+      origem: "usuario",
+      conteudo: "Olá, grupo",
+      enviada_em: new Date("2026-09-01T13:00:00.000Z"),
+      remetente: {
+        id: 3,
+        nome: "Funcionário participante",
+        tipo_usuario: "funcionario",
+      },
+    });
+
+    await expect(
+      service.enviarMensagem(3, 30, "Olá, grupo"),
+    ).resolves.toEqual(
+      expect.objectContaining({
+        conversaId: 30,
+        origem: "usuario",
+      }),
+    );
+    expect(prismaMock.mensagem.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          conversa_id: 30,
+          remetente_id: 3,
+          origem: "usuario",
+        }),
+      }),
+    );
+  });
+
+  it("impede contato fora do grupo de visualizar mensagens", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 8,
+      nome: "Funcionário externo",
+      tipo_usuario: "funcionario",
+      setor_id: 2,
+      secretaria_id: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 30,
+      tipo: "grupo",
+      conversa_participante: [
+        { usuario_id: 2, cadastro: { tipo_usuario: "admin" } },
+        { usuario_id: 3, cadastro: { tipo_usuario: "funcionario" } },
+      ],
+      atendimento_setor: null,
+    });
+
+    await expect(service.listarMensagens(8, 30)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
+    expect(prismaMock.mensagem.findMany).not.toHaveBeenCalled();
+  });
+
+  it("impede usuário comum de visualizar grupo mesmo se constar como participante", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 7,
+      nome: "Usuário comum",
+      tipo_usuario: "user",
+      setor_id: null,
+      secretaria_id: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 30,
+      tipo: "grupo",
+      conversa_participante: [
+        { usuario_id: 7, cadastro: { tipo_usuario: "user" } },
+        { usuario_id: 2, cadastro: { tipo_usuario: "admin" } },
+      ],
+      atendimento_setor: null,
+    });
+
+    await expect(service.listarMensagens(7, 30)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
   });
 
   it("permite que superAdmin sinalize digitação em atendimento de setor", async () => {

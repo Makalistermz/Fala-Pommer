@@ -50,6 +50,17 @@ export class UsuariosController {
             );
     }
 
+    @Get("grupos/contatos")
+    @UseGuards(AuthGuard, PerfisGuard)
+    @Perfis("admin", "funcionario", "superAdmin")
+    listarContatosParaGrupo(
+        @Req() requisicao: RequisicaoAutenticada
+    ) {
+        return this.usuariosService.listarContatosParaGrupo(
+            requisicao.usuario!.sub
+        );
+    }
+
     @Get("me")
     @UseGuards(AuthGuard)
     listarMeuPerfil(

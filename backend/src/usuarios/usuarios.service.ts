@@ -277,6 +277,83 @@ export class UsuariosService {
         }));
     }
 
+    /*
+     * Lista somente os perfis que podem participar de grupos.
+     * Usuários comuns são excluídos no banco e nunca chegam ao cliente.
+     */
+    async listarContatosParaGrupo(
+        usuarioLogadoId: number
+    ) {
+        const usuarioLogado =
+            await this.prisma.cadastro.findUnique({
+                where: {
+                    id: usuarioLogadoId
+                },
+
+                select: {
+                    id: true,
+                    tipo_usuario: true
+                }
+            });
+
+        if (!usuarioLogado) {
+            throw new NotFoundException(
+                "Usuário autenticado não encontrado."
+            );
+        }
+
+        if (usuarioLogado.tipo_usuario === "user") {
+            throw new ForbiddenException(
+                "Você não possui permissão para acessar grupos."
+            );
+        }
+
+        const contatos =
+            await this.prisma.cadastro.findMany({
+                where: {
+                    desativado_em: null,
+                    id: {
+                        not: usuarioLogado.id
+                    },
+                    tipo_usuario: {
+                        not: "user"
+                    }
+                },
+
+                select: {
+                    id: true,
+                    nome: true,
+                    tipo_usuario: true,
+                    foto_perfil_url: true,
+                    setor: {
+                        select: {
+                            id: true,
+                            setor: true,
+                            sigla_setor: true
+                        }
+                    }
+                },
+
+                orderBy: {
+                    nome: "asc"
+                }
+            });
+
+        return contatos.map((contato) => ({
+            id: contato.id,
+            nome: contato.nome,
+            tipoUsuario: contato.tipo_usuario,
+            foto_perfil_url: contato.foto_perfil_url,
+            setor: contato.setor
+                ? {
+                    id: contato.setor.id,
+                    nome: contato.setor.setor,
+                    sigla: contato.setor.sigla_setor
+                }
+                : null
+        }));
+    }
+
     async listarMeuPerfil(id: number) {
         return this.prisma.cadastro.findUnique({
             where: {

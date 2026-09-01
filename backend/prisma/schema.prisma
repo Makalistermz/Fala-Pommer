@@ -74,6 +74,7 @@ model login_evento {
 model conversa {
   id                    Int                     @id @default(autoincrement())
   tipo                  conversa_tipo           @default(privada)
+  nome                  String?                  @db.VarChar(120)
   criada_em             DateTime                @default(now()) @db.DateTime(0)
   conversa_leitura      conversa_leitura[]
   conversa_participante conversa_participante[]

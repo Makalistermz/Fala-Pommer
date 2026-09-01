@@ -16,7 +16,6 @@ import {
     type ChartOptions,
     BarElement,
 } from "chart.js";
-import UsuariosDesativados from "./usuarios/usuariosDesativados";
 
 ChartJS.register(
     CategoryScale,
@@ -30,6 +29,7 @@ ChartJS.register(
     Filler,
 );
 
+// Tipos usados pelas respostas das APIs exibidas no painel.
 type MesLogin = {
     mes: number;
     nome: string;
@@ -47,6 +47,84 @@ type QuantUsuarioCategoria = {
         id: number;
     };
 };
+
+type UsuarioResumo = {
+    desativado_em?: string | null;
+};
+
+type EventoAdministrativoResumo = {
+    acao: "usuario_desativado" | "usuario_reativado";
+    criado_em: string;
+};
+
+type MesDesativacao = {
+    chave: string;
+    nome: string;
+    quantidade: number;
+};
+
+// Os agrupamentos mensais seguem o horário oficial usado pelo sistema.
+const FUSO_HORARIO = "America/Sao_Paulo";
+const formatadorAnoMes = new Intl.DateTimeFormat("en-US", {
+    timeZone: FUSO_HORARIO,
+    year: "numeric",
+    month: "2-digit",
+});
+const formatadorNomeMes = new Intl.DateTimeFormat("pt-BR", {
+    timeZone: "UTC",
+    month: "short",
+});
+
+// Extrai ano e mês de uma data e cria uma chave estável no formato AAAA-MM.
+function obterAnoMes(data: Date) {
+    const partes = formatadorAnoMes.formatToParts(data);
+    const ano = partes.find((parte) => parte.type === "year")?.value;
+    const mes = partes.find((parte) => parte.type === "month")?.value;
+
+    if (!ano || !mes) return null;
+
+    return {
+        ano: Number(ano),
+        mes: Number(mes),
+        chave: `${ano}-${mes}`,
+    };
+}
+
+// Cria os seis meses mais recentes e contabiliza somente eventos de desativação.
+function criarHistoricoDesativacoes(eventos: EventoAdministrativoResumo[]): MesDesativacao[] {
+    const atual = obterAnoMes(new Date());
+
+    if (!atual) return [];
+
+    const meses = Array.from({ length: 6 }, (_, indice) => {
+        const data = new Date(Date.UTC(atual.ano, atual.mes - 1 - (5 - indice), 1));
+        const ano = data.getUTCFullYear();
+        const mes = data.getUTCMonth() + 1;
+        const nomeFormatado = formatadorNomeMes.format(data).replace(".", "");
+
+        return {
+            chave: `${ano}-${String(mes).padStart(2, "0")}`,
+            nome: nomeFormatado.charAt(0).toUpperCase() + nomeFormatado.slice(1),
+            quantidade: 0,
+        };
+    });
+
+    const mesesPorChave = new Map(meses.map((mes) => [mes.chave, mes]));
+
+    for (const evento of eventos) {
+        if (evento.acao !== "usuario_desativado") continue;
+
+        const dataDesativacao = new Date(evento.criado_em);
+        if (Number.isNaN(dataDesativacao.getTime())) continue;
+
+        const anoMes = obterAnoMes(dataDesativacao);
+        const mes = anoMes ? mesesPorChave.get(anoMes.chave) : undefined;
+
+        if (mes) mes.quantidade += 1;
+    }
+
+    return meses;
+}
 
 interface CounterProps {
     endValue: number;
@@ -85,6 +163,7 @@ export const NumberCounter: React.FC<CounterProps> = ({ endValue, duration = 2 }
     return <strong ref={numberRef}>0</strong>;
 }
 
+// Configuração do gráfico anual de acessos ao sistema.
 const opcoesLogin: ChartOptions<"line"> = {
     responsive: true,
     maintainAspectRatio: false, // Permite que o gráfico use toda a altura do container pai
@@ -122,9 +201,12 @@ const opcoesLogin: ChartOptions<"line"> = {
     },
 };
 
+// Configuração do gráfico que compara a quantidade por categoria de usuário.
 const opcoesUsuarios: ChartOptions<"bar"> = {
     responsive: true,
     maintainAspectRatio: false,
+    // Ignora valores nulos para centralizar cada barra na categoria correspondente.
+    skipNull: true,
 
     plugins: {
         legend: {
@@ -152,11 +234,62 @@ const opcoesUsuarios: ChartOptions<"bar"> = {
     }
 };
 
+// Configuração do minigráfico responsivo do histórico de desativações.
+const opcoesHistoricoDesativacoes: ChartOptions<"line"> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            display: false,
+        },
+        tooltip: {
+            callbacks: {
+                label: (contexto) => (
+                    `${contexto.parsed.y} desativação${contexto.parsed.y === 1 ? "" : "ões"}`
+                ),
+            },
+        },
+    },
+    layout: {
+        padding: {
+            top: 18,
+            left: 8,
+            right: 8,
+        },
+    },
+    scales: {
+        x: {
+            border: {
+                display: false,
+            },
+            grid: {
+                display: false,
+            },
+            ticks: {
+                color: "#6e7e99",
+                font: {
+                    size: 13,
+                    weight: 600,
+                },
+                maxRotation: 0,
+                minRotation: 0,
+            },
+        },
+        y: {
+            display: false,
+            beginAtZero: true,
+            grace: "25%",
+        },
+    },
+};
+
 function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
+    // Estados alimentados pelas consultas da visão geral.
     const [resultado, setResultado] = useState<RespostaLoginsMensais | null>(null);
     const [carregando, setCarregando] = useState(true);
     const [quantUsuarios, setQuantUsuarios] = useState(0);
-    const [quantUsuariosDesativados, setQuantUsuariosDesativados] = useState(0);
+    const [usuarios, setUsuarios] = useState<UsuarioResumo[]>([]);
+    const [eventosAdministrativos, setEventosAdministrativos] = useState<EventoAdministrativoResumo[]>([]);
     const [quantSetores, setQuantSetores] = useState(0);
     const [quantSecretarias, setQuantSecretarias] = useState(0);
     const [quantUsuariosCategoria, setQuantUsuariosCategoria] = useState<QuantUsuarioCategoria[]>([]);
@@ -168,6 +301,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
         }).format(new Date()),
     );
 
+    // Busca os logins mensais do ano atual e cancela a requisição ao desmontar.
     useEffect(() => {
         const controlador = new AbortController();
 
@@ -216,6 +350,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
         return () => controlador.abort();
     }, [anoAtual]);
 
+    // Busca o total geral de usuários cadastrados.
     useEffect(() => {
         async function carregarQuantUsuarios() {
             const token = localStorage.getItem("access_token");
@@ -246,6 +381,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
         void carregarQuantUsuarios();
     }, []);
 
+    // Busca as secretarias e usa o tamanho da lista como total.
     useEffect(() => {
         async function carregarQuantSecretarias() {
             try {
@@ -270,6 +406,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
         void carregarQuantSecretarias();
     }, []);
 
+    // Busca os setores e usa o tamanho da lista como total.
     useEffect(() => {
         async function carregarQuantSetores() {
             try {
@@ -294,6 +431,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
         void carregarQuantSetores();
     }, []);
 
+    // Busca os totais agrupados por perfil para o gráfico de barras.
     useEffect(() => {
         async function carregarQuantUsuariosCategoria() {
             const token = localStorage.getItem("access_token");
@@ -324,6 +462,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
         void carregarQuantUsuariosCategoria();
     }, []);
 
+    // Busca todos os usuários para identificar quais permanecem desativados.
     useEffect(() => {
         async function carregarUsuariosDesativados() {
             const token = localStorage.getItem("access_token");
@@ -343,17 +482,134 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                     throw new Error("Não foi possível buscar os usuários desativados.");
                 }
 
-                const dados = await resposta.json();
-                const quantidade = dados.filter(usuario => usuario.desativado_em).length;
-                setQuantUsuariosDesativados(quantidade);
+                const dados = await resposta.json() as UsuarioResumo[];
+                setUsuarios(dados);
+                setQuantUsuarios(dados.length);
             } catch (erro) {
-                console.log("Erro ao buscar quantidade de usuarios desativados:", erro)
+                console.error("Erro ao buscar usuários desativados:", erro);
             }
         }
 
         void carregarUsuariosDesativados();
-    }, [])
+    }, []);
 
+    // Preserva no gráfico desativações de usuários que já foram reativados.
+    useEffect(() => {
+        async function carregarHistoricoDesativacoes() {
+            const token = localStorage.getItem("access_token");
+
+            if (!token) return;
+
+            try {
+                const resposta = await fetch(
+                    `${import.meta.env.VITE_API_URL}/usuarios/historico-administrativo`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível buscar o histórico de desativações.");
+                }
+
+                const dados = await resposta.json() as EventoAdministrativoResumo[];
+                setEventosAdministrativos(dados);
+            } catch (erro) {
+                console.error("Erro ao buscar histórico de desativações:", erro);
+            }
+        }
+
+        void carregarHistoricoDesativacoes();
+    }, []);
+
+    // Mantém apenas usuários cujo campo de desativação está preenchido.
+    const usuariosDesativados = useMemo(
+        () => usuarios.filter((usuario) => Boolean(usuario.desativado_em)),
+        [usuarios],
+    );
+    const quantUsuariosDesativados = usuariosDesativados.length;
+
+    // Monta a série mensal usada no gráfico e na comparação entre os meses.
+    const historicoDesativacoes = useMemo(
+        () => criarHistoricoDesativacoes(eventosAdministrativos),
+        [eventosAdministrativos],
+    );
+
+    // Os dois últimos itens representam, respectivamente, o mês atual e o anterior.
+    const desativacoesMesAtual = historicoDesativacoes.at(-1)?.quantidade ?? 0;
+    const desativacoesMesAnterior = historicoDesativacoes.at(-2)?.quantidade ?? 0;
+
+    // Define a tendência visual a partir da diferença entre os dois meses.
+    const tendencia = desativacoesMesAtual < desativacoesMesAnterior
+        ? "diminuindo"
+        : desativacoesMesAtual > desativacoesMesAnterior
+            ? "aumentando"
+            : "estavel";
+    const rotuloTendencia = tendencia === "diminuindo"
+        ? "Diminuindo"
+        : tendencia === "aumentando"
+            ? "Aumentando"
+            : "Estável";
+    const iconeTendencia = tendencia === "diminuindo"
+        ? "↓"
+        : tendencia === "aumentando"
+            ? "↑"
+            : "→";
+
+    // Calcula a variação percentual absoluta em relação ao mês anterior.
+    // Se o mês anterior for zero, não existe uma base válida para a divisão.
+    const variacaoPercentualDesativacoes = desativacoesMesAnterior > 0
+        ? Math.abs(
+            ((desativacoesMesAtual - desativacoesMesAnterior) / desativacoesMesAnterior) * 100,
+        )
+        : desativacoesMesAtual === 0
+            ? 0
+            : null;
+    const porcentagemFormatada = variacaoPercentualDesativacoes === null
+        ? null
+        : new Intl.NumberFormat("pt-BR", {
+            maximumFractionDigits: 1,
+        }).format(variacaoPercentualDesativacoes);
+    const textoVariacaoPercentual = porcentagemFormatada === null
+        ? "Sem base no mês anterior"
+        : tendencia === "aumentando"
+            ? `${porcentagemFormatada}% de aumento`
+            : tendencia === "diminuindo"
+                ? `${porcentagemFormatada}% de redução`
+                : "0% de variação";
+
+    // Limita o preenchimento do círculo a 100%, mesmo em aumentos superiores.
+    const preenchimentoVariacao = Math.min(
+        variacaoPercentualDesativacoes ?? 0,
+        100,
+    );
+    const descricaoHistorico = historicoDesativacoes
+        .map((mes) => `${mes.nome}: ${mes.quantidade}`)
+        .join(", ");
+
+    // Converte o histórico para o formato esperado pelo Chart.js.
+    const dadosHistoricoDesativacoes = useMemo<ChartData<"line">>(() => ({
+        labels: historicoDesativacoes.map((mes) => mes.nome),
+        datasets: [
+            {
+                data: historicoDesativacoes.map((mes) => mes.quantidade),
+                borderColor: "#1351b4",
+                backgroundColor: "rgba(19, 81, 180, 0.14)",
+                borderWidth: 4,
+                fill: true,
+                tension: 0,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                pointBackgroundColor: "#ffffff",
+                pointBorderColor: "#1351b4",
+                pointBorderWidth: 4,
+            },
+        ],
+    }), [historicoDesativacoes]);
+
+    // Retorna zero enquanto uma categoria não estiver presente na resposta da API.
     function obterQuantidadeCategoria(
         tipo: QuantUsuarioCategoria["tipo_usuario"],
     ) {
@@ -362,6 +618,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
         )?._count.id ?? 0;
     }
 
+    // Converte os logins mensais para a série do gráfico anual.
     const dadosLogin = useMemo<ChartData<"line">>(() => ({
         labels: resultado?.meses.map((mes) => mes.nome) ?? [],
         datasets: [
@@ -378,6 +635,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
         ],
     }), [anoAtual, resultado]);
 
+    // Cada dataset preenche somente a posição da categoria que representa.
     const dadosUsuarios: ChartData<"bar"> = {
         labels: [
             "Super Administrador",
@@ -400,8 +658,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                 backgroundColor: "rgba(52, 99, 175, 0.25)",
                 borderColor: "rgb(52, 99, 175)",
                 borderWidth: 1,
-                borderRadius: 6,
-                skipNull: true
+                borderRadius: 6
             },
             {
                 label: "Administradores",
@@ -416,8 +673,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                 backgroundColor: "rgba(175, 122, 52, 0.25)",
                 borderColor: "rgb(175, 111, 52)",
                 borderWidth: 1,
-                borderRadius: 6,
-                skipNull: true
+                borderRadius: 6
             },
             {
                 label: "Funcionários",
@@ -432,8 +688,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                 backgroundColor: "rgba(26, 151, 10, 0.25)",
                 borderColor: "rgb(26, 151, 10)",
                 borderWidth: 1,
-                borderRadius: 6,
-                skipNull: true
+                borderRadius: 6
             },
             {
                 label: "Usuários",
@@ -448,14 +703,14 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                 backgroundColor: "rgba(187, 17, 17, 0.25)",
                 borderColor: "rgb(187, 17, 17)",
                 borderWidth: 1,
-                borderRadius: 6,
-                skipNull: true
+                borderRadius: 6
             }
         ]
     };
 
     return (
         <>
+            {/* Cards com os totais principais do painel. */}
             <div className="container-cards">
                 <div className="cards card-usuarios">
                     <div className="icone-card">
@@ -496,6 +751,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                 </div>
             </div>
 
+            {/* Total atual, variação mensal e histórico de desativações. */}
             <section className="usuarios-desativados-card" aria-labelledby="titulo-desativados">
 
                 <div className="indicador-desativados">
@@ -503,7 +759,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                         className="grafico-circular"
                         viewBox="0 0 120 120"
                         role="img"
-                        aria-label="8,4% dos usuários estão desativados"
+                        aria-label={`${textoVariacaoPercentual} em relação ao mês anterior`}
                     >
                         <circle
                             className="circulo-fundo"
@@ -518,7 +774,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                             cy="60"
                             r="52"
                             pathLength="100"
-                            stroke-dasharray="84 16"
+                            strokeDasharray={`${preenchimentoVariacao} ${100 - preenchimentoVariacao}`}
                         />
                     </svg>
 
@@ -548,12 +804,12 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
 
                     <div className="detalhes-desativados">
                         <span className="porcentagem-desativados">
-                            8,4% do total
+                            {textoVariacaoPercentual}
                         </span>
 
-                        <span className="variacao-desativados">
-                            <span aria-hidden="true">↓</span>
-                            12 este mês
+                        <span className={`variacao-desativados variacao-desativados--${tendencia}`}>
+                            <span aria-hidden="true">{iconeTendencia}</span>
+                            {desativacoesMesAtual} neste mês
                         </span>
                     </div>
                 </div>
@@ -570,84 +826,20 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                             </span>
                         </div>
 
-                        <span className="status-historico">
-                            Diminuindo
+                        <span className={`status-historico status-historico--${tendencia}`}>
+                            {rotuloTendencia}
                         </span>
                     </div>
 
-                    <svg
+                    <div
                         className="grafico-historico"
-                        viewBox="0 0 360 130"
                         role="img"
-                        aria-label="Gráfico de usuários desativados nos últimos seis meses"
+                        aria-label={`Desativações nos últimos seis meses. ${descricaoHistorico}`}
                     >
-                        <defs>
-                            <linearGradient
-                                id="preenchimentoGrafico"
-                                x1="0"
-                                y1="0"
-                                x2="0"
-                                y2="1"
-                            >
-                                <stop
-                                    offset="0%"
-                                    stop-color="#1351b4"
-                                    stop-opacity="0.25"
-                                />
-
-                                <stop
-                                    offset="100%"
-                                    stop-color="#1351b4"
-                                    stop-opacity="0"
-                                />
-                            </linearGradient>
-                        </defs>
-
-                        <path
-                            className="area-grafico"
-                            d="
-                                M 15 80
-                                L 80 35
-                                L 145 50
-                                L 210 75
-                                L 275 68
-                                L 345 100
-                                L 345 115
-                                L 15 115
-                                Z
-                            "
-                            fill="url(#preenchimentoGrafico)"
+                        <Line
+                            data={dadosHistoricoDesativacoes}
+                            options={opcoesHistoricoDesativacoes}
                         />
-
-                        <polyline
-                            className="linha-grafico"
-                            points="
-                                15,80
-                                80,35
-                                145,50
-                                210,75
-                                275,68
-                                345,100
-                            "
-                        />
-
-                        <g className="pontos-grafico">
-                            <circle cx="15" cy="80" r="5"></circle>
-                            <circle cx="80" cy="35" r="5"></circle>
-                            <circle cx="145" cy="50" r="5"></circle>
-                            <circle cx="210" cy="75" r="5"></circle>
-                            <circle cx="275" cy="68" r="5"></circle>
-                            <circle cx="345" cy="100" r="5"></circle>
-                        </g>
-                    </svg>
-
-                    <div className="meses-grafico" aria-hidden="true">
-                        <span>Mar</span>
-                        <span>Abr</span>
-                        <span>Mai</span>
-                        <span>Jun</span>
-                        <span>Jul</span>
-                        <span>Ago</span>
                     </div>
 
                     <button 
@@ -668,6 +860,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
 
             </section>
 
+            {/* Gráfico de logins realizados durante o ano atual. */}
             <div className="grafico-card">
                 <div className="grafico-card-header">
                     <div>
@@ -687,6 +880,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                 )}
             </div>
 
+            {/* Distribuição do total de usuários por categoria. */}
             <div className="grafico-card grafico-card--usuarios">
                 <div className="grafico-card-header">
                     <div>

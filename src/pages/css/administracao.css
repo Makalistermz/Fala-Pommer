@@ -516,6 +516,26 @@
     font-size: 1.1rem;
 }
 
+.variacao-desativados--aumentando,
+.status-historico--aumentando {
+    color: #b42318;
+    background: #fef3f2;
+}
+
+.variacao-desativados--aumentando {
+    border-color: rgba(180, 35, 24, 0.18);
+}
+
+.variacao-desativados--estavel,
+.status-historico--estavel {
+    color: var(--texto-secundario);
+    background: #f2f4f7;
+}
+
+.variacao-desativados--estavel {
+    border-color: var(--borda);
+}
+
 /* Histórico */
 
 .historico-desativados {
@@ -553,38 +573,10 @@
 }
 
 .grafico-historico {
+    position: relative;
     width: 100%;
-    height: 125px;
+    height: 155px;
     margin-top: 12px;
-    overflow: visible;
-}
-
-.linha-grafico {
-    fill: none;
-    stroke: var(--azul-principal);
-    stroke-width: 4;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: 700;
-    stroke-dashoffset: 700;
-    animation: desenhar-linha 1.4s 0.25s ease forwards;
-}
-
-.pontos-grafico circle {
-    fill: var(--branco);
-    stroke: var(--azul-principal);
-    stroke-width: 4;
-    opacity: 0;
-    animation: mostrar-pontos 0.4s 1.1s ease forwards;
-}
-
-.meses-grafico {
-    margin-top: -6px;
-    display: flex;
-    justify-content: space-between;
-    color: var(--texto-secundario);
-    font-size: 0.68rem;
-    font-weight: 600;
 }
 
 .botao-ver-usuarios {
@@ -681,93 +673,6 @@
     to {
         opacity: 1;
         transform: scale(1);
-    }
-}
-
-/* Tablet */
-
-@media (max-width: 960px) {
-    body {
-        padding: 24px;
-    }
-
-    .usuarios-desativados-card {
-        grid-template-columns: 170px 1fr;
-        gap: 30px;
-        padding: 32px;
-    }
-
-    .indicador-desativados {
-        width: 170px;
-        height: 170px;
-    }
-
-    .historico-desativados {
-        grid-column: 1 / -1;
-        padding: 30px 0 0;
-        border-left: 0;
-        border-top: 1px solid var(--borda);
-    }
-}
-
-/* Celular */
-
-@media (max-width: 600px) {
-    body {
-        padding: 16px;
-        place-items: start center;
-    }
-
-    .usuarios-desativados-card {
-        grid-template-columns: 1fr;
-        gap: 24px;
-        padding: 26px 20px;
-        border-radius: 20px;
-        text-align: center;
-    }
-
-    .indicador-desativados {
-        width: 155px;
-        height: 155px;
-        margin: 0 auto;
-    }
-
-    .informacoes-desativados h2 {
-        font-size: 1.35rem;
-    }
-
-    .quantidade-desativados {
-        font-size: 4.4rem;
-    }
-
-    .detalhes-desativados {
-        justify-content: center;
-    }
-
-    .historico-desativados {
-        width: 100%;
-        padding-top: 24px;
-    }
-
-    .cabecalho-historico {
-        text-align: left;
-    }
-
-    .grafico-historico {
-        height: 105px;
-    }
-}
-
-/* Acessibilidade */
-
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        scroll-behavior: auto !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
     }
 }
 
@@ -2127,6 +2032,31 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     opacity: 1;
 }
 
+@media (max-width: 1300px) {
+    .usuarios-desativados-card {
+        grid-template-columns: minmax(150px, 170px) minmax(0, 1fr);
+        gap: clamp(24px, 4vw, 36px);
+        padding: clamp(24px, 3vw, 32px);
+    }
+
+    .indicador-desativados {
+        width: 170px;
+        height: 170px;
+        margin: 0 auto;
+    }
+
+    .informacoes-desativados {
+        margin-left: 0;
+    }
+
+    .historico-desativados {
+        grid-column: 1 / -1;
+        padding: 30px 0 0;
+        border-left: 0;
+        border-top: 1px solid var(--borda);
+    }
+}
+
 @media (max-width: 1000px) {
     .container-cards {
         grid-template-columns: 1fr;
@@ -2174,6 +2104,51 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
 
     .admin-content {
         padding: 26px 18px 26px 38px;
+    }
+
+    .usuarios-desativados-card {
+        min-height: 0;
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 26px 20px;
+        border-radius: 20px;
+        text-align: center;
+    }
+
+    .indicador-desativados {
+        width: 155px;
+        height: 155px;
+        margin: 0 auto;
+    }
+
+    .informacoes-desativados h2 {
+        font-size: 1.35rem;
+    }
+
+    .quantidade-desativados {
+        font-size: 4.4rem;
+    }
+
+    .detalhes-desativados {
+        justify-content: center;
+    }
+
+    .historico-desativados {
+        width: 100%;
+        padding-top: 24px;
+    }
+
+    .cabecalho-historico {
+        align-items: center;
+        text-align: left;
+    }
+
+    .grafico-historico {
+        height: 175px;
+    }
+
+    .botao-ver-usuarios {
+        margin-top: 16px;
     }
 
     .gerenciar-user__pastas {
@@ -2320,6 +2295,18 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
         padding-left: 22px;
     }
 
+    .usuarios-desativados-card {
+        padding: 22px 14px;
+    }
+
+    .cabecalho-historico {
+        gap: 12px;
+    }
+
+    .status-historico {
+        padding-inline: 8px;
+    }
+
     .gerenciar-user__pastas {
         gap: 3px;
     }
@@ -2402,6 +2389,15 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
     .admin-sidebar,
     .admin-content,
     .admin-brand,

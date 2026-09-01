@@ -1602,12 +1602,13 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
 
 .container-campo-secretaria {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 30px;
     margin-bottom: 32px;
 }
 
 .campo-form-secretaria {
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -1619,10 +1620,13 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
 }
 
 .campo-form-secretaria input {
+    width: 100%;
+    min-width: 0;
     height: 40px;
     padding: 10px;
     border: 1px solid rgba(0, 0, 0, 0.25);
     border-radius: 10px;
+    font: inherit;
 }
 
 .campo-form-secretaria input:focus {
@@ -2064,6 +2068,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
 }
 
 @media (max-width: 800px) {
+    .container-campo-secretaria,
     .container-campo-setor {
         grid-template-columns: 1fr;
         gap: 18px;
@@ -2214,6 +2219,27 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
         margin-top: -1px;
     }
 
+    .secretaria__header {
+        padding: 18px;
+    }
+
+    .secretaria__header h2 {
+        font-size: 19px;
+    }
+
+    .formulario-secretaria {
+        margin: 22px 16px;
+    }
+
+    .container-campo-secretaria {
+        margin-bottom: 22px;
+    }
+
+    .botao-enviar-secretaria {
+        width: 100%;
+        min-height: 42px;
+    }
+
     .setores__header {
         padding: 18px;
     }
@@ -2340,6 +2366,17 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
 
     .secretaria {
         border-radius: 0 0 12px 12px;
+    }
+
+    .secretaria__header,
+    .formulario-secretaria {
+        padding-right: 14px;
+        padding-left: 14px;
+    }
+
+    .formulario-secretaria {
+        margin-right: 0;
+        margin-left: 0;
     }
 
     .setores {

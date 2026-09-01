@@ -804,6 +804,43 @@ html.plano-fundo-conversa-5 .mensagens {
     justify-content: flex-end;
 }
 
+.mensagem-linha--com-avatar {
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.mensagem-grupo__avatar {
+    position: relative;
+    display: grid;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    place-items: center;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.92);
+    border-radius: 50%;
+    background: linear-gradient(145deg, #0b326b, #2878df);
+    color: #ffffff;
+    box-shadow: 0 3px 9px rgba(15, 38, 73, 0.18);
+    font-family: var(--fonte-poppins);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.mensagem-grupo__avatar img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.mensagem-linha--com-avatar .mensagem-balao {
+    max-width: min(calc(70% - 42px), 620px);
+}
+
 .mensagem-balao {
     position: relative;
     min-width: 110px;
@@ -2131,6 +2168,10 @@ html.plano-fundo-conversa-5 .mensagens {
 
     .mensagem-balao {
         max-width: 85%;
+    }
+
+    .mensagem-linha--com-avatar .mensagem-balao {
+        max-width: calc(85% - 42px);
     }
 
     .conversas {

@@ -138,6 +138,7 @@ interface MensagemChat {
         tipo: "usuario" | "setor" | "admin" | "superAdmin";
         id: number;
         nome: string;
+        fotoPerfilUrl?: string | null;
         tipoUsuario?: TipoUsuario;
         sigla_setor?: string;
     };
@@ -2373,6 +2374,9 @@ function Home() {
                             usuario,
                             conversaSelecionada,
                         );
+                        const exibirAvatarGrupo =
+                            conversaSelecionada.tipo === "grupo" &&
+                            !enviadaPorMim;
 
                         return (
                             <div
@@ -2381,8 +2385,24 @@ function Home() {
                                 enviadaPorMim
                                 ? "mensagem-linha--enviada"
                                 : "mensagem-linha--recebida"
+                            } ${
+                                exibirAvatarGrupo
+                                    ? "mensagem-linha--com-avatar"
+                                    : ""
                             }`}
                             >
+                            {exibirAvatarGrupo && (
+                                <div
+                                    className="mensagem-grupo__avatar"
+                                    aria-label={`Foto de ${item.remetente.nome}`}
+                                    title={item.remetente.nome}
+                                >
+                                    {renderizarAvatar(
+                                        item.remetente.nome,
+                                        item.remetente.fotoPerfilUrl,
+                                    )}
+                                </div>
+                            )}
                             <article
                                 className="mensagem-balao"
                                 ref={(el) => {

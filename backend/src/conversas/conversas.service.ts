@@ -1260,7 +1260,8 @@ export class ConversasService {
                         select: {
                             id: true,
                             nome: true,
-                            tipo_usuario: true
+                            tipo_usuario: true,
+                            foto_perfil_url: true
                         }
                     }
                 }
@@ -1283,7 +1284,8 @@ export class ConversasService {
                         id: mensagem.remetente.id,
                         nome: mensagem.remetente.nome,
                         sigla_setor: atendimento.setor.sigla_setor,
-                        tipo_usuario: mensagem.remetente.tipo_usuario
+                        tipo_usuario: mensagem.remetente.tipo_usuario,
+                        fotoPerfilUrl: mensagem.remetente.foto_perfil_url
                     }
                     : {
                         tipo:
@@ -1294,6 +1296,7 @@ export class ConversasService {
                             : "usuario" as const,
                         id: mensagem.remetente.id,
                         nome: mensagem.remetente.nome,
+                        fotoPerfilUrl: mensagem.remetente.foto_perfil_url,
                         tipoUsuario:
                             mensagem.remetente.tipo_usuario
                     };
@@ -1371,7 +1374,8 @@ export class ConversasService {
                         select: {
                             id: true,
                             nome: true,
-                            tipo_usuario: true
+                            tipo_usuario: true,
+                            foto_perfil_url: true
                         }
                     }
                 },
@@ -1402,7 +1406,8 @@ export class ConversasService {
                         id: mensagem.remetente.id,
                         nome: mensagem.remetente.nome,
                         sigla_setor: atendimento.setor.sigla_setor,
-                        tipo_usuario: mensagem.remetente.tipo_usuario
+                        tipo_usuario: mensagem.remetente.tipo_usuario,
+                        fotoPerfilUrl: mensagem.remetente.foto_perfil_url
                     }
                     : {
                         tipo:
@@ -1414,6 +1419,7 @@ export class ConversasService {
                         id: mensagem.remetente.id,
                         nome:
                             mensagem.remetente.nome,
+                        fotoPerfilUrl: mensagem.remetente.foto_perfil_url,
                         tipoUsuario:
                             mensagem.remetente.tipo_usuario
                     };

@@ -799,7 +799,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                     </h2>
 
                     <strong className="quantidade-desativados">
-                        {quantUsuariosDesativados}
+                        <NumberCounter endValue={quantUsuariosDesativados} />
                     </strong>
 
                     <div className="detalhes-desativados">
@@ -809,7 +809,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
 
                         <span className={`variacao-desativados variacao-desativados--${tendencia}`}>
                             <span aria-hidden="true">{iconeTendencia}</span>
-                            {desativacoesMesAtual} neste mês
+                            <NumberCounter endValue={desativacoesMesAtual} /> neste mês
                         </span>
                     </div>
                 </div>

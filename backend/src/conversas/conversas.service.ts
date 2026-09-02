@@ -70,7 +70,8 @@ export class ConversasService {
                                 {
                                     conversa_participante: {
                                         some: {
-                                            usuario_id: usuarioLogadoId
+                                            usuario_id: usuarioLogadoId,
+                                            ocultada_em: null
                                         }
                                     }
                                 },
@@ -88,7 +89,8 @@ export class ConversasService {
                         : {
                             conversa_participante: {
                                 some: {
-                                    usuario_id: usuarioLogadoId
+                                    usuario_id: usuarioLogadoId,
+                                    ocultada_em: null
                                 }
                             }
                         }),
@@ -161,7 +163,13 @@ export class ConversasService {
                     id: conversa.id,
                     ultimaMensagemLidaId:
                         conversa.conversa_leitura[0]
-                            ?.ultima_mensagem_lida_id ?? null
+                            ?.ultima_mensagem_lida_id ?? null,
+                    visivelDesdeMensagemId:
+                        conversa.conversa_participante.find(
+                            (participante) =>
+                                participante.usuario_id ===
+                                usuarioLogadoId
+                        )?.visivel_desde_mensagem_id ?? null
                 }))
             );
 
@@ -312,14 +320,17 @@ export class ConversasService {
                         {
                             conversa_participante: {
                                 some: {
-                                    usuario_id: usuarioLogado.id
+                                    usuario_id: usuarioLogado.id,
+                                    ocultada_em: null
                                 }
                             }
                         },
                         {
                             conversa_participante: {
                                 some: {
-                                    usuario_id: usuarioSelecionado.id
+                                    usuario_id:
+                                        usuarioSelecionado.id,
+                                    ocultada_em: null
                                 }
                             }
                         },
@@ -578,86 +589,110 @@ export class ConversasService {
             );
         }
 
-        const usuarioLogado =
-            await this.prisma.cadastro.findUnique({
-                where: {
-                    id: usuarioLogadoId
-                },
-                select: {
-                    id: true,
-                    tipo_usuario: true
-                }
-            });
-
-        if (!usuarioLogado) {
-            throw new NotFoundException(
-                "Usuário autenticado não encontrado."
-            );
-        }
-
-        if (usuarioLogado.tipo_usuario === "user") {
-            throw new ForbiddenException(
-                "Usuários comuns não podem criar grupos."
-            );
-        }
-
-        const contatos =
-            await this.prisma.cadastro.findMany({
-                where: {
-                    id: {
-                        in: contatosSelecionados
-                    },
-                    desativado_em: null,
-                    tipo_usuario: {
-                        not: "user"
-                    }
-                },
-                select: {
-                    id: true
-                }
-            });
-
-        if (contatos.length !== contatosSelecionados.length) {
-            throw new BadRequestException(
-                "Um ou mais contatos não podem participar de grupos."
-            );
-        }
-
         const todosParticipantes = [
-            usuarioLogado.id,
+            usuarioLogadoId,
             ...contatosSelecionados
         ];
 
-        const grupo =
-            await this.prisma.conversa.create({
-                data: {
-                    tipo: "grupo",
-                    nome: nomeLimpo,
-                    conversa_participante: {
-                        create: todosParticipantes.map((usuarioId) => ({
-                            cadastro: {
-                                connect: {
-                                    id: usuarioId
-                                }
+        const grupo = await this.prisma.$transaction(
+            async (transacao) => {
+                // Usa a mesma trava da desativação para que a validação e
+                // a inclusão no grupo sejam uma operação atômica.
+                for (const usuarioId of [...todosParticipantes].sort(
+                    (primeiroId, segundoId) => primeiroId - segundoId
+                )) {
+                    await transacao.$queryRaw<Array<{ id: number }>>`
+                        SELECT id
+                        FROM cadastro
+                        WHERE id = ${usuarioId}
+                        FOR UPDATE
+                    `;
+                }
+
+                const usuarioLogado =
+                    await transacao.cadastro.findUnique({
+                        where: {
+                            id: usuarioLogadoId
+                        },
+                        select: {
+                            id: true,
+                            tipo_usuario: true,
+                            desativado_em: true
+                        }
+                    });
+
+                if (!usuarioLogado) {
+                    throw new NotFoundException(
+                        "Usuário autenticado não encontrado."
+                    );
+                }
+
+                if (
+                    usuarioLogado.desativado_em !== null ||
+                    usuarioLogado.tipo_usuario === "user"
+                ) {
+                    throw new ForbiddenException(
+                        "Usuários comuns não podem criar grupos."
+                    );
+                }
+
+                const contatos =
+                    await transacao.cadastro.findMany({
+                        where: {
+                            id: {
+                                in: contatosSelecionados
+                            },
+                            desativado_em: null,
+                            tipo_usuario: {
+                                not: "user"
                             }
-                        }))
-                    }
-                },
-                include: {
-                    conversa_participante: {
-                        include: {
-                            cadastro: {
-                                select: {
-                                    id: true,
-                                    nome: true,
-                                    tipo_usuario: true,
-                                    foto_perfil_url: true
+                        },
+                        select: {
+                            id: true
+                        }
+                    });
+
+                if (
+                    contatos.length !== contatosSelecionados.length
+                ) {
+                    throw new BadRequestException(
+                        "Um ou mais contatos não podem participar de grupos."
+                    );
+                }
+
+                return transacao.conversa.create({
+                    data: {
+                        tipo: "grupo",
+                        nome: nomeLimpo,
+                        conversa_participante: {
+                            create: todosParticipantes.map(
+                                (usuarioId) => ({
+                                    cadastro: {
+                                        connect: {
+                                            id: usuarioId
+                                        }
+                                    }
+                                })
+                            )
+                        }
+                    },
+                    include: {
+                        conversa_participante: {
+                            include: {
+                                cadastro: {
+                                    select: {
+                                        id: true,
+                                        nome: true,
+                                        tipo_usuario: true,
+                                        foto_perfil_url: true
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
+                });
+            }
+        );
 
         return {
             id: grupo.id,
@@ -709,6 +744,7 @@ export class ConversasService {
         const filtro: {
             usuario_id?: number;
             setor_id?: number;
+            ocultada_para_usuario_em?: null;
             setor?: {
                 secretaria_id: number;
             };
@@ -716,6 +752,7 @@ export class ConversasService {
 
         if (usuarioLogado.tipo_usuario === "user") {
             filtro.usuario_id = usuarioLogado.id;
+            filtro.ocultada_para_usuario_em = null;
         }
 
         if (
@@ -882,6 +919,7 @@ export class ConversasService {
         conversas: Array<{
             id: number;
             ultimaMensagemLidaId: number | null;
+            visivelDesdeMensagemId?: number | null;
         }>
     ) {
         if (conversas.length === 0) {
@@ -899,11 +937,12 @@ export class ConversasService {
                             not: usuarioLogadoId
                         },
 
-                        ...(conversa.ultimaMensagemLidaId !== null && {
-                            id: {
-                                gt: conversa.ultimaMensagemLidaId
-                            }
-                        })
+                        id: {
+                            gt: Math.max(
+                                conversa.ultimaMensagemLidaId ?? 0,
+                                (conversa.visivelDesdeMensagemId ?? 1) - 1
+                            )
+                        }
                     }))
                 },
 
@@ -1068,63 +1107,97 @@ export class ConversasService {
         setorId: number,
         usuarioId: number
     ) {
-        const atendimento =
-            await this.prisma.conversa_setor.upsert({
-                where: {
-                    setor_id_usuario_id: {
-                        setor_id: setorId,
-                        usuario_id: usuarioId
-                    }
-                },
+        const atendimento = await this.prisma.$transaction(
+            async (transacao) => {
+                // Evita a criação simultânea de duas conversas ativas
+                // para o mesmo usuário e setor.
+                await transacao.$queryRaw<Array<{ id: number }>>`
+                    SELECT id
+                    FROM cadastro
+                    WHERE id = ${usuarioId}
+                    FOR UPDATE
+                `;
 
-                update: {},
-
-                create: {
-                    conversa: {
-                        create: {
-                            tipo: "setor"
+                const atendimentoExistente =
+                    await transacao.conversa_setor.findFirst({
+                        where: {
+                            setor_id: setorId,
+                            usuario_id: usuarioId,
+                            ocultada_para_usuario_em: null
+                        },
+                        include: {
+                            conversa: {
+                                select: {
+                                    id: true,
+                                    tipo: true,
+                                    criada_em: true
+                                }
+                            },
+                            setor: {
+                                select: {
+                                    id: true,
+                                    setor: true,
+                                    sigla_setor: true
+                                }
+                            },
+                            usuario: {
+                                select: {
+                                    id: true,
+                                    nome: true,
+                                    foto_perfil_url: true
+                                }
+                            }
                         }
-                    },
+                    });
 
-                    setor: {
-                        connect: {
-                            id: setorId
-                        }
-                    },
-
-                    usuario: {
-                        connect: {
-                            id: usuarioId
-                        }
-                    }
-                },
-
-                include: {
-                    conversa: {
-                        select: {
-                            id: true,
-                            tipo: true,
-                            criada_em: true
-                        }
-                    },
-
-                    setor: {
-                        select: {
-                            id: true,
-                            setor: true,
-                            sigla_setor: true
-                        }
-                    },
-
-                    usuario: {
-                        select: {
-                            id: true,
-                            nome: true,
-                            foto_perfil_url: true
-                        }
-                    }
+                if (atendimentoExistente) {
+                    return atendimentoExistente;
                 }
-            });
+
+                return transacao.conversa_setor.create({
+                    data: {
+                        conversa: {
+                            create: {
+                                tipo: "setor"
+                            }
+                        },
+                        setor: {
+                            connect: {
+                                id: setorId
+                            }
+                        },
+                        usuario: {
+                            connect: {
+                                id: usuarioId
+                            }
+                        }
+                    },
+                    include: {
+                        conversa: {
+                            select: {
+                                id: true,
+                                tipo: true,
+                                criada_em: true
+                            }
+                        },
+                        setor: {
+                            select: {
+                                id: true,
+                                setor: true,
+                                sigla_setor: true
+                            }
+                        },
+                        usuario: {
+                            select: {
+                                id: true,
+                                nome: true,
+                                foto_perfil_url: true
+                            }
+                        }
+                    }
+                });
+            }
+        );
 
         return {
             id: atendimento.conversa.id,
@@ -1241,31 +1314,66 @@ export class ConversasService {
         }
 
         try {
-            const mensagem =
-                await this.prisma.mensagem.create({
-                data: {
-                    conversa_id: conversaId,
-                    remetente_id: usuarioLogadoId,
-                    origem,
-                    conteudo: conteudoLimpo,
-                    arquivo_nome: dadosArquivo?.nome ?? null,
-                    arquivo_url: dadosArquivo?.url ?? null,
-                    arquivo_tipo: dadosArquivo?.tipo ?? null,
-                    arquivo_mime: dadosArquivo?.mime ?? null,
-                    arquivo_tamanho: dadosArquivo?.tamanho ?? null
-                },
+            const enviadaEm = new Date();
+            const mensagem = await this.prisma.$transaction(
+                async (transacao) => {
+                    const mensagemCriada =
+                        await transacao.mensagem.create({
+                            data: {
+                                conversa_id: conversaId,
+                                remetente_id: usuarioLogadoId,
+                                origem,
+                                conteudo: conteudoLimpo,
+                                enviada_em: enviadaEm,
+                                arquivo_nome: dadosArquivo?.nome ?? null,
+                                arquivo_url: dadosArquivo?.url ?? null,
+                                arquivo_tipo: dadosArquivo?.tipo ?? null,
+                                arquivo_mime: dadosArquivo?.mime ?? null,
+                                arquivo_tamanho: dadosArquivo?.tamanho ?? null
+                            },
 
-                include: {
-                    remetente: {
-                        select: {
-                            id: true,
-                            nome: true,
-                            tipo_usuario: true,
-                            foto_perfil_url: true
-                        }
+                            include: {
+                                remetente: {
+                                    select: {
+                                        id: true,
+                                        nome: true,
+                                        tipo_usuario: true,
+                                        foto_perfil_url: true
+                                    }
+                                }
+                            }
+                        });
+
+                    if (
+                        contexto.conversa.tipo === "privada" &&
+                        (
+                            contexto.usuarioLogado.tipo_usuario === "admin" ||
+                            contexto.usuarioLogado.tipo_usuario === "superAdmin"
+                        )
+                    ) {
+                        // Uma nova mensagem administrativa reabre a conversa
+                        // somente a partir deste ponto para o usuário desativado.
+                        await transacao.conversa_participante.updateMany({
+                            where: {
+                                conversa_id: conversaId,
+                                ocultada_em: {
+                                    not: null
+                                },
+                                cadastro: {
+                                    tipo_usuario: "user"
+                                }
+                            },
+                            data: {
+                                ocultada_em: null,
+                                visivel_desde_mensagem_id:
+                                    mensagemCriada.id
+                            }
+                        });
                     }
+
+                    return mensagemCriada;
                 }
-                });
+            );
 
             this.usuariosDigitando.delete(
                 this.obterChaveDigitacao(
@@ -1347,6 +1455,14 @@ export class ConversasService {
                 conversaId
             );
 
+        const visivelDesdeMensagemId =
+            contexto.conversa.tipo === "privada"
+                ? contexto.conversa.conversa_participante.find(
+                    (participante) =>
+                        participante.usuario_id === usuarioLogadoId
+                )?.visivel_desde_mensagem_id ?? null
+                : null;
+
         const limite = consulta.limite ?? 50;
         const ordemDecrescente =
             consulta.depoisDe === undefined;
@@ -1356,17 +1472,23 @@ export class ConversasService {
                 where: {
                     conversa_id: conversaId,
 
-                    ...(consulta.depoisDe !== undefined && {
+                    ...(
+                        visivelDesdeMensagemId !== null ||
+                        consulta.depoisDe !== undefined ||
+                        consulta.antesDe !== undefined
+                    ) && {
                         id: {
-                            gt: consulta.depoisDe
+                            ...(visivelDesdeMensagemId !== null && {
+                                gte: visivelDesdeMensagemId
+                            }),
+                            ...(consulta.depoisDe !== undefined && {
+                                gt: consulta.depoisDe
+                            }),
+                            ...(consulta.antesDe !== undefined && {
+                                lt: consulta.antesDe
+                            })
                         }
-                    }),
-
-                    ...(consulta.antesDe !== undefined && {
-                        id: {
-                            lt: consulta.antesDe
-                        }
-                    })
+                    }
                 },
 
                 include: {
@@ -1685,6 +1807,8 @@ export class ConversasService {
                         conversa_participante: {
                             select: {
                                 usuario_id: true,
+                                ocultada_em: true,
+                                visivel_desde_mensagem_id: true,
                                 cadastro: {
                                     select: {
                                         tipo_usuario: true
@@ -1738,7 +1862,8 @@ export class ConversasService {
                 conversa.conversa_participante.some(
                     (participante) =>
                         participante.usuario_id ===
-                        usuarioLogado.id
+                            usuarioLogado.id &&
+                        participante.ocultada_em === null
                 );
 
             const possuiOutroSuperAdmin =
@@ -1797,8 +1922,11 @@ export class ConversasService {
 
             if (
                 usuarioLogado.tipo_usuario === "user" &&
-                atendimento.usuario_id !==
-                    usuarioLogado.id
+                (
+                    atendimento.usuario_id !==
+                        usuarioLogado.id ||
+                    atendimento.ocultada_para_usuario_em !== null
+                )
             ) {
                 throw new ForbiddenException(
                     "Você não possui acesso a este atendimento."

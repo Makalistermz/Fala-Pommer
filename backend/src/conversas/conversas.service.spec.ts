@@ -24,6 +24,8 @@ describe("ConversasService", () => {
   });
 
   const prismaMock = {
+    $transaction: jest.fn(),
+    $queryRaw: jest.fn(),
     cadastro: {
       findUnique: jest.fn(),
       findMany: jest.fn(),
@@ -35,6 +37,11 @@ describe("ConversasService", () => {
     },
     conversa_setor: {
       findMany: jest.fn(),
+      findFirst: jest.fn(),
+      create: jest.fn(),
+    },
+    conversa_participante: {
+      updateMany: jest.fn(),
     },
     mensagem: {
       findMany: jest.fn(),
@@ -47,6 +54,11 @@ describe("ConversasService", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    prismaMock.$transaction.mockImplementation(async (operacao) =>
+      operacao(prismaMock),
+    );
+    prismaMock.$queryRaw.mockResolvedValue([{ id: 1 }]);
+    prismaMock.conversa_participante.updateMany.mockResolvedValue({ count: 0 });
     prismaMock.cadastro.findUnique.mockResolvedValue({
       id: 1,
       nome: "Usuário",
@@ -56,7 +68,7 @@ describe("ConversasService", () => {
     prismaMock.conversa.findUnique.mockResolvedValue({
       id: 10,
       tipo: "privada",
-      conversa_participante: [{ usuario_id: 1 }],
+      conversa_participante: [{ usuario_id: 1, ocultada_em: null }],
       atendimento_setor: null,
     });
     prismaMock.conversa_setor.findMany.mockResolvedValue([]);
@@ -133,6 +145,127 @@ describe("ConversasService", () => {
     expect(resultado.map((item) => item.id)).toEqual([8, 9]);
   });
 
+  it("impede abrir uma conversa privada ocultada para o usuário", async () => {
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "privada",
+      conversa_participante: [
+        {
+          usuario_id: 1,
+          ocultada_em: new Date("2026-09-02T12:00:00.000Z"),
+          cadastro: { tipo_usuario: "user" },
+        },
+        {
+          usuario_id: 2,
+          ocultada_em: null,
+          cadastro: { tipo_usuario: "admin" },
+        },
+      ],
+      atendimento_setor: null,
+    });
+
+    await expect(service.listarMensagens(1, 10)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
+    expect(prismaMock.mensagem.findMany).not.toHaveBeenCalled();
+  });
+
+  it("mostra somente mensagens privadas posteriores à reabertura", async () => {
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "privada",
+      conversa_participante: [
+        {
+          usuario_id: 1,
+          ocultada_em: null,
+          visivel_desde_mensagem_id: 50,
+          cadastro: { tipo_usuario: "user" },
+        },
+        {
+          usuario_id: 2,
+          ocultada_em: null,
+          visivel_desde_mensagem_id: null,
+          cadastro: { tipo_usuario: "admin" },
+        },
+      ],
+      atendimento_setor: null,
+    });
+    prismaMock.mensagem.findMany.mockResolvedValue([]);
+
+    await service.listarMensagens(1, 10);
+
+    expect(prismaMock.mensagem.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          conversa_id: 10,
+          id: { gte: 50 },
+        }),
+      }),
+    );
+  });
+
+  it("reabre a conversa para o usuário ao receber mensagem administrativa", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 2,
+      nome: "Administrador",
+      tipo_usuario: "admin",
+      setor_id: null,
+      secretaria_id: 7,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "privada",
+      conversa_participante: [
+        {
+          usuario_id: 2,
+          ocultada_em: null,
+          visivel_desde_mensagem_id: null,
+          cadastro: { tipo_usuario: "admin" },
+        },
+        {
+          usuario_id: 1,
+          ocultada_em: new Date("2026-09-02T12:00:00.000Z"),
+          visivel_desde_mensagem_id: null,
+          cadastro: { tipo_usuario: "user" },
+        },
+      ],
+      atendimento_setor: null,
+    });
+    prismaMock.mensagem.create.mockResolvedValue({
+      id: 20,
+      conversa_id: 10,
+      remetente_id: 2,
+      origem: "usuario",
+      conteudo: "Nova mensagem",
+      enviada_em: new Date("2026-09-02T13:00:00.000Z"),
+      arquivo_nome: null,
+      arquivo_url: null,
+      arquivo_tipo: null,
+      arquivo_mime: null,
+      arquivo_tamanho: null,
+      remetente: {
+        id: 2,
+        nome: "Administrador",
+        tipo_usuario: "admin",
+        foto_perfil_url: null,
+      },
+    });
+
+    await service.enviarMensagem(2, 10, "Nova mensagem");
+
+    expect(prismaMock.conversa_participante.updateMany).toHaveBeenCalledWith({
+      where: {
+        conversa_id: 10,
+        ocultada_em: { not: null },
+        cadastro: { tipo_usuario: "user" },
+      },
+      data: {
+        ocultada_em: null,
+        visivel_desde_mensagem_id: 20,
+      },
+    });
+  });
+
   it("recusa filtros anterior e posterior ao mesmo tempo", async () => {
     await expect(
       service.listarMensagens(1, 10, {
@@ -163,6 +296,47 @@ describe("ConversasService", () => {
         },
       }),
     );
+  });
+
+  it("não lista atendimentos antigos ocultados para o usuário comum", async () => {
+    await expect(service.listarAtendimentos(1)).resolves.toEqual([]);
+
+    expect(prismaMock.conversa_setor.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: {
+          usuario_id: 1,
+          ocultada_para_usuario_em: null,
+        },
+      }),
+    );
+  });
+
+  it("impede abrir diretamente atendimento ocultado para o usuário", async () => {
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "setor",
+      conversa_participante: [],
+      atendimento_setor: {
+        setor_id: 2,
+        usuario_id: 1,
+        ocultada_para_usuario_em: new Date("2026-09-02T12:00:00.000Z"),
+        setor: {
+          id: 2,
+          setor: "Atendimento",
+          sigla_setor: "ATD",
+          secretaria_id: 7,
+        },
+        usuario: {
+          id: 1,
+          nome: "Usuário",
+        },
+      },
+    });
+
+    await expect(service.listarMensagens(1, 10)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
+    expect(prismaMock.mensagem.findMany).not.toHaveBeenCalled();
   });
 
   it("retorna lista vazia para admin sem secretaria", async () => {
@@ -444,7 +618,7 @@ describe("ConversasService", () => {
           OR: [
             {
               conversa_participante: {
-                some: { usuario_id: 9 },
+                some: { usuario_id: 9, ocultada_em: null },
               },
             },
             {
@@ -471,8 +645,16 @@ describe("ConversasService", () => {
       id: 10,
       tipo: "privada",
       conversa_participante: [
-        { usuario_id: 9, cadastro: { tipo_usuario: "superAdmin" } },
-        { usuario_id: 7, cadastro: { tipo_usuario: "superAdmin" } },
+        {
+          usuario_id: 9,
+          ocultada_em: null,
+          cadastro: { tipo_usuario: "superAdmin" },
+        },
+        {
+          usuario_id: 7,
+          ocultada_em: null,
+          cadastro: { tipo_usuario: "superAdmin" },
+        },
       ],
       atendimento_setor: null,
     });
@@ -507,6 +689,7 @@ describe("ConversasService", () => {
     prismaMock.cadastro.findUnique.mockResolvedValue({
       id: 1,
       tipo_usuario: "admin",
+      desativado_em: null,
     });
     prismaMock.cadastro.findMany.mockResolvedValue([
       { id: 2 },
@@ -550,12 +733,15 @@ describe("ConversasService", () => {
         }),
       }),
     );
+    expect(prismaMock.$transaction).toHaveBeenCalledTimes(1);
+    expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(3);
   });
 
   it("impede adicionar usuário comum ao grupo", async () => {
     prismaMock.cadastro.findUnique.mockResolvedValue({
       id: 1,
       tipo_usuario: "admin",
+      desativado_em: null,
     });
     prismaMock.cadastro.findMany.mockResolvedValue([
       { id: 2 },
@@ -564,6 +750,22 @@ describe("ConversasService", () => {
     await expect(
       service.criarGrupo(1, "Grupo interno", [2, 3]),
     ).rejects.toBeInstanceOf(BadRequestException);
+    expect(prismaMock.conversa.create).not.toHaveBeenCalled();
+  });
+
+  it("impede criar o grupo se o criador for desativado durante a operação", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      tipo_usuario: "user",
+      desativado_em: new Date("2026-09-02T12:00:00.000Z"),
+    });
+
+    await expect(
+      service.criarGrupo(1, "Grupo interno", [2, 3]),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+
+    expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(3);
+    expect(prismaMock.cadastro.findMany).not.toHaveBeenCalled();
     expect(prismaMock.conversa.create).not.toHaveBeenCalled();
   });
 

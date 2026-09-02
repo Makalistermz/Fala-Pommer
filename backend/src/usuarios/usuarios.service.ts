@@ -226,7 +226,14 @@ export class UsuariosService {
         const usuarios =
             await this.prisma.cadastro.findMany({
                 where: {
-                    desativado_em: null,
+                    OR: [
+                        {
+                            desativado_em: null
+                        },
+                        {
+                            tipo_usuario: "user"
+                        }
+                    ],
 
                     id: {
                         not: usuarioLogado.id
@@ -780,6 +787,7 @@ export class UsuariosService {
                     },
                     select: {
                         id: true,
+                        nome: true,
                         tipo_usuario: true,
                         setor_id: true,
                         secretaria_id: true,
@@ -861,17 +869,9 @@ export class UsuariosService {
                     desativado_em: desativadoEm,
                     desativado_por: administradorId,
                     motivo_desativacao: motivoNormalizado,
-                    ...(usuario.tipo_usuario === "funcionario"
-                        ? {
-                            tipo_usuario: "user" as const,
-                            setor_id: null
-                        }
-                        : usuario.tipo_usuario === "admin"
-                            ? {
-                                tipo_usuario: "user" as const,
-                                secretaria_id: null
-                            }
-                            : {}),
+                    tipo_usuario: "user",
+                    setor_id: null,
+                    secretaria_id: null,
                     versao_token: {
                         increment: 1
                     },
@@ -924,6 +924,76 @@ export class UsuariosService {
                 },
                 data: {
                     usado_em: desativadoEm
+                }
+            });
+
+            // A conversa privada permanece para os demais participantes,
+            // mas deixa de existir para o perfil que virou usuário comum.
+            await transacao.conversa_participante.updateMany({
+                where: {
+                    usuario_id: id,
+                    conversa: {
+                        tipo: "privada"
+                    }
+                },
+                data: {
+                    ocultada_em: desativadoEm,
+                    visivel_desde_mensagem_id: null
+                }
+            });
+
+            const gruposDoUsuario =
+                await transacao.conversa_participante.findMany({
+                    where: {
+                        usuario_id: id,
+                        conversa: {
+                            tipo: "grupo"
+                        }
+                    },
+                    select: {
+                        conversa_id: true
+                    }
+                });
+
+            // Em grupos, remove o vínculo e registra no histórico visível
+            // aos demais participantes por que o perfil saiu.
+            await transacao.conversa_participante.deleteMany({
+                where: {
+                    usuario_id: id,
+                    conversa: {
+                        tipo: "grupo"
+                    }
+                }
+            });
+
+            if (gruposDoUsuario.length > 0) {
+                await transacao.mensagem.createMany({
+                    data: gruposDoUsuario.map((grupo) => ({
+                        conversa_id: grupo.conversa_id,
+                        remetente_id: administradorId,
+                        origem: "usuario",
+                        conteudo:
+                            `${usuario.nome} foi removido do grupo porque seu perfil foi desativado.`,
+                        enviada_em: desativadoEm
+                    }))
+                });
+            }
+
+            // O atendimento continua disponível ao setor, mas não
+            // volta a aparecer para a conta que foi desativada.
+            await transacao.conversa_setor.updateMany({
+                where: {
+                    usuario_id: id,
+                    ocultada_para_usuario_em: null
+                },
+                data: {
+                    ocultada_para_usuario_em: desativadoEm
+                }
+            });
+
+            await transacao.conversa_leitura.deleteMany({
+                where: {
+                    usuario_id: id
                 }
             });
 

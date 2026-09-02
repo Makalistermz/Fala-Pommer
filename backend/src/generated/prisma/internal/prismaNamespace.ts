@@ -1384,7 +1384,9 @@ export type ConversaScalarFieldEnum = (typeof ConversaScalarFieldEnum)[keyof typ
 export const Conversa_participanteScalarFieldEnum = {
   conversa_id: 'conversa_id',
   usuario_id: 'usuario_id',
-  entrou_em: 'entrou_em'
+  entrou_em: 'entrou_em',
+  ocultada_em: 'ocultada_em',
+  visivel_desde_mensagem_id: 'visivel_desde_mensagem_id'
 } as const
 
 export type Conversa_participanteScalarFieldEnum = (typeof Conversa_participanteScalarFieldEnum)[keyof typeof Conversa_participanteScalarFieldEnum]
@@ -1394,7 +1396,8 @@ export const Conversa_setorScalarFieldEnum = {
   conversa_id: 'conversa_id',
   setor_id: 'setor_id',
   usuario_id: 'usuario_id',
-  criada_em: 'criada_em'
+  criada_em: 'criada_em',
+  ocultada_para_usuario_em: 'ocultada_para_usuario_em'
 } as const
 
 export type Conversa_setorScalarFieldEnum = (typeof Conversa_setorScalarFieldEnum)[keyof typeof Conversa_setorScalarFieldEnum]

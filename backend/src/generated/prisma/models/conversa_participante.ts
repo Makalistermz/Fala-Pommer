@@ -29,29 +29,37 @@ export type AggregateConversa_participante = {
 export type Conversa_participanteAvgAggregateOutputType = {
   conversa_id: number | null
   usuario_id: number | null
+  visivel_desde_mensagem_id: number | null
 }
 
 export type Conversa_participanteSumAggregateOutputType = {
   conversa_id: number | null
   usuario_id: number | null
+  visivel_desde_mensagem_id: number | null
 }
 
 export type Conversa_participanteMinAggregateOutputType = {
   conversa_id: number | null
   usuario_id: number | null
   entrou_em: Date | null
+  ocultada_em: Date | null
+  visivel_desde_mensagem_id: number | null
 }
 
 export type Conversa_participanteMaxAggregateOutputType = {
   conversa_id: number | null
   usuario_id: number | null
   entrou_em: Date | null
+  ocultada_em: Date | null
+  visivel_desde_mensagem_id: number | null
 }
 
 export type Conversa_participanteCountAggregateOutputType = {
   conversa_id: number
   usuario_id: number
   entrou_em: number
+  ocultada_em: number
+  visivel_desde_mensagem_id: number
   _all: number
 }
 
@@ -59,29 +67,37 @@ export type Conversa_participanteCountAggregateOutputType = {
 export type Conversa_participanteAvgAggregateInputType = {
   conversa_id?: true
   usuario_id?: true
+  visivel_desde_mensagem_id?: true
 }
 
 export type Conversa_participanteSumAggregateInputType = {
   conversa_id?: true
   usuario_id?: true
+  visivel_desde_mensagem_id?: true
 }
 
 export type Conversa_participanteMinAggregateInputType = {
   conversa_id?: true
   usuario_id?: true
   entrou_em?: true
+  ocultada_em?: true
+  visivel_desde_mensagem_id?: true
 }
 
 export type Conversa_participanteMaxAggregateInputType = {
   conversa_id?: true
   usuario_id?: true
   entrou_em?: true
+  ocultada_em?: true
+  visivel_desde_mensagem_id?: true
 }
 
 export type Conversa_participanteCountAggregateInputType = {
   conversa_id?: true
   usuario_id?: true
   entrou_em?: true
+  ocultada_em?: true
+  visivel_desde_mensagem_id?: true
   _all?: true
 }
 
@@ -175,6 +191,8 @@ export type Conversa_participanteGroupByOutputType = {
   conversa_id: number
   usuario_id: number
   entrou_em: Date
+  ocultada_em: Date | null
+  visivel_desde_mensagem_id: number | null
   _count: Conversa_participanteCountAggregateOutputType | null
   _avg: Conversa_participanteAvgAggregateOutputType | null
   _sum: Conversa_participanteSumAggregateOutputType | null
@@ -204,6 +222,8 @@ export type conversa_participanteWhereInput = {
   conversa_id?: Prisma.IntFilter<"conversa_participante"> | number
   usuario_id?: Prisma.IntFilter<"conversa_participante"> | number
   entrou_em?: Prisma.DateTimeFilter<"conversa_participante"> | Date | string
+  ocultada_em?: Prisma.DateTimeNullableFilter<"conversa_participante"> | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.IntNullableFilter<"conversa_participante"> | number | null
   conversa?: Prisma.XOR<Prisma.ConversaScalarRelationFilter, Prisma.conversaWhereInput>
   cadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }
@@ -212,6 +232,8 @@ export type conversa_participanteOrderByWithRelationInput = {
   conversa_id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
   entrou_em?: Prisma.SortOrder
+  ocultada_em?: Prisma.SortOrderInput | Prisma.SortOrder
+  visivel_desde_mensagem_id?: Prisma.SortOrderInput | Prisma.SortOrder
   conversa?: Prisma.conversaOrderByWithRelationInput
   cadastro?: Prisma.cadastroOrderByWithRelationInput
 }
@@ -224,6 +246,8 @@ export type conversa_participanteWhereUniqueInput = Prisma.AtLeast<{
   conversa_id?: Prisma.IntFilter<"conversa_participante"> | number
   usuario_id?: Prisma.IntFilter<"conversa_participante"> | number
   entrou_em?: Prisma.DateTimeFilter<"conversa_participante"> | Date | string
+  ocultada_em?: Prisma.DateTimeNullableFilter<"conversa_participante"> | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.IntNullableFilter<"conversa_participante"> | number | null
   conversa?: Prisma.XOR<Prisma.ConversaScalarRelationFilter, Prisma.conversaWhereInput>
   cadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }, "conversa_id_usuario_id">
@@ -232,6 +256,8 @@ export type conversa_participanteOrderByWithAggregationInput = {
   conversa_id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
   entrou_em?: Prisma.SortOrder
+  ocultada_em?: Prisma.SortOrderInput | Prisma.SortOrder
+  visivel_desde_mensagem_id?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.conversa_participanteCountOrderByAggregateInput
   _avg?: Prisma.conversa_participanteAvgOrderByAggregateInput
   _max?: Prisma.conversa_participanteMaxOrderByAggregateInput
@@ -246,10 +272,14 @@ export type conversa_participanteScalarWhereWithAggregatesInput = {
   conversa_id?: Prisma.IntWithAggregatesFilter<"conversa_participante"> | number
   usuario_id?: Prisma.IntWithAggregatesFilter<"conversa_participante"> | number
   entrou_em?: Prisma.DateTimeWithAggregatesFilter<"conversa_participante"> | Date | string
+  ocultada_em?: Prisma.DateTimeNullableWithAggregatesFilter<"conversa_participante"> | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.IntNullableWithAggregatesFilter<"conversa_participante"> | number | null
 }
 
 export type conversa_participanteCreateInput = {
   entrou_em?: Date | string
+  ocultada_em?: Date | string | null
+  visivel_desde_mensagem_id?: number | null
   conversa: Prisma.conversaCreateNestedOneWithoutConversa_participanteInput
   cadastro: Prisma.cadastroCreateNestedOneWithoutConversa_participanteInput
 }
@@ -258,10 +288,14 @@ export type conversa_participanteUncheckedCreateInput = {
   conversa_id: number
   usuario_id: number
   entrou_em?: Date | string
+  ocultada_em?: Date | string | null
+  visivel_desde_mensagem_id?: number | null
 }
 
 export type conversa_participanteUpdateInput = {
   entrou_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ocultada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   conversa?: Prisma.conversaUpdateOneRequiredWithoutConversa_participanteNestedInput
   cadastro?: Prisma.cadastroUpdateOneRequiredWithoutConversa_participanteNestedInput
 }
@@ -270,22 +304,30 @@ export type conversa_participanteUncheckedUpdateInput = {
   conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   entrou_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ocultada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type conversa_participanteCreateManyInput = {
   conversa_id: number
   usuario_id: number
   entrou_em?: Date | string
+  ocultada_em?: Date | string | null
+  visivel_desde_mensagem_id?: number | null
 }
 
 export type conversa_participanteUpdateManyMutationInput = {
   entrou_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ocultada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type conversa_participanteUncheckedUpdateManyInput = {
   conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   entrou_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ocultada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type Conversa_participanteListRelationFilter = {
@@ -307,28 +349,36 @@ export type conversa_participanteCountOrderByAggregateInput = {
   conversa_id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
   entrou_em?: Prisma.SortOrder
+  ocultada_em?: Prisma.SortOrder
+  visivel_desde_mensagem_id?: Prisma.SortOrder
 }
 
 export type conversa_participanteAvgOrderByAggregateInput = {
   conversa_id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
+  visivel_desde_mensagem_id?: Prisma.SortOrder
 }
 
 export type conversa_participanteMaxOrderByAggregateInput = {
   conversa_id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
   entrou_em?: Prisma.SortOrder
+  ocultada_em?: Prisma.SortOrder
+  visivel_desde_mensagem_id?: Prisma.SortOrder
 }
 
 export type conversa_participanteMinOrderByAggregateInput = {
   conversa_id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
   entrou_em?: Prisma.SortOrder
+  ocultada_em?: Prisma.SortOrder
+  visivel_desde_mensagem_id?: Prisma.SortOrder
 }
 
 export type conversa_participanteSumOrderByAggregateInput = {
   conversa_id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
+  visivel_desde_mensagem_id?: Prisma.SortOrder
 }
 
 export type conversa_participanteCreateNestedManyWithoutCadastroInput = {
@@ -417,12 +467,16 @@ export type conversa_participanteUncheckedUpdateManyWithoutConversaNestedInput =
 
 export type conversa_participanteCreateWithoutCadastroInput = {
   entrou_em?: Date | string
+  ocultada_em?: Date | string | null
+  visivel_desde_mensagem_id?: number | null
   conversa: Prisma.conversaCreateNestedOneWithoutConversa_participanteInput
 }
 
 export type conversa_participanteUncheckedCreateWithoutCadastroInput = {
   conversa_id: number
   entrou_em?: Date | string
+  ocultada_em?: Date | string | null
+  visivel_desde_mensagem_id?: number | null
 }
 
 export type conversa_participanteCreateOrConnectWithoutCadastroInput = {
@@ -458,16 +512,22 @@ export type conversa_participanteScalarWhereInput = {
   conversa_id?: Prisma.IntFilter<"conversa_participante"> | number
   usuario_id?: Prisma.IntFilter<"conversa_participante"> | number
   entrou_em?: Prisma.DateTimeFilter<"conversa_participante"> | Date | string
+  ocultada_em?: Prisma.DateTimeNullableFilter<"conversa_participante"> | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.IntNullableFilter<"conversa_participante"> | number | null
 }
 
 export type conversa_participanteCreateWithoutConversaInput = {
   entrou_em?: Date | string
+  ocultada_em?: Date | string | null
+  visivel_desde_mensagem_id?: number | null
   cadastro: Prisma.cadastroCreateNestedOneWithoutConversa_participanteInput
 }
 
 export type conversa_participanteUncheckedCreateWithoutConversaInput = {
   usuario_id: number
   entrou_em?: Date | string
+  ocultada_em?: Date | string | null
+  visivel_desde_mensagem_id?: number | null
 }
 
 export type conversa_participanteCreateOrConnectWithoutConversaInput = {
@@ -499,41 +559,57 @@ export type conversa_participanteUpdateManyWithWhereWithoutConversaInput = {
 export type conversa_participanteCreateManyCadastroInput = {
   conversa_id: number
   entrou_em?: Date | string
+  ocultada_em?: Date | string | null
+  visivel_desde_mensagem_id?: number | null
 }
 
 export type conversa_participanteUpdateWithoutCadastroInput = {
   entrou_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ocultada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   conversa?: Prisma.conversaUpdateOneRequiredWithoutConversa_participanteNestedInput
 }
 
 export type conversa_participanteUncheckedUpdateWithoutCadastroInput = {
   conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
   entrou_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ocultada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type conversa_participanteUncheckedUpdateManyWithoutCadastroInput = {
   conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
   entrou_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ocultada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type conversa_participanteCreateManyConversaInput = {
   usuario_id: number
   entrou_em?: Date | string
+  ocultada_em?: Date | string | null
+  visivel_desde_mensagem_id?: number | null
 }
 
 export type conversa_participanteUpdateWithoutConversaInput = {
   entrou_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ocultada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cadastro?: Prisma.cadastroUpdateOneRequiredWithoutConversa_participanteNestedInput
 }
 
 export type conversa_participanteUncheckedUpdateWithoutConversaInput = {
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   entrou_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ocultada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type conversa_participanteUncheckedUpdateManyWithoutConversaInput = {
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   entrou_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ocultada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
@@ -542,6 +618,8 @@ export type conversa_participanteSelect<ExtArgs extends runtime.Types.Extensions
   conversa_id?: boolean
   usuario_id?: boolean
   entrou_em?: boolean
+  ocultada_em?: boolean
+  visivel_desde_mensagem_id?: boolean
   conversa?: boolean | Prisma.conversaDefaultArgs<ExtArgs>
   cadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversa_participante"]>
@@ -552,9 +630,11 @@ export type conversa_participanteSelectScalar = {
   conversa_id?: boolean
   usuario_id?: boolean
   entrou_em?: boolean
+  ocultada_em?: boolean
+  visivel_desde_mensagem_id?: boolean
 }
 
-export type conversa_participanteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"conversa_id" | "usuario_id" | "entrou_em", ExtArgs["result"]["conversa_participante"]>
+export type conversa_participanteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"conversa_id" | "usuario_id" | "entrou_em" | "ocultada_em" | "visivel_desde_mensagem_id", ExtArgs["result"]["conversa_participante"]>
 export type conversa_participanteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   conversa?: boolean | Prisma.conversaDefaultArgs<ExtArgs>
   cadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
@@ -570,6 +650,8 @@ export type $conversa_participantePayload<ExtArgs extends runtime.Types.Extensio
     conversa_id: number
     usuario_id: number
     entrou_em: Date
+    ocultada_em: Date | null
+    visivel_desde_mensagem_id: number | null
   }, ExtArgs["result"]["conversa_participante"]>
   composites: {}
 }
@@ -944,6 +1026,8 @@ export interface conversa_participanteFieldRefs {
   readonly conversa_id: Prisma.FieldRef<"conversa_participante", 'Int'>
   readonly usuario_id: Prisma.FieldRef<"conversa_participante", 'Int'>
   readonly entrou_em: Prisma.FieldRef<"conversa_participante", 'DateTime'>
+  readonly ocultada_em: Prisma.FieldRef<"conversa_participante", 'DateTime'>
+  readonly visivel_desde_mensagem_id: Prisma.FieldRef<"conversa_participante", 'Int'>
 }
     
 

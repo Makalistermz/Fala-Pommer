@@ -74,7 +74,7 @@ model login_evento {
 model conversa {
   id                    Int                     @id @default(autoincrement())
   tipo                  conversa_tipo           @default(privada)
-  nome                  String?                  @db.VarChar(120)
+  nome                  String?                 @db.VarChar(120)
   criada_em             DateTime                @default(now()) @db.DateTime(0)
   conversa_leitura      conversa_leitura[]
   conversa_participante conversa_participante[]
@@ -83,26 +83,30 @@ model conversa {
 }
 
 model conversa_participante {
-  conversa_id Int
-  usuario_id  Int
-  entrou_em   DateTime @default(now()) @db.DateTime(0)
-  conversa    conversa @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_participante_conversa")
-  cadastro    cadastro @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_participante_usuario")
+  conversa_id               Int
+  usuario_id                Int
+  entrou_em                 DateTime  @default(now()) @db.DateTime(0)
+  ocultada_em               DateTime? @db.DateTime(3)
+  visivel_desde_mensagem_id Int?
+  conversa                  conversa  @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_participante_conversa")
+  cadastro                  cadastro  @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_participante_usuario")
 
   @@id([conversa_id, usuario_id])
   @@index([usuario_id], map: "fk_participante_usuario")
+  @@index([usuario_id, ocultada_em], map: "idx_participante_usuario_visibilidade")
 }
 
 model conversa_setor {
-  conversa_id Int      @id
-  setor_id    Int
-  usuario_id  Int
-  criada_em   DateTime @default(now()) @db.DateTime(0)
-  conversa    conversa @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_conversa_setor_conversa")
-  setor       setores  @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_conversa_setor_setor")
-  usuario     cadastro @relation("UsuarioAtendido", fields: [usuario_id], references: [id], onUpdate: Restrict, map: "fk_conversa_setor_usuario")
+  conversa_id              Int       @id
+  setor_id                 Int
+  usuario_id               Int
+  criada_em                DateTime  @default(now()) @db.DateTime(0)
+  ocultada_para_usuario_em DateTime? @db.DateTime(3)
+  conversa                 conversa  @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_conversa_setor_conversa")
+  setor                    setores   @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_conversa_setor_setor")
+  usuario                  cadastro  @relation("UsuarioAtendido", fields: [usuario_id], references: [id], onUpdate: Restrict, map: "fk_conversa_setor_usuario")
 
-  @@unique([setor_id, usuario_id], map: "uq_conversa_setor_usuario")
+  @@index([setor_id, usuario_id, ocultada_para_usuario_em], map: "idx_conversa_setor_usuario_visibilidade")
   @@index([usuario_id], map: "idx_conversa_setor_usuario")
 }
 

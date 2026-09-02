@@ -103,6 +103,40 @@ describe('AuthService - autenticação em duas etapas', () => {
     expect(prismaMock.login_evento.create).toHaveBeenCalledTimes(1);
   });
 
+  it('permite que um perfil desativado entre como usuário comum', async () => {
+    usuariosMock.buscarPorEmail.mockResolvedValue({
+      ...usuario,
+      dois_fatores_email_ativo: false,
+      desativado_em: new Date('2026-09-02T12:00:00.000Z'),
+    });
+
+    const resultado = await service.signIn(usuario.email, 'Senha!123');
+
+    expect(resultado).toEqual(
+      expect.objectContaining({
+        requer_segunda_etapa: false,
+        access_token: 'jwt-final',
+        usuario: expect.objectContaining({
+          tipo: 'user',
+        }),
+      }),
+    );
+  });
+
+  it('rejeita um registro desativado que ainda possua perfil privilegiado', async () => {
+    usuariosMock.buscarPorEmail.mockResolvedValue({
+      ...usuario,
+      tipo_usuario: 'admin',
+      dois_fatores_email_ativo: false,
+      desativado_em: new Date('2026-09-02T12:00:00.000Z'),
+    });
+
+    await expect(
+      service.signIn(usuario.email, 'Senha!123'),
+    ).rejects.toBeInstanceOf(UnauthorizedException);
+    expect(jwtMock.signAsync).not.toHaveBeenCalled();
+  });
+
   it('não cria desafio quando a senha está incorreta', async () => {
     usuariosMock.buscarPorEmail.mockResolvedValue(usuario);
     (bcrypt.compare as jest.Mock).mockResolvedValue(false);
@@ -159,6 +193,16 @@ describe('AuthService - autenticação em duas etapas', () => {
     );
     expect(resultado.access_token).toBe('jwt-final');
     expect(prismaMock.login_evento.create).toHaveBeenCalledTimes(1);
+    expect(prismaMock.cadastro.findFirst).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          OR: [
+            { desativado_em: null },
+            { tipo_usuario: 'user' },
+          ],
+        }),
+      }),
+    );
   });
 
   it('permite concluir o login com um código de recuperação válido', async () => {

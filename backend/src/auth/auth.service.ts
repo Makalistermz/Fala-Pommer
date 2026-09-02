@@ -79,7 +79,10 @@ export class AuthService {
             );
         }
 
-        if (usuario.desativado_em) {
+        if (
+            usuario.desativado_em &&
+            usuario.tipo_usuario !== "user"
+        ) {
             throw new UnauthorizedException(
                 "Esta conta está desativada."
             );
@@ -139,7 +142,14 @@ export class AuthService {
             where: {
                 id: usuarioId,
                 dois_fatores_email_ativo: true,
-                desativado_em: null
+                OR: [
+                    {
+                        desativado_em: null
+                    },
+                    {
+                        tipo_usuario: "user"
+                    }
+                ]
             },
             select: {
                 id: true,

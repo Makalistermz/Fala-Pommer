@@ -37,14 +37,14 @@ const ITENS_POR_PAGINA = 20;
 // Retorna um aviso de desativação adequado ao perfil atual do usuário.
 function obterAvisoDesativacao(usuario: Usuario) {
     if (usuario.tipo_usuario === "funcionario") {
-        return "Ao desativar, este funcionário perderá o vínculo com o setor, será alterado para usuário comum e todas as sessões serão encerradas.";
+        return "Ao desativar, este funcionário perderá o vínculo com o setor, será alterado para usuário comum, sairá dos grupos e deixará de ver as conversas antigas. Ele poderá entrar novamente e receber novas mensagens privadas.";
     }
 
     if (usuario.tipo_usuario === "admin") {
-        return "Ao desativar, este admin perderá o vínculo com a secretaria, será alterado para usuário comum e todas as sessões serão encerradas.";
+        return "Ao desativar, este admin perderá o vínculo com a secretaria, será alterado para usuário comum, sairá dos grupos e deixará de ver as conversas antigas. Ele poderá entrar novamente e receber novas mensagens privadas.";
     }
 
-    return "Ao desativar esta conta, todas as sessões abertas serão encerradas imediatamente.";
+    return "Ao desativar, este perfil será alterado para usuário comum, sairá dos grupos e deixará de ver as conversas antigas. Ele poderá entrar novamente e receber novas mensagens privadas.";
 }
 
 // Permite reutilizar a tela para usuários ativos ou desativados.
@@ -331,7 +331,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                 tipo: "sucesso",
                 mensagem: estaDesativado
                     ? "O usuário foi reativado como usuário comum."
-                    : "O usuário foi desativado e suas sessões foram encerradas.",
+                    : "O perfil foi desativado como usuário comum e suas conversas anteriores foram removidas da conta.",
             });
         } catch (erro) {
             setFeedback({

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { obterItensPaginacao } from "../../library/paginacao";
 
+// Representa cada registro de erro retornado pela API.
 type RelatorioErro = {
     id: number;
     usuario: string;
@@ -9,6 +10,7 @@ type RelatorioErro = {
     horario: string;
 };
 
+// Formatadores reutilizados para exibir data e horário no padrão brasileiro.
 const FORMATADOR_HORARIO = new Intl.DateTimeFormat("pt-BR", {
     timeZone: "America/Sao_Paulo",
     hour: "2-digit",
@@ -22,6 +24,7 @@ const FORMATADOR_DATA = new Intl.DateTimeFormat('pt-BR', {
 
 const ITENS_POR_PAGINA = 20;
 
+// Converte os valores internos da API em textos amigáveis para a tabela.
 const NOMES_PERFIS: Record<RelatorioErro["tipoUsuario"], string> = {
     admin: "Administrador",
     superAdmin: "Super administrador",
@@ -48,6 +51,7 @@ function RelatorioError() {
     const [erro, setErro] = useState("");
     const [paginaAtual, setPaginaAtual] = useState(1);
 
+    // Separa somente os registros pertencentes à página selecionada.
     const totalPaginas = Math.ceil(relatorios.length / ITENS_POR_PAGINA);
     const inicioPagina = (paginaAtual - 1) * ITENS_POR_PAGINA;
     const relatoriosPaginados = relatorios.slice(
@@ -56,9 +60,11 @@ function RelatorioError() {
     );
 
     useEffect(() => {
+        // Permite cancelar a requisição caso o componente seja desmontado.
         const controlador = new AbortController();
 
         async function carregarRelatorios() {
+            // O endpoint exige o token de acesso salvo após a autenticação.
             const token = localStorage.getItem("access_token");
 
             if (!token) {
@@ -82,6 +88,7 @@ function RelatorioError() {
                     throw new Error("Não foi possível consultar os relatórios.");
                 }
 
+                // Armazena os registros retornados para renderização e paginação.
                 const dados = await resposta.json() as RelatorioErro[];
                 setRelatorios(dados);
             } catch (error) {
@@ -99,6 +106,7 @@ function RelatorioError() {
 
         void carregarRelatorios();
 
+        // Evita atualizar o estado depois que o componente deixa a tela.
         return () => controlador.abort();
     }, []);
 
@@ -119,10 +127,11 @@ function RelatorioError() {
                             <th scope="col">Usuário</th>
                             <th scope="col">Perfil</th>
                             <th scope="col">Erro</th>
-                            <th scope="col">Horário</th>
+                            <th scope="col">Data e Hora</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {/* Exibe uma única mensagem enquanto os dados estão sendo buscados. */}
                         {carregando && (
                             <tr>
                                 <td className="relatorios-logs__mensagem" colSpan={4}>
@@ -131,6 +140,7 @@ function RelatorioError() {
                             </tr>
                         )}
 
+                        {/* Informa falhas de autenticação ou de comunicação com a API. */}
                         {!carregando && erro && (
                             <tr>
                                 <td className="relatorios-logs__mensagem relatorios-logs__mensagem--erro" colSpan={4}>
@@ -139,6 +149,7 @@ function RelatorioError() {
                             </tr>
                         )}
 
+                        {/* Trata o retorno válido quando ainda não existem registros. */}
                         {!carregando && !erro && relatorios.length === 0 && (
                             <tr>
                                 <td className="relatorios-logs__mensagem" colSpan={4}>
@@ -147,6 +158,7 @@ function RelatorioError() {
                             </tr>
                         )}
 
+                        {/* Renderiza apenas os relatórios correspondentes à página atual. */}
                         {!carregando && !erro && relatoriosPaginados.map((relatorio) => (
                             <tr key={relatorio.id}>
                                 <td>
@@ -163,6 +175,7 @@ function RelatorioError() {
                 </table>
             </div>
 
+            {/* A navegação só é necessária quando os registros ocupam mais de uma página. */}
             {!carregando && !erro && totalPaginas > 1 && (
                 <nav
                     aria-label="Paginação dos relatórios de erros"
@@ -177,6 +190,7 @@ function RelatorioError() {
                     </button>
 
                     {obterItensPaginacao(paginaAtual, totalPaginas).map((item) => {
+                        // Itens textuais representam intervalos de páginas omitidas.
                         if (typeof item === "string") {
                             return (
                                 <span key={item} aria-hidden="true">

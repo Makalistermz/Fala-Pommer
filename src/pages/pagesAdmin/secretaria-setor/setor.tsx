@@ -4,6 +4,7 @@ import { obterItensPaginacao } from "../../../library/paginacao";
 import { ModalConfirmacao } from "../../../components/ModalConfirmacao";
 import { ModalFeedback } from "../../../components/ModalFeedback";
 
+// Representa um setor e sua possível associação com uma secretaria.
 type Setor = {
     id: number;
     setor: string;
@@ -12,6 +13,7 @@ type Setor = {
     secretaria: Secretaria | null;
 }
 
+// Define os dados de secretaria usados na seleção e na listagem.
 type Secretaria = {
     id: number;
     secretaria: string;
@@ -21,6 +23,7 @@ type Secretaria = {
 const ITENS_POR_PAGINA = 20;
 
 function Setores() {
+    // Mantém as listas e os estados das operações realizadas na tela.
     const [setores, setSetores] = useState<Setor[]>([]);
     const [secretarias, setSecretarias] = useState<Secretaria[]>([]);
     const [carregandoSecretarias, setCarregandoSecretarias] = useState(true);
@@ -33,6 +36,7 @@ function Setores() {
         mensagem: ""
     });
 
+    // Seleciona apenas os setores correspondentes à página atual.
     const totalPaginas = Math.ceil(setores.length / ITENS_POR_PAGINA);
     const inicioPagina = (paginaAtual - 1) * ITENS_POR_PAGINA;
     const setoresPaginados = setores.slice(
@@ -41,6 +45,7 @@ function Setores() {
     );
 
     useEffect(() => {
+        // Carrega os setores cadastrados ao abrir a tela.
         async function carregarSetores() {
             try {
                 const token = localStorage.getItem("access_token");
@@ -65,6 +70,7 @@ function Setores() {
     }, []);
 
     useEffect(() => {
+        // Carrega as secretarias disponíveis para associação com o setor.
         async function carregarSecretarias() {
             try {
                 const token = localStorage.getItem("access_token");
@@ -99,6 +105,7 @@ function Setores() {
     }, []);
 
     useEffect(() => {
+        // Ajusta a página atual quando uma exclusão reduz o total de páginas.
         if (totalPaginas > 0 && paginaAtual > totalPaginas) {
             setPaginaAtual(totalPaginas);
         }
@@ -113,6 +120,7 @@ function Setores() {
         const dadosFormulario = new FormData(formulario);
         const secretariaId = dadosFormulario.get("secretaria_id");
 
+        // Normaliza os valores do formulário antes do envio para a API.
         const dados = {
             setor: String(dadosFormulario.get("setor") ?? ""),
             sigla_setor: String(dadosFormulario.get("sigla_setor") ?? ""),
@@ -150,6 +158,7 @@ function Setores() {
                 mensagem: "O setor foi cadastrado com sucesso"
             });
 
+            // Acrescenta o setor criado à listagem sem realizar uma nova consulta.
             setSetores((setoresAtuais) => [...setoresAtuais, resultado]);
             formulario.reset();
         } catch(erro) {
@@ -165,6 +174,7 @@ function Setores() {
     }
 
     async function apagar() {
+        // A exclusão só prossegue quando um setor foi selecionado.
         if (!setorParaApagar) return;
 
         setSetorSendoApagado(setorParaApagar.id);
@@ -186,6 +196,7 @@ function Setores() {
                 throw new Error(resultado.message ?? "Não foi possível apagar o setor.");
             }
 
+            // Remove da listagem local o setor excluído pela API.
             setSetores((setoresAtuais) =>
                 setoresAtuais.filter((setorAtual) => setorAtual.id !== setorParaApagar.id),
             );
@@ -208,6 +219,7 @@ function Setores() {
         }
     }
 
+    // Indicador visual reutilizado nos campos obrigatórios.
     const estiloObrigatorio: React.CSSProperties = {
         color: 'red',
     }
@@ -224,6 +236,7 @@ function Setores() {
             </header>
 
             <div className="formulario-setor">
+                {/* Formulário responsável pelo cadastro de novos setores. */}
                 <form method="POST" className="setor-form" onSubmit={criar}>
                     <div className="container-campo-setor">
                         <div className="campo-form-setor campo-form-setor--secretaria">
@@ -242,6 +255,7 @@ function Setores() {
                                             : "Sem secretaria"}
                                 </option>
 
+                                {/* Disponibiliza as secretarias carregadas como opções. */}
                                 {secretarias.map((secretaria) => (
                                     <option key={secretaria.id} value={secretaria.id}>
                                         {secretaria.sigla_secretaria} — {secretaria.secretaria}
@@ -292,6 +306,7 @@ function Setores() {
                     </thead>
 
                     <tbody>
+                        {/* Exibe somente os setores da página selecionada. */}
                         {setoresPaginados.map((setor) => (
                             <tr key={setor.id}>
                                 <td>{setor.sigla_setor}</td>
@@ -317,6 +332,7 @@ function Setores() {
                 </table>
             </div>
 
+            {/* Mostra a navegação somente quando há mais de uma página. */}
             {totalPaginas > 1 && (
                 <nav
                     aria-label="Paginação dos setores"
@@ -331,6 +347,7 @@ function Setores() {
                     </button>
 
                     {obterItensPaginacao(paginaAtual, totalPaginas).map((item) => {
+                        // Itens textuais representam intervalos de páginas omitidas.
                         if (typeof item === "string") {
                             return (
                                 <span key={item} aria-hidden="true">
@@ -362,6 +379,7 @@ function Setores() {
                 </nav>
             )}
 
+            {/* Solicita confirmação antes de excluir um setor. */}
             <ModalConfirmacao
                 aberto={setorParaApagar !== null}
                 titulo="Apagar setor?"
@@ -373,6 +391,7 @@ function Setores() {
                 aoConfirmar={() => void apagar()}
             />
 
+            {/* Comunica o resultado das operações realizadas na tela. */}
             <ModalFeedback
                 aberto={feedback.aberto}
                 tipo={feedback.tipo}

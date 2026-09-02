@@ -4,6 +4,7 @@ import { ModalConfirmacao } from "../../../components/ModalConfirmacao";
 import { ModalFeedback } from "../../../components/ModalFeedback";
 import { obterItensPaginacao } from "../../../library/paginacao";
 
+// Representa uma secretaria retornada pela API.
 type SecretariaCadastrada = {
     id: number;
     secretaria: string;
@@ -13,6 +14,7 @@ type SecretariaCadastrada = {
 const ITENS_POR_PAGINA = 20;
 
 function Secretaria() {
+    // Mantém os dados da listagem e os estados das operações da tela.
     const [secretarias, setSecretarias] = useState<SecretariaCadastrada[]>([]);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [carregando, setCarregando] = useState(true);
@@ -27,6 +29,7 @@ function Secretaria() {
         mensagem: "",
     });
 
+    // Seleciona as secretarias que pertencem à página atual.
     const totalPaginas = Math.ceil(secretarias.length / ITENS_POR_PAGINA);
     const inicioPagina = (paginaAtual - 1) * ITENS_POR_PAGINA;
     const secretariasPaginadas = secretarias.slice(
@@ -35,6 +38,7 @@ function Secretaria() {
     );
 
     useEffect(() => {
+        // Carrega a lista inicial de secretarias ao abrir a tela.
         async function carregarSecretarias() {
             try {
                 const token = localStorage.getItem("access_token");
@@ -70,12 +74,14 @@ function Secretaria() {
     }, []);
 
     useEffect(() => {
+        // Reposiciona a paginação quando uma exclusão reduz o total de páginas.
         if (totalPaginas > 0 && paginaAtual > totalPaginas) {
             setPaginaAtual(totalPaginas);
         }
     }, [paginaAtual, totalPaginas]);
 
     async function criar(evento: React.SubmitEvent<HTMLFormElement>) {
+        // Envia os dados do formulário sem recarregar a página.
         evento.preventDefault();
 
         const formulario = evento.currentTarget;
@@ -110,6 +116,7 @@ function Secretaria() {
                 return;
             }
 
+            // Inclui a nova secretaria localmente e preserva a ordem alfabética.
             const secretariaCriada = resultado as SecretariaCadastrada;
             setSecretarias((secretariasAtuais) =>
                 [...secretariasAtuais, secretariaCriada].sort((itemA, itemB) =>
@@ -135,6 +142,7 @@ function Secretaria() {
     }
 
     async function apagar() {
+        // A exclusão só prossegue após a escolha de uma secretaria.
         if (!secretariaParaApagar) return;
 
         setSecretariaSendoApagada(secretariaParaApagar.id);
@@ -158,6 +166,7 @@ function Secretaria() {
                 );
             }
 
+            // Remove da listagem local a secretaria excluída pela API.
             setSecretarias((secretariasAtuais) =>
                 secretariasAtuais.filter(
                     (secretariaAtual) =>
@@ -184,6 +193,7 @@ function Secretaria() {
         }
     }
 
+    // Indicador visual reutilizado nos campos obrigatórios.
     const estiloObrigatorio: React.CSSProperties = {
         color: "red",
     };
@@ -200,6 +210,7 @@ function Secretaria() {
             </header>
 
             <div className="formulario-secretaria">
+                {/* Formulário responsável pelo cadastro de novas secretarias. */}
                 <form method="POST" className="secretaria-form" onSubmit={criar}>
                     <div className="container-campo-secretaria">
                         <div className="campo-form-secretaria">
@@ -247,6 +258,7 @@ function Secretaria() {
                     </thead>
 
                     <tbody>
+                        {/* Exibe somente as secretarias da página selecionada. */}
                         {secretariasPaginadas.map((item) => (
                             <tr key={item.id}>
                                 <td>{item.sigla_secretaria}</td>
@@ -266,12 +278,14 @@ function Secretaria() {
                             </tr>
                         ))}
 
+                        {/* Informa quando o carregamento termina sem registros. */}
                         {!carregando && secretarias.length === 0 && (
                             <tr>
                                 <td colSpan={3}>Nenhuma secretaria cadastrada.</td>
                             </tr>
                         )}
 
+                        {/* Mantém um retorno visual durante a consulta inicial. */}
                         {carregando && (
                             <tr>
                                 <td colSpan={3}>Carregando secretarias...</td>
@@ -281,6 +295,7 @@ function Secretaria() {
                 </table>
             </div>
 
+            {/* Mostra a navegação somente quando há mais de uma página. */}
             {totalPaginas > 1 && (
                 <nav
                     aria-label="Paginação das secretarias"
@@ -295,6 +310,7 @@ function Secretaria() {
                     </button>
 
                     {obterItensPaginacao(paginaAtual, totalPaginas).map((item) => {
+                        // Itens textuais representam intervalos de páginas omitidas.
                         if (typeof item === "string") {
                             return (
                                 <span key={item} aria-hidden="true">
@@ -326,6 +342,7 @@ function Secretaria() {
                 </nav>
             )}
 
+            {/* Solicita confirmação antes de excluir uma secretaria. */}
             <ModalConfirmacao
                 aberto={secretariaParaApagar !== null}
                 titulo="Apagar secretaria?"
@@ -339,6 +356,7 @@ function Secretaria() {
                 aoConfirmar={() => void apagar()}
             />
 
+            {/* Comunica o resultado das operações realizadas na tela. */}
             <ModalFeedback
                 aberto={feedback.aberto}
                 tipo={feedback.tipo}

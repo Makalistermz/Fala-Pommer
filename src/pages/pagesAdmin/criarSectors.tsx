@@ -3,11 +3,13 @@ import { useState } from "react";
 import Setores from "./secretaria-setor/setor";
 import Secretaria from "./secretaria-setor/secretaria";
 
+// Define os dados necessários para cada opção do menu.
 type itemMenuSecretaria = {
     id: string;
     label: string;
 };
 
+// Mantém centralizadas as opções disponíveis para navegação.
 const itensMenuSecretaria: itemMenuSecretaria[] = [
     {
         id: "secretaria",
@@ -20,8 +22,10 @@ const itensMenuSecretaria: itemMenuSecretaria[] = [
 ]
 
 function CriarSectors() {
+    // Controla qual área administrativa está visível no momento.
     const [itemAtivo, setItemAtivo] = useState("secretaria");
 
+    // Seleciona o componente correspondente à opção ativa.
     function renderizarConteudo() {
         switch (itemAtivo) {
             case "secretaria":
@@ -41,6 +45,7 @@ function CriarSectors() {
                 className="criar-sectors__pastas"
                 aria-label="Escolha entre secretarias e setores"
             >
+                {/* Cria um botão de navegação para cada opção cadastrada. */}
                 {itensMenuSecretaria.map((item) => (
                     <button
                         key={item.id}
@@ -60,6 +65,7 @@ function CriarSectors() {
             </nav>
 
             <div className="criar-sectors__conteudo">
+                {/* Exibe o formulário referente à opção selecionada. */}
                 {renderizarConteudo()}
             </div>
         </section>

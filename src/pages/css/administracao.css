@@ -2090,6 +2090,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     .container-dashboard {
         grid-template-columns: 1fr;
         grid-template-rows: repeat(3, auto);
+        gap: 0px;
     }
 
     .grafico-card--logins {

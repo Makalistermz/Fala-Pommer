@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { obterItensPaginacao } from "../../library/paginacao";
 
+// Representa um registro de entrada e saída retornado pela API.
 type RelatorioLog = {
     id: number;
     usuario: string;
@@ -10,6 +11,7 @@ type RelatorioLog = {
     saida: string | null;
 };
 
+// Mantém a apresentação das datas no padrão e no fuso horário brasileiros.
 const FORMATADOR_DATA = new Intl.DateTimeFormat("pt-BR", {
     timeZone: "America/Sao_Paulo",
     dateStyle: "short",
@@ -18,6 +20,7 @@ const FORMATADOR_DATA = new Intl.DateTimeFormat("pt-BR", {
 
 const ITENS_POR_PAGINA = 20;
 
+// Converte os identificadores de perfil em nomes legíveis na tabela.
 const NOMES_PERFIS: Record<RelatorioLog["tipoUsuario"], string> = {
     admin: "Administrador",
     superAdmin: "Super administrador",
@@ -35,6 +38,7 @@ function RelatoriosLogs() {
     const [erro, setErro] = useState("");
     const [paginaAtual, setPaginaAtual] = useState(1);
 
+    // Seleciona apenas os registros que pertencem à página atual.
     const totalPaginas = Math.ceil(relatorios.length / ITENS_POR_PAGINA);
     const inicioPagina = (paginaAtual - 1) * ITENS_POR_PAGINA;
     const relatoriosPaginados = relatorios.slice(
@@ -43,9 +47,11 @@ function RelatoriosLogs() {
     );
 
     useEffect(() => {
+        // Permite cancelar a requisição quando o componente for desmontado.
         const controlador = new AbortController();
 
         async function carregarRelatorios() {
+            // Recupera o token necessário para acessar o endpoint protegido.
             const token = localStorage.getItem("access_token");
 
             if (!token) {
@@ -69,6 +75,7 @@ function RelatoriosLogs() {
                     throw new Error("Não foi possível consultar os relatórios.");
                 }
 
+                // Armazena os acessos retornados para exibição e paginação.
                 const dados = await resposta.json() as RelatorioLog[];
                 setRelatorios(dados);
             } catch (error) {
@@ -86,6 +93,7 @@ function RelatoriosLogs() {
 
         void carregarRelatorios();
 
+        // Impede atualizações de estado após a saída desta tela.
         return () => controlador.abort();
     }, []);
 
@@ -110,6 +118,7 @@ function RelatoriosLogs() {
                         </tr>
                     </thead>
                     <tbody>
+                        {/* Informa que os registros ainda estão sendo carregados. */}
                         {carregando && (
                             <tr>
                                 <td className="relatorios-logs__mensagem" colSpan={5}>
@@ -118,6 +127,7 @@ function RelatoriosLogs() {
                             </tr>
                         )}
 
+                        {/* Apresenta falhas de autenticação ou de comunicação com a API. */}
                         {!carregando && erro && (
                             <tr>
                                 <td className="relatorios-logs__mensagem relatorios-logs__mensagem--erro" colSpan={5}>
@@ -126,6 +136,7 @@ function RelatoriosLogs() {
                             </tr>
                         )}
 
+                        {/* Trata uma resposta válida que não contém registros de acesso. */}
                         {!carregando && !erro && relatorios.length === 0 && (
                             <tr>
                                 <td className="relatorios-logs__mensagem" colSpan={5}>
@@ -134,6 +145,7 @@ function RelatoriosLogs() {
                             </tr>
                         )}
 
+                        {/* Renderiza somente os acessos correspondentes à página selecionada. */}
                         {!carregando && !erro && relatoriosPaginados.map((relatorio) => (
                             <tr key={relatorio.id}>
                                 <td>
@@ -144,6 +156,7 @@ function RelatoriosLogs() {
                                 <td>{NOMES_PERFIS[relatorio.tipoUsuario]}</td>
                                 <td>{formatarData(relatorio.entrada)}</td>
                                 <td>
+                                    {/* Sinaliza os acessos cuja saída ainda não foi registrada. */}
                                     {relatorio.saida
                                         ? formatarData(relatorio.saida)
                                         : "Não registrada"}
@@ -154,6 +167,7 @@ function RelatoriosLogs() {
                 </table>
             </div>
 
+            {/* Exibe os controles apenas quando existe mais de uma página. */}
             {!carregando && !erro && totalPaginas > 1 && (
                 <nav
                     aria-label="Paginação dos relatórios de acesso"
@@ -168,6 +182,7 @@ function RelatoriosLogs() {
                     </button>
 
                     {obterItensPaginacao(paginaAtual, totalPaginas).map((item) => {
+                        // Itens textuais indicam um intervalo de páginas omitidas.
                         if (typeof item === "string") {
                             return (
                                 <span key={item} aria-hidden="true">

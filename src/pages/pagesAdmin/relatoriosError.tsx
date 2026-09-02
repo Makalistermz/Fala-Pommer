@@ -16,6 +16,10 @@ const FORMATADOR_HORARIO = new Intl.DateTimeFormat("pt-BR", {
     second: "2-digit",
 });
 
+const FORMATADOR_DATA = new Intl.DateTimeFormat('pt-BR', {
+    dateStyle: 'short',
+});
+
 const ITENS_POR_PAGINA = 20;
 
 const NOMES_PERFIS: Record<RelatorioErro["tipoUsuario"], string> = {
@@ -32,6 +36,10 @@ const NOMES_ERROS: Record<RelatorioErro["erro"], string> = {
 
 function formatarHorario(data: string) {
     return FORMATADOR_HORARIO.format(new Date(data));
+}
+
+function formatarData(data: string) {
+    return FORMATADOR_DATA.format(new Date(data));
 }
 
 function RelatorioError() {
@@ -148,7 +156,7 @@ function RelatorioError() {
                                 </td>
                                 <td>{NOMES_PERFIS[relatorio.tipoUsuario]}</td>
                                 <td>{NOMES_ERROS[relatorio.erro]}</td>
-                                <td>{formatarHorario(relatorio.horario)}</td>
+                                <td>{formatarHorario(relatorio.horario)} - {formatarData(relatorio.horario)}</td>
                             </tr>
                         ))}
                     </tbody>

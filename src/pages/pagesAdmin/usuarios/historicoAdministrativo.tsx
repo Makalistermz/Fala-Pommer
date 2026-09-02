@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { obterItensPaginacao } from "../../../library/paginacao";
 
+// Representa os dados básicos dos usuários envolvidos em cada ação.
 interface UsuarioAlvo {
     id: number;
     nome: string;
 }
 
+// Define a estrutura de um registro do histórico administrativo.
 interface Historico {
     id: number;
     administrador: UsuarioAlvo;
@@ -18,10 +20,12 @@ interface Historico {
 
 const ITENS_POR_PAGINA = 20;
 
+// Converte o identificador da ação em um texto legível.
 function formatarAcao(acao: Historico["acao"]) {
     return acao === "usuario_desativado" ? "Desativação" : "Reativação";
 }
 
+// Traduz os tipos internos de usuário para os nomes exibidos na tabela.
 function formatarTipoUsuario(tipo: string | null) {
     const tipos: Record<string, string> = {
         user: "Usuário",
@@ -33,6 +37,7 @@ function formatarTipoUsuario(tipo: string | null) {
     return tipo ? tipos[tipo] ?? tipo : "—";
 }
 
+// Formata datas válidas conforme o padrão brasileiro.
 function formatarData(data: string) {
     const dataConvertida = new Date(data);
 
@@ -45,12 +50,14 @@ function formatarData(data: string) {
 }
 
 function HistoricoAdministrativo() {
+    // Mantém os registros e os estados de pesquisa, paginação e carregamento.
     const [historicos, setHistoricos] = useState<Historico[]>([]);
     const [pesquisa, setPesquisa] = useState("");
     const [paginaAtual, setPaginaAtual] = useState(1);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
 
+    // Normaliza o termo e pesquisa nos principais campos do histórico.
     const termoPesquisa = pesquisa.trim().toLocaleLowerCase("pt-BR");
     const historicosFiltrados = historicos.filter((historico) => (
         String(historico.id).includes(termoPesquisa) ||
@@ -70,6 +77,7 @@ function HistoricoAdministrativo() {
             .includes(termoPesquisa)
     ));
 
+    // Pagina somente os registros que correspondem à pesquisa atual.
     const totalPaginas = Math.ceil(
         historicosFiltrados.length / ITENS_POR_PAGINA,
     );
@@ -80,9 +88,11 @@ function HistoricoAdministrativo() {
     );
 
     useEffect(() => {
+        // Evita atualizações de estado depois que o componente for desmontado.
         let componenteAtivo = true;
 
         async function carregarHistorico() {
+            // Consulta o histórico utilizando a autenticação armazenada localmente.
             try {
                 const token = localStorage.getItem("access_token");
                 const resposta = await fetch(
@@ -101,6 +111,7 @@ function HistoricoAdministrativo() {
                 const dados: Historico[] = await resposta.json();
 
                 if (componenteAtivo) {
+                    // Mantém os registros mais recentes no início da listagem.
                     setHistoricos(
                         dados.sort((primeiro, segundo) =>
                             segundo.criado_em.localeCompare(primeiro.criado_em),
@@ -128,6 +139,7 @@ function HistoricoAdministrativo() {
     }, []);
 
     useEffect(() => {
+        // Corrige a página atual quando a filtragem reduz o total de páginas.
         if (totalPaginas > 0 && paginaAtual > totalPaginas) {
             setPaginaAtual(totalPaginas);
         }
@@ -148,6 +160,7 @@ function HistoricoAdministrativo() {
             </header>
 
             <div className="usuarios__pesquisa">
+                {/* Reinicia a paginação sempre que o termo pesquisado muda. */}
                 <input
                     type="search"
                     value={pesquisa}
@@ -175,24 +188,28 @@ function HistoricoAdministrativo() {
                     </thead>
 
                     <tbody>
+                        {/* Apresenta o estado da consulta inicial. */}
                         {carregando && (
                             <tr>
                                 <td colSpan={7}>Carregando histórico...</td>
                             </tr>
                         )}
 
+                        {/* Exibe uma falha ocorrida durante o carregamento. */}
                         {!carregando && erro && (
                             <tr>
                                 <td colSpan={7}>{erro}</td>
                             </tr>
                         )}
 
+                        {/* Informa quando não existem resultados para a pesquisa. */}
                         {!carregando && !erro && historicosPaginados.length === 0 && (
                             <tr>
                                 <td colSpan={7}>Nenhum registro encontrado.</td>
                             </tr>
                         )}
 
+                        {/* Renderiza apenas os registros pertencentes à página atual. */}
                         {!carregando && !erro && historicosPaginados.map((historico) => (
                             <tr key={historico.id}>
                                 <td>{historico.id}</td>
@@ -220,6 +237,7 @@ function HistoricoAdministrativo() {
                 </table>
             </div>
 
+            {/* Mostra a navegação somente quando há mais de uma página. */}
             {totalPaginas > 1 && (
                 <nav
                     aria-label="Paginação do histórico administrativo"
@@ -234,6 +252,7 @@ function HistoricoAdministrativo() {
                     </button>
 
                     {obterItensPaginacao(paginaAtual, totalPaginas).map((item) => {
+                        // Itens textuais representam intervalos de páginas omitidas.
                         if (typeof item === "string") {
                             return (
                                 <span key={item} aria-hidden="true">

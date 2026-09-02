@@ -4,11 +4,13 @@ import UsuariosAtivos from "./usuarios/usuariosAtivos";
 import UsuariosDesativados from "./usuarios/usuariosDesativados";
 import HistoricoAdministrativo from "./usuarios/historicoAdministrativo";
 
+// Define os dados necessários para cada opção do menu de usuários.
 type itemMenuUsuarios = {
     id: string;
     label: string;
 };
 
+// Centraliza as áreas disponíveis para consulta e gerenciamento.
 const itensMenuSecretaria: itemMenuUsuarios[] = [
     {
         id: "ativos",
@@ -25,8 +27,10 @@ const itensMenuSecretaria: itemMenuUsuarios[] = [
 ]
 
 function CriarUsers() {
+    // Controla qual área de usuários está visível no momento.
     const [itemAtivo, setItemAtivo] = useState("ativos");
 
+    // Seleciona o componente correspondente à opção ativa.
     function renderizarConteudo() {
         switch (itemAtivo) {
             case "ativos":
@@ -49,6 +53,7 @@ function CriarUsers() {
                 className="gerenciar-user__pastas"
                 aria-label="Escolha entre secretarias e setores"
             >
+                {/* Cria um botão de navegação para cada área cadastrada. */}
                 {itensMenuSecretaria.map((item) => (
                     <button
                         key={item.id}
@@ -68,6 +73,7 @@ function CriarUsers() {
             </nav>
 
             <div className="gerenciar-user__conteudo">
+                {/* Exibe o conteúdo referente à opção selecionada. */}
                 {renderizarConteudo()}
             </div>
         </section>

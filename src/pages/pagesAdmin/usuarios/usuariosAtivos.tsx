@@ -5,6 +5,7 @@ import { obterItensPaginacao } from "../../../library/paginacao";
 import { ModalConfirmacao } from "../../../components/ModalConfirmacao";
 import { ModalFeedback } from "../../../components/ModalFeedback";
 
+// Define os dados de usuário utilizados na listagem e na edição.
 interface Usuario {
     id: number;
     nome: string;
@@ -17,12 +18,14 @@ interface Usuario {
     motivo_desativacao?: string | null;
 }
 
+// Representa as opções de setor disponíveis para funcionários.
 interface Setor {
     id: number;
     setor: string;
     sigla_setor: string;
 }
 
+// Representa as opções de secretaria disponíveis para administradores.
 interface Secretaria {
     id: number;
     secretaria: string;
@@ -31,6 +34,7 @@ interface Secretaria {
 
 const ITENS_POR_PAGINA = 20;
 
+// Retorna um aviso de desativação adequado ao perfil atual do usuário.
 function obterAvisoDesativacao(usuario: Usuario) {
     if (usuario.tipo_usuario === "funcionario") {
         return "Ao desativar, este funcionário perderá o vínculo com o setor, será alterado para usuário comum e todas as sessões serão encerradas.";
@@ -43,10 +47,12 @@ function obterAvisoDesativacao(usuario: Usuario) {
     return "Ao desativar esta conta, todas as sessões abertas serão encerradas imediatamente.";
 }
 
+// Permite reutilizar a tela para usuários ativos ou desativados.
 interface UsuariosAtivosProps {
     exibirDesativados?: boolean;
 }
 
+// Armazena o conteúdo e a posição do tooltip de desativação.
 interface TooltipMotivo {
     motivo: string | null;
     top: number;
@@ -55,6 +61,7 @@ interface TooltipMotivo {
 }
 
 function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
+    // Mantém os dados e os estados das operações disponíveis na tela.
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
     const [setores, setSetores] = useState<Setor[]>([]);
     const [secretarias, setSecretarias] = useState<Secretaria[]>([]);
@@ -74,6 +81,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
         mensagem: "",
     });
 
+    // Filtra os usuários pelo termo pesquisado e pelo status solicitado.
     const termoPesquisa = pesquisa.trim().toLocaleLowerCase("pt-BR");
     const usuariosFiltrados = usuarios.filter((usuario) => {
         const correspondePesquisa =
@@ -89,6 +97,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
         return correspondePesquisa && correspondeStatus;
     });
 
+    // Pagina somente os usuários que correspondem aos filtros atuais.
     const totalPaginas = Math.ceil(usuariosFiltrados.length / ITENS_POR_PAGINA);
     const inicioPagina = (paginaAtual - 1) * ITENS_POR_PAGINA;
     const usuariosPaginados = usuariosFiltrados.slice(
@@ -97,6 +106,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
     );
 
     useEffect(() => {
+        // Carrega a lista completa de usuários ao abrir a tela.
         async function carregarUsuarios() {
             const token = localStorage.getItem("access_token");
 
@@ -121,6 +131,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
     }, []);
 
     useEffect(() => {
+        // Carrega os setores disponíveis para edição de funcionários.
         async function carregarSetores() {
             const token = localStorage.getItem("access_token");
             const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`, {
@@ -141,6 +152,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
     }, []);
 
     useEffect(() => {
+        // Carrega as secretarias disponíveis para edição de administradores.
         async function carregarSecretarias() {
             const token = localStorage.getItem("access_token");
             const resposta = await fetch(`${import.meta.env.VITE_API_URL}/secretaria`, {
@@ -161,12 +173,14 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
     }, []);
 
     useEffect(() => {
+        // Corrige a página atual quando os filtros reduzem o total de páginas.
         if (totalPaginas > 0 && paginaAtual > totalPaginas) {
             setPaginaAtual(totalPaginas);
         }
     }, [paginaAtual, totalPaginas]);
 
     useEffect(() => {
+        // Permite fechar o painel de edição pressionando a tecla Escape.
         if (!usuarioEmEdicao) return;
 
         function fecharComEscape(evento: KeyboardEvent) {
@@ -180,12 +194,14 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
     }, [usuarioEmEdicao]);
 
     function abrirEdicao(usuario: Usuario) {
+        // Cria uma cópia editável e prepara os vínculos atuais do usuário.
         setUsuarioEmEdicao({ ...usuario });
         setSetorEmEdicao(usuario.setor_id ? String(usuario.setor_id) : "");
         setSecretariaEmEdicao(usuario.secretaria_id ? String(usuario.secretaria_id) : "");
     }
 
     async function salvarAlteracoes() {
+        // Impede o envio quando nenhum usuário está aberto para edição.
         if (!usuarioEmEdicao) return;
 
         setSalvandoAlteracoes(true);
@@ -221,6 +237,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                 throw new Error(mensagem ?? "Não foi possível salvar as alterações.");
             }
 
+            // Substitui localmente somente o usuário atualizado pela API.
             const usuarioAtualizado = resultado as Usuario;
             setUsuarios((usuariosAtuais) =>
                 usuariosAtuais.map((usuarioAtual) =>
@@ -249,11 +266,13 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
     }
 
     async function alterarStatus() {
+        // A alteração depende de um usuário previamente selecionado.
         if (!usuarioParaAlterarStatus) return;
 
         const estaDesativado = Boolean(usuarioParaAlterarStatus.desativado_em);
         const motivo = motivoDesativacao.trim();
 
+        // Exige uma justificativa válida apenas nas desativações.
         if (!estaDesativado && motivo.length < 3) {
             setFeedback({
                 aberto: true,
@@ -267,6 +286,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
 
         try {
             const token = localStorage.getItem("access_token");
+            // Define dinamicamente o endpoint conforme o status atual.
             const acao = estaDesativado ? "ativar" : "desativar";
             const resposta = await fetch(
                 `${import.meta.env.VITE_API_URL}/usuarios/${usuarioParaAlterarStatus.id}/${acao}`,
@@ -295,6 +315,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                 );
             }
 
+            // Mescla no estado local somente os campos retornados pela operação.
             const usuarioAtualizado = resultado as Partial<Usuario> & { id: number };
             setUsuarios((usuariosAtuais) =>
                 usuariosAtuais.map((usuarioAtual) =>
@@ -344,6 +365,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
             </header>
 
             <div className="usuarios__pesquisa">
+                {/* Reinicia a paginação quando o termo de pesquisa muda. */}
                 <input
                     type="search"
                     value={pesquisa}
@@ -371,6 +393,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                     </thead>
 
                     <tbody>
+                        {/* Renderiza apenas os usuários pertencentes à página atual. */}
                         {usuariosPaginados.map((usuario) => (
                             <tr
                                 key={usuario.id}
@@ -384,6 +407,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                                     if (!exibirDesativados) abrirEdicao(usuario);
                                 }}
                                 onMouseEnter={(evento) => {
+                                    // Posiciona o motivo próximo ao status do usuário desativado.
                                     if (!exibirDesativados) return;
 
                                     const status = evento.currentTarget.querySelector<HTMLElement>(
@@ -408,6 +432,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                                     if (exibirDesativados) setTooltipMotivo(null);
                                 }}
                                 onKeyDown={(evento) => {
+                                    // Oferece acesso ao painel de edição também pelo teclado.
                                     if (exibirDesativados) return;
                                     if (evento.target !== evento.currentTarget) return;
 
@@ -477,6 +502,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                 </table>
             </div>
 
+            {/* Renderiza o tooltip fora da tabela para evitar cortes pelo contêiner. */}
             {exibirDesativados && tooltipMotivo && createPortal(
                 <span
                     className={`usuarios__tooltip${
@@ -497,6 +523,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                 document.body,
             )}
 
+            {/* Mostra a navegação somente quando há mais de uma página. */}
             {totalPaginas > 1 && (
                 <nav
                     aria-label="Paginação dos usuários"
@@ -511,6 +538,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                     </button>
 
                     {obterItensPaginacao(paginaAtual, totalPaginas).map((item) => {
+                        // Itens textuais representam intervalos de páginas omitidas.
                         if (typeof item === "string") {
                             return (
                                 <span key={item} aria-hidden="true">
@@ -542,6 +570,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                 </nav>
             )}
 
+            {/* Exibe o painel lateral somente durante a edição de um usuário. */}
             {usuarioEmEdicao && (
                 <div
                     className="usuarios__painel-fundo"
@@ -661,6 +690,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                                 </select>
                             </div>
 
+                            {/* Funcionários precisam estar vinculados a um setor. */}
                             {usuarioEmEdicao.tipo_usuario === "funcionario" && (
                                 <div className="info__painel-lateral">
                                     <label htmlFor="setor-vinculado">Setor vinculado</label>
@@ -679,6 +709,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                                 </div>
                             )}
 
+                            {/* Administradores podem ser vinculados a uma secretaria. */}
                             {usuarioEmEdicao.tipo_usuario === "admin" && (
                                 <div className="info__painel-lateral">
                                     <label htmlFor="secretaria-vinculada">Secretaria vinculada</label>
@@ -713,6 +744,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                 </div>
             )}
 
+            {/* Confirma a ativação ou desativação antes de enviar a operação. */}
             <ModalConfirmacao
                 aberto={usuarioParaAlterarStatus !== null}
                 titulo={usuarioParaAlterarStatus?.desativado_em
@@ -739,6 +771,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                 }}
                 aoConfirmar={() => void alterarStatus()}
             >
+                {/* Solicita o motivo somente quando a conta será desativada. */}
                 {usuarioParaAlterarStatus && !usuarioParaAlterarStatus.desativado_em && (
                     <div className="usuarios__modal-motivo">
                         <label htmlFor="motivo-desativacao">
@@ -757,6 +790,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
                 )}
             </ModalConfirmacao>
 
+            {/* Comunica o resultado das alterações realizadas na tela. */}
             <ModalFeedback
                 aberto={feedback.aberto}
                 tipo={feedback.tipo}

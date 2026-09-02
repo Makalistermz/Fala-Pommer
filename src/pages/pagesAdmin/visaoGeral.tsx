@@ -759,156 +759,136 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
             </div>
 
             {/* Total atual, variação mensal e histórico de desativações. */}
-            <section className="usuarios-desativados-card" aria-labelledby="titulo-desativados">
-
-                {/* Indicador circular da variação em relação ao mês anterior. */}
-                <div className="indicador-desativados">
-                    <svg
-                        className="grafico-circular"
-                        viewBox="0 0 120 120"
-                        role="img"
-                        aria-label={`${textoVariacaoPercentual} em relação ao mês anterior`}
-                    >
-                        <circle
-                            className="circulo-fundo"
-                            cx="60"
-                            cy="60"
-                            r="52"
-                        />
-
-                        <circle
-                            className="circulo-progresso"
-                            cx="60"
-                            cy="60"
-                            r="52"
-                            pathLength="100"
-                            strokeDasharray={`${preenchimentoVariacao} ${100 - preenchimentoVariacao}`}
-                        />
-                    </svg>
-
-                    <div className="icone-usuario-desativado">
+            <div className="container-dashboard">
+                <section className="usuarios-desativados-card" aria-labelledby="titulo-desativados">
+                    {/* Indicador circular da variação em relação ao mês anterior. */}
+                    <div className="indicador-desativados">
                         <svg
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
+                            className="grafico-circular"
+                            viewBox="0 0 120 120"
+                            role="img"
+                            aria-label={`${textoVariacaoPercentual} em relação ao mês anterior`}
                         >
-                            <circle cx="10" cy="7" r="4"></circle>
-                            <path d="M3 21v-2a7 7 0 0 1 7-7c1.2 0 2.4.3 3.4.8"></path>
-                            <circle cx="18" cy="18" r="4"></circle>
-                            <path d="M16.5 18h3"></path>
+                            <circle
+                                className="circulo-fundo"
+                                cx="60"
+                                cy="60"
+                                r="52"
+                            />
+                            <circle
+                                className="circulo-progresso"
+                                cx="60"
+                                cy="60"
+                                r="52"
+                                pathLength="100"
+                                strokeDasharray={`${preenchimentoVariacao} ${100 - preenchimentoVariacao}`}
+                            />
                         </svg>
+                        <div className="icone-usuario-desativado">
+                            <svg
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                            >
+                                <circle cx="10" cy="7" r="4"></circle>
+                                <path d="M3 21v-2a7 7 0 0 1 7-7c1.2 0 2.4.3 3.4.8"></path>
+                                <circle cx="18" cy="18" r="4"></circle>
+                                <path d="M16.5 18h3"></path>
+                            </svg>
+                        </div>
                     </div>
-                </div>
-
-                <div className="informacoes-desativados">
-                    <p className="categoria-card">CONTROLE DE ACESSOS</p>
-
-                    <h2 id="titulo-desativados">
-                        Usuários desativados
-                    </h2>
-
-                    <strong className="quantidade-desativados">
-                        <NumberCounter endValue={quantUsuariosDesativados} />
-                    </strong>
-
-                    <div className="detalhes-desativados">
-                        <span className="porcentagem-desativados">
-                            {textoVariacaoPercentual}
-                        </span>
-
-                        <span className={`variacao-desativados variacao-desativados--${tendencia}`}>
-                            <span aria-hidden="true">{iconeTendencia}</span>
-                            <NumberCounter endValue={desativacoesMesAtual} /> neste mês
-                        </span>
-                    </div>
-                </div>
-
-                {/* Série dos últimos seis meses e atalho para consultar usuários. */}
-                <div className="historico-desativados">
-                    <div className="cabecalho-historico">
-                        <div>
-                            <p className="titulo-historico">
-                                Últimos 6 meses
-                            </p>
-
-                            <span className="descricao-historico">
-                                Histórico de desativações
+                    <div className="informacoes-desativados">
+                        <p className="categoria-card">CONTROLE DE ACESSOS</p>
+                        <h2 id="titulo-desativados">
+                            Usuários desativados
+                        </h2>
+                        <strong className="quantidade-desativados">
+                            <NumberCounter endValue={quantUsuariosDesativados} />
+                        </strong>
+                        <div className="detalhes-desativados">
+                            <span className="porcentagem-desativados">
+                                {textoVariacaoPercentual}
+                            </span>
+                            <span className={`variacao-desativados variacao-desativados--${tendencia}`}>
+                                <span aria-hidden="true">{iconeTendencia}</span>
+                                <NumberCounter endValue={desativacoesMesAtual} /> neste mês
                             </span>
                         </div>
-
-                        <span className={`status-historico status-historico--${tendencia}`}>
-                            {rotuloTendencia}
-                        </span>
                     </div>
-
-                    <div
-                        className="grafico-historico"
-                        role="img"
-                        aria-label={`Desativações nos últimos seis meses. ${descricaoHistorico}`}
-                    >
-                        <Line
-                            data={dadosHistoricoDesativacoes}
-                            options={opcoesHistoricoDesativacoes}
+                    {/* Série dos últimos seis meses e atalho para consultar usuários. */}
+                    <div className="historico-desativados">
+                        <div className="cabecalho-historico">
+                            <div>
+                                <p className="titulo-historico">
+                                    Últimos 6 meses
+                                </p>
+                                <span className="descricao-historico">
+                                    Histórico de desativações
+                                </span>
+                            </div>
+                            <span className={`status-historico status-historico--${tendencia}`}>
+                                {rotuloTendencia}
+                            </span>
+                        </div>
+                        <div
+                            className="grafico-historico"
+                            role="img"
+                            aria-label={`Desativações nos últimos seis meses. ${descricaoHistorico}`}
+                        >
+                            <Line
+                                data={dadosHistoricoDesativacoes}
+                                options={opcoesHistoricoDesativacoes}
+                            />
+                        </div>
+                        <button
+                            className="botao-ver-usuarios"
+                            type="button"
+                            onClick={onVerUsuarios}
+                        >
+                            <span>Ver usuários</span>
+                            <svg
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                            >
+                                <path d="M9 18l6-6-6-6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </section>
+                {/* Gráfico de logins realizados durante o ano atual. */}
+                <div className="grafico-card grafico-card--logins">
+                    <div className="grafico-card-header">
+                        <div>
+                            <span className="grafico-card-legenda">ACESSOS AO SISTEMA</span>
+                            <h2>Logins mensais</h2>
+                        </div>
+                        <strong>{resultado?.ano ?? anoAtual}</strong>
+                    </div>
+                    {/* Alterna entre os estados de carregamento, erro e gráfico pronto. */}
+                    {carregando && <p className="grafico-status">Carregando dados do gráfico...</p>}
+                    {erro && <p className="grafico-status grafico-status-erro" role="alert">{erro}</p>}
+                    {!carregando && !erro && (
+                        <div className="grafico-container">
+                            <Line data={dadosLogin} options={opcoesLogin} />
+                        </div>
+                    )}
+                </div>
+                {/* Distribuição do total de usuários por categoria. */}
+                <div className="grafico-card grafico-card--usuarios">
+                    <div className="grafico-card-header">
+                        <div>
+                            <span className="grafico-card-legenda">
+                                TOTAL DE USUÁRIOS
+                            </span>
+                            <h2>Categorias de usuários</h2>
+                        </div>
+                        <NumberCounter endValue={quantUsuarios}/>
+                    </div>
+                    <div className="grafico-container grafico-container--barras">
+                        <Bar
+                            data={dadosUsuarios}
+                            options={opcoesUsuarios}
                         />
                     </div>
-
-                    <button 
-                        className="botao-ver-usuarios" 
-                        type="button"
-                        onClick={onVerUsuarios}
-                    >
-                        <span>Ver usuários</span>
-
-                        <svg
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                        >
-                            <path d="M9 18l6-6-6-6"></path>
-                        </svg>
-                    </button>
-                </div>
-
-            </section>
-
-            {/* Gráfico de logins realizados durante o ano atual. */}
-            <div className="grafico-card">
-                <div className="grafico-card-header">
-                    <div>
-                        <span className="grafico-card-legenda">ACESSOS AO SISTEMA</span>
-                        <h2>Logins mensais</h2>
-                    </div>
-                    <strong>{resultado?.ano ?? anoAtual}</strong>
-                </div>
-
-                {/* Alterna entre os estados de carregamento, erro e gráfico pronto. */}
-                {carregando && <p className="grafico-status">Carregando dados do gráfico...</p>}
-                {erro && <p className="grafico-status grafico-status-erro" role="alert">{erro}</p>}
-
-                {!carregando && !erro && (
-                    <div className="grafico-container">
-                        <Line data={dadosLogin} options={opcoesLogin} />
-                    </div>
-                )}
-            </div>
-
-            {/* Distribuição do total de usuários por categoria. */}
-            <div className="grafico-card grafico-card--usuarios">
-                <div className="grafico-card-header">
-                    <div>
-                        <span className="grafico-card-legenda">
-                            TOTAL DE USUÁRIOS
-                        </span>
-
-                        <h2>Categorias de usuários</h2>
-                    </div>
-
-                    <NumberCounter endValue={quantUsuarios}/>
-                </div>
-
-                <div className="grafico-container grafico-container--barras">
-                    <Bar
-                        data={dadosUsuarios}
-                        options={opcoesUsuarios}
-                    />
                 </div>
             </div>
         </>

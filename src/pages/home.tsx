@@ -270,8 +270,12 @@ function Home() {
         useState<FiltroConversa>("todos");
 
     const [menuAberto, setMenuAberto] = useState(false);
+    const botaoMenuRef = useRef<HTMLButtonElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const [menuAbertoArquivos, setMenuAbertoArquivo] = useState(false);
+    const acaoArquivosRef = useRef<HTMLDivElement>(null);
+    const botaoArquivosRef = useRef<HTMLButtonElement>(null);
 
     const [conversas, setConversas] = useState<Conversa[]>([]);
 
@@ -286,6 +290,8 @@ function Home() {
     const botaoFecharVisualizadorRef = useRef<HTMLButtonElement>(null);
 
     const [seletorEmojiAberto, setSeletorEmojiAberto] = useState(false);
+    const acaoEmojiRef = useRef<HTMLDivElement>(null);
+    const botaoEmojiRef = useRef<HTMLButtonElement>(null);
 
     const inputDocumentosRef = useRef<HTMLInputElement>(null);
 
@@ -299,6 +305,114 @@ function Home() {
     const [processandoGravacaoAudio, setProcessandoGravacaoAudio] = useState(false);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!menuAberto) {
+            return;
+        }
+
+        function fecharMenuAoClicarFora(evento: PointerEvent) {
+            const alvo = evento.target;
+
+            if (!(alvo instanceof Node)) {
+                return;
+            }
+
+            if (
+                botaoMenuRef.current?.contains(alvo) ||
+                menuRef.current?.contains(alvo)
+            ) {
+                return;
+            }
+
+            setMenuAberto(false);
+        }
+
+        function fecharMenuComEscape(evento: KeyboardEvent) {
+            if (evento.key === "Escape") {
+                setMenuAberto(false);
+                botaoMenuRef.current?.focus();
+            }
+        }
+
+        document.addEventListener("pointerdown", fecharMenuAoClicarFora);
+        window.addEventListener("keydown", fecharMenuComEscape);
+
+        return () => {
+            document.removeEventListener("pointerdown", fecharMenuAoClicarFora);
+            window.removeEventListener("keydown", fecharMenuComEscape);
+        };
+    }, [menuAberto]);
+
+    useEffect(() => {
+        if (!menuAbertoArquivos) {
+            return;
+        }
+
+        function fecharArquivosAoClicarFora(evento: PointerEvent) {
+            const alvo = evento.target;
+
+            if (
+                alvo instanceof Node &&
+                !acaoArquivosRef.current?.contains(alvo)
+            ) {
+                setMenuAbertoArquivo(false);
+            }
+        }
+
+        function fecharArquivosComEscape(evento: KeyboardEvent) {
+            if (evento.key === "Escape") {
+                setMenuAbertoArquivo(false);
+                botaoArquivosRef.current?.focus();
+            }
+        }
+
+        document.addEventListener("pointerdown", fecharArquivosAoClicarFora);
+        window.addEventListener("keydown", fecharArquivosComEscape);
+
+        return () => {
+            document.removeEventListener(
+                "pointerdown",
+                fecharArquivosAoClicarFora,
+            );
+            window.removeEventListener("keydown", fecharArquivosComEscape);
+        };
+    }, [menuAbertoArquivos]);
+
+    useEffect(() => {
+        if (!seletorEmojiAberto) {
+            return;
+        }
+
+        function fecharEmojisAoClicarFora(evento: PointerEvent) {
+            const alvo = evento.target;
+
+            if (
+                alvo instanceof Node &&
+                !acaoEmojiRef.current?.contains(alvo)
+            ) {
+                setSeletorEmojiAberto(false);
+            }
+        }
+
+        function fecharEmojisComEscape(evento: KeyboardEvent) {
+            if (evento.key === "Escape") {
+                setSeletorEmojiAberto(false);
+                botaoEmojiRef.current?.focus();
+            }
+        }
+
+        document.addEventListener("pointerdown", fecharEmojisAoClicarFora);
+        window.addEventListener("keydown", fecharEmojisComEscape);
+
+        return () => {
+            document.removeEventListener(
+                "pointerdown",
+                fecharEmojisAoClicarFora,
+            );
+            window.removeEventListener("keydown", fecharEmojisComEscape);
+        };
+    }, [seletorEmojiAberto]);
 
     useEffect(() => {
         if (!modalGrupoAberto) {
@@ -1987,8 +2101,13 @@ function Home() {
                 )}
 
                 <button
+                ref={botaoMenuRef}
+                type="button"
                 className="header-menu-button"
                 onClick={() => setMenuAberto((aberto) => !aberto)}
+                aria-label={menuAberto ? "Fechar menu" : "Abrir menu"}
+                aria-expanded={menuAberto}
+                aria-controls="menu-principal"
                 >
                 <span className="header-menu-icon">
                     <svg
@@ -2564,10 +2683,13 @@ function Home() {
                     )}
 
                     <div className="chat-input__conteudo">
-                    <div className="chat-input__acao">
+                    <div ref={acaoArquivosRef} className="chat-input__acao">
                         <button
+                        ref={botaoArquivosRef}
                         type="button"
                         aria-label="Anexar arquivo"
+                        aria-expanded={menuAbertoArquivos}
+                        aria-controls="menu-arquivos"
                         onClick={() => setMenuAbertoArquivo((aberto) => !aberto)}
                         >
                         <svg
@@ -2582,7 +2704,7 @@ function Home() {
                         </button>
 
                         {menuAbertoArquivos && (
-                        <div className="menu-arquivos">
+                        <div id="menu-arquivos" className="menu-arquivos">
                             <nav className="menu-arquivos__lista">
                             <button
                                 type="button"
@@ -2677,11 +2799,13 @@ function Home() {
                         />
                     </div>
 
-                    <div className="chat-input__acao">
+                    <div ref={acaoEmojiRef} className="chat-input__acao">
                         <button
+                        ref={botaoEmojiRef}
                         type="button"
                         aria-label="Adicionar emoji"
                         aria-expanded={seletorEmojiAberto}
+                        aria-controls="seletor-emojis"
                         onClick={() => setSeletorEmojiAberto((aberto) => !aberto)}
                         >
                         <svg
@@ -2697,7 +2821,11 @@ function Home() {
                         </button>
 
                         {seletorEmojiAberto && (
-                        <div className="chat-input__emojis" data-lenis-prevent>
+                        <div
+                            id="seletor-emojis"
+                            className="chat-input__emojis"
+                            data-lenis-prevent
+                        >
                             <EmojiPicker
                             aoSelecionar={(emoji) => {
                                 adicionarEmoji(emoji);
@@ -2822,7 +2950,11 @@ function Home() {
         </section>
 
         {menuAberto && (
-            <div className="menu-modal">
+            <div
+                ref={menuRef}
+                id="menu-principal"
+                className="menu-modal"
+            >
 
                 {(usuario?.tipo === "admin" || usuario?.tipo === "funcionario" || usuario?.tipo === "superAdmin") && (
                     <div className="menu-modal-item menu-modal-criar-grupo">

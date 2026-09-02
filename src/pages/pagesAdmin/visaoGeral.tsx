@@ -17,6 +17,7 @@ import {
     BarElement,
 } from "chart.js";
 
+// Registra os recursos do Chart.js utilizados pelos gráficos desta página.
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -109,6 +110,7 @@ function criarHistoricoDesativacoes(eventos: EventoAdministrativoResumo[]): MesD
         };
     });
 
+    // Facilita o acesso ao mês correto durante a contagem dos eventos.
     const mesesPorChave = new Map(meses.map((mes) => [mes.chave, mes]));
 
     for (const evento of eventos) {
@@ -126,16 +128,19 @@ function criarHistoricoDesativacoes(eventos: EventoAdministrativoResumo[]): MesD
     return meses;
 }
 
+// Define os valores necessários para animar os indicadores numéricos.
 interface CounterProps {
     endValue: number;
     duration?: number;
 }
 
+// Permite que o painel solicite a abertura da área de usuários.
 interface VisaoGeralProps {
     onVerUsuarios: () => void;
 }
 
 export const NumberCounter: React.FC<CounterProps> = ({ endValue, duration = 2 }) => {
+    // Referência usada para atualizar o número durante a animação.
     const numberRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
@@ -294,6 +299,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
     const [quantSecretarias, setQuantSecretarias] = useState(0);
     const [quantUsuariosCategoria, setQuantUsuariosCategoria] = useState<QuantUsuarioCategoria[]>([]);
     const [erro, setErro] = useState("");
+    // Calcula o ano conforme o fuso horário oficial adotado pelo sistema.
     const anoAtual = Number(
         new Intl.DateTimeFormat("pt-BR", {
             timeZone: "America/Sao_Paulo",
@@ -585,6 +591,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
         variacaoPercentualDesativacoes ?? 0,
         100,
     );
+    // Gera uma descrição textual do gráfico para tecnologias assistivas.
     const descricaoHistorico = historicoDesativacoes
         .map((mes) => `${mes.nome}: ${mes.quantidade}`)
         .join(", ");
@@ -754,6 +761,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
             {/* Total atual, variação mensal e histórico de desativações. */}
             <section className="usuarios-desativados-card" aria-labelledby="titulo-desativados">
 
+                {/* Indicador circular da variação em relação ao mês anterior. */}
                 <div className="indicador-desativados">
                     <svg
                         className="grafico-circular"
@@ -814,6 +822,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                     </div>
                 </div>
 
+                {/* Série dos últimos seis meses e atalho para consultar usuários. */}
                 <div className="historico-desativados">
                     <div className="cabecalho-historico">
                         <div>
@@ -870,6 +879,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                     <strong>{resultado?.ano ?? anoAtual}</strong>
                 </div>
 
+                {/* Alterna entre os estados de carregamento, erro e gráfico pronto. */}
                 {carregando && <p className="grafico-status">Carregando dados do gráfico...</p>}
                 {erro && <p className="grafico-status grafico-status-erro" role="alert">{erro}</p>}
 

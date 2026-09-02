@@ -9,6 +9,7 @@ import RelatorioError from "./pagesAdmin/relatoriosError";
 import CriarSectors from "./pagesAdmin/criarSectors";
 import CriarUsers from "./pagesAdmin/usuarios";
 
+// Define os dados necessários para cada opção do menu administrativo.
 type ItemMenu = {
     id: string;
     label: string;
@@ -16,6 +17,7 @@ type ItemMenu = {
     icon: ReactNode;
 };
 
+// Centraliza as páginas disponíveis e seus respectivos ícones.
 const itensMenu: ItemMenu[] = [
     {
         id: "visao-geral",
@@ -72,13 +74,16 @@ const itensMenu: ItemMenu[] = [
 ];
 
 function Administracao() {
+    // Controla a abertura do menu lateral e a página atualmente selecionada.
     const [menuAberto, setMenuAberto] = useState(true);
     const [itemAtivo, setItemAtivo] = useState("visao-geral");
 
+    // Recupera os dados usados no título da página ativa.
     const itemSelecionado = itensMenu.find(
         (item) => item.id === itemAtivo
     );
 
+    // Renderiza a página correspondente à opção escolhida no menu.
     function renderizarConteudo() {
         switch (itemAtivo) {
             case "visao-geral":
@@ -100,6 +105,7 @@ function Administracao() {
 
     return (
         <div className={`administracao ${menuAberto ? "menu-aberto" : "menu-fechado"}`}>
+            {/* Menu lateral de navegação entre as áreas administrativas. */}
             <aside className="admin-sidebar" aria-label="Menu de administração" data-lenis-prevent>
                 <div className="admin-sidebar-header">
                     <img className="admin-logo" src={brasao} alt="Fala Pommer" />
@@ -124,6 +130,7 @@ function Administracao() {
 
                 <nav className="admin-nav">
                     <span className="admin-nav-title">MENU</span>
+                    {/* Cria uma opção de navegação para cada página cadastrada. */}
                     {itensMenu.map((item) => (
                         <button
                             key={item.id}
@@ -139,6 +146,7 @@ function Administracao() {
                     ))}
                 </nav>
 
+                {/* Disponibiliza o retorno à página inicial do sistema. */}
                 <div className="admin-sidebar-footer">
                     <Link className="admin-nav-item" to="/home" title={!menuAberto ? "Voltar ao início" : undefined}>
                         <span className="admin-nav-icon">
@@ -151,6 +159,7 @@ function Administracao() {
                 </div>
             </aside>
 
+            {/* Área principal atualizada conforme a opção ativa no menu. */}
             <main className="admin-content">
                 <header className="admin-content-header">
                     <div>
@@ -159,6 +168,7 @@ function Administracao() {
                     </div>
                 </header>
                 <div className="admin-page-content">
+                    {/* Insere o conteúdo selecionado dentro do painel. */}
                     {renderizarConteudo()}
                 </div>
             </main>

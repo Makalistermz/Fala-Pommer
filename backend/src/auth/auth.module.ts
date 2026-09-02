@@ -33,7 +33,7 @@ import { TwoFactorEmailService } from "./two-factor-email.service";
                 ),
 
                 signOptions: {
-                    expiresIn: 60 * 60
+                    expiresIn: 60 * 6000 //4 dias de token valido
                 }
             })
         })

@@ -1,6 +1,7 @@
 // Contém as regras de negócio relacionadas às conversas.
 import {
     BadRequestException,
+    ConflictException,
     ForbiddenException,
     Injectable,
     NotFoundException
@@ -10,6 +11,8 @@ import { PrismaService } from "../prisma/prisma.service";
 import { mkdir, unlink, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import { join } from "node:path";
+import { CriarAvaliacaoDto } from "./dto/criar-avaliacao.dto";
+import { Prisma } from "../generated/prisma/client";
 
 export type ArquivoMensagemUpload = {
     originalname: string;
@@ -2031,5 +2034,70 @@ export class ConversasService {
         }
 
         throw new BadRequestException("Tipo de conversa inválido.");
+    }
+
+    async criaAvaliacao(
+        usuarioLogadoId: number,
+        conversaId: number,
+        dados: CriarAvaliacaoDto
+    ) {
+        const contexto = await this.verificarAcessoConversa(
+            usuarioLogadoId,
+            conversaId
+        );
+
+        if (contexto.conversa.tipo !== "setor") {
+            throw new BadRequestException(
+                "Somente conversas de atendimento podem ser avaliadas."
+            );
+        }
+
+        if (
+            contexto.usuarioLogado.tipo_usuario !== "user" &&
+            contexto.usuarioLogado.tipo_usuario !== "funcionario"
+        ) {
+            throw new ForbiddenException(
+                "Somente o usuário ou o funcionário do atendimento pode avaliar esta conversa."
+            );
+        }
+
+        try {
+            const avaliacao = await this.prisma.avaliacao.create({
+                data: {
+                    conversa_id: conversaId,
+                    avaliador_id: usuarioLogadoId,
+                    nota: dados.nota,
+                    descricao: dados.descricao?.trim() || null
+                },
+                select: {
+                    id: true,
+                    conversa_id: true,
+                    avaliador_id: true,
+                    nota: true,
+                    descricao: true,
+                    criada_em: true
+                }
+            });
+
+            return {
+                id: avaliacao.id,
+                conversaId: avaliacao.conversa_id,
+                avaliadorId: avaliacao.avaliador_id,
+                nota: avaliacao.nota,
+                descricao: avaliacao.descricao,
+                criadaEm: avaliacao.criada_em
+            };
+        } catch (erro) {
+            if (
+                erro instanceof Prisma.PrismaClientKnownRequestError &&
+                erro.code === "P2002"
+            ) {
+                throw new ConflictException(
+                    "Você já avaliou esta conversa."
+                );
+            }
+
+            throw erro;
+        }
     }
 }

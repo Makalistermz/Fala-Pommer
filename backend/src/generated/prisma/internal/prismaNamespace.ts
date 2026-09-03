@@ -1561,8 +1561,11 @@ export type Historico_administrativoScalarFieldEnum = (typeof Historico_administ
 
 export const AvaliacaoScalarFieldEnum = {
   id: 'id',
+  conversa_id: 'conversa_id',
+  avaliador_id: 'avaliador_id',
   nota: 'nota',
-  descricao: 'descricao'
+  descricao: 'descricao',
+  criada_em: 'criada_em'
 } as const
 
 export type AvaliacaoScalarFieldEnum = (typeof AvaliacaoScalarFieldEnum)[keyof typeof AvaliacaoScalarFieldEnum]

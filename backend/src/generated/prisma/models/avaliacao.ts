@@ -28,60 +28,86 @@ export type AggregateAvaliacao = {
 
 export type AvaliacaoAvgAggregateOutputType = {
   id: number | null
+  conversa_id: number | null
+  avaliador_id: number | null
   nota: number | null
 }
 
 export type AvaliacaoSumAggregateOutputType = {
   id: number | null
+  conversa_id: number | null
+  avaliador_id: number | null
   nota: number | null
 }
 
 export type AvaliacaoMinAggregateOutputType = {
   id: number | null
+  conversa_id: number | null
+  avaliador_id: number | null
   nota: number | null
   descricao: string | null
+  criada_em: Date | null
 }
 
 export type AvaliacaoMaxAggregateOutputType = {
   id: number | null
+  conversa_id: number | null
+  avaliador_id: number | null
   nota: number | null
   descricao: string | null
+  criada_em: Date | null
 }
 
 export type AvaliacaoCountAggregateOutputType = {
   id: number
+  conversa_id: number
+  avaliador_id: number
   nota: number
   descricao: number
+  criada_em: number
   _all: number
 }
 
 
 export type AvaliacaoAvgAggregateInputType = {
   id?: true
+  conversa_id?: true
+  avaliador_id?: true
   nota?: true
 }
 
 export type AvaliacaoSumAggregateInputType = {
   id?: true
+  conversa_id?: true
+  avaliador_id?: true
   nota?: true
 }
 
 export type AvaliacaoMinAggregateInputType = {
   id?: true
+  conversa_id?: true
+  avaliador_id?: true
   nota?: true
   descricao?: true
+  criada_em?: true
 }
 
 export type AvaliacaoMaxAggregateInputType = {
   id?: true
+  conversa_id?: true
+  avaliador_id?: true
   nota?: true
   descricao?: true
+  criada_em?: true
 }
 
 export type AvaliacaoCountAggregateInputType = {
   id?: true
+  conversa_id?: true
+  avaliador_id?: true
   nota?: true
   descricao?: true
+  criada_em?: true
   _all?: true
 }
 
@@ -173,8 +199,11 @@ export type avaliacaoGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 
 export type AvaliacaoGroupByOutputType = {
   id: number
+  conversa_id: number
+  avaliador_id: number
   nota: number
   descricao: string | null
+  criada_em: Date
   _count: AvaliacaoCountAggregateOutputType | null
   _avg: AvaliacaoAvgAggregateOutputType | null
   _sum: AvaliacaoSumAggregateOutputType | null
@@ -202,30 +231,49 @@ export type avaliacaoWhereInput = {
   OR?: Prisma.avaliacaoWhereInput[]
   NOT?: Prisma.avaliacaoWhereInput | Prisma.avaliacaoWhereInput[]
   id?: Prisma.IntFilter<"avaliacao"> | number
+  conversa_id?: Prisma.IntFilter<"avaliacao"> | number
+  avaliador_id?: Prisma.IntFilter<"avaliacao"> | number
   nota?: Prisma.IntFilter<"avaliacao"> | number
   descricao?: Prisma.StringNullableFilter<"avaliacao"> | string | null
+  criada_em?: Prisma.DateTimeFilter<"avaliacao"> | Date | string
+  conversa?: Prisma.XOR<Prisma.ConversaScalarRelationFilter, Prisma.conversaWhereInput>
+  avaliador?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }
 
 export type avaliacaoOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  conversa_id?: Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
   descricao?: Prisma.SortOrderInput | Prisma.SortOrder
+  criada_em?: Prisma.SortOrder
+  conversa?: Prisma.conversaOrderByWithRelationInput
+  avaliador?: Prisma.cadastroOrderByWithRelationInput
   _relevance?: Prisma.avaliacaoOrderByRelevanceInput
 }
 
 export type avaliacaoWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  conversa_id_avaliador_id?: Prisma.avaliacaoConversa_idAvaliador_idCompoundUniqueInput
   AND?: Prisma.avaliacaoWhereInput | Prisma.avaliacaoWhereInput[]
   OR?: Prisma.avaliacaoWhereInput[]
   NOT?: Prisma.avaliacaoWhereInput | Prisma.avaliacaoWhereInput[]
+  conversa_id?: Prisma.IntFilter<"avaliacao"> | number
+  avaliador_id?: Prisma.IntFilter<"avaliacao"> | number
   nota?: Prisma.IntFilter<"avaliacao"> | number
   descricao?: Prisma.StringNullableFilter<"avaliacao"> | string | null
-}, "id">
+  criada_em?: Prisma.DateTimeFilter<"avaliacao"> | Date | string
+  conversa?: Prisma.XOR<Prisma.ConversaScalarRelationFilter, Prisma.conversaWhereInput>
+  avaliador?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
+}, "id" | "conversa_id_avaliador_id">
 
 export type avaliacaoOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  conversa_id?: Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
   descricao?: Prisma.SortOrderInput | Prisma.SortOrder
+  criada_em?: Prisma.SortOrder
   _count?: Prisma.avaliacaoCountOrderByAggregateInput
   _avg?: Prisma.avaliacaoAvgOrderByAggregateInput
   _max?: Prisma.avaliacaoMaxOrderByAggregateInput
@@ -238,47 +286,79 @@ export type avaliacaoScalarWhereWithAggregatesInput = {
   OR?: Prisma.avaliacaoScalarWhereWithAggregatesInput[]
   NOT?: Prisma.avaliacaoScalarWhereWithAggregatesInput | Prisma.avaliacaoScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"avaliacao"> | number
+  conversa_id?: Prisma.IntWithAggregatesFilter<"avaliacao"> | number
+  avaliador_id?: Prisma.IntWithAggregatesFilter<"avaliacao"> | number
   nota?: Prisma.IntWithAggregatesFilter<"avaliacao"> | number
   descricao?: Prisma.StringNullableWithAggregatesFilter<"avaliacao"> | string | null
+  criada_em?: Prisma.DateTimeWithAggregatesFilter<"avaliacao"> | Date | string
 }
 
 export type avaliacaoCreateInput = {
   nota: number
   descricao?: string | null
+  criada_em?: Date | string
+  conversa: Prisma.conversaCreateNestedOneWithoutAvaliacoesInput
+  avaliador: Prisma.cadastroCreateNestedOneWithoutAvaliacoes_realizadasInput
 }
 
 export type avaliacaoUncheckedCreateInput = {
   id?: number
+  conversa_id: number
+  avaliador_id: number
   nota: number
   descricao?: string | null
+  criada_em?: Date | string
 }
 
 export type avaliacaoUpdateInput = {
   nota?: Prisma.IntFieldUpdateOperationsInput | number
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  conversa?: Prisma.conversaUpdateOneRequiredWithoutAvaliacoesNestedInput
+  avaliador?: Prisma.cadastroUpdateOneRequiredWithoutAvaliacoes_realizadasNestedInput
 }
 
 export type avaliacaoUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliador_id?: Prisma.IntFieldUpdateOperationsInput | number
   nota?: Prisma.IntFieldUpdateOperationsInput | number
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type avaliacaoCreateManyInput = {
   id?: number
+  conversa_id: number
+  avaliador_id: number
   nota: number
   descricao?: string | null
+  criada_em?: Date | string
 }
 
 export type avaliacaoUpdateManyMutationInput = {
   nota?: Prisma.IntFieldUpdateOperationsInput | number
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type avaliacaoUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliador_id?: Prisma.IntFieldUpdateOperationsInput | number
   nota?: Prisma.IntFieldUpdateOperationsInput | number
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AvaliacaoListRelationFilter = {
+  every?: Prisma.avaliacaoWhereInput
+  some?: Prisma.avaliacaoWhereInput
+  none?: Prisma.avaliacaoWhereInput
+}
+
+export type avaliacaoOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type avaliacaoOrderByRelevanceInput = {
@@ -287,59 +367,335 @@ export type avaliacaoOrderByRelevanceInput = {
   search: string
 }
 
+export type avaliacaoConversa_idAvaliador_idCompoundUniqueInput = {
+  conversa_id: number
+  avaliador_id: number
+}
+
 export type avaliacaoCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  conversa_id?: Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
   descricao?: Prisma.SortOrder
+  criada_em?: Prisma.SortOrder
 }
 
 export type avaliacaoAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  conversa_id?: Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
 }
 
 export type avaliacaoMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  conversa_id?: Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
   descricao?: Prisma.SortOrder
+  criada_em?: Prisma.SortOrder
 }
 
 export type avaliacaoMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  conversa_id?: Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
   descricao?: Prisma.SortOrder
+  criada_em?: Prisma.SortOrder
 }
 
 export type avaliacaoSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  conversa_id?: Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
+}
+
+export type avaliacaoCreateNestedManyWithoutAvaliadorInput = {
+  create?: Prisma.XOR<Prisma.avaliacaoCreateWithoutAvaliadorInput, Prisma.avaliacaoUncheckedCreateWithoutAvaliadorInput> | Prisma.avaliacaoCreateWithoutAvaliadorInput[] | Prisma.avaliacaoUncheckedCreateWithoutAvaliadorInput[]
+  connectOrCreate?: Prisma.avaliacaoCreateOrConnectWithoutAvaliadorInput | Prisma.avaliacaoCreateOrConnectWithoutAvaliadorInput[]
+  createMany?: Prisma.avaliacaoCreateManyAvaliadorInputEnvelope
+  connect?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+}
+
+export type avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput = {
+  create?: Prisma.XOR<Prisma.avaliacaoCreateWithoutAvaliadorInput, Prisma.avaliacaoUncheckedCreateWithoutAvaliadorInput> | Prisma.avaliacaoCreateWithoutAvaliadorInput[] | Prisma.avaliacaoUncheckedCreateWithoutAvaliadorInput[]
+  connectOrCreate?: Prisma.avaliacaoCreateOrConnectWithoutAvaliadorInput | Prisma.avaliacaoCreateOrConnectWithoutAvaliadorInput[]
+  createMany?: Prisma.avaliacaoCreateManyAvaliadorInputEnvelope
+  connect?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+}
+
+export type avaliacaoUpdateManyWithoutAvaliadorNestedInput = {
+  create?: Prisma.XOR<Prisma.avaliacaoCreateWithoutAvaliadorInput, Prisma.avaliacaoUncheckedCreateWithoutAvaliadorInput> | Prisma.avaliacaoCreateWithoutAvaliadorInput[] | Prisma.avaliacaoUncheckedCreateWithoutAvaliadorInput[]
+  connectOrCreate?: Prisma.avaliacaoCreateOrConnectWithoutAvaliadorInput | Prisma.avaliacaoCreateOrConnectWithoutAvaliadorInput[]
+  upsert?: Prisma.avaliacaoUpsertWithWhereUniqueWithoutAvaliadorInput | Prisma.avaliacaoUpsertWithWhereUniqueWithoutAvaliadorInput[]
+  createMany?: Prisma.avaliacaoCreateManyAvaliadorInputEnvelope
+  set?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  disconnect?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  delete?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  connect?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  update?: Prisma.avaliacaoUpdateWithWhereUniqueWithoutAvaliadorInput | Prisma.avaliacaoUpdateWithWhereUniqueWithoutAvaliadorInput[]
+  updateMany?: Prisma.avaliacaoUpdateManyWithWhereWithoutAvaliadorInput | Prisma.avaliacaoUpdateManyWithWhereWithoutAvaliadorInput[]
+  deleteMany?: Prisma.avaliacaoScalarWhereInput | Prisma.avaliacaoScalarWhereInput[]
+}
+
+export type avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput = {
+  create?: Prisma.XOR<Prisma.avaliacaoCreateWithoutAvaliadorInput, Prisma.avaliacaoUncheckedCreateWithoutAvaliadorInput> | Prisma.avaliacaoCreateWithoutAvaliadorInput[] | Prisma.avaliacaoUncheckedCreateWithoutAvaliadorInput[]
+  connectOrCreate?: Prisma.avaliacaoCreateOrConnectWithoutAvaliadorInput | Prisma.avaliacaoCreateOrConnectWithoutAvaliadorInput[]
+  upsert?: Prisma.avaliacaoUpsertWithWhereUniqueWithoutAvaliadorInput | Prisma.avaliacaoUpsertWithWhereUniqueWithoutAvaliadorInput[]
+  createMany?: Prisma.avaliacaoCreateManyAvaliadorInputEnvelope
+  set?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  disconnect?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  delete?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  connect?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  update?: Prisma.avaliacaoUpdateWithWhereUniqueWithoutAvaliadorInput | Prisma.avaliacaoUpdateWithWhereUniqueWithoutAvaliadorInput[]
+  updateMany?: Prisma.avaliacaoUpdateManyWithWhereWithoutAvaliadorInput | Prisma.avaliacaoUpdateManyWithWhereWithoutAvaliadorInput[]
+  deleteMany?: Prisma.avaliacaoScalarWhereInput | Prisma.avaliacaoScalarWhereInput[]
+}
+
+export type avaliacaoCreateNestedManyWithoutConversaInput = {
+  create?: Prisma.XOR<Prisma.avaliacaoCreateWithoutConversaInput, Prisma.avaliacaoUncheckedCreateWithoutConversaInput> | Prisma.avaliacaoCreateWithoutConversaInput[] | Prisma.avaliacaoUncheckedCreateWithoutConversaInput[]
+  connectOrCreate?: Prisma.avaliacaoCreateOrConnectWithoutConversaInput | Prisma.avaliacaoCreateOrConnectWithoutConversaInput[]
+  createMany?: Prisma.avaliacaoCreateManyConversaInputEnvelope
+  connect?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+}
+
+export type avaliacaoUncheckedCreateNestedManyWithoutConversaInput = {
+  create?: Prisma.XOR<Prisma.avaliacaoCreateWithoutConversaInput, Prisma.avaliacaoUncheckedCreateWithoutConversaInput> | Prisma.avaliacaoCreateWithoutConversaInput[] | Prisma.avaliacaoUncheckedCreateWithoutConversaInput[]
+  connectOrCreate?: Prisma.avaliacaoCreateOrConnectWithoutConversaInput | Prisma.avaliacaoCreateOrConnectWithoutConversaInput[]
+  createMany?: Prisma.avaliacaoCreateManyConversaInputEnvelope
+  connect?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+}
+
+export type avaliacaoUpdateManyWithoutConversaNestedInput = {
+  create?: Prisma.XOR<Prisma.avaliacaoCreateWithoutConversaInput, Prisma.avaliacaoUncheckedCreateWithoutConversaInput> | Prisma.avaliacaoCreateWithoutConversaInput[] | Prisma.avaliacaoUncheckedCreateWithoutConversaInput[]
+  connectOrCreate?: Prisma.avaliacaoCreateOrConnectWithoutConversaInput | Prisma.avaliacaoCreateOrConnectWithoutConversaInput[]
+  upsert?: Prisma.avaliacaoUpsertWithWhereUniqueWithoutConversaInput | Prisma.avaliacaoUpsertWithWhereUniqueWithoutConversaInput[]
+  createMany?: Prisma.avaliacaoCreateManyConversaInputEnvelope
+  set?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  disconnect?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  delete?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  connect?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  update?: Prisma.avaliacaoUpdateWithWhereUniqueWithoutConversaInput | Prisma.avaliacaoUpdateWithWhereUniqueWithoutConversaInput[]
+  updateMany?: Prisma.avaliacaoUpdateManyWithWhereWithoutConversaInput | Prisma.avaliacaoUpdateManyWithWhereWithoutConversaInput[]
+  deleteMany?: Prisma.avaliacaoScalarWhereInput | Prisma.avaliacaoScalarWhereInput[]
+}
+
+export type avaliacaoUncheckedUpdateManyWithoutConversaNestedInput = {
+  create?: Prisma.XOR<Prisma.avaliacaoCreateWithoutConversaInput, Prisma.avaliacaoUncheckedCreateWithoutConversaInput> | Prisma.avaliacaoCreateWithoutConversaInput[] | Prisma.avaliacaoUncheckedCreateWithoutConversaInput[]
+  connectOrCreate?: Prisma.avaliacaoCreateOrConnectWithoutConversaInput | Prisma.avaliacaoCreateOrConnectWithoutConversaInput[]
+  upsert?: Prisma.avaliacaoUpsertWithWhereUniqueWithoutConversaInput | Prisma.avaliacaoUpsertWithWhereUniqueWithoutConversaInput[]
+  createMany?: Prisma.avaliacaoCreateManyConversaInputEnvelope
+  set?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  disconnect?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  delete?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  connect?: Prisma.avaliacaoWhereUniqueInput | Prisma.avaliacaoWhereUniqueInput[]
+  update?: Prisma.avaliacaoUpdateWithWhereUniqueWithoutConversaInput | Prisma.avaliacaoUpdateWithWhereUniqueWithoutConversaInput[]
+  updateMany?: Prisma.avaliacaoUpdateManyWithWhereWithoutConversaInput | Prisma.avaliacaoUpdateManyWithWhereWithoutConversaInput[]
+  deleteMany?: Prisma.avaliacaoScalarWhereInput | Prisma.avaliacaoScalarWhereInput[]
+}
+
+export type avaliacaoCreateWithoutAvaliadorInput = {
+  nota: number
+  descricao?: string | null
+  criada_em?: Date | string
+  conversa: Prisma.conversaCreateNestedOneWithoutAvaliacoesInput
+}
+
+export type avaliacaoUncheckedCreateWithoutAvaliadorInput = {
+  id?: number
+  conversa_id: number
+  nota: number
+  descricao?: string | null
+  criada_em?: Date | string
+}
+
+export type avaliacaoCreateOrConnectWithoutAvaliadorInput = {
+  where: Prisma.avaliacaoWhereUniqueInput
+  create: Prisma.XOR<Prisma.avaliacaoCreateWithoutAvaliadorInput, Prisma.avaliacaoUncheckedCreateWithoutAvaliadorInput>
+}
+
+export type avaliacaoCreateManyAvaliadorInputEnvelope = {
+  data: Prisma.avaliacaoCreateManyAvaliadorInput | Prisma.avaliacaoCreateManyAvaliadorInput[]
+  skipDuplicates?: boolean
+}
+
+export type avaliacaoUpsertWithWhereUniqueWithoutAvaliadorInput = {
+  where: Prisma.avaliacaoWhereUniqueInput
+  update: Prisma.XOR<Prisma.avaliacaoUpdateWithoutAvaliadorInput, Prisma.avaliacaoUncheckedUpdateWithoutAvaliadorInput>
+  create: Prisma.XOR<Prisma.avaliacaoCreateWithoutAvaliadorInput, Prisma.avaliacaoUncheckedCreateWithoutAvaliadorInput>
+}
+
+export type avaliacaoUpdateWithWhereUniqueWithoutAvaliadorInput = {
+  where: Prisma.avaliacaoWhereUniqueInput
+  data: Prisma.XOR<Prisma.avaliacaoUpdateWithoutAvaliadorInput, Prisma.avaliacaoUncheckedUpdateWithoutAvaliadorInput>
+}
+
+export type avaliacaoUpdateManyWithWhereWithoutAvaliadorInput = {
+  where: Prisma.avaliacaoScalarWhereInput
+  data: Prisma.XOR<Prisma.avaliacaoUpdateManyMutationInput, Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorInput>
+}
+
+export type avaliacaoScalarWhereInput = {
+  AND?: Prisma.avaliacaoScalarWhereInput | Prisma.avaliacaoScalarWhereInput[]
+  OR?: Prisma.avaliacaoScalarWhereInput[]
+  NOT?: Prisma.avaliacaoScalarWhereInput | Prisma.avaliacaoScalarWhereInput[]
+  id?: Prisma.IntFilter<"avaliacao"> | number
+  conversa_id?: Prisma.IntFilter<"avaliacao"> | number
+  avaliador_id?: Prisma.IntFilter<"avaliacao"> | number
+  nota?: Prisma.IntFilter<"avaliacao"> | number
+  descricao?: Prisma.StringNullableFilter<"avaliacao"> | string | null
+  criada_em?: Prisma.DateTimeFilter<"avaliacao"> | Date | string
+}
+
+export type avaliacaoCreateWithoutConversaInput = {
+  nota: number
+  descricao?: string | null
+  criada_em?: Date | string
+  avaliador: Prisma.cadastroCreateNestedOneWithoutAvaliacoes_realizadasInput
+}
+
+export type avaliacaoUncheckedCreateWithoutConversaInput = {
+  id?: number
+  avaliador_id: number
+  nota: number
+  descricao?: string | null
+  criada_em?: Date | string
+}
+
+export type avaliacaoCreateOrConnectWithoutConversaInput = {
+  where: Prisma.avaliacaoWhereUniqueInput
+  create: Prisma.XOR<Prisma.avaliacaoCreateWithoutConversaInput, Prisma.avaliacaoUncheckedCreateWithoutConversaInput>
+}
+
+export type avaliacaoCreateManyConversaInputEnvelope = {
+  data: Prisma.avaliacaoCreateManyConversaInput | Prisma.avaliacaoCreateManyConversaInput[]
+  skipDuplicates?: boolean
+}
+
+export type avaliacaoUpsertWithWhereUniqueWithoutConversaInput = {
+  where: Prisma.avaliacaoWhereUniqueInput
+  update: Prisma.XOR<Prisma.avaliacaoUpdateWithoutConversaInput, Prisma.avaliacaoUncheckedUpdateWithoutConversaInput>
+  create: Prisma.XOR<Prisma.avaliacaoCreateWithoutConversaInput, Prisma.avaliacaoUncheckedCreateWithoutConversaInput>
+}
+
+export type avaliacaoUpdateWithWhereUniqueWithoutConversaInput = {
+  where: Prisma.avaliacaoWhereUniqueInput
+  data: Prisma.XOR<Prisma.avaliacaoUpdateWithoutConversaInput, Prisma.avaliacaoUncheckedUpdateWithoutConversaInput>
+}
+
+export type avaliacaoUpdateManyWithWhereWithoutConversaInput = {
+  where: Prisma.avaliacaoScalarWhereInput
+  data: Prisma.XOR<Prisma.avaliacaoUpdateManyMutationInput, Prisma.avaliacaoUncheckedUpdateManyWithoutConversaInput>
+}
+
+export type avaliacaoCreateManyAvaliadorInput = {
+  id?: number
+  conversa_id: number
+  nota: number
+  descricao?: string | null
+  criada_em?: Date | string
+}
+
+export type avaliacaoUpdateWithoutAvaliadorInput = {
+  nota?: Prisma.IntFieldUpdateOperationsInput | number
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  conversa?: Prisma.conversaUpdateOneRequiredWithoutAvaliacoesNestedInput
+}
+
+export type avaliacaoUncheckedUpdateWithoutAvaliadorInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
+  nota?: Prisma.IntFieldUpdateOperationsInput | number
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type avaliacaoUncheckedUpdateManyWithoutAvaliadorInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
+  nota?: Prisma.IntFieldUpdateOperationsInput | number
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type avaliacaoCreateManyConversaInput = {
+  id?: number
+  avaliador_id: number
+  nota: number
+  descricao?: string | null
+  criada_em?: Date | string
+}
+
+export type avaliacaoUpdateWithoutConversaInput = {
+  nota?: Prisma.IntFieldUpdateOperationsInput | number
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  avaliador?: Prisma.cadastroUpdateOneRequiredWithoutAvaliacoes_realizadasNestedInput
+}
+
+export type avaliacaoUncheckedUpdateWithoutConversaInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliador_id?: Prisma.IntFieldUpdateOperationsInput | number
+  nota?: Prisma.IntFieldUpdateOperationsInput | number
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type avaliacaoUncheckedUpdateManyWithoutConversaInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliador_id?: Prisma.IntFieldUpdateOperationsInput | number
+  nota?: Prisma.IntFieldUpdateOperationsInput | number
+  descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
 
 export type avaliacaoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  conversa_id?: boolean
+  avaliador_id?: boolean
   nota?: boolean
   descricao?: boolean
+  criada_em?: boolean
+  conversa?: boolean | Prisma.conversaDefaultArgs<ExtArgs>
+  avaliador?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["avaliacao"]>
 
 
 
 export type avaliacaoSelectScalar = {
   id?: boolean
+  conversa_id?: boolean
+  avaliador_id?: boolean
   nota?: boolean
   descricao?: boolean
+  criada_em?: boolean
 }
 
-export type avaliacaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nota" | "descricao", ExtArgs["result"]["avaliacao"]>
+export type avaliacaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversa_id" | "avaliador_id" | "nota" | "descricao" | "criada_em", ExtArgs["result"]["avaliacao"]>
+export type avaliacaoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  conversa?: boolean | Prisma.conversaDefaultArgs<ExtArgs>
+  avaliador?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
+}
 
 export type $avaliacaoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "avaliacao"
-  objects: {}
+  objects: {
+    conversa: Prisma.$conversaPayload<ExtArgs>
+    avaliador: Prisma.$cadastroPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
+    conversa_id: number
+    avaliador_id: number
     nota: number
     descricao: string | null
+    criada_em: Date
   }, ExtArgs["result"]["avaliacao"]>
   composites: {}
 }
@@ -680,6 +1036,8 @@ readonly fields: avaliacaoFieldRefs;
  */
 export interface Prisma__avaliacaoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  conversa<T extends Prisma.conversaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversaDefaultArgs<ExtArgs>>): Prisma.Prisma__conversaClient<runtime.Types.Result.GetResult<Prisma.$conversaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  avaliador<T extends Prisma.cadastroDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastroDefaultArgs<ExtArgs>>): Prisma.Prisma__cadastroClient<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -710,8 +1068,11 @@ export interface Prisma__avaliacaoClient<T, Null = never, ExtArgs extends runtim
  */
 export interface avaliacaoFieldRefs {
   readonly id: Prisma.FieldRef<"avaliacao", 'Int'>
+  readonly conversa_id: Prisma.FieldRef<"avaliacao", 'Int'>
+  readonly avaliador_id: Prisma.FieldRef<"avaliacao", 'Int'>
   readonly nota: Prisma.FieldRef<"avaliacao", 'Int'>
   readonly descricao: Prisma.FieldRef<"avaliacao", 'String'>
+  readonly criada_em: Prisma.FieldRef<"avaliacao", 'DateTime'>
 }
     
 
@@ -728,6 +1089,10 @@ export type avaliacaoFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the avaliacao
    */
   omit?: Prisma.avaliacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.avaliacaoInclude<ExtArgs> | null
   /**
    * Filter, which avaliacao to fetch.
    */
@@ -747,6 +1112,10 @@ export type avaliacaoFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.avaliacaoOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.avaliacaoInclude<ExtArgs> | null
+  /**
    * Filter, which avaliacao to fetch.
    */
   where: Prisma.avaliacaoWhereUniqueInput
@@ -764,6 +1133,10 @@ export type avaliacaoFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the avaliacao
    */
   omit?: Prisma.avaliacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.avaliacaoInclude<ExtArgs> | null
   /**
    * Filter, which avaliacao to fetch.
    */
@@ -813,6 +1186,10 @@ export type avaliacaoFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.avaliacaoOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.avaliacaoInclude<ExtArgs> | null
+  /**
    * Filter, which avaliacao to fetch.
    */
   where?: Prisma.avaliacaoWhereInput
@@ -860,6 +1237,10 @@ export type avaliacaoFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the avaliacao
    */
   omit?: Prisma.avaliacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.avaliacaoInclude<ExtArgs> | null
   /**
    * Filter, which avaliacaos to fetch.
    */
@@ -909,6 +1290,10 @@ export type avaliacaoCreateArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.avaliacaoOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.avaliacaoInclude<ExtArgs> | null
+  /**
    * The data needed to create a avaliacao.
    */
   data: Prisma.XOR<Prisma.avaliacaoCreateInput, Prisma.avaliacaoUncheckedCreateInput>
@@ -937,6 +1322,10 @@ export type avaliacaoUpdateArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the avaliacao
    */
   omit?: Prisma.avaliacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.avaliacaoInclude<ExtArgs> | null
   /**
    * The data needed to update a avaliacao.
    */
@@ -978,6 +1367,10 @@ export type avaliacaoUpsertArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.avaliacaoOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.avaliacaoInclude<ExtArgs> | null
+  /**
    * The filter to search for the avaliacao to update in case it exists.
    */
   where: Prisma.avaliacaoWhereUniqueInput
@@ -1003,6 +1396,10 @@ export type avaliacaoDeleteArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the avaliacao
    */
   omit?: Prisma.avaliacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.avaliacaoInclude<ExtArgs> | null
   /**
    * Filter which avaliacao to delete.
    */
@@ -1035,4 +1432,8 @@ export type avaliacaoDefaultArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the avaliacao
    */
   omit?: Prisma.avaliacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.avaliacaoInclude<ExtArgs> | null
 }

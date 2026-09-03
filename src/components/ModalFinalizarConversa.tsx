@@ -27,6 +27,7 @@ export function ModalFinalizarConversa({
     aoEnviar,
 }: ModalFinalizarConversaProps) {
     const [avaliacao, setAvaliacao] = useState(0);
+    const [avaliacaoEmDestaque, setAvaliacaoEmDestaque] = useState<number | null>(null);
     const [descricao, setDescricao] = useState("");
 
     const [usuario, setUsuario] = useState<UsuarioAutenticado | null>(null);
@@ -72,6 +73,7 @@ export function ModalFinalizarConversa({
         }
 
         setAvaliacao(0);
+        setAvaliacaoEmDestaque(null);
         setDescricao("");
 
         function fecharComEscape(evento: KeyboardEvent) {
@@ -164,6 +166,7 @@ export function ModalFinalizarConversa({
                             className="modal-finalizar__estrelas"
                             role="radiogroup"
                             aria-label="Avaliação de uma a cinco estrelas"
+                            onMouseLeave={() => setAvaliacaoEmDestaque(null)}
                         >
                             {[1, 2, 3, 4, 5].map((estrela) => (
                                 <button
@@ -174,11 +177,11 @@ export function ModalFinalizarConversa({
                                     aria-label={estrela === 1
                                         ? "1 estrela"
                                         : `${estrela} estrelas`}
-                                    className={estrela <= avaliacao
+                                    className={estrela <= (avaliacaoEmDestaque ?? avaliacao)
                                         ? "modal-finalizar__estrela modal-finalizar__estrela--ativa"
                                         : "modal-finalizar__estrela"}
                                     onClick={() => setAvaliacao(estrela)}
-                                    onMouseEnter={() => setAvaliacao(estrela)}
+                                    onMouseEnter={() => setAvaliacaoEmDestaque(estrela)}
                                 >
                                     ★
                                 </button>

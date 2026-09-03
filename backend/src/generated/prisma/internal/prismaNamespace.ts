@@ -409,7 +409,8 @@ export const ModelName = {
   codigo_recuperacao_2fa: 'codigo_recuperacao_2fa',
   desafio_login_2fa: 'desafio_login_2fa',
   secretaria: 'secretaria',
-  historico_administrativo: 'historico_administrativo'
+  historico_administrativo: 'historico_administrativo',
+  avaliacao: 'avaliacao'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -425,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo"
+    modelProps: "cadastro" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1287,6 +1288,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    avaliacao: {
+      payload: Prisma.$avaliacaoPayload<ExtArgs>
+      fields: Prisma.avaliacaoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.avaliacaoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$avaliacaoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.avaliacaoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$avaliacaoPayload>
+        }
+        findFirst: {
+          args: Prisma.avaliacaoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$avaliacaoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.avaliacaoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$avaliacaoPayload>
+        }
+        findMany: {
+          args: Prisma.avaliacaoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$avaliacaoPayload>[]
+        }
+        create: {
+          args: Prisma.avaliacaoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$avaliacaoPayload>
+        }
+        createMany: {
+          args: Prisma.avaliacaoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.avaliacaoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$avaliacaoPayload>
+        }
+        update: {
+          args: Prisma.avaliacaoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$avaliacaoPayload>
+        }
+        deleteMany: {
+          args: Prisma.avaliacaoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.avaliacaoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.avaliacaoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$avaliacaoPayload>
+        }
+        aggregate: {
+          args: Prisma.AvaliacaoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAvaliacao>
+        }
+        groupBy: {
+          args: Prisma.avaliacaoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AvaliacaoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.avaliacaoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AvaliacaoCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1338,10 +1405,10 @@ export const CadastroScalarFieldEnum = {
   token_recuperacao_expira_em: 'token_recuperacao_expira_em',
   tipo_usuario: 'tipo_usuario',
   setor_id: 'setor_id',
-  secretaria_id: 'secretaria_id',
   foto_perfil_url: 'foto_perfil_url',
   dois_fatores_email_ativo: 'dois_fatores_email_ativo',
   dois_fatores_email_confirmado_em: 'dois_fatores_email_confirmado_em',
+  secretaria_id: 'secretaria_id',
   desativado_em: 'desativado_em',
   desativado_por: 'desativado_por',
   motivo_desativacao: 'motivo_desativacao',
@@ -1483,13 +1550,22 @@ export const Historico_administrativoScalarFieldEnum = {
   usuario_alvo_id: 'usuario_alvo_id',
   acao: 'acao',
   motivo: 'motivo',
+  criado_em: 'criado_em',
   tipo_usuario_anterior: 'tipo_usuario_anterior',
   setor_id_anterior: 'setor_id_anterior',
-  secretaria_id_anterior: 'secretaria_id_anterior',
-  criado_em: 'criado_em'
+  secretaria_id_anterior: 'secretaria_id_anterior'
 } as const
 
 export type Historico_administrativoScalarFieldEnum = (typeof Historico_administrativoScalarFieldEnum)[keyof typeof Historico_administrativoScalarFieldEnum]
+
+
+export const AvaliacaoScalarFieldEnum = {
+  id: 'id',
+  nota: 'nota',
+  descricao: 'descricao'
+} as const
+
+export type AvaliacaoScalarFieldEnum = (typeof AvaliacaoScalarFieldEnum)[keyof typeof AvaliacaoScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1576,6 +1652,13 @@ export const historico_administrativoOrderByRelevanceFieldEnum = {
 } as const
 
 export type historico_administrativoOrderByRelevanceFieldEnum = (typeof historico_administrativoOrderByRelevanceFieldEnum)[keyof typeof historico_administrativoOrderByRelevanceFieldEnum]
+
+
+export const avaliacaoOrderByRelevanceFieldEnum = {
+  descricao: 'descricao'
+} as const
+
+export type avaliacaoOrderByRelevanceFieldEnum = (typeof avaliacaoOrderByRelevanceFieldEnum)[keyof typeof avaliacaoOrderByRelevanceFieldEnum]
 
 
 
@@ -1824,6 +1907,7 @@ export type GlobalOmitConfig = {
   desafio_login_2fa?: Prisma.desafio_login_2faOmit
   secretaria?: Prisma.secretariaOmit
   historico_administrativo?: Prisma.historico_administrativoOmit
+  avaliacao?: Prisma.avaliacaoOmit
 }
 
 /* Types for Logging */

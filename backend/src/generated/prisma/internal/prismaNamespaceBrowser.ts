@@ -63,7 +63,8 @@ export const ModelName = {
   codigo_recuperacao_2fa: 'codigo_recuperacao_2fa',
   desafio_login_2fa: 'desafio_login_2fa',
   secretaria: 'secretaria',
-  historico_administrativo: 'historico_administrativo'
+  historico_administrativo: 'historico_administrativo',
+  avaliacao: 'avaliacao'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -94,10 +95,10 @@ export const CadastroScalarFieldEnum = {
   token_recuperacao_expira_em: 'token_recuperacao_expira_em',
   tipo_usuario: 'tipo_usuario',
   setor_id: 'setor_id',
-  secretaria_id: 'secretaria_id',
   foto_perfil_url: 'foto_perfil_url',
   dois_fatores_email_ativo: 'dois_fatores_email_ativo',
   dois_fatores_email_confirmado_em: 'dois_fatores_email_confirmado_em',
+  secretaria_id: 'secretaria_id',
   desativado_em: 'desativado_em',
   desativado_por: 'desativado_por',
   motivo_desativacao: 'motivo_desativacao',
@@ -239,13 +240,22 @@ export const Historico_administrativoScalarFieldEnum = {
   usuario_alvo_id: 'usuario_alvo_id',
   acao: 'acao',
   motivo: 'motivo',
+  criado_em: 'criado_em',
   tipo_usuario_anterior: 'tipo_usuario_anterior',
   setor_id_anterior: 'setor_id_anterior',
-  secretaria_id_anterior: 'secretaria_id_anterior',
-  criado_em: 'criado_em'
+  secretaria_id_anterior: 'secretaria_id_anterior'
 } as const
 
 export type Historico_administrativoScalarFieldEnum = (typeof Historico_administrativoScalarFieldEnum)[keyof typeof Historico_administrativoScalarFieldEnum]
+
+
+export const AvaliacaoScalarFieldEnum = {
+  id: 'id',
+  nota: 'nota',
+  descricao: 'descricao'
+} as const
+
+export type AvaliacaoScalarFieldEnum = (typeof AvaliacaoScalarFieldEnum)[keyof typeof AvaliacaoScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -332,4 +342,11 @@ export const historico_administrativoOrderByRelevanceFieldEnum = {
 } as const
 
 export type historico_administrativoOrderByRelevanceFieldEnum = (typeof historico_administrativoOrderByRelevanceFieldEnum)[keyof typeof historico_administrativoOrderByRelevanceFieldEnum]
+
+
+export const avaliacaoOrderByRelevanceFieldEnum = {
+  descricao: 'descricao'
+} as const
+
+export type avaliacaoOrderByRelevanceFieldEnum = (typeof avaliacaoOrderByRelevanceFieldEnum)[keyof typeof avaliacaoOrderByRelevanceFieldEnum]
 

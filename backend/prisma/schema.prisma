@@ -20,26 +20,26 @@ model cadastro {
   token_recuperacao_expira_em      DateTime?
   tipo_usuario                     cadastro_tipo_usuario      @default(user)
   setor_id                         Int?
-  secretaria_id                    Int?
   foto_perfil_url                  String?                    @db.VarChar(500)
   dois_fatores_email_ativo         Boolean                    @default(false)
   dois_fatores_email_confirmado_em DateTime?
-  desativado_em                    DateTime?                  @db.DateTime(3)
+  secretaria_id                    Int?
+  desativado_em                    DateTime?
   desativado_por                   Int?
   motivo_desativacao               String?                    @db.VarChar(500)
   versao_token                     Int                        @default(0) @db.UnsignedInt
-  setor                            setores?                   @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
-  secretaria                       secretaria?                @relation(fields: [secretaria_id], references: [id], onDelete: SetNull, onUpdate: Restrict, map: "fk_cadastro_secretaria")
   responsavel_desativacao          cadastro?                  @relation("CadastroDesativadoPor", fields: [desativado_por], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_cadastro_desativado_por")
   desativacoes_realizadas          cadastro[]                 @relation("CadastroDesativadoPor")
-  historicos_como_administrador    historico_administrativo[] @relation("HistoricoAdministrador")
-  historicos_como_usuario_alvo     historico_administrativo[] @relation("HistoricoUsuarioAlvo")
+  secretaria                       secretaria?                @relation(fields: [secretaria_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_secretaria")
+  setor                            setores?                   @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
   codigo_recuperacao_2fa           codigo_recuperacao_2fa[]
   conversa_leitura                 conversa_leitura[]
   conversa_participante            conversa_participante[]
   conversas_atendidas              conversa_setor[]           @relation("UsuarioAtendido")
   desafio_login_2fa                desafio_login_2fa[]
   erro_autenticacao                erro_autenticacao[]
+  historicos_como_administrador    historico_administrativo[] @relation("HistoricoAdministrador")
+  historicos_como_usuario_alvo     historico_administrativo[] @relation("HistoricoUsuarioAlvo")
   login_evento                     login_evento[]
   mensagens_enviadas               mensagem[]                 @relation("RemetenteMensagem")
 
@@ -86,13 +86,12 @@ model conversa_participante {
   conversa_id               Int
   usuario_id                Int
   entrou_em                 DateTime  @default(now()) @db.DateTime(0)
-  ocultada_em               DateTime? @db.DateTime(3)
+  ocultada_em               DateTime?
   visivel_desde_mensagem_id Int?
   conversa                  conversa  @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_participante_conversa")
   cadastro                  cadastro  @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_participante_usuario")
 
   @@id([conversa_id, usuario_id])
-  @@index([usuario_id], map: "fk_participante_usuario")
   @@index([usuario_id, ocultada_em], map: "idx_participante_usuario_visibilidade")
 }
 
@@ -101,7 +100,7 @@ model conversa_setor {
   setor_id                 Int
   usuario_id               Int
   criada_em                DateTime  @default(now()) @db.DateTime(0)
-  ocultada_para_usuario_em DateTime? @db.DateTime(3)
+  ocultada_para_usuario_em DateTime?
   conversa                 conversa  @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_conversa_setor_conversa")
   setor                    setores   @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_conversa_setor_setor")
   usuario                  cadastro  @relation("UsuarioAtendido", fields: [usuario_id], references: [id], onUpdate: Restrict, map: "fk_conversa_setor_usuario")
@@ -202,15 +201,21 @@ model historico_administrativo {
   usuario_alvo_id        Int
   acao                   historico_administrativo_acao
   motivo                 String?                       @db.VarChar(500)
+  criado_em              DateTime                      @default(now())
   tipo_usuario_anterior  cadastro_tipo_usuario?
   setor_id_anterior      Int?
   secretaria_id_anterior Int?
-  criado_em              DateTime                      @default(now()) @db.DateTime(3)
-  administrador          cadastro                      @relation("HistoricoAdministrador", fields: [administrador_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_historico_administrador")
-  usuario_alvo           cadastro                      @relation("HistoricoUsuarioAlvo", fields: [usuario_alvo_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_historico_usuario_alvo")
+  administrador          cadastro                      @relation("HistoricoAdministrador", fields: [administrador_id], references: [id], onUpdate: Restrict, map: "fk_historico_administrador")
+  usuario_alvo           cadastro                      @relation("HistoricoUsuarioAlvo", fields: [usuario_alvo_id], references: [id], onUpdate: Restrict, map: "fk_historico_usuario_alvo")
 
   @@index([administrador_id, criado_em], map: "idx_historico_administrador_data")
   @@index([usuario_alvo_id, criado_em], map: "idx_historico_usuario_data")
+}
+
+model avaliacao {
+  id        Int     @id @default(autoincrement())
+  nota      Int
+  descricao String? @db.VarChar(500)
 }
 
 enum desafio_2fa_finalidade {

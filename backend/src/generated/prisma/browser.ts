@@ -82,3 +82,8 @@ export type secretaria = Prisma.secretariaModel
  * 
  */
 export type historico_administrativo = Prisma.historico_administrativoModel
+/**
+ * Model avaliacao
+ * 
+ */
+export type avaliacao = Prisma.avaliacaoModel

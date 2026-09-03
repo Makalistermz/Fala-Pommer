@@ -48,10 +48,10 @@ export type Historico_administrativoMinAggregateOutputType = {
   usuario_alvo_id: number | null
   acao: $Enums.historico_administrativo_acao | null
   motivo: string | null
+  criado_em: Date | null
   tipo_usuario_anterior: $Enums.cadastro_tipo_usuario | null
   setor_id_anterior: number | null
   secretaria_id_anterior: number | null
-  criado_em: Date | null
 }
 
 export type Historico_administrativoMaxAggregateOutputType = {
@@ -60,10 +60,10 @@ export type Historico_administrativoMaxAggregateOutputType = {
   usuario_alvo_id: number | null
   acao: $Enums.historico_administrativo_acao | null
   motivo: string | null
+  criado_em: Date | null
   tipo_usuario_anterior: $Enums.cadastro_tipo_usuario | null
   setor_id_anterior: number | null
   secretaria_id_anterior: number | null
-  criado_em: Date | null
 }
 
 export type Historico_administrativoCountAggregateOutputType = {
@@ -72,10 +72,10 @@ export type Historico_administrativoCountAggregateOutputType = {
   usuario_alvo_id: number
   acao: number
   motivo: number
+  criado_em: number
   tipo_usuario_anterior: number
   setor_id_anterior: number
   secretaria_id_anterior: number
-  criado_em: number
   _all: number
 }
 
@@ -102,10 +102,10 @@ export type Historico_administrativoMinAggregateInputType = {
   usuario_alvo_id?: true
   acao?: true
   motivo?: true
+  criado_em?: true
   tipo_usuario_anterior?: true
   setor_id_anterior?: true
   secretaria_id_anterior?: true
-  criado_em?: true
 }
 
 export type Historico_administrativoMaxAggregateInputType = {
@@ -114,10 +114,10 @@ export type Historico_administrativoMaxAggregateInputType = {
   usuario_alvo_id?: true
   acao?: true
   motivo?: true
+  criado_em?: true
   tipo_usuario_anterior?: true
   setor_id_anterior?: true
   secretaria_id_anterior?: true
-  criado_em?: true
 }
 
 export type Historico_administrativoCountAggregateInputType = {
@@ -126,10 +126,10 @@ export type Historico_administrativoCountAggregateInputType = {
   usuario_alvo_id?: true
   acao?: true
   motivo?: true
+  criado_em?: true
   tipo_usuario_anterior?: true
   setor_id_anterior?: true
   secretaria_id_anterior?: true
-  criado_em?: true
   _all?: true
 }
 
@@ -225,10 +225,10 @@ export type Historico_administrativoGroupByOutputType = {
   usuario_alvo_id: number
   acao: $Enums.historico_administrativo_acao
   motivo: string | null
+  criado_em: Date
   tipo_usuario_anterior: $Enums.cadastro_tipo_usuario | null
   setor_id_anterior: number | null
   secretaria_id_anterior: number | null
-  criado_em: Date
   _count: Historico_administrativoCountAggregateOutputType | null
   _avg: Historico_administrativoAvgAggregateOutputType | null
   _sum: Historico_administrativoSumAggregateOutputType | null
@@ -260,10 +260,10 @@ export type historico_administrativoWhereInput = {
   usuario_alvo_id?: Prisma.IntFilter<"historico_administrativo"> | number
   acao?: Prisma.Enumhistorico_administrativo_acaoFilter<"historico_administrativo"> | $Enums.historico_administrativo_acao
   motivo?: Prisma.StringNullableFilter<"historico_administrativo"> | string | null
+  criado_em?: Prisma.DateTimeFilter<"historico_administrativo"> | Date | string
   tipo_usuario_anterior?: Prisma.Enumcadastro_tipo_usuarioNullableFilter<"historico_administrativo"> | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.IntNullableFilter<"historico_administrativo"> | number | null
   secretaria_id_anterior?: Prisma.IntNullableFilter<"historico_administrativo"> | number | null
-  criado_em?: Prisma.DateTimeFilter<"historico_administrativo"> | Date | string
   administrador?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
   usuario_alvo?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }
@@ -274,10 +274,10 @@ export type historico_administrativoOrderByWithRelationInput = {
   usuario_alvo_id?: Prisma.SortOrder
   acao?: Prisma.SortOrder
   motivo?: Prisma.SortOrderInput | Prisma.SortOrder
+  criado_em?: Prisma.SortOrder
   tipo_usuario_anterior?: Prisma.SortOrderInput | Prisma.SortOrder
   setor_id_anterior?: Prisma.SortOrderInput | Prisma.SortOrder
   secretaria_id_anterior?: Prisma.SortOrderInput | Prisma.SortOrder
-  criado_em?: Prisma.SortOrder
   administrador?: Prisma.cadastroOrderByWithRelationInput
   usuario_alvo?: Prisma.cadastroOrderByWithRelationInput
   _relevance?: Prisma.historico_administrativoOrderByRelevanceInput
@@ -292,10 +292,10 @@ export type historico_administrativoWhereUniqueInput = Prisma.AtLeast<{
   usuario_alvo_id?: Prisma.IntFilter<"historico_administrativo"> | number
   acao?: Prisma.Enumhistorico_administrativo_acaoFilter<"historico_administrativo"> | $Enums.historico_administrativo_acao
   motivo?: Prisma.StringNullableFilter<"historico_administrativo"> | string | null
+  criado_em?: Prisma.DateTimeFilter<"historico_administrativo"> | Date | string
   tipo_usuario_anterior?: Prisma.Enumcadastro_tipo_usuarioNullableFilter<"historico_administrativo"> | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.IntNullableFilter<"historico_administrativo"> | number | null
   secretaria_id_anterior?: Prisma.IntNullableFilter<"historico_administrativo"> | number | null
-  criado_em?: Prisma.DateTimeFilter<"historico_administrativo"> | Date | string
   administrador?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
   usuario_alvo?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }, "id">
@@ -306,10 +306,10 @@ export type historico_administrativoOrderByWithAggregationInput = {
   usuario_alvo_id?: Prisma.SortOrder
   acao?: Prisma.SortOrder
   motivo?: Prisma.SortOrderInput | Prisma.SortOrder
+  criado_em?: Prisma.SortOrder
   tipo_usuario_anterior?: Prisma.SortOrderInput | Prisma.SortOrder
   setor_id_anterior?: Prisma.SortOrderInput | Prisma.SortOrder
   secretaria_id_anterior?: Prisma.SortOrderInput | Prisma.SortOrder
-  criado_em?: Prisma.SortOrder
   _count?: Prisma.historico_administrativoCountOrderByAggregateInput
   _avg?: Prisma.historico_administrativoAvgOrderByAggregateInput
   _max?: Prisma.historico_administrativoMaxOrderByAggregateInput
@@ -326,19 +326,19 @@ export type historico_administrativoScalarWhereWithAggregatesInput = {
   usuario_alvo_id?: Prisma.IntWithAggregatesFilter<"historico_administrativo"> | number
   acao?: Prisma.Enumhistorico_administrativo_acaoWithAggregatesFilter<"historico_administrativo"> | $Enums.historico_administrativo_acao
   motivo?: Prisma.StringNullableWithAggregatesFilter<"historico_administrativo"> | string | null
+  criado_em?: Prisma.DateTimeWithAggregatesFilter<"historico_administrativo"> | Date | string
   tipo_usuario_anterior?: Prisma.Enumcadastro_tipo_usuarioNullableWithAggregatesFilter<"historico_administrativo"> | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.IntNullableWithAggregatesFilter<"historico_administrativo"> | number | null
   secretaria_id_anterior?: Prisma.IntNullableWithAggregatesFilter<"historico_administrativo"> | number | null
-  criado_em?: Prisma.DateTimeWithAggregatesFilter<"historico_administrativo"> | Date | string
 }
 
 export type historico_administrativoCreateInput = {
   acao: $Enums.historico_administrativo_acao
   motivo?: string | null
+  criado_em?: Date | string
   tipo_usuario_anterior?: $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: number | null
   secretaria_id_anterior?: number | null
-  criado_em?: Date | string
   administrador: Prisma.cadastroCreateNestedOneWithoutHistoricos_como_administradorInput
   usuario_alvo: Prisma.cadastroCreateNestedOneWithoutHistoricos_como_usuario_alvoInput
 }
@@ -349,19 +349,19 @@ export type historico_administrativoUncheckedCreateInput = {
   usuario_alvo_id: number
   acao: $Enums.historico_administrativo_acao
   motivo?: string | null
+  criado_em?: Date | string
   tipo_usuario_anterior?: $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: number | null
   secretaria_id_anterior?: number | null
-  criado_em?: Date | string
 }
 
 export type historico_administrativoUpdateInput = {
   acao?: Prisma.Enumhistorico_administrativo_acaoFieldUpdateOperationsInput | $Enums.historico_administrativo_acao
   motivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipo_usuario_anterior?: Prisma.NullableEnumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   secretaria_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   administrador?: Prisma.cadastroUpdateOneRequiredWithoutHistoricos_como_administradorNestedInput
   usuario_alvo?: Prisma.cadastroUpdateOneRequiredWithoutHistoricos_como_usuario_alvoNestedInput
 }
@@ -372,10 +372,10 @@ export type historico_administrativoUncheckedUpdateInput = {
   usuario_alvo_id?: Prisma.IntFieldUpdateOperationsInput | number
   acao?: Prisma.Enumhistorico_administrativo_acaoFieldUpdateOperationsInput | $Enums.historico_administrativo_acao
   motivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipo_usuario_anterior?: Prisma.NullableEnumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   secretaria_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type historico_administrativoCreateManyInput = {
@@ -384,19 +384,19 @@ export type historico_administrativoCreateManyInput = {
   usuario_alvo_id: number
   acao: $Enums.historico_administrativo_acao
   motivo?: string | null
+  criado_em?: Date | string
   tipo_usuario_anterior?: $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: number | null
   secretaria_id_anterior?: number | null
-  criado_em?: Date | string
 }
 
 export type historico_administrativoUpdateManyMutationInput = {
   acao?: Prisma.Enumhistorico_administrativo_acaoFieldUpdateOperationsInput | $Enums.historico_administrativo_acao
   motivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipo_usuario_anterior?: Prisma.NullableEnumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   secretaria_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type historico_administrativoUncheckedUpdateManyInput = {
@@ -405,10 +405,10 @@ export type historico_administrativoUncheckedUpdateManyInput = {
   usuario_alvo_id?: Prisma.IntFieldUpdateOperationsInput | number
   acao?: Prisma.Enumhistorico_administrativo_acaoFieldUpdateOperationsInput | $Enums.historico_administrativo_acao
   motivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipo_usuario_anterior?: Prisma.NullableEnumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   secretaria_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type Historico_administrativoListRelationFilter = {
@@ -433,10 +433,10 @@ export type historico_administrativoCountOrderByAggregateInput = {
   usuario_alvo_id?: Prisma.SortOrder
   acao?: Prisma.SortOrder
   motivo?: Prisma.SortOrder
+  criado_em?: Prisma.SortOrder
   tipo_usuario_anterior?: Prisma.SortOrder
   setor_id_anterior?: Prisma.SortOrder
   secretaria_id_anterior?: Prisma.SortOrder
-  criado_em?: Prisma.SortOrder
 }
 
 export type historico_administrativoAvgOrderByAggregateInput = {
@@ -453,10 +453,10 @@ export type historico_administrativoMaxOrderByAggregateInput = {
   usuario_alvo_id?: Prisma.SortOrder
   acao?: Prisma.SortOrder
   motivo?: Prisma.SortOrder
+  criado_em?: Prisma.SortOrder
   tipo_usuario_anterior?: Prisma.SortOrder
   setor_id_anterior?: Prisma.SortOrder
   secretaria_id_anterior?: Prisma.SortOrder
-  criado_em?: Prisma.SortOrder
 }
 
 export type historico_administrativoMinOrderByAggregateInput = {
@@ -465,10 +465,10 @@ export type historico_administrativoMinOrderByAggregateInput = {
   usuario_alvo_id?: Prisma.SortOrder
   acao?: Prisma.SortOrder
   motivo?: Prisma.SortOrder
+  criado_em?: Prisma.SortOrder
   tipo_usuario_anterior?: Prisma.SortOrder
   setor_id_anterior?: Prisma.SortOrder
   secretaria_id_anterior?: Prisma.SortOrder
-  criado_em?: Prisma.SortOrder
 }
 
 export type historico_administrativoSumOrderByAggregateInput = {
@@ -574,10 +574,10 @@ export type NullableEnumcadastro_tipo_usuarioFieldUpdateOperationsInput = {
 export type historico_administrativoCreateWithoutAdministradorInput = {
   acao: $Enums.historico_administrativo_acao
   motivo?: string | null
+  criado_em?: Date | string
   tipo_usuario_anterior?: $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: number | null
   secretaria_id_anterior?: number | null
-  criado_em?: Date | string
   usuario_alvo: Prisma.cadastroCreateNestedOneWithoutHistoricos_como_usuario_alvoInput
 }
 
@@ -586,10 +586,10 @@ export type historico_administrativoUncheckedCreateWithoutAdministradorInput = {
   usuario_alvo_id: number
   acao: $Enums.historico_administrativo_acao
   motivo?: string | null
+  criado_em?: Date | string
   tipo_usuario_anterior?: $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: number | null
   secretaria_id_anterior?: number | null
-  criado_em?: Date | string
 }
 
 export type historico_administrativoCreateOrConnectWithoutAdministradorInput = {
@@ -605,10 +605,10 @@ export type historico_administrativoCreateManyAdministradorInputEnvelope = {
 export type historico_administrativoCreateWithoutUsuario_alvoInput = {
   acao: $Enums.historico_administrativo_acao
   motivo?: string | null
+  criado_em?: Date | string
   tipo_usuario_anterior?: $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: number | null
   secretaria_id_anterior?: number | null
-  criado_em?: Date | string
   administrador: Prisma.cadastroCreateNestedOneWithoutHistoricos_como_administradorInput
 }
 
@@ -617,10 +617,10 @@ export type historico_administrativoUncheckedCreateWithoutUsuario_alvoInput = {
   administrador_id: number
   acao: $Enums.historico_administrativo_acao
   motivo?: string | null
+  criado_em?: Date | string
   tipo_usuario_anterior?: $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: number | null
   secretaria_id_anterior?: number | null
-  criado_em?: Date | string
 }
 
 export type historico_administrativoCreateOrConnectWithoutUsuario_alvoInput = {
@@ -658,10 +658,10 @@ export type historico_administrativoScalarWhereInput = {
   usuario_alvo_id?: Prisma.IntFilter<"historico_administrativo"> | number
   acao?: Prisma.Enumhistorico_administrativo_acaoFilter<"historico_administrativo"> | $Enums.historico_administrativo_acao
   motivo?: Prisma.StringNullableFilter<"historico_administrativo"> | string | null
+  criado_em?: Prisma.DateTimeFilter<"historico_administrativo"> | Date | string
   tipo_usuario_anterior?: Prisma.Enumcadastro_tipo_usuarioNullableFilter<"historico_administrativo"> | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.IntNullableFilter<"historico_administrativo"> | number | null
   secretaria_id_anterior?: Prisma.IntNullableFilter<"historico_administrativo"> | number | null
-  criado_em?: Prisma.DateTimeFilter<"historico_administrativo"> | Date | string
 }
 
 export type historico_administrativoUpsertWithWhereUniqueWithoutUsuario_alvoInput = {
@@ -685,10 +685,10 @@ export type historico_administrativoCreateManyAdministradorInput = {
   usuario_alvo_id: number
   acao: $Enums.historico_administrativo_acao
   motivo?: string | null
+  criado_em?: Date | string
   tipo_usuario_anterior?: $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: number | null
   secretaria_id_anterior?: number | null
-  criado_em?: Date | string
 }
 
 export type historico_administrativoCreateManyUsuario_alvoInput = {
@@ -696,19 +696,19 @@ export type historico_administrativoCreateManyUsuario_alvoInput = {
   administrador_id: number
   acao: $Enums.historico_administrativo_acao
   motivo?: string | null
+  criado_em?: Date | string
   tipo_usuario_anterior?: $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: number | null
   secretaria_id_anterior?: number | null
-  criado_em?: Date | string
 }
 
 export type historico_administrativoUpdateWithoutAdministradorInput = {
   acao?: Prisma.Enumhistorico_administrativo_acaoFieldUpdateOperationsInput | $Enums.historico_administrativo_acao
   motivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipo_usuario_anterior?: Prisma.NullableEnumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   secretaria_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuario_alvo?: Prisma.cadastroUpdateOneRequiredWithoutHistoricos_como_usuario_alvoNestedInput
 }
 
@@ -717,10 +717,10 @@ export type historico_administrativoUncheckedUpdateWithoutAdministradorInput = {
   usuario_alvo_id?: Prisma.IntFieldUpdateOperationsInput | number
   acao?: Prisma.Enumhistorico_administrativo_acaoFieldUpdateOperationsInput | $Enums.historico_administrativo_acao
   motivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipo_usuario_anterior?: Prisma.NullableEnumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   secretaria_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type historico_administrativoUncheckedUpdateManyWithoutAdministradorInput = {
@@ -728,19 +728,19 @@ export type historico_administrativoUncheckedUpdateManyWithoutAdministradorInput
   usuario_alvo_id?: Prisma.IntFieldUpdateOperationsInput | number
   acao?: Prisma.Enumhistorico_administrativo_acaoFieldUpdateOperationsInput | $Enums.historico_administrativo_acao
   motivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipo_usuario_anterior?: Prisma.NullableEnumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   secretaria_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type historico_administrativoUpdateWithoutUsuario_alvoInput = {
   acao?: Prisma.Enumhistorico_administrativo_acaoFieldUpdateOperationsInput | $Enums.historico_administrativo_acao
   motivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipo_usuario_anterior?: Prisma.NullableEnumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   secretaria_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   administrador?: Prisma.cadastroUpdateOneRequiredWithoutHistoricos_como_administradorNestedInput
 }
 
@@ -749,10 +749,10 @@ export type historico_administrativoUncheckedUpdateWithoutUsuario_alvoInput = {
   administrador_id?: Prisma.IntFieldUpdateOperationsInput | number
   acao?: Prisma.Enumhistorico_administrativo_acaoFieldUpdateOperationsInput | $Enums.historico_administrativo_acao
   motivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipo_usuario_anterior?: Prisma.NullableEnumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   secretaria_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type historico_administrativoUncheckedUpdateManyWithoutUsuario_alvoInput = {
@@ -760,10 +760,10 @@ export type historico_administrativoUncheckedUpdateManyWithoutUsuario_alvoInput 
   administrador_id?: Prisma.IntFieldUpdateOperationsInput | number
   acao?: Prisma.Enumhistorico_administrativo_acaoFieldUpdateOperationsInput | $Enums.historico_administrativo_acao
   motivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tipo_usuario_anterior?: Prisma.NullableEnumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario | null
   setor_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   secretaria_id_anterior?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -774,10 +774,10 @@ export type historico_administrativoSelect<ExtArgs extends runtime.Types.Extensi
   usuario_alvo_id?: boolean
   acao?: boolean
   motivo?: boolean
+  criado_em?: boolean
   tipo_usuario_anterior?: boolean
   setor_id_anterior?: boolean
   secretaria_id_anterior?: boolean
-  criado_em?: boolean
   administrador?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
   usuario_alvo?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["historico_administrativo"]>
@@ -790,13 +790,13 @@ export type historico_administrativoSelectScalar = {
   usuario_alvo_id?: boolean
   acao?: boolean
   motivo?: boolean
+  criado_em?: boolean
   tipo_usuario_anterior?: boolean
   setor_id_anterior?: boolean
   secretaria_id_anterior?: boolean
-  criado_em?: boolean
 }
 
-export type historico_administrativoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "administrador_id" | "usuario_alvo_id" | "acao" | "motivo" | "tipo_usuario_anterior" | "setor_id_anterior" | "secretaria_id_anterior" | "criado_em", ExtArgs["result"]["historico_administrativo"]>
+export type historico_administrativoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "administrador_id" | "usuario_alvo_id" | "acao" | "motivo" | "criado_em" | "tipo_usuario_anterior" | "setor_id_anterior" | "secretaria_id_anterior", ExtArgs["result"]["historico_administrativo"]>
 export type historico_administrativoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   administrador?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
   usuario_alvo?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
@@ -814,10 +814,10 @@ export type $historico_administrativoPayload<ExtArgs extends runtime.Types.Exten
     usuario_alvo_id: number
     acao: $Enums.historico_administrativo_acao
     motivo: string | null
+    criado_em: Date
     tipo_usuario_anterior: $Enums.cadastro_tipo_usuario | null
     setor_id_anterior: number | null
     secretaria_id_anterior: number | null
-    criado_em: Date
   }, ExtArgs["result"]["historico_administrativo"]>
   composites: {}
 }
@@ -1194,10 +1194,10 @@ export interface historico_administrativoFieldRefs {
   readonly usuario_alvo_id: Prisma.FieldRef<"historico_administrativo", 'Int'>
   readonly acao: Prisma.FieldRef<"historico_administrativo", 'historico_administrativo_acao'>
   readonly motivo: Prisma.FieldRef<"historico_administrativo", 'String'>
+  readonly criado_em: Prisma.FieldRef<"historico_administrativo", 'DateTime'>
   readonly tipo_usuario_anterior: Prisma.FieldRef<"historico_administrativo", 'cadastro_tipo_usuario'>
   readonly setor_id_anterior: Prisma.FieldRef<"historico_administrativo", 'Int'>
   readonly secretaria_id_anterior: Prisma.FieldRef<"historico_administrativo", 'Int'>
-  readonly criado_em: Prisma.FieldRef<"historico_administrativo", 'DateTime'>
 }
     
 

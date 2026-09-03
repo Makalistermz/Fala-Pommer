@@ -2,10 +2,18 @@
 import { useEffect, useState, type FormEvent } from "react";
 import "./ModalFinalizarConversa.css";
 
+type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
+
 type DadosFinalizacao = {
     avaliacao: number;
     descricao: string;
 };
+
+interface UsuarioAutenticado {
+    sub: number;
+    email: string;
+    tipo: TipoUsuario;
+}
 
 type ModalFinalizarConversaProps = {
     aberto: boolean;
@@ -20,6 +28,43 @@ export function ModalFinalizarConversa({
 }: ModalFinalizarConversaProps) {
     const [avaliacao, setAvaliacao] = useState(0);
     const [descricao, setDescricao] = useState("");
+
+    const [usuario, setUsuario] = useState<UsuarioAutenticado | null>(null);
+
+    useEffect(() => {
+        async function buscarPerfil() {
+            const token = localStorage.getItem("access_token");
+
+            if (!token) {
+                return;
+            }
+
+            try {
+                const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/auth/Perfil`,
+                {
+                    headers: {
+                    Authorization: `Bearer ${token}`,
+                    },
+                },
+                );
+
+                if (!resposta.ok) {
+                return;
+                }
+
+                const dados = await resposta.json();
+
+                console.log("Usuário autenticado:", dados);
+
+                setUsuario(dados);
+            } catch (erro) {
+                console.error("Erro ao buscar perfil:", erro);
+            }
+        }
+
+        buscarPerfil();
+    }, []);
 
     useEffect(() => {
         if (!aberto) {
@@ -73,7 +118,13 @@ export function ModalFinalizarConversa({
             >
                 <header className="modal-finalizar__cabecalho">
                     <div>
-                        <span>AVALIAÇÃO DO ATENDIMENTO</span>
+                        {usuario?.tipo === "user" &&(
+                            <span>AVALIAÇÃO DO ATENDIMENTO</span>
+                        )}
+
+                        {usuario?.tipo !== "user" &&(
+                            <span>AVALIAÇÃO DO USUÁRIO</span>
+                        )}
                         <h2 id="modal-finalizar-titulo">Finalizar conversa</h2>
                     </div>
 
@@ -91,11 +142,23 @@ export function ModalFinalizarConversa({
 
                 <div className="modal-finalizar__conteudo">
                     <div className="modal-finalizar__introducao">
-                        <p>Sua opinião é muito importante! Qual nota você dá para o nosso atendimento?</p>
+                        {usuario?.tipo === "user"  && (
+                            <p>Sua opinião é muito importante! Qual nota você dá para o nosso atendimento?</p>
+                        )}
+
+                        {usuario?.tipo !== "user" && (
+                            <p>Sua opinião é muito importante! Qual nota você dá para o usuário?</p>
+                        )}
                     </div>
 
                     <fieldset className="modal-finalizar__avaliacao">
-                        <legend>Como você avalia este atendimento?</legend>
+                        {usuario?.tipo === "user" && (
+                            <legend>Como você avalia este atendimento?</legend>
+                        )}
+
+                        {usuario?.tipo !== "user" &&(
+                            <legend>Como você avalia este usuário?</legend>
+                        )}
 
                         <div
                             className="modal-finalizar__estrelas"
@@ -128,7 +191,12 @@ export function ModalFinalizarConversa({
                         <textarea
                             value={descricao}
                             onChange={(evento) => setDescricao(evento.target.value)}
-                            placeholder="Conte como foi o atendimento..."
+                            placeholder=
+                            {
+                                usuario?.tipo === "user" 
+                                ? "Conte como foi o atendimento..." 
+                                : "Conte como foi o usuário..."
+                            } 
                             rows={5}
                         />
                     </label>

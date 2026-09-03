@@ -898,15 +898,15 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                     <header className="atendimentos-cabecalho">
                         <div className="atendimentos-titulos">
                             <span className="atendimentos-categoria">
-                                DEMANDA DE ATENDIMENTO
+                                AVALIAÇÕES DE USUÁRIOS
                             </span>
 
                             <h2 id="titulo-atendimentos-setor">
-                                Atendimentos por setor
+                                Avaliações de atendimentos
                             </h2>
 
                             <p>
-                                Volume de conversas nos últimos 30 dias
+                                Avaliações nos ultimos 30 dias
                             </p>
                         </div>
 
@@ -926,7 +926,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                     <div className="atendimentos-conteudo">
 
                         <div className="ranking-setores">
-                            <h3>Conversas por setor</h3>
+                            <h3>Avaliações dos setores</h3>
 
                             <ul className="lista-setores">
 
@@ -1040,7 +1040,7 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
 
                         <aside className="resumo-atendimentos">
                             <div className="resolucao">
-                                <h3>Taxa de resolução</h3>
+                                <h3>Atendimentos perfeitos</h3>
 
                                 <div className="grafico-resolucao">
                                     <svg
@@ -1073,36 +1073,32 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
 
                                 <div className="metrica-item">
                                     <span
-                                        className="metrica-icone metrica-icone-andamento"
+                                        className="metrica-icone metrica-icone-piores"
                                         aria-hidden="true"
                                     ></span>
 
                                     <div>
                                         <strong>23</strong>
-                                        <span>Em andamento</span>
+                                        <span>Piores avaliações</span>
                                     </div>
                                 </div>
 
                                 <div className="metrica-item">
-                                    <svg
-                                        className="metrica-icone-tempo"
-                                        viewBox="0 0 24 24"
+                                    <span
+                                        className="metrica-icone metrica-icone-melhores"
                                         aria-hidden="true"
-                                    >
-                                        <circle cx="12" cy="12" r="9"></circle>
-                                        <path d="M12 7v5l3 2"></path>
-                                    </svg>
+                                    ></span>
 
                                     <div>
-                                        <strong>14 min</strong>
-                                        <span>Tempo médio</span>
+                                        <strong>23</strong>
+                                        <span>Melhores avaliações</span>
                                     </div>
                                 </div>
 
                             </div>
 
                             <button className="botao-ver-atendimentos" type="button">
-                                <span>Ver atendimentos</span>
+                                <span>Ver avaliações</span>
 
                                 <svg
                                     viewBox="0 0 24 24"

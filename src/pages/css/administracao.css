@@ -848,16 +848,6 @@
 /* Atendimentos por setor */
 
 .atendimentos-setor-card {
-    --azul-principal: #1351b4;
-    --azul-secundario: #2f72da;
-    --azul-claro: #e8f0fc;
-    --azul-escuro: #10214a;
-    --texto-secundario: #6d7c96;
-    --borda: #dce5f1;
-    --fundo-barra: #e9f0fa;
-    --laranja: #f97316;
-    --branco: #ffffff;
-
     grid-column: span 2;
     width: 100%;
     padding: 28px;
@@ -1106,11 +1096,12 @@
 }
 
 .metrica-item {
-    display: flex;
+    display: grid;
+    grid-template-columns: 21px minmax(0, 1fr);
     min-width: 0;
     align-items: center;
-    justify-content: center;
-    gap: 9px;
+    justify-content: start;
+    gap: 10px;
 }
 
 .metrica-item > div {
@@ -1127,28 +1118,37 @@
     white-space: nowrap;
 }
 
-.metrica-item span {
+.metrica-item > div > span {
     color: var(--texto-secundario);
     font-size: 0.68rem;
     white-space: nowrap;
 }
 
 .metrica-icone {
-    flex: 0 0 auto;
+    justify-self: center;
 }
 
-.metrica-icone-andamento {
+.metrica-icone-piores,
+.metrica-icone-melhores {
     width: 13px;
     height: 13px;
     border-radius: 50%;
-    background: var(--laranja);
-    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1);
+}
+
+.metrica-icone-piores {
+    background: var(--vermelho);
+    box-shadow: 0 0 0 4px rgba(249, 22, 22, 0.1);
+}
+
+.metrica-icone-melhores {
+    background: var(--verde-sucesso);
+    box-shadow: 0 0 0 4px rgba(32, 114, 24, 0.1);
 }
 
 .metrica-icone-tempo {
     width: 21px;
     height: 21px;
-    flex: 0 0 auto;
+    justify-self: center;
     fill: none;
     stroke: var(--azul-principal);
     stroke-width: 2;
@@ -2795,7 +2795,6 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     }
 
     .metrica-item {
-        justify-content: flex-start;
         padding-left: 20px;
     }
 }

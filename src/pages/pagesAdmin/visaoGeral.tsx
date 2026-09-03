@@ -890,6 +890,232 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                         />
                     </div>
                 </div>
+
+                <section
+                    className="atendimentos-setor-card"
+                    aria-labelledby="titulo-atendimentos-setor"
+                >
+                    <header className="atendimentos-cabecalho">
+                        <div className="atendimentos-titulos">
+                            <span className="atendimentos-categoria">
+                                DEMANDA DE ATENDIMENTO
+                            </span>
+
+                            <h2 id="titulo-atendimentos-setor">
+                                Atendimentos por setor
+                            </h2>
+
+                            <p>
+                                Volume de conversas nos últimos 30 dias
+                            </p>
+                        </div>
+
+                        <button className="botao-periodo" type="button">
+                            <svg
+                                viewBox="0 0 24 24"
+                                aria-hidden="true"
+                            >
+                                <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+                                <path d="M16 3v4M8 3v4M3 10h18"></path>
+                            </svg>
+
+                            <span>Últimos 30 dias</span>
+                        </button>
+                    </header>
+
+                    <div className="atendimentos-conteudo">
+
+                        <div className="ranking-setores">
+                            <h3>Conversas por setor</h3>
+
+                            <ul className="lista-setores">
+
+                                <li className="setor-item">
+                                    <div className="setor-informacoes">
+                                        <span>Finanças</span>
+                                        <strong>148</strong>
+                                    </div>
+
+                                    <div
+                                        className="barra-fundo"
+                                        role="progressbar"
+                                        aria-label="Finanças: 148 atendimentos"
+                                        aria-valuemin={0}
+                                        aria-valuemax={148}
+                                        aria-valuenow={148}
+                                    >
+                                        <span
+                                            className="barra-preenchimento"
+                                            style={{ width: "100%" }}
+                                        ></span>
+                                    </div>
+                                </li>
+
+                                <li className="setor-item">
+                                    <div className="setor-informacoes">
+                                        <span>Saúde</span>
+                                        <strong>112</strong>
+                                    </div>
+
+                                    <div
+                                        className="barra-fundo"
+                                        role="progressbar"
+                                        aria-label="Saúde: 112 atendimentos"
+                                        aria-valuemin={0}
+                                        aria-valuemax={148}
+                                        aria-valuenow={112}
+                                    >
+                                        <span
+                                            className="barra-preenchimento"
+                                            style={{ width: "76%" }}
+                                        ></span>
+                                    </div>
+                                </li>
+
+                                <li className="setor-item">
+                                    <div className="setor-informacoes">
+                                        <span>Obras</span>
+                                        <strong>86</strong>
+                                    </div>
+
+                                    <div
+                                        className="barra-fundo"
+                                        role="progressbar"
+                                        aria-label="Obras: 86 atendimentos"
+                                        aria-valuemin={0}
+                                        aria-valuemax={148}
+                                        aria-valuenow={86}
+                                    >
+                                        <span
+                                            className="barra-preenchimento"
+                                            style={{ width: "58%" }}
+                                        ></span>
+                                    </div>
+                                </li>
+
+                                <li className="setor-item">
+                                    <div className="setor-informacoes">
+                                        <span>Educação</span>
+                                        <strong>64</strong>
+                                    </div>
+
+                                    <div
+                                        className="barra-fundo"
+                                        role="progressbar"
+                                        aria-label="Educação: 64 atendimentos"
+                                        aria-valuemin={0}
+                                        aria-valuemax={148}
+                                        aria-valuenow={64}
+                                    >
+                                        <span
+                                            className="barra-preenchimento"
+                                            style={{ width: "43%" }}
+                                        ></span>
+                                    </div>
+                                </li>
+
+                                <li className="setor-item">
+                                    <div className="setor-informacoes">
+                                        <span>Outros</span>
+                                        <strong>37</strong>
+                                    </div>
+
+                                    <div
+                                        className="barra-fundo"
+                                        role="progressbar"
+                                        aria-label="Outros: 37 atendimentos"
+                                        aria-valuemin={0}
+                                        aria-valuemax={148}
+                                        aria-valuenow={37}
+                                    >
+                                        <span
+                                            className="barra-preenchimento"
+                                            style={{ width: "25%" }}
+                                        ></span>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <aside className="resumo-atendimentos">
+                            <div className="resolucao">
+                                <h3>Taxa de resolução</h3>
+
+                                <div className="grafico-resolucao">
+                                    <svg
+                                        viewBox="0 0 120 120"
+                                        role="img"
+                                        aria-label="Taxa de resolução de 82%"
+                                    >
+                                        <circle
+                                            className="circulo-resolucao-fundo"
+                                            cx="60"
+                                            cy="60"
+                                            r="50"
+                                        ></circle>
+
+                                        <circle
+                                            className="circulo-resolucao-progresso"
+                                            cx="60"
+                                            cy="60"
+                                            r="50"
+                                            pathLength="100"
+                                            strokeDasharray="82 18"
+                                        ></circle>
+                                    </svg>
+
+                                    <strong>82%</strong>
+                                </div>
+                            </div>
+
+                            <div className="metricas-atendimentos">
+
+                                <div className="metrica-item">
+                                    <span
+                                        className="metrica-icone metrica-icone-andamento"
+                                        aria-hidden="true"
+                                    ></span>
+
+                                    <div>
+                                        <strong>23</strong>
+                                        <span>Em andamento</span>
+                                    </div>
+                                </div>
+
+                                <div className="metrica-item">
+                                    <svg
+                                        className="metrica-icone-tempo"
+                                        viewBox="0 0 24 24"
+                                        aria-hidden="true"
+                                    >
+                                        <circle cx="12" cy="12" r="9"></circle>
+                                        <path d="M12 7v5l3 2"></path>
+                                    </svg>
+
+                                    <div>
+                                        <strong>14 min</strong>
+                                        <span>Tempo médio</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <button className="botao-ver-atendimentos" type="button">
+                                <span>Ver atendimentos</span>
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M9 18l6-6-6-6"></path>
+                                </svg>
+                            </button>
+                        </aside>
+
+                    </div>
+                </section>
+
             </div>
         </>
     );

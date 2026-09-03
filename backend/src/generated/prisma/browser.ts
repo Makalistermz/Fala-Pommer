@@ -87,3 +87,8 @@ export type historico_administrativo = Prisma.historico_administrativoModel
  * 
  */
 export type avaliacao = Prisma.avaliacaoModel
+/**
+ * Model conversa_finalizacao
+ * 
+ */
+export type conversa_finalizacao = Prisma.conversa_finalizacaoModel

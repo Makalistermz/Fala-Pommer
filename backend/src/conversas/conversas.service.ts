@@ -819,6 +819,37 @@ export class ConversasService {
                                 select: {
                                     ultima_mensagem_lida_id: true
                                 }
+                            },
+
+                            finalizacoes: {
+                                orderBy: {
+                                    id: "desc"
+                                },
+
+                                take: 1,
+
+                                select: {
+                                    id: true,
+                                    finalizada_por_id: true,
+                                    ultima_mensagem_id: true,
+                                    finalizada_em: true,
+                                    finalizada_por: {
+                                        select: {
+                                            nome: true
+                                        }
+                                    },
+                                    avaliacoes: {
+                                        where: {
+                                            avaliador_id: usuarioLogadoId
+                                        },
+
+                                        take: 1,
+
+                                        select: {
+                                            id: true
+                                        }
+                                    }
+                                }
                             }
                         }
                     },
@@ -870,6 +901,29 @@ export class ConversasService {
                 null;
 
             const secretaria = atendimento.setor.secretaria
+            const ultimaFinalizacao =
+                atendimento.conversa.finalizacoes[0] ?? null;
+            const dadosUltimaFinalizacao = ultimaFinalizacao
+                ? {
+                    id: ultimaFinalizacao.id,
+                    finalizadaPorId:
+                        ultimaFinalizacao.finalizada_por_id,
+                    finalizadaPorNome:
+                        ultimaFinalizacao.finalizada_por.nome,
+                    finalizadaEm:
+                        ultimaFinalizacao.finalizada_em
+                }
+                : null;
+            const finalizacaoPendente =
+                usuarioLogado.tipo_usuario === "user" &&
+                ultimaFinalizacao &&
+                ultimaFinalizacao.avaliacoes.length === 0
+                    ? dadosUltimaFinalizacao
+                    : null;
+            const podeFinalizar =
+                ultimaMensagem !== null &&
+                ultimaFinalizacao?.ultima_mensagem_id !==
+                    ultimaMensagem.id;
 
             return {
                 id: atendimento.conversa.id,
@@ -912,7 +966,11 @@ export class ConversasService {
                         nome: secretaria.secretaria,
                         sigla: secretaria.sigla_secretaria
                     }
-                    : null
+                    : null,
+
+                finalizacaoPendente,
+                ultimaFinalizacao: dadosUltimaFinalizacao,
+                podeFinalizar
             };
         });
     }
@@ -2036,6 +2094,89 @@ export class ConversasService {
         throw new BadRequestException("Tipo de conversa inválido.");
     }
 
+    async finalizarConversa(
+        usuarioLogadoId: number,
+        conversaId: number
+    ) {
+        const contexto = await this.verificarAcessoConversa(
+            usuarioLogadoId,
+            conversaId
+        );
+
+        if (contexto.conversa.tipo !== "setor") {
+            throw new BadRequestException(
+                "Somente conversas de atendimento podem ser finalizadas."
+            );
+        }
+
+        if (
+            !contexto.usuarioLogado.tipo_usuario
+        ) {
+            throw new ForbiddenException(
+                "Você não pode finalizar esta conversa."
+            );
+        }
+
+        const ultimaMensagem = await this.prisma.mensagem.findFirst({
+            where: {
+                conversa_id: conversaId
+            },
+            orderBy: {
+                id: "desc"
+            },
+            select: {
+                id: true
+            }
+        });
+
+        if (!ultimaMensagem) {
+            throw new BadRequestException(
+                "Não é possível finalizar uma conversa sem mensagens."
+            );
+        }
+
+        try {
+            const finalizacao =
+                await this.prisma.conversa_finalizacao.create({
+                    data: {
+                        conversa_id: conversaId,
+                        finalizada_por_id: usuarioLogadoId,
+                        ultima_mensagem_id: ultimaMensagem.id
+                    },
+                    select: {
+                        id: true,
+                        conversa_id: true,
+                        finalizada_por_id: true,
+                        finalizada_em: true,
+                        finalizada_por: {
+                            select: {
+                                nome: true
+                            }
+                        }
+                    }
+                });
+
+            return {
+                id: finalizacao.id,
+                conversaId: finalizacao.conversa_id,
+                finalizadaPorId: finalizacao.finalizada_por_id,
+                finalizadaPorNome: finalizacao.finalizada_por.nome,
+                finalizadaEm: finalizacao.finalizada_em
+            };
+        } catch (erro) {
+            if (
+                erro instanceof Prisma.PrismaClientKnownRequestError &&
+                erro.code === "P2002"
+            ) {
+                throw new ConflictException(
+                    "Esta conversa já foi finalizada. Envie uma nova mensagem antes de finalizá-la novamente."
+                );
+            }
+
+            throw erro;
+        }
+    }
+
     async criaAvaliacao(
         usuarioLogadoId: number,
         conversaId: number,
@@ -2053,25 +2194,44 @@ export class ConversasService {
         }
 
         if (
-            contexto.usuarioLogado.tipo_usuario !== "user" &&
-            contexto.usuarioLogado.tipo_usuario !== "funcionario"
+            contexto.usuarioLogado.tipo_usuario !== "user"
         ) {
             throw new ForbiddenException(
-                "Somente o usuário ou o funcionário do atendimento pode avaliar esta conversa."
+                "Somente o usuário pode avaliar esta conversa."
+            );
+        }
+
+        const finalizacao =
+            await this.prisma.conversa_finalizacao.findFirst({
+                where: {
+                    conversa_id: conversaId
+                },
+                orderBy: [
+                    { finalizada_em: "desc" },
+                    { id: "desc" }
+                ],
+                select: {
+                    id: true
+                }
+            });
+
+        if (!finalizacao) {
+            throw new BadRequestException(
+                "Esta conversa ainda não foi finalizada."
             );
         }
 
         try {
             const avaliacao = await this.prisma.avaliacao.create({
                 data: {
-                    conversa_id: conversaId,
+                    finalizacao_id: finalizacao.id,
                     avaliador_id: usuarioLogadoId,
                     nota: dados.nota,
                     descricao: dados.descricao?.trim() || null
                 },
                 select: {
                     id: true,
-                    conversa_id: true,
+                    finalizacao_id: true,
                     avaliador_id: true,
                     nota: true,
                     descricao: true,
@@ -2081,7 +2241,8 @@ export class ConversasService {
 
             return {
                 id: avaliacao.id,
-                conversaId: avaliacao.conversa_id,
+                conversaId,
+                finalizacaoId: avaliacao.finalizacao_id,
                 avaliadorId: avaliacao.avaliador_id,
                 nota: avaliacao.nota,
                 descricao: avaliacao.descricao,
@@ -2093,7 +2254,7 @@ export class ConversasService {
                 erro.code === "P2002"
             ) {
                 throw new ConflictException(
-                    "Você já avaliou esta conversa."
+                    "Você já avaliou esta finalização."
                 );
             }
 

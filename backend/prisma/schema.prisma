@@ -36,7 +36,8 @@ model cadastro {
   conversa_leitura                 conversa_leitura[]
   conversa_participante            conversa_participante[]
   conversas_atendidas              conversa_setor[]           @relation("UsuarioAtendido")
-  avaliacoes_realizadas            avaliacao[]                 @relation("AvaliadorAvaliacao")
+  avaliacoes_realizadas            avaliacao[]                @relation("AvaliadorAvaliacao")
+  finalizacoes_realizadas          conversa_finalizacao[]     @relation("ResponsavelFinalizacao")
   desafio_login_2fa                desafio_login_2fa[]
   erro_autenticacao                erro_autenticacao[]
   historicos_como_administrador    historico_administrativo[] @relation("HistoricoAdministrador")
@@ -80,7 +81,7 @@ model conversa {
   conversa_leitura      conversa_leitura[]
   conversa_participante conversa_participante[]
   atendimento_setor     conversa_setor?
-  avaliacoes            avaliacao[]
+  finalizacoes          conversa_finalizacao[]
   mensagens             mensagem[]
 }
 
@@ -112,20 +113,21 @@ model conversa_setor {
 }
 
 model mensagem {
-  id               Int                @id @default(autoincrement())
+  id               Int                    @id @default(autoincrement())
   conversa_id      Int
   remetente_id     Int
   origem           mensagem_origem
-  conteudo         String             @db.Text
-  enviada_em       DateTime           @default(now()) @db.DateTime(0)
-  arquivo_nome     String?            @db.VarChar(255)
-  arquivo_url      String?            @db.VarChar(500)
-  arquivo_tipo     String?            @db.VarChar(20)
-  arquivo_mime     String?            @db.VarChar(150)
+  conteudo         String                 @db.Text
+  enviada_em       DateTime               @default(now()) @db.DateTime(0)
+  arquivo_nome     String?                @db.VarChar(255)
+  arquivo_url      String?                @db.VarChar(500)
+  arquivo_tipo     String?                @db.VarChar(20)
+  arquivo_mime     String?                @db.VarChar(150)
   arquivo_tamanho  Int?
   conversa_leitura conversa_leitura[]
-  conversa         conversa           @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_mensagem_conversa")
-  remetente        cadastro           @relation("RemetenteMensagem", fields: [remetente_id], references: [id], onUpdate: Restrict, map: "fk_mensagem_remetente")
+  conversa         conversa               @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_mensagem_conversa")
+  remetente        cadastro               @relation("RemetenteMensagem", fields: [remetente_id], references: [id], onUpdate: Restrict, map: "fk_mensagem_remetente")
+  finalizacoes     conversa_finalizacao[] @relation("MensagemFinalizacao")
 
   @@index([conversa_id, enviada_em], map: "idx_mensagem_conversa_data")
   @@index([remetente_id], map: "idx_mensagem_remetente")
@@ -215,17 +217,33 @@ model historico_administrativo {
 }
 
 model avaliacao {
-  id           Int      @id @default(autoincrement())
-  conversa_id  Int
-  avaliador_id Int
-  nota         Int
-  descricao    String?  @db.VarChar(500)
-  criada_em    DateTime @default(now()) @db.DateTime(0)
-  conversa     conversa @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_avaliacao_conversa")
-  avaliador    cadastro @relation("AvaliadorAvaliacao", fields: [avaliador_id], references: [id], onUpdate: Restrict, map: "fk_avaliacao_avaliador")
+  id             Int                  @id @default(autoincrement())
+  finalizacao_id Int
+  avaliador_id   Int
+  nota           Int
+  descricao      String?              @db.VarChar(500)
+  criada_em      DateTime             @default(now()) @db.DateTime(0)
+  finalizacao    conversa_finalizacao @relation(fields: [finalizacao_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_avaliacao_finalizacao")
+  avaliador      cadastro             @relation("AvaliadorAvaliacao", fields: [avaliador_id], references: [id], onUpdate: Restrict, map: "fk_avaliacao_avaliador")
 
-  @@unique([conversa_id, avaliador_id], map: "uq_avaliacao_conversa_avaliador")
+  @@unique([finalizacao_id, avaliador_id], map: "uq_avaliacao_finalizacao_avaliador")
   @@index([avaliador_id], map: "idx_avaliacao_avaliador")
+}
+
+model conversa_finalizacao {
+  id                 Int         @id @default(autoincrement())
+  conversa_id        Int
+  finalizada_por_id  Int
+  ultima_mensagem_id Int?
+  finalizada_em      DateTime    @default(now()) @db.DateTime(0)
+  conversa           conversa    @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_finalizacao_conversa")
+  finalizada_por     cadastro    @relation("ResponsavelFinalizacao", fields: [finalizada_por_id], references: [id], onUpdate: Restrict, map: "fk_finalizacao_responsavel")
+  ultima_mensagem    mensagem?   @relation("MensagemFinalizacao", fields: [ultima_mensagem_id], references: [id], onDelete: SetNull, onUpdate: Restrict, map: "fk_finalizacao_ultima_mensagem")
+  avaliacoes         avaliacao[]
+
+  @@unique([conversa_id, ultima_mensagem_id], map: "uq_finalizacao_conversa_mensagem")
+  @@index([finalizada_por_id], map: "idx_finalizacao_responsavel")
+  @@index([ultima_mensagem_id], map: "idx_finalizacao_ultima_mensagem")
 }
 
 enum desafio_2fa_finalidade {

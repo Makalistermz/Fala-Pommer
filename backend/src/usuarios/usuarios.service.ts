@@ -259,6 +259,14 @@ export class UsuariosService {
                             setor: true,
                             sigla_setor: true
                         }
+                    },
+
+                    secretaria: {
+                        select: {
+                            id: true,
+                            secretaria: true,
+                            sigla_secretaria: true
+                        }
                     }
                 },
 

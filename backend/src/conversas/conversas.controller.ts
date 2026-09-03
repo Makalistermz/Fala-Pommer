@@ -26,6 +26,7 @@ import { CriarMensagemDto } from "./dto/criar-mensagem.dto";
 import { AtualizarDigitacaoDto } from "./dto/atualizar-digitacao.dto";
 import { ListarMensagensDto } from "./dto/listar-mensagens.dto";
 import { CriarGrupoDto } from "./dto/criar-grupo.dto";
+import { CriarAvaliacaoDto } from "./dto/criar-avaliacao.dto";
 
 import {
     AuthGuard,
@@ -271,6 +272,36 @@ export class ConversasController {
             conversaId,
             dados.conteudo,
             arquivo
+        );
+    }
+
+    @Post(":conversaId/finalizacao")
+    @HttpCode(201)
+    @Perfis("user", "funcionario", "admin", "superAdmin")
+    finalizarConversa(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Param("conversaId", ParseIntPipe)
+        conversaId: number
+    ) {
+        return this.conversasService.finalizarConversa(
+            requisicao.usuario!.sub,
+            conversaId
+        );
+    }
+
+    @Post(":conversaId/avaliacao")
+    @HttpCode(201)
+    @Perfis("user")
+    criarAvaliacao(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Param("conversaId", ParseIntPipe)
+        conversaId: number,
+        @Body() dados: CriarAvaliacaoDto
+    ) {
+        return this.conversasService.criaAvaliacao(
+            requisicao.usuario!.sub,
+            conversaId,
+            dados
         );
     }
 }

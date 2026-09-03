@@ -2,70 +2,25 @@
 import { useEffect, useState, type FormEvent } from "react";
 import "./ModalFinalizarConversa.css";
 
-type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
-
 type DadosFinalizacao = {
     avaliacao: number;
     descricao: string;
 };
 
-interface UsuarioAutenticado {
-    sub: number;
-    email: string;
-    tipo: TipoUsuario;
-}
-
 type ModalFinalizarConversaProps = {
     aberto: boolean;
-    aoCancelar: () => void;
+    enviando?: boolean;
     aoEnviar: (dados: DadosFinalizacao) => void;
 };
 
 export function ModalFinalizarConversa({
     aberto,
-    aoCancelar,
+    enviando = false,
     aoEnviar,
 }: ModalFinalizarConversaProps) {
     const [avaliacao, setAvaliacao] = useState(0);
     const [avaliacaoEmDestaque, setAvaliacaoEmDestaque] = useState<number | null>(null);
     const [descricao, setDescricao] = useState("");
-
-    const [usuario, setUsuario] = useState<UsuarioAutenticado | null>(null);
-
-    useEffect(() => {
-        async function buscarPerfil() {
-            const token = localStorage.getItem("access_token");
-
-            if (!token) {
-                return;
-            }
-
-            try {
-                const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/auth/Perfil`,
-                {
-                    headers: {
-                    Authorization: `Bearer ${token}`,
-                    },
-                },
-                );
-
-                if (!resposta.ok) {
-                return;
-                }
-
-                const dados = await resposta.json();
-
-                console.log("Usuário autenticado:", dados);
-
-                setUsuario(dados);
-            } catch (erro) {
-                console.error("Erro ao buscar perfil:", erro);
-            }
-        }
-
-        buscarPerfil();
-    }, []);
 
     useEffect(() => {
         if (!aberto) {
@@ -75,19 +30,7 @@ export function ModalFinalizarConversa({
         setAvaliacao(0);
         setAvaliacaoEmDestaque(null);
         setDescricao("");
-
-        function fecharComEscape(evento: KeyboardEvent) {
-            if (evento.key === "Escape") {
-                aoCancelar();
-            }
-        }
-
-        window.addEventListener("keydown", fecharComEscape);
-
-        return () => {
-            window.removeEventListener("keydown", fecharComEscape);
-        };
-    }, [aberto, aoCancelar]);
+    }, [aberto]);
 
     if (!aberto) {
         return null;
@@ -95,6 +38,11 @@ export function ModalFinalizarConversa({
 
     function enviar(evento: FormEvent<HTMLFormElement>) {
         evento.preventDefault();
+
+        if (avaliacao === 0 || enviando) {
+            return;
+        }
+
         aoEnviar({
             avaliacao,
             descricao: descricao.trim(),
@@ -105,11 +53,6 @@ export function ModalFinalizarConversa({
         <div
             className="modal-finalizar-fundo"
             role="presentation"
-            onMouseDown={(evento) => {
-                if (evento.target === evento.currentTarget) {
-                    aoCancelar();
-                }
-            }}
         >
             <form
                 className="modal-finalizar"
@@ -120,48 +63,18 @@ export function ModalFinalizarConversa({
             >
                 <header className="modal-finalizar__cabecalho">
                     <div>
-                        {usuario?.tipo === "user" &&(
                             <span>AVALIAÇÃO DO ATENDIMENTO</span>
-                        )}
-
-                        {usuario?.tipo !== "user" &&(
-                            <span>AVALIAÇÃO DO USUÁRIO</span>
-                        )}
                         <h2 id="modal-finalizar-titulo">Finalizar conversa</h2>
                     </div>
-
-                    <button
-                        type="button"
-                        className="modal-finalizar__fechar"
-                        aria-label="Fechar modal"
-                        onClick={aoCancelar}
-                    >
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="m6 6 12 12M18 6 6 18" />
-                        </svg>
-                    </button>
                 </header>
 
                 <div className="modal-finalizar__conteudo">
                     <div className="modal-finalizar__introducao">
-                        {usuario?.tipo === "user"  && (
                             <p>Sua opinião é muito importante! Qual nota você dá para o nosso atendimento?</p>
-                        )}
-
-                        {usuario?.tipo !== "user" && (
-                            <p>Sua opinião é muito importante! Qual nota você dá para o usuário?</p>
-                        )}
                     </div>
 
                     <fieldset className="modal-finalizar__avaliacao">
-                        {usuario?.tipo === "user" && (
                             <legend>Como você avalia este atendimento?</legend>
-                        )}
-
-                        {usuario?.tipo !== "user" &&(
-                            <legend>Como você avalia este usuário?</legend>
-                        )}
-
                         <div
                             className="modal-finalizar__estrelas"
                             role="radiogroup"
@@ -182,6 +95,7 @@ export function ModalFinalizarConversa({
                                         : "modal-finalizar__estrela"}
                                     onClick={() => setAvaliacao(estrela)}
                                     onMouseEnter={() => setAvaliacaoEmDestaque(estrela)}
+                                    disabled={enviando}
                                 >
                                     ★
                                 </button>
@@ -194,30 +108,21 @@ export function ModalFinalizarConversa({
                         <textarea
                             value={descricao}
                             onChange={(evento) => setDescricao(evento.target.value)}
-                            placeholder=
-                            {
-                                usuario?.tipo === "user" 
-                                ? "Conte como foi o atendimento..." 
-                                : "Conte como foi o usuário..."
-                            } 
+                            placeholder="Conte como foi o atendimento..."
                             rows={5}
+                            maxLength={500}
+                            disabled={enviando}
                         />
                     </label>
                 </div>
 
                 <footer className="modal-finalizar__acoes">
                     <button
-                        type="button"
-                        className="modal-finalizar__cancelar"
-                        onClick={aoCancelar}
-                    >
-                        Cancelar
-                    </button>
-                    <button
                         type="submit"
                         className="modal-finalizar__enviar"
+                        disabled={avaliacao === 0 || enviando}
                     >
-                        Enviar
+                        {enviando ? "Enviando..." : "Enviar"}
                     </button>
                 </footer>
             </form>

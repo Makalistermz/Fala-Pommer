@@ -410,7 +410,8 @@ export const ModelName = {
   desafio_login_2fa: 'desafio_login_2fa',
   secretaria: 'secretaria',
   historico_administrativo: 'historico_administrativo',
-  avaliacao: 'avaliacao'
+  avaliacao: 'avaliacao',
+  conversa_finalizacao: 'conversa_finalizacao'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -426,7 +427,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao"
+    modelProps: "cadastro" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1354,6 +1355,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    conversa_finalizacao: {
+      payload: Prisma.$conversa_finalizacaoPayload<ExtArgs>
+      fields: Prisma.conversa_finalizacaoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.conversa_finalizacaoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_finalizacaoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.conversa_finalizacaoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_finalizacaoPayload>
+        }
+        findFirst: {
+          args: Prisma.conversa_finalizacaoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_finalizacaoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.conversa_finalizacaoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_finalizacaoPayload>
+        }
+        findMany: {
+          args: Prisma.conversa_finalizacaoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_finalizacaoPayload>[]
+        }
+        create: {
+          args: Prisma.conversa_finalizacaoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_finalizacaoPayload>
+        }
+        createMany: {
+          args: Prisma.conversa_finalizacaoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.conversa_finalizacaoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_finalizacaoPayload>
+        }
+        update: {
+          args: Prisma.conversa_finalizacaoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_finalizacaoPayload>
+        }
+        deleteMany: {
+          args: Prisma.conversa_finalizacaoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.conversa_finalizacaoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.conversa_finalizacaoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_finalizacaoPayload>
+        }
+        aggregate: {
+          args: Prisma.Conversa_finalizacaoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateConversa_finalizacao>
+        }
+        groupBy: {
+          args: Prisma.conversa_finalizacaoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Conversa_finalizacaoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.conversa_finalizacaoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Conversa_finalizacaoCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1561,7 +1628,7 @@ export type Historico_administrativoScalarFieldEnum = (typeof Historico_administ
 
 export const AvaliacaoScalarFieldEnum = {
   id: 'id',
-  conversa_id: 'conversa_id',
+  finalizacao_id: 'finalizacao_id',
   avaliador_id: 'avaliador_id',
   nota: 'nota',
   descricao: 'descricao',
@@ -1569,6 +1636,17 @@ export const AvaliacaoScalarFieldEnum = {
 } as const
 
 export type AvaliacaoScalarFieldEnum = (typeof AvaliacaoScalarFieldEnum)[keyof typeof AvaliacaoScalarFieldEnum]
+
+
+export const Conversa_finalizacaoScalarFieldEnum = {
+  id: 'id',
+  conversa_id: 'conversa_id',
+  finalizada_por_id: 'finalizada_por_id',
+  ultima_mensagem_id: 'ultima_mensagem_id',
+  finalizada_em: 'finalizada_em'
+} as const
+
+export type Conversa_finalizacaoScalarFieldEnum = (typeof Conversa_finalizacaoScalarFieldEnum)[keyof typeof Conversa_finalizacaoScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1911,6 +1989,7 @@ export type GlobalOmitConfig = {
   secretaria?: Prisma.secretariaOmit
   historico_administrativo?: Prisma.historico_administrativoOmit
   avaliacao?: Prisma.avaliacaoOmit
+  conversa_finalizacao?: Prisma.conversa_finalizacaoOmit
 }
 
 /* Types for Logging */

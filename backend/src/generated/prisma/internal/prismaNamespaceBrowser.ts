@@ -64,7 +64,8 @@ export const ModelName = {
   desafio_login_2fa: 'desafio_login_2fa',
   secretaria: 'secretaria',
   historico_administrativo: 'historico_administrativo',
-  avaliacao: 'avaliacao'
+  avaliacao: 'avaliacao',
+  conversa_finalizacao: 'conversa_finalizacao'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -251,7 +252,7 @@ export type Historico_administrativoScalarFieldEnum = (typeof Historico_administ
 
 export const AvaliacaoScalarFieldEnum = {
   id: 'id',
-  conversa_id: 'conversa_id',
+  finalizacao_id: 'finalizacao_id',
   avaliador_id: 'avaliador_id',
   nota: 'nota',
   descricao: 'descricao',
@@ -259,6 +260,17 @@ export const AvaliacaoScalarFieldEnum = {
 } as const
 
 export type AvaliacaoScalarFieldEnum = (typeof AvaliacaoScalarFieldEnum)[keyof typeof AvaliacaoScalarFieldEnum]
+
+
+export const Conversa_finalizacaoScalarFieldEnum = {
+  id: 'id',
+  conversa_id: 'conversa_id',
+  finalizada_por_id: 'finalizada_por_id',
+  ultima_mensagem_id: 'ultima_mensagem_id',
+  finalizada_em: 'finalizada_em'
+} as const
+
+export type Conversa_finalizacaoScalarFieldEnum = (typeof Conversa_finalizacaoScalarFieldEnum)[keyof typeof Conversa_finalizacaoScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -19,6 +19,7 @@ import {
     type GravadorAudioAtivo,
 } from "../library/gravadorAudio";
 import { ModalFinalizarConversa } from "../components/ModalFinalizarConversa";
+import { ModalFeedback } from "../components/ModalFeedback";
 
 type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 type FiltroConversa = "todos" | "nao-lidas" | "grupos";
@@ -61,6 +62,11 @@ interface Setor {
     id: number;
     setor: string;
     sigla_setor: string;
+    secretaria: {
+        id: number;
+        nome: string;
+        sigla_secretaria: string;
+    } | null;
 }
 
 interface UltimaMensagem {
@@ -70,6 +76,13 @@ interface UltimaMensagem {
     arquivoNome?: string | null;
     arquivoTipo?: string | null;
     enviadaEm: string;
+}
+
+interface FinalizacaoPendente {
+    id: number;
+    finalizadaPorId: number;
+    finalizadaPorNome: string;
+    finalizadaEm: string;
 }
 
 interface ConversaSetor {
@@ -92,6 +105,9 @@ interface ConversaSetor {
     usuario: UsuarioBasico;
     mensagensNaoLidas: number;
     ultimaMensagem: UltimaMensagem | null;
+    finalizacaoPendente: FinalizacaoPendente | null;
+    ultimaFinalizacao: FinalizacaoPendente | null;
+    podeFinalizar: boolean;
 }
 
 interface ConversaPrivada {
@@ -204,6 +220,15 @@ function mensagemFoiEnviadaPeloUsuario(
 function Home() {
     const [novaConversaAberta, setNovaConversaAberta] = useState(false);
     const [modalFinalizarAberto, setModalFinalizarAberto] = useState(false);
+    const [conversaAvaliacaoId, setConversaAvaliacaoId] =
+        useState<number | null>(null);
+    const [finalizandoConversa, setFinalizandoConversa] = useState(false);
+    const [enviandoAvaliacao, setEnviandoAvaliacao] = useState(false);
+    const [feedbackFinalizacao, setFeedbackFinalizacao] = useState({
+        aberto: false,
+        tipo: "erro" as "erro" | "sucesso",
+        mensagem: "",
+    });
     const menuConversaMobileRef = useRef<HTMLDetailsElement>(null);
 
     const [modalGrupoAberto, setModalGrupoAberto] = useState(false);
@@ -251,6 +276,9 @@ function Home() {
     const somNotificacaoRef = useRef<HTMLAudioElement | null>(null);
     const audioNotificacaoLiberadoRef = useRef(false);
     const conversasSincronizadasRef = useRef(false);
+    const finalizacoesConhecidasRef = useRef(
+        new Map<number, number | null>(),
+    );
     const estadoConversasRef = useRef(
         new Map<number, {
             ultimaMensagemId: number | null;
@@ -309,12 +337,204 @@ function Home() {
 
     const navigate = useNavigate();
 
-    function abrirModalFinalizar() {
+    async function finalizarConversaSelecionada() {
         if (menuConversaMobileRef.current) {
             menuConversaMobileRef.current.open = false;
         }
 
-        setModalFinalizarAberto(true);
+        if (
+            !conversaSelecionada ||
+            conversaSelecionada.tipo !== "setor" ||
+            finalizandoConversa
+        ) {
+            return;
+        }
+
+        const finalizacaoPendente =
+            conversaSelecionada.finalizacaoPendente;
+
+        if (usuario?.tipo === "user" && finalizacaoPendente) {
+            setConversaAvaliacaoId(conversaSelecionada.id);
+            setModalFinalizarAberto(true);
+            return;
+        }
+
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+            return;
+        }
+
+        setFinalizandoConversa(true);
+
+        try {
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/conversas/${conversaSelecionada.id}/finalizacao`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                },
+            );
+            const resultado = await resposta.json() as {
+                id?: number;
+                finalizadaPorId?: number;
+                finalizadaPorNome?: string;
+                finalizadaEm?: string;
+                message?: string | string[];
+            };
+
+            if (!resposta.ok || !resultado.id) {
+                throw new Error(
+                    Array.isArray(resultado.message)
+                        ? resultado.message.join(", ")
+                        : resultado.message ||
+                            "Não foi possível finalizar a conversa.",
+                );
+            }
+
+            const novaFinalizacao: FinalizacaoPendente = {
+                id: resultado.id,
+                finalizadaPorId:
+                    resultado.finalizadaPorId ?? usuario?.sub ?? 0,
+                finalizadaPorNome:
+                    resultado.finalizadaPorNome ?? "Usuário",
+                finalizadaEm:
+                    resultado.finalizadaEm ?? new Date().toISOString(),
+            };
+
+            finalizacoesConhecidasRef.current.set(
+                conversaSelecionada.id,
+                novaFinalizacao.id,
+            );
+
+            setConversas((conversasAtuais) =>
+                conversasAtuais.map((conversa) =>
+                    conversa.id === conversaSelecionada.id &&
+                    conversa.tipo === "setor"
+                        ? {
+                            ...conversa,
+                            podeFinalizar: false,
+                            ultimaFinalizacao: novaFinalizacao,
+                            finalizacaoPendente:
+                                usuario?.tipo === "user"
+                                    ? novaFinalizacao
+                                    : conversa.finalizacaoPendente,
+                        }
+                        : conversa,
+                ),
+            );
+            setConversaSelecionada((conversaAtual) =>
+                conversaAtual?.id === conversaSelecionada.id &&
+                conversaAtual.tipo === "setor"
+                    ? {
+                        ...conversaAtual,
+                        podeFinalizar: false,
+                        ultimaFinalizacao: novaFinalizacao,
+                        finalizacaoPendente:
+                            usuario?.tipo === "user"
+                                ? novaFinalizacao
+                                : conversaAtual.finalizacaoPendente,
+                    }
+                    : conversaAtual,
+            );
+
+            if (usuario?.tipo === "user") {
+                setConversaAvaliacaoId(conversaSelecionada.id);
+                setModalFinalizarAberto(true);
+            } else {
+                setFeedbackFinalizacao({
+                    aberto: true,
+                    tipo: "sucesso",
+                    mensagem:
+                        `Conversa finalizada por ${novaFinalizacao.finalizadaPorNome}.`,
+                });
+            }
+        } catch (erro) {
+            console.error("Erro ao finalizar conversa:", erro);
+            setFeedbackFinalizacao({
+                aberto: true,
+                tipo: "erro",
+                mensagem: erro instanceof Error
+                    ? erro.message
+                    : "Não foi possível finalizar a conversa.",
+            });
+        } finally {
+            setFinalizandoConversa(false);
+        }
+    }
+
+    async function enviarAvaliacao(dados: {
+        avaliacao: number;
+        descricao: string;
+    }) {
+        const token = localStorage.getItem("access_token");
+
+        if (!token || !conversaAvaliacaoId || enviandoAvaliacao) {
+            return;
+        }
+
+        setEnviandoAvaliacao(true);
+
+        try {
+            const resposta = await fetch(
+                `${import.meta.env.VITE_API_URL}/conversas/${conversaAvaliacaoId}/avaliacao`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        nota: dados.avaliacao,
+                        descricao: dados.descricao || undefined,
+                    }),
+                },
+            );
+            const resultado = await resposta.json() as {
+                message?: string | string[];
+            };
+
+            if (!resposta.ok) {
+                throw new Error(
+                    Array.isArray(resultado.message)
+                        ? resultado.message.join(", ")
+                        : resultado.message ||
+                            "Não foi possível enviar a avaliação.",
+                );
+            }
+
+            const conversaAvaliadaId = conversaAvaliacaoId;
+
+            setConversas((conversasAtuais) =>
+                conversasAtuais.map((conversa) =>
+                    conversa.id === conversaAvaliadaId &&
+                    conversa.tipo === "setor"
+                        ? { ...conversa, finalizacaoPendente: null }
+                        : conversa,
+                ),
+            );
+            setConversaSelecionada((conversaAtual) =>
+                conversaAtual?.id === conversaAvaliadaId &&
+                conversaAtual.tipo === "setor"
+                    ? { ...conversaAtual, finalizacaoPendente: null }
+                    : conversaAtual,
+            );
+            setModalFinalizarAberto(false);
+            setConversaAvaliacaoId(null);
+        } catch (erro) {
+            console.error("Erro ao enviar avaliação:", erro);
+            setFeedbackFinalizacao({
+                aberto: true,
+                tipo: "erro",
+                mensagem: erro instanceof Error
+                    ? erro.message
+                    : "Não foi possível enviar a avaliação.",
+            });
+        } finally {
+            setEnviandoAvaliacao(false);
+        }
     }
 
     useEffect(() => {
@@ -673,6 +893,7 @@ function Home() {
         let ativo = true;
         let buscando = false;
         const tipoUsuarioLogado = usuario.tipo;
+        const usuarioLogadoId = usuario.sub;
 
         async function buscarConversas() {
             if (buscando || document.visibilityState === "hidden") {
@@ -759,6 +980,27 @@ function Home() {
                                     estadoAnterior.ultimaMensagemId
                             );
                         });
+                    const conversaFinalizadaPorOutro =
+                        tipoUsuarioLogado !== "user"
+                            ? conversasSetores.find((conversa) => {
+                                const finalizacao =
+                                    conversa.ultimaFinalizacao;
+
+                                if (
+                                    !finalizacao ||
+                                    finalizacao.finalizadaPorId === usuarioLogadoId ||
+                                    !finalizacoesConhecidasRef.current.has(
+                                        conversa.id,
+                                    )
+                                ) {
+                                    return false;
+                                }
+
+                                return finalizacoesConhecidasRef.current.get(
+                                    conversa.id,
+                                ) !== finalizacao.id;
+                            })
+                            : undefined;
 
                     estadoConversasRef.current = new Map(
                         todasConversas.map((conversa) => [
@@ -771,8 +1013,47 @@ function Home() {
                             },
                         ]),
                     );
+                    finalizacoesConhecidasRef.current = new Map(
+                        conversasSetores.map((conversa) => [
+                            conversa.id,
+                            conversa.ultimaFinalizacao?.id ?? null,
+                        ]),
+                    );
                     conversasSincronizadasRef.current = true;
                     setConversas(todasConversas);
+                    setConversaSelecionada((conversaAtual) => {
+                        if (!conversaAtual) {
+                            return conversaAtual;
+                        }
+
+                        return todasConversas.find(
+                            (conversa) => conversa.id === conversaAtual.id,
+                        ) ?? conversaAtual;
+                    });
+
+                    if (tipoUsuarioLogado === "user") {
+                        const conversaComAvaliacaoPendente =
+                            conversasSetores.find(
+                                (conversa) =>
+                                    conversa.finalizacaoPendente !== null,
+                            );
+
+                        if (
+                            conversaComAvaliacaoPendente?.finalizacaoPendente
+                        ) {
+                            setConversaAvaliacaoId(
+                                conversaComAvaliacaoPendente.id,
+                            );
+                            setModalFinalizarAberto(true);
+                        }
+                    } else if (conversaFinalizadaPorOutro) {
+                        setFeedbackFinalizacao({
+                            aberto: true,
+                            tipo: "sucesso",
+                            mensagem:
+                                `Conversa finalizada por ${conversaFinalizadaPorOutro.ultimaFinalizacao!.finalizadaPorNome}.`,
+                        });
+                    }
 
                     if (deveTocarNotificacao) {
                         tocarSomDeNovaMensagem();
@@ -1172,6 +1453,9 @@ function Home() {
                 const conversaAtualizada: Conversa = {
                     ...conversa,
                     mensagensNaoLidas: 0,
+                    ...(conversa.tipo === "setor" && {
+                        podeFinalizar: true,
+                    }),
                     ultimaMensagem: {
                         id: novaMensagem.id,
                         conteudo: novaMensagem.conteudo,
@@ -1185,6 +1469,25 @@ function Home() {
                 resultado.unshift(conversaAtualizada);
                 return resultado;
             }, []),
+        );
+
+        setConversaSelecionada((conversaAtual) =>
+            conversaAtual?.id === novaMensagem.conversaId
+                ? {
+                    ...conversaAtual,
+                    ...(conversaAtual.tipo === "setor" && {
+                        podeFinalizar: true,
+                    }),
+                    ultimaMensagem: {
+                        id: novaMensagem.id,
+                        conteudo: novaMensagem.conteudo,
+                        origem: novaMensagem.origem,
+                        arquivoNome: novaMensagem.arquivo?.nome,
+                        arquivoTipo: novaMensagem.arquivo?.tipo,
+                        enviadaEm: novaMensagem.enviadaEm,
+                    },
+                }
+                : conversaAtual,
         );
     }
 
@@ -2369,7 +2672,9 @@ function Home() {
 
                     <div className="nova-conversa__dados">
                         <strong>{setor.setor}</strong>
-                        <span>{setor.sigla_setor}</span>
+                        <span>
+                            {setor.secretaria?.nome ?? "Sem secretaria"}
+                        </span>
                     </div>
                     </button>
                 ))}
@@ -2466,14 +2771,18 @@ function Home() {
                     </div>
                 </div>
 
-                {conversaSelecionada.tipo === "setor" && (
+                {conversaSelecionada.tipo === "setor" &&
+                    conversaSelecionada.podeFinalizar && (
                     <div className="chat-header__acoes">
                         <button
                             type="button"
                             className="chat-header__finalizar"
-                            onClick={abrirModalFinalizar}
+                            onClick={finalizarConversaSelecionada}
+                            disabled={finalizandoConversa}
                         >
-                            Finalizar
+                            {finalizandoConversa
+                                ? "Finalizando..."
+                                : "Finalizar"}
                         </button>
 
                         <details
@@ -2500,9 +2809,12 @@ function Home() {
                             <div className="chat-header__menu-opcoes">
                                 <button
                                     type="button"
-                                    onClick={abrirModalFinalizar}
+                                    onClick={finalizarConversaSelecionada}
+                                    disabled={finalizandoConversa}
                                 >
-                                    Finalizar
+                                    {finalizandoConversa
+                                        ? "Finalizando..."
+                                        : "Finalizar"}
                                 </button>
                             </div>
                         </details>
@@ -3418,10 +3730,24 @@ function Home() {
             </div>
         )}
 
-        <ModalFinalizarConversa
-            aberto={modalFinalizarAberto}
-            aoCancelar={() => setModalFinalizarAberto(false)}
-            aoEnviar={() => setModalFinalizarAberto(false)}
+        {usuario?.tipo === "user" && (
+            <ModalFinalizarConversa
+                aberto={modalFinalizarAberto}
+                enviando={enviandoAvaliacao}
+                aoEnviar={enviarAvaliacao}
+            />
+        )}
+
+        <ModalFeedback
+            aberto={feedbackFinalizacao.aberto}
+            tipo={feedbackFinalizacao.tipo}
+            mensagem={feedbackFinalizacao.mensagem}
+            aoFechar={() => {
+                setFeedbackFinalizacao((estadoAtual) => ({
+                    ...estadoAtual,
+                    aberto: false,
+                }));
+            }}
         />
         </main>
     );

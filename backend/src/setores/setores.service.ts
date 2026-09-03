@@ -36,7 +36,7 @@ export class SetoresService {
     }
 
     async listarComFuncionarios() {
-        return this.prisma.setores.findMany({
+        const setores = await this.prisma.setores.findMany({
             where: {
                 cadastros: {
                     some: {
@@ -48,11 +48,32 @@ export class SetoresService {
                 id: true,
                 setor: true,
                 sigla_setor: true,
+                secretaria: {
+                    select: {
+                        id: true,
+                        secretaria: true,
+                        sigla_secretaria: true,
+                    },
+                },
             },
             orderBy: {
                 setor: 'asc',
             },
         });
+
+        return setores.map((setor) => ({
+            id: setor.id,
+            setor: setor.setor,
+            sigla_setor: setor.sigla_setor,
+            secretaria: setor.secretaria
+                ? {
+                    id: setor.secretaria.id,
+                    nome: setor.secretaria.secretaria,
+                    sigla_secretaria:
+                        setor.secretaria.sigla_secretaria,
+                }
+                : null,
+        }));
     }
 
     async criar(dados: CriarSetorDTO) {

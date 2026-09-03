@@ -36,6 +36,7 @@ model cadastro {
   conversa_leitura                 conversa_leitura[]
   conversa_participante            conversa_participante[]
   conversas_atendidas              conversa_setor[]           @relation("UsuarioAtendido")
+  avaliacoes_realizadas            avaliacao[]                 @relation("AvaliadorAvaliacao")
   desafio_login_2fa                desafio_login_2fa[]
   erro_autenticacao                erro_autenticacao[]
   historicos_como_administrador    historico_administrativo[] @relation("HistoricoAdministrador")
@@ -79,6 +80,7 @@ model conversa {
   conversa_leitura      conversa_leitura[]
   conversa_participante conversa_participante[]
   atendimento_setor     conversa_setor?
+  avaliacoes            avaliacao[]
   mensagens             mensagem[]
 }
 
@@ -213,9 +215,17 @@ model historico_administrativo {
 }
 
 model avaliacao {
-  id        Int     @id @default(autoincrement())
-  nota      Int
-  descricao String? @db.VarChar(500)
+  id           Int      @id @default(autoincrement())
+  conversa_id  Int
+  avaliador_id Int
+  nota         Int
+  descricao    String?  @db.VarChar(500)
+  criada_em    DateTime @default(now()) @db.DateTime(0)
+  conversa     conversa @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_avaliacao_conversa")
+  avaliador    cadastro @relation("AvaliadorAvaliacao", fields: [avaliador_id], references: [id], onUpdate: Restrict, map: "fk_avaliacao_avaliador")
+
+  @@unique([conversa_id, avaliador_id], map: "uq_avaliacao_conversa_avaliador")
+  @@index([avaliador_id], map: "idx_avaliacao_avaliador")
 }
 
 enum desafio_2fa_finalidade {

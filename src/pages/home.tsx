@@ -18,6 +18,7 @@ import {
     obterMensagemErroGravacaoAudio,
     type GravadorAudioAtivo,
 } from "../library/gravadorAudio";
+import { ModalFinalizarConversa } from "../components/ModalFinalizarConversa";
 
 type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 type FiltroConversa = "todos" | "nao-lidas" | "grupos";
@@ -202,6 +203,8 @@ function mensagemFoiEnviadaPeloUsuario(
 
 function Home() {
     const [novaConversaAberta, setNovaConversaAberta] = useState(false);
+    const [modalFinalizarAberto, setModalFinalizarAberto] = useState(false);
+    const menuConversaMobileRef = useRef<HTMLDetailsElement>(null);
 
     const [modalGrupoAberto, setModalGrupoAberto] = useState(false);
     const [nomeGrupo, setNomeGrupo] = useState("");
@@ -305,6 +308,14 @@ function Home() {
     const [processandoGravacaoAudio, setProcessandoGravacaoAudio] = useState(false);
 
     const navigate = useNavigate();
+
+    function abrirModalFinalizar() {
+        if (menuConversaMobileRef.current) {
+            menuConversaMobileRef.current.open = false;
+        }
+
+        setModalFinalizarAberto(true);
+    }
 
     useEffect(() => {
         if (!menuAberto) {
@@ -2460,11 +2471,15 @@ function Home() {
                         <button
                             type="button"
                             className="chat-header__finalizar"
+                            onClick={abrirModalFinalizar}
                         >
                             Finalizar
                         </button>
 
-                        <details className="chat-header__menu-mobile">
+                        <details
+                            ref={menuConversaMobileRef}
+                            className="chat-header__menu-mobile"
+                        >
                             <summary aria-label="Abrir ações da conversa">
                                 <svg
                                     width="22"
@@ -2483,7 +2498,12 @@ function Home() {
                             </summary>
 
                             <div className="chat-header__menu-opcoes">
-                                <button type="button">Finalizar</button>
+                                <button
+                                    type="button"
+                                    onClick={abrirModalFinalizar}
+                                >
+                                    Finalizar
+                                </button>
                             </div>
                         </details>
                     </div>
@@ -3397,6 +3417,12 @@ function Home() {
                 </section>
             </div>
         )}
+
+        <ModalFinalizarConversa
+            aberto={modalFinalizarAberto}
+            aoCancelar={() => setModalFinalizarAberto(false)}
+            aoEnviar={() => setModalFinalizarAberto(false)}
+        />
         </main>
     );
 }

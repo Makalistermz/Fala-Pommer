@@ -1137,7 +1137,14 @@ export class ConversasService {
                                 select: {
                                     id: true,
                                     setor: true,
-                                    sigla_setor: true
+                                    sigla_setor: true,
+                                    secretaria: {
+                                        select: {
+                                            id: true,
+                                            secretaria: true,
+                                            sigla_secretaria: true
+                                        }
+                                    }
                                 }
                             },
                             usuario: {
@@ -1184,7 +1191,14 @@ export class ConversasService {
                             select: {
                                 id: true,
                                 setor: true,
-                                sigla_setor: true
+                                sigla_setor: true,
+                                secretaria: {
+                                    select: {
+                                        id: true,
+                                        secretaria: true,
+                                        sigla_secretaria: true
+                                    }
+                                }
                             }
                         },
                         usuario: {
@@ -1209,6 +1223,14 @@ export class ConversasService {
                 nome: atendimento.setor.setor,
                 sigla: atendimento.setor.sigla_setor
             },
+
+            secretaria: atendimento.setor.secretaria
+                ? {
+                    id: atendimento.setor.secretaria.id,
+                    nome: atendimento.setor.secretaria.secretaria,
+                    sigla: atendimento.setor.secretaria.sigla_secretaria
+                }
+                : null,
 
             usuario: atendimento.usuario,
             ultimaMensagem: null

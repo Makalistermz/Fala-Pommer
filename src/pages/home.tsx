@@ -2441,19 +2441,53 @@ function Home() {
                     </svg>
                     </button>
 
-                    <div className="chat-header__avatar">
-                    {renderizarAvatar(
-                        nomeDaConversa(conversaSelecionada),
-                        fotoDaConversa(conversaSelecionada)
-                    )}
-                    </div>
-
-                    <div className="chat-header__dados">
-                    <strong>{nomeDaConversa(conversaSelecionada)}</strong>
-
-                    <span>{subtituloDaConversa(conversaSelecionada)}</span>
+                    <div className="header__avatar__dados">
+                        <div className="chat-header__avatar">
+                            {renderizarAvatar(
+                                nomeDaConversa(conversaSelecionada),
+                                fotoDaConversa(conversaSelecionada)
+                            )}
+                        </div>
+                        <div className="chat-header__dados">
+                            <strong>{nomeDaConversa(conversaSelecionada)}</strong>
+                            <span>{subtituloDaConversa(conversaSelecionada)}</span>
+                        </div>
                     </div>
                 </div>
+
+                {conversaSelecionada.tipo === "setor" && (
+                    <div className="chat-header__acoes">
+                        <button
+                            type="button"
+                            className="chat-header__finalizar"
+                        >
+                            Finalizar
+                        </button>
+
+                        <details className="chat-header__menu-mobile">
+                            <summary aria-label="Abrir ações da conversa">
+                                <svg
+                                    width="22"
+                                    height="22"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="M4 7h16M4 12h16M4 17h16"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                    />
+                                </svg>
+                            </summary>
+
+                            <div className="chat-header__menu-opcoes">
+                                <button type="button">Finalizar</button>
+                            </div>
+                        </details>
+                    </div>
+                )}
                 </header>
 
                 <div

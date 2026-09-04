@@ -601,6 +601,18 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
         );
     }, [avaliacao]);
 
+    const quatroSetoresMaisBemAvaliados = avaliacoesPorSetor.slice(0, 4);
+    const totalOutrosSetores = avaliacoesPorSetor
+        .slice(4)
+        .reduce(
+            (total, setor) => total + setor.totalAvaliacoes,
+            0,
+        );
+    const maiorTotalAvaliacoes = Math.max(
+        quatroSetoresMaisBemAvaliados[0]?.totalAvaliacoes ?? 0,
+        totalOutrosSetores,
+    );
+
     // Mantém apenas usuários cujo campo de desativação está preenchido.
     const usuariosDesativados = useMemo(
         () => usuarios.filter((usuario) => Boolean(usuario.desativado_em)),
@@ -1000,7 +1012,7 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
                             <h3>Avaliações dos setores</h3>
 
                             <ul className="lista-setores">
-                                {avaliacoesPorSetor.map((setor) => (
+                                {quatroSetoresMaisBemAvaliados.map((setor) => (
                                     <li className="setor-item" key={setor.id}>
                                         <div className="setor-informacoes">
                                             <span>{setor.nome}</span>
@@ -1010,39 +1022,49 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
                                         <div
                                             className="barra-fundo"
                                             role="progressbar"
-                                            aria-label="Finanças: 148 atendimentos"
+                                            aria-label={`${setor.nome}: ${setor.totalAvaliacoes} pontos em avaliações`}
                                             aria-valuemin={0}
-                                            aria-valuemax={148}
-                                            aria-valuenow={148}
+                                            aria-valuemax={maiorTotalAvaliacoes}
+                                            aria-valuenow={setor.totalAvaliacoes}
                                         >
                                             <span
                                                 className="barra-preenchimento"
-                                                style={{ width: "100%" }}
+                                                style={{
+                                                    width: maiorTotalAvaliacoes > 0
+                                                        ? `${(setor.totalAvaliacoes / maiorTotalAvaliacoes) * 100}%`
+                                                        : "0%",
+                                                }}
                                             ></span>
                                         </div>
                                     </li>
                                 ))}
 
-                                <li className="setor-item">
-                                    <div className="setor-informacoes">
-                                        <span>Outros</span>
-                                        <strong>37</strong>
-                                    </div>
+                                {totalOutrosSetores > 0 && (
+                                    <li className="setor-item">
+                                        <div className="setor-informacoes">
+                                            <span>Outros</span>
+                                            <strong>{totalOutrosSetores}</strong>
+                                        </div>
 
-                                    <div
-                                        className="barra-fundo"
-                                        role="progressbar"
-                                        aria-label="Outros: 37 atendimentos"
-                                        aria-valuemin={0}
-                                        aria-valuemax={148}
-                                        aria-valuenow={37}
-                                    >
-                                        <span
-                                            className="barra-preenchimento"
-                                            style={{ width: "25%" }}
-                                        ></span>
-                                    </div>
-                                </li>
+                                        <div
+                                            className="barra-fundo"
+                                            role="progressbar"
+                                            aria-label={`Outros: ${totalOutrosSetores} pontos em avaliações`}
+                                            aria-valuemin={0}
+                                            aria-valuemax={maiorTotalAvaliacoes}
+                                            aria-valuenow={totalOutrosSetores}
+                                        >
+                                            <span
+                                                className="barra-preenchimento"
+                                                style={{
+                                                    width: maiorTotalAvaliacoes > 0
+                                                        ? `${(totalOutrosSetores / maiorTotalAvaliacoes) * 100}%`
+                                                        : "0%",
+                                                }}
+                                            ></span>
+                                        </div>
+                                    </li>
+                                )}
 
                             </ul>
                         </div>

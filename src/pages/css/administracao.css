@@ -2478,6 +2478,52 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     font-weight: 600;
 }
 
+.avaliacoes-setores__desempenho {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 10px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.avaliacoes-setores__desempenho::before {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: currentColor;
+    content: "";
+}
+
+.avaliacoes-setores__desempenho--acima {
+    border-color: #b7e4d5;
+    background: #e8f7f1;
+    color: #087553;
+}
+
+.avaliacoes-setores__desempenho--na-media {
+    border-color: #bfd4f5;
+    background: #e7f0ff;
+    color: #1351b4;
+}
+
+.avaliacoes-setores__desempenho--abaixo {
+    border-color: #f3c2cb;
+    background: #fff0f3;
+    color: #a1263e;
+}
+
+.avaliacoes-setores__desempenho--sem-media {
+    border-color: #d5dce8;
+    background: #f6f8fc;
+    color: #6e7e99;
+}
+
 .relatorios-logs__status {
     display: inline-flex;
     align-items: center;

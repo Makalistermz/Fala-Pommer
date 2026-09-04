@@ -112,6 +112,36 @@ function TodasAvaliacoesSectors() {
 
         return () => controlador.abort();
     }, []);
+
+    function obterValorMedia(totalNotasSetor: number) {
+        if (mediaTodasNotas === null) {
+            return {
+                texto: "Sem média",
+                modificador: "sem-media",
+            };
+        }
+
+        const mediaArredondada = Math.round(mediaTodasNotas);
+
+        if (totalNotasSetor < mediaArredondada) {
+            return {
+                texto: "Abaixo da média",
+                modificador: "abaixo",
+            };
+        }
+
+        if (totalNotasSetor === mediaArredondada) {
+            return {
+                texto: "Na média",
+                modificador: "na-media",
+            };
+        }
+
+        return {
+            texto: "Acima da média",
+            modificador: "acima",
+        };
+    }
     
     return (
         <section
@@ -140,7 +170,7 @@ function TodasAvaliacoesSectors() {
                             <th scope="col">Secretaria</th>
                             <th scope="col">Setor</th>
                             <th scope="col">Notas totais</th>
-                            <th scope="col"></th>
+                            <th scope="col">Desempenho</th>
                         </tr>
                     </thead>
 
@@ -172,18 +202,29 @@ function TodasAvaliacoesSectors() {
                             </tr>
                         )}
 
-                        {!carregando && !erro && setoresPaginados.map((setor) => (
-                            <tr key={setor.id}>
-                                <td>{setor.secretaria?.trim() || "Sem secretaria"}</td>
-                                <td>
-                                    <strong className="avaliacoes-setores__usuario">
-                                        {setor.nome}
-                                    </strong>
-                                </td>
-                                <td>{setor.totalNotas}</td>
-                                <td></td>
-                            </tr>
-                        ))}
+                        {!carregando && !erro && setoresPaginados.map((setor) => {
+                            const situacaoMedia = obterValorMedia(setor.totalNotas);
+
+                            return (
+                                <tr key={setor.id}>
+                                    <td>{setor.secretaria?.trim() || "Sem secretaria"}</td>
+                                    <td>
+                                        <strong className="avaliacoes-setores__usuario">
+                                            {setor.nome}
+                                        </strong>
+                                    </td>
+                                    <td>{setor.totalNotas}</td>
+                                    <td>
+                                        <span
+                                            className={`avaliacoes-setores__desempenho avaliacoes-setores__desempenho--${situacaoMedia.modificador}`}
+                                            title={`Total do setor: ${setor.totalNotas}. Média geral: ${Math.round(mediaTodasNotas ?? 0)}.`}
+                                        >
+                                            {situacaoMedia.texto}
+                                        </span>
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>

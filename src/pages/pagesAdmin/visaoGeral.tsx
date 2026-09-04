@@ -612,6 +612,20 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
         quatroSetoresMaisBemAvaliados[0]?.totalAvaliacoes ?? 0,
         totalOutrosSetores,
     );
+    const quantidadeAtendimentosCincoEstrelas = avaliacao.filter(
+        (item) => item.nota === 5,
+    ).length;
+    const quantidadePioresAvaliacoes = avaliacao.filter(
+        (item) => item.nota === 1 || item.nota === 2,
+    ).length;
+    const quantidadeMelhoresAvaliacoes = avaliacao.filter(
+        (item) => item.nota === 4 || item.nota === 5,
+    ).length;
+    const porcentagemAtendimentosCincoEstrelas = avaliacao.length > 0
+        ? Math.round(
+            (quantidadeAtendimentosCincoEstrelas / avaliacao.length) * 100,
+        )
+        : 0;
 
     // Mantém apenas usuários cujo campo de desativação está preenchido.
     const usuariosDesativados = useMemo(
@@ -1077,7 +1091,7 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
                                     <svg
                                         viewBox="0 0 120 120"
                                         role="img"
-                                        aria-label="Taxa de resolução de 82%"
+                                        aria-label={`${porcentagemAtendimentosCincoEstrelas}% dos atendimentos receberam 5 estrelas`}
                                     >
                                         <circle
                                             className="circulo-resolucao-fundo"
@@ -1092,11 +1106,11 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
                                             cy="60"
                                             r="50"
                                             pathLength="100"
-                                            strokeDasharray="82 18"
+                                            strokeDasharray={`${porcentagemAtendimentosCincoEstrelas} ${100 - porcentagemAtendimentosCincoEstrelas}`}
                                         ></circle>
                                     </svg>
 
-                                    <strong>82%</strong>
+                                    <strong>{porcentagemAtendimentosCincoEstrelas}%</strong>
                                 </div>
                             </div>
 
@@ -1109,7 +1123,7 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
                                     ></span>
 
                                     <div>
-                                        <strong>23</strong>
+                                        <strong>{quantidadePioresAvaliacoes}</strong>
                                         <span>Piores avaliações</span>
                                     </div>
                                 </div>
@@ -1121,7 +1135,7 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
                                     ></span>
 
                                     <div>
-                                        <strong>23</strong>
+                                        <strong>{quantidadeMelhoresAvaliacoes}</strong>
                                         <span>Melhores avaliações</span>
                                     </div>
                                 </div>

@@ -18,7 +18,7 @@ interface Avaliacao {
     };
 }
 
-const ITENS_POR_PAGINA = 20;
+const ITENS_POR_PAGINA = 10;
 
 function TodasAvaliacoesSectors() {
     const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>([]);
@@ -61,6 +61,10 @@ function TodasAvaliacoesSectors() {
         inicioPagina,
         inicioPagina + ITENS_POR_PAGINA,
     );
+    const mediaTodasNotas = avaliacoesPorSetor.length > 0
+        ? avaliacoesPorSetor.reduce((total, setor) => total + setor.totalNotas, 0)
+            / avaliacoesPorSetor.length
+        : null;
 
     useEffect(() => {
         const controlador = new AbortController();
@@ -122,6 +126,11 @@ function TodasAvaliacoesSectors() {
                     </h2>
                     <p>Monitor e analise a satisfação dos cidadãos em relação aos setores.</p>
                 </div>
+                <strong>
+                    Média geral: {mediaTodasNotas?.toLocaleString("pt-BR", {
+                        maximumFractionDigits: 0,
+                    }) ?? "—"}
+                </strong>
             </header>
 
             <div className="avaliacoes-setores__tabela-container">
@@ -131,13 +140,14 @@ function TodasAvaliacoesSectors() {
                             <th scope="col">Secretaria</th>
                             <th scope="col">Setor</th>
                             <th scope="col">Notas totais</th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {carregando && (
                             <tr>
-                                <td className="avaliacoes-setores__mensagem" colSpan={3}>
+                                <td className="avaliacoes-setores__mensagem" colSpan={4}>
                                     Carregando avaliações...
                                 </td>
                             </tr>
@@ -156,7 +166,7 @@ function TodasAvaliacoesSectors() {
 
                         {!carregando && !erro && avaliacoes.length === 0 && (
                             <tr>
-                                <td className="avaliacoes-setores__mensagem" colSpan={3}>
+                                <td className="avaliacoes-setores__mensagem" colSpan={4}>
                                     Nenhuma avaliação registrada nos últimos 30 dias.
                                 </td>
                             </tr>
@@ -171,6 +181,7 @@ function TodasAvaliacoesSectors() {
                                     </strong>
                                 </td>
                                 <td>{setor.totalNotas}</td>
+                                <td></td>
                             </tr>
                         ))}
                     </tbody>

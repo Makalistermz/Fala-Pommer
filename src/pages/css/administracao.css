@@ -2420,7 +2420,8 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     font-size: 14px;
 }
 
-.relatorios-logs__header > strong {
+.relatorios-logs__header > strong,
+.avaliacoes-setores__header > strong {
     flex: 0 0 auto;
     padding: 8px 12px;
     border-radius: 10px;

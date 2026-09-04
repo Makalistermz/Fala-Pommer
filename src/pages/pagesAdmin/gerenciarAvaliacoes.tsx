@@ -6,6 +6,10 @@ interface Avaliacao {
     nota: number;
     descricao: string | null;
     criadaEm: string;
+    avaliador: {
+        id: number;
+        nome: string;
+    };
     setor: {
         id: number;
         nome: string;
@@ -106,6 +110,7 @@ function GerenciarAvaliações() {
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
+                            <th scope="col">Avaliador</th>
                             <th scope="col">Nota</th>
                             <th scope="col">Descrição</th>
                             <th scope="col">Data</th>
@@ -116,7 +121,7 @@ function GerenciarAvaliações() {
                     <tbody>
                         {carregando && (
                             <tr>
-                                <td className="relatorios-logs__mensagem" colSpan={5}>
+                                <td className="relatorios-logs__mensagem" colSpan={6}>
                                     Carregando avaliações...
                                 </td>
                             </tr>
@@ -126,7 +131,7 @@ function GerenciarAvaliações() {
                             <tr>
                                 <td
                                     className="relatorios-logs__mensagem relatorios-logs__mensagem--erro"
-                                    colSpan={5}
+                                    colSpan={6}
                                 >
                                     {erro}
                                 </td>
@@ -135,7 +140,7 @@ function GerenciarAvaliações() {
 
                         {!carregando && !erro && avaliacoes.length === 0 && (
                             <tr>
-                                <td className="relatorios-logs__mensagem" colSpan={5}>
+                                <td className="relatorios-logs__mensagem" colSpan={6}>
                                     Nenhuma avaliação registrada nos últimos 30 dias.
                                 </td>
                             </tr>
@@ -144,6 +149,11 @@ function GerenciarAvaliações() {
                         {!carregando && !erro && avaliacoesPaginadas.map((avaliacao) => (
                             <tr key={avaliacao.id}>
                                 <td>{avaliacao.id}</td>
+                                <td>
+                                    <strong className="relatorios-logs__usuario">
+                                        {avaliacao.avaliador.nome}
+                                    </strong>
+                                </td>
                                 <td aria-label={`${avaliacao.nota} de 5`}>
                                     {avaliacao.nota}/5
                                 </td>

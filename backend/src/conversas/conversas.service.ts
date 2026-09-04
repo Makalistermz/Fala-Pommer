@@ -58,6 +58,12 @@ export class ConversasService {
                 nota: true,
                 descricao: true,
                 criada_em: true,
+                avaliador: {
+                    select: {
+                        id: true,
+                        nome: true
+                    }
+                },
                 finalizacao: {
                     select: {
                         conversa: {
@@ -96,6 +102,10 @@ export class ConversasService {
                 nota: avaliacao.nota,
                 descricao: avaliacao.descricao,
                 criadaEm: avaliacao.criada_em,
+                avaliador: {
+                    id: avaliacao.avaliador.id,
+                    nome: avaliacao.avaliador.nome
+                },
                 setor: {
                     id: setor.id,
                     nome: setor.setor,

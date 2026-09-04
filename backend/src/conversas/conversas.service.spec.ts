@@ -91,6 +91,7 @@ describe("ConversasService", () => {
         nota: 5,
         descricao: "Atendimento excelente",
         criada_em: criadaEmFinancas,
+        avaliador: { id: 20, nome: "Ana Souza" },
         finalizacao: {
           conversa: {
             atendimento_setor: {
@@ -109,6 +110,7 @@ describe("ConversasService", () => {
         nota: 4,
         descricao: null,
         criada_em: criadaEmTributos,
+        avaliador: { id: 21, nome: "Carlos Lima" },
         finalizacao: {
           conversa: {
             atendimento_setor: {
@@ -130,6 +132,7 @@ describe("ConversasService", () => {
         nota: 5,
         descricao: "Atendimento excelente",
         criadaEm: criadaEmFinancas,
+        avaliador: { id: 20, nome: "Ana Souza" },
         setor: {
           id: 2,
           nome: "Finanças",
@@ -142,6 +145,7 @@ describe("ConversasService", () => {
         nota: 4,
         descricao: null,
         criadaEm: criadaEmTributos,
+        avaliador: { id: 21, nome: "Carlos Lima" },
         setor: {
           id: 3,
           nome: "Tributos",

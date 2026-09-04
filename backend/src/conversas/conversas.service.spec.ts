@@ -48,6 +48,9 @@ describe("ConversasService", () => {
       groupBy: jest.fn(),
       create: jest.fn(),
     },
+    avaliacao: {
+      findMany: jest.fn(),
+    },
   };
 
   let service: ConversasService;
@@ -75,6 +78,70 @@ describe("ConversasService", () => {
     prismaMock.mensagem.groupBy.mockResolvedValue([]);
     service = new ConversasService(
       prismaMock as unknown as PrismaService,
+    );
+  });
+
+  it("lista as avaliações dos últimos 30 dias com seus setores", async () => {
+    const criadaEmFinancas = new Date("2026-09-03T15:00:00.000Z");
+    const criadaEmTributos = new Date("2026-09-02T15:00:00.000Z");
+
+    prismaMock.avaliacao.findMany.mockResolvedValue([
+      {
+        id: 11,
+        nota: 5,
+        descricao: "Atendimento excelente",
+        criada_em: criadaEmFinancas,
+        finalizacao: {
+          conversa: {
+            atendimento_setor: {
+              setor: { id: 2, setor: "Finanças", sigla_setor: "FIN" },
+            },
+          },
+        },
+      },
+      {
+        id: 10,
+        nota: 4,
+        descricao: null,
+        criada_em: criadaEmTributos,
+        finalizacao: {
+          conversa: {
+            atendimento_setor: {
+              setor: { id: 3, setor: "Tributos", sigla_setor: "TRI" },
+            },
+          },
+        },
+      },
+    ]);
+
+    await expect(service.listarAvaliacoes()).resolves.toEqual([
+      {
+        id: 11,
+        nota: 5,
+        descricao: "Atendimento excelente",
+        criadaEm: criadaEmFinancas,
+        setor: { id: 2, nome: "Finanças", sigla: "FIN" },
+      },
+      {
+        id: 10,
+        nota: 4,
+        descricao: null,
+        criadaEm: criadaEmTributos,
+        setor: { id: 3, nome: "Tributos", sigla: "TRI" },
+      },
+    ]);
+    expect(prismaMock.avaliacao.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: {
+          criada_em: {
+            gte: expect.any(Date),
+          },
+        },
+        orderBy: [
+          { criada_em: "desc" },
+          { id: "desc" },
+        ],
+      }),
     );
   });
 

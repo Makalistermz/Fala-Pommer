@@ -39,6 +39,67 @@ export class ConversasService {
         private readonly prisma: PrismaService
     ) {}
 
+    async listarAvaliacoes() {
+        const inicioPeriodo = new Date();
+        inicioPeriodo.setDate(inicioPeriodo.getDate() - 30);
+
+        const avaliacoes = await this.prisma.avaliacao.findMany({
+            where: {
+                criada_em: {
+                    gte: inicioPeriodo
+                }
+            },
+            orderBy: [
+                { criada_em: "desc" },
+                { id: "desc" }
+            ],
+            select: {
+                id: true,
+                nota: true,
+                descricao: true,
+                criada_em: true,
+                finalizacao: {
+                    select: {
+                        conversa: {
+                            select: {
+                                atendimento_setor: {
+                                    select: {
+                                        setor: {
+                                            select: {
+                                                id: true,
+                                                setor: true,
+                                                sigla_setor: true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        return avaliacoes.flatMap((avaliacao) => {
+            const setor =
+                avaliacao.finalizacao.conversa.atendimento_setor?.setor;
+
+            if (!setor) return [];
+
+            return [{
+                id: avaliacao.id,
+                nota: avaliacao.nota,
+                descricao: avaliacao.descricao,
+                criadaEm: avaliacao.criada_em,
+                setor: {
+                    id: setor.id,
+                    nome: setor.setor,
+                    sigla: setor.sigla_setor
+                }
+            }];
+        });
+    }
+
     /*
      * Lista as conversas privadas do usuário autenticado.
      * O superAdmin também pode fiscalizar conversas entre

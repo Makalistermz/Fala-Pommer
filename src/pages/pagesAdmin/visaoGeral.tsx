@@ -134,9 +134,22 @@ interface CounterProps {
     duration?: number;
 }
 
+interface Avaliacao {
+    id: number;
+    nota: number;
+    descricao: string | null;
+    criadaEm: string;
+    setor: {
+        id: number;
+        nome: string;
+        sigla: string;
+    };
+}
+
 // Permite que o painel solicite a abertura da área de usuários.
 interface VisaoGeralProps {
     onVerUsuarios: () => void;
+    onVerAvaliacoes: () => void;
 }
 
 export const NumberCounter: React.FC<CounterProps> = ({ endValue, duration = 2 }) => {
@@ -288,13 +301,14 @@ const opcoesHistoricoDesativacoes: ChartOptions<"line"> = {
     },
 };
 
-function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
+function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
     // Estados alimentados pelas consultas da visão geral.
     const [resultado, setResultado] = useState<RespostaLoginsMensais | null>(null);
     const [carregando, setCarregando] = useState(true);
     const [quantUsuarios, setQuantUsuarios] = useState(0);
     const [usuarios, setUsuarios] = useState<UsuarioResumo[]>([]);
     const [eventosAdministrativos, setEventosAdministrativos] = useState<EventoAdministrativoResumo[]>([]);
+    const [avaliacao, setAvaliacao] = useState<Avaliacao[]>([]);
     const [quantSetores, setQuantSetores] = useState(0);
     const [quantSecretarias, setQuantSecretarias] = useState(0);
     const [quantUsuariosCategoria, setQuantUsuariosCategoria] = useState<QuantUsuarioCategoria[]>([]);
@@ -529,6 +543,63 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
 
         void carregarHistoricoDesativacoes();
     }, []);
+
+    useEffect(() => {
+        async function carregarAvaliacoes() {
+            const token = localStorage.getItem("access_token");
+
+            if (!token) return;
+
+            try {
+                const resposta = await fetch(
+                    `${import.meta.env.VITE_API_URL}/conversas/avaliacoes`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possivel buscar as avaliações")
+                }
+
+                const dados = await resposta.json() as Avaliacao[];
+                setAvaliacao(dados);
+            } catch (erro) {
+                console.error("Erro ao buscar as avaliações:", erro);
+            }
+        }
+
+        void carregarAvaliacoes();
+    }, [])
+
+    const avaliacoesPorSetor = useMemo(() => {
+        const setores = new Map<number, {
+            id: number;
+            nome: string;
+            totalAvaliacoes: number;
+        }>();
+
+        for (const item of avaliacao) {
+            const setorExistente = setores.get(item.setor.id);
+
+            if (setorExistente) {
+                setorExistente.totalAvaliacoes += item.nota;
+                continue;
+            }
+
+            setores.set(item.setor.id, {
+                id: item.setor.id,
+                nome: item.setor.nome,
+                totalAvaliacoes: item.nota,
+            });
+        }
+
+        return [...setores.values()].sort(
+            (primeiro, segundo) => segundo.totalAvaliacoes - primeiro.totalAvaliacoes,
+        );
+    }, [avaliacao]);
 
     // Mantém apenas usuários cujo campo de desativação está preenchido.
     const usuariosDesativados = useMemo(
@@ -929,90 +1000,28 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
                             <h3>Avaliações dos setores</h3>
 
                             <ul className="lista-setores">
+                                {avaliacoesPorSetor.map((setor) => (
+                                    <li className="setor-item" key={setor.id}>
+                                        <div className="setor-informacoes">
+                                            <span>{setor.nome}</span>
+                                            <strong>{setor.totalAvaliacoes}</strong>
+                                        </div>
 
-                                <li className="setor-item">
-                                    <div className="setor-informacoes">
-                                        <span>Finanças</span>
-                                        <strong>148</strong>
-                                    </div>
-
-                                    <div
-                                        className="barra-fundo"
-                                        role="progressbar"
-                                        aria-label="Finanças: 148 atendimentos"
-                                        aria-valuemin={0}
-                                        aria-valuemax={148}
-                                        aria-valuenow={148}
-                                    >
-                                        <span
-                                            className="barra-preenchimento"
-                                            style={{ width: "100%" }}
-                                        ></span>
-                                    </div>
-                                </li>
-
-                                <li className="setor-item">
-                                    <div className="setor-informacoes">
-                                        <span>Saúde</span>
-                                        <strong>112</strong>
-                                    </div>
-
-                                    <div
-                                        className="barra-fundo"
-                                        role="progressbar"
-                                        aria-label="Saúde: 112 atendimentos"
-                                        aria-valuemin={0}
-                                        aria-valuemax={148}
-                                        aria-valuenow={112}
-                                    >
-                                        <span
-                                            className="barra-preenchimento"
-                                            style={{ width: "76%" }}
-                                        ></span>
-                                    </div>
-                                </li>
-
-                                <li className="setor-item">
-                                    <div className="setor-informacoes">
-                                        <span>Obras</span>
-                                        <strong>86</strong>
-                                    </div>
-
-                                    <div
-                                        className="barra-fundo"
-                                        role="progressbar"
-                                        aria-label="Obras: 86 atendimentos"
-                                        aria-valuemin={0}
-                                        aria-valuemax={148}
-                                        aria-valuenow={86}
-                                    >
-                                        <span
-                                            className="barra-preenchimento"
-                                            style={{ width: "58%" }}
-                                        ></span>
-                                    </div>
-                                </li>
-
-                                <li className="setor-item">
-                                    <div className="setor-informacoes">
-                                        <span>Educação</span>
-                                        <strong>64</strong>
-                                    </div>
-
-                                    <div
-                                        className="barra-fundo"
-                                        role="progressbar"
-                                        aria-label="Educação: 64 atendimentos"
-                                        aria-valuemin={0}
-                                        aria-valuemax={148}
-                                        aria-valuenow={64}
-                                    >
-                                        <span
-                                            className="barra-preenchimento"
-                                            style={{ width: "43%" }}
-                                        ></span>
-                                    </div>
-                                </li>
+                                        <div
+                                            className="barra-fundo"
+                                            role="progressbar"
+                                            aria-label="Finanças: 148 atendimentos"
+                                            aria-valuemin={0}
+                                            aria-valuemax={148}
+                                            aria-valuenow={148}
+                                        >
+                                            <span
+                                                className="barra-preenchimento"
+                                                style={{ width: "100%" }}
+                                            ></span>
+                                        </div>
+                                    </li>
+                                ))}
 
                                 <li className="setor-item">
                                     <div className="setor-informacoes">
@@ -1097,7 +1106,11 @@ function VisaoGeral({ onVerUsuarios }: VisaoGeralProps) {
 
                             </div>
 
-                            <button className="botao-ver-atendimentos" type="button">
+                            <button
+                                className="botao-ver-atendimentos"
+                                type="button"
+                                onClick={onVerAvaliacoes}
+                            >
                                 <span>Ver avaliações</span>
 
                                 <svg

@@ -115,6 +115,15 @@ export class ConversasController {
     }
 
     /*
+     * Lista as avaliações recentes com o respectivo setor atendente.
+     */
+    @Get("avaliacoes")
+    @Perfis("admin", "superAdmin")
+    listarAvaliacoes() {
+        return this.conversasService.listarAvaliacoes();
+    }
+
+    /*
      * Usuário inicia atendimento com um setor.
      */
     @Post("setor")

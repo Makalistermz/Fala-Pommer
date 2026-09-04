@@ -94,7 +94,12 @@ describe("ConversasService", () => {
         finalizacao: {
           conversa: {
             atendimento_setor: {
-              setor: { id: 2, setor: "Finanças", sigla_setor: "FIN" },
+              setor: {
+                id: 2,
+                setor: "Finanças",
+                sigla_setor: "FIN",
+                secretaria: { secretaria: "Secretaria da Fazenda" },
+              },
             },
           },
         },
@@ -107,7 +112,12 @@ describe("ConversasService", () => {
         finalizacao: {
           conversa: {
             atendimento_setor: {
-              setor: { id: 3, setor: "Tributos", sigla_setor: "TRI" },
+              setor: {
+                id: 3,
+                setor: "Tributos",
+                sigla_setor: "TRI",
+                secretaria: { secretaria: "Secretaria da Fazenda" },
+              },
             },
           },
         },
@@ -120,14 +130,24 @@ describe("ConversasService", () => {
         nota: 5,
         descricao: "Atendimento excelente",
         criadaEm: criadaEmFinancas,
-        setor: { id: 2, nome: "Finanças", sigla: "FIN" },
+        setor: {
+          id: 2,
+          nome: "Finanças",
+          sigla: "FIN",
+          secretaria: "Secretaria da Fazenda",
+        },
       },
       {
         id: 10,
         nota: 4,
         descricao: null,
         criadaEm: criadaEmTributos,
-        setor: { id: 3, nome: "Tributos", sigla: "TRI" },
+        setor: {
+          id: 3,
+          nome: "Tributos",
+          sigla: "TRI",
+          secretaria: "Secretaria da Fazenda",
+        },
       },
     ]);
     expect(prismaMock.avaliacao.findMany).toHaveBeenCalledWith(

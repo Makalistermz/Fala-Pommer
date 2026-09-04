@@ -68,7 +68,12 @@ export class ConversasService {
                                             select: {
                                                 id: true,
                                                 setor: true,
-                                                sigla_setor: true
+                                                sigla_setor: true,
+                                                secretaria: {
+                                                    select: {
+                                                        secretaria: true
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -94,7 +99,8 @@ export class ConversasService {
                 setor: {
                     id: setor.id,
                     nome: setor.setor,
-                    sigla: setor.sigla_setor
+                    sigla: setor.sigla_setor,
+                    secretaria: setor.secretaria?.secretaria ?? null
                 }
             }];
         });

@@ -11,6 +11,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import { CriarUsuarioDto } from "./dto/criar-usuario.dto";
 import { AtualizarUsuarioDto } from "./dto/atualizar-usuario.dto";
 import { AtualizarMeuPerfilDto } from "./dto/atualizar-meu-perfil.dto";
+import { EmailService } from "src/email/email.service";
 
 import * as bcrypt from "bcrypt";
 import { randomUUID } from "node:crypto";
@@ -27,7 +28,8 @@ export type ArquivoFotoPerfilUpload = {
 @Injectable()
 export class UsuariosService {
     constructor(
-        private readonly prisma: PrismaService
+        private readonly prisma: PrismaService,
+        private readonly emailService: EmailService
     ) {}
 
     async cadastrar(
@@ -123,7 +125,7 @@ export class UsuariosService {
                 12
             );
 
-        return this.prisma.cadastro.create({
+        const usuarioCriado = await this.prisma.cadastro.create({
             data: {
                 nome: dados.nome.trim(),
 
@@ -146,6 +148,13 @@ export class UsuariosService {
                 email: true
             }
         });
+
+        await this.emailService.enviarConfirmacaoCadastro(
+            usuarioCriado.email,
+            usuarioCriado.nome
+        );
+
+        return usuarioCriado;
     }
 
     async chamarHistorico() {

@@ -15,6 +15,185 @@ export class EmailService {
         }
     });
 
+    async enviarConfirmacaoCadastro(email: string, nome: string) {
+        try {
+            const linkLogin = `${process.env.FRONTEND_URL}`;
+
+            if (!linkLogin) {
+                throw new Error("FRONTEND_URL não foi configurada.");
+            }
+
+            this.transporter.sendMail({
+                from: `"Fala Pommer" <${process.env.SMTP_USER}>`,
+                to: email,
+                subject: "Cadastro confirmado | Fala Pommer",
+
+                text: `
+                    Olá, ${nome}
+
+                    Seu cadastro no Fala Pommer foi realizado com sucesso.
+
+                    Agora você pode acessar a plataforma e utilizar nossos canais de atendimento para entrar em contato com os setores disponíveis de forma rápida e segura.
+
+                    Acesse sua conta utilizando o e-mail cadastrado:
+
+                    ${linkLogin}
+
+                    Se você não realizou este cadastro, entre em contato com nossa equipe de suporte.
+
+                    Atenciosamente,
+                    Equipe Fala Pommer
+                    Prefeitura Municipal
+                `,
+
+                html: `
+                    <!DOCTYPE html>
+                    <html lang="pt-BR">
+                        <head>
+                            <meta charset="UTF-8">
+                        </head>
+
+                        <body style="
+                            margin: 0;
+                            padding: 0;
+                            background-color: #f3f5f8;
+                            font-family: Arial, sans-serif;
+                            color: #252525;
+                        ">
+                            <table
+                                width="100%"
+                                cellpadding="0"
+                                cellspacing="0"
+                                role="presentation"
+                                style="padding: 40px 15px;"
+                            >
+                                <tr>
+                                    <td align="center">
+                                        <table
+                                            width="100%"
+                                            cellpadding="0"
+                                            cellspacing="0"
+                                            role="presentation"
+                                            style="
+                                                max-width: 600px;
+                                                background-color: #ffffff;
+                                                border-radius: 12px;
+                                                overflow: hidden;
+                                                box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+                                            "
+                                        >
+                                            <tr>
+                                                <td
+                                                    align="center"
+                                                    style="
+                                                        padding: 28px;
+                                                        background-color: #1351b4;
+                                                        color: #ffffff;
+                                                    "
+                                                >
+                                                    <h1 style="margin: 0; font-size: 26px;">
+                                                        Fala Pommer
+                                                    </h1>
+
+                                                    <p style="margin: 8px 0 0;">
+                                                        Cadastro confirmado
+                                                    </p>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td style="padding: 35px 40px;">
+                                                    <h2 style="
+                                                        margin: 0 0 20px;
+                                                        font-size: 21px;
+                                                        color: #1351b4;
+                                                    ">
+                                                        Olá, ${nome}!
+                                                    </h2>
+
+                                                    <p style="line-height: 1.6;">
+                                                        Seu cadastro no
+                                                        <strong>Fala Pommer</strong>
+                                                        foi realizado com sucesso.
+                                                    </p>
+
+                                                    <p style="line-height: 1.6;">
+                                                        Agora você pode acessar a plataforma
+                                                        e entrar em contato com os setores
+                                                        disponíveis de forma rápida e segura.
+                                                    </p>
+
+                                                    <table
+                                                        width="100%"
+                                                        cellpadding="0"
+                                                        cellspacing="0"
+                                                        role="presentation"
+                                                    >
+                                                        <tr>
+                                                            <td
+                                                                align="center"
+                                                                style="padding: 22px 0;"
+                                                            >
+                                                                <a
+                                                                    href="${linkLogin}"
+                                                                    target="_blank"
+                                                                    style="
+                                                                        display: inline-block;
+                                                                        padding: 14px 28px;
+                                                                        background-color: #1351b4;
+                                                                        color: #ffffff;
+                                                                        text-decoration: none;
+                                                                        border-radius: 6px;
+                                                                        font-weight: bold;
+                                                                    "
+                                                                >
+                                                                    Acessar o Fala Pommer
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                    <p style="
+                                                        margin-top: 20px;
+                                                        font-size: 14px;
+                                                        line-height: 1.5;
+                                                        color: #666666;
+                                                    ">
+                                                        Se você não realizou este cadastro,
+                                                        entre em contato com nossa equipe
+                                                        de suporte.
+                                                    </p>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td
+                                                    align="center"
+                                                    style="
+                                                        padding: 22px;
+                                                        background-color: #eef3fb;
+                                                        color: #555555;
+                                                        font-size: 13px;
+                                                        line-height: 1.5;
+                                                    "
+                                                >
+                                                    Equipe Fala Pommer<br>
+                                                    Prefeitura Municipal
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </body>
+                    </html>
+                `,
+            });
+        } catch (erro){
+            console.log("Erro ao enviar o e-mail", erro);
+        }
+    }
+
     async enviarRecuperacaoSenha(email: string, token: string) {
         try {
             const linkRecuperacao =

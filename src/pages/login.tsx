@@ -39,7 +39,7 @@ interface RespostaApi {
   email_mascarado?: string;
   expira_em?: string;
   usuario?: {
-    tipo: "user" | "admin" | "funcionario";
+    tipo: "user" | "admin" | "funcionario" | "superAdmin";
   };
 }
 

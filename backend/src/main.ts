@@ -13,11 +13,12 @@ async function bootstrap() {
     prefix: '/uploads/',
   });
 
-  // Permite requisições do frontend local e da rede interna.
+  // Inclui a origem padrão do WebView Android nas chamadas autenticadas.
   app.enableCors({
     origin: [
       process.env.FRONTEND_URL ?? "http://localhost:5173",
       "http://192.168.103.81:5173",
+      "https://localhost",
     ],
     credentials: true
   });

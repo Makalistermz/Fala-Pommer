@@ -4,6 +4,7 @@ import { TwoFactorEmailService } from './two-factor-email.service';
 
 describe('AuthController - rotas de autenticação em duas etapas', () => {
   const authMock = {
+    signIn: jest.fn(),
     confirmarLoginDoisFatores: jest.fn(),
     confirmarLoginComCodigoRecuperacao: jest.fn(),
     renovarSessao: jest.fn(),
@@ -22,11 +23,16 @@ describe('AuthController - rotas de autenticação em duas etapas', () => {
 
   let controller: AuthController;
   const requisicao = {
+    headers: {},
     usuario: {
       sub: 7,
       tipo: 'user',
       sid: 'sessao-1',
     },
+  };
+  const resposta = {
+    cookie: jest.fn(),
+    clearCookie: jest.fn(),
   };
 
   beforeEach(() => {
@@ -49,11 +55,15 @@ describe('AuthController - rotas de autenticação em duas etapas', () => {
     await controller.confirmarLoginDoisFatores({
       token: 'token',
       codigo: '123456',
-    });
-    await controller.confirmarLoginComCodigoRecuperacao({
-      token: 'token',
-      codigoRecuperacao: 'ABCD-EFGH',
-    });
+    }, requisicao as never, resposta as never);
+    await controller.confirmarLoginComCodigoRecuperacao(
+      {
+        token: 'token',
+        codigoRecuperacao: 'ABCD-EFGH',
+      },
+      requisicao as never,
+      resposta as never,
+    );
     await controller.reenviarCodigoLoginDoisFatores({ token: 'token' });
 
     expect(authMock.confirmarLoginDoisFatores).toHaveBeenCalledWith(
@@ -151,14 +161,84 @@ describe('AuthController - rotas de autenticação em duas etapas', () => {
     );
   });
 
-  it('delega a renovacao e o logout da sessao atual', async () => {
+  it('usa o cookie web na renovacao e o remove no logout', async () => {
+    const refreshToken = 'a'.repeat(86);
+    const requisicaoWeb = {
+      ...requisicao,
+      headers: {
+        cookie: `fala_pommer_refresh_token=${refreshToken}`,
+      },
+    };
     authMock.renovarSessao.mockResolvedValue({ access_token: 'novo-jwt' });
     authMock.registrarSaida.mockResolvedValue({ mensagem: 'ok' });
 
-    await controller.renovarSessao({ refreshToken: 'a'.repeat(86) });
-    await controller.logout(requisicao as never);
+    await controller.renovarSessao(
+      {},
+      requisicaoWeb as never,
+      resposta as never,
+    );
+    await controller.logout(requisicao as never, resposta as never);
 
-    expect(authMock.renovarSessao).toHaveBeenCalledWith('a'.repeat(86));
+    expect(authMock.renovarSessao).toHaveBeenCalledWith(refreshToken);
     expect(authMock.registrarSaida).toHaveBeenCalledWith(7, 'sessao-1');
+    expect(resposta.clearCookie).toHaveBeenCalledWith(
+      'fala_pommer_refresh_token',
+      expect.objectContaining({ httpOnly: true, path: '/auth' }),
+    );
+  });
+
+  it('entrega refresh token no corpo somente para o aplicativo', async () => {
+    const refreshToken = 'a'.repeat(86);
+    const novoRefreshToken = 'b'.repeat(86);
+    const requisicaoCapacitor = {
+      headers: {
+        'x-fala-pommer-cliente': 'capacitor',
+      },
+    };
+    authMock.renovarSessao.mockResolvedValue({
+      access_token: 'novo-jwt',
+      refresh_token: novoRefreshToken,
+    });
+
+    const resultado = await controller.renovarSessao(
+      { refreshToken },
+      requisicaoCapacitor as never,
+      resposta as never,
+    );
+
+    expect(authMock.renovarSessao).toHaveBeenCalledWith(refreshToken);
+    expect(resultado).toEqual({
+      access_token: 'novo-jwt',
+      refresh_token: novoRefreshToken,
+    });
+    expect(resposta.cookie).not.toHaveBeenCalled();
+  });
+
+  it('guarda o refresh token do login web em cookie HttpOnly', async () => {
+    authMock.signIn.mockResolvedValue({
+      access_token: 'jwt',
+      refresh_token: 'c'.repeat(86),
+      usuario: { tipo: 'user' },
+    });
+
+    const resultado = await controller.login(
+      { email: 'usuario@teste.com', senha: 'Senha!123' },
+      requisicao as never,
+      resposta as never,
+    );
+
+    expect(resultado).toEqual({
+      access_token: 'jwt',
+      usuario: { tipo: 'user' },
+    });
+    expect(resposta.cookie).toHaveBeenCalledWith(
+      'fala_pommer_refresh_token',
+      'c'.repeat(86),
+      expect.objectContaining({
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/auth',
+      }),
+    );
   });
 });

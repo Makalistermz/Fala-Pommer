@@ -134,17 +134,13 @@ function Login() {
     return resultado;
   }
 
-  function concluirAcesso(resultado: RespostaApi) {
-    if (
-      !resultado.access_token ||
-      !resultado.refresh_token ||
-      !resultado.usuario
-    ) {
+  async function concluirAcesso(resultado: RespostaApi) {
+    if (!resultado.access_token || !resultado.usuario) {
       throw new Error("A resposta de autenticação está incompleta.");
     }
 
-    // Entrega os tokens ao cliente central e atualiza o usuário global.
-    iniciarSessao(
+    // Na web o refresh token está no cookie; no APK ele vem no corpo da resposta.
+    await iniciarSessao(
       {
         access_token: resultado.access_token,
         refresh_token: resultado.refresh_token,
@@ -206,7 +202,7 @@ function Login() {
         return;
       }
 
-      concluirAcesso(resultado);
+      await concluirAcesso(resultado);
     } catch (erro) {
       mostrarErro(erro);
     } finally {
@@ -245,7 +241,7 @@ function Login() {
       });
       const resultado = await lerResposta(resposta);
 
-      concluirAcesso(resultado);
+      await concluirAcesso(resultado);
     } catch (erro) {
       mostrarErro(erro);
     } finally {

@@ -8,9 +8,12 @@ import {
     Post,
     Get,
     Req,
+    Res,
     Query,
+    UnauthorizedException,
     UseGuards
 } from "@nestjs/common";
+import type { Request, Response } from "express";
 
 import { AuthGuard } from "./auth.guard";
 
@@ -22,7 +25,6 @@ import { AuthService } from "./auth.service";
 import { LoginDto } from "./dto/login.dto";
 import { Perfis } from "./decorators/perfis.decorator";
 import { PerfisGuard } from "./guards/perfis.guard";
-import { get } from "http";
 import { TwoFactorEmailService } from "./two-factor-email.service";
 import { SenhaDoisFatoresDto } from "./dto/senha-2fa.dto";
 import { CodigoDoisFatoresDto } from "./dto/codigo-2fa.dto";
@@ -31,6 +33,11 @@ import { CodigoRecuperacaoDoisFatoresDto } from "./dto/codigo-recuperacao-2fa.dt
 import { TokenDesafioDoisFatoresDto } from "./dto/token-desafio-2fa.dto";
 import { DesativarComCodigoRecuperacaoDto } from "./dto/desativar-recuperacao-2fa.dto";
 import { RenovarSessaoDto } from "./dto/renovar-sessao.dto";
+
+const COOKIE_REFRESH_TOKEN = "fala_pommer_refresh_token";
+const DURACAO_COOKIE_REFRESH_MS = 400 * 24 * 60 * 60 * 1000;
+const CABECALHO_CLIENTE = "x-fala-pommer-cliente";
+const CLIENTE_CAPACITOR = "capacitor";
 
 @Controller("auth")
 export class AuthController {
@@ -41,24 +48,33 @@ export class AuthController {
 
     @Post("2fa/login/confirm")
     @HttpCode(HttpStatus.OK)
-    confirmarLoginDoisFatores(
-        @Body() dados: CodigoDoisFatoresDto
+    async confirmarLoginDoisFatores(
+        @Body() dados: CodigoDoisFatoresDto,
+        @Req() requisicao: Request,
+        @Res({ passthrough: true }) resposta: Response
     ) {
-        return this.authService.confirmarLoginDoisFatores(
+        const resultado = await this.authService.confirmarLoginDoisFatores(
             dados.token,
             dados.codigo
         );
+
+        return this.entregarAutenticacao(resultado, requisicao, resposta);
     }
 
     @Post("2fa/login/recovery")
     @HttpCode(HttpStatus.OK)
-    confirmarLoginComCodigoRecuperacao(
-        @Body() dados: CodigoRecuperacaoDoisFatoresDto
+    async confirmarLoginComCodigoRecuperacao(
+        @Body() dados: CodigoRecuperacaoDoisFatoresDto,
+        @Req() requisicao: Request,
+        @Res({ passthrough: true }) resposta: Response
     ) {
-        return this.authService.confirmarLoginComCodigoRecuperacao(
+        const resultado =
+            await this.authService.confirmarLoginComCodigoRecuperacao(
             dados.token,
             dados.codigoRecuperacao
         );
+
+        return this.entregarAutenticacao(resultado, requisicao, resposta);
     }
 
     @Post("2fa/login/resend")
@@ -246,8 +262,11 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @UseGuards(AuthGuard)
     logout(
-        @Req() requisicao: RequisicaoAutenticada
+        @Req() requisicao: RequisicaoAutenticada,
+        @Res({ passthrough: true }) resposta: Response
     ) {
+        this.removerCookieRefresh(resposta);
+
         return this.authService.registrarSaida(
             requisicao.usuario!.sub,
             requisicao.usuario!.sid
@@ -256,8 +275,36 @@ export class AuthController {
 
     @Post("refresh")
     @HttpCode(HttpStatus.OK)
-    renovarSessao(@Body() dados: RenovarSessaoDto) {
-        return this.authService.renovarSessao(dados.refreshToken);
+    async renovarSessao(
+        @Body() dados: RenovarSessaoDto,
+        @Req() requisicao: Request,
+        @Res({ passthrough: true }) resposta: Response
+    ) {
+        const clienteCapacitor = this.ehClienteCapacitor(requisicao);
+        const refreshToken = clienteCapacitor
+            ? dados.refreshToken
+            : this.extrairCookieRefresh(requisicao);
+
+        if (!refreshToken) {
+            this.removerCookieRefresh(resposta);
+            throw new UnauthorizedException(
+                "Refresh token não informado."
+            );
+        }
+
+        try {
+            const resultado =
+                await this.authService.renovarSessao(refreshToken);
+
+            return this.entregarAutenticacao(
+                resultado,
+                requisicao,
+                resposta
+            );
+        } catch (erro) {
+            this.removerCookieRefresh(resposta);
+            throw erro;
+        }
     }
 
     @Get("area-municipe")
@@ -271,10 +318,88 @@ export class AuthController {
 
     @Post("login")
     @HttpCode(HttpStatus.OK)
-    login(@Body() dados: LoginDto) {
-        return this.authService.signIn(
+    async login(
+        @Body() dados: LoginDto,
+        @Req() requisicao: Request,
+        @Res({ passthrough: true }) resposta: Response
+    ) {
+        const resultado = await this.authService.signIn(
             dados.email,
             dados.senha
         );
+
+        return this.entregarAutenticacao(resultado, requisicao, resposta);
+    }
+
+    private entregarAutenticacao<T extends object>(
+        resultado: T,
+        requisicao: Request,
+        resposta: Response
+    ) {
+        // O APK recebe o token para guardá-lo no Keystore; a web recebe cookie.
+        const refreshToken =
+            "refresh_token" in resultado &&
+            typeof resultado.refresh_token === "string"
+                ? resultado.refresh_token
+                : undefined;
+
+        if (
+            !refreshToken ||
+            this.ehClienteCapacitor(requisicao)
+        ) {
+            return resultado;
+        }
+
+        this.definirCookieRefresh(resposta, refreshToken);
+
+        const resultadoSemRefresh = {
+            ...resultado
+        } as T & { refresh_token?: string };
+        delete resultadoSemRefresh.refresh_token;
+
+        return resultadoSemRefresh;
+    }
+
+    private ehClienteCapacitor(requisicao: Request) {
+        return requisicao.headers[CABECALHO_CLIENTE] === CLIENTE_CAPACITOR;
+    }
+
+    private extrairCookieRefresh(requisicao: Request) {
+        // Lê somente o cookie de sessão sem expô-lo ao JavaScript do navegador.
+        const cookies = requisicao.headers.cookie?.split(";") ?? [];
+        const prefixo = `${COOKIE_REFRESH_TOKEN}=`;
+        const cookie = cookies
+            .map((item) => item.trim())
+            .find((item) => item.startsWith(prefixo));
+
+        if (!cookie) {
+            return undefined;
+        }
+
+        try {
+            return decodeURIComponent(cookie.slice(prefixo.length));
+        } catch {
+            return undefined;
+        }
+    }
+
+    private definirCookieRefresh(resposta: Response, refreshToken: string) {
+        // A renovação atualiza a validade do cookie persistente e HttpOnly.
+        resposta.cookie(COOKIE_REFRESH_TOKEN, refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/auth",
+            maxAge: DURACAO_COOKIE_REFRESH_MS
+        });
+    }
+
+    private removerCookieRefresh(resposta: Response) {
+        resposta.clearCookie(COOKIE_REFRESH_TOKEN, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/auth"
+        });
     }
 }

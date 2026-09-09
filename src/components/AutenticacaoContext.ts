@@ -10,7 +10,7 @@ export interface UsuarioAutenticado {
 
 export interface TokensAutenticacao {
   access_token: string;
-  refresh_token: string;
+  refresh_token?: string;
 }
 
 export type SituacaoAutenticacao =
@@ -24,7 +24,7 @@ interface ValorAutenticacaoContext {
   iniciarSessao: (
     tokens: TokensAutenticacao,
     usuario: UsuarioAutenticado,
-  ) => void;
+  ) => Promise<void>;
   encerrarSessao: () => Promise<void>;
 }
 

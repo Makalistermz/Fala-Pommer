@@ -4,7 +4,6 @@ import {
   apiFetch,
   limparSessaoLocal,
   observarSessaoEncerrada,
-  obterAccessToken,
   registrarTokensSessao,
   revogarSessaoAtual,
 } from "../services/api";
@@ -36,20 +35,12 @@ export function AutenticacaoProvider({
     });
 
     async function restaurarSessao() {
-      // Evita consultar o perfil quando não há nenhuma autenticação anterior.
-      if (!obterAccessToken()) {
-        if (ativo) {
-          setCarregando(false);
-        }
-        return;
-      }
-
       try {
-        // O backend confirma a validade, o perfil e a sessão vinculada ao JWT.
+        // Também tenta renovar via cookie web ou cofre nativo quando o JWT sumiu.
         const resposta = await apiFetch("/auth/perfil");
 
         if (!resposta.ok) {
-          limparSessaoLocal();
+          await limparSessaoLocal();
           return;
         }
 
@@ -59,7 +50,7 @@ export function AutenticacaoProvider({
           setUsuario(perfil);
         }
       } catch {
-        limparSessaoLocal();
+        await limparSessaoLocal();
       } finally {
         if (ativo) {
           setCarregando(false);
@@ -76,9 +67,12 @@ export function AutenticacaoProvider({
   }, []);
 
   const iniciarSessao = useCallback(
-    (tokens: TokensAutenticacao, usuarioLogado: UsuarioAutenticado) => {
+    async (
+      tokens: TokensAutenticacao,
+      usuarioLogado: UsuarioAutenticado,
+    ) => {
       // Disponibiliza os tokens ao cliente HTTP e libera as rotas protegidas.
-      registrarTokensSessao(tokens);
+      await registrarTokensSessao(tokens);
       setUsuario(usuarioLogado);
       setCarregando(false);
     },

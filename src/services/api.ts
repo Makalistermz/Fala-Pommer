@@ -1,10 +1,18 @@
+import {
+  ehClienteCapacitor,
+  obterRefreshTokenSeguro,
+  removerRefreshTokenSeguro,
+  salvarRefreshTokenSeguro,
+} from "./armazenamentoSessao";
+
 const API_URL = import.meta.env.VITE_API_URL;
 const CHAVE_ACCESS_TOKEN = "access_token";
 const EVENTO_SESSAO_ENCERRADA = "fala-pommer:sessao-encerrada";
+const CABECALHO_CLIENTE = "X-Fala-Pommer-Cliente";
 
 interface TokensSessao {
   access_token: string;
-  refresh_token: string;
+  refresh_token?: string;
 }
 
 let refreshTokenEmMemoria: string | null = null;
@@ -15,16 +23,28 @@ export function obterAccessToken() {
   return localStorage.getItem(CHAVE_ACCESS_TOKEN);
 }
 
-export function registrarTokensSessao(tokens: TokensSessao) {
+export async function registrarTokensSessao(tokens: TokensSessao) {
+  if (ehClienteCapacitor()) {
+    if (!tokens.refresh_token) {
+      throw new Error("O aplicativo não recebeu o refresh token da sessão.");
+    }
+
+    // No APK, persiste a credencial longa antes de liberar a sessão na interface.
+    await salvarRefreshTokenSeguro(tokens.refresh_token);
+    refreshTokenEmMemoria = tokens.refresh_token;
+  } else {
+    // Na web, o refresh token permanece exclusivamente no cookie HttpOnly.
+    refreshTokenEmMemoria = null;
+  }
+
   localStorage.setItem(CHAVE_ACCESS_TOKEN, tokens.access_token);
-  // O refresh token só será persistido após os armazenamentos seguros web e APK.
-  refreshTokenEmMemoria = tokens.refresh_token;
 }
 
 // Limpa os tokens e avisa o contexto para atualizar imediatamente a interface.
-export function limparSessaoLocal() {
+export async function limparSessaoLocal() {
   localStorage.removeItem(CHAVE_ACCESS_TOKEN);
   refreshTokenEmMemoria = null;
+  await removerRefreshTokenSeguro();
   window.dispatchEvent(new Event(EVENTO_SESSAO_ENCERRADA));
 }
 
@@ -40,11 +60,25 @@ export function requisicaoPublica(
   caminho: string,
   opcoes: RequestInit = {},
 ) {
-  // Prepara as chamadas para receber cookies HttpOnly em uma etapa posterior.
+  const headers = prepararCabecalhos(opcoes.headers);
+
+  // Permite que o navegador envie o cookie HttpOnly nas rotas de autenticação.
   return fetch(`${API_URL}${caminho}`, {
     ...opcoes,
+    headers,
     credentials: "include",
   });
+}
+
+function prepararCabecalhos(headersIniciais?: HeadersInit) {
+  const headers = new Headers(headersIniciais);
+
+  if (ehClienteCapacitor()) {
+    // O backend usa esta marca para devolver o refresh token somente ao APK.
+    headers.set(CABECALHO_CLIENTE, "capacitor");
+  }
+
+  return headers;
 }
 
 async function executarRequisicaoAutenticada(
@@ -52,7 +86,7 @@ async function executarRequisicaoAutenticada(
   opcoes: RequestInit,
 ) {
   // Centraliza a inclusão do JWT em todas as requisições autenticadas novas.
-  const headers = new Headers(opcoes.headers);
+  const headers = prepararCabecalhos(opcoes.headers);
   const accessToken = obterAccessToken();
 
   if (accessToken) {
@@ -67,8 +101,13 @@ async function executarRequisicaoAutenticada(
 }
 
 async function renovarAccessToken() {
-  // Sem uma credencial de renovação não é possível prolongar a sessão atual.
-  if (!refreshTokenEmMemoria) {
+  const clienteCapacitor = ehClienteCapacitor();
+  const refreshToken = clienteCapacitor
+    ? refreshTokenEmMemoria ?? (await obterRefreshTokenSeguro())
+    : null;
+
+  // O navegador usa o cookie; somente o APK precisa enviar o token no corpo.
+  if (clienteCapacitor && !refreshToken) {
     return false;
   }
 
@@ -77,27 +116,35 @@ async function renovarAccessToken() {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      refreshToken: refreshTokenEmMemoria,
-    }),
+    body: JSON.stringify(
+      clienteCapacitor ? { refreshToken } : {},
+    ),
   });
 
   if (!resposta.ok) {
-    limparSessaoLocal();
+    await limparSessaoLocal();
     return false;
   }
 
   const tokens = (await resposta.json()) as Partial<TokensSessao>;
 
-  if (!tokens.access_token || !tokens.refresh_token) {
-    limparSessaoLocal();
+  if (
+    !tokens.access_token ||
+    (clienteCapacitor && !tokens.refresh_token)
+  ) {
+    await limparSessaoLocal();
     return false;
   }
 
-  registrarTokensSessao({
-    access_token: tokens.access_token,
-    refresh_token: tokens.refresh_token,
-  });
+  try {
+    await registrarTokensSessao({
+      access_token: tokens.access_token,
+      refresh_token: tokens.refresh_token,
+    });
+  } catch {
+    await limparSessaoLocal();
+    return false;
+  }
 
   return true;
 }
@@ -126,7 +173,7 @@ export async function apiFetch(
   const renovado = await renovarAccessTokenUmaVez();
 
   if (!renovado) {
-    limparSessaoLocal();
+    await limparSessaoLocal();
     return resposta;
   }
 
@@ -134,7 +181,7 @@ export async function apiFetch(
   resposta = await executarRequisicaoAutenticada(caminho, opcoes);
 
   if (resposta.status === 401) {
-    limparSessaoLocal();
+    await limparSessaoLocal();
   }
 
   return resposta;
@@ -143,12 +190,10 @@ export async function apiFetch(
 export async function revogarSessaoAtual() {
   // A limpeza local ocorre mesmo se o servidor estiver indisponível.
   try {
-    if (obterAccessToken()) {
-      await apiFetch("/auth/logout", {
-        method: "POST",
-      });
-    }
+    await apiFetch("/auth/logout", {
+      method: "POST",
+    });
   } finally {
-    limparSessaoLocal();
+    await limparSessaoLocal();
   }
 }

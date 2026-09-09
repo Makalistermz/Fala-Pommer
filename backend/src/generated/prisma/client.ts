@@ -45,6 +45,11 @@ export { Prisma }
  */
 export type cadastro = Prisma.cadastroModel
 /**
+ * Model sessao
+ * 
+ */
+export type sessao = Prisma.sessaoModel
+/**
  * Model erro_autenticacao
  * 
  */

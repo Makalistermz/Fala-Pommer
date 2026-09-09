@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   cadastro: 'cadastro',
+  sessao: 'sessao',
   erro_autenticacao: 'erro_autenticacao',
   login_evento: 'login_evento',
   conversa: 'conversa',
@@ -107,6 +108,20 @@ export const CadastroScalarFieldEnum = {
 } as const
 
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]
+
+
+export const SessaoScalarFieldEnum = {
+  id: 'id',
+  usuario_id: 'usuario_id',
+  refresh_token_hash: 'refresh_token_hash',
+  nome_dispositivo: 'nome_dispositivo',
+  plataforma: 'plataforma',
+  ultimo_uso_em: 'ultimo_uso_em',
+  revogada_em: 'revogada_em',
+  criado_em: 'criado_em'
+} as const
+
+export type SessaoScalarFieldEnum = (typeof SessaoScalarFieldEnum)[keyof typeof SessaoScalarFieldEnum]
 
 
 export const Erro_autenticacaoScalarFieldEnum = {
@@ -301,6 +316,16 @@ export const cadastroOrderByRelevanceFieldEnum = {
 } as const
 
 export type cadastroOrderByRelevanceFieldEnum = (typeof cadastroOrderByRelevanceFieldEnum)[keyof typeof cadastroOrderByRelevanceFieldEnum]
+
+
+export const sessaoOrderByRelevanceFieldEnum = {
+  id: 'id',
+  refresh_token_hash: 'refresh_token_hash',
+  nome_dispositivo: 'nome_dispositivo',
+  plataforma: 'plataforma'
+} as const
+
+export type sessaoOrderByRelevanceFieldEnum = (typeof sessaoOrderByRelevanceFieldEnum)[keyof typeof sessaoOrderByRelevanceFieldEnum]
 
 
 export const conversaOrderByRelevanceFieldEnum = {

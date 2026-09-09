@@ -9,6 +9,7 @@ import { UsuariosService } from "../usuarios/usuarios.service";
 import * as bcrypt from "bcrypt";
 import { PrismaService } from "../prisma/prisma.service";
 import { TwoFactorEmailService } from "./two-factor-email.service";
+import { createHash, randomBytes } from "node:crypto";
 
 const NOMES_MESES = [
     "Janeiro",
@@ -184,10 +185,28 @@ export class AuthService {
             }
         });
 
+        const refreshToken = randomBytes(64).toString("base64url");
+        const refreshTokenHash = createHash("sha256")
+            .update(refreshToken)
+            .digest("hex");
+
+        const sessao = await this.prisma.sessao.create({
+            data: {
+                usuario_id: usuario.id,
+                refresh_token_hash: refreshTokenHash,
+                ultimo_uso_em: agoraEmSaoPaulo(),
+                criado_em: agoraEmSaoPaulo()
+            },
+            select: {
+                id: true
+            }
+        });
+
         const payload = {
             sub: usuario.id,
             tipo: usuario.tipo_usuario,
-            ver: usuario.versao_token
+            ver: usuario.versao_token,
+            sid: sessao.id
         };
 
         const accessToken =
@@ -196,6 +215,7 @@ export class AuthService {
         return {
             requer_segunda_etapa: false,
             access_token: accessToken,
+            refresh_token: refreshToken,
 
             usuario: {
                 id: usuario.id,

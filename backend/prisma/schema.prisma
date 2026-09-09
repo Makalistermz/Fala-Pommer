@@ -44,11 +44,26 @@ model cadastro {
   historicos_como_usuario_alvo     historico_administrativo[] @relation("HistoricoUsuarioAlvo")
   login_evento                     login_evento[]
   mensagens_enviadas               mensagem[]                 @relation("RemetenteMensagem")
+  sessoes                          sessao[]
 
   @@index([setor_id], map: "fk_cadastro_setor")
   @@index([secretaria_id], map: "fk_cadastro_secretaria")
   @@index([desativado_em, id], map: "idx_cadastro_status_id")
   @@index([desativado_por], map: "idx_cadastro_desativado_por")
+}
+
+model sessao {
+  id                 String    @id @default(cuid())
+  usuario_id         Int
+  refresh_token_hash String    @unique(map: "uq_sessao_refresh_token_hash") @db.Char(64)
+  nome_dispositivo   String?   @db.VarChar(150)
+  plataforma         String?   @db.VarChar(30)
+  ultimo_uso_em      DateTime  @default(now()) @db.DateTime(0)
+  revogada_em        DateTime? @db.DateTime(0)
+  criado_em          DateTime  @default(now()) @db.DateTime(0)
+  usuario            cadastro  @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_sessao_usuario")
+
+  @@index([usuario_id], map: "idx_sessao_usuario")
 }
 
 model erro_autenticacao {

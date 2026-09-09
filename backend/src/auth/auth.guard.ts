@@ -14,6 +14,7 @@ export type JwtPayload = {
     sub: number;
     tipo: "user" | "admin" | "funcionario" | "superAdmin";
     ver: number;
+    sid: string;
     iat: number;
     exp: number;
 };

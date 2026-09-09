@@ -398,6 +398,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   cadastro: 'cadastro',
+  sessao: 'sessao',
   erro_autenticacao: 'erro_autenticacao',
   login_evento: 'login_evento',
   conversa: 'conversa',
@@ -427,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao"
+    modelProps: "cadastro" | "sessao" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -494,6 +495,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.cadastroCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CadastroCountAggregateOutputType> | number
+        }
+      }
+    }
+    sessao: {
+      payload: Prisma.$sessaoPayload<ExtArgs>
+      fields: Prisma.sessaoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.sessaoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sessaoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.sessaoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sessaoPayload>
+        }
+        findFirst: {
+          args: Prisma.sessaoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sessaoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.sessaoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sessaoPayload>
+        }
+        findMany: {
+          args: Prisma.sessaoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sessaoPayload>[]
+        }
+        create: {
+          args: Prisma.sessaoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sessaoPayload>
+        }
+        createMany: {
+          args: Prisma.sessaoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.sessaoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sessaoPayload>
+        }
+        update: {
+          args: Prisma.sessaoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sessaoPayload>
+        }
+        deleteMany: {
+          args: Prisma.sessaoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.sessaoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.sessaoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sessaoPayload>
+        }
+        aggregate: {
+          args: Prisma.SessaoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSessao>
+        }
+        groupBy: {
+          args: Prisma.sessaoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SessaoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.sessaoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SessaoCountAggregateOutputType> | number
         }
       }
     }
@@ -1485,6 +1552,20 @@ export const CadastroScalarFieldEnum = {
 export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typeof CadastroScalarFieldEnum]
 
 
+export const SessaoScalarFieldEnum = {
+  id: 'id',
+  usuario_id: 'usuario_id',
+  refresh_token_hash: 'refresh_token_hash',
+  nome_dispositivo: 'nome_dispositivo',
+  plataforma: 'plataforma',
+  ultimo_uso_em: 'ultimo_uso_em',
+  revogada_em: 'revogada_em',
+  criado_em: 'criado_em'
+} as const
+
+export type SessaoScalarFieldEnum = (typeof SessaoScalarFieldEnum)[keyof typeof SessaoScalarFieldEnum]
+
+
 export const Erro_autenticacaoScalarFieldEnum = {
   id: 'id',
   usuario_id: 'usuario_id',
@@ -1677,6 +1758,16 @@ export const cadastroOrderByRelevanceFieldEnum = {
 } as const
 
 export type cadastroOrderByRelevanceFieldEnum = (typeof cadastroOrderByRelevanceFieldEnum)[keyof typeof cadastroOrderByRelevanceFieldEnum]
+
+
+export const sessaoOrderByRelevanceFieldEnum = {
+  id: 'id',
+  refresh_token_hash: 'refresh_token_hash',
+  nome_dispositivo: 'nome_dispositivo',
+  plataforma: 'plataforma'
+} as const
+
+export type sessaoOrderByRelevanceFieldEnum = (typeof sessaoOrderByRelevanceFieldEnum)[keyof typeof sessaoOrderByRelevanceFieldEnum]
 
 
 export const conversaOrderByRelevanceFieldEnum = {
@@ -1976,6 +2067,7 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
   cadastro?: Prisma.cadastroOmit
+  sessao?: Prisma.sessaoOmit
   erro_autenticacao?: Prisma.erro_autenticacaoOmit
   login_evento?: Prisma.login_eventoOmit
   conversa?: Prisma.conversaOmit

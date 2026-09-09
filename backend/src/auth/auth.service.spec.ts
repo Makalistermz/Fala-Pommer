@@ -25,6 +25,9 @@ describe('AuthService - autenticação em duas etapas', () => {
     login_evento: {
       create: jest.fn(),
     },
+    sessao: {
+      create: jest.fn(),
+    },
     erro_autenticacao: {
       create: jest.fn(),
       findMany: jest.fn(),
@@ -53,6 +56,7 @@ describe('AuthService - autenticação em duas etapas', () => {
     jest.clearAllMocks();
     (bcrypt.compare as jest.Mock).mockResolvedValue(true);
     prismaMock.login_evento.create.mockResolvedValue({});
+    prismaMock.sessao.create.mockResolvedValue({ id: 'sessao-1' });
     prismaMock.erro_autenticacao.create.mockResolvedValue({});
     jwtMock.signAsync.mockResolvedValue('jwt-final');
 
@@ -97,10 +101,28 @@ describe('AuthService - autenticação em duas etapas', () => {
       expect.objectContaining({
         requer_segunda_etapa: false,
         access_token: 'jwt-final',
+        refresh_token: expect.any(String),
       }),
     );
     expect(twoFactorMock.iniciarLogin).not.toHaveBeenCalled();
     expect(prismaMock.login_evento.create).toHaveBeenCalledTimes(1);
+    expect(prismaMock.sessao.create).toHaveBeenCalledWith({
+      data: {
+        usuario_id: usuario.id,
+        refresh_token_hash: expect.stringMatching(/^[a-f0-9]{64}$/),
+        ultimo_uso_em: expect.any(Date),
+        criado_em: expect.any(Date),
+      },
+      select: {
+        id: true,
+      },
+    });
+    expect(jwtMock.signAsync).toHaveBeenCalledWith({
+      sub: usuario.id,
+      tipo: usuario.tipo_usuario,
+      ver: usuario.versao_token,
+      sid: 'sessao-1',
+    });
   });
 
   it('permite que um perfil desativado entre como usuário comum', async () => {

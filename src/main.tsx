@@ -9,6 +9,7 @@ import { inicializarAltoContraste } from "./library/altoContraste.ts";
 import { inicializarTextoAmpliado } from "./library/textoAmpliado.ts";
 import { inicializarPlanoFundoConversa } from "./library/planoFundoConversa.ts";
 import { inicializarTemaAparencia } from "./library/temaAparencia.ts";
+import { AutenticacaoProvider } from "./components/AutenticacaoProvider.tsx";
 import "./index.css";
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -21,9 +22,12 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <GoogleOAuthProvider clientId={googleClientId}>
-        <NavegacaoAudioProvider>
-          <App />
-        </NavegacaoAudioProvider>
+        {/* Disponibiliza a sessão restaurada para todas as rotas da aplicação. */}
+        <AutenticacaoProvider>
+          <NavegacaoAudioProvider>
+            <App />
+          </NavegacaoAudioProvider>
+        </AutenticacaoProvider>
       </GoogleOAuthProvider>
     </BrowserRouter>
   </StrictMode>

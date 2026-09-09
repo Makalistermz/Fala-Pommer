@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { ModalFeedback } from "../../components/ModalFeedback";
 import { NotificacaoConfiguracao } from "../../components/NotificacaoConfiguracao";
+import { useAutenticacao } from "../../components/AutenticacaoContext";
 
 type EtapaModal =
   | "senha-ativacao"
@@ -56,6 +57,7 @@ function formatarCodigoRecuperacao(valor: string) {
 
 function ContaSeguranca() {
   const navigate = useNavigate();
+  const { encerrarSessao } = useAutenticacao();
   const [ativo, setAtivo] = useState(false);
   const [carregandoStatus, setCarregandoStatus] = useState(true);
   const [carregando, setCarregando] = useState(false);
@@ -399,19 +401,10 @@ function ContaSeguranca() {
   }
 
   async function sair() {
-    const token = localStorage.getItem("access_token");
-
     try {
-      if (token) {
-        await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
+      // Usa o fluxo central para revogar a sessão e limpar os tokens.
+      await encerrarSessao();
     } finally {
-      localStorage.removeItem("access_token");
       navigate("/");
     }
   }

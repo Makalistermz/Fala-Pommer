@@ -4,8 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import imagemLogin from "../assets/img/imagem-pagina-login.png";
 import "./css/LoginCadastro.css";
 import "./css/RecuperarSenha.css";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { ModalFeedback } from "../components/ModalFeedback";
+import { useAutenticacao } from "../components/AutenticacaoContext";
+import { requisicaoPublica } from "../services/api";
 
 import {
   GoogleLogin,
@@ -35,6 +37,7 @@ interface RespostaApi {
   message?: string | string[];
   requer_segunda_etapa?: boolean;
   access_token?: string;
+  refresh_token?: string;
   token?: string;
   email_mascarado?: string;
   expira_em?: string;
@@ -89,6 +92,11 @@ function Login() {
   });
 
   const navigate = useNavigate();
+  const {
+    iniciarSessao,
+    situacao: situacaoAutenticacao,
+    usuario: usuarioAutenticado,
+  } = useAutenticacao();
 
   useEffect(() => {
     const container = googleButtonContainerRef.current;
@@ -127,11 +135,22 @@ function Login() {
   }
 
   function concluirAcesso(resultado: RespostaApi) {
-    if (!resultado.access_token || !resultado.usuario) {
+    if (
+      !resultado.access_token ||
+      !resultado.refresh_token ||
+      !resultado.usuario
+    ) {
       throw new Error("A resposta de autenticação está incompleta.");
     }
 
-    localStorage.setItem("access_token", resultado.access_token);
+    // Entrega os tokens ao cliente central e atualiza o usuário global.
+    iniciarSessao(
+      {
+        access_token: resultado.access_token,
+        refresh_token: resultado.refresh_token,
+      },
+      resultado.usuario,
+    );
 
     if (resultado.usuario.tipo === "user") {
       navigate("/sectors");
@@ -158,19 +177,16 @@ function Login() {
     const formulario = new FormData(event.currentTarget);
 
     try {
-      const resposta = await fetch(
-        `${import.meta.env.VITE_API_URL}/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: formulario.get("email"),
-            senha: formulario.get("senha"),
-          }),
+      const resposta = await requisicaoPublica("/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          email: formulario.get("email"),
+          senha: formulario.get("senha"),
+        }),
+      });
       const resultado = await lerResposta(resposta);
 
       if (resultado.requer_segunda_etapa) {
@@ -220,16 +236,13 @@ function Login() {
             token: desafio.token,
             codigo,
           };
-      const resposta = await fetch(
-        `${import.meta.env.VITE_API_URL}${endpoint}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(corpo),
+      const resposta = await requisicaoPublica(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(corpo),
+      });
       const resultado = await lerResposta(resposta);
 
       concluirAcesso(resultado);
@@ -246,18 +259,15 @@ function Login() {
     setCarregando(true);
 
     try {
-      const resposta = await fetch(
-        `${import.meta.env.VITE_API_URL}/auth/2fa/login/resend`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token: desafio.token,
-          }),
+      const resposta = await requisicaoPublica("/auth/2fa/login/resend", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          token: desafio.token,
+        }),
+      });
       const resultado = await lerResposta(resposta);
 
       setDesafio((atual) =>
@@ -313,6 +323,20 @@ function Login() {
 
   function handleError() {
     console.error("Falha na autenticação do Google.");
+  }
+
+  if (situacaoAutenticacao === "carregando") {
+    return <p>Restaurando sessão...</p>;
+  }
+
+  if (usuarioAutenticado) {
+    // Impede que uma sessão válida volte a exibir o formulário de login.
+    return (
+      <Navigate
+        to={usuarioAutenticado.tipo === "user" ? "/sectors" : "/home"}
+        replace
+      />
+    );
   }
 
   return (

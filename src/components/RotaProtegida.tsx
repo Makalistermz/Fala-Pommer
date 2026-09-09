@@ -1,81 +1,29 @@
 // Protege páginas que exigem autenticação ou perfil específico.
-import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router";
-
-type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
+import {
+    useAutenticacao,
+    type TipoUsuario
+} from "./AutenticacaoContext";
 
 interface RotaProtegidaProps {
     perfisPermitidos: TipoUsuario[];
 }
 
-type Situacao =
-    | "carregando"
-    | "permitido"
-    | "negado"
-    | "deslogado";
-
 function RotaProtegida({
     perfisPermitidos
 }: RotaProtegidaProps) {
-    const [situacao, setSituacao] =
-        useState<Situacao>("carregando");
-
-    useEffect(() => {
-        async function verificarPermissao() {
-            const token =
-                localStorage.getItem("access_token");
-
-            if (!token) {
-                setSituacao("deslogado");
-                return;
-            }
-
-            try {
-                const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/auth/perfil`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
-
-                if (resposta.status === 401) {
-                    setSituacao("deslogado");
-                    return;
-                }
-
-                if (!resposta.ok) {
-                    setSituacao("negado");
-                    return;
-                }
-
-                const usuario = await resposta.json();
-
-                if (
-                    perfisPermitidos.includes(usuario.tipo)
-                ) {
-                    setSituacao("permitido");
-                } else {
-                    setSituacao("negado");
-                }
-            } catch {
-                setSituacao("deslogado");
-            }
-        }
-
-        verificarPermissao();
-    }, [perfisPermitidos]);
+    // Reutiliza a verificação feita uma única vez durante a inicialização.
+    const { situacao, usuario } = useAutenticacao();
 
     if (situacao === "carregando") {
         return <p>Verificando permissão...</p>;
     }
 
-    if (situacao === "deslogado") {
+    if (!usuario) {
         return <Navigate to="/" replace />;
     }
 
-    if (situacao === "negado") {
+    if (!perfisPermitidos.includes(usuario.tipo)) {
         return <Navigate to="/SemPermissao" replace />;
     }
 

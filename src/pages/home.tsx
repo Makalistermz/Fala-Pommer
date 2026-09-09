@@ -20,6 +20,7 @@ import {
 } from "../library/gravadorAudio";
 import { ModalFinalizarConversa } from "../components/ModalFinalizarConversa";
 import { ModalFeedback } from "../components/ModalFeedback";
+import { useAutenticacao } from "../components/AutenticacaoContext";
 
 type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 type FiltroConversa = "todos" | "nao-lidas" | "grupos";
@@ -336,6 +337,7 @@ function Home() {
     const [processandoGravacaoAudio, setProcessandoGravacaoAudio] = useState(false);
 
     const navigate = useNavigate();
+    const { encerrarSessao } = useAutenticacao();
 
     async function finalizarConversaSelecionada() {
         if (menuConversaMobileRef.current) {
@@ -831,19 +833,10 @@ function Home() {
     }
 
     async function sair() {
-        const token = localStorage.getItem("access_token");
-
         try {
-            if (token) {
-                await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                });
-            }
+            // Usa o fluxo central para revogar a sessão e limpar os tokens.
+            await encerrarSessao();
         } finally {
-            localStorage.removeItem("access_token");
             navigate("/");
         }
     }

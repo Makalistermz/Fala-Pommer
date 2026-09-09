@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { obterItensPaginacao } from "../../../library/paginacao";
 import { ModalConfirmacao } from "../../../components/ModalConfirmacao";
 import { ModalFeedback } from "../../../components/ModalFeedback";
+import { apiFetch } from "../../../services/api";
 
 // Define os dados de usuário utilizados na listagem e na edição.
 interface Usuario {
@@ -108,16 +109,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
     useEffect(() => {
         // Carrega a lista completa de usuários ao abrir a tela.
         async function carregarUsuarios() {
-            const token = localStorage.getItem("access_token");
-
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/usuarios`,
-                {
-                    headers: {
-                    Authorization: `Bearer ${token}`,
-                    },
-                },
-            );
+            const resposta = await apiFetch("/usuarios");
 
             if (!resposta.ok) {
                 throw new Error("Não foi possível carregar os usuários");
@@ -133,12 +125,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
     useEffect(() => {
         // Carrega os setores disponíveis para edição de funcionários.
         async function carregarSetores() {
-            const token = localStorage.getItem("access_token");
-            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const resposta = await apiFetch("/setores");
 
             if (!resposta.ok) {
                 throw new Error("Não foi possível carregar os setores");
@@ -154,12 +141,7 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
     useEffect(() => {
         // Carrega as secretarias disponíveis para edição de administradores.
         async function carregarSecretarias() {
-            const token = localStorage.getItem("access_token");
-            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/secretaria`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const resposta = await apiFetch("/secretaria");
 
             if (!resposta.ok) {
                 throw new Error("Não foi possível carregar as secretarias");
@@ -207,13 +189,11 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
         setSalvandoAlteracoes(true);
 
         try {
-            const token = localStorage.getItem("access_token");
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/usuarios/${usuarioEmEdicao.id}`,
+            const resposta = await apiFetch(
+                `/usuarios/${usuarioEmEdicao.id}`,
                 {
                     method: "PATCH",
                     headers: {
-                        Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
@@ -285,15 +265,13 @@ function UsuariosAtivos({ exibirDesativados = false }: UsuariosAtivosProps) {
         setUsuarioSendoAlterado(usuarioParaAlterarStatus.id);
 
         try {
-            const token = localStorage.getItem("access_token");
             // Define dinamicamente o endpoint conforme o status atual.
             const acao = estaDesativado ? "ativar" : "desativar";
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/usuarios/${usuarioParaAlterarStatus.id}/${acao}`,
+            const resposta = await apiFetch(
+                `/usuarios/${usuarioParaAlterarStatus.id}/${acao}`,
                 {
                     method: "PATCH",
                     headers: {
-                        Authorization: `Bearer ${token}`,
                         ...(!estaDesativado
                             ? { "Content-Type": "application/json" }
                             : {}),

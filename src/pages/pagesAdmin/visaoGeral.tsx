@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import { Bar, Line } from "react-chartjs-2";
 import gsap from 'gsap';
+import { apiFetch } from "../../services/api";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -326,21 +327,10 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
         const controlador = new AbortController();
 
         async function carregarLoginsMensais() {
-            const token = localStorage.getItem("access_token");
-
-            if (!token) {
-                setErro("Sessão expirada. Entre novamente para consultar os dados.");
-                setCarregando(false);
-                return;
-            }
-
             try {
-                const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/auth/logins-por-mes?ano=${anoAtual}`,
+                const resposta = await apiFetch(
+                    `/auth/logins-por-mes?ano=${anoAtual}`,
                     {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
                         signal: controlador.signal,
                     },
                 );
@@ -373,19 +363,8 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
     // Busca o total geral de usuários cadastrados.
     useEffect(() => {
         async function carregarQuantUsuarios() {
-            const token = localStorage.getItem("access_token");
-
-            if (!token) return;
-
             try {
-                const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/auth/quantidade-usuarios`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
-                );
+                const resposta = await apiFetch("/auth/quantidade-usuarios");
 
                 if (!resposta.ok) {
                     throw new Error("Não foi possível buscar os usuários.");
@@ -405,12 +384,7 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
     useEffect(() => {
         async function carregarQuantSecretarias() {
             try {
-                const token = localStorage.getItem("access_token");
-                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/secretaria`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    }
-                });
+                const resposta = await apiFetch("/secretaria");
 
                 if (!resposta.ok) {
                     throw new Error("Não foi possível buscar as secretarias.");
@@ -430,12 +404,7 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
     useEffect(() => {
         async function carregarQuantSetores() {
             try {
-                const token = localStorage.getItem("access_token");
-                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    }
-                });
+                const resposta = await apiFetch("/setores");
 
                 if (!resposta.ok) {
                     throw new Error("Não foi possível buscar os setores.");
@@ -454,18 +423,9 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
     // Busca os totais agrupados por perfil para o gráfico de barras.
     useEffect(() => {
         async function carregarQuantUsuariosCategoria() {
-            const token = localStorage.getItem("access_token");
-
-            if (!token) return;
-
             try {
-                const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/auth/quantidade-usuarios-categoria`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        },
-                    },
+                const resposta = await apiFetch(
+                    "/auth/quantidade-usuarios-categoria",
                 );
 
                 if (!resposta.ok) {
@@ -485,18 +445,8 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
     // Busca todos os usuários para identificar quais permanecem desativados.
     useEffect(() => {
         async function carregarUsuariosDesativados() {
-            const token = localStorage.getItem("access_token");
-
-            if (!token) return;
-
             try {
-                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/usuarios`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        },
-                    },
-                );
+                const resposta = await apiFetch("/usuarios");
 
                 if (!resposta.ok) {
                     throw new Error("Não foi possível buscar os usuários desativados.");
@@ -516,18 +466,9 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
     // Preserva no gráfico desativações de usuários que já foram reativados.
     useEffect(() => {
         async function carregarHistoricoDesativacoes() {
-            const token = localStorage.getItem("access_token");
-
-            if (!token) return;
-
             try {
-                const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/usuarios/historico-administrativo`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
+                const resposta = await apiFetch(
+                    "/usuarios/historico-administrativo",
                 );
 
                 if (!resposta.ok) {
@@ -546,19 +487,8 @@ function VisaoGeral({ onVerUsuarios, onVerAvaliacoes }: VisaoGeralProps) {
 
     useEffect(() => {
         async function carregarAvaliacoes() {
-            const token = localStorage.getItem("access_token");
-
-            if (!token) return;
-
             try {
-                const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/conversas/avaliacoes`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
-                );
+                const resposta = await apiFetch("/conversas/avaliacoes");
 
                 if (!resposta.ok) {
                     throw new Error("Não foi possivel buscar as avaliações")

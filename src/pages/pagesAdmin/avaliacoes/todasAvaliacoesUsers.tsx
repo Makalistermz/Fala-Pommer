@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { obterItensPaginacao } from "../../../library/paginacao";
+import { apiFetch } from "../../../services/api";
 
 interface Avaliacao {
     id: number;
@@ -47,21 +48,10 @@ function TodasAvaliacoesUsers() {
         const controlador = new AbortController();
 
         async function carregarAvaliacoes() {
-            const token = localStorage.getItem("access_token");
-
-            if (!token) {
-                setErro("Sessão expirada. Entre novamente para consultar as avaliações.");
-                setCarregando(false);
-                return;
-            }
-
             try {
-                const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/conversas/avaliacoes`,
+                const resposta = await apiFetch(
+                    "/conversas/avaliacoes",
                     {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
                         signal: controlador.signal,
                     },
                 );

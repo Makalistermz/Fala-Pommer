@@ -10,7 +10,7 @@ import {
     type ChangeEvent,
     type RefObject,
 } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import EmojiPicker from "../assets/emojiPicker";
 import gsap from "gsap";
 import {
@@ -21,6 +21,7 @@ import {
 import { ModalFinalizarConversa } from "../components/ModalFinalizarConversa";
 import { ModalFeedback } from "../components/ModalFeedback";
 import { useAutenticacao } from "../components/AutenticacaoContext";
+import { apiFetch } from "../services/api";
 
 type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 type FiltroConversa = "todos" | "nao-lidas" | "grupos";
@@ -361,22 +362,13 @@ function Home() {
             return;
         }
 
-        const token = localStorage.getItem("access_token");
-
-        if (!token) {
-            return;
-        }
-
         setFinalizandoConversa(true);
 
         try {
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/conversas/${conversaSelecionada.id}/finalizacao`,
+            const resposta = await apiFetch(
+                `/conversas/${conversaSelecionada.id}/finalizacao`,
                 {
                     method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
                 },
             );
             const resultado = await resposta.json() as {
@@ -471,22 +463,19 @@ function Home() {
         avaliacao: number;
         descricao: string;
     }) {
-        const token = localStorage.getItem("access_token");
-
-        if (!token || !conversaAvaliacaoId || enviandoAvaliacao) {
+        if (!conversaAvaliacaoId || enviandoAvaliacao) {
             return;
         }
 
         setEnviandoAvaliacao(true);
 
         try {
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/conversas/${conversaAvaliacaoId}/avaliacao`,
+            const resposta = await apiFetch(
+                `/conversas/${conversaAvaliacaoId}/avaliacao`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify({
                         nota: dados.avaliacao,
@@ -772,22 +761,17 @@ function Home() {
             digitacaoAtivaRef.current = false;
 
             if (conversaId !== null && estavaDigitando) {
-                const token = localStorage.getItem("access_token");
-
-                if (token) {
-                    void fetch(
-                        `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/digitando`,
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                Authorization: `Bearer ${token}`,
-                            },
-                            body: JSON.stringify({ digitando: false }),
-                            keepalive: true,
+                void apiFetch(
+                    `/conversas/${conversaId}/digitando`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
                         },
-                    ).catch(() => undefined);
-                }
+                        body: JSON.stringify({ digitando: false }),
+                        keepalive: true,
+                    },
+                ).catch(() => undefined);
             }
         }
 
@@ -845,21 +829,8 @@ function Home() {
 
     useEffect(() => {
         async function buscarPerfil() {
-            const token = localStorage.getItem("access_token");
-
-            if (!token) {
-                return;
-            }
-
             try {
-                const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/auth/Perfil`,
-                {
-                    headers: {
-                    Authorization: `Bearer ${token}`,
-                    },
-                },
-                );
+                const resposta = await apiFetch("/auth/Perfil");
 
                 if (!resposta.ok) {
                 return;
@@ -893,25 +864,15 @@ function Home() {
                 return;
             }
 
-            const token = localStorage.getItem("access_token");
-
-            if (!token) {
-                return;
-            }
-
             buscando = true;
 
             try {
-                const headers = {
-                    Authorization: `Bearer ${token}`,
-                };
-
                 const [respostaPrivadas, respostaSetores, respostaGrupos] = await Promise.all([
-                    fetch(`${import.meta.env.VITE_API_URL}/conversas`, { headers }),
-                    fetch(`${import.meta.env.VITE_API_URL}/conversas/setor`, { headers }),
+                    apiFetch("/conversas"),
+                    apiFetch("/conversas/setor"),
                     tipoUsuarioLogado === "user"
                         ? Promise.resolve(null)
-                        : fetch(`${import.meta.env.VITE_API_URL}/conversas/grupos`, { headers }),
+                        : apiFetch("/conversas/grupos"),
                 ]);
 
                 if (
@@ -1096,24 +1057,13 @@ function Home() {
         setCarregandoUsuarios(true);
         setBuscaUsuario("");
 
-        const token = localStorage.getItem("access_token");
-
-        if (!token) {
-            setCarregandoUsuarios(false);
-            return;
-        }
-
         try {
             const rota =
                 usuario.tipo === "user"
                     ? "/setores/com-funcionarios"
                     : "/usuarios/conversas";
 
-            const resposta = await fetch(`${import.meta.env.VITE_API_URL}${rota}`, {
-                headers: {
-                Authorization: `Bearer ${token}`,
-                },
-            });
+            const resposta = await apiFetch(rota);
 
             if (!resposta.ok) {
                 throw new Error("Não foi possível carregar as opções.");
@@ -1151,23 +1101,8 @@ function Home() {
         setCriandoGrupo(false);
         setCarregandoContatosGrupo(true);
 
-        const token = localStorage.getItem("access_token");
-
-        if (!token) {
-            setErroContatosGrupo("Não foi possível carregar os contatos.");
-            setCarregandoContatosGrupo(false);
-            return;
-        }
-
         try {
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/usuarios/grupos/contatos`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                },
-            );
+            const resposta = await apiFetch("/usuarios/grupos/contatos");
 
             if (!resposta.ok) {
                 throw new Error("Não foi possível carregar os contatos.");
@@ -1197,24 +1132,16 @@ function Home() {
             return;
         }
 
-        const token = localStorage.getItem("access_token");
-
-        if (!token) {
-            setErroCriacaoGrupo("Não foi possível criar o grupo.");
-            return;
-        }
-
         setCriandoGrupo(true);
         setErroCriacaoGrupo("");
 
         try {
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/conversas/grupos`,
+            const resposta = await apiFetch(
+                "/conversas/grupos",
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify({
                         nome: nomeLimpo,
@@ -1270,9 +1197,7 @@ function Home() {
     }
 
     async function selecionarUsuario(contato: UsuarioConversa) {
-        const token = localStorage.getItem("access_token");
-
-        if (!token || !usuario || usuario.tipo === "user") {
+        if (!usuario || usuario.tipo === "user") {
             return;
         }
 
@@ -1280,11 +1205,10 @@ function Home() {
             const rota =
                 ["admin", "superAdmin"].includes(usuario.tipo) ? "/conversas" : "/conversas/setor/usuario";
 
-            const resposta = await fetch(`${import.meta.env.VITE_API_URL}${rota}`, {
+            const resposta = await apiFetch(rota, {
                 method: "POST",
                 headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                 usuarioId: contato.id,
@@ -1309,20 +1233,13 @@ function Home() {
     }
 
     async function selecionarSetor(setor: Setor) {
-        const token = localStorage.getItem("access_token");
-
-        if (!token) {
-            return;
-        }
-
         try {
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/conversas/setor`,
+            const resposta = await apiFetch(
+                "/conversas/setor",
                 {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     setorId: setor.id,
@@ -1350,20 +1267,13 @@ function Home() {
         conversaId: number,
         digitando: boolean,
     ) {
-        const token = localStorage.getItem("access_token");
-
-        if (!token) {
-            return;
-        }
-
         try {
-            await fetch(
-                `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/digitando`,
+            await apiFetch(
+                `/conversas/${conversaId}/digitando`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
                     },
                     body: JSON.stringify({ digitando }),
                 },
@@ -1486,11 +1396,9 @@ function Home() {
 
     async function enviarMensagem() {
         const conteudo = mensagem.trim();
-        const token = localStorage.getItem("access_token");
 
         if (
             (!conteudo && !arquivoSelecionado) ||
-            !token ||
             !conversaSelecionada ||
             enviandoMensagem
         ) {
@@ -1511,15 +1419,14 @@ function Home() {
                 corpo.append("arquivo", arquivoSelecionado!);
             }
 
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/conversas/${conversaSelecionada.id}/mensagens`,
+            const resposta = await apiFetch(
+                `/conversas/${conversaSelecionada.id}/mensagens`,
                 {
                 method: "POST",
                 headers: arquivoSelecionado
-                    ? { Authorization: `Bearer ${token}` }
+                    ? undefined
                     : {
                         "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
                     },
                 body: corpo,
                 },
@@ -1605,16 +1512,12 @@ function Home() {
 
     async function marcarConversaComoLida(
         conversaId: number,
-        token: string,
     ) {
         try {
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/leitura`,
+            const resposta = await apiFetch(
+                `/conversas/${conversaId}/leitura`,
                 {
                     method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
                 },
             );
 
@@ -1666,21 +1569,9 @@ function Home() {
         setCarregandoMensagensAnteriores(false);
         setTemMensagensAnteriores(false);
 
-        const token = localStorage.getItem("access_token");
-
-        if (!token) {
-            setCarregandoMensagens(false);
-            return;
-        }
-
         try {
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/conversas/${conversa.id}/mensagens?limite=${LIMITE_HISTORICO_MENSAGENS}`,
-                {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                },
+            const resposta = await apiFetch(
+                `/conversas/${conversa.id}/mensagens?limite=${LIMITE_HISTORICO_MENSAGENS}`,
             );
 
             if (!resposta.ok) {
@@ -1702,7 +1593,7 @@ function Home() {
             setTemMensagensAnteriores(
                 dados.length === LIMITE_HISTORICO_MENSAGENS,
             );
-            await marcarConversaComoLida(conversa.id, token);
+            await marcarConversaComoLida(conversa.id);
         } catch (erro) {
             console.error(erro);
 
@@ -1720,12 +1611,10 @@ function Home() {
     async function carregarMensagensAnteriores() {
         const conversaId = conversaSelecionada?.id;
         const primeiraMensagemId = mensagensChat[0]?.id;
-        const token = localStorage.getItem("access_token");
 
         if (
             !conversaId ||
             !primeiraMensagemId ||
-            !token ||
             carregandoMensagensAnteriores
         ) {
             return;
@@ -1734,13 +1623,8 @@ function Home() {
         setCarregandoMensagensAnteriores(true);
 
         try {
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/mensagens?antesDe=${primeiraMensagemId}&limite=${LIMITE_HISTORICO_MENSAGENS}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                },
+            const resposta = await apiFetch(
+                `/conversas/${conversaId}/mensagens?antesDe=${primeiraMensagemId}&limite=${LIMITE_HISTORICO_MENSAGENS}`,
             );
 
             if (!resposta.ok) {
@@ -1907,22 +1791,11 @@ function Home() {
                 return;
             }
 
-            const token = localStorage.getItem("access_token");
-
-            if (!token) {
-                return;
-            }
-
             buscando = true;
 
             try {
-                const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/digitando`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
+                const resposta = await apiFetch(
+                    `/conversas/${conversaId}/digitando`,
                 );
 
                 if (!resposta.ok) {
@@ -2027,24 +1900,13 @@ function Home() {
                 return;
             }
 
-            const token = localStorage.getItem("access_token");
-
-            if (!token) {
-                return;
-            }
-
             buscando = true;
 
             try {
                 const ultimaMensagemId =
                     ultimaMensagemChatIdRef.current;
-                const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/conversas/${conversaId}/mensagens?depoisDe=${ultimaMensagemId}&limite=${LIMITE_NOVAS_MENSAGENS}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
+                const resposta = await apiFetch(
+                    `/conversas/${conversaId}/mensagens?depoisDe=${ultimaMensagemId}&limite=${LIMITE_NOVAS_MENSAGENS}`,
                 );
 
                 if (!resposta.ok) {
@@ -2105,7 +1967,7 @@ function Home() {
                     tocarSomDeNovaMensagem();
                 }
 
-                await marcarConversaComoLida(conversaId, token);
+                await marcarConversaComoLida(conversaId);
             } catch (erro) {
                 console.error("Erro ao atualizar mensagens:", erro);
             } finally {
@@ -3333,8 +3195,8 @@ function Home() {
 
                 {usuario?.tipo === "superAdmin" && (
                     <div className="menu-modal-item menu-modal-administracao">
-                        <a
-                            href="/administracao"
+                        <Link
+                            to="/administracao"
                             className="menu-modal-button"
                         >
                             <svg
@@ -3355,12 +3217,12 @@ function Home() {
                             />
                             </svg>
                             <span className="menu-modal-texto">Administração</span>
-                        </a>
+                        </Link>
                     </div>
                 )}
 
                 <div className="menu-modal-item menu-modal-configuracoes">
-                    <a href="/configuracao" className="menu-modal-button">
+                    <Link to="/configuracao" className="menu-modal-button">
                     <svg
                         width="16"
                         height="16"
@@ -3378,7 +3240,7 @@ function Home() {
                         />
                     </svg>
                     <span className="menu-modal-texto">Configurações</span>
-                    </a>
+                    </Link>
                 </div>
 
                 <div className="menu-modal-item menu-modal-sair">

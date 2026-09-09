@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { obterItensPaginacao } from "../../../library/paginacao";
 import { ModalConfirmacao } from "../../../components/ModalConfirmacao";
 import { ModalFeedback } from "../../../components/ModalFeedback";
+import { apiFetch } from "../../../services/api";
 
 // Representa um setor e sua possível associação com uma secretaria.
 type Setor = {
@@ -48,12 +49,7 @@ function Setores() {
         // Carrega os setores cadastrados ao abrir a tela.
         async function carregarSetores() {
             try {
-                const token = localStorage.getItem("access_token");
-                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                const resposta = await apiFetch("/setores");
 
                 if (!resposta.ok) {
                     throw new Error("Falha ao carregar os setores.");
@@ -73,15 +69,7 @@ function Setores() {
         // Carrega as secretarias disponíveis para associação com o setor.
         async function carregarSecretarias() {
             try {
-                const token = localStorage.getItem("access_token");
-                const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/secretaria`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
-                );
+                const resposta = await apiFetch("/secretaria");
 
                 if (!resposta.ok) {
                     throw new Error("Falha ao carregar as secretarias.");
@@ -128,11 +116,9 @@ function Setores() {
         };
 
         try {
-            const token = localStorage.getItem("access_token");
-            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/setores`, {
+            const resposta = await apiFetch("/setores", {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(dados),
@@ -180,14 +166,10 @@ function Setores() {
         setSetorSendoApagado(setorParaApagar.id);
 
         try {
-            const token = localStorage.getItem("access_token");
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/setores/${setorParaApagar.id}`,
+            const resposta = await apiFetch(
+                `/setores/${setorParaApagar.id}`,
                 {
                     method: "DELETE",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
                 },
             );
             const resultado = await resposta.json();

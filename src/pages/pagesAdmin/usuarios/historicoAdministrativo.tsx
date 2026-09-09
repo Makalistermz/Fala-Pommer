@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { obterItensPaginacao } from "../../../library/paginacao";
+import { apiFetch } from "../../../services/api";
 
 // Representa os dados básicos dos usuários envolvidos em cada ação.
 interface UsuarioAlvo {
@@ -92,16 +93,10 @@ function HistoricoAdministrativo() {
         let componenteAtivo = true;
 
         async function carregarHistorico() {
-            // Consulta o histórico utilizando a autenticação armazenada localmente.
+            // Consulta o histórico pelo cliente que renova a sessão automaticamente.
             try {
-                const token = localStorage.getItem("access_token");
-                const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/usuarios/historico-administrativo`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
+                const resposta = await apiFetch(
+                    "/usuarios/historico-administrativo",
                 );
 
                 if (!resposta.ok) {

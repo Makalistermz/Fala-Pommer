@@ -6,7 +6,7 @@ import {
 } from "./armazenamentoSessao";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const CHAVE_ACCESS_TOKEN = "access_token";
+const CHAVE_ACCESS_TOKEN_LEGADO = "access_token";
 const EVENTO_SESSAO_ENCERRADA = "fala-pommer:sessao-encerrada";
 const CABECALHO_CLIENTE = "X-Fala-Pommer-Cliente";
 
@@ -15,12 +15,15 @@ interface TokensSessao {
   refresh_token?: string;
 }
 
+let accessTokenEmMemoria: string | null = null;
 let refreshTokenEmMemoria: string | null = null;
 let renovacaoEmAndamento: Promise<boolean> | null = null;
 
-// Mantém compatibilidade com as telas que ainda consultam o access token diretamente.
-export function obterAccessToken() {
-  return localStorage.getItem(CHAVE_ACCESS_TOKEN);
+// Apaga o JWT persistido por versões antigas; a sessão longa usa outra credencial.
+localStorage.removeItem(CHAVE_ACCESS_TOKEN_LEGADO);
+
+function obterAccessToken() {
+  return accessTokenEmMemoria;
 }
 
 export async function registrarTokensSessao(tokens: TokensSessao) {
@@ -37,12 +40,14 @@ export async function registrarTokensSessao(tokens: TokensSessao) {
     refreshTokenEmMemoria = null;
   }
 
-  localStorage.setItem(CHAVE_ACCESS_TOKEN, tokens.access_token);
+  // O access token é curto e permanece apenas na memória desta execução.
+  accessTokenEmMemoria = tokens.access_token;
 }
 
 // Limpa os tokens e avisa o contexto para atualizar imediatamente a interface.
 export async function limparSessaoLocal() {
-  localStorage.removeItem(CHAVE_ACCESS_TOKEN);
+  accessTokenEmMemoria = null;
+  localStorage.removeItem(CHAVE_ACCESS_TOKEN_LEGADO);
   refreshTokenEmMemoria = null;
   await removerRefreshTokenSeguro();
   window.dispatchEvent(new Event(EVENTO_SESSAO_ENCERRADA));

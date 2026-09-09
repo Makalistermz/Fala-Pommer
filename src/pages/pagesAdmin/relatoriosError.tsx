@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { obterItensPaginacao } from "../../library/paginacao";
+import { apiFetch } from "../../services/api";
 
 // Representa cada registro de erro retornado pela API.
 type RelatorioErro = {
@@ -64,22 +65,10 @@ function RelatorioError() {
         const controlador = new AbortController();
 
         async function carregarRelatorios() {
-            // O endpoint exige o token de acesso salvo após a autenticação.
-            const token = localStorage.getItem("access_token");
-
-            if (!token) {
-                setErro("Sessão expirada. Entre novamente para consultar os relatórios.");
-                setCarregando(false);
-                return;
-            }
-
             try {
-                const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/auth/relatorios-erros`,
+                const resposta = await apiFetch(
+                    "/auth/relatorios-erros",
                     {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
                         signal: controlador.signal,
                     },
                 );

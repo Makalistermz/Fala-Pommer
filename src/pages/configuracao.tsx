@@ -6,6 +6,7 @@ import MeuPerfil from "./configPages/meu-perfil";
 import ContaSeguranca from "./configPages/conta-seguranca";
 import Aparencia from "./configPages/aparencia";
 import Acessibilidade from "./configPages/acessibilidade";
+import { apiFetch } from "../services/api";
 import "./css/configuracao.css";
 
 type ItemMenu = {
@@ -86,37 +87,25 @@ function Configuracao() {
     }
 
     useEffect(() => {
-            async function carregarPerfil() {
-                const token = localStorage.getItem("access_token");
-    
-                if (!token) {
-                    return
-                }
-    
-                const resposta = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/me`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
-                );
-    
-                if (!resposta.ok) {
-                    throw new Error("Não foi possível carregar o perfil.");
-                }
-    
-                const dados: Perfil = await resposta.json();
-                setPerfil(dados);
-            }
-    
-            carregarPerfil().catch(console.error);
-        }, []);
+        async function carregarPerfil() {
+            const resposta = await apiFetch("/usuarios/me");
 
-        function obterUrlFoto(url: string) {
-            return url.startsWith("http://") || url.startsWith("https://")
+            if (!resposta.ok) {
+                throw new Error("Não foi possível carregar o perfil.");
+            }
+
+            const dados: Perfil = await resposta.json();
+            setPerfil(dados);
+        }
+
+        carregarPerfil().catch(console.error);
+    }, []);
+
+    function obterUrlFoto(url: string) {
+        return url.startsWith("http://") || url.startsWith("https://")
             ? url
             : `${import.meta.env.VITE_API_URL}${url}`;
-        }
+    }
 
     return (
         <div className={`administracao ${menuAberto ? "menu-aberto" : "menu-fechado"}`}>

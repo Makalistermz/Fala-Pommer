@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { ModalFeedback } from "../../components/ModalFeedback";
 import { NotificacaoConfiguracao } from "../../components/NotificacaoConfiguracao";
 import { useAutenticacao } from "../../components/AutenticacaoContext";
+import { apiFetch } from "../../services/api";
 
 type EtapaModal =
   | "senha-ativacao"
@@ -87,23 +88,9 @@ function ContaSeguranca() {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      setCarregandoStatus(false);
-      return;
-    }
-
     void (async () => {
       try {
-        const resposta = await fetch(
-          `${import.meta.env.VITE_API_URL}/auth/2fa/status`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
+        const resposta = await apiFetch("/auth/2fa/status");
         const resultado = (await resposta.json()) as RespostaApi;
 
         if (!resposta.ok) {
@@ -140,19 +127,12 @@ function ContaSeguranca() {
     endpoint: string,
     opcoes: RequestInit = {},
   ) {
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      throw new Error("Sua sessão expirou. Entre novamente para continuar.");
-    }
-
-    const resposta = await fetch(
-      `${import.meta.env.VITE_API_URL}${endpoint}`,
+    const resposta = await apiFetch(
+      endpoint,
       {
         ...opcoes,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
           ...opcoes.headers,
         },
       },

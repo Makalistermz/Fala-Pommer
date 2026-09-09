@@ -7,6 +7,7 @@ import {
 } from "react";
 import { ModalFeedback } from "../../components/ModalFeedback";
 import Cropper, { type Area, type Point } from "react-easy-crop";
+import { apiFetch } from "../../services/api";
 
 interface Perfil {
     id: number;
@@ -124,19 +125,7 @@ function MeuPerfil() {
 
     useEffect(() => {
         async function carregarPerfil() {
-            const token = localStorage.getItem("access_token");
-
-            if (!token) {
-                return
-            }
-
-            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/usuarios/me`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                },
-            );
+            const resposta = await apiFetch("/usuarios/me");
 
             if (!resposta.ok) {
                 throw new Error("Não foi possível carregar o perfil.");
@@ -243,17 +232,6 @@ function MeuPerfil() {
             return;
         }
 
-        const token = localStorage.getItem("access_token");
-
-        if (!token) {
-            setFeedback({
-                aberto: true,
-                tipo: "erro",
-                mensagem: "Sua sessão expirou. Entre novamente para continuar."
-            });
-            return;
-        }
-
         setEnviandoFoto(true);
 
         try {
@@ -270,13 +248,10 @@ function MeuPerfil() {
             const corpo = new FormData();
             corpo.append("foto", arquivoRecortado);
 
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/usuarios/me/foto`,
+            const resposta = await apiFetch(
+                "/usuarios/me/foto",
                 {
                     method: "PATCH",
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    },
                     body: corpo
                 }
             );
@@ -317,26 +292,14 @@ function MeuPerfil() {
     }
 
     async function salvarAlteracoes() {
-        const token = localStorage.getItem("access_token");
-
-        if (!token) {
-            setFeedback({
-                aberto: true,
-                tipo: "erro",
-                mensagem: "Sua sessão expirou. Entre novamente para continuar.",
-            });
-            return;
-        }
-
         setSalvando(true);
 
         try {
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/usuarios/me`,
+            const resposta = await apiFetch(
+                "/usuarios/me",
                 {
                     method: "PATCH",
                     headers: {
-                        Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({

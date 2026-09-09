@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ModalConfirmacao } from "../../../components/ModalConfirmacao";
 import { ModalFeedback } from "../../../components/ModalFeedback";
 import { obterItensPaginacao } from "../../../library/paginacao";
+import { apiFetch } from "../../../services/api";
 
 // Representa uma secretaria retornada pela API.
 type SecretariaCadastrada = {
@@ -41,15 +42,7 @@ function Secretaria() {
         // Carrega a lista inicial de secretarias ao abrir a tela.
         async function carregarSecretarias() {
             try {
-                const token = localStorage.getItem("access_token");
-                const resposta = await fetch(
-                    `${import.meta.env.VITE_API_URL}/secretaria`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
-                );
+                const resposta = await apiFetch("/secretaria");
 
                 if (!resposta.ok) {
                     throw new Error("Falha ao carregar as secretarias.");
@@ -91,13 +84,11 @@ function Secretaria() {
         setEnviando(true);
 
         try {
-            const token = localStorage.getItem("access_token");
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/secretaria`,
+            const resposta = await apiFetch(
+                "/secretaria",
                 {
                     method: "POST",
                     headers: {
-                        Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(dados),
@@ -148,14 +139,10 @@ function Secretaria() {
         setSecretariaSendoApagada(secretariaParaApagar.id);
 
         try {
-            const token = localStorage.getItem("access_token");
-            const resposta = await fetch(
-                `${import.meta.env.VITE_API_URL}/secretaria/${secretariaParaApagar.id}`,
+            const resposta = await apiFetch(
+                `/secretaria/${secretariaParaApagar.id}`,
                 {
                     method: "DELETE",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
                 },
             );
             const resultado = await resposta.json();

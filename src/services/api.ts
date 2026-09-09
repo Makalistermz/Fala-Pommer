@@ -5,7 +5,10 @@ import {
   salvarRefreshTokenSeguro,
 } from "./armazenamentoSessao";
 
-const API_URL = import.meta.env.VITE_API_URL;
+// No navegador em desenvolvimento, usa o proxy local para o cookie ser first-party.
+const API_URL = import.meta.env.DEV && !ehClienteCapacitor()
+  ? ""
+  : import.meta.env.VITE_API_URL;
 const CHAVE_ACCESS_TOKEN_LEGADO = "access_token";
 const EVENTO_SESSAO_ENCERRADA = "fala-pommer:sessao-encerrada";
 const CABECALHO_CLIENTE = "X-Fala-Pommer-Cliente";

@@ -10,7 +10,7 @@ describe('AuthGuard - perfil desativado', () => {
     verifyAsync: jest.fn(),
   };
   const prismaMock = {
-    cadastro: {
+    sessao: {
       findUnique: jest.fn(),
     },
   };
@@ -26,6 +26,7 @@ describe('AuthGuard - perfil desativado', () => {
     sub: 7,
     tipo: 'user',
     ver: 1,
+    sid: 'sessao-1',
     iat: 1,
     exp: 2,
   };
@@ -51,10 +52,14 @@ describe('AuthGuard - perfil desativado', () => {
   });
 
   it('mantém o acesso quando a conta desativada já é usuário comum', async () => {
-    prismaMock.cadastro.findUnique.mockResolvedValue({
-      desativado_em: new Date('2026-09-02T12:00:00.000Z'),
-      versao_token: 1,
-      tipo_usuario: 'user',
+    prismaMock.sessao.findUnique.mockResolvedValue({
+      usuario_id: 7,
+      revogada_em: null,
+      usuario: {
+        desativado_em: new Date('2026-09-02T12:00:00.000Z'),
+        versao_token: 1,
+        tipo_usuario: 'user',
+      },
     });
 
     await expect(guard.canActivate(contexto)).resolves.toBe(true);
@@ -66,10 +71,30 @@ describe('AuthGuard - perfil desativado', () => {
       ...payload,
       tipo: 'admin',
     });
-    prismaMock.cadastro.findUnique.mockResolvedValue({
-      desativado_em: new Date('2026-09-02T12:00:00.000Z'),
-      versao_token: 1,
-      tipo_usuario: 'admin',
+    prismaMock.sessao.findUnique.mockResolvedValue({
+      usuario_id: 7,
+      revogada_em: null,
+      usuario: {
+        desativado_em: new Date('2026-09-02T12:00:00.000Z'),
+        versao_token: 1,
+        tipo_usuario: 'admin',
+      },
+    });
+
+    await expect(guard.canActivate(contexto)).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
+  });
+
+  it('bloqueia um access token cuja sessao foi revogada', async () => {
+    prismaMock.sessao.findUnique.mockResolvedValue({
+      usuario_id: 7,
+      revogada_em: new Date(),
+      usuario: {
+        desativado_em: null,
+        versao_token: 1,
+        tipo_usuario: 'user',
+      },
     });
 
     await expect(guard.canActivate(contexto)).rejects.toBeInstanceOf(

@@ -30,6 +30,7 @@ import { ReenviarDoisFatoresDto } from "./dto/reenviar-2fa.dto";
 import { CodigoRecuperacaoDoisFatoresDto } from "./dto/codigo-recuperacao-2fa.dto";
 import { TokenDesafioDoisFatoresDto } from "./dto/token-desafio-2fa.dto";
 import { DesativarComCodigoRecuperacaoDto } from "./dto/desativar-recuperacao-2fa.dto";
+import { RenovarSessaoDto } from "./dto/renovar-sessao.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -248,8 +249,15 @@ export class AuthController {
         @Req() requisicao: RequisicaoAutenticada
     ) {
         return this.authService.registrarSaida(
-            requisicao.usuario!.sub
+            requisicao.usuario!.sub,
+            requisicao.usuario!.sid
         );
+    }
+
+    @Post("refresh")
+    @HttpCode(HttpStatus.OK)
+    renovarSessao(@Body() dados: RenovarSessaoDto) {
+        return this.authService.renovarSessao(dados.refreshToken);
     }
 
     @Get("area-municipe")

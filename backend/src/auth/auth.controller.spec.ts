@@ -6,6 +6,8 @@ describe('AuthController - rotas de autenticação em duas etapas', () => {
   const authMock = {
     confirmarLoginDoisFatores: jest.fn(),
     confirmarLoginComCodigoRecuperacao: jest.fn(),
+    renovarSessao: jest.fn(),
+    registrarSaida: jest.fn(),
   };
   const twoFactorMock = {
     reenviarCodigoLogin: jest.fn(),
@@ -23,6 +25,7 @@ describe('AuthController - rotas de autenticação em duas etapas', () => {
     usuario: {
       sub: 7,
       tipo: 'user',
+      sid: 'sessao-1',
     },
   };
 
@@ -146,5 +149,16 @@ describe('AuthController - rotas de autenticação em duas etapas', () => {
       'token',
       'ativacao',
     );
+  });
+
+  it('delega a renovacao e o logout da sessao atual', async () => {
+    authMock.renovarSessao.mockResolvedValue({ access_token: 'novo-jwt' });
+    authMock.registrarSaida.mockResolvedValue({ mensagem: 'ok' });
+
+    await controller.renovarSessao({ refreshToken: 'a'.repeat(86) });
+    await controller.logout(requisicao as never);
+
+    expect(authMock.renovarSessao).toHaveBeenCalledWith('a'.repeat(86));
+    expect(authMock.registrarSaida).toHaveBeenCalledWith(7, 'sessao-1');
   });
 });

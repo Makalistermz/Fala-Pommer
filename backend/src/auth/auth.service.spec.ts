@@ -24,9 +24,13 @@ describe('AuthService - autenticação em duas etapas', () => {
     },
     login_evento: {
       create: jest.fn(),
+      findFirst: jest.fn(),
+      update: jest.fn(),
     },
     sessao: {
       create: jest.fn(),
+      findUnique: jest.fn(),
+      updateMany: jest.fn(),
     },
     erro_autenticacao: {
       create: jest.fn(),
@@ -57,6 +61,7 @@ describe('AuthService - autenticação em duas etapas', () => {
     (bcrypt.compare as jest.Mock).mockResolvedValue(true);
     prismaMock.login_evento.create.mockResolvedValue({});
     prismaMock.sessao.create.mockResolvedValue({ id: 'sessao-1' });
+    prismaMock.sessao.updateMany.mockResolvedValue({ count: 1 });
     prismaMock.erro_autenticacao.create.mockResolvedValue({});
     jwtMock.signAsync.mockResolvedValue('jwt-final');
 
@@ -109,6 +114,7 @@ describe('AuthService - autenticação em duas etapas', () => {
     expect(prismaMock.sessao.create).toHaveBeenCalledWith({
       data: {
         usuario_id: usuario.id,
+        versao_token: usuario.versao_token,
         refresh_token_hash: expect.stringMatching(/^[a-f0-9]{64}$/),
         ultimo_uso_em: expect.any(Date),
         criado_em: expect.any(Date),
@@ -244,5 +250,79 @@ describe('AuthService - autenticação em duas etapas', () => {
       'login',
     );
     expect(resultado.access_token).toBe('jwt-final');
+  });
+
+  it('rotaciona o refresh token e emite um novo access token', async () => {
+    const refreshTokenAtual = 'a'.repeat(86);
+    prismaMock.sessao.findUnique.mockResolvedValue({
+      id: 'sessao-1',
+      usuario_id: usuario.id,
+      versao_token: usuario.versao_token,
+      revogada_em: null,
+      usuario,
+    });
+
+    const resultado = await service.renovarSessao(refreshTokenAtual);
+
+    expect(resultado).toEqual({
+      access_token: 'jwt-final',
+      refresh_token: expect.stringMatching(/^[A-Za-z0-9_-]{86}$/),
+    });
+    expect(resultado.refresh_token).not.toBe(refreshTokenAtual);
+    expect(jwtMock.signAsync).toHaveBeenCalledWith({
+      sub: usuario.id,
+      tipo: usuario.tipo_usuario,
+      ver: usuario.versao_token,
+      sid: 'sessao-1',
+    });
+    expect(prismaMock.sessao.updateMany).toHaveBeenCalledWith({
+      where: {
+        id: 'sessao-1',
+        usuario_id: usuario.id,
+        refresh_token_hash: expect.stringMatching(/^[a-f0-9]{64}$/),
+        revogada_em: null,
+      },
+      data: {
+        refresh_token_hash: expect.stringMatching(/^[a-f0-9]{64}$/),
+        ultimo_uso_em: expect.any(Date),
+      },
+    });
+  });
+
+  it('rejeita a renovacao de uma sessao revogada', async () => {
+    prismaMock.sessao.findUnique.mockResolvedValue({
+      id: 'sessao-1',
+      usuario_id: usuario.id,
+      versao_token: usuario.versao_token,
+      revogada_em: new Date(),
+      usuario,
+    });
+
+    await expect(
+      service.renovarSessao('a'.repeat(86)),
+    ).rejects.toBeInstanceOf(UnauthorizedException);
+    expect(prismaMock.sessao.updateMany).not.toHaveBeenCalled();
+  });
+
+  it('revoga a sessao atual ao sair', async () => {
+    prismaMock.login_evento.findFirst.mockResolvedValue({ id: 15 });
+    prismaMock.login_evento.update.mockResolvedValue({});
+
+    await service.registrarSaida(usuario.id, 'sessao-1');
+
+    expect(prismaMock.sessao.updateMany).toHaveBeenCalledWith({
+      where: {
+        id: 'sessao-1',
+        usuario_id: usuario.id,
+        revogada_em: null,
+      },
+      data: {
+        revogada_em: expect.any(Date),
+      },
+    });
+    expect(prismaMock.login_evento.update).toHaveBeenCalledWith({
+      where: { id: 15 },
+      data: { saiu_em: expect.any(Date) },
+    });
   });
 });

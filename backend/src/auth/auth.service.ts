@@ -185,14 +185,13 @@ export class AuthService {
             }
         });
 
-        const refreshToken = randomBytes(64).toString("base64url");
-        const refreshTokenHash = createHash("sha256")
-            .update(refreshToken)
-            .digest("hex");
+        const refreshToken = this.gerarRefreshToken();
+        const refreshTokenHash = this.gerarHashToken(refreshToken);
 
         const sessao = await this.prisma.sessao.create({
             data: {
                 usuario_id: usuario.id,
+                versao_token: usuario.versao_token,
                 refresh_token_hash: refreshTokenHash,
                 ultimo_uso_em: agoraEmSaoPaulo(),
                 criado_em: agoraEmSaoPaulo()
@@ -226,6 +225,92 @@ export class AuthService {
         };
     }
 
+    async renovarSessao(refreshTokenAtual: string) {
+        const refreshTokenHashAtual =
+            this.gerarHashToken(refreshTokenAtual);
+
+        const sessao = await this.prisma.sessao.findUnique({
+            where: {
+                refresh_token_hash: refreshTokenHashAtual
+            },
+            select: {
+                id: true,
+                usuario_id: true,
+                versao_token: true,
+                revogada_em: true,
+                usuario: {
+                    select: {
+                        id: true,
+                        nome: true,
+                        email: true,
+                        tipo_usuario: true,
+                        versao_token: true,
+                        desativado_em: true
+                    }
+                }
+            }
+        });
+
+        if (
+            !sessao ||
+            sessao.revogada_em ||
+            sessao.versao_token !== sessao.usuario.versao_token ||
+            (
+                sessao.usuario.desativado_em &&
+                sessao.usuario.tipo_usuario !== "user"
+            )
+        ) {
+            throw new UnauthorizedException(
+                "Sessão inválida ou revogada."
+            );
+        }
+
+        const novoRefreshToken = this.gerarRefreshToken();
+        const novoRefreshTokenHash =
+            this.gerarHashToken(novoRefreshToken);
+
+        const accessToken = await this.jwtService.signAsync({
+            sub: sessao.usuario.id,
+            tipo: sessao.usuario.tipo_usuario,
+            ver: sessao.usuario.versao_token,
+            sid: sessao.id
+        });
+
+        const sessaoAtualizada = await this.prisma.sessao.updateMany({
+            where: {
+                id: sessao.id,
+                usuario_id: sessao.usuario_id,
+                refresh_token_hash: refreshTokenHashAtual,
+                revogada_em: null
+            },
+            data: {
+                refresh_token_hash: novoRefreshTokenHash,
+                ultimo_uso_em: agoraEmSaoPaulo()
+            }
+        });
+
+        if (sessaoAtualizada.count !== 1) {
+            throw new UnauthorizedException(
+                "Sessão inválida ou revogada."
+            );
+        }
+
+        return {
+            access_token: accessToken,
+            refresh_token: novoRefreshToken
+        };
+    }
+
+    private gerarRefreshToken() {
+        return randomBytes(64).toString("base64url");
+    }
+
+    private gerarHashToken(token: string) {
+        return createHash("sha256")
+            .update(token)
+            .digest("hex");
+    }
+
     async obterQuantUsuarios() {
         const total = await this.prisma.cadastro.count();
         return total;
@@ -242,7 +327,25 @@ export class AuthService {
         return resultado;
     }
 
-    async registrarSaida(usuarioId: number) {
+    async registrarSaida(usuarioId: number, sessaoId: string) {
+        const agora = agoraEmSaoPaulo();
+        const sessaoRevogada = await this.prisma.sessao.updateMany({
+            where: {
+                id: sessaoId,
+                usuario_id: usuarioId,
+                revogada_em: null
+            },
+            data: {
+                revogada_em: agora
+            }
+        });
+
+        if (sessaoRevogada.count !== 1) {
+            throw new UnauthorizedException(
+                "Sessão inválida ou revogada."
+            );
+        }
+
         const acessoAberto = await this.prisma.login_evento.findFirst({
             where: {
                 usuario_id: usuarioId,
@@ -258,7 +361,7 @@ export class AuthService {
 
         if (!acessoAberto) {
             return {
-                mensagem: "Nenhum acesso aberto encontrado."
+                mensagem: "Saída realizada com sucesso."
             };
         }
 
@@ -267,7 +370,7 @@ export class AuthService {
                 id: acessoAberto.id
             },
             data: {
-                saiu_em: agoraEmSaoPaulo()
+                saiu_em: agora
             }
         });
 

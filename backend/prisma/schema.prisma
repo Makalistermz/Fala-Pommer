@@ -55,6 +55,7 @@ model cadastro {
 model sessao {
   id                 String    @id @default(cuid())
   usuario_id         Int
+  versao_token       Int       @db.UnsignedInt
   refresh_token_hash String    @unique(map: "uq_sessao_refresh_token_hash") @db.Char(64)
   nome_dispositivo   String?   @db.VarChar(150)
   plataforma         String?   @db.VarChar(30)

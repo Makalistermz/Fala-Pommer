@@ -1555,6 +1555,7 @@ export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typ
 export const SessaoScalarFieldEnum = {
   id: 'id',
   usuario_id: 'usuario_id',
+  versao_token: 'versao_token',
   refresh_token_hash: 'refresh_token_hash',
   nome_dispositivo: 'nome_dispositivo',
   plataforma: 'plataforma',

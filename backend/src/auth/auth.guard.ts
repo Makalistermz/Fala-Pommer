@@ -48,18 +48,33 @@ export class AuthGuard implements CanActivate {
             const payload =
                 await this.jwtService.verifyAsync<JwtPayload>(token);
 
-            const usuario = await this.prisma.cadastro.findUnique({
+            if (!payload.sid) {
+                throw new UnauthorizedException();
+            }
+
+            const sessao = await this.prisma.sessao.findUnique({
                 where: {
-                    id: payload.sub
+                    id: payload.sid
                 },
                 select: {
-                    desativado_em: true,
-                    versao_token: true,
-                    tipo_usuario: true
+                    usuario_id: true,
+                    revogada_em: true,
+                    usuario: {
+                        select: {
+                            desativado_em: true,
+                            versao_token: true,
+                            tipo_usuario: true
+                        }
+                    }
                 }
             });
 
+            const usuario = sessao?.usuario;
+
             if (
+                !sessao ||
+                sessao.usuario_id !== payload.sub ||
+                sessao.revogada_em ||
                 !usuario ||
                 (
                     usuario.desativado_em &&

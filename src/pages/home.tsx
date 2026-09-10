@@ -258,6 +258,10 @@ function Home() {
         setCarregandoContatosModalAdicionarPessoas] = useState(false);
     const [erroContatosModalAdicionarPessoas,
         setErroContatosModalAdicionarPessoas] = useState("");
+    const [erroAdicionarPessoasGrupo, setErroAdicionarPessoasGrupo] =
+        useState("");
+    const [adicionandoPessoasGrupo, setAdicionandoPessoasGrupo] =
+        useState(false);
     const botaoFecharModalAdicionarPessoaRef =
         useRef<HTMLButtonElement>(null);
     const inputBuscaPessoaGrupoRef = useRef<HTMLInputElement>(null);
@@ -1178,6 +1182,8 @@ function Home() {
         setContatosDisponiveisModalAdicionarPessoas([]);
         setContatosModalAdicionarPessoasSelecionados(new Set());
         setErroContatosModalAdicionarPessoas("");
+        setErroAdicionarPessoasGrupo("");
+        setAdicionandoPessoasGrupo(false);
         setCarregandoContatosModalAdicionarPessoas(true);
         setModalAdicionarPessoaAberto(true);
 
@@ -1202,6 +1208,86 @@ function Home() {
             );
         } finally {
             setCarregandoContatosModalAdicionarPessoas(false);
+        }
+    }
+
+    async function adicionarPessoasAoGrupo() {
+        if (
+            conversaSelecionada?.tipo !== "grupo" ||
+            contatosModalAdicionarPessoasSelecionados.size < 1 ||
+            adicionandoPessoasGrupo
+        ) {
+            return;
+        }
+
+        const grupoId = conversaSelecionada.id;
+        setErroAdicionarPessoasGrupo("");
+        setAdicionandoPessoasGrupo(true);
+
+        try {
+            const resposta = await apiFetch(
+                `/conversas/grupos/${grupoId}/participantes`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        participanteIds: Array.from(
+                            contatosModalAdicionarPessoasSelecionados,
+                        ),
+                    }),
+                },
+            );
+
+            const resultado = await resposta.json().catch(() => null) as {
+                grupoId?: number;
+                participantes?: ConversaGrupo["participantes"];
+                totalParticipantes?: number;
+                message?: string | string[];
+            } | null;
+
+            if (
+                !resposta.ok ||
+                !resultado?.grupoId ||
+                !resultado.participantes ||
+                resultado.totalParticipantes === undefined
+            ) {
+                const mensagemErro = Array.isArray(resultado?.message)
+                    ? resultado.message.join(", ")
+                    : resultado?.message;
+
+                throw new Error(
+                    mensagemErro ??
+                        "Não foi possível adicionar as pessoas ao grupo.",
+                );
+            }
+
+            const atualizarGrupo = (conversa: Conversa): Conversa =>
+                conversa.tipo === "grupo" && conversa.id === grupoId
+                    ? {
+                        ...conversa,
+                        participantes: resultado.participantes!,
+                        totalParticipantes: resultado.totalParticipantes!,
+                    }
+                    : conversa;
+
+            setConversas((conversasAtuais) =>
+                conversasAtuais.map(atualizarGrupo),
+            );
+            setConversaSelecionada((conversaAtual) =>
+                conversaAtual ? atualizarGrupo(conversaAtual) : null,
+            );
+            setModalAdicionarPessoaAberto(false);
+        } catch (erro) {
+            console.error("Erro ao adicionar pessoas ao grupo:", erro);
+            setErroAdicionarPessoasGrupo(
+                erro instanceof Error
+                    ? erro.message
+                    : "Não foi possível adicionar as pessoas ao grupo.",
+            );
+        } finally {
+            setAdicionandoPessoasGrupo(false);
         }
     }
 
@@ -1281,6 +1367,7 @@ function Home() {
     }
 
     function alternarContatoModalAdicionarPessoas(contatoId: number) {
+        setErroAdicionarPessoasGrupo("");
         setContatosModalAdicionarPessoasSelecionados((selecionadosAtuais) => {
             const novosSelecionados = new Set(selecionadosAtuais);
 
@@ -3815,14 +3902,23 @@ function Home() {
                                         ? "1 pessoa selecionada"
                                         : `${contatosModalAdicionarPessoasSelecionados.size} pessoas selecionadas`}
                             </span>
+                            {erroAdicionarPessoasGrupo && (
+                                <span className="modal-grupo__erro" role="alert">
+                                    {erroAdicionarPessoasGrupo}
+                                </span>
+                            )}
                         </div>
                         <button
                             type="button"
                             disabled={
-                                contatosModalAdicionarPessoasSelecionados.size < 1
+                                contatosModalAdicionarPessoasSelecionados.size < 1 ||
+                                adicionandoPessoasGrupo
                             }
+                            onClick={() => void adicionarPessoasAoGrupo()}
                         >
-                            Adicionar ao grupo
+                            {adicionandoPessoasGrupo
+                                ? "Adicionando..."
+                                : "Adicionar ao grupo"}
                         </button>
                     </footer>
                 </section>

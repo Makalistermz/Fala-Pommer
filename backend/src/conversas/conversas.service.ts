@@ -790,6 +790,198 @@ export class ConversasService {
         };
     }
 
+    async adicionarParticipantesGrupo(
+        usuarioLogadoId: number,
+        conversaId: number,
+        participanteIds: number[]
+    ) {
+        const contatosSelecionados = Array.from(
+            new Set(participanteIds)
+        );
+
+        if (
+            contatosSelecionados.length < 1 ||
+            contatosSelecionados.includes(usuarioLogadoId)
+        ) {
+            throw new BadRequestException(
+                "Selecione pelo menos uma pessoa diferente de você."
+            );
+        }
+
+        const grupo = await this.prisma.$transaction(
+            async (transacao) => {
+                const usuariosParaBloquear = Array.from(
+                    new Set([
+                        usuarioLogadoId,
+                        ...contatosSelecionados
+                    ])
+                ).sort(
+                    (primeiroId, segundoId) =>
+                        primeiroId - segundoId
+                );
+
+                for (const usuarioId of usuariosParaBloquear) {
+                    await transacao.$queryRaw<Array<{ id: number }>>`
+                        SELECT id
+                        FROM cadastro
+                        WHERE id = ${usuarioId}
+                        FOR UPDATE
+                    `;
+                }
+
+                await transacao.$queryRaw<Array<{ id: number }>>`
+                    SELECT id
+                    FROM conversa
+                    WHERE id = ${conversaId}
+                    FOR UPDATE
+                `;
+
+                const [usuarioLogado, conversa, contatos] =
+                    await Promise.all([
+                        transacao.cadastro.findUnique({
+                            where: {
+                                id: usuarioLogadoId
+                            },
+                            select: {
+                                id: true,
+                                tipo_usuario: true,
+                                desativado_em: true
+                            }
+                        }),
+                        transacao.conversa.findUnique({
+                            where: {
+                                id: conversaId
+                            },
+                            include: {
+                                conversa_participante: {
+                                    select: {
+                                        usuario_id: true
+                                    }
+                                }
+                            }
+                        }),
+                        transacao.cadastro.findMany({
+                            where: {
+                                id: {
+                                    in: contatosSelecionados
+                                },
+                                desativado_em: null,
+                                tipo_usuario: {
+                                    not: "user"
+                                }
+                            },
+                            select: {
+                                id: true
+                            }
+                        })
+                    ]);
+
+                if (!usuarioLogado) {
+                    throw new NotFoundException(
+                        "Usuário autenticado não encontrado."
+                    );
+                }
+
+                if (
+                    usuarioLogado.desativado_em !== null ||
+                    usuarioLogado.tipo_usuario === "user"
+                ) {
+                    throw new ForbiddenException(
+                        "Você não pode adicionar pessoas a grupos."
+                    );
+                }
+
+                if (!conversa) {
+                    throw new NotFoundException(
+                        "Conversa não encontrada."
+                    );
+                }
+
+                if (conversa.tipo !== "grupo") {
+                    throw new BadRequestException(
+                        "Somente grupos podem receber novos participantes."
+                    );
+                }
+
+                const participaDoGrupo =
+                    conversa.conversa_participante.some(
+                        (participante) =>
+                            participante.usuario_id === usuarioLogadoId
+                    );
+
+                if (!participaDoGrupo) {
+                    throw new ForbiddenException(
+                        "Você não participa deste grupo."
+                    );
+                }
+
+                if (contatos.length !== contatosSelecionados.length) {
+                    throw new BadRequestException(
+                        "Uma ou mais pessoas não podem participar de grupos."
+                    );
+                }
+
+                const participantesAtuais = new Set(
+                    conversa.conversa_participante.map(
+                        (participante) => participante.usuario_id
+                    )
+                );
+
+                if (
+                    contatosSelecionados.some((contatoId) =>
+                        participantesAtuais.has(contatoId)
+                    )
+                ) {
+                    throw new ConflictException(
+                        "Uma ou mais pessoas já participam deste grupo."
+                    );
+                }
+
+                return transacao.conversa.update({
+                    where: {
+                        id: conversaId
+                    },
+                    data: {
+                        conversa_participante: {
+                            create: contatosSelecionados.map(
+                                (usuarioId) => ({
+                                    cadastro: {
+                                        connect: {
+                                            id: usuarioId
+                                        }
+                                    }
+                                })
+                            )
+                        }
+                    },
+                    include: {
+                        conversa_participante: {
+                            include: {
+                                cadastro: {
+                                    select: {
+                                        id: true,
+                                        nome: true,
+                                        tipo_usuario: true,
+                                        foto_perfil_url: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        );
+
+        return {
+            grupoId: grupo.id,
+            participantes: grupo.conversa_participante.map(
+                (participante) => participante.cadastro
+            ),
+            totalParticipantes:
+                grupo.conversa_participante.length
+        };
+    }
+
     /*
      * Lista atendimentos de setor.
      *

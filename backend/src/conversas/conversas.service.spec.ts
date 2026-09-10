@@ -34,6 +34,7 @@ describe("ConversasService", () => {
       findUnique: jest.fn(),
       findMany: jest.fn(),
       create: jest.fn(),
+      update: jest.fn(),
     },
     conversa_setor: {
       findMany: jest.fn(),
@@ -826,6 +827,71 @@ describe("ConversasService", () => {
     );
     expect(prismaMock.$transaction).toHaveBeenCalledTimes(1);
     expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(3);
+  });
+
+  it("adiciona pelo menos um novo participante ao grupo", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      tipo_usuario: "admin",
+      desativado_em: null,
+    });
+    prismaMock.cadastro.findMany.mockResolvedValue([{ id: 2 }]);
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 30,
+      tipo: "grupo",
+      conversa_participante: [{ usuario_id: 1 }],
+    });
+    prismaMock.conversa.update.mockResolvedValue({
+      id: 30,
+      conversa_participante: [
+        { cadastro: { id: 1, nome: "Admin" } },
+        { cadastro: { id: 2, nome: "Contato" } },
+      ],
+    });
+
+    await expect(
+      service.adicionarParticipantesGrupo(1, 30, [2]),
+    ).resolves.toEqual({
+      grupoId: 30,
+      participantes: [
+        { id: 1, nome: "Admin" },
+        { id: 2, nome: "Contato" },
+      ],
+      totalParticipantes: 2,
+    });
+
+    expect(prismaMock.conversa.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: 30 },
+        data: {
+          conversa_participante: {
+            create: [
+              { cadastro: { connect: { id: 2 } } },
+            ],
+          },
+        },
+      }),
+    );
+  });
+
+  it("impede que quem não participa adicione pessoas ao grupo", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      tipo_usuario: "admin",
+      desativado_em: null,
+    });
+    prismaMock.cadastro.findMany.mockResolvedValue([{ id: 2 }]);
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 30,
+      tipo: "grupo",
+      conversa_participante: [{ usuario_id: 3 }],
+    });
+
+    await expect(
+      service.adicionarParticipantesGrupo(1, 30, [2]),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+
+    expect(prismaMock.conversa.update).not.toHaveBeenCalled();
   });
 
   it("impede adicionar usuário comum ao grupo", async () => {

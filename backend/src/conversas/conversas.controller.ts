@@ -26,6 +26,7 @@ import { CriarMensagemDto } from "./dto/criar-mensagem.dto";
 import { AtualizarDigitacaoDto } from "./dto/atualizar-digitacao.dto";
 import { ListarMensagensDto } from "./dto/listar-mensagens.dto";
 import { CriarGrupoDto } from "./dto/criar-grupo.dto";
+import { AdicionarParticipantesGrupoDto } from "./dto/adicionar-participantes-grupo.dto";
 import { CriarAvaliacaoDto } from "./dto/criar-avaliacao.dto";
 
 import {
@@ -97,6 +98,22 @@ export class ConversasController {
         return this.conversasService.criarGrupo(
             requisicao.usuario!.sub,
             dados.nome,
+            dados.participanteIds
+        );
+    }
+
+    @Post("grupos/:conversaId/participantes")
+    @HttpCode(200)
+    @Perfis("funcionario", "admin", "superAdmin")
+    adicionarParticipantesGrupo(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Param("conversaId", ParseIntPipe)
+        conversaId: number,
+        @Body() dados: AdicionarParticipantesGrupoDto
+    ) {
+        return this.conversasService.adicionarParticipantesGrupo(
+            requisicao.usuario!.sub,
+            conversaId,
             dados.participanteIds
         );
     }

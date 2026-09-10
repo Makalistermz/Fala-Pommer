@@ -248,8 +248,19 @@ function Home() {
     const [modalAdicionarPessoaAberto, setModalAdicionarPessoaAberto] =
         useState(false);
     const [buscaPessoaGrupo, setBuscaPessoaGrupo] = useState("");
+    const [contatosDisponiveisModalAdicionarPessoas,
+        setContatosDisponiveisModalAdicionarPessoas] =
+        useState<UsuarioConversa[]>([]);
+    const [contatosModalAdicionarPessoasSelecionados,
+        setContatosModalAdicionarPessoasSelecionados] =
+        useState<Set<number>>(new Set());
+    const [carregandoContatosModalAdicionarPessoas,
+        setCarregandoContatosModalAdicionarPessoas] = useState(false);
+    const [erroContatosModalAdicionarPessoas,
+        setErroContatosModalAdicionarPessoas] = useState("");
     const botaoFecharModalAdicionarPessoaRef =
         useRef<HTMLButtonElement>(null);
+    const inputBuscaPessoaGrupoRef = useRef<HTMLInputElement>(null);
 
     const [usuarios, setUsuarios] = useState<UsuarioConversa[]>([]);
 
@@ -677,7 +688,7 @@ function Home() {
         const overflowAnterior = document.body.style.overflow;
         const elementoComFocoAnterior = document.activeElement;
         document.body.style.overflow = "hidden";
-        botaoFecharModalAdicionarPessoaRef.current?.focus();
+        inputBuscaPessoaGrupoRef.current?.focus();
 
         function fecharComEscape(evento: KeyboardEvent) {
             if (evento.key === "Escape") {
@@ -1154,6 +1165,46 @@ function Home() {
         }
     }
 
+    async function contatosModalAdicionarPessoas() {
+        if (
+            !usuario ||
+            usuario.tipo === "user" ||
+            conversaSelecionada?.tipo !== "grupo"
+        ) {
+            return;
+        }
+
+        setBuscaPessoaGrupo("");
+        setContatosDisponiveisModalAdicionarPessoas([]);
+        setContatosModalAdicionarPessoasSelecionados(new Set());
+        setErroContatosModalAdicionarPessoas("");
+        setCarregandoContatosModalAdicionarPessoas(true);
+        setModalAdicionarPessoaAberto(true);
+
+        try {
+            const resposta = await apiFetch("/usuarios/grupos/contatos");
+
+            if (!resposta.ok) {
+                throw new Error("Não foi possível carregar os contatos.");
+            }
+
+            const contatos = await resposta.json() as UsuarioConversa[];
+            setContatosDisponiveisModalAdicionarPessoas(
+                contatos.filter((contato) => contato.tipoUsuario !== "user"),
+            );
+        } catch (erro) {
+            console.error(
+                "Erro ao carregar contatos para adição ao grupo:",
+                erro,
+            );
+            setErroContatosModalAdicionarPessoas(
+                "Não foi possível carregar os contatos.",
+            );
+        } finally {
+            setCarregandoContatosModalAdicionarPessoas(false);
+        }
+    }
+
     async function criarGrupo() {
         const nomeLimpo = nomeGrupo.trim();
 
@@ -1217,6 +1268,20 @@ function Home() {
     function alternarContatoGrupo(contatoId: number) {
         setErroCriacaoGrupo("");
         setContatosGrupoSelecionados((selecionadosAtuais) => {
+            const novosSelecionados = new Set(selecionadosAtuais);
+
+            if (novosSelecionados.has(contatoId)) {
+                novosSelecionados.delete(contatoId);
+            } else {
+                novosSelecionados.add(contatoId);
+            }
+
+            return novosSelecionados;
+        });
+    }
+
+    function alternarContatoModalAdicionarPessoas(contatoId: number) {
+        setContatosModalAdicionarPessoasSelecionados((selecionadosAtuais) => {
             const novosSelecionados = new Set(selecionadosAtuais);
 
             if (novosSelecionados.has(contatoId)) {
@@ -1518,6 +1583,26 @@ function Home() {
 
         return descricao.toLowerCase().includes(busca);
     });
+
+    const contatosDisponiveisParaGrupo =
+        contatosDisponiveisModalAdicionarPessoas.filter((contato) => {
+            if (
+                contato.tipoUsuario === "user" ||
+                conversaSelecionada?.tipo !== "grupo" ||
+                conversaSelecionada.participantes.some(
+                    (participante) => participante.id === contato.id,
+                )
+            ) {
+                return false;
+            }
+
+            const busca = buscaPessoaGrupo.trim().toLowerCase();
+            const descricao = contato.setor
+                ? `${contato.nome} ${contato.setor.nome} ${contato.setor.sigla}`
+                : `${contato.nome} ${contato.tipoUsuario}`;
+
+            return descricao.toLowerCase().includes(busca);
+        });
 
     function adicionarEAbrirConversa(conversa: Conversa) {
         const conversaNormalizada: Conversa = {
@@ -2664,10 +2749,7 @@ function Home() {
                         type="button"
                         className="chat-header__adicionar-pessoa"
                         aria-label="Adicionar pessoa ao grupo"
-                        onClick={() => {
-                            setBuscaPessoaGrupo("");
-                            setModalAdicionarPessoaAberto(true);
-                        }}
+                        onClick={() => void contatosModalAdicionarPessoas()}
                     >
                         <svg
                             width="20"
@@ -3610,6 +3692,7 @@ function Home() {
                             <path d="m16 16 4 4" />
                         </svg>
                         <input
+                            ref={inputBuscaPessoaGrupoRef}
                             type="search"
                             value={buscaPessoaGrupo}
                             onChange={(evento) =>
@@ -3623,27 +3706,122 @@ function Home() {
 
                     <div className="modal-grupo__rotulo-lista">
                         <span>PESSOAS DISPONÍVEIS</span>
-                        <span>0</span>
+                        {!carregandoContatosModalAdicionarPessoas &&
+                            !erroContatosModalAdicionarPessoas && (
+                            <span>{contatosDisponiveisParaGrupo.length}</span>
+                        )}
                     </div>
 
                     <div className="modal-grupo__contatos">
-                        <p className="modal-grupo__mensagem">
-                            Nenhuma pessoa disponível.
-                        </p>
+
+                        {carregandoContatosModalAdicionarPessoas && (
+                            <p className="modal-grupo__mensagem">
+                                Carregando contatos...
+                            </p>
+                        )}
+
+                        {!carregandoContatosModalAdicionarPessoas &&
+                            erroContatosModalAdicionarPessoas && (
+                            <p className="modal-grupo__mensagem modal-grupo__mensagem--erro">
+                                {erroContatosModalAdicionarPessoas}
+                            </p>
+                        )}
+
+                        {!carregandoContatosModalAdicionarPessoas &&
+                            !erroContatosModalAdicionarPessoas &&
+                            contatosDisponiveisParaGrupo.map((contato) => {
+                                const selecionado =
+                                    contatosModalAdicionarPessoasSelecionados.has(
+                                        contato.id,
+                                    );
+
+                                return (
+                                    <button
+                                        key={contato.id}
+                                        type="button"
+                                        className={`modal-grupo__contato ${
+                                            selecionado
+                                                ? "modal-grupo__contato--selecionado"
+                                                : ""
+                                        }`}
+                                        onClick={() =>
+                                            alternarContatoModalAdicionarPessoas(
+                                                contato.id,
+                                            )
+                                        }
+                                        aria-pressed={selecionado}
+                                    >
+                                        <span className="modal-grupo__avatar">
+                                            {renderizarAvatar(
+                                                contato.nome,
+                                                contato.foto_perfil_url,
+                                            )}
+                                        </span>
+
+                                        <span className="modal-grupo__dados">
+                                            <strong>{contato.nome}</strong>
+                                            <span
+                                                className={`modal-grupo__perfil modal-grupo__perfil--${contato.tipoUsuario}`}
+                                            >
+                                                {contato.tipoUsuario === "funcionario"
+                                                    ? (contato.setor?.nome ?? "Funcionário")
+                                                    : contato.tipoUsuario === "admin"
+                                                        ? "Administrador"
+                                                        : "Super Administrador"}
+                                            </span>
+                                        </span>
+
+                                        <span
+                                            className="modal-grupo__selecao"
+                                            aria-hidden="true"
+                                        >
+                                            {selecionado && (
+                                                <svg viewBox="0 0 16 16">
+                                                    <path d="m3 8 3 3 7-7" />
+                                                </svg>
+                                            )}
+                                        </span>
+                                    </button>
+                                );
+                        })}
+
+                        {!carregandoContatosModalAdicionarPessoas &&
+                            !erroContatosModalAdicionarPessoas &&
+                            contatosDisponiveisParaGrupo.length === 0 && (
+                                <p className="modal-grupo__mensagem">
+                                    Nenhum contato encontrado.
+                                </p>
+                        )}
                     </div>
 
                     <footer className="modal-grupo__rodape">
                         <div className="modal-grupo__resumo">
-                            <span className="modal-grupo__contador">
+                            <span
+                                className={
+                                    contatosModalAdicionarPessoasSelecionados.size > 0
+                                        ? "modal-grupo__contador modal-grupo__contador--ativo"
+                                        : "modal-grupo__contador"
+                                }
+                                aria-live="polite"
+                            >
                                 <svg viewBox="0 0 20 20" aria-hidden="true">
                                     <path d="M13.5 16v-1.25A2.75 2.75 0 0 0 10.75 12h-4.5a2.75 2.75 0 0 0-2.75 2.75V16" />
                                     <circle cx="8.5" cy="6.5" r="2.5" />
                                     <path d="M14.5 7v5M12 9.5h5" />
                                 </svg>
-                                Nenhuma pessoa selecionada
+                                {contatosModalAdicionarPessoasSelecionados.size === 0
+                                    ? "Nenhuma pessoa selecionada"
+                                    : contatosModalAdicionarPessoasSelecionados.size === 1
+                                        ? "1 pessoa selecionada"
+                                        : `${contatosModalAdicionarPessoasSelecionados.size} pessoas selecionadas`}
                             </span>
                         </div>
-                        <button type="button" disabled>
+                        <button
+                            type="button"
+                            disabled={
+                                contatosModalAdicionarPessoasSelecionados.size < 1
+                            }
+                        >
                             Adicionar ao grupo
                         </button>
                     </footer>

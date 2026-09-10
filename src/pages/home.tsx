@@ -245,6 +245,11 @@ function Home() {
     const [erroCriacaoGrupo, setErroCriacaoGrupo] = useState("");
     const [criandoGrupo, setCriandoGrupo] = useState(false);
     const botaoFecharModalGrupoRef = useRef<HTMLButtonElement>(null);
+    const [modalAdicionarPessoaAberto, setModalAdicionarPessoaAberto] =
+        useState(false);
+    const [buscaPessoaGrupo, setBuscaPessoaGrupo] = useState("");
+    const botaoFecharModalAdicionarPessoaRef =
+        useRef<HTMLButtonElement>(null);
 
     const [usuarios, setUsuarios] = useState<UsuarioConversa[]>([]);
 
@@ -663,6 +668,34 @@ function Home() {
             }
         };
     }, [modalGrupoAberto]);
+
+    useEffect(() => {
+        if (!modalAdicionarPessoaAberto) {
+            return;
+        }
+
+        const overflowAnterior = document.body.style.overflow;
+        const elementoComFocoAnterior = document.activeElement;
+        document.body.style.overflow = "hidden";
+        botaoFecharModalAdicionarPessoaRef.current?.focus();
+
+        function fecharComEscape(evento: KeyboardEvent) {
+            if (evento.key === "Escape") {
+                setModalAdicionarPessoaAberto(false);
+            }
+        }
+
+        window.addEventListener("keydown", fecharComEscape);
+
+        return () => {
+            document.body.style.overflow = overflowAnterior;
+            window.removeEventListener("keydown", fecharComEscape);
+
+            if (elementoComFocoAnterior instanceof HTMLElement) {
+                elementoComFocoAnterior.focus();
+            }
+        };
+    }, [modalAdicionarPessoaAberto]);
 
     useEffect(() => {
         if (!arquivoEmVisualizacao) {
@@ -2626,6 +2659,35 @@ function Home() {
                     </div>
                 </div>
 
+                {conversaSelecionada.tipo === "grupo" && (
+                    <button
+                        type="button"
+                        className="chat-header__adicionar-pessoa"
+                        aria-label="Adicionar pessoa ao grupo"
+                        onClick={() => {
+                            setBuscaPessoaGrupo("");
+                            setModalAdicionarPessoaAberto(true);
+                        }}
+                    >
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            aria-hidden="true"
+                        >
+                            <path
+                                d="M15 19c0-2.21-2.69-4-6-4s-6 1.79-6 4m6-7a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm9-5v6m3-3h-6"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
+                        <span>Adicionar pessoa</span>
+                    </button>
+                )}
+
                 {conversaSelecionada.tipo === "setor" &&
                     conversaSelecionada.podeFinalizar && (
                     <div className="chat-header__acoes">
@@ -3482,6 +3544,107 @@ function Home() {
                                     : contatosGrupoSelecionados.size < 2
                                         ? "Selecione 2 contatos"
                                         : "Criar grupo"}
+                        </button>
+                    </footer>
+                </section>
+            </div>
+        )}
+
+        {modalAdicionarPessoaAberto &&
+            conversaSelecionada?.tipo === "grupo" && (
+            <div
+                className="modal-grupo"
+                role="presentation"
+                onMouseDown={(evento) => {
+                    if (evento.target === evento.currentTarget) {
+                        setModalAdicionarPessoaAberto(false);
+                    }
+                }}
+            >
+                <section
+                    className="modal-grupo__janela modal-grupo__janela--adicionar-pessoa"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="modal-adicionar-pessoa-titulo"
+                    aria-describedby="modal-adicionar-pessoa-descricao"
+                >
+                    <header className="modal-grupo__cabecalho">
+                        <div className="modal-grupo__titulo">
+                            <span className="modal-grupo__icone" aria-hidden="true">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M15 19c0-2.21-2.69-4-6-4s-6 1.79-6 4" />
+                                    <circle cx="9" cy="8" r="4" />
+                                    <path d="M18 8v6M15 11h6" />
+                                </svg>
+                            </span>
+
+                            <div>
+                                <span className="modal-grupo__etapa">
+                                    NOVO PARTICIPANTE
+                                </span>
+                                <h2 id="modal-adicionar-pessoa-titulo">
+                                    Adicionar pessoa
+                                </h2>
+                                <p id="modal-adicionar-pessoa-descricao">
+                                    Escolha quem você deseja adicionar ao grupo.
+                                </p>
+                            </div>
+                        </div>
+
+                        <button
+                            ref={botaoFecharModalAdicionarPessoaRef}
+                            type="button"
+                            className="modal-grupo__fechar"
+                            onClick={() => setModalAdicionarPessoaAberto(false)}
+                            aria-label="Fechar adição de pessoa"
+                        >
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M6 6l12 12M18 6 6 18" />
+                            </svg>
+                        </button>
+                    </header>
+
+                    <div className="modal-grupo__pesquisa">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="11" cy="11" r="7" />
+                            <path d="m16 16 4 4" />
+                        </svg>
+                        <input
+                            type="search"
+                            value={buscaPessoaGrupo}
+                            onChange={(evento) =>
+                                setBuscaPessoaGrupo(evento.target.value)
+                            }
+                            placeholder="Pesquisar pessoa"
+                            aria-label="Pesquisar pessoa para adicionar ao grupo"
+                            autoComplete="off"
+                        />
+                    </div>
+
+                    <div className="modal-grupo__rotulo-lista">
+                        <span>PESSOAS DISPONÍVEIS</span>
+                        <span>0</span>
+                    </div>
+
+                    <div className="modal-grupo__contatos">
+                        <p className="modal-grupo__mensagem">
+                            Nenhuma pessoa disponível.
+                        </p>
+                    </div>
+
+                    <footer className="modal-grupo__rodape">
+                        <div className="modal-grupo__resumo">
+                            <span className="modal-grupo__contador">
+                                <svg viewBox="0 0 20 20" aria-hidden="true">
+                                    <path d="M13.5 16v-1.25A2.75 2.75 0 0 0 10.75 12h-4.5a2.75 2.75 0 0 0-2.75 2.75V16" />
+                                    <circle cx="8.5" cy="6.5" r="2.5" />
+                                    <path d="M14.5 7v5M12 9.5h5" />
+                                </svg>
+                                Nenhuma pessoa selecionada
+                            </span>
+                        </div>
+                        <button type="button" disabled>
+                            Adicionar ao grupo
                         </button>
                     </footer>
                 </section>

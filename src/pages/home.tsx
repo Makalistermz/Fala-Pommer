@@ -2708,6 +2708,7 @@ function Home() {
             </div>
             </header>
 
+            <div className="conversas__conteudo">
             <div className="pesquisa">
             <div className="pesquisa-container">
                 <div className="pesquisa-icone-container">
@@ -2850,6 +2851,7 @@ function Home() {
                 </p>
             )}
             </section>
+            </div>
 
             <div
             className={`nova-conversa ${

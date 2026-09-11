@@ -34,6 +34,14 @@
     flex-direction: column;
 }
 
+.conversas__conteudo {
+    display: flex;
+    min-height: 0;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+}
+
 .conversas-header {
     display: flex;
     min-height: 92px;
@@ -1056,15 +1064,30 @@
 
     .modal-dados-grupo {
         max-height: 88vh;
+        overflow-x: hidden;
+        overflow-y: auto;
         border-radius: 18px;
+        overscroll-behavior: contain;
+    }
+
+    .modal-dados-grupo__cabecalho {
+        position: sticky;
+        z-index: 2;
+        top: 0;
+        flex: 0 0 auto;
+        background: inherit;
     }
 
     .modal-dados-grupo__conteudo {
+        min-height: auto;
+        flex: 0 0 auto;
         padding: 18px 16px;
+        overflow: visible;
     }
 
     .modal-dados-grupo__participantes ul {
-        max-height: 48vh;
+        max-height: none;
+        overflow: visible;
     }
 }
 
@@ -2707,6 +2730,19 @@ html.plano-fundo-conversa-5 .mensagens {
         --home-page-padding: 0px;
         --home-panel-gap: 0px;
         --largura-conversas: 100%;
+    }
+
+    .conversas__conteudo {
+        display: block;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    .lista-conversas {
+        min-height: auto;
+        flex: 0 0 auto;
+        overflow: visible;
     }
 
     .mensagens {

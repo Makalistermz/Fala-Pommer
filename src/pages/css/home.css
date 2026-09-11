@@ -2614,9 +2614,56 @@ html.plano-fundo-conversa-5 .mensagens {
 /* Tablet */
 @media (max-width: 900px) {
     .home {
-        --home-page-padding: 16px;
-        --home-panel-gap: 16px;
-        --largura-conversas: 340px;
+        --home-page-padding: 0px;
+        --home-panel-gap: 0px;
+        --largura-conversas: 100%;
+        grid-template-columns: 1fr;
+    }
+
+    .conversas,
+    .chat {
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .conversas {
+        width: 100%;
+    }
+
+    .chat {
+        display: none;
+    }
+
+    .home--chat-mobile-aberto .conversas {
+        display: none;
+    }
+
+    .home--chat-mobile-aberto .chat {
+        display: grid;
+    }
+
+    .chat-header__voltar {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        display: grid;
+        flex-shrink: 0;
+        place-items: center;
+        border: 0;
+        border-radius: 10px;
+        background: transparent;
+        color: #172033;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+    .chat-header__voltar:hover {
+        background: #e7f0ff;
+    }
+
+    .chat-header__voltar:active {
+        scale: .9;
     }
 
     .header-name {
@@ -2660,14 +2707,6 @@ html.plano-fundo-conversa-5 .mensagens {
         --home-page-padding: 0px;
         --home-panel-gap: 0px;
         --largura-conversas: 100%;
-        grid-template-columns: 1fr;
-    }
-
-    .conversas,
-    .chat {
-        border: 0;
-        border-radius: 0;
-        box-shadow: none;
     }
 
     .mensagens {
@@ -2680,45 +2719,6 @@ html.plano-fundo-conversa-5 .mensagens {
 
     .mensagem-linha--com-avatar .mensagem-balao {
         max-width: calc(85% - 42px);
-    }
-
-    .conversas {
-        width: 100%;
-    }
-
-    .chat {
-        display: none;
-    }
-
-    .home--chat-mobile-aberto .conversas {
-        display: none;
-    }
-
-    .home--chat-mobile-aberto .chat {
-        display: grid;
-    }
-
-    .chat-header__voltar {
-        width: 40px;
-        height: 40px;
-        padding: 0;
-        display: grid;
-        flex-shrink: 0;
-        place-items: center;
-        border: 0;
-        border-radius: 10px;
-        background: transparent;
-        color: #172033;
-        cursor: pointer;
-        transition: .3s;
-    }
-
-    .chat-header__voltar:hover {
-        background: #e7f0ff;
-    }
-
-    .chat-header__voltar:active {
-        scale: .9;
     }
 
     .chat-header {
@@ -2939,5 +2939,13 @@ html.plano-fundo-conversa-5 .mensagens {
 @media (max-width: 550px) {
     .mensagem-anexo--audio {
         min-width: 180px;
+    }
+
+    .mensagem-balao__cabecalho strong {
+        font-size: 10px;
+    }
+
+    .mensagem-balao__perfil {
+        font-size: 8px;
     }
 }

@@ -303,6 +303,14 @@ html.tema-escuro:not(.alto-contraste) .header__avatar__dados--clicavel:hover {
   background: var(--tema-superficie-interativa);
 }
 
+html.tema-escuro:not(.alto-contraste) .chat-header__voltar {
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-header__voltar:hover {
+  background: var(--tema-superficie-interativa);
+}
+
 html.tema-escuro:not(.alto-contraste) .chat-header__menu-grupo summary {
   border-color: var(--tema-borda);
   background: var(--tema-superficie-elevada);

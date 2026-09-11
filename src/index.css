@@ -82,11 +82,6 @@ html.tema-escuro:not(.alto-contraste) .conta-seguranca__item--sessoes {
   border-color: rgba(255, 0, 0, 0.336) !important;
 }
 
-html.tema-escuro:not(.alto-contraste) :is(.setores__botao-apagar, .usuarios__botao-apagar) {
-  background: rgb(255, 53, 53);
-  color: black;
-}
-
 html.tema-escuro:not(.alto-contraste) :is(.admin-nav-item.ativo, .admin-profile-role) {
   background: var(--tema-superficie-elevada);
   color: white;
@@ -271,6 +266,334 @@ html.tema-escuro:not(.alto-contraste) .chat-input__emojis emoji-picker {
   --input-font-color: var(--tema-texto);
 }
 
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-grupo__janela,
+  .modal-dados-grupo,
+  .chat-header__menu-opcoes
+) {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie);
+  color: var(--tema-texto);
+  box-shadow: 0 22px 60px rgb(0 0 0 / 38%);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__cabecalho {
+  border-bottom: 1px solid #263b58;
+  background:
+    radial-gradient(circle at 90% -20%, rgb(114 167 255 / 12%), transparent 42%),
+    linear-gradient(135deg, #070e1a 0%, #0b1b31 56%, #12335b 100%);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__icone {
+  border-color: rgb(143 185 255 / 22%);
+  background: rgb(58 101 164 / 20%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 8%);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__fechar {
+  border-color: rgb(143 185 255 / 18%);
+  background: rgb(30 52 82 / 72%);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__fechar:hover {
+  background: rgb(52 82 124 / 78%);
+}
+
+html.tema-escuro:not(.alto-contraste) .header__avatar__dados--clicavel:hover {
+  background: var(--tema-superficie-interativa);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-header__menu-grupo summary {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .chat-header__menu-grupo summary:hover,
+  .chat-header__menu-grupo[open] summary
+) {
+  background: var(--tema-superficie-interativa);
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo button {
+  border-color: transparent;
+  background: transparent;
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo button:hover {
+  background: var(--tema-superficie-interativa);
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo .chat-header__menu-sair-grupo {
+  color: #ff8a80;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo .chat-header__menu-sair-grupo:hover {
+  background: #7f1d1d;
+  color: #ffffff;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .chat-header__finalizar,
+  .chat-header__menu-opcoes:not(.chat-header__menu-opcoes--grupo) button
+) {
+  border-color: #f97066;
+  background: #321e22;
+  color: #ff9b95;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .chat-header__finalizar:hover:not(:disabled),
+  .chat-header__menu-opcoes:not(.chat-header__menu-opcoes--grupo) button:hover:not(:disabled)
+) {
+  border-color: #e5483e;
+  background: #c9342b;
+  color: #ffffff;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .chat-header__finalizar:disabled,
+  .chat-header__menu-opcoes:not(.chat-header__menu-opcoes--grupo) button:disabled
+) {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+html.tema-escuro:not(.alto-contraste) .mensagem-sistema {
+  background: rgb(23 36 58 / 94%);
+  color: #c5d0df;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-dados-grupo__cabecalho,
+  .modal-dados-grupo__participantes,
+  .modal-dados-grupo__participantes li + li
+) {
+  border-color: var(--tema-borda);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-dados-grupo__cabecalho h2,
+  .modal-dados-grupo__identificacao strong,
+  .modal-dados-grupo__secao-titulo h3,
+  .modal-dados-grupo__participante-dados strong
+) {
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-dados-grupo__identificacao > span,
+  .modal-dados-grupo__participante-dados > span,
+  .modal-dados-grupo__sem-participantes
+) {
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-dados-grupo__secao-titulo > span,
+  .modal-dados-grupo__voce
+) {
+  background: #203d65;
+  color: #8ab6ff;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-dados-grupo__participantes ul {
+  scrollbar-color: #40536f transparent;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-dados-grupo__participantes li:hover {
+  background: var(--tema-superficie-interativa);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-dados-grupo__sem-participantes {
+  background: var(--tema-superficie-elevada);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-dados-grupo__cabecalho button {
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-dados-grupo__cabecalho button:hover {
+  background: var(--tema-superficie-interativa);
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-grupo__nome > div,
+  .modal-grupo__pesquisa,
+  .modal-grupo__selecao
+) {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-grupo__nome > div:focus-within,
+  .modal-grupo__pesquisa:focus-within
+) {
+  border-color: var(--tema-destaque);
+  background: var(--tema-superficie-interativa);
+  box-shadow: 0 0 0 3px rgb(114 167 255 / 16%);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-grupo__nome input,
+  .modal-grupo__pesquisa input,
+  .modal-grupo__dados strong
+) {
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-grupo__nome > span,
+  .modal-grupo__nome small,
+  .modal-grupo__rotulo-lista,
+  .modal-grupo__mensagem,
+  .modal-grupo__contador
+) {
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-grupo__nome input,
+  .modal-grupo__pesquisa input
+)::placeholder {
+  color: #7f8da3;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__contatos {
+  scrollbar-color: #40536f transparent;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__contato:hover {
+  border-color: #3a506f;
+  background: var(--tema-superficie-interativa);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__contato--selecionado {
+  border-color: #416da8;
+  background: linear-gradient(90deg, #182f50, #1b365b);
+  box-shadow: 0 5px 14px rgb(0 0 0 / 18%);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__avatar {
+  border-color: var(--tema-superficie);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__perfil {
+  background: #283750;
+  color: #b9c6d8;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__perfil--admin {
+  background: #4d3819;
+  color: #ffd38a;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__perfil--superAdmin {
+  background: #3b2d62;
+  color: #c9b4ff;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__perfil--funcionario {
+  background: #193f31;
+  color: #8de0b0;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__rodape {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__contador--ativo {
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-grupo__rodape button:disabled {
+  background: #34435a;
+  color: #8290a3;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-finalizar {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie);
+  color: var(--tema-texto);
+  box-shadow: 0 24px 70px rgb(0 0 0 / 42%);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-finalizar__cabecalho,
+  .modal-finalizar__acoes
+) {
+  border-color: var(--tema-borda);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-finalizar__cabecalho h2,
+  .modal-finalizar__avaliacao legend,
+  .modal-finalizar__descricao > span
+) {
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-finalizar__cabecalho span {
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-finalizar__introducao {
+  border-color: var(--tema-destaque);
+  background: var(--tema-superficie-elevada);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-finalizar__introducao p {
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-finalizar__estrela {
+  background: var(--tema-superficie-elevada);
+  color: #718097;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-finalizar__estrela:hover,
+  .modal-finalizar__estrela--ativa
+) {
+  color: #ffd166;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-finalizar__descricao textarea {
+  border-color: #40516b;
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-finalizar__descricao textarea::placeholder {
+  color: #7f8da3;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-finalizar__fechar,
+  .modal-finalizar__cancelar
+) {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-finalizar__fechar:hover,
+  .modal-finalizar__cancelar:hover
+) {
+  background: var(--tema-superficie-interativa);
+  color: var(--tema-texto);
+}
+
 /* Administração e configurações */
 html.tema-escuro:not(.alto-contraste) .administracao {
   background: var(--tema-fundo);
@@ -287,9 +610,13 @@ html.tema-escuro:not(.alto-contraste) :is(
   .aparencia__opcao-tema,
   .cards,
   .grafico-card,
+  .usuarios-desativados-card,
+  .atendimentos-setor-card,
   .usuarios,
+  .secretaria,
   .setores,
   .relatorios-logs,
+  .avaliacoes-setores,
   .usuarios__painel-lateral
 ) {
   border-color: var(--tema-borda);
@@ -314,10 +641,25 @@ html.tema-escuro:not(.alto-contraste) :is(
   .aparencia__rotulo,
   .info-cards strong,
   .grafico-card-header h2,
+  .informacoes-desativados h2,
+  .quantidade-desativados,
+  .titulo-historico,
+  .atendimentos-titulos h2,
+  .setor-informacoes > strong,
+  .resolucao h3,
+  .grafico-resolucao > strong,
+  .metrica-item strong,
   .usuarios__header h2,
+  .secretaria__header h2,
   .setores__header h2,
   .relatorios-logs__header h2,
-  .relatorios-logs__usuario
+  .avaliacoes-setores__header h2,
+  .relatorios-logs__usuario,
+  .avaliacoes-setores__usuario,
+  .campo-form-secretaria label,
+  .campo-form-setor label,
+  .usuarios__modal-motivo label,
+  .info__painel-lateral label
 ) {
   color: var(--tema-texto);
 }
@@ -330,10 +672,23 @@ html.tema-escuro:not(.alto-contraste) :is(
   .info-cards small,
   .grafico-card-legenda,
   .grafico-status,
+  .porcentagem-desativados,
+  .descricao-historico,
+  .atendimentos-titulos p,
+  .ranking-setores h3,
+  .setor-informacoes > span,
+  .metrica-item > div > span,
   .usuarios__header p,
+  .usuarios__pesquisa label,
+  .usuarios__modal-motivo small,
+  .secretaria__header p,
   .setores__header p,
   .relatorios-logs__header p,
-  .relatorios-logs__mensagem
+  .avaliacoes-setores__header p,
+  .relatorios-logs__mensagem,
+  .avaliacoes-setores__mensagem,
+  .relatorios-logs__paginacao > span,
+  .avaliacoes-setores__paginacao > span
 ) {
   color: var(--tema-texto-secundario);
 }
@@ -341,8 +696,12 @@ html.tema-escuro:not(.alto-contraste) :is(
 html.tema-escuro:not(.alto-contraste) :is(
   .meu-perfil__campo input,
   .usuarios__pesquisa input,
+  .usuarios__pesquisa select,
+  .usuarios__modal-motivo textarea,
   .info__painel-lateral input,
   .info__painel-lateral select,
+  .info__painel-lateral textarea,
+  .campo-form-secretaria input,
   .campo-form-setor input,
   .campo-form-setor select
 ) {
@@ -356,7 +715,10 @@ html.tema-escuro:not(.alto-contraste) :is(
   .meu-perfil__alterar-senha,
   .meu-perfil__cancelar,
   .usuarios__botao-editar,
-  .relatorios-logs__paginacao button
+  .botao-periodo,
+  .botao-ver-atendimentos,
+  .relatorios-logs__paginacao button,
+  .avaliacoes-setores__paginacao button
 ) {
   border-color: #4777b8;
   background: var(--tema-superficie-elevada);
@@ -368,7 +730,10 @@ html.tema-escuro:not(.alto-contraste) :is(
   .meu-perfil__alterar-senha:hover,
   .meu-perfil__cancelar:hover,
   .usuarios__botao-editar:hover,
-  .relatorios-logs__paginacao button:hover:not(:disabled)
+  .botao-periodo:hover,
+  .botao-ver-atendimentos:hover,
+  .relatorios-logs__paginacao button:hover:not(:disabled),
+  .avaliacoes-setores__paginacao button:hover:not(:disabled)
 ) {
   background: #1d3d67;
   color: #ffffff;
@@ -377,7 +742,8 @@ html.tema-escuro:not(.alto-contraste) :is(
 html.tema-escuro:not(.alto-contraste) :is(
   .usuarios__tabela,
   .setores__tabela,
-  .relatorios-logs__tabela
+  .relatorios-logs__tabela,
+  .avaliacoes-setores__tabela
 ) {
   color: var(--tema-texto);
 }
@@ -386,7 +752,9 @@ html.tema-escuro:not(.alto-contraste) :is(
   .usuarios__tabela th,
   .setores__tabela th,
   .relatorios-logs__tabela th,
-  .relatorios-logs__paginacao
+  .avaliacoes-setores__tabela th,
+  .relatorios-logs__paginacao,
+  .avaliacoes-setores__paginacao
 ) {
   border-color: var(--tema-borda);
   background: var(--tema-superficie-elevada);
@@ -397,10 +765,15 @@ html.tema-escuro:not(.alto-contraste) :is(
   .usuarios__tabela td,
   .setores__tabela td,
   .relatorios-logs__tabela td,
+  .avaliacoes-setores__tabela td,
   .usuarios__header,
   .usuarios__pesquisa,
+  .secretaria__header,
   .setores__header,
   .relatorios-logs__header,
+  .avaliacoes-setores__header,
+  .historico-desativados,
+  .resumo-atendimentos,
   .header__painel-lateral,
   .meu-perfil__divisor
 ) {
@@ -410,7 +783,8 @@ html.tema-escuro:not(.alto-contraste) :is(
 html.tema-escuro:not(.alto-contraste) :is(
   .usuarios__tabela tbody tr:hover,
   .setores__tabela tbody tr:hover,
-  .relatorios-logs__tabela tbody tr:hover
+  .relatorios-logs__tabela tbody tr:hover,
+  .avaliacoes-setores__tabela tbody tr:hover
 ) {
   background: var(--tema-superficie-interativa);
 }
@@ -422,11 +796,213 @@ html.tema-escuro:not(.alto-contraste) :is(
   .acessibilidade__icone,
   .grafico-card-header > strong,
   .usuarios__header > strong,
+  .secretaria__header > strong,
   .setores__header > strong,
-  .relatorios-logs__header > strong
+  .relatorios-logs__header > strong,
+  .avaliacoes-setores__header > strong
 ) {
   background: #172f52;
   color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .admin-toggle {
+  border-color: var(--tema-fundo);
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .criar-avaliacao__pasta,
+  .usuarios__painel-fechar
+) {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .criar-avaliacao__pasta::before {
+  border-color: var(--tema-borda);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .criar-avaliacao__pasta:hover,
+  .usuarios__painel-fechar:hover
+) {
+  border-color: #6088c1;
+  background: var(--tema-superficie-interativa);
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .criar-avaliacao__pasta:hover::before {
+  border-color: #6088c1;
+}
+
+html.tema-escuro:not(.alto-contraste) .criar-avaliacao__pasta--ativa {
+  border-color: var(--tema-destaque);
+  border-bottom-color: var(--tema-superficie);
+  background: var(--tema-superficie);
+  color: var(--tema-destaque);
+  box-shadow: 0 -4px 16px rgb(0 0 0 / 16%);
+}
+
+html.tema-escuro:not(.alto-contraste) .criar-avaliacao__pasta--ativa::before {
+  border-color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .circulo-fundo,
+  .circulo-resolucao-fundo
+) {
+  stroke: #2a405e;
+}
+
+html.tema-escuro:not(.alto-contraste) .barra-fundo {
+  background: #293b56;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .categoria-card,
+  .atendimentos-categoria,
+  .usuarios__header > div > span,
+  .secretaria__header > div > span,
+  .setores__header > div > span,
+  .relatorios-logs__header > div > span,
+  .avaliacoes-setores__header > div > span
+) {
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .botao-ver-usuarios {
+  border-color: #4777b8;
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .usuarios__linha--desativada {
+  background: #2b2025;
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .usuarios__linha--desativada:hover {
+  background: #3a292f;
+}
+
+html.tema-escuro:not(.alto-contraste) .usuarios__botao-desativar {
+  border-color: #ff8a65;
+  background: #39231d;
+  color: #ffad8f;
+}
+
+html.tema-escuro:not(.alto-contraste) .usuarios__botao-desativar:hover:not(:disabled) {
+  border-color: #ff6d3a;
+  background: #d94b1b;
+  color: #ffffff;
+}
+
+html.tema-escuro:not(.alto-contraste) .usuarios__botao-ativar {
+  border-color: #49b978;
+  background: #173a29;
+  color: #78dca2;
+}
+
+html.tema-escuro:not(.alto-contraste) .usuarios__botao-ativar:hover:not(:disabled) {
+  border-color: #38a868;
+  background: #16753a;
+  color: #ffffff;
+}
+
+html.tema-escuro:not(.alto-contraste) .setores__botao-apagar {
+  border-color: #f97066;
+  background: #321e22;
+  color: #ff9b95;
+}
+
+html.tema-escuro:not(.alto-contraste) .setores__botao-apagar:hover:not(:disabled) {
+  border-color: #e5483e;
+  background: #c9342b;
+  color: #ffffff;
+}
+
+html.tema-escuro:not(.alto-contraste) .usuarios__status--ativa {
+  background: #173d2b;
+  color: #75d99d;
+}
+
+html.tema-escuro:not(.alto-contraste) .usuarios__status--desativada {
+  background: #4a2527;
+  color: #ff9b95;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .variacao-desativados,
+  .status-historico
+) {
+  border-color: #286c52;
+  background: #173d2f;
+  color: #7de0b4;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .variacao-desativados--estavel,
+  .status-historico--estavel
+) {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-interativa);
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .variacao-desativados--aumentando,
+  .status-historico--aumentando
+) {
+  background: #4a2527;
+  color: #ff9b95;
+}
+
+html.tema-escuro:not(.alto-contraste) .avaliacoes-setores__desempenho--acima,
+html.tema-escuro:not(.alto-contraste) .relatorios-logs__status--encerrado {
+  border-color: #286c52;
+  background: #173d2f;
+  color: #7de0b4;
+}
+
+html.tema-escuro:not(.alto-contraste) .avaliacoes-setores__desempenho--na-media {
+  border-color: #365f94;
+  background: #19385f;
+  color: #8ab6ff;
+}
+
+html.tema-escuro:not(.alto-contraste) .avaliacoes-setores__desempenho--abaixo {
+  border-color: #814052;
+  background: #482631;
+  color: #ff9eb1;
+}
+
+html.tema-escuro:not(.alto-contraste) .avaliacoes-setores__desempenho--sem-media {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-interativa);
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .relatorios-logs__status--aberto {
+  background: #49351a;
+  color: #ffd18a;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .grafico-status-erro,
+  .relatorios-logs__mensagem--erro,
+  .avaliacoes-setores__mensagem--erro
+) {
+  color: #ff9eb1;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .relatorios-logs__paginacao button[aria-current="page"],
+  .avaliacoes-setores__paginacao button[aria-current="page"]
+) {
+  border-color: var(--rosa-escuro);
+  background: var(--rosa-escuro);
+  color: #ffffff;
 }
 
 /* Modais */
@@ -451,6 +1027,16 @@ html.tema-escuro:not(.alto-contraste) :is(
   .modal-confirmacao p
 ) {
   color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-confirmacao__cancelar {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-confirmacao__cancelar:hover:not(:disabled) {
+  background: var(--tema-superficie-interativa);
 }
 
 html.tema-escuro:not(.alto-contraste):has(

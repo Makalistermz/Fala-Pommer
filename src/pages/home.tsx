@@ -3908,7 +3908,7 @@ function Home() {
                         )}
                     </div>
 
-                    <div className="modal-grupo__contatos">
+                    <div className="modal-grupo__contatos" data-lenis-prevent>
                         {carregandoContatosGrupo && (
                             <p className="modal-grupo__mensagem">
                                 Carregando contatos...
@@ -4102,7 +4102,7 @@ function Home() {
                         />
                     </div>
 
-                    <div className="modal-grupo__rotulo-lista">
+                    <div className="modal-grupo__rotulo-lista" data-lenis-prevent>
                         <span>PESSOAS DISPONÍVEIS</span>
                         {!carregandoContatosModalAdicionarPessoas &&
                             !erroContatosModalAdicionarPessoas && (
@@ -4110,7 +4110,7 @@ function Home() {
                         )}
                     </div>
 
-                    <div className="modal-grupo__contatos">
+                    <div className="modal-grupo__contatos" >
 
                         {carregandoContatosModalAdicionarPessoas && (
                             <p className="modal-grupo__mensagem">

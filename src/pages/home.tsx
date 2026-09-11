@@ -239,6 +239,8 @@ function Home() {
     const menuGrupoRef = useRef<HTMLDetailsElement>(null);
 
     const [modalGrupoAberto, setModalGrupoAberto] = useState(false);
+    const [modalDadosGrupoAberto, setModalDadosGrupoAberto] = useState(false);
+    const botaoFecharModalDadosGrupoRef = useRef<HTMLButtonElement>(null);
     const [nomeGrupo, setNomeGrupo] = useState("");
     const [contatosGrupo, setContatosGrupo] = useState<UsuarioConversa[]>([]);
     const [contatosGrupoSelecionados, setContatosGrupoSelecionados] =
@@ -732,6 +734,34 @@ function Home() {
             }
         };
     }, [modalGrupoAberto]);
+
+    useEffect(() => {
+        if (!modalDadosGrupoAberto) {
+            return;
+        }
+
+        const overflowAnterior = document.body.style.overflow;
+        const elementoComFocoAnterior = document.activeElement;
+        document.body.style.overflow = "hidden";
+        botaoFecharModalDadosGrupoRef.current?.focus();
+
+        function fecharComEscape(evento: KeyboardEvent) {
+            if (evento.key === "Escape") {
+                setModalDadosGrupoAberto(false);
+            }
+        }
+
+        window.addEventListener("keydown", fecharComEscape);
+
+        return () => {
+            document.body.style.overflow = overflowAnterior;
+            window.removeEventListener("keydown", fecharComEscape);
+
+            if (elementoComFocoAnterior instanceof HTMLElement) {
+                elementoComFocoAnterior.focus();
+            }
+        };
+    }, [modalDadosGrupoAberto]);
 
     useEffect(() => {
         if (!modalAdicionarPessoaAberto) {
@@ -2980,7 +3010,47 @@ function Home() {
                     </svg>
                     </button>
 
-                    <div className="header__avatar__dados">
+                    <div
+                        className={`header__avatar__dados ${
+                            conversaSelecionada.tipo === "grupo"
+                                ? "header__avatar__dados--clicavel"
+                                : ""
+                        }`}
+                        role={
+                            conversaSelecionada.tipo === "grupo"
+                                ? "button"
+                                : undefined
+                        }
+                        tabIndex={
+                            conversaSelecionada.tipo === "grupo"
+                                ? 0
+                                : undefined
+                        }
+                        aria-haspopup={
+                            conversaSelecionada.tipo === "grupo"
+                                ? "dialog"
+                                : undefined
+                        }
+                        aria-expanded={
+                            conversaSelecionada.tipo === "grupo"
+                                ? modalDadosGrupoAberto
+                                : undefined
+                        }
+                        onClick={() => {
+                            if (conversaSelecionada.tipo === "grupo") {
+                                setModalDadosGrupoAberto(true);
+                            }
+                        }}
+                        onKeyDown={(evento) => {
+                            if (
+                                conversaSelecionada.tipo === "grupo" &&
+                                (evento.key === "Enter" || evento.key === " ")
+                            ) {
+                                evento.preventDefault();
+                                setModalDadosGrupoAberto(true);
+                            }
+                        }}
+                    >
                         <div className="chat-header__avatar">
                             {renderizarAvatar(
                                 nomeDaConversa(conversaSelecionada),
@@ -4268,6 +4338,117 @@ function Home() {
                 enviando={enviandoAvaliacao}
                 aoEnviar={enviarAvaliacao}
             />
+        )}
+
+        {modalDadosGrupoAberto && conversaSelecionada?.tipo === "grupo" && (
+            <div
+                className="modal-dados-grupo__fundo"
+                onClick={() => setModalDadosGrupoAberto(false)}
+            >
+                <section
+                    className="modal-dados-grupo"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="modal-dados-grupo-titulo"
+                    onClick={(evento) => evento.stopPropagation()}
+                >
+                    <header className="modal-dados-grupo__cabecalho">
+                        <h2 id="modal-dados-grupo-titulo">
+                            Dados do grupo
+                        </h2>
+                        <button
+                            ref={botaoFecharModalDadosGrupoRef}
+                            type="button"
+                            aria-label="Fechar"
+                            onClick={() => setModalDadosGrupoAberto(false)}
+                        >
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="m6 6 12 12M18 6 6 18" />
+                            </svg>
+                        </button>
+                    </header>
+
+                    <div className="modal-dados-grupo__conteudo">
+                        <div className="modal-dados-grupo__identidade">
+                            <div
+                                className="modal-dados-grupo__avatar-principal"
+                                aria-hidden="true"
+                            >
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M16 20c0-2.21-2.69-4-6-4s-6 1.79-6 4m6-7a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 7c0-1.61-1.2-3.03-3-3.66M16.5 5.13a4 4 0 0 1 0 7.75" />
+                                </svg>
+                            </div>
+                            <div className="modal-dados-grupo__identificacao">
+                                <strong>{conversaSelecionada.nome}</strong>
+                                <span>
+                                    {conversaSelecionada.totalParticipantes === 1
+                                        ? "1 participante"
+                                        : `${conversaSelecionada.totalParticipantes} participantes`}
+                                </span>
+                            </div>
+                        </div>
+
+                        <section
+                            className="modal-dados-grupo__participantes"
+                            aria-labelledby="modal-dados-grupo-participantes"
+                        >
+                            <div className="modal-dados-grupo__secao-titulo">
+                                <h3 id="modal-dados-grupo-participantes">
+                                    Participantes
+                                </h3>
+                                <span>{conversaSelecionada.totalParticipantes}</span>
+                            </div>
+
+                            {conversaSelecionada.participantes.length > 0 ? (
+                                <ul data-lenis-prevent>
+                                    {[...conversaSelecionada.participantes]
+                                        .sort((primeiro, segundo) => {
+                                            if (primeiro.id === usuario?.sub) return -1;
+                                            if (segundo.id === usuario?.sub) return 1;
+                                            return primeiro.nome.localeCompare(
+                                                segundo.nome,
+                                                "pt-BR",
+                                            );
+                                        })
+                                        .map((participante) => (
+                                            <li key={participante.id}>
+                                                <div className="modal-dados-grupo__participante-avatar">
+                                                    {renderizarAvatar(
+                                                        participante.nome,
+                                                        participante.foto_perfil_url,
+                                                    )}
+                                                </div>
+                                                <div className="modal-dados-grupo__participante-dados">
+                                                    <div>
+                                                        <strong>{participante.nome}</strong>
+                                                        {participante.id === usuario?.sub && (
+                                                            <span className="modal-dados-grupo__voce">
+                                                                Você
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <span>
+                                                        {participante.tipo_usuario === "superAdmin"
+                                                            ? "Super administrador"
+                                                            : participante.tipo_usuario === "admin"
+                                                                ? "Administrador"
+                                                                : participante.tipo_usuario === "funcionario"
+                                                                    ? "Funcionário"
+                                                                    : "Usuário"}
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        ))}
+                                </ul>
+                            ) : (
+                                <p className="modal-dados-grupo__sem-participantes">
+                                    Este grupo não possui participantes.
+                                </p>
+                            )}
+                        </section>
+                    </div>
+                </section>
+            </div>
         )}
 
         <ModalConfirmacao

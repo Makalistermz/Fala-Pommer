@@ -3,6 +3,7 @@ import {
     BadRequestException,
     Body,
     Controller,
+    Delete,
     Get,
     HttpCode,
     Param,
@@ -115,6 +116,20 @@ export class ConversasController {
             requisicao.usuario!.sub,
             conversaId,
             dados.participanteIds
+        );
+    }
+
+    @Delete("grupos/:conversaId/participantes/eu")
+    @HttpCode(200)
+    @Perfis("funcionario", "admin", "superAdmin")
+    sairDoGrupo(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Param("conversaId", ParseIntPipe)
+        conversaId: number
+    ) {
+        return this.conversasService.sairDoGrupo(
+            requisicao.usuario!.sub,
+            conversaId
         );
     }
 

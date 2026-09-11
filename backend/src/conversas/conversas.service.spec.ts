@@ -43,6 +43,11 @@ describe("ConversasService", () => {
     },
     conversa_participante: {
       updateMany: jest.fn(),
+      delete: jest.fn(),
+      count: jest.fn(),
+    },
+    conversa_leitura: {
+      deleteMany: jest.fn(),
     },
     mensagem: {
       findMany: jest.fn(),
@@ -63,6 +68,9 @@ describe("ConversasService", () => {
     );
     prismaMock.$queryRaw.mockResolvedValue([{ id: 1 }]);
     prismaMock.conversa_participante.updateMany.mockResolvedValue({ count: 0 });
+    prismaMock.conversa_participante.delete.mockResolvedValue({});
+    prismaMock.conversa_participante.count.mockResolvedValue(2);
+    prismaMock.conversa_leitura.deleteMany.mockResolvedValue({ count: 0 });
     prismaMock.cadastro.findUnique.mockResolvedValue({
       id: 1,
       nome: "Usuário",
@@ -944,6 +952,76 @@ describe("ConversasService", () => {
         },
       }),
     );
+  });
+
+  it("remove o participante e sua leitura ao sair do grupo", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      tipo_usuario: "funcionario",
+      desativado_em: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 30,
+      tipo: "grupo",
+      conversa_participante: [{ usuario_id: 1 }],
+    });
+
+    await expect(service.sairDoGrupo(1, 30)).resolves.toEqual({
+      grupoId: 30,
+      totalParticipantes: 2,
+      somenteLeitura: false,
+    });
+    expect(prismaMock.conversa_leitura.deleteMany).toHaveBeenCalledWith({
+      where: { conversa_id: 30, usuario_id: 1 },
+    });
+    expect(prismaMock.conversa_participante.delete).toHaveBeenCalledWith({
+      where: {
+        conversa_id_usuario_id: {
+          conversa_id: 30,
+          usuario_id: 1,
+        },
+      },
+    });
+    expect(prismaMock.conversa_participante.count).toHaveBeenCalledWith({
+      where: { conversa_id: 30 },
+    });
+  });
+
+  it("mantém o grupo somente para leitura quando o superAdmin sai", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 9,
+      tipo_usuario: "superAdmin",
+      desativado_em: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 30,
+      tipo: "grupo",
+      conversa_participante: [{ usuario_id: 9 }],
+    });
+
+    await expect(service.sairDoGrupo(9, 30)).resolves.toEqual({
+      grupoId: 30,
+      totalParticipantes: 2,
+      somenteLeitura: true,
+    });
+  });
+
+  it("impede sair de um grupo do qual não participa", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      tipo_usuario: "admin",
+      desativado_em: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 30,
+      tipo: "grupo",
+      conversa_participante: [],
+    });
+
+    await expect(service.sairDoGrupo(1, 30)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
+    expect(prismaMock.conversa_participante.delete).not.toHaveBeenCalled();
   });
 
   it("permite que superAdmin visualize grupo sem participar", async () => {

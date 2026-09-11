@@ -6,6 +6,7 @@ import { ConversasService } from "./conversas.service";
 describe("ConversasController", () => {
   const conversasServiceMock = {
     listarMensagens: jest.fn(),
+    sairDoGrupo: jest.fn(),
   };
 
   const controller = new ConversasController(
@@ -34,5 +35,17 @@ describe("ConversasController", () => {
       15,
       consulta,
     );
+  });
+
+  it("encaminha o usuário e o grupo ao sair", () => {
+    const requisicao = {
+      usuario: {
+        sub: 7,
+      },
+    } as RequisicaoAutenticada;
+
+    controller.sairDoGrupo(requisicao, 30);
+
+    expect(conversasServiceMock.sairDoGrupo).toHaveBeenCalledWith(7, 30);
   });
 });

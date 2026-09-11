@@ -19,6 +19,7 @@ import {
     type GravadorAudioAtivo,
 } from "../library/gravadorAudio";
 import { ModalFinalizarConversa } from "../components/ModalFinalizarConversa";
+import { ModalConfirmacao } from "../components/ModalConfirmacao";
 import { ModalFeedback } from "../components/ModalFeedback";
 import { useAutenticacao } from "../components/AutenticacaoContext";
 import { apiFetch } from "../services/api";
@@ -225,6 +226,8 @@ function Home() {
     const [conversaAvaliacaoId, setConversaAvaliacaoId] =
         useState<number | null>(null);
     const [finalizandoConversa, setFinalizandoConversa] = useState(false);
+    const [modalSairGrupoAberto, setModalSairGrupoAberto] = useState(false);
+    const [saindoDoGrupo, setSaindoDoGrupo] = useState(false);
     const [enviandoAvaliacao, setEnviandoAvaliacao] = useState(false);
     const [feedbackFinalizacao, setFeedbackFinalizacao] = useState({
         aberto: false,
@@ -232,6 +235,7 @@ function Home() {
         mensagem: "",
     });
     const menuConversaMobileRef = useRef<HTMLDetailsElement>(null);
+    const menuGrupoRef = useRef<HTMLDetailsElement>(null);
 
     const [modalGrupoAberto, setModalGrupoAberto] = useState(false);
     const [nomeGrupo, setNomeGrupo] = useState("");
@@ -547,6 +551,50 @@ function Home() {
             setEnviandoAvaliacao(false);
         }
     }
+
+    useEffect(() => {
+        function fecharMenuGrupoAoClicarFora(evento: PointerEvent) {
+            const menuGrupo = menuGrupoRef.current;
+            const alvo = evento.target;
+
+            if (
+                menuGrupo?.open &&
+                alvo instanceof Node &&
+                !menuGrupo.contains(alvo)
+            ) {
+                menuGrupo.open = false;
+            }
+        }
+
+        function fecharMenuGrupoComEscape(evento: KeyboardEvent) {
+            const menuGrupo = menuGrupoRef.current;
+
+            if (evento.key !== "Escape" || !menuGrupo?.open) {
+                return;
+            }
+
+            menuGrupo.open = false;
+            const resumo = menuGrupo.querySelector("summary");
+
+            if (resumo instanceof HTMLElement) {
+                resumo.focus();
+            }
+        }
+
+        document.addEventListener(
+            "pointerdown",
+            fecharMenuGrupoAoClicarFora,
+        );
+        window.addEventListener("keydown", fecharMenuGrupoComEscape);
+
+        return () => {
+            document.removeEventListener(
+                "pointerdown",
+                fecharMenuGrupoAoClicarFora,
+            );
+            window.removeEventListener("keydown", fecharMenuGrupoComEscape);
+        };
+    }, []);
 
     useEffect(() => {
         if (!menuAberto) {
@@ -1028,9 +1076,17 @@ function Home() {
                             return conversaAtual;
                         }
 
-                        return todasConversas.find(
+                        const conversaAtualizada = todasConversas.find(
                             (conversa) => conversa.id === conversaAtual.id,
-                        ) ?? conversaAtual;
+                        );
+
+                        if (conversaAtualizada) {
+                            return conversaAtualizada;
+                        }
+
+                        return conversaAtual.tipo === "grupo"
+                            ? null
+                            : conversaAtual;
                     });
 
                     if (tipoUsuarioLogado === "user") {
@@ -1288,6 +1344,112 @@ function Home() {
             );
         } finally {
             setAdicionandoPessoasGrupo(false);
+        }
+    }
+
+    async function sairDoGrupoSelecionado() {
+        if (
+            conversaSelecionada?.tipo !== "grupo" ||
+            conversaSelecionada.somenteLeitura ||
+            saindoDoGrupo
+        ) {
+            return;
+        }
+
+        const grupoId = conversaSelecionada.id;
+        setSaindoDoGrupo(true);
+        pararDeInformarDigitacao();
+        cancelarGravacaoAudio();
+
+        try {
+            const resposta = await apiFetch(
+                `/conversas/grupos/${grupoId}/participantes/eu`,
+                { method: "DELETE" },
+            );
+            const resultado = await resposta.json().catch(() => null) as {
+                grupoId?: number;
+                totalParticipantes?: number;
+                somenteLeitura?: boolean;
+                message?: string | string[];
+            } | null;
+
+            if (
+                !resposta.ok ||
+                resultado?.grupoId !== grupoId ||
+                resultado.totalParticipantes === undefined
+            ) {
+                const mensagemErro = Array.isArray(resultado?.message)
+                    ? resultado.message.join(", ")
+                    : resultado?.message;
+
+                throw new Error(
+                    mensagemErro ?? "Não foi possível sair do grupo.",
+                );
+            }
+
+            setModalSairGrupoAberto(false);
+
+            if (
+                usuario?.tipo === "superAdmin" &&
+                resultado.somenteLeitura
+            ) {
+                const tornarGrupoSomenteLeitura = (
+                    conversa: Conversa,
+                ): Conversa => {
+                    if (conversa.tipo !== "grupo" || conversa.id !== grupoId) {
+                        return conversa;
+                    }
+
+                    const participantes = conversa.participantes.filter(
+                        (participante) => participante.id !== usuario.sub,
+                    );
+
+                    return {
+                        ...conversa,
+                        participantes,
+                        totalParticipantes: resultado.totalParticipantes!,
+                        somenteLeitura: true,
+                        mensagensNaoLidas: 0,
+                    };
+                };
+
+                setConversas((conversasAtuais) =>
+                    conversasAtuais.map(tornarGrupoSomenteLeitura),
+                );
+                setConversaSelecionada((conversaAtual) =>
+                    conversaAtual
+                        ? tornarGrupoSomenteLeitura(conversaAtual)
+                        : null,
+                );
+            } else {
+                conversaAbertaIdRef.current = null;
+                setConversas((conversasAtuais) =>
+                    conversasAtuais.filter((conversa) => conversa.id !== grupoId),
+                );
+                setConversaSelecionada(null);
+                fecharChatMobile();
+            }
+
+            setFeedbackFinalizacao({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem:
+                    usuario?.tipo === "superAdmin"
+                        ? "Você saiu do grupo. Ele continua disponível somente para leitura."
+                        : "Você saiu do grupo e não possui mais acesso a ele.",
+            });
+        } catch (erro) {
+            console.error("Erro ao sair do grupo:", erro);
+            setFeedbackFinalizacao({
+                aberto: true,
+                tipo: "erro",
+                mensagem:
+                    erro instanceof Error
+                        ? erro.message
+                        : "Não foi possível sair do grupo.",
+            });
+        } finally {
+            setSaindoDoGrupo(false);
         }
     }
 
@@ -2831,30 +2993,96 @@ function Home() {
                     </div>
                 </div>
 
-                {conversaSelecionada.tipo === "grupo" && (
-                    <button
-                        type="button"
-                        className="chat-header__adicionar-pessoa"
-                        aria-label="Adicionar pessoa ao grupo"
-                        onClick={() => void contatosModalAdicionarPessoas()}
-                    >
-                        <svg
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            aria-hidden="true"
+                {conversaSelecionada.tipo === "grupo" &&
+                    !conversaSelecionada.somenteLeitura && (
+                    <div className="chat-header__acoes chat-header__acoes--grupo">
+                        <details
+                            ref={menuGrupoRef}
+                            className="chat-header__menu-grupo"
                         >
-                            <path
-                                d="M15 19c0-2.21-2.69-4-6-4s-6 1.79-6 4m6-7a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm9-5v6m3-3h-6"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
-                        </svg>
-                        <span>Adicionar pessoa</span>
-                    </button>
+                            <summary aria-label="Abrir ações do grupo">
+                                <svg
+                                    width="22"
+                                    height="22"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        d="M4 7h16M4 12h16M4 17h16"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                    />
+                                </svg>
+                            </summary>
+
+                            <div className="chat-header__menu-opcoes chat-header__menu-opcoes--grupo">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        if (menuGrupoRef.current) {
+                                            menuGrupoRef.current.open = false;
+                                        }
+                                        void contatosModalAdicionarPessoas();
+                                    }}
+                                >
+                                    <svg
+                                        width="18"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            d="M14 19c0-2.21-2.46-4-5.5-4S3 16.79 3 19M8.5 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        />
+                                        <path
+                                            d="M19 8v6m3-3h-6"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                        />
+                                    </svg>
+                                    <span>Adicionar pessoa</span>
+                                </button>
+
+                                <div className="container-botao-sair-grupo">
+                                    <button
+                                        type="button"
+                                        className="chat-header__menu-sair-grupo"
+                                        onClick={() => {
+                                            if (menuGrupoRef.current) {
+                                                menuGrupoRef.current.open = false;
+                                            }
+                                            setModalSairGrupoAberto(true);
+                                        }}
+                                    >
+                                        <svg
+                                            width="18"
+                                            height="18"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            aria-hidden="true"
+                                        >
+                                            <path
+                                                d="M10 17l5-5-5-5m5 5H3m10-9h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            />
+                                        </svg>
+                                        <span>Sair do grupo</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
                 )}
 
                 {conversaSelecionada.tipo === "setor" &&
@@ -4028,6 +4256,21 @@ function Home() {
                 aoEnviar={enviarAvaliacao}
             />
         )}
+
+        <ModalConfirmacao
+            aberto={modalSairGrupoAberto}
+            titulo="Sair do grupo?"
+            mensagem={
+                usuario?.tipo === "superAdmin"
+                    ? "Você deixará de participar e não poderá mais escrever. Como super administrador, continuará vendo o grupo somente para leitura."
+                    : "Você deixará de ver as mensagens e não terá mais acesso a este grupo."
+            }
+            carregando={saindoDoGrupo}
+            textoConfirmar="Sair do grupo"
+            textoCarregando="Saindo..."
+            aoCancelar={() => setModalSairGrupoAberto(false)}
+            aoConfirmar={() => void sairDoGrupoSelecionado()}
+        />
 
         <ModalFeedback
             aberto={feedbackFinalizacao.aberto}

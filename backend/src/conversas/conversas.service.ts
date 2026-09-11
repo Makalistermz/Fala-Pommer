@@ -982,6 +982,124 @@ export class ConversasService {
         };
     }
 
+    async sairDoGrupo(
+        usuarioLogadoId: number,
+        conversaId: number
+    ) {
+        const resultado = await this.prisma.$transaction(
+            async (transacao) => {
+                await transacao.$queryRaw<Array<{ id: number }>>`
+                    SELECT id
+                    FROM conversa
+                    WHERE id = ${conversaId}
+                    FOR UPDATE
+                `;
+
+                const [usuarioLogado, conversa] = await Promise.all([
+                    transacao.cadastro.findUnique({
+                        where: {
+                            id: usuarioLogadoId
+                        },
+                        select: {
+                            id: true,
+                            tipo_usuario: true,
+                            desativado_em: true
+                        }
+                    }),
+                    transacao.conversa.findUnique({
+                        where: {
+                            id: conversaId
+                        },
+                        select: {
+                            id: true,
+                            tipo: true,
+                            conversa_participante: {
+                                where: {
+                                    usuario_id: usuarioLogadoId
+                                },
+                                select: {
+                                    usuario_id: true
+                                }
+                            }
+                        }
+                    })
+                ]);
+
+                if (!usuarioLogado) {
+                    throw new NotFoundException(
+                        "Usuário autenticado não encontrado."
+                    );
+                }
+
+                if (
+                    usuarioLogado.desativado_em !== null ||
+                    usuarioLogado.tipo_usuario === "user"
+                ) {
+                    throw new ForbiddenException(
+                        "Você não pode sair de grupos."
+                    );
+                }
+
+                if (!conversa) {
+                    throw new NotFoundException(
+                        "Conversa não encontrada."
+                    );
+                }
+
+                if (conversa.tipo !== "grupo") {
+                    throw new BadRequestException(
+                        "Somente participantes de grupos podem usar esta ação."
+                    );
+                }
+
+                if (conversa.conversa_participante.length === 0) {
+                    throw new ForbiddenException(
+                        "Você não participa deste grupo."
+                    );
+                }
+
+                await transacao.conversa_leitura.deleteMany({
+                    where: {
+                        conversa_id: conversaId,
+                        usuario_id: usuarioLogadoId
+                    }
+                });
+
+                await transacao.conversa_participante.delete({
+                    where: {
+                        conversa_id_usuario_id: {
+                            conversa_id: conversaId,
+                            usuario_id: usuarioLogadoId
+                        }
+                    }
+                });
+
+                const totalParticipantes =
+                    await transacao.conversa_participante.count({
+                        where: {
+                            conversa_id: conversaId
+                        }
+                    });
+
+                return {
+                    grupoId: conversa.id,
+                    totalParticipantes,
+                    somenteLeitura:
+                        usuarioLogado.tipo_usuario === "superAdmin"
+                };
+            }
+        );
+
+        this.usuariosDigitando.delete(
+            this.obterChaveDigitacao(
+                conversaId,
+                usuarioLogadoId
+            )
+        );
+
+        return resultado;
+    }
+
     /*
      * Lista atendimentos de setor.
      *

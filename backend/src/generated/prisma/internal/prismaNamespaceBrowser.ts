@@ -182,6 +182,7 @@ export const MensagemScalarFieldEnum = {
   conversa_id: 'conversa_id',
   remetente_id: 'remetente_id',
   origem: 'origem',
+  sistema: 'sistema',
   conteudo: 'conteudo',
   enviada_em: 'enviada_em',
   arquivo_nome: 'arquivo_nome',

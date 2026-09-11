@@ -972,6 +972,21 @@ html.plano-fundo-conversa-5 .mensagens {
     width: 100%;
 }
 
+.mensagem-sistema {
+    align-self: center;
+    max-width: min(80%, 520px);
+    margin: 5px auto;
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: #54656f;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 1px 2px rgba(15, 38, 73, 0.12);
+    font-family: var(--fonte-dm-sans);
+    font-size: 12px;
+    line-height: 1.35;
+    text-align: center;
+}
+
 .mensagem-linha--recebida {
     justify-content: flex-start;
 }

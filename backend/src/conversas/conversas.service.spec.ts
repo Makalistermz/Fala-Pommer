@@ -9,6 +9,7 @@ describe("ConversasService", () => {
     conversa_id: 10,
     remetente_id: 1,
     origem: "usuario",
+    sistema: false,
     conteudo: `Mensagem ${id}`,
     enviada_em: new Date("2026-08-24T12:00:00.000Z"),
     arquivo_nome: null,
@@ -195,6 +196,25 @@ describe("ConversasService", () => {
       }),
     );
     expect(resultado.map((item) => item.id)).toEqual([1, 2, 3]);
+  });
+
+  it("identifica o aviso de saída como mensagem do sistema", async () => {
+    prismaMock.mensagem.findMany.mockResolvedValue([
+      {
+        ...mensagem(1),
+        conteudo: "Funcionário Teste saiu do grupo.",
+        sistema: true,
+      },
+    ]);
+
+    const resultado = await service.listarMensagens(1, 10);
+
+    expect(resultado[0]).toEqual(
+      expect.objectContaining({
+        conteudo: "Funcionário Teste saiu do grupo.",
+        sistema: true,
+      }),
+    );
   });
 
   it("carrega somente mensagens posteriores ao último ID", async () => {
@@ -957,6 +977,7 @@ describe("ConversasService", () => {
   it("remove o participante e sua leitura ao sair do grupo", async () => {
     prismaMock.cadastro.findUnique.mockResolvedValue({
       id: 1,
+      nome: "Funcionário Teste",
       tipo_usuario: "funcionario",
       desativado_em: null,
     });
@@ -974,6 +995,15 @@ describe("ConversasService", () => {
     expect(prismaMock.conversa_leitura.deleteMany).toHaveBeenCalledWith({
       where: { conversa_id: 30, usuario_id: 1 },
     });
+    expect(prismaMock.mensagem.create).toHaveBeenCalledWith({
+      data: {
+        conversa_id: 30,
+        remetente_id: 1,
+        origem: "usuario",
+        sistema: true,
+        conteudo: "Funcionário Teste saiu do grupo.",
+      },
+    });
     expect(prismaMock.conversa_participante.delete).toHaveBeenCalledWith({
       where: {
         conversa_id_usuario_id: {
@@ -990,6 +1020,7 @@ describe("ConversasService", () => {
   it("mantém o grupo somente para leitura quando o superAdmin sai", async () => {
     prismaMock.cadastro.findUnique.mockResolvedValue({
       id: 9,
+      nome: "Super administrador",
       tipo_usuario: "superAdmin",
       desativado_em: null,
     });

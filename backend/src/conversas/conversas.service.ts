@@ -1002,6 +1002,7 @@ export class ConversasService {
                         },
                         select: {
                             id: true,
+                            nome: true,
                             tipo_usuario: true,
                             desativado_em: true
                         }
@@ -1057,6 +1058,16 @@ export class ConversasService {
                         "Você não participa deste grupo."
                     );
                 }
+
+                await transacao.mensagem.create({
+                    data: {
+                        conversa_id: conversaId,
+                        remetente_id: usuarioLogado.id,
+                        origem: "usuario",
+                        sistema: true,
+                        conteudo: `${usuarioLogado.nome} saiu do grupo`
+                    }
+                });
 
                 await transacao.conversa_leitura.deleteMany({
                     where: {
@@ -1884,6 +1895,7 @@ export class ConversasService {
                 conversaId: mensagem.conversa_id,
                 conteudo: mensagem.conteudo,
                 origem: mensagem.origem,
+                sistema: false,
                 enviadaEm: mensagem.enviada_em,
                 remetente: remetenteExibido,
                 arquivo: dadosArquivo
@@ -2027,6 +2039,7 @@ export class ConversasService {
                 conversaId: mensagem.conversa_id,
                 conteudo: mensagem.conteudo,
                 origem: mensagem.origem,
+                sistema: mensagem.sistema,
                 enviadaEm: mensagem.enviada_em,
                 remetente: remetenteExibido,
                 arquivo: mensagem.arquivo_url

@@ -152,6 +152,7 @@ interface MensagemChat {
     conversaId: number;
     conteudo: string;
     origem: "usuario" | "setor";
+    sistema: boolean;
     enviadaEm: string;
 
     remetente: {
@@ -3168,6 +3169,18 @@ function Home() {
 
                     {!carregandoMensagens &&
                         mensagensChat.map((item) => {
+                        if (item.sistema) {
+                            return (
+                                <div
+                                    key={item.id}
+                                    className="mensagem-sistema"
+                                    role="status"
+                                >
+                                    {item.conteudo}
+                                </div>
+                            );
+                        }
+
                         const enviadaPorMim = mensagemFoiEnviadaPeloUsuario(
                             item,
                             usuario,

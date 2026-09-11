@@ -133,6 +133,7 @@ model mensagem {
   conversa_id      Int
   remetente_id     Int
   origem           mensagem_origem
+  sistema          Boolean                 @default(false)
   conteudo         String                 @db.Text
   enviada_em       DateTime               @default(now()) @db.DateTime(0)
   arquivo_nome     String?                @db.VarChar(255)

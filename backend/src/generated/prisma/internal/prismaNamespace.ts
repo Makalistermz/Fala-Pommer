@@ -399,6 +399,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   cadastro: 'cadastro',
   sessao: 'sessao',
+  token_push: 'token_push',
   erro_autenticacao: 'erro_autenticacao',
   login_evento: 'login_evento',
   conversa: 'conversa',
@@ -428,7 +429,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "sessao" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao"
+    modelProps: "cadastro" | "sessao" | "token_push" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -561,6 +562,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.sessaoCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.SessaoCountAggregateOutputType> | number
+        }
+      }
+    }
+    token_push: {
+      payload: Prisma.$token_pushPayload<ExtArgs>
+      fields: Prisma.token_pushFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.token_pushFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$token_pushPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.token_pushFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$token_pushPayload>
+        }
+        findFirst: {
+          args: Prisma.token_pushFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$token_pushPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.token_pushFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$token_pushPayload>
+        }
+        findMany: {
+          args: Prisma.token_pushFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$token_pushPayload>[]
+        }
+        create: {
+          args: Prisma.token_pushCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$token_pushPayload>
+        }
+        createMany: {
+          args: Prisma.token_pushCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.token_pushDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$token_pushPayload>
+        }
+        update: {
+          args: Prisma.token_pushUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$token_pushPayload>
+        }
+        deleteMany: {
+          args: Prisma.token_pushDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.token_pushUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.token_pushUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$token_pushPayload>
+        }
+        aggregate: {
+          args: Prisma.Token_pushAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateToken_push>
+        }
+        groupBy: {
+          args: Prisma.token_pushGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Token_pushGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.token_pushCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Token_pushCountAggregateOutputType> | number
         }
       }
     }
@@ -1567,6 +1634,19 @@ export const SessaoScalarFieldEnum = {
 export type SessaoScalarFieldEnum = (typeof SessaoScalarFieldEnum)[keyof typeof SessaoScalarFieldEnum]
 
 
+export const Token_pushScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  usuario_id: 'usuario_id',
+  sessao_id: 'sessao_id',
+  plataforma: 'plataforma',
+  criado_em: 'criado_em',
+  atualizado_em: 'atualizado_em'
+} as const
+
+export type Token_pushScalarFieldEnum = (typeof Token_pushScalarFieldEnum)[keyof typeof Token_pushScalarFieldEnum]
+
+
 export const Erro_autenticacaoScalarFieldEnum = {
   id: 'id',
   usuario_id: 'usuario_id',
@@ -1770,6 +1850,15 @@ export const sessaoOrderByRelevanceFieldEnum = {
 } as const
 
 export type sessaoOrderByRelevanceFieldEnum = (typeof sessaoOrderByRelevanceFieldEnum)[keyof typeof sessaoOrderByRelevanceFieldEnum]
+
+
+export const token_pushOrderByRelevanceFieldEnum = {
+  token: 'token',
+  sessao_id: 'sessao_id',
+  plataforma: 'plataforma'
+} as const
+
+export type token_pushOrderByRelevanceFieldEnum = (typeof token_pushOrderByRelevanceFieldEnum)[keyof typeof token_pushOrderByRelevanceFieldEnum]
 
 
 export const conversaOrderByRelevanceFieldEnum = {
@@ -2070,6 +2159,7 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
   cadastro?: Prisma.cadastroOmit
   sessao?: Prisma.sessaoOmit
+  token_push?: Prisma.token_pushOmit
   erro_autenticacao?: Prisma.erro_autenticacaoOmit
   login_evento?: Prisma.login_eventoOmit
   conversa?: Prisma.conversaOmit

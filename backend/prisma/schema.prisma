@@ -45,6 +45,7 @@ model cadastro {
   login_evento                     login_evento[]
   mensagens_enviadas               mensagem[]                 @relation("RemetenteMensagem")
   sessoes                          sessao[]
+  tokens_push                      token_push[]
 
   @@index([setor_id], map: "fk_cadastro_setor")
   @@index([secretaria_id], map: "fk_cadastro_secretaria")
@@ -53,18 +54,34 @@ model cadastro {
 }
 
 model sessao {
-  id                 String    @id @default(cuid())
+  id                 String       @id @default(cuid())
   usuario_id         Int
-  versao_token       Int       @db.UnsignedInt
-  refresh_token_hash String    @unique(map: "uq_sessao_refresh_token_hash") @db.Char(64)
-  nome_dispositivo   String?   @db.VarChar(150)
-  plataforma         String?   @db.VarChar(30)
-  ultimo_uso_em      DateTime  @default(now()) @db.DateTime(0)
-  revogada_em        DateTime? @db.DateTime(0)
-  criado_em          DateTime  @default(now()) @db.DateTime(0)
-  usuario            cadastro  @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_sessao_usuario")
+  versao_token       Int          @db.UnsignedInt
+  refresh_token_hash String       @unique(map: "uq_sessao_refresh_token_hash") @db.Char(64)
+  nome_dispositivo   String?      @db.VarChar(150)
+  plataforma         String?      @db.VarChar(30)
+  ultimo_uso_em      DateTime     @default(now()) @db.DateTime(0)
+  revogada_em        DateTime?    @db.DateTime(0)
+  criado_em          DateTime     @default(now()) @db.DateTime(0)
+  usuario            cadastro     @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_sessao_usuario")
+  tokens_push        token_push[]
 
   @@index([usuario_id], map: "idx_sessao_usuario")
+}
+
+model token_push {
+  id            Int      @id @default(autoincrement())
+  token         String   @unique(map: "uq_token_push_token") @db.VarChar(512)
+  usuario_id    Int
+  sessao_id     String
+  plataforma    String   @db.VarChar(20)
+  criado_em     DateTime @default(now()) @db.DateTime(0)
+  atualizado_em DateTime @updatedAt @db.DateTime(0)
+  usuario       cadastro @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_token_push_usuario")
+  sessao        sessao   @relation(fields: [sessao_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_token_push_sessao")
+
+  @@index([usuario_id], map: "idx_token_push_usuario")
+  @@index([sessao_id], map: "idx_token_push_sessao")
 }
 
 model erro_autenticacao {
@@ -133,7 +150,7 @@ model mensagem {
   conversa_id      Int
   remetente_id     Int
   origem           mensagem_origem
-  sistema          Boolean                 @default(false)
+  sistema          Boolean                @default(false)
   conteudo         String                 @db.Text
   enviada_em       DateTime               @default(now()) @db.DateTime(0)
   arquivo_nome     String?                @db.VarChar(255)

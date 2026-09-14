@@ -361,6 +361,7 @@ export type cadastroWhereInput = {
   login_evento?: Prisma.Login_eventoListRelationFilter
   mensagens_enviadas?: Prisma.MensagemListRelationFilter
   sessoes?: Prisma.SessaoListRelationFilter
+  tokens_push?: Prisma.Token_pushListRelationFilter
 }
 
 export type cadastroOrderByWithRelationInput = {
@@ -400,6 +401,7 @@ export type cadastroOrderByWithRelationInput = {
   login_evento?: Prisma.login_eventoOrderByRelationAggregateInput
   mensagens_enviadas?: Prisma.mensagemOrderByRelationAggregateInput
   sessoes?: Prisma.sessaoOrderByRelationAggregateInput
+  tokens_push?: Prisma.token_pushOrderByRelationAggregateInput
   _relevance?: Prisma.cadastroOrderByRelevanceInput
 }
 
@@ -443,6 +445,7 @@ export type cadastroWhereUniqueInput = Prisma.AtLeast<{
   login_evento?: Prisma.Login_eventoListRelationFilter
   mensagens_enviadas?: Prisma.MensagemListRelationFilter
   sessoes?: Prisma.SessaoListRelationFilter
+  tokens_push?: Prisma.Token_pushListRelationFilter
 }, "id">
 
 export type cadastroOrderByWithAggregationInput = {
@@ -530,6 +533,7 @@ export type cadastroCreateInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateInput = {
@@ -566,6 +570,7 @@ export type cadastroUncheckedCreateInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUpdateInput = {
@@ -601,6 +606,7 @@ export type cadastroUpdateInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateInput = {
@@ -637,6 +643,7 @@ export type cadastroUncheckedUpdateInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroCreateManyInput = {
@@ -919,6 +926,20 @@ export type cadastroUpdateOneRequiredWithoutSessoesNestedInput = {
   upsert?: Prisma.cadastroUpsertWithoutSessoesInput
   connect?: Prisma.cadastroWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.cadastroUpdateToOneWithWhereWithoutSessoesInput, Prisma.cadastroUpdateWithoutSessoesInput>, Prisma.cadastroUncheckedUpdateWithoutSessoesInput>
+}
+
+export type cadastroCreateNestedOneWithoutTokens_pushInput = {
+  create?: Prisma.XOR<Prisma.cadastroCreateWithoutTokens_pushInput, Prisma.cadastroUncheckedCreateWithoutTokens_pushInput>
+  connectOrCreate?: Prisma.cadastroCreateOrConnectWithoutTokens_pushInput
+  connect?: Prisma.cadastroWhereUniqueInput
+}
+
+export type cadastroUpdateOneRequiredWithoutTokens_pushNestedInput = {
+  create?: Prisma.XOR<Prisma.cadastroCreateWithoutTokens_pushInput, Prisma.cadastroUncheckedCreateWithoutTokens_pushInput>
+  connectOrCreate?: Prisma.cadastroCreateOrConnectWithoutTokens_pushInput
+  upsert?: Prisma.cadastroUpsertWithoutTokens_pushInput
+  connect?: Prisma.cadastroWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.cadastroUpdateToOneWithWhereWithoutTokens_pushInput, Prisma.cadastroUpdateWithoutTokens_pushInput>, Prisma.cadastroUncheckedUpdateWithoutTokens_pushInput>
 }
 
 export type cadastroCreateNestedOneWithoutErro_autenticacaoInput = {
@@ -1205,6 +1226,7 @@ export type cadastroCreateWithoutDesativacoes_realizadasInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutDesativacoes_realizadasInput = {
@@ -1240,6 +1262,7 @@ export type cadastroUncheckedCreateWithoutDesativacoes_realizadasInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutDesativacoes_realizadasInput = {
@@ -1279,6 +1302,7 @@ export type cadastroCreateWithoutResponsavel_desativacaoInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutResponsavel_desativacaoInput = {
@@ -1314,6 +1338,7 @@ export type cadastroUncheckedCreateWithoutResponsavel_desativacaoInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutResponsavel_desativacaoInput = {
@@ -1369,6 +1394,7 @@ export type cadastroUpdateWithoutDesativacoes_realizadasInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutDesativacoes_realizadasInput = {
@@ -1404,6 +1430,7 @@ export type cadastroUncheckedUpdateWithoutDesativacoes_realizadasInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUpsertWithWhereUniqueWithoutResponsavel_desativacaoInput = {
@@ -1479,6 +1506,7 @@ export type cadastroCreateWithoutSessoesInput = {
   historicos_como_usuario_alvo?: Prisma.historico_administrativoCreateNestedManyWithoutUsuario_alvoInput
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutSessoesInput = {
@@ -1514,6 +1542,7 @@ export type cadastroUncheckedCreateWithoutSessoesInput = {
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutUsuario_alvoInput
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutSessoesInput = {
@@ -1564,6 +1593,7 @@ export type cadastroUpdateWithoutSessoesInput = {
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUpdateManyWithoutUsuario_alvoNestedInput
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutSessoesInput = {
@@ -1599,6 +1629,165 @@ export type cadastroUncheckedUpdateWithoutSessoesInput = {
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedUpdateManyWithoutUsuario_alvoNestedInput
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
+}
+
+export type cadastroCreateWithoutTokens_pushInput = {
+  nome: string
+  data_nascimento: Date | string
+  cpf: string
+  telefone: string
+  email: string
+  senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
+  foto_perfil_url?: string | null
+  dois_fatores_email_ativo?: boolean
+  dois_fatores_email_confirmado_em?: Date | string | null
+  desativado_em?: Date | string | null
+  motivo_desativacao?: string | null
+  versao_token?: number
+  responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
+  desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
+  setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
+  conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
+  conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
+  erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
+  historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
+  historicos_como_usuario_alvo?: Prisma.historico_administrativoCreateNestedManyWithoutUsuario_alvoInput
+  login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
+  mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
+  sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+}
+
+export type cadastroUncheckedCreateWithoutTokens_pushInput = {
+  id?: number
+  nome: string
+  data_nascimento: Date | string
+  cpf: string
+  telefone: string
+  email: string
+  senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
+  setor_id?: number | null
+  foto_perfil_url?: string | null
+  dois_fatores_email_ativo?: boolean
+  dois_fatores_email_confirmado_em?: Date | string | null
+  secretaria_id?: number | null
+  desativado_em?: Date | string | null
+  desativado_por?: number | null
+  motivo_desativacao?: string | null
+  versao_token?: number
+  desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
+  conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
+  conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
+  erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
+  historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
+  historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutUsuario_alvoInput
+  login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
+  mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
+  sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+}
+
+export type cadastroCreateOrConnectWithoutTokens_pushInput = {
+  where: Prisma.cadastroWhereUniqueInput
+  create: Prisma.XOR<Prisma.cadastroCreateWithoutTokens_pushInput, Prisma.cadastroUncheckedCreateWithoutTokens_pushInput>
+}
+
+export type cadastroUpsertWithoutTokens_pushInput = {
+  update: Prisma.XOR<Prisma.cadastroUpdateWithoutTokens_pushInput, Prisma.cadastroUncheckedUpdateWithoutTokens_pushInput>
+  create: Prisma.XOR<Prisma.cadastroCreateWithoutTokens_pushInput, Prisma.cadastroUncheckedCreateWithoutTokens_pushInput>
+  where?: Prisma.cadastroWhereInput
+}
+
+export type cadastroUpdateToOneWithWhereWithoutTokens_pushInput = {
+  where?: Prisma.cadastroWhereInput
+  data: Prisma.XOR<Prisma.cadastroUpdateWithoutTokens_pushInput, Prisma.cadastroUncheckedUpdateWithoutTokens_pushInput>
+}
+
+export type cadastroUpdateWithoutTokens_pushInput = {
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  data_nascimento?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cpf?: Prisma.StringFieldUpdateOperationsInput | string
+  telefone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
+  desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
+  setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
+  conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
+  conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
+  erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
+  historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
+  historicos_como_usuario_alvo?: Prisma.historico_administrativoUpdateManyWithoutUsuario_alvoNestedInput
+  login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
+  mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
+  sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+}
+
+export type cadastroUncheckedUpdateWithoutTokens_pushInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  data_nascimento?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cpf?: Prisma.StringFieldUpdateOperationsInput | string
+  telefone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
+  conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
+  conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
+  historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
+  historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedUpdateManyWithoutUsuario_alvoNestedInput
+  login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
+  mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
+  sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroCreateWithoutErro_autenticacaoInput = {
@@ -1633,6 +1822,7 @@ export type cadastroCreateWithoutErro_autenticacaoInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutErro_autenticacaoInput = {
@@ -1668,6 +1858,7 @@ export type cadastroUncheckedCreateWithoutErro_autenticacaoInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutErro_autenticacaoInput = {
@@ -1718,6 +1909,7 @@ export type cadastroUpdateWithoutErro_autenticacaoInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutErro_autenticacaoInput = {
@@ -1753,6 +1945,7 @@ export type cadastroUncheckedUpdateWithoutErro_autenticacaoInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroCreateWithoutLogin_eventoInput = {
@@ -1787,6 +1980,7 @@ export type cadastroCreateWithoutLogin_eventoInput = {
   historicos_como_usuario_alvo?: Prisma.historico_administrativoCreateNestedManyWithoutUsuario_alvoInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutLogin_eventoInput = {
@@ -1822,6 +2016,7 @@ export type cadastroUncheckedCreateWithoutLogin_eventoInput = {
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutUsuario_alvoInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutLogin_eventoInput = {
@@ -1872,6 +2067,7 @@ export type cadastroUpdateWithoutLogin_eventoInput = {
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUpdateManyWithoutUsuario_alvoNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutLogin_eventoInput = {
@@ -1907,6 +2103,7 @@ export type cadastroUncheckedUpdateWithoutLogin_eventoInput = {
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedUpdateManyWithoutUsuario_alvoNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroCreateWithoutConversa_participanteInput = {
@@ -1941,6 +2138,7 @@ export type cadastroCreateWithoutConversa_participanteInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutConversa_participanteInput = {
@@ -1976,6 +2174,7 @@ export type cadastroUncheckedCreateWithoutConversa_participanteInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutConversa_participanteInput = {
@@ -2026,6 +2225,7 @@ export type cadastroUpdateWithoutConversa_participanteInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutConversa_participanteInput = {
@@ -2061,6 +2261,7 @@ export type cadastroUncheckedUpdateWithoutConversa_participanteInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroCreateWithoutConversas_atendidasInput = {
@@ -2095,6 +2296,7 @@ export type cadastroCreateWithoutConversas_atendidasInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutConversas_atendidasInput = {
@@ -2130,6 +2332,7 @@ export type cadastroUncheckedCreateWithoutConversas_atendidasInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutConversas_atendidasInput = {
@@ -2180,6 +2383,7 @@ export type cadastroUpdateWithoutConversas_atendidasInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutConversas_atendidasInput = {
@@ -2215,6 +2419,7 @@ export type cadastroUncheckedUpdateWithoutConversas_atendidasInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroCreateWithoutMensagens_enviadasInput = {
@@ -2249,6 +2454,7 @@ export type cadastroCreateWithoutMensagens_enviadasInput = {
   historicos_como_usuario_alvo?: Prisma.historico_administrativoCreateNestedManyWithoutUsuario_alvoInput
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutMensagens_enviadasInput = {
@@ -2284,6 +2490,7 @@ export type cadastroUncheckedCreateWithoutMensagens_enviadasInput = {
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutUsuario_alvoInput
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutMensagens_enviadasInput = {
@@ -2334,6 +2541,7 @@ export type cadastroUpdateWithoutMensagens_enviadasInput = {
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUpdateManyWithoutUsuario_alvoNestedInput
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutMensagens_enviadasInput = {
@@ -2369,6 +2577,7 @@ export type cadastroUncheckedUpdateWithoutMensagens_enviadasInput = {
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedUpdateManyWithoutUsuario_alvoNestedInput
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroCreateWithoutSetorInput = {
@@ -2403,6 +2612,7 @@ export type cadastroCreateWithoutSetorInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutSetorInput = {
@@ -2438,6 +2648,7 @@ export type cadastroUncheckedCreateWithoutSetorInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutSetorInput = {
@@ -2498,6 +2709,7 @@ export type cadastroCreateWithoutConversa_leituraInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutConversa_leituraInput = {
@@ -2533,6 +2745,7 @@ export type cadastroUncheckedCreateWithoutConversa_leituraInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutConversa_leituraInput = {
@@ -2583,6 +2796,7 @@ export type cadastroUpdateWithoutConversa_leituraInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutConversa_leituraInput = {
@@ -2618,6 +2832,7 @@ export type cadastroUncheckedUpdateWithoutConversa_leituraInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroCreateWithoutCodigo_recuperacao_2faInput = {
@@ -2652,6 +2867,7 @@ export type cadastroCreateWithoutCodigo_recuperacao_2faInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutCodigo_recuperacao_2faInput = {
@@ -2687,6 +2903,7 @@ export type cadastroUncheckedCreateWithoutCodigo_recuperacao_2faInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutCodigo_recuperacao_2faInput = {
@@ -2737,6 +2954,7 @@ export type cadastroUpdateWithoutCodigo_recuperacao_2faInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutCodigo_recuperacao_2faInput = {
@@ -2772,6 +2990,7 @@ export type cadastroUncheckedUpdateWithoutCodigo_recuperacao_2faInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroCreateWithoutDesafio_login_2faInput = {
@@ -2806,6 +3025,7 @@ export type cadastroCreateWithoutDesafio_login_2faInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutDesafio_login_2faInput = {
@@ -2841,6 +3061,7 @@ export type cadastroUncheckedCreateWithoutDesafio_login_2faInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutDesafio_login_2faInput = {
@@ -2891,6 +3112,7 @@ export type cadastroUpdateWithoutDesafio_login_2faInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutDesafio_login_2faInput = {
@@ -2926,6 +3148,7 @@ export type cadastroUncheckedUpdateWithoutDesafio_login_2faInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroCreateWithoutSecretariaInput = {
@@ -2960,6 +3183,7 @@ export type cadastroCreateWithoutSecretariaInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutSecretariaInput = {
@@ -2995,6 +3219,7 @@ export type cadastroUncheckedCreateWithoutSecretariaInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutSecretariaInput = {
@@ -3055,6 +3280,7 @@ export type cadastroCreateWithoutHistoricos_como_administradorInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutHistoricos_como_administradorInput = {
@@ -3090,6 +3316,7 @@ export type cadastroUncheckedCreateWithoutHistoricos_como_administradorInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutHistoricos_como_administradorInput = {
@@ -3129,6 +3356,7 @@ export type cadastroCreateWithoutHistoricos_como_usuario_alvoInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutHistoricos_como_usuario_alvoInput = {
@@ -3164,6 +3392,7 @@ export type cadastroUncheckedCreateWithoutHistoricos_como_usuario_alvoInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutHistoricos_como_usuario_alvoInput = {
@@ -3214,6 +3443,7 @@ export type cadastroUpdateWithoutHistoricos_como_administradorInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutHistoricos_como_administradorInput = {
@@ -3249,6 +3479,7 @@ export type cadastroUncheckedUpdateWithoutHistoricos_como_administradorInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUpsertWithoutHistoricos_como_usuario_alvoInput = {
@@ -3294,6 +3525,7 @@ export type cadastroUpdateWithoutHistoricos_como_usuario_alvoInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutHistoricos_como_usuario_alvoInput = {
@@ -3329,6 +3561,7 @@ export type cadastroUncheckedUpdateWithoutHistoricos_como_usuario_alvoInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroCreateWithoutAvaliacoes_realizadasInput = {
@@ -3363,6 +3596,7 @@ export type cadastroCreateWithoutAvaliacoes_realizadasInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutAvaliacoes_realizadasInput = {
@@ -3398,6 +3632,7 @@ export type cadastroUncheckedCreateWithoutAvaliacoes_realizadasInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutAvaliacoes_realizadasInput = {
@@ -3448,6 +3683,7 @@ export type cadastroUpdateWithoutAvaliacoes_realizadasInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutAvaliacoes_realizadasInput = {
@@ -3483,6 +3719,7 @@ export type cadastroUncheckedUpdateWithoutAvaliacoes_realizadasInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroCreateWithoutFinalizacoes_realizadasInput = {
@@ -3517,6 +3754,7 @@ export type cadastroCreateWithoutFinalizacoes_realizadasInput = {
   login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroUncheckedCreateWithoutFinalizacoes_realizadasInput = {
@@ -3552,6 +3790,7 @@ export type cadastroUncheckedCreateWithoutFinalizacoes_realizadasInput = {
   login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
   mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
   sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
 }
 
 export type cadastroCreateOrConnectWithoutFinalizacoes_realizadasInput = {
@@ -3602,6 +3841,7 @@ export type cadastroUpdateWithoutFinalizacoes_realizadasInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutFinalizacoes_realizadasInput = {
@@ -3637,6 +3877,7 @@ export type cadastroUncheckedUpdateWithoutFinalizacoes_realizadasInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroCreateManyResponsavel_desativacaoInput = {
@@ -3692,6 +3933,7 @@ export type cadastroUpdateWithoutResponsavel_desativacaoInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutResponsavel_desativacaoInput = {
@@ -3727,6 +3969,7 @@ export type cadastroUncheckedUpdateWithoutResponsavel_desativacaoInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoInput = {
@@ -3803,6 +4046,7 @@ export type cadastroUpdateWithoutSetorInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutSetorInput = {
@@ -3838,6 +4082,7 @@ export type cadastroUncheckedUpdateWithoutSetorInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateManyWithoutSetorInput = {
@@ -3914,6 +4159,7 @@ export type cadastroUpdateWithoutSecretariaInput = {
   login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateWithoutSecretariaInput = {
@@ -3949,6 +4195,7 @@ export type cadastroUncheckedUpdateWithoutSecretariaInput = {
   login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
   mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
   sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
 }
 
 export type cadastroUncheckedUpdateManyWithoutSecretariaInput = {
@@ -3992,6 +4239,7 @@ export type CadastroCountOutputType = {
   login_evento: number
   mensagens_enviadas: number
   sessoes: number
+  tokens_push: number
 }
 
 export type CadastroCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4009,6 +4257,7 @@ export type CadastroCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   login_evento?: boolean | CadastroCountOutputTypeCountLogin_eventoArgs
   mensagens_enviadas?: boolean | CadastroCountOutputTypeCountMensagens_enviadasArgs
   sessoes?: boolean | CadastroCountOutputTypeCountSessoesArgs
+  tokens_push?: boolean | CadastroCountOutputTypeCountTokens_pushArgs
 }
 
 /**
@@ -4119,6 +4368,13 @@ export type CadastroCountOutputTypeCountSessoesArgs<ExtArgs extends runtime.Type
   where?: Prisma.sessaoWhereInput
 }
 
+/**
+ * CadastroCountOutputType without action
+ */
+export type CadastroCountOutputTypeCountTokens_pushArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.token_pushWhereInput
+}
+
 
 export type cadastroSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -4157,6 +4413,7 @@ export type cadastroSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   login_evento?: boolean | Prisma.cadastro$login_eventoArgs<ExtArgs>
   mensagens_enviadas?: boolean | Prisma.cadastro$mensagens_enviadasArgs<ExtArgs>
   sessoes?: boolean | Prisma.cadastro$sessoesArgs<ExtArgs>
+  tokens_push?: boolean | Prisma.cadastro$tokens_pushArgs<ExtArgs>
   _count?: boolean | Prisma.CadastroCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cadastro"]>
 
@@ -4203,6 +4460,7 @@ export type cadastroInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   login_evento?: boolean | Prisma.cadastro$login_eventoArgs<ExtArgs>
   mensagens_enviadas?: boolean | Prisma.cadastro$mensagens_enviadasArgs<ExtArgs>
   sessoes?: boolean | Prisma.cadastro$sessoesArgs<ExtArgs>
+  tokens_push?: boolean | Prisma.cadastro$tokens_pushArgs<ExtArgs>
   _count?: boolean | Prisma.CadastroCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -4226,6 +4484,7 @@ export type $cadastroPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     login_evento: Prisma.$login_eventoPayload<ExtArgs>[]
     mensagens_enviadas: Prisma.$mensagemPayload<ExtArgs>[]
     sessoes: Prisma.$sessaoPayload<ExtArgs>[]
+    tokens_push: Prisma.$token_pushPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -4604,6 +4863,7 @@ export interface Prisma__cadastroClient<T, Null = never, ExtArgs extends runtime
   login_evento<T extends Prisma.cadastro$login_eventoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$login_eventoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$login_eventoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mensagens_enviadas<T extends Prisma.cadastro$mensagens_enviadasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$mensagens_enviadasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$mensagemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessoes<T extends Prisma.cadastro$sessoesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$sessoesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$sessaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tokens_push<T extends Prisma.cadastro$tokens_pushArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$tokens_pushArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$token_pushPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5390,6 +5650,30 @@ export type cadastro$sessoesArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.SessaoScalarFieldEnum | Prisma.SessaoScalarFieldEnum[]
+}
+
+/**
+ * cadastro.tokens_push
+ */
+export type cadastro$tokens_pushArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the token_push
+   */
+  select?: Prisma.token_pushSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the token_push
+   */
+  omit?: Prisma.token_pushOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.token_pushInclude<ExtArgs> | null
+  where?: Prisma.token_pushWhereInput
+  orderBy?: Prisma.token_pushOrderByWithRelationInput | Prisma.token_pushOrderByWithRelationInput[]
+  cursor?: Prisma.token_pushWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Token_pushScalarFieldEnum | Prisma.Token_pushScalarFieldEnum[]
 }
 
 /**

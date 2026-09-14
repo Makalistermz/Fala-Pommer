@@ -28,6 +28,11 @@ export type cadastro = Prisma.cadastroModel
  */
 export type sessao = Prisma.sessaoModel
 /**
+ * Model token_push
+ * 
+ */
+export type token_push = Prisma.token_pushModel
+/**
  * Model erro_autenticacao
  * 
  */

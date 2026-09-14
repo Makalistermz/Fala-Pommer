@@ -23,6 +23,7 @@ import { ModalConfirmacao } from "../components/ModalConfirmacao";
 import { ModalFeedback } from "../components/ModalFeedback";
 import { useAutenticacao } from "../components/AutenticacaoContext";
 import { apiFetch } from "../services/api";
+import { inicializarNotificacoes } from "../services/notificacoes.service";
 import { Capacitor } from '@capacitor/core';
 import { Haptics } from '@capacitor/haptics';
 
@@ -996,6 +997,14 @@ function Home() {
 
         buscarPerfil();
     }, []);
+
+    useEffect(() => {
+        if (!usuario) {
+            return;
+        }
+
+        void inicializarNotificacoes();
+    }, [usuario]);
 
     useEffect(() => {
         if (!usuario) {

@@ -2,6 +2,7 @@
 import { BadRequestException, ForbiddenException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { ConversasService } from "./conversas.service";
+import { NotificacoesService } from "../notificacoes/notificacoes.service";
 
 describe("ConversasService", () => {
   const mensagem = (id: number) => ({
@@ -61,6 +62,9 @@ describe("ConversasService", () => {
   };
 
   let service: ConversasService;
+  const notificacoesMock = {
+    enviarNovaMensagem: jest.fn().mockResolvedValue(undefined),
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -88,6 +92,7 @@ describe("ConversasService", () => {
     prismaMock.mensagem.groupBy.mockResolvedValue([]);
     service = new ConversasService(
       prismaMock as unknown as PrismaService,
+      notificacoesMock as unknown as NotificacoesService,
     );
   });
 

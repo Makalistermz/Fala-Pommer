@@ -253,6 +253,7 @@ export type sessaoWhereInput = {
   revogada_em?: Prisma.DateTimeNullableFilter<"sessao"> | Date | string | null
   criado_em?: Prisma.DateTimeFilter<"sessao"> | Date | string
   usuario?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
+  tokens_push?: Prisma.Token_pushListRelationFilter
 }
 
 export type sessaoOrderByWithRelationInput = {
@@ -266,6 +267,7 @@ export type sessaoOrderByWithRelationInput = {
   revogada_em?: Prisma.SortOrderInput | Prisma.SortOrder
   criado_em?: Prisma.SortOrder
   usuario?: Prisma.cadastroOrderByWithRelationInput
+  tokens_push?: Prisma.token_pushOrderByRelationAggregateInput
   _relevance?: Prisma.sessaoOrderByRelevanceInput
 }
 
@@ -283,6 +285,7 @@ export type sessaoWhereUniqueInput = Prisma.AtLeast<{
   revogada_em?: Prisma.DateTimeNullableFilter<"sessao"> | Date | string | null
   criado_em?: Prisma.DateTimeFilter<"sessao"> | Date | string
   usuario?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
+  tokens_push?: Prisma.Token_pushListRelationFilter
 }, "id" | "refresh_token_hash">
 
 export type sessaoOrderByWithAggregationInput = {
@@ -327,6 +330,7 @@ export type sessaoCreateInput = {
   revogada_em?: Date | string | null
   criado_em?: Date | string
   usuario: Prisma.cadastroCreateNestedOneWithoutSessoesInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutSessaoInput
 }
 
 export type sessaoUncheckedCreateInput = {
@@ -339,6 +343,7 @@ export type sessaoUncheckedCreateInput = {
   ultimo_uso_em?: Date | string
   revogada_em?: Date | string | null
   criado_em?: Date | string
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutSessaoInput
 }
 
 export type sessaoUpdateInput = {
@@ -351,6 +356,7 @@ export type sessaoUpdateInput = {
   revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   usuario?: Prisma.cadastroUpdateOneRequiredWithoutSessoesNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutSessaoNestedInput
 }
 
 export type sessaoUncheckedUpdateInput = {
@@ -363,6 +369,7 @@ export type sessaoUncheckedUpdateInput = {
   ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutSessaoNestedInput
 }
 
 export type sessaoCreateManyInput = {
@@ -462,6 +469,11 @@ export type sessaoSumOrderByAggregateInput = {
   versao_token?: Prisma.SortOrder
 }
 
+export type SessaoScalarRelationFilter = {
+  is?: Prisma.sessaoWhereInput
+  isNot?: Prisma.sessaoWhereInput
+}
+
 export type sessaoCreateNestedManyWithoutUsuarioInput = {
   create?: Prisma.XOR<Prisma.sessaoCreateWithoutUsuarioInput, Prisma.sessaoUncheckedCreateWithoutUsuarioInput> | Prisma.sessaoCreateWithoutUsuarioInput[] | Prisma.sessaoUncheckedCreateWithoutUsuarioInput[]
   connectOrCreate?: Prisma.sessaoCreateOrConnectWithoutUsuarioInput | Prisma.sessaoCreateOrConnectWithoutUsuarioInput[]
@@ -504,6 +516,20 @@ export type sessaoUncheckedUpdateManyWithoutUsuarioNestedInput = {
   deleteMany?: Prisma.sessaoScalarWhereInput | Prisma.sessaoScalarWhereInput[]
 }
 
+export type sessaoCreateNestedOneWithoutTokens_pushInput = {
+  create?: Prisma.XOR<Prisma.sessaoCreateWithoutTokens_pushInput, Prisma.sessaoUncheckedCreateWithoutTokens_pushInput>
+  connectOrCreate?: Prisma.sessaoCreateOrConnectWithoutTokens_pushInput
+  connect?: Prisma.sessaoWhereUniqueInput
+}
+
+export type sessaoUpdateOneRequiredWithoutTokens_pushNestedInput = {
+  create?: Prisma.XOR<Prisma.sessaoCreateWithoutTokens_pushInput, Prisma.sessaoUncheckedCreateWithoutTokens_pushInput>
+  connectOrCreate?: Prisma.sessaoCreateOrConnectWithoutTokens_pushInput
+  upsert?: Prisma.sessaoUpsertWithoutTokens_pushInput
+  connect?: Prisma.sessaoWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.sessaoUpdateToOneWithWhereWithoutTokens_pushInput, Prisma.sessaoUpdateWithoutTokens_pushInput>, Prisma.sessaoUncheckedUpdateWithoutTokens_pushInput>
+}
+
 export type sessaoCreateWithoutUsuarioInput = {
   id?: string
   versao_token: number
@@ -513,6 +539,7 @@ export type sessaoCreateWithoutUsuarioInput = {
   ultimo_uso_em?: Date | string
   revogada_em?: Date | string | null
   criado_em?: Date | string
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutSessaoInput
 }
 
 export type sessaoUncheckedCreateWithoutUsuarioInput = {
@@ -524,6 +551,7 @@ export type sessaoUncheckedCreateWithoutUsuarioInput = {
   ultimo_uso_em?: Date | string
   revogada_em?: Date | string | null
   criado_em?: Date | string
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutSessaoInput
 }
 
 export type sessaoCreateOrConnectWithoutUsuarioInput = {
@@ -567,6 +595,70 @@ export type sessaoScalarWhereInput = {
   criado_em?: Prisma.DateTimeFilter<"sessao"> | Date | string
 }
 
+export type sessaoCreateWithoutTokens_pushInput = {
+  id?: string
+  versao_token: number
+  refresh_token_hash: string
+  nome_dispositivo?: string | null
+  plataforma?: string | null
+  ultimo_uso_em?: Date | string
+  revogada_em?: Date | string | null
+  criado_em?: Date | string
+  usuario: Prisma.cadastroCreateNestedOneWithoutSessoesInput
+}
+
+export type sessaoUncheckedCreateWithoutTokens_pushInput = {
+  id?: string
+  usuario_id: number
+  versao_token: number
+  refresh_token_hash: string
+  nome_dispositivo?: string | null
+  plataforma?: string | null
+  ultimo_uso_em?: Date | string
+  revogada_em?: Date | string | null
+  criado_em?: Date | string
+}
+
+export type sessaoCreateOrConnectWithoutTokens_pushInput = {
+  where: Prisma.sessaoWhereUniqueInput
+  create: Prisma.XOR<Prisma.sessaoCreateWithoutTokens_pushInput, Prisma.sessaoUncheckedCreateWithoutTokens_pushInput>
+}
+
+export type sessaoUpsertWithoutTokens_pushInput = {
+  update: Prisma.XOR<Prisma.sessaoUpdateWithoutTokens_pushInput, Prisma.sessaoUncheckedUpdateWithoutTokens_pushInput>
+  create: Prisma.XOR<Prisma.sessaoCreateWithoutTokens_pushInput, Prisma.sessaoUncheckedCreateWithoutTokens_pushInput>
+  where?: Prisma.sessaoWhereInput
+}
+
+export type sessaoUpdateToOneWithWhereWithoutTokens_pushInput = {
+  where?: Prisma.sessaoWhereInput
+  data: Prisma.XOR<Prisma.sessaoUpdateWithoutTokens_pushInput, Prisma.sessaoUncheckedUpdateWithoutTokens_pushInput>
+}
+
+export type sessaoUpdateWithoutTokens_pushInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  refresh_token_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  nome_dispositivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plataforma?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  usuario?: Prisma.cadastroUpdateOneRequiredWithoutSessoesNestedInput
+}
+
+export type sessaoUncheckedUpdateWithoutTokens_pushInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  refresh_token_hash?: Prisma.StringFieldUpdateOperationsInput | string
+  nome_dispositivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plataforma?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type sessaoCreateManyUsuarioInput = {
   id?: string
   versao_token: number
@@ -587,6 +679,7 @@ export type sessaoUpdateWithoutUsuarioInput = {
   ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tokens_push?: Prisma.token_pushUpdateManyWithoutSessaoNestedInput
 }
 
 export type sessaoUncheckedUpdateWithoutUsuarioInput = {
@@ -598,6 +691,7 @@ export type sessaoUncheckedUpdateWithoutUsuarioInput = {
   ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutSessaoNestedInput
 }
 
 export type sessaoUncheckedUpdateManyWithoutUsuarioInput = {
@@ -612,6 +706,35 @@ export type sessaoUncheckedUpdateManyWithoutUsuarioInput = {
 }
 
 
+/**
+ * Count Type SessaoCountOutputType
+ */
+
+export type SessaoCountOutputType = {
+  tokens_push: number
+}
+
+export type SessaoCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tokens_push?: boolean | SessaoCountOutputTypeCountTokens_pushArgs
+}
+
+/**
+ * SessaoCountOutputType without action
+ */
+export type SessaoCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SessaoCountOutputType
+   */
+  select?: Prisma.SessaoCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * SessaoCountOutputType without action
+ */
+export type SessaoCountOutputTypeCountTokens_pushArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.token_pushWhereInput
+}
+
 
 export type sessaoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -624,6 +747,8 @@ export type sessaoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   revogada_em?: boolean
   criado_em?: boolean
   usuario?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
+  tokens_push?: boolean | Prisma.sessao$tokens_pushArgs<ExtArgs>
+  _count?: boolean | Prisma.SessaoCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["sessao"]>
 
 
@@ -643,12 +768,15 @@ export type sessaoSelectScalar = {
 export type sessaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "usuario_id" | "versao_token" | "refresh_token_hash" | "nome_dispositivo" | "plataforma" | "ultimo_uso_em" | "revogada_em" | "criado_em", ExtArgs["result"]["sessao"]>
 export type sessaoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   usuario?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
+  tokens_push?: boolean | Prisma.sessao$tokens_pushArgs<ExtArgs>
+  _count?: boolean | Prisma.SessaoCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $sessaoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "sessao"
   objects: {
     usuario: Prisma.$cadastroPayload<ExtArgs>
+    tokens_push: Prisma.$token_pushPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1001,6 +1129,7 @@ readonly fields: sessaoFieldRefs;
 export interface Prisma__sessaoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   usuario<T extends Prisma.cadastroDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastroDefaultArgs<ExtArgs>>): Prisma.Prisma__cadastroClient<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  tokens_push<T extends Prisma.sessao$tokens_pushArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.sessao$tokens_pushArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$token_pushPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1384,6 +1513,30 @@ export type sessaoDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many sessaos to delete.
    */
   limit?: number
+}
+
+/**
+ * sessao.tokens_push
+ */
+export type sessao$tokens_pushArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the token_push
+   */
+  select?: Prisma.token_pushSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the token_push
+   */
+  omit?: Prisma.token_pushOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.token_pushInclude<ExtArgs> | null
+  where?: Prisma.token_pushWhereInput
+  orderBy?: Prisma.token_pushOrderByWithRelationInput | Prisma.token_pushOrderByWithRelationInput[]
+  cursor?: Prisma.token_pushWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Token_pushScalarFieldEnum | Prisma.Token_pushScalarFieldEnum[]
 }
 
 /**

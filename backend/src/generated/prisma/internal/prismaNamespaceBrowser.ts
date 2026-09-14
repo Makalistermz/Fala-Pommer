@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   cadastro: 'cadastro',
   sessao: 'sessao',
+  token_push: 'token_push',
   erro_autenticacao: 'erro_autenticacao',
   login_evento: 'login_evento',
   conversa: 'conversa',
@@ -123,6 +124,19 @@ export const SessaoScalarFieldEnum = {
 } as const
 
 export type SessaoScalarFieldEnum = (typeof SessaoScalarFieldEnum)[keyof typeof SessaoScalarFieldEnum]
+
+
+export const Token_pushScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  usuario_id: 'usuario_id',
+  sessao_id: 'sessao_id',
+  plataforma: 'plataforma',
+  criado_em: 'criado_em',
+  atualizado_em: 'atualizado_em'
+} as const
+
+export type Token_pushScalarFieldEnum = (typeof Token_pushScalarFieldEnum)[keyof typeof Token_pushScalarFieldEnum]
 
 
 export const Erro_autenticacaoScalarFieldEnum = {
@@ -328,6 +342,15 @@ export const sessaoOrderByRelevanceFieldEnum = {
 } as const
 
 export type sessaoOrderByRelevanceFieldEnum = (typeof sessaoOrderByRelevanceFieldEnum)[keyof typeof sessaoOrderByRelevanceFieldEnum]
+
+
+export const token_pushOrderByRelevanceFieldEnum = {
+  token: 'token',
+  sessao_id: 'sessao_id',
+  plataforma: 'plataforma'
+} as const
+
+export type token_pushOrderByRelevanceFieldEnum = (typeof token_pushOrderByRelevanceFieldEnum)[keyof typeof token_pushOrderByRelevanceFieldEnum]
 
 
 export const conversaOrderByRelevanceFieldEnum = {

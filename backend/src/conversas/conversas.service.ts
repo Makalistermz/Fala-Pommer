@@ -13,6 +13,7 @@ import { randomUUID } from "node:crypto";
 import { join } from "node:path";
 import { CriarAvaliacaoDto } from "./dto/criar-avaliacao.dto";
 import { Prisma } from "../generated/prisma/client";
+import { NotificacoesService } from "../notificacoes/notificacoes.service";
 
 export type ArquivoMensagemUpload = {
     originalname: string;
@@ -36,7 +37,8 @@ export class ConversasService {
         new Map<string, EstadoDigitacao>();
 
     constructor(
-        private readonly prisma: PrismaService
+        private readonly prisma: PrismaService,
+        private readonly notificacoesService: NotificacoesService
     ) {}
 
     async listarAvaliacoes() {
@@ -1889,6 +1891,15 @@ export class ConversasService {
                         tipoUsuario:
                             mensagem.remetente.tipo_usuario
                     };
+
+            void this.notificacoesService.enviarNovaMensagem({
+                conversaId,
+                mensagemId: mensagem.id,
+                remetenteId: usuarioLogadoId,
+                remetenteNome: mensagem.remetente.nome,
+                conteudo: mensagem.conteudo,
+                possuiArquivo: dadosArquivo !== null
+            });
 
             return {
                 id: mensagem.id,

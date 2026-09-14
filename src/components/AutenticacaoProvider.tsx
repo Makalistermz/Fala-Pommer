@@ -12,6 +12,7 @@ import {
   type TokensAutenticacao,
   type UsuarioAutenticado,
 } from "./AutenticacaoContext";
+import { desregistrarNotificacoes } from "../services/notificacoes.service";
 
 interface AutenticacaoProviderProps {
   children: ReactNode;
@@ -80,7 +81,8 @@ export function AutenticacaoProvider({
   );
 
   const encerrarSessao = useCallback(async () => {
-    // Revoga primeiro no backend e depois reflete o logout no estado global.
+    // Remove o token push enquanto a sessão ainda pode autenticar a requisição.
+    await desregistrarNotificacoes();
     await revogarSessaoAtual();
     setUsuario(null);
     setCarregando(false);

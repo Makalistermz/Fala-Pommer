@@ -23,6 +23,8 @@ import { ModalConfirmacao } from "../components/ModalConfirmacao";
 import { ModalFeedback } from "../components/ModalFeedback";
 import { useAutenticacao } from "../components/AutenticacaoContext";
 import { apiFetch } from "../services/api";
+import { Capacitor } from '@capacitor/core';
+import { Haptics } from '@capacitor/haptics';
 
 type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 type FiltroConversa = "todos" | "nao-lidas" | "grupos";
@@ -923,6 +925,20 @@ function Home() {
         };
     }, []);
 
+    async function vibrarNovaMensagem() {
+        if(!Capacitor.isNativePlatform()) {
+            return;
+        }
+
+        try {
+            await Haptics.vibrate({
+                duration: 200,
+            });
+        } catch(erro) {
+            console.error('Não foi possível vibrar:', erro);
+        }
+    }
+
     function tocarSomDeNovaMensagem() {
         const audio = somNotificacaoRef.current;
 
@@ -941,6 +957,11 @@ function Home() {
             .catch(() => {
                 // O navegador ou WebView ainda aguarda interação do usuário.
             });
+    }
+
+    function alertarNovaMensagem() {
+        tocarSomDeNovaMensagem();
+        void vibrarNovaMensagem();
     }
 
     async function sair() {
@@ -1145,7 +1166,7 @@ function Home() {
                     }
 
                     if (deveTocarNotificacao) {
-                        tocarSomDeNovaMensagem();
+                        alertarNovaMensagem();
                     }
                 }
             } catch (erro) {
@@ -2362,7 +2383,7 @@ function Home() {
                 }
 
                 if (recebeuMensagemDeOutraPessoa) {
-                    tocarSomDeNovaMensagem();
+                    alertarNovaMensagem();
                 }
 
                 await marcarConversaComoLida(conversaId);

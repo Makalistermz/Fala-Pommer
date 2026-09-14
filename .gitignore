@@ -16,6 +16,9 @@ dist-ssr
 .env.*
 !.env.example
 
+# Credenciais privadas do Firebase Admin
+backend/credentials/
+
 # Arquivos e diretórios do editor
 .vscode/*
 !.vscode/extensions.json

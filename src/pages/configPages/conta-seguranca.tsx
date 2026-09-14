@@ -60,6 +60,7 @@ function ContaSeguranca() {
   const navigate = useNavigate();
   const { encerrarSessao } = useAutenticacao();
   const [ativo, setAtivo] = useState(false);
+  const [biometriaAtiva, setBiometriaAtiva] = useState(false);
   const [carregandoStatus, setCarregandoStatus] = useState(true);
   const [carregando, setCarregando] = useState(false);
   const [etapaModal, setEtapaModal] = useState<EtapaModal>(null);
@@ -450,6 +451,48 @@ function ContaSeguranca() {
               aria-checked={ativo}
               disabled={carregandoStatus}
               onClick={abrirConfiguracao}
+            />
+          </span>
+        </div>
+      </section>
+
+      <section className="conta-seguranca__item conta-seguranca__item--biometria">
+        <div className="conta-seguranca__acao">
+          <div className="conta-seguranca__icone">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 11a2 2 0 0 1 2 2c0 3.2-.8 5.9-2.3 8" />
+              <path d="M8.2 20.2A18.4 18.4 0 0 0 9 13a3 3 0 0 1 6 0c0 2.5-.4 4.8-1.2 7" />
+              <path d="M5.1 18.2c.6-1.8.9-3.5.9-5.2a6 6 0 0 1 12 0c0 1.9-.2 3.7-.7 5.4" />
+              <path d="M3 14.5V13a9 9 0 0 1 18 0" />
+              <path d="M5.5 5.5A9 9 0 0 1 12 3" />
+            </svg>
+          </div>
+
+          <div className="conta-seguranca__conteudo">
+            <strong className="conta-seguranca__titulo">Login por biometria</strong>
+            <span className="conta-seguranca__descricao">
+              Funcionalidade disponível apenas em dispositivos móveis.
+            </span>
+          </div>
+
+          <span className="conta-seguranca__indicador">
+            <button
+              className={`conta-seguranca__alternador alternador-configuracao${biometriaAtiva ? " conta-seguranca__alternador--ativo" : ""}`}
+              type="button"
+              role="switch"
+              aria-label={`${biometriaAtiva ? "Desativar" : "Ativar"} login por biometria`}
+              aria-checked={biometriaAtiva}
+              onClick={() => setBiometriaAtiva((estado) => !estado)}
             />
           </span>
         </div>

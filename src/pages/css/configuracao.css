@@ -714,6 +714,12 @@ a.conta-seguranca__acao {
     box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.1);
 }
 
+.alternador-configuracao.conta-seguranca__alternador--ativo {
+    border-color: #1351b4;
+    background-color: #1351b4;
+    box-shadow: 0 0 0 3px rgba(19, 81, 180, 0.1);
+}
+
 .conta-seguranca__alternador--ativo::after {
     left: 25px;
     animation: toggleEffectsActive 0.55s ease-out;

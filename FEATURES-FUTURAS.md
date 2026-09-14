@@ -4,7 +4,7 @@
 
 - [ X ] Notificações push.
 - [ X ] Vibração personalizada para mensagens.
-- [ ] Som próprio de notificação.
+- [ X ] Som próprio de notificação.
 - [ ] Desbloqueio por biometria.
 - [ ] Compartilhar arquivos de outros aplicativos para o Fala-Pommer.
 - [ ] Funcionamento offline básico.

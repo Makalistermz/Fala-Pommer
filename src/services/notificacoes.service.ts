@@ -105,9 +105,10 @@ export async function inicializarNotificacoes() {
 
         if (Capacitor.getPlatform() === "android") {
             await PushNotifications.createChannel({
-                id: "mensagens_fala_pommer",
+                id: "mensagens_fala_pommer_v2",
                 name: "Novas mensagens",
                 description: "Notificações de novas mensagens do Fala Pommer",
+                sound: "notificacao.mp3",
                 importance: 4,
                 vibration: true,
                 visibility: 1,

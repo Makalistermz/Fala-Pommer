@@ -149,8 +149,8 @@ export class NotificacoesService {
             android: {
                 priority: "high",
                 notification: {
-                    channelId: "mensagens_fala_pommer",
-                    sound: "default"
+                    channelId: "mensagens_fala_pommer_v2",
+                    sound: "notificacao.mp3"
                 }
             },
             apns: {

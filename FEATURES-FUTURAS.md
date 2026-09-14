@@ -2,8 +2,8 @@
 
 ## Experiência nativa no aplicativo
 
-- [ ] Notificações push.
-- [ ] Vibração personalizada para mensagens.
+- [ X ] Notificações push.
+- [ X ] Vibração personalizada para mensagens.
 - [ ] Som próprio de notificação.
 - [ ] Desbloqueio por biometria.
 - [ ] Compartilhar arquivos de outros aplicativos para o Fala-Pommer.

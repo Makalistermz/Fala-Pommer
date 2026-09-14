@@ -13,6 +13,11 @@ import {
   type UsuarioAutenticado,
 } from "./AutenticacaoContext";
 import { desregistrarNotificacoes } from "../services/notificacoes.service";
+import { autenticarComBiometria } from "../services/biometria.service";
+import {
+  obterBiometriaHabilitada,
+  obterRefreshTokenSeguro,
+} from "../services/armazenamentoSessao";
 
 interface AutenticacaoProviderProps {
   children: ReactNode;
@@ -23,6 +28,7 @@ export function AutenticacaoProvider({
 }: AutenticacaoProviderProps) {
   const [usuario, setUsuario] = useState<UsuarioAutenticado | null>(null);
   const [carregando, setCarregando] = useState(true);
+  const [biometriaPendente, setBiometriaPendente] = useState(false);
 
   useEffect(() => {
     let ativo = true;
@@ -31,12 +37,29 @@ export function AutenticacaoProvider({
     const removerObservador = observarSessaoEncerrada(() => {
       if (ativo) {
         setUsuario(null);
+        setBiometriaPendente(false);
         setCarregando(false);
       }
     });
 
     async function restaurarSessao() {
       try {
+        const biometriaHabilitada = await obterBiometriaHabilitada();
+        const possuiSessaoNativa = biometriaHabilitada
+          ? Boolean(await obterRefreshTokenSeguro())
+          : false;
+
+        if (possuiSessaoNativa) {
+          try {
+            await autenticarComBiometria();
+          } catch {
+            if (ativo) {
+              setBiometriaPendente(true);
+            }
+            return;
+          }
+        }
+
         // Também tenta renovar via cookie web ou cofre nativo quando o JWT sumiu.
         const resposta = await apiFetch("/auth/perfil");
 
@@ -49,8 +72,10 @@ export function AutenticacaoProvider({
 
         if (ativo) {
           setUsuario(perfil);
+          setBiometriaPendente(false);
         }
       } catch {
+        // O cancelamento do prompt é tratado acima e não apaga o refresh token.
         await limparSessaoLocal();
       } finally {
         if (ativo) {
@@ -67,6 +92,27 @@ export function AutenticacaoProvider({
     };
   }, []);
 
+  const entrarComBiometria = useCallback(async () => {
+    setCarregando(true);
+
+    try {
+      await autenticarComBiometria();
+
+      const resposta = await apiFetch("/auth/perfil");
+
+      if (!resposta.ok) {
+        await limparSessaoLocal();
+        throw new Error("Sua sessão expirou. Entre novamente com e-mail e senha.");
+      }
+
+      const perfil = (await resposta.json()) as UsuarioAutenticado;
+      setUsuario(perfil);
+      setBiometriaPendente(false);
+    } finally {
+      setCarregando(false);
+    }
+  }, []);
+
   const iniciarSessao = useCallback(
     async (
       tokens: TokensAutenticacao,
@@ -75,6 +121,7 @@ export function AutenticacaoProvider({
       // Disponibiliza os tokens ao cliente HTTP e libera as rotas protegidas.
       await registrarTokensSessao(tokens);
       setUsuario(usuarioLogado);
+      setBiometriaPendente(false);
       setCarregando(false);
     },
     [],
@@ -96,10 +143,19 @@ export function AutenticacaoProvider({
           ? ("autenticado" as const)
           : ("deslogado" as const),
       usuario,
+      biometriaPendente,
+      entrarComBiometria,
       iniciarSessao,
       encerrarSessao,
     }),
-    [carregando, encerrarSessao, iniciarSessao, usuario],
+    [
+      biometriaPendente,
+      carregando,
+      encerrarSessao,
+      entrarComBiometria,
+      iniciarSessao,
+      usuario,
+    ],
   );
 
   return (

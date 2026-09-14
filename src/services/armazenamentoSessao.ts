@@ -2,6 +2,7 @@ import { Capacitor } from "@capacitor/core";
 
 const CHAVE_REFRESH_TOKEN = "refresh_token";
 const PREFIXO_ARMAZENAMENTO = "fala-pommer_";
+const CHAVE_BIOMETRIA_HABILITADA = "biometria_habilitada";
 
 type ArmazenamentoSeguro = typeof import("@aparajita/capacitor-secure-storage").SecureStorage;
 
@@ -53,4 +54,27 @@ export async function removerRefreshTokenSeguro() {
     // O logout local deve continuar mesmo se o cofre nativo estiver indisponível.
     console.error("Não foi possível limpar o refresh token seguro.", erro);
   }
+}
+
+export async function salvarBiometriaHabilitada() {
+  const armazenamento = await obterArmazenamentoSeguro();
+  await armazenamento.setItem(CHAVE_BIOMETRIA_HABILITADA, "true");
+}
+
+export async function obterBiometriaHabilitada() {
+  if (!ehClienteCapacitor()) {
+    return false;
+  }
+
+  const armazenamento = await obterArmazenamentoSeguro();
+  return (await armazenamento.getItem(CHAVE_BIOMETRIA_HABILITADA)) === "true";
+}
+
+export async function removerBiometriaHabilitada() {
+  if (!ehClienteCapacitor()) {
+    return;
+  }
+
+  const armazenamento = await obterArmazenamentoSeguro();
+  await armazenamento.removeItem(CHAVE_BIOMETRIA_HABILITADA);
 }

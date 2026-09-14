@@ -93,10 +93,20 @@ function Login() {
 
   const navigate = useNavigate();
   const {
+    biometriaPendente,
+    entrarComBiometria,
     iniciarSessao,
     situacao: situacaoAutenticacao,
     usuario: usuarioAutenticado,
   } = useAutenticacao();
+
+  async function tentarBiometria() {
+    try {
+      await entrarComBiometria();
+    } catch (erro) {
+      mostrarErro(erro);
+    }
+  }
 
   useEffect(() => {
     const container = googleButtonContainerRef.current;
@@ -359,6 +369,17 @@ function Login() {
 
           {etapa === "credenciais" ? (
             <>
+              {biometriaPendente && (
+                <button
+                  className="login__botao"
+                  type="button"
+                  disabled={carregando}
+                  onClick={tentarBiometria}
+                >
+                  Tentar novamente com biometria
+                </button>
+              )}
+
               <form onSubmit={entrar}>
                 <div className="campo">
                   <label htmlFor="email">E-mail</label>

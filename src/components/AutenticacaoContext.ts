@@ -21,6 +21,8 @@ export type SituacaoAutenticacao =
 interface ValorAutenticacaoContext {
   situacao: SituacaoAutenticacao;
   usuario: UsuarioAutenticado | null;
+  biometriaPendente: boolean;
+  entrarComBiometria: () => Promise<void>;
   iniciarSessao: (
     tokens: TokensAutenticacao,
     usuario: UsuarioAutenticado,

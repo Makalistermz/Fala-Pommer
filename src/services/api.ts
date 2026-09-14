@@ -1,6 +1,7 @@
 import {
   ehClienteCapacitor,
   obterRefreshTokenSeguro,
+  removerBiometriaHabilitada,
   removerRefreshTokenSeguro,
   salvarRefreshTokenSeguro,
 } from "./armazenamentoSessao";
@@ -53,6 +54,14 @@ export async function limparSessaoLocal() {
   localStorage.removeItem(CHAVE_ACCESS_TOKEN_LEGADO);
   refreshTokenEmMemoria = null;
   await removerRefreshTokenSeguro();
+
+  try {
+    await removerBiometriaHabilitada();
+  } catch (erro) {
+    // A interface ainda deve encerrar a sessão se o cofre nativo falhar.
+    console.error("Não foi possível limpar a preferência de biometria.", erro);
+  }
+
   window.dispatchEvent(new Event(EVENTO_SESSAO_ENCERRADA));
 }
 

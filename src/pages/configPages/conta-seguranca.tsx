@@ -4,6 +4,13 @@ import { ModalFeedback } from "../../components/ModalFeedback";
 import { NotificacaoConfiguracao } from "../../components/NotificacaoConfiguracao";
 import { useAutenticacao } from "../../components/AutenticacaoContext";
 import { apiFetch } from "../../services/api";
+import { autenticarComBiometria } from "../../services/biometria.service";
+import {
+  ehClienteCapacitor,
+  obterBiometriaHabilitada,
+  removerBiometriaHabilitada,
+  salvarBiometriaHabilitada,
+} from "../../services/armazenamentoSessao";
 
 type EtapaModal =
   | "senha-ativacao"
@@ -61,6 +68,7 @@ function ContaSeguranca() {
   const { encerrarSessao } = useAutenticacao();
   const [ativo, setAtivo] = useState(false);
   const [biometriaAtiva, setBiometriaAtiva] = useState(false);
+  const [carregandoBiometria, setCarregandoBiometria] = useState(true);
   const [carregandoStatus, setCarregandoStatus] = useState(true);
   const [carregando, setCarregando] = useState(false);
   const [etapaModal, setEtapaModal] = useState<EtapaModal>(null);
@@ -110,6 +118,22 @@ function ContaSeguranca() {
         });
       } finally {
         setCarregandoStatus(false);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    void (async () => {
+      try {
+        setBiometriaAtiva(await obterBiometriaHabilitada());
+      } catch {
+        setFeedback({
+          aberto: true,
+          tipo: "erro",
+          mensagem: "Não foi possível consultar a configuração de biometria.",
+        });
+      } finally {
+        setCarregandoBiometria(false);
       }
     })();
   }, []);
@@ -390,6 +414,50 @@ function ContaSeguranca() {
     }
   }
 
+  async function alternarBiometria() {
+    if (!ehClienteCapacitor()) {
+      setFeedback({
+        aberto: true,
+        tipo: "erro",
+        mensagem: "O login por biometria está disponível apenas no aplicativo.",
+      });
+      return;
+    }
+
+    setCarregandoBiometria(true);
+
+    try {
+      if (biometriaAtiva) {
+        await removerBiometriaHabilitada();
+        setBiometriaAtiva(false);
+        setFeedback({
+          aberto: true,
+          tipo: "sucesso",
+          mensagem: "Login por biometria desativado.",
+        });
+        return;
+      }
+
+      await autenticarComBiometria();
+      await salvarBiometriaHabilitada();
+      setBiometriaAtiva(true);
+      setFeedback({
+        aberto: true,
+        tipo: "sucesso",
+        mensagem: "Login por biometria ativado.",
+      });
+    } catch {
+      setFeedback({
+        aberto: true,
+        tipo: "erro",
+        mensagem:
+          "Não foi possível confirmar a biometria. Verifique se ela está cadastrada no aparelho e tente novamente.",
+      });
+    } finally {
+      setCarregandoBiometria(false);
+    }
+  }
+
   const modalCodigo =
     etapaModal === "codigo-ativacao" || etapaModal === "codigo-desativacao";
 
@@ -492,7 +560,8 @@ function ContaSeguranca() {
               role="switch"
               aria-label={`${biometriaAtiva ? "Desativar" : "Ativar"} login por biometria`}
               aria-checked={biometriaAtiva}
-              onClick={() => setBiometriaAtiva((estado) => !estado)}
+              disabled={carregandoBiometria}
+              onClick={alternarBiometria}
             />
           </span>
         </div>

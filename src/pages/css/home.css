@@ -1838,6 +1838,24 @@ button.modal-transferencia__etapa {
     border-radius: 50%;
     background: #12b76a;
     box-shadow: 0 0 0 3px rgba(18, 183, 106, 0.12);
+    animation: pulsar 1.8s ease-out infinite;
+}
+
+@keyframes pulsar {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(18, 183, 106, 0.45);
+    }
+
+    45% {
+        transform: scale(1.12);
+    }
+
+    75%,
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 7px rgba(18, 183, 106, 0);
+    }
 }
 
 .modal-transferencia__vazio {
@@ -2399,19 +2417,6 @@ button.modal-transferencia__etapa {
     from {
         opacity: 0;
         transform: translateY(14px) scale(0.975);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .modal-grupo,
-    .modal-grupo__janela {
-        animation: none;
-    }
-
-    .modal-grupo__contato,
-    .modal-grupo__fechar,
-    .modal-grupo__rodape button {
-        transition: none;
     }
 }
 
@@ -3321,5 +3326,23 @@ button.modal-transferencia__etapa {
 
     .mensagem-balao__perfil {
         font-size: 8px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .modal-grupo,
+    .modal-grupo__janela {
+        animation: none;
+    }
+
+    .modal-grupo__contato,
+    .modal-grupo__fechar,
+    .modal-grupo__rodape button {
+        transition: none;
+    }
+
+    .modal-transferencia__disponivel > span,
+    .modal-transferencia__legenda > span {
+        animation: none;
     }
 }

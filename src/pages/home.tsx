@@ -238,8 +238,8 @@ function Home() {
         tipo: "erro" as "erro" | "sucesso",
         mensagem: "",
     });
-    const menuConversaMobileRef = useRef<HTMLDetailsElement>(null);
     const menuGrupoRef = useRef<HTMLDetailsElement>(null);
+    const menuSetorRef = useRef<HTMLDetailsElement>(null);
 
     const [modalGrupoAberto, setModalGrupoAberto] = useState(false);
     const [modalDadosGrupoAberto, setModalDadosGrupoAberto] = useState(false);
@@ -371,8 +371,8 @@ function Home() {
     const { encerrarSessao } = useAutenticacao();
 
     async function finalizarConversaSelecionada() {
-        if (menuConversaMobileRef.current) {
-            menuConversaMobileRef.current.open = false;
+        if (menuSetorRef.current) {
+            menuSetorRef.current.open = false;
         }
 
         if (
@@ -599,6 +599,50 @@ function Home() {
                 fecharMenuGrupoAoClicarFora,
             );
             window.removeEventListener("keydown", fecharMenuGrupoComEscape);
+        };
+    }, []);
+
+    useEffect(() => {
+        function fecharMenuSetorAoClicarFora(evento: PointerEvent) {
+            const menuSetor = menuSetorRef.current;
+            const alvo = evento.target;
+
+            if (
+                menuSetor?.open &&
+                alvo instanceof Node &&
+                !menuSetor.contains(alvo)
+            ) {
+                menuSetor.open = false;
+            }
+        }
+
+        function fecharMenuSetorComEscape(evento: KeyboardEvent) {
+            const menuSetor = menuSetorRef.current;
+
+            if (evento.key !== "Escape" || !menuSetor?.open) {
+                return;
+            }
+
+            menuSetor.open = false;
+            const resumo = menuSetor.querySelector("summary");
+
+            if (resumo instanceof HTMLElement) {
+                resumo.focus();
+            }
+        }
+
+        document.addEventListener(
+            "pointerdown",
+            fecharMenuSetorAoClicarFora,
+        );
+        window.addEventListener("keydown", fecharMenuSetorComEscape);
+
+        return () => {
+            document.removeEventListener(
+                "pointerdown",
+                fecharMenuSetorAoClicarFora,
+            );
+            window.removeEventListener("keydown", fecharMenuSetorComEscape);
         };
     }, []);
 
@@ -3189,24 +3233,14 @@ function Home() {
                 )}
 
                 {conversaSelecionada.tipo === "setor" &&
-                    conversaSelecionada.podeFinalizar && (
-                    <div className="chat-header__acoes">
-                        <button
-                            type="button"
-                            className="chat-header__finalizar"
-                            onClick={finalizarConversaSelecionada}
-                            disabled={finalizandoConversa}
-                        >
-                            {finalizandoConversa
-                                ? "Finalizando..."
-                                : "Finalizar"}
-                        </button>
-
+                    (usuario?.tipo !== "user" ||
+                        conversaSelecionada.podeFinalizar) && (
+                    <div className="chat-header__acoes chat-header__acoes--setor">
                         <details
-                            ref={menuConversaMobileRef}
-                            className="chat-header__menu-mobile"
+                            ref={menuSetorRef}
+                            className="chat-header__menu-grupo chat-header__menu-setor"
                         >
-                            <summary aria-label="Abrir ações da conversa">
+                            <summary aria-label="Abrir ações do setor">
                                 <svg
                                     width="22"
                                     height="22"
@@ -3223,16 +3257,37 @@ function Home() {
                                 </svg>
                             </summary>
 
-                            <div className="chat-header__menu-opcoes">
-                                <button
-                                    type="button"
-                                    onClick={finalizarConversaSelecionada}
-                                    disabled={finalizandoConversa}
+                            <div className="chat-header__menu-opcoes chat-header__menu-opcoes--grupo">
+                                {usuario?.tipo !== "user" && (
+                                    <button
+                                        type="button"
+                                        className="chat-header__transferir"
+                                        onClick={() => {
+                                            if (menuSetorRef.current) {
+                                                menuSetorRef.current.open = false;
+                                            }
+                                        }}
+                                    >
+                                        Transferir conversa
+                                    </button>
+                                )}
+
+                                <div 
+                                className={usuario?.tipo !== "user" ? "container-botao-finalizar" : ""}
                                 >
-                                    {finalizandoConversa
-                                        ? "Finalizando..."
-                                        : "Finalizar"}
-                                </button>
+                                    {conversaSelecionada.podeFinalizar && (
+                                        <button
+                                            type="button"
+                                            className="chat-header__menu-finalizar"
+                                            onClick={finalizarConversaSelecionada}
+                                            disabled={finalizandoConversa}
+                                        >
+                                            {finalizandoConversa
+                                                ? "Finalizando..."
+                                                : "Finalizar"}
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </details>
                     </div>

@@ -1211,6 +1211,17 @@
     text-align: left;
 }
 
+.container-botao-finalizar {
+    border-top: 1px solid rgba(229, 234, 240);
+    padding-top: 5px;
+    margin-top: 5px;
+}
+
+.chat-header__menu-finalizar:hover {
+    background-color: rgb(254, 228, 226) !important;
+    color: rgb(180, 35, 24) !important;
+}
+
 .chat-header__menu-opcoes--grupo {
     min-width: 210px;
 }

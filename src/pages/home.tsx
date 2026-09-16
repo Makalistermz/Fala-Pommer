@@ -258,6 +258,9 @@ function Home() {
     const [modalAdicionarPessoaAberto, setModalAdicionarPessoaAberto] =
         useState(false);
     const [modalTransferirConversa, setModalTransferirConversa] = useState(false);
+    const [setorTransferenciaSelecionado, setSetorTransferenciaSelecionado] =
+        useState<Setor | null>(null);
+    const [mensagemTransferencia, setMensagemTransferencia] = useState("");
     const botaoFecharModalTransferenciaRef = useRef<HTMLButtonElement>(null);
     const [buscaPessoaGrupo, setBuscaPessoaGrupo] = useState("");
     const [buscarSetorTranfConversa, setBuscarSetorTranfConversa] = useState("");
@@ -4604,6 +4607,11 @@ function Home() {
                                         key={setor.id}
                                         type="button"
                                         className="modal-grupo__contato modal-transferencia__item"
+                                        onClick={() => {
+                                            setSetorTransferenciaSelecionado(setor);
+                                            setMensagemTransferencia("");
+                                            setModalTransferirConversa(false);
+                                        }}
                                     >
                                         <span className="modal-transferencia__item-icone">
                                             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -4916,6 +4924,43 @@ function Home() {
                 </section>
             </div>
         )}
+
+        <ModalConfirmacao
+            aberto={setorTransferenciaSelecionado !== null}
+            titulo="Confirmar transferência"
+            mensagem={
+                setorTransferenciaSelecionado
+                    ? `Deseja transferir a conversa para o setor ${setorTransferenciaSelecionado.setor}?`
+                    : ""
+            }
+            textoConfirmar="Confirmar"
+            aoCancelar={() => {
+                setSetorTransferenciaSelecionado(null);
+                setMensagemTransferencia("");
+                setModalTransferirConversa(true);
+            }}
+            aoConfirmar={() => {
+                setSetorTransferenciaSelecionado(null);
+                setMensagemTransferencia("");
+            }}
+        >
+            <label
+                className="modal-transferencia-confirmacao__mensagem"
+                htmlFor="mensagem-transferencia"
+            >
+                <span>Mensagem</span>
+                <textarea
+                    id="mensagem-transferencia"
+                    value={mensagemTransferencia}
+                    onChange={(evento) =>
+                        setMensagemTransferencia(evento.target.value)
+                    }
+                    placeholder="Digite uma mensagem..."
+                    rows={4}
+                    maxLength={500}
+                />
+            </label>
+        </ModalConfirmacao>
 
         <ModalConfirmacao
             aberto={modalSairGrupoAberto}

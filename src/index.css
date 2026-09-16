@@ -1252,6 +1252,20 @@ html.tema-escuro:not(.alto-contraste) .modal-confirmacao__cancelar:hover:not(:di
   background: var(--tema-superficie-interativa);
 }
 
+html.tema-escuro:not(.alto-contraste) .modal-transferencia-confirmacao__mensagem {
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia-confirmacao__mensagem textarea {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia-confirmacao__mensagem textarea::placeholder {
+  color: var(--tema-texto-secundario);
+}
+
 html.tema-escuro:not(.alto-contraste):has(
   :is(.login, .cadastro, .recuperacao, .redefinir)
 ) {

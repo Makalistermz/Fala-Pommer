@@ -1616,6 +1616,24 @@ html.plano-fundo-conversa-5 .mensagens {
     grid-template-rows: auto auto auto minmax(0, 1fr) auto;
 }
 
+.modal-grupo__janela--transferencia {
+    min-height: 520px;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.modal-transferencia__cabecalho {
+    min-height: 132px;
+}
+
+.modal-transferencia__corpo {
+    min-height: 300px;
+    background: #ffffff;
+}
+
+.modal-transferencia__rodape {
+    min-height: 78px;
+}
+
 .modal-grupo__cabecalho {
     position: relative;
     display: flex;

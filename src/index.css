@@ -284,6 +284,10 @@ html.tema-escuro:not(.alto-contraste) .modal-grupo__cabecalho {
     linear-gradient(135deg, #070e1a 0%, #0b1b31 56%, #12335b 100%);
 }
 
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__corpo {
+  background: var(--tema-superficie);
+}
+
 html.tema-escuro:not(.alto-contraste) .modal-grupo__icone {
   border-color: rgb(143 185 255 / 22%);
   background: rgb(58 101 164 / 20%);

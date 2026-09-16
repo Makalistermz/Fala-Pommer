@@ -257,6 +257,8 @@ function Home() {
     const botaoFecharModalGrupoRef = useRef<HTMLButtonElement>(null);
     const [modalAdicionarPessoaAberto, setModalAdicionarPessoaAberto] =
         useState(false);
+    const [modalTransferirConversa, setModalTransferirConversa] = useState(false);
+    const botaoFecharModalTransferenciaRef = useRef<HTMLButtonElement>(null);
     const [buscaPessoaGrupo, setBuscaPessoaGrupo] = useState("");
     const [contatosDisponiveisModalAdicionarPessoas,
         setContatosDisponiveisModalAdicionarPessoas] =
@@ -867,6 +869,34 @@ function Home() {
     }, [arquivoEmVisualizacao]);
 
     useEffect(() => {
+        if (!modalTransferirConversa) {
+            return;
+        }
+
+        const overflowAnterior = document.body.style.overflow;
+        const elementoComFocoAnterior = document.activeElement;
+        document.body.style.overflow = "hidden";
+        botaoFecharModalTransferenciaRef.current?.focus();
+
+        function fecharComEscape(evento: KeyboardEvent) {
+            if (evento.key === "Escape") {
+                setModalTransferirConversa(false);
+            }
+        }
+
+        window.addEventListener("keydown", fecharComEscape);
+
+        return () => {
+            document.body.style.overflow = overflowAnterior;
+            window.removeEventListener("keydown", fecharComEscape);
+
+            if (elementoComFocoAnterior instanceof HTMLElement) {
+                elementoComFocoAnterior.focus();
+            }
+        };
+    }, [modalTransferirConversa]);
+
+    useEffect(() => {
         const audio = new Audio(somNovaMensagem);
         let liberando = false;
 
@@ -1370,6 +1400,17 @@ function Home() {
         } finally {
             setCarregandoContatosModalAdicionarPessoas(false);
         }
+    }
+
+    async function transferirConversa() {
+        if (!usuario ||
+            usuario.tipo === "user" ||
+            conversaSelecionada?.tipo !== "setor"
+        ) {
+            return;
+        }
+
+        setModalTransferirConversa(true);
     }
 
     async function adicionarPessoasAoGrupo() {
@@ -3266,6 +3307,7 @@ function Home() {
                                             if (menuSetorRef.current) {
                                                 menuSetorRef.current.open = false;
                                             }
+                                            void transferirConversa()
                                         }}
                                     >
                                         Transferir conversa
@@ -4322,6 +4364,65 @@ function Home() {
                 </section>
             </div>
         )}
+
+        {modalTransferirConversa &&
+            conversaSelecionada?.tipo === "setor" && (
+                <div
+                    className="modal-grupo"
+                    role="presentation"
+                    onMouseDown={(evento) => {
+                        if (evento.target === evento.currentTarget) {
+                            setModalTransferirConversa(false);
+                        }
+                    }}
+                >
+                    <section
+                        className="modal-grupo__janela modal-grupo__janela--transferencia"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="modal-transferencia-titulo"
+                        aria-describedby="modal-transferencia-descricao"
+                    >
+                        <header className="modal-grupo__cabecalho modal-transferencia__cabecalho">
+                            <div className="modal-grupo__titulo">
+                                <span className="modal-grupo__icone" aria-hidden="true">
+                                    <svg width="14" height="14" fill="currentColor" className="bi bi-arrow-down-up" viewBox="0 0 16 18">
+                                        <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+                                    </svg>
+                                </span>
+
+                                <div>
+                                    <span className="modal-grupo__etapa">
+                                        TRANSFERÊNCIA
+                                    </span>
+                                    <h2 id="modal-transferencia-titulo">
+                                        Transferir conversa
+                                    </h2>
+                                    <p id="modal-transferencia-descricao">
+                                        Selecione o setor para o qual deseja
+                                        transferir esta conversa.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <button
+                                ref={botaoFecharModalTransferenciaRef}
+                                type="button"
+                                className="modal-grupo__fechar"
+                                onClick={() => setModalTransferirConversa(false)}
+                                aria-label="Fechar transferência de conversa"
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M6 6l12 12M18 6 6 18" />
+                                </svg>
+                            </button>
+                        </header>
+                        <div className="modal-transferencia__corpo" />
+                        <footer className="modal-grupo__rodape modal-transferencia__rodape" />
+                    </section>
+                </div>
+            )
+        }
 
         {arquivoEmVisualizacao && (
             <div

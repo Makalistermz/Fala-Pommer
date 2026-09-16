@@ -266,6 +266,89 @@ html.tema-escuro:not(.alto-contraste) .chat-input__emojis emoji-picker {
   --input-font-color: var(--tema-texto);
 }
 
+html.tema-escuro:not(.alto-contraste) .chat-input {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__conteudo {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__conteudo:focus-within {
+  border-color: var(--tema-destaque);
+  background: var(--tema-superficie-interativa);
+  box-shadow: 0 0 0 3px rgb(114 167 255 / 16%);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__campo input {
+  background: transparent;
+  color: var(--tema-texto);
+  caret-color: var(--tema-destaque);
+  color-scheme: dark;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__campo input::placeholder {
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .chat-input__acao > button,
+  .chat-input__audio > button
+) {
+  background: transparent;
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .chat-input__acao > button:hover:not(:disabled),
+  .chat-input__audio > button:hover:not(:disabled)
+) {
+  background: var(--tema-superficie-interativa);
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .chat-input__acao > button:disabled,
+  .chat-input__audio > button:disabled
+) {
+  color: #66758b;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__enviar button {
+  background: #2f6fc8;
+  color: #ffffff;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__enviar button:hover:not(:disabled) {
+  background: #3f82df;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__enviar button:disabled {
+  background: #34435a;
+  color: #8290a3;
+  cursor: not-allowed;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__arquivo {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__arquivo-icone {
+  background: #1d385d;
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__arquivo-remover:hover {
+  background: #5b2528;
+  color: #ffaaa5;
+}
+
 html.tema-escuro:not(.alto-contraste) :is(
   .modal-grupo__janela,
   .modal-dados-grupo,
@@ -408,7 +491,11 @@ html.tema-escuro:not(.alto-contraste) .chat-header__voltar:hover {
   background: var(--tema-superficie-interativa);
 }
 
-html.tema-escuro:not(.alto-contraste) .chat-header__menu-grupo summary {
+html.tema-escuro:not(.alto-contraste) :is(
+  .chat-header__menu-grupo summary,
+  .chat-header__menu-setor summary,
+  .chat-header__menu-mobile summary
+) {
   border-color: var(--tema-borda);
   background: var(--tema-superficie-elevada);
   color: var(--tema-texto-secundario);
@@ -416,10 +503,22 @@ html.tema-escuro:not(.alto-contraste) .chat-header__menu-grupo summary {
 
 html.tema-escuro:not(.alto-contraste) :is(
   .chat-header__menu-grupo summary:hover,
-  .chat-header__menu-grupo[open] summary
+  .chat-header__menu-grupo[open] summary,
+  .chat-header__menu-setor summary:hover,
+  .chat-header__menu-setor[open] summary,
+  .chat-header__menu-mobile summary:hover,
+  .chat-header__menu-mobile[open] summary
 ) {
   background: var(--tema-superficie-interativa);
   color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .container-botao-finalizar,
+  .container-botao-sair-grupo,
+  .menu-modal-sair
+) {
+  border-color: var(--tema-borda);
 }
 
 html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo button {
@@ -440,6 +539,15 @@ html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo .chat-hea
 html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo .chat-header__menu-sair-grupo:hover {
   background: #7f1d1d;
   color: #ffffff;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo .chat-header__menu-finalizar {
+  color: #ff9b95;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo .chat-header__menu-finalizar:hover {
+  background: #7f1d1d !important;
+  color: #ffffff !important;
 }
 
 html.tema-escuro:not(.alto-contraste) :is(

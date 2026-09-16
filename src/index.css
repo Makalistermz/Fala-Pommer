@@ -1256,6 +1256,10 @@ html.tema-escuro:not(.alto-contraste) .modal-transferencia-confirmacao__mensagem
   color: var(--tema-texto);
 }
 
+html.tema-escuro:not(.alto-contraste) .modal-transferencia-confirmacao__mensagem small {
+  color: var(--tema-texto-secundario);
+}
+
 html.tema-escuro:not(.alto-contraste) .modal-transferencia-confirmacao__mensagem textarea {
   border-color: var(--tema-borda);
   background: var(--tema-superficie-elevada);

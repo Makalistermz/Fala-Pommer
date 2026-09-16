@@ -4934,6 +4934,7 @@ function Home() {
                     : ""
             }
             textoConfirmar="Confirmar"
+            confirmarDesabilitado={mensagemTransferencia.trim().length < 10}
             aoCancelar={() => {
                 setSetorTransferenciaSelecionado(null);
                 setMensagemTransferencia("");
@@ -4948,16 +4949,31 @@ function Home() {
                 className="modal-transferencia-confirmacao__mensagem"
                 htmlFor="mensagem-transferencia"
             >
-                <span>Mensagem</span>
+                <span>
+                    Mensagem de transferência
+                    <span
+                        className="modal-transferencia-confirmacao__obrigatorio"
+                        aria-hidden="true"
+                    >
+                        *
+                    </span>
+                </span>
+                <small id="mensagem-transferencia-ajuda">
+                    Explique o motivo da transferência e o que o próximo funcionário
+                    precisa saber para continuar o atendimento. Mínimo de 10 caracteres.
+                </small>
                 <textarea
                     id="mensagem-transferencia"
                     value={mensagemTransferencia}
                     onChange={(evento) =>
                         setMensagemTransferencia(evento.target.value)
                     }
-                    placeholder="Digite uma mensagem..."
+                    placeholder="Ex.: O cidadão precisa de ajuda com..."
                     rows={4}
                     maxLength={500}
+                    minLength={10}
+                    required
+                    aria-describedby="mensagem-transferencia-ajuda"
                 />
             </label>
         </ModalConfirmacao>

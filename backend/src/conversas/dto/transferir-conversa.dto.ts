@@ -14,7 +14,7 @@ export class TransferirConversaDto {
     @Min(1)
     setorDestinoId!: number;
 
-    @Transform(({ value }) =>
+    @Transform(({ value }) => //impede que seja enviado somente espaços
         typeof value === "string"
             ? value.trim()
             : value

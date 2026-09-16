@@ -59,3 +59,12 @@ export const historico_administrativo_acao = {
 } as const
 
 export type historico_administrativo_acao = (typeof historico_administrativo_acao)[keyof typeof historico_administrativo_acao]
+
+
+export const mensagem_visibilidade = {
+  todos: 'todos',
+  equipe: 'equipe',
+  cidadao: 'cidadao'
+} as const
+
+export type mensagem_visibilidade = (typeof mensagem_visibilidade)[keyof typeof mensagem_visibilidade]

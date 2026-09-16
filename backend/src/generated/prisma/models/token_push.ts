@@ -236,8 +236,8 @@ export type token_pushWhereInput = {
   plataforma?: Prisma.StringFilter<"token_push"> | string
   criado_em?: Prisma.DateTimeFilter<"token_push"> | Date | string
   atualizado_em?: Prisma.DateTimeFilter<"token_push"> | Date | string
-  usuario?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
   sessao?: Prisma.XOR<Prisma.SessaoScalarRelationFilter, Prisma.sessaoWhereInput>
+  usuario?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }
 
 export type token_pushOrderByWithRelationInput = {
@@ -248,8 +248,8 @@ export type token_pushOrderByWithRelationInput = {
   plataforma?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
   atualizado_em?: Prisma.SortOrder
-  usuario?: Prisma.cadastroOrderByWithRelationInput
   sessao?: Prisma.sessaoOrderByWithRelationInput
+  usuario?: Prisma.cadastroOrderByWithRelationInput
   _relevance?: Prisma.token_pushOrderByRelevanceInput
 }
 
@@ -264,8 +264,8 @@ export type token_pushWhereUniqueInput = Prisma.AtLeast<{
   plataforma?: Prisma.StringFilter<"token_push"> | string
   criado_em?: Prisma.DateTimeFilter<"token_push"> | Date | string
   atualizado_em?: Prisma.DateTimeFilter<"token_push"> | Date | string
-  usuario?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
   sessao?: Prisma.XOR<Prisma.SessaoScalarRelationFilter, Prisma.sessaoWhereInput>
+  usuario?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }, "id" | "token">
 
 export type token_pushOrderByWithAggregationInput = {
@@ -301,8 +301,8 @@ export type token_pushCreateInput = {
   plataforma: string
   criado_em?: Date | string
   atualizado_em?: Date | string
-  usuario: Prisma.cadastroCreateNestedOneWithoutTokens_pushInput
   sessao: Prisma.sessaoCreateNestedOneWithoutTokens_pushInput
+  usuario: Prisma.cadastroCreateNestedOneWithoutTokens_pushInput
 }
 
 export type token_pushUncheckedCreateInput = {
@@ -320,8 +320,8 @@ export type token_pushUpdateInput = {
   plataforma?: Prisma.StringFieldUpdateOperationsInput | string
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   atualizado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  usuario?: Prisma.cadastroUpdateOneRequiredWithoutTokens_pushNestedInput
   sessao?: Prisma.sessaoUpdateOneRequiredWithoutTokens_pushNestedInput
+  usuario?: Prisma.cadastroUpdateOneRequiredWithoutTokens_pushNestedInput
 }
 
 export type token_pushUncheckedUpdateInput = {
@@ -680,8 +680,8 @@ export type token_pushSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   plataforma?: boolean
   criado_em?: boolean
   atualizado_em?: boolean
-  usuario?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
   sessao?: boolean | Prisma.sessaoDefaultArgs<ExtArgs>
+  usuario?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["token_push"]>
 
 
@@ -698,15 +698,15 @@ export type token_pushSelectScalar = {
 
 export type token_pushOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "token" | "usuario_id" | "sessao_id" | "plataforma" | "criado_em" | "atualizado_em", ExtArgs["result"]["token_push"]>
 export type token_pushInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  usuario?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
   sessao?: boolean | Prisma.sessaoDefaultArgs<ExtArgs>
+  usuario?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }
 
 export type $token_pushPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "token_push"
   objects: {
-    usuario: Prisma.$cadastroPayload<ExtArgs>
     sessao: Prisma.$sessaoPayload<ExtArgs>
+    usuario: Prisma.$cadastroPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1056,8 +1056,8 @@ readonly fields: token_pushFieldRefs;
  */
 export interface Prisma__token_pushClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  usuario<T extends Prisma.cadastroDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastroDefaultArgs<ExtArgs>>): Prisma.Prisma__cadastroClient<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   sessao<T extends Prisma.sessaoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.sessaoDefaultArgs<ExtArgs>>): Prisma.Prisma__sessaoClient<runtime.Types.Result.GetResult<Prisma.$sessaoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  usuario<T extends Prisma.cadastroDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastroDefaultArgs<ExtArgs>>): Prisma.Prisma__cadastroClient<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

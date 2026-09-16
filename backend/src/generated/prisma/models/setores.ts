@@ -214,6 +214,9 @@ export type setoresWhereInput = {
   secretaria_id?: Prisma.IntNullableFilter<"setores"> | number | null
   cadastros?: Prisma.CadastroListRelationFilter
   atendimentos?: Prisma.Conversa_setorListRelationFilter
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.Conversa_transferenciaListRelationFilter
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.Conversa_transferenciaListRelationFilter
+  mensagem?: Prisma.MensagemListRelationFilter
   secretaria?: Prisma.XOR<Prisma.SecretariaNullableScalarRelationFilter, Prisma.secretariaWhereInput> | null
 }
 
@@ -224,6 +227,9 @@ export type setoresOrderByWithRelationInput = {
   secretaria_id?: Prisma.SortOrderInput | Prisma.SortOrder
   cadastros?: Prisma.cadastroOrderByRelationAggregateInput
   atendimentos?: Prisma.conversa_setorOrderByRelationAggregateInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaOrderByRelationAggregateInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaOrderByRelationAggregateInput
+  mensagem?: Prisma.mensagemOrderByRelationAggregateInput
   secretaria?: Prisma.secretariaOrderByWithRelationInput
   _relevance?: Prisma.setoresOrderByRelevanceInput
 }
@@ -238,6 +244,9 @@ export type setoresWhereUniqueInput = Prisma.AtLeast<{
   secretaria_id?: Prisma.IntNullableFilter<"setores"> | number | null
   cadastros?: Prisma.CadastroListRelationFilter
   atendimentos?: Prisma.Conversa_setorListRelationFilter
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.Conversa_transferenciaListRelationFilter
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.Conversa_transferenciaListRelationFilter
+  mensagem?: Prisma.MensagemListRelationFilter
   secretaria?: Prisma.XOR<Prisma.SecretariaNullableScalarRelationFilter, Prisma.secretariaWhereInput> | null
 }, "id">
 
@@ -268,6 +277,9 @@ export type setoresCreateInput = {
   sigla_setor: string
   cadastros?: Prisma.cadastroCreateNestedManyWithoutSetorInput
   atendimentos?: Prisma.conversa_setorCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaCreateNestedManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaCreateNestedManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresInput
+  mensagem?: Prisma.mensagemCreateNestedManyWithoutSetoresInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutSetoresInput
 }
 
@@ -278,6 +290,9 @@ export type setoresUncheckedCreateInput = {
   secretaria_id?: number | null
   cadastros?: Prisma.cadastroUncheckedCreateNestedManyWithoutSetorInput
   atendimentos?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresInput
+  mensagem?: Prisma.mensagemUncheckedCreateNestedManyWithoutSetoresInput
 }
 
 export type setoresUpdateInput = {
@@ -285,6 +300,9 @@ export type setoresUpdateInput = {
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
   cadastros?: Prisma.cadastroUpdateManyWithoutSetorNestedInput
   atendimentos?: Prisma.conversa_setorUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUpdateManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresNestedInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUpdateManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresNestedInput
+  mensagem?: Prisma.mensagemUpdateManyWithoutSetoresNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutSetoresNestedInput
 }
 
@@ -295,6 +313,9 @@ export type setoresUncheckedUpdateInput = {
   secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cadastros?: Prisma.cadastroUncheckedUpdateManyWithoutSetorNestedInput
   atendimentos?: Prisma.conversa_setorUncheckedUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresNestedInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresNestedInput
+  mensagem?: Prisma.mensagemUncheckedUpdateManyWithoutSetoresNestedInput
 }
 
 export type setoresCreateManyInput = {
@@ -403,6 +424,22 @@ export type setoresUpdateOneRequiredWithoutAtendimentosNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.setoresUpdateToOneWithWhereWithoutAtendimentosInput, Prisma.setoresUpdateWithoutAtendimentosInput>, Prisma.setoresUncheckedUpdateWithoutAtendimentosInput>
 }
 
+export type setoresCreateNestedOneWithoutMensagemInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutMensagemInput, Prisma.setoresUncheckedCreateWithoutMensagemInput>
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutMensagemInput
+  connect?: Prisma.setoresWhereUniqueInput
+}
+
+export type setoresUpdateOneWithoutMensagemNestedInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutMensagemInput, Prisma.setoresUncheckedCreateWithoutMensagemInput>
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutMensagemInput
+  upsert?: Prisma.setoresUpsertWithoutMensagemInput
+  disconnect?: Prisma.setoresWhereInput | boolean
+  delete?: Prisma.setoresWhereInput | boolean
+  connect?: Prisma.setoresWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.setoresUpdateToOneWithWhereWithoutMensagemInput, Prisma.setoresUpdateWithoutMensagemInput>, Prisma.setoresUncheckedUpdateWithoutMensagemInput>
+}
+
 export type setoresCreateNestedManyWithoutSecretariaInput = {
   create?: Prisma.XOR<Prisma.setoresCreateWithoutSecretariaInput, Prisma.setoresUncheckedCreateWithoutSecretariaInput> | Prisma.setoresCreateWithoutSecretariaInput[] | Prisma.setoresUncheckedCreateWithoutSecretariaInput[]
   connectOrCreate?: Prisma.setoresCreateOrConnectWithoutSecretariaInput | Prisma.setoresCreateOrConnectWithoutSecretariaInput[]
@@ -445,10 +482,41 @@ export type setoresUncheckedUpdateManyWithoutSecretariaNestedInput = {
   deleteMany?: Prisma.setoresScalarWhereInput | Prisma.setoresScalarWhereInput[]
 }
 
+export type setoresCreateNestedOneWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput, Prisma.setoresUncheckedCreateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput>
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput
+  connect?: Prisma.setoresWhereUniqueInput
+}
+
+export type setoresCreateNestedOneWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput, Prisma.setoresUncheckedCreateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput>
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput
+  connect?: Prisma.setoresWhereUniqueInput
+}
+
+export type setoresUpdateOneRequiredWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresNestedInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput, Prisma.setoresUncheckedCreateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput>
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput
+  upsert?: Prisma.setoresUpsertWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput
+  connect?: Prisma.setoresWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.setoresUpdateToOneWithWhereWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput, Prisma.setoresUpdateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput>, Prisma.setoresUncheckedUpdateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput>
+}
+
+export type setoresUpdateOneRequiredWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresNestedInput = {
+  create?: Prisma.XOR<Prisma.setoresCreateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput, Prisma.setoresUncheckedCreateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput>
+  connectOrCreate?: Prisma.setoresCreateOrConnectWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput
+  upsert?: Prisma.setoresUpsertWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput
+  connect?: Prisma.setoresWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.setoresUpdateToOneWithWhereWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput, Prisma.setoresUpdateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput>, Prisma.setoresUncheckedUpdateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput>
+}
+
 export type setoresCreateWithoutCadastrosInput = {
   setor: string
   sigla_setor: string
   atendimentos?: Prisma.conversa_setorCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaCreateNestedManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaCreateNestedManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresInput
+  mensagem?: Prisma.mensagemCreateNestedManyWithoutSetoresInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutSetoresInput
 }
 
@@ -458,6 +526,9 @@ export type setoresUncheckedCreateWithoutCadastrosInput = {
   sigla_setor: string
   secretaria_id?: number | null
   atendimentos?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresInput
+  mensagem?: Prisma.mensagemUncheckedCreateNestedManyWithoutSetoresInput
 }
 
 export type setoresCreateOrConnectWithoutCadastrosInput = {
@@ -480,6 +551,9 @@ export type setoresUpdateWithoutCadastrosInput = {
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
   atendimentos?: Prisma.conversa_setorUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUpdateManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresNestedInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUpdateManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresNestedInput
+  mensagem?: Prisma.mensagemUpdateManyWithoutSetoresNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutSetoresNestedInput
 }
 
@@ -489,12 +563,18 @@ export type setoresUncheckedUpdateWithoutCadastrosInput = {
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
   secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   atendimentos?: Prisma.conversa_setorUncheckedUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresNestedInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresNestedInput
+  mensagem?: Prisma.mensagemUncheckedUpdateManyWithoutSetoresNestedInput
 }
 
 export type setoresCreateWithoutAtendimentosInput = {
   setor: string
   sigla_setor: string
   cadastros?: Prisma.cadastroCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaCreateNestedManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaCreateNestedManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresInput
+  mensagem?: Prisma.mensagemCreateNestedManyWithoutSetoresInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutSetoresInput
 }
 
@@ -504,6 +584,9 @@ export type setoresUncheckedCreateWithoutAtendimentosInput = {
   sigla_setor: string
   secretaria_id?: number | null
   cadastros?: Prisma.cadastroUncheckedCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresInput
+  mensagem?: Prisma.mensagemUncheckedCreateNestedManyWithoutSetoresInput
 }
 
 export type setoresCreateOrConnectWithoutAtendimentosInput = {
@@ -526,6 +609,9 @@ export type setoresUpdateWithoutAtendimentosInput = {
   setor?: Prisma.StringFieldUpdateOperationsInput | string
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
   cadastros?: Prisma.cadastroUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUpdateManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresNestedInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUpdateManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresNestedInput
+  mensagem?: Prisma.mensagemUpdateManyWithoutSetoresNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutSetoresNestedInput
 }
 
@@ -535,6 +621,67 @@ export type setoresUncheckedUpdateWithoutAtendimentosInput = {
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
   secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   cadastros?: Prisma.cadastroUncheckedUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresNestedInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresNestedInput
+  mensagem?: Prisma.mensagemUncheckedUpdateManyWithoutSetoresNestedInput
+}
+
+export type setoresCreateWithoutMensagemInput = {
+  setor: string
+  sigla_setor: string
+  cadastros?: Prisma.cadastroCreateNestedManyWithoutSetorInput
+  atendimentos?: Prisma.conversa_setorCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaCreateNestedManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaCreateNestedManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutSetoresInput
+}
+
+export type setoresUncheckedCreateWithoutMensagemInput = {
+  id?: number
+  setor: string
+  sigla_setor: string
+  secretaria_id?: number | null
+  cadastros?: Prisma.cadastroUncheckedCreateNestedManyWithoutSetorInput
+  atendimentos?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresInput
+}
+
+export type setoresCreateOrConnectWithoutMensagemInput = {
+  where: Prisma.setoresWhereUniqueInput
+  create: Prisma.XOR<Prisma.setoresCreateWithoutMensagemInput, Prisma.setoresUncheckedCreateWithoutMensagemInput>
+}
+
+export type setoresUpsertWithoutMensagemInput = {
+  update: Prisma.XOR<Prisma.setoresUpdateWithoutMensagemInput, Prisma.setoresUncheckedUpdateWithoutMensagemInput>
+  create: Prisma.XOR<Prisma.setoresCreateWithoutMensagemInput, Prisma.setoresUncheckedCreateWithoutMensagemInput>
+  where?: Prisma.setoresWhereInput
+}
+
+export type setoresUpdateToOneWithWhereWithoutMensagemInput = {
+  where?: Prisma.setoresWhereInput
+  data: Prisma.XOR<Prisma.setoresUpdateWithoutMensagemInput, Prisma.setoresUncheckedUpdateWithoutMensagemInput>
+}
+
+export type setoresUpdateWithoutMensagemInput = {
+  setor?: Prisma.StringFieldUpdateOperationsInput | string
+  sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  cadastros?: Prisma.cadastroUpdateManyWithoutSetorNestedInput
+  atendimentos?: Prisma.conversa_setorUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUpdateManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresNestedInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUpdateManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutSetoresNestedInput
+}
+
+export type setoresUncheckedUpdateWithoutMensagemInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  setor?: Prisma.StringFieldUpdateOperationsInput | string
+  sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cadastros?: Prisma.cadastroUncheckedUpdateManyWithoutSetorNestedInput
+  atendimentos?: Prisma.conversa_setorUncheckedUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresNestedInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresNestedInput
 }
 
 export type setoresCreateWithoutSecretariaInput = {
@@ -542,6 +689,9 @@ export type setoresCreateWithoutSecretariaInput = {
   sigla_setor: string
   cadastros?: Prisma.cadastroCreateNestedManyWithoutSetorInput
   atendimentos?: Prisma.conversa_setorCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaCreateNestedManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaCreateNestedManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresInput
+  mensagem?: Prisma.mensagemCreateNestedManyWithoutSetoresInput
 }
 
 export type setoresUncheckedCreateWithoutSecretariaInput = {
@@ -550,6 +700,9 @@ export type setoresUncheckedCreateWithoutSecretariaInput = {
   sigla_setor: string
   cadastros?: Prisma.cadastroUncheckedCreateNestedManyWithoutSetorInput
   atendimentos?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresInput
+  mensagem?: Prisma.mensagemUncheckedCreateNestedManyWithoutSetoresInput
 }
 
 export type setoresCreateOrConnectWithoutSecretariaInput = {
@@ -588,6 +741,122 @@ export type setoresScalarWhereInput = {
   secretaria_id?: Prisma.IntNullableFilter<"setores"> | number | null
 }
 
+export type setoresCreateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput = {
+  setor: string
+  sigla_setor: string
+  cadastros?: Prisma.cadastroCreateNestedManyWithoutSetorInput
+  atendimentos?: Prisma.conversa_setorCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaCreateNestedManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresInput
+  mensagem?: Prisma.mensagemCreateNestedManyWithoutSetoresInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutSetoresInput
+}
+
+export type setoresUncheckedCreateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput = {
+  id?: number
+  setor: string
+  sigla_setor: string
+  secretaria_id?: number | null
+  cadastros?: Prisma.cadastroUncheckedCreateNestedManyWithoutSetorInput
+  atendimentos?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresInput
+  mensagem?: Prisma.mensagemUncheckedCreateNestedManyWithoutSetoresInput
+}
+
+export type setoresCreateOrConnectWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput = {
+  where: Prisma.setoresWhereUniqueInput
+  create: Prisma.XOR<Prisma.setoresCreateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput, Prisma.setoresUncheckedCreateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput>
+}
+
+export type setoresCreateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput = {
+  setor: string
+  sigla_setor: string
+  cadastros?: Prisma.cadastroCreateNestedManyWithoutSetorInput
+  atendimentos?: Prisma.conversa_setorCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaCreateNestedManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresInput
+  mensagem?: Prisma.mensagemCreateNestedManyWithoutSetoresInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutSetoresInput
+}
+
+export type setoresUncheckedCreateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput = {
+  id?: number
+  setor: string
+  sigla_setor: string
+  secretaria_id?: number | null
+  cadastros?: Prisma.cadastroUncheckedCreateNestedManyWithoutSetorInput
+  atendimentos?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutSetorInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresInput
+  mensagem?: Prisma.mensagemUncheckedCreateNestedManyWithoutSetoresInput
+}
+
+export type setoresCreateOrConnectWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput = {
+  where: Prisma.setoresWhereUniqueInput
+  create: Prisma.XOR<Prisma.setoresCreateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput, Prisma.setoresUncheckedCreateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput>
+}
+
+export type setoresUpsertWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput = {
+  update: Prisma.XOR<Prisma.setoresUpdateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput, Prisma.setoresUncheckedUpdateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput>
+  create: Prisma.XOR<Prisma.setoresCreateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput, Prisma.setoresUncheckedCreateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput>
+  where?: Prisma.setoresWhereInput
+}
+
+export type setoresUpdateToOneWithWhereWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput = {
+  where?: Prisma.setoresWhereInput
+  data: Prisma.XOR<Prisma.setoresUpdateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput, Prisma.setoresUncheckedUpdateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput>
+}
+
+export type setoresUpdateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput = {
+  setor?: Prisma.StringFieldUpdateOperationsInput | string
+  sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  cadastros?: Prisma.cadastroUpdateManyWithoutSetorNestedInput
+  atendimentos?: Prisma.conversa_setorUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUpdateManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresNestedInput
+  mensagem?: Prisma.mensagemUpdateManyWithoutSetoresNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutSetoresNestedInput
+}
+
+export type setoresUncheckedUpdateWithoutConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  setor?: Prisma.StringFieldUpdateOperationsInput | string
+  sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cadastros?: Prisma.cadastroUncheckedUpdateManyWithoutSetorNestedInput
+  atendimentos?: Prisma.conversa_setorUncheckedUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresNestedInput
+  mensagem?: Prisma.mensagemUncheckedUpdateManyWithoutSetoresNestedInput
+}
+
+export type setoresUpsertWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput = {
+  update: Prisma.XOR<Prisma.setoresUpdateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput, Prisma.setoresUncheckedUpdateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput>
+  create: Prisma.XOR<Prisma.setoresCreateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput, Prisma.setoresUncheckedCreateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput>
+  where?: Prisma.setoresWhereInput
+}
+
+export type setoresUpdateToOneWithWhereWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput = {
+  where?: Prisma.setoresWhereInput
+  data: Prisma.XOR<Prisma.setoresUpdateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput, Prisma.setoresUncheckedUpdateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput>
+}
+
+export type setoresUpdateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput = {
+  setor?: Prisma.StringFieldUpdateOperationsInput | string
+  sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  cadastros?: Prisma.cadastroUpdateManyWithoutSetorNestedInput
+  atendimentos?: Prisma.conversa_setorUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUpdateManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresNestedInput
+  mensagem?: Prisma.mensagemUpdateManyWithoutSetoresNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutSetoresNestedInput
+}
+
+export type setoresUncheckedUpdateWithoutConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  setor?: Prisma.StringFieldUpdateOperationsInput | string
+  sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  cadastros?: Prisma.cadastroUncheckedUpdateManyWithoutSetorNestedInput
+  atendimentos?: Prisma.conversa_setorUncheckedUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresNestedInput
+  mensagem?: Prisma.mensagemUncheckedUpdateManyWithoutSetoresNestedInput
+}
+
 export type setoresCreateManySecretariaInput = {
   id?: number
   setor: string
@@ -599,6 +868,9 @@ export type setoresUpdateWithoutSecretariaInput = {
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
   cadastros?: Prisma.cadastroUpdateManyWithoutSetorNestedInput
   atendimentos?: Prisma.conversa_setorUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUpdateManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresNestedInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUpdateManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresNestedInput
+  mensagem?: Prisma.mensagemUpdateManyWithoutSetoresNestedInput
 }
 
 export type setoresUncheckedUpdateWithoutSecretariaInput = {
@@ -607,6 +879,9 @@ export type setoresUncheckedUpdateWithoutSecretariaInput = {
   sigla_setor?: Prisma.StringFieldUpdateOperationsInput | string
   cadastros?: Prisma.cadastroUncheckedUpdateManyWithoutSetorNestedInput
   atendimentos?: Prisma.conversa_setorUncheckedUpdateManyWithoutSetorNestedInput
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutSetores_conversa_transferencia_setor_destino_idTosetoresNestedInput
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutSetores_conversa_transferencia_setor_origem_idTosetoresNestedInput
+  mensagem?: Prisma.mensagemUncheckedUpdateManyWithoutSetoresNestedInput
 }
 
 export type setoresUncheckedUpdateManyWithoutSecretariaInput = {
@@ -623,11 +898,17 @@ export type setoresUncheckedUpdateManyWithoutSecretariaInput = {
 export type SetoresCountOutputType = {
   cadastros: number
   atendimentos: number
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores: number
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores: number
+  mensagem: number
 }
 
 export type SetoresCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cadastros?: boolean | SetoresCountOutputTypeCountCadastrosArgs
   atendimentos?: boolean | SetoresCountOutputTypeCountAtendimentosArgs
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: boolean | SetoresCountOutputTypeCountConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresArgs
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: boolean | SetoresCountOutputTypeCountConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresArgs
+  mensagem?: boolean | SetoresCountOutputTypeCountMensagemArgs
 }
 
 /**
@@ -654,6 +935,27 @@ export type SetoresCountOutputTypeCountAtendimentosArgs<ExtArgs extends runtime.
   where?: Prisma.conversa_setorWhereInput
 }
 
+/**
+ * SetoresCountOutputType without action
+ */
+export type SetoresCountOutputTypeCountConversa_transferencia_conversa_transferencia_setor_destino_idTosetoresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.conversa_transferenciaWhereInput
+}
+
+/**
+ * SetoresCountOutputType without action
+ */
+export type SetoresCountOutputTypeCountConversa_transferencia_conversa_transferencia_setor_origem_idTosetoresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.conversa_transferenciaWhereInput
+}
+
+/**
+ * SetoresCountOutputType without action
+ */
+export type SetoresCountOutputTypeCountMensagemArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.mensagemWhereInput
+}
+
 
 export type setoresSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -662,6 +964,9 @@ export type setoresSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   secretaria_id?: boolean
   cadastros?: boolean | Prisma.setores$cadastrosArgs<ExtArgs>
   atendimentos?: boolean | Prisma.setores$atendimentosArgs<ExtArgs>
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: boolean | Prisma.setores$conversa_transferencia_conversa_transferencia_setor_destino_idTosetoresArgs<ExtArgs>
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: boolean | Prisma.setores$conversa_transferencia_conversa_transferencia_setor_origem_idTosetoresArgs<ExtArgs>
+  mensagem?: boolean | Prisma.setores$mensagemArgs<ExtArgs>
   secretaria?: boolean | Prisma.setores$secretariaArgs<ExtArgs>
   _count?: boolean | Prisma.SetoresCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["setores"]>
@@ -679,6 +984,9 @@ export type setoresOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type setoresInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cadastros?: boolean | Prisma.setores$cadastrosArgs<ExtArgs>
   atendimentos?: boolean | Prisma.setores$atendimentosArgs<ExtArgs>
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores?: boolean | Prisma.setores$conversa_transferencia_conversa_transferencia_setor_destino_idTosetoresArgs<ExtArgs>
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores?: boolean | Prisma.setores$conversa_transferencia_conversa_transferencia_setor_origem_idTosetoresArgs<ExtArgs>
+  mensagem?: boolean | Prisma.setores$mensagemArgs<ExtArgs>
   secretaria?: boolean | Prisma.setores$secretariaArgs<ExtArgs>
   _count?: boolean | Prisma.SetoresCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -688,6 +996,9 @@ export type $setoresPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     cadastros: Prisma.$cadastroPayload<ExtArgs>[]
     atendimentos: Prisma.$conversa_setorPayload<ExtArgs>[]
+    conversa_transferencia_conversa_transferencia_setor_destino_idTosetores: Prisma.$conversa_transferenciaPayload<ExtArgs>[]
+    conversa_transferencia_conversa_transferencia_setor_origem_idTosetores: Prisma.$conversa_transferenciaPayload<ExtArgs>[]
+    mensagem: Prisma.$mensagemPayload<ExtArgs>[]
     secretaria: Prisma.$secretariaPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1037,6 +1348,9 @@ export interface Prisma__setoresClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   cadastros<T extends Prisma.setores$cadastrosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.setores$cadastrosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   atendimentos<T extends Prisma.setores$atendimentosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.setores$atendimentosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_setorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores<T extends Prisma.setores$conversa_transferencia_conversa_transferencia_setor_destino_idTosetoresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.setores$conversa_transferencia_conversa_transferencia_setor_destino_idTosetoresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_transferenciaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores<T extends Prisma.setores$conversa_transferencia_conversa_transferencia_setor_origem_idTosetoresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.setores$conversa_transferencia_conversa_transferencia_setor_origem_idTosetoresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_transferenciaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  mensagem<T extends Prisma.setores$mensagemArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.setores$mensagemArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$mensagemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   secretaria<T extends Prisma.setores$secretariaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.setores$secretariaArgs<ExtArgs>>): Prisma.Prisma__secretariaClient<runtime.Types.Result.GetResult<Prisma.$secretariaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1464,6 +1778,78 @@ export type setores$atendimentosArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.Conversa_setorScalarFieldEnum | Prisma.Conversa_setorScalarFieldEnum[]
+}
+
+/**
+ * setores.conversa_transferencia_conversa_transferencia_setor_destino_idTosetores
+ */
+export type setores$conversa_transferencia_conversa_transferencia_setor_destino_idTosetoresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the conversa_transferencia
+   */
+  select?: Prisma.conversa_transferenciaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the conversa_transferencia
+   */
+  omit?: Prisma.conversa_transferenciaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.conversa_transferenciaInclude<ExtArgs> | null
+  where?: Prisma.conversa_transferenciaWhereInput
+  orderBy?: Prisma.conversa_transferenciaOrderByWithRelationInput | Prisma.conversa_transferenciaOrderByWithRelationInput[]
+  cursor?: Prisma.conversa_transferenciaWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Conversa_transferenciaScalarFieldEnum | Prisma.Conversa_transferenciaScalarFieldEnum[]
+}
+
+/**
+ * setores.conversa_transferencia_conversa_transferencia_setor_origem_idTosetores
+ */
+export type setores$conversa_transferencia_conversa_transferencia_setor_origem_idTosetoresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the conversa_transferencia
+   */
+  select?: Prisma.conversa_transferenciaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the conversa_transferencia
+   */
+  omit?: Prisma.conversa_transferenciaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.conversa_transferenciaInclude<ExtArgs> | null
+  where?: Prisma.conversa_transferenciaWhereInput
+  orderBy?: Prisma.conversa_transferenciaOrderByWithRelationInput | Prisma.conversa_transferenciaOrderByWithRelationInput[]
+  cursor?: Prisma.conversa_transferenciaWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Conversa_transferenciaScalarFieldEnum | Prisma.Conversa_transferenciaScalarFieldEnum[]
+}
+
+/**
+ * setores.mensagem
+ */
+export type setores$mensagemArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the mensagem
+   */
+  select?: Prisma.mensagemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the mensagem
+   */
+  omit?: Prisma.mensagemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.mensagemInclude<ExtArgs> | null
+  where?: Prisma.mensagemWhereInput
+  orderBy?: Prisma.mensagemOrderByWithRelationInput | Prisma.mensagemOrderByWithRelationInput[]
+  cursor?: Prisma.mensagemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MensagemScalarFieldEnum | Prisma.MensagemScalarFieldEnum[]
 }
 
 /**

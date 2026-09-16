@@ -102,3 +102,8 @@ export type avaliacao = Prisma.avaliacaoModel
  * 
  */
 export type conversa_finalizacao = Prisma.conversa_finalizacaoModel
+/**
+ * Model conversa_transferencia
+ * 
+ */
+export type conversa_transferencia = Prisma.conversa_transferenciaModel

@@ -67,7 +67,8 @@ export const ModelName = {
   secretaria: 'secretaria',
   historico_administrativo: 'historico_administrativo',
   avaliacao: 'avaliacao',
-  conversa_finalizacao: 'conversa_finalizacao'
+  conversa_finalizacao: 'conversa_finalizacao',
+  conversa_transferencia: 'conversa_transferencia'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -114,13 +115,13 @@ export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typ
 export const SessaoScalarFieldEnum = {
   id: 'id',
   usuario_id: 'usuario_id',
-  versao_token: 'versao_token',
   refresh_token_hash: 'refresh_token_hash',
   nome_dispositivo: 'nome_dispositivo',
   plataforma: 'plataforma',
   ultimo_uso_em: 'ultimo_uso_em',
   revogada_em: 'revogada_em',
-  criado_em: 'criado_em'
+  criado_em: 'criado_em',
+  versao_token: 'versao_token'
 } as const
 
 export type SessaoScalarFieldEnum = (typeof SessaoScalarFieldEnum)[keyof typeof SessaoScalarFieldEnum]
@@ -185,7 +186,8 @@ export const Conversa_setorScalarFieldEnum = {
   setor_id: 'setor_id',
   usuario_id: 'usuario_id',
   criada_em: 'criada_em',
-  ocultada_para_usuario_em: 'ocultada_para_usuario_em'
+  ocultada_para_usuario_em: 'ocultada_para_usuario_em',
+  usuario_visivel_desde_mensagem_id: 'usuario_visivel_desde_mensagem_id'
 } as const
 
 export type Conversa_setorScalarFieldEnum = (typeof Conversa_setorScalarFieldEnum)[keyof typeof Conversa_setorScalarFieldEnum]
@@ -197,6 +199,9 @@ export const MensagemScalarFieldEnum = {
   remetente_id: 'remetente_id',
   origem: 'origem',
   sistema: 'sistema',
+  visibilidade: 'visibilidade',
+  transferencia_id: 'transferencia_id',
+  setor_id: 'setor_id',
   conteudo: 'conteudo',
   enviada_em: 'enviada_em',
   arquivo_nome: 'arquivo_nome',
@@ -283,11 +288,11 @@ export type Historico_administrativoScalarFieldEnum = (typeof Historico_administ
 
 export const AvaliacaoScalarFieldEnum = {
   id: 'id',
-  finalizacao_id: 'finalizacao_id',
-  avaliador_id: 'avaliador_id',
   nota: 'nota',
   descricao: 'descricao',
-  criada_em: 'criada_em'
+  avaliador_id: 'avaliador_id',
+  criada_em: 'criada_em',
+  finalizacao_id: 'finalizacao_id'
 } as const
 
 export type AvaliacaoScalarFieldEnum = (typeof AvaliacaoScalarFieldEnum)[keyof typeof AvaliacaoScalarFieldEnum]
@@ -302,6 +307,19 @@ export const Conversa_finalizacaoScalarFieldEnum = {
 } as const
 
 export type Conversa_finalizacaoScalarFieldEnum = (typeof Conversa_finalizacaoScalarFieldEnum)[keyof typeof Conversa_finalizacaoScalarFieldEnum]
+
+
+export const Conversa_transferenciaScalarFieldEnum = {
+  id: 'id',
+  conversa_id: 'conversa_id',
+  setor_origem_id: 'setor_origem_id',
+  setor_destino_id: 'setor_destino_id',
+  transferida_por_id: 'transferida_por_id',
+  motivo: 'motivo',
+  transferida_em: 'transferida_em'
+} as const
+
+export type Conversa_transferenciaScalarFieldEnum = (typeof Conversa_transferenciaScalarFieldEnum)[keyof typeof Conversa_transferenciaScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -414,4 +432,11 @@ export const avaliacaoOrderByRelevanceFieldEnum = {
 } as const
 
 export type avaliacaoOrderByRelevanceFieldEnum = (typeof avaliacaoOrderByRelevanceFieldEnum)[keyof typeof avaliacaoOrderByRelevanceFieldEnum]
+
+
+export const conversa_transferenciaOrderByRelevanceFieldEnum = {
+  motivo: 'motivo'
+} as const
+
+export type conversa_transferenciaOrderByRelevanceFieldEnum = (typeof conversa_transferenciaOrderByRelevanceFieldEnum)[keyof typeof conversa_transferenciaOrderByRelevanceFieldEnum]
 

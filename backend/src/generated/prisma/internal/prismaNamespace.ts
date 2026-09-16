@@ -413,7 +413,8 @@ export const ModelName = {
   secretaria: 'secretaria',
   historico_administrativo: 'historico_administrativo',
   avaliacao: 'avaliacao',
-  conversa_finalizacao: 'conversa_finalizacao'
+  conversa_finalizacao: 'conversa_finalizacao',
+  conversa_transferencia: 'conversa_transferencia'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -429,7 +430,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "sessao" | "token_push" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao"
+    modelProps: "cadastro" | "sessao" | "token_push" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao" | "conversa_transferencia"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1555,6 +1556,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    conversa_transferencia: {
+      payload: Prisma.$conversa_transferenciaPayload<ExtArgs>
+      fields: Prisma.conversa_transferenciaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.conversa_transferenciaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_transferenciaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.conversa_transferenciaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_transferenciaPayload>
+        }
+        findFirst: {
+          args: Prisma.conversa_transferenciaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_transferenciaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.conversa_transferenciaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_transferenciaPayload>
+        }
+        findMany: {
+          args: Prisma.conversa_transferenciaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_transferenciaPayload>[]
+        }
+        create: {
+          args: Prisma.conversa_transferenciaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_transferenciaPayload>
+        }
+        createMany: {
+          args: Prisma.conversa_transferenciaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.conversa_transferenciaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_transferenciaPayload>
+        }
+        update: {
+          args: Prisma.conversa_transferenciaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_transferenciaPayload>
+        }
+        deleteMany: {
+          args: Prisma.conversa_transferenciaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.conversa_transferenciaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.conversa_transferenciaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$conversa_transferenciaPayload>
+        }
+        aggregate: {
+          args: Prisma.Conversa_transferenciaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateConversa_transferencia>
+        }
+        groupBy: {
+          args: Prisma.conversa_transferenciaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Conversa_transferenciaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.conversa_transferenciaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Conversa_transferenciaCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1622,13 +1689,13 @@ export type CadastroScalarFieldEnum = (typeof CadastroScalarFieldEnum)[keyof typ
 export const SessaoScalarFieldEnum = {
   id: 'id',
   usuario_id: 'usuario_id',
-  versao_token: 'versao_token',
   refresh_token_hash: 'refresh_token_hash',
   nome_dispositivo: 'nome_dispositivo',
   plataforma: 'plataforma',
   ultimo_uso_em: 'ultimo_uso_em',
   revogada_em: 'revogada_em',
-  criado_em: 'criado_em'
+  criado_em: 'criado_em',
+  versao_token: 'versao_token'
 } as const
 
 export type SessaoScalarFieldEnum = (typeof SessaoScalarFieldEnum)[keyof typeof SessaoScalarFieldEnum]
@@ -1693,7 +1760,8 @@ export const Conversa_setorScalarFieldEnum = {
   setor_id: 'setor_id',
   usuario_id: 'usuario_id',
   criada_em: 'criada_em',
-  ocultada_para_usuario_em: 'ocultada_para_usuario_em'
+  ocultada_para_usuario_em: 'ocultada_para_usuario_em',
+  usuario_visivel_desde_mensagem_id: 'usuario_visivel_desde_mensagem_id'
 } as const
 
 export type Conversa_setorScalarFieldEnum = (typeof Conversa_setorScalarFieldEnum)[keyof typeof Conversa_setorScalarFieldEnum]
@@ -1705,6 +1773,9 @@ export const MensagemScalarFieldEnum = {
   remetente_id: 'remetente_id',
   origem: 'origem',
   sistema: 'sistema',
+  visibilidade: 'visibilidade',
+  transferencia_id: 'transferencia_id',
+  setor_id: 'setor_id',
   conteudo: 'conteudo',
   enviada_em: 'enviada_em',
   arquivo_nome: 'arquivo_nome',
@@ -1791,11 +1862,11 @@ export type Historico_administrativoScalarFieldEnum = (typeof Historico_administ
 
 export const AvaliacaoScalarFieldEnum = {
   id: 'id',
-  finalizacao_id: 'finalizacao_id',
-  avaliador_id: 'avaliador_id',
   nota: 'nota',
   descricao: 'descricao',
-  criada_em: 'criada_em'
+  avaliador_id: 'avaliador_id',
+  criada_em: 'criada_em',
+  finalizacao_id: 'finalizacao_id'
 } as const
 
 export type AvaliacaoScalarFieldEnum = (typeof AvaliacaoScalarFieldEnum)[keyof typeof AvaliacaoScalarFieldEnum]
@@ -1810,6 +1881,19 @@ export const Conversa_finalizacaoScalarFieldEnum = {
 } as const
 
 export type Conversa_finalizacaoScalarFieldEnum = (typeof Conversa_finalizacaoScalarFieldEnum)[keyof typeof Conversa_finalizacaoScalarFieldEnum]
+
+
+export const Conversa_transferenciaScalarFieldEnum = {
+  id: 'id',
+  conversa_id: 'conversa_id',
+  setor_origem_id: 'setor_origem_id',
+  setor_destino_id: 'setor_destino_id',
+  transferida_por_id: 'transferida_por_id',
+  motivo: 'motivo',
+  transferida_em: 'transferida_em'
+} as const
+
+export type Conversa_transferenciaScalarFieldEnum = (typeof Conversa_transferenciaScalarFieldEnum)[keyof typeof Conversa_transferenciaScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1924,6 +2008,13 @@ export const avaliacaoOrderByRelevanceFieldEnum = {
 export type avaliacaoOrderByRelevanceFieldEnum = (typeof avaliacaoOrderByRelevanceFieldEnum)[keyof typeof avaliacaoOrderByRelevanceFieldEnum]
 
 
+export const conversa_transferenciaOrderByRelevanceFieldEnum = {
+  motivo: 'motivo'
+} as const
+
+export type conversa_transferenciaOrderByRelevanceFieldEnum = (typeof conversa_transferenciaOrderByRelevanceFieldEnum)[keyof typeof conversa_transferenciaOrderByRelevanceFieldEnum]
+
+
 
 /**
  * Field references
@@ -1983,6 +2074,13 @@ export type Enumconversa_tipoFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'mensagem_origem'
  */
 export type Enummensagem_origemFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'mensagem_origem'>
+    
+
+
+/**
+ * Reference to a field of type 'mensagem_visibilidade'
+ */
+export type Enummensagem_visibilidadeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'mensagem_visibilidade'>
     
 
 
@@ -2174,6 +2272,7 @@ export type GlobalOmitConfig = {
   historico_administrativo?: Prisma.historico_administrativoOmit
   avaliacao?: Prisma.avaliacaoOmit
   conversa_finalizacao?: Prisma.conversa_finalizacaoOmit
+  conversa_transferencia?: Prisma.conversa_transferenciaOmit
 }
 
 /* Types for Logging */

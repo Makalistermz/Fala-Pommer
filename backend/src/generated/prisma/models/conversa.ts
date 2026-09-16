@@ -208,10 +208,11 @@ export type conversaWhereInput = {
   tipo?: Prisma.Enumconversa_tipoFilter<"conversa"> | $Enums.conversa_tipo
   nome?: Prisma.StringNullableFilter<"conversa"> | string | null
   criada_em?: Prisma.DateTimeFilter<"conversa"> | Date | string
+  finalizacoes?: Prisma.Conversa_finalizacaoListRelationFilter
   conversa_leitura?: Prisma.Conversa_leituraListRelationFilter
   conversa_participante?: Prisma.Conversa_participanteListRelationFilter
   atendimento_setor?: Prisma.XOR<Prisma.Conversa_setorNullableScalarRelationFilter, Prisma.conversa_setorWhereInput> | null
-  finalizacoes?: Prisma.Conversa_finalizacaoListRelationFilter
+  conversa_transferencia?: Prisma.Conversa_transferenciaListRelationFilter
   mensagens?: Prisma.MensagemListRelationFilter
 }
 
@@ -220,10 +221,11 @@ export type conversaOrderByWithRelationInput = {
   tipo?: Prisma.SortOrder
   nome?: Prisma.SortOrderInput | Prisma.SortOrder
   criada_em?: Prisma.SortOrder
+  finalizacoes?: Prisma.conversa_finalizacaoOrderByRelationAggregateInput
   conversa_leitura?: Prisma.conversa_leituraOrderByRelationAggregateInput
   conversa_participante?: Prisma.conversa_participanteOrderByRelationAggregateInput
   atendimento_setor?: Prisma.conversa_setorOrderByWithRelationInput
-  finalizacoes?: Prisma.conversa_finalizacaoOrderByRelationAggregateInput
+  conversa_transferencia?: Prisma.conversa_transferenciaOrderByRelationAggregateInput
   mensagens?: Prisma.mensagemOrderByRelationAggregateInput
   _relevance?: Prisma.conversaOrderByRelevanceInput
 }
@@ -236,10 +238,11 @@ export type conversaWhereUniqueInput = Prisma.AtLeast<{
   tipo?: Prisma.Enumconversa_tipoFilter<"conversa"> | $Enums.conversa_tipo
   nome?: Prisma.StringNullableFilter<"conversa"> | string | null
   criada_em?: Prisma.DateTimeFilter<"conversa"> | Date | string
+  finalizacoes?: Prisma.Conversa_finalizacaoListRelationFilter
   conversa_leitura?: Prisma.Conversa_leituraListRelationFilter
   conversa_participante?: Prisma.Conversa_participanteListRelationFilter
   atendimento_setor?: Prisma.XOR<Prisma.Conversa_setorNullableScalarRelationFilter, Prisma.conversa_setorWhereInput> | null
-  finalizacoes?: Prisma.Conversa_finalizacaoListRelationFilter
+  conversa_transferencia?: Prisma.Conversa_transferenciaListRelationFilter
   mensagens?: Prisma.MensagemListRelationFilter
 }, "id">
 
@@ -269,10 +272,11 @@ export type conversaCreateInput = {
   tipo?: $Enums.conversa_tipo
   nome?: string | null
   criada_em?: Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutConversaInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorCreateNestedOneWithoutConversaInput
-  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutConversaInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutConversaInput
   mensagens?: Prisma.mensagemCreateNestedManyWithoutConversaInput
 }
 
@@ -281,10 +285,11 @@ export type conversaUncheckedCreateInput = {
   tipo?: $Enums.conversa_tipo
   nome?: string | null
   criada_em?: Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutConversaInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorUncheckedCreateNestedOneWithoutConversaInput
-  finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutConversaInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutConversaInput
   mensagens?: Prisma.mensagemUncheckedCreateNestedManyWithoutConversaInput
 }
 
@@ -292,10 +297,11 @@ export type conversaUpdateInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
   nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutConversaNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUpdateOneWithoutConversaNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutConversaNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutConversaNestedInput
   mensagens?: Prisma.mensagemUpdateManyWithoutConversaNestedInput
 }
 
@@ -304,10 +310,11 @@ export type conversaUncheckedUpdateInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
   nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutConversaNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUncheckedUpdateOneWithoutConversaNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutConversaNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutConversaNestedInput
   mensagens?: Prisma.mensagemUncheckedUpdateManyWithoutConversaNestedInput
 }
 
@@ -445,13 +452,28 @@ export type conversaUpdateOneRequiredWithoutFinalizacoesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.conversaUpdateToOneWithWhereWithoutFinalizacoesInput, Prisma.conversaUpdateWithoutFinalizacoesInput>, Prisma.conversaUncheckedUpdateWithoutFinalizacoesInput>
 }
 
+export type conversaCreateNestedOneWithoutConversa_transferenciaInput = {
+  create?: Prisma.XOR<Prisma.conversaCreateWithoutConversa_transferenciaInput, Prisma.conversaUncheckedCreateWithoutConversa_transferenciaInput>
+  connectOrCreate?: Prisma.conversaCreateOrConnectWithoutConversa_transferenciaInput
+  connect?: Prisma.conversaWhereUniqueInput
+}
+
+export type conversaUpdateOneRequiredWithoutConversa_transferenciaNestedInput = {
+  create?: Prisma.XOR<Prisma.conversaCreateWithoutConversa_transferenciaInput, Prisma.conversaUncheckedCreateWithoutConversa_transferenciaInput>
+  connectOrCreate?: Prisma.conversaCreateOrConnectWithoutConversa_transferenciaInput
+  upsert?: Prisma.conversaUpsertWithoutConversa_transferenciaInput
+  connect?: Prisma.conversaWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.conversaUpdateToOneWithWhereWithoutConversa_transferenciaInput, Prisma.conversaUpdateWithoutConversa_transferenciaInput>, Prisma.conversaUncheckedUpdateWithoutConversa_transferenciaInput>
+}
+
 export type conversaCreateWithoutConversa_participanteInput = {
   tipo?: $Enums.conversa_tipo
   nome?: string | null
   criada_em?: Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutConversaInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorCreateNestedOneWithoutConversaInput
-  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutConversaInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutConversaInput
   mensagens?: Prisma.mensagemCreateNestedManyWithoutConversaInput
 }
 
@@ -460,9 +482,10 @@ export type conversaUncheckedCreateWithoutConversa_participanteInput = {
   tipo?: $Enums.conversa_tipo
   nome?: string | null
   criada_em?: Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutConversaInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorUncheckedCreateNestedOneWithoutConversaInput
-  finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutConversaInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutConversaInput
   mensagens?: Prisma.mensagemUncheckedCreateNestedManyWithoutConversaInput
 }
 
@@ -486,9 +509,10 @@ export type conversaUpdateWithoutConversa_participanteInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
   nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutConversaNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUpdateOneWithoutConversaNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutConversaNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutConversaNestedInput
   mensagens?: Prisma.mensagemUpdateManyWithoutConversaNestedInput
 }
 
@@ -497,9 +521,10 @@ export type conversaUncheckedUpdateWithoutConversa_participanteInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
   nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutConversaNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUncheckedUpdateOneWithoutConversaNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutConversaNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutConversaNestedInput
   mensagens?: Prisma.mensagemUncheckedUpdateManyWithoutConversaNestedInput
 }
 
@@ -507,9 +532,10 @@ export type conversaCreateWithoutAtendimento_setorInput = {
   tipo?: $Enums.conversa_tipo
   nome?: string | null
   criada_em?: Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutConversaInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutConversaInput
-  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutConversaInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutConversaInput
   mensagens?: Prisma.mensagemCreateNestedManyWithoutConversaInput
 }
 
@@ -518,9 +544,10 @@ export type conversaUncheckedCreateWithoutAtendimento_setorInput = {
   tipo?: $Enums.conversa_tipo
   nome?: string | null
   criada_em?: Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutConversaInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutConversaInput
-  finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutConversaInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutConversaInput
   mensagens?: Prisma.mensagemUncheckedCreateNestedManyWithoutConversaInput
 }
 
@@ -544,9 +571,10 @@ export type conversaUpdateWithoutAtendimento_setorInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
   nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutConversaNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutConversaNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutConversaNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutConversaNestedInput
   mensagens?: Prisma.mensagemUpdateManyWithoutConversaNestedInput
 }
 
@@ -555,9 +583,10 @@ export type conversaUncheckedUpdateWithoutAtendimento_setorInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
   nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutConversaNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutConversaNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutConversaNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutConversaNestedInput
   mensagens?: Prisma.mensagemUncheckedUpdateManyWithoutConversaNestedInput
 }
 
@@ -565,10 +594,11 @@ export type conversaCreateWithoutMensagensInput = {
   tipo?: $Enums.conversa_tipo
   nome?: string | null
   criada_em?: Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutConversaInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorCreateNestedOneWithoutConversaInput
-  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutConversaInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutConversaInput
 }
 
 export type conversaUncheckedCreateWithoutMensagensInput = {
@@ -576,10 +606,11 @@ export type conversaUncheckedCreateWithoutMensagensInput = {
   tipo?: $Enums.conversa_tipo
   nome?: string | null
   criada_em?: Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutConversaInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorUncheckedCreateNestedOneWithoutConversaInput
-  finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutConversaInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutConversaInput
 }
 
 export type conversaCreateOrConnectWithoutMensagensInput = {
@@ -602,10 +633,11 @@ export type conversaUpdateWithoutMensagensInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
   nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutConversaNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUpdateOneWithoutConversaNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutConversaNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutConversaNestedInput
 }
 
 export type conversaUncheckedUpdateWithoutMensagensInput = {
@@ -613,19 +645,21 @@ export type conversaUncheckedUpdateWithoutMensagensInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
   nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutConversaNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUncheckedUpdateOneWithoutConversaNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutConversaNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutConversaNestedInput
 }
 
 export type conversaCreateWithoutConversa_leituraInput = {
   tipo?: $Enums.conversa_tipo
   nome?: string | null
   criada_em?: Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorCreateNestedOneWithoutConversaInput
-  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutConversaInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutConversaInput
   mensagens?: Prisma.mensagemCreateNestedManyWithoutConversaInput
 }
 
@@ -634,9 +668,10 @@ export type conversaUncheckedCreateWithoutConversa_leituraInput = {
   tipo?: $Enums.conversa_tipo
   nome?: string | null
   criada_em?: Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorUncheckedCreateNestedOneWithoutConversaInput
-  finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutConversaInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutConversaInput
   mensagens?: Prisma.mensagemUncheckedCreateNestedManyWithoutConversaInput
 }
 
@@ -660,9 +695,10 @@ export type conversaUpdateWithoutConversa_leituraInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
   nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUpdateOneWithoutConversaNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutConversaNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutConversaNestedInput
   mensagens?: Prisma.mensagemUpdateManyWithoutConversaNestedInput
 }
 
@@ -671,9 +707,10 @@ export type conversaUncheckedUpdateWithoutConversa_leituraInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
   nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUncheckedUpdateOneWithoutConversaNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutConversaNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutConversaNestedInput
   mensagens?: Prisma.mensagemUncheckedUpdateManyWithoutConversaNestedInput
 }
 
@@ -684,6 +721,7 @@ export type conversaCreateWithoutFinalizacoesInput = {
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorCreateNestedOneWithoutConversaInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutConversaInput
   mensagens?: Prisma.mensagemCreateNestedManyWithoutConversaInput
 }
 
@@ -695,6 +733,7 @@ export type conversaUncheckedCreateWithoutFinalizacoesInput = {
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutConversaInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutConversaInput
   atendimento_setor?: Prisma.conversa_setorUncheckedCreateNestedOneWithoutConversaInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutConversaInput
   mensagens?: Prisma.mensagemUncheckedCreateNestedManyWithoutConversaInput
 }
 
@@ -721,6 +760,7 @@ export type conversaUpdateWithoutFinalizacoesInput = {
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUpdateOneWithoutConversaNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutConversaNestedInput
   mensagens?: Prisma.mensagemUpdateManyWithoutConversaNestedInput
 }
 
@@ -729,6 +769,69 @@ export type conversaUncheckedUpdateWithoutFinalizacoesInput = {
   tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
   nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutConversaNestedInput
+  conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutConversaNestedInput
+  atendimento_setor?: Prisma.conversa_setorUncheckedUpdateOneWithoutConversaNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutConversaNestedInput
+  mensagens?: Prisma.mensagemUncheckedUpdateManyWithoutConversaNestedInput
+}
+
+export type conversaCreateWithoutConversa_transferenciaInput = {
+  tipo?: $Enums.conversa_tipo
+  nome?: string | null
+  criada_em?: Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutConversaInput
+  conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutConversaInput
+  conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutConversaInput
+  atendimento_setor?: Prisma.conversa_setorCreateNestedOneWithoutConversaInput
+  mensagens?: Prisma.mensagemCreateNestedManyWithoutConversaInput
+}
+
+export type conversaUncheckedCreateWithoutConversa_transferenciaInput = {
+  id?: number
+  tipo?: $Enums.conversa_tipo
+  nome?: string | null
+  criada_em?: Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutConversaInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutConversaInput
+  conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutConversaInput
+  atendimento_setor?: Prisma.conversa_setorUncheckedCreateNestedOneWithoutConversaInput
+  mensagens?: Prisma.mensagemUncheckedCreateNestedManyWithoutConversaInput
+}
+
+export type conversaCreateOrConnectWithoutConversa_transferenciaInput = {
+  where: Prisma.conversaWhereUniqueInput
+  create: Prisma.XOR<Prisma.conversaCreateWithoutConversa_transferenciaInput, Prisma.conversaUncheckedCreateWithoutConversa_transferenciaInput>
+}
+
+export type conversaUpsertWithoutConversa_transferenciaInput = {
+  update: Prisma.XOR<Prisma.conversaUpdateWithoutConversa_transferenciaInput, Prisma.conversaUncheckedUpdateWithoutConversa_transferenciaInput>
+  create: Prisma.XOR<Prisma.conversaCreateWithoutConversa_transferenciaInput, Prisma.conversaUncheckedCreateWithoutConversa_transferenciaInput>
+  where?: Prisma.conversaWhereInput
+}
+
+export type conversaUpdateToOneWithWhereWithoutConversa_transferenciaInput = {
+  where?: Prisma.conversaWhereInput
+  data: Prisma.XOR<Prisma.conversaUpdateWithoutConversa_transferenciaInput, Prisma.conversaUncheckedUpdateWithoutConversa_transferenciaInput>
+}
+
+export type conversaUpdateWithoutConversa_transferenciaInput = {
+  tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutConversaNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutConversaNestedInput
+  conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutConversaNestedInput
+  atendimento_setor?: Prisma.conversa_setorUpdateOneWithoutConversaNestedInput
+  mensagens?: Prisma.mensagemUpdateManyWithoutConversaNestedInput
+}
+
+export type conversaUncheckedUpdateWithoutConversa_transferenciaInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  tipo?: Prisma.Enumconversa_tipoFieldUpdateOperationsInput | $Enums.conversa_tipo
+  nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutConversaNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutConversaNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutConversaNestedInput
   atendimento_setor?: Prisma.conversa_setorUncheckedUpdateOneWithoutConversaNestedInput
@@ -741,16 +844,18 @@ export type conversaUncheckedUpdateWithoutFinalizacoesInput = {
  */
 
 export type ConversaCountOutputType = {
+  finalizacoes: number
   conversa_leitura: number
   conversa_participante: number
-  finalizacoes: number
+  conversa_transferencia: number
   mensagens: number
 }
 
 export type ConversaCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  finalizacoes?: boolean | ConversaCountOutputTypeCountFinalizacoesArgs
   conversa_leitura?: boolean | ConversaCountOutputTypeCountConversa_leituraArgs
   conversa_participante?: boolean | ConversaCountOutputTypeCountConversa_participanteArgs
-  finalizacoes?: boolean | ConversaCountOutputTypeCountFinalizacoesArgs
+  conversa_transferencia?: boolean | ConversaCountOutputTypeCountConversa_transferenciaArgs
   mensagens?: boolean | ConversaCountOutputTypeCountMensagensArgs
 }
 
@@ -762,6 +867,13 @@ export type ConversaCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
    * Select specific fields to fetch from the ConversaCountOutputType
    */
   select?: Prisma.ConversaCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ConversaCountOutputType without action
+ */
+export type ConversaCountOutputTypeCountFinalizacoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.conversa_finalizacaoWhereInput
 }
 
 /**
@@ -781,8 +893,8 @@ export type ConversaCountOutputTypeCountConversa_participanteArgs<ExtArgs extend
 /**
  * ConversaCountOutputType without action
  */
-export type ConversaCountOutputTypeCountFinalizacoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.conversa_finalizacaoWhereInput
+export type ConversaCountOutputTypeCountConversa_transferenciaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.conversa_transferenciaWhereInput
 }
 
 /**
@@ -798,10 +910,11 @@ export type conversaSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   tipo?: boolean
   nome?: boolean
   criada_em?: boolean
+  finalizacoes?: boolean | Prisma.conversa$finalizacoesArgs<ExtArgs>
   conversa_leitura?: boolean | Prisma.conversa$conversa_leituraArgs<ExtArgs>
   conversa_participante?: boolean | Prisma.conversa$conversa_participanteArgs<ExtArgs>
   atendimento_setor?: boolean | Prisma.conversa$atendimento_setorArgs<ExtArgs>
-  finalizacoes?: boolean | Prisma.conversa$finalizacoesArgs<ExtArgs>
+  conversa_transferencia?: boolean | Prisma.conversa$conversa_transferenciaArgs<ExtArgs>
   mensagens?: boolean | Prisma.conversa$mensagensArgs<ExtArgs>
   _count?: boolean | Prisma.ConversaCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversa"]>
@@ -817,10 +930,11 @@ export type conversaSelectScalar = {
 
 export type conversaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tipo" | "nome" | "criada_em", ExtArgs["result"]["conversa"]>
 export type conversaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  finalizacoes?: boolean | Prisma.conversa$finalizacoesArgs<ExtArgs>
   conversa_leitura?: boolean | Prisma.conversa$conversa_leituraArgs<ExtArgs>
   conversa_participante?: boolean | Prisma.conversa$conversa_participanteArgs<ExtArgs>
   atendimento_setor?: boolean | Prisma.conversa$atendimento_setorArgs<ExtArgs>
-  finalizacoes?: boolean | Prisma.conversa$finalizacoesArgs<ExtArgs>
+  conversa_transferencia?: boolean | Prisma.conversa$conversa_transferenciaArgs<ExtArgs>
   mensagens?: boolean | Prisma.conversa$mensagensArgs<ExtArgs>
   _count?: boolean | Prisma.ConversaCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -828,10 +942,11 @@ export type conversaInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type $conversaPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "conversa"
   objects: {
+    finalizacoes: Prisma.$conversa_finalizacaoPayload<ExtArgs>[]
     conversa_leitura: Prisma.$conversa_leituraPayload<ExtArgs>[]
     conversa_participante: Prisma.$conversa_participantePayload<ExtArgs>[]
     atendimento_setor: Prisma.$conversa_setorPayload<ExtArgs> | null
-    finalizacoes: Prisma.$conversa_finalizacaoPayload<ExtArgs>[]
+    conversa_transferencia: Prisma.$conversa_transferenciaPayload<ExtArgs>[]
     mensagens: Prisma.$mensagemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1179,10 +1294,11 @@ readonly fields: conversaFieldRefs;
  */
 export interface Prisma__conversaClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  finalizacoes<T extends Prisma.conversa$finalizacoesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversa$finalizacoesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_finalizacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversa_leitura<T extends Prisma.conversa$conversa_leituraArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversa$conversa_leituraArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_leituraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversa_participante<T extends Prisma.conversa$conversa_participanteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversa$conversa_participanteArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_participantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   atendimento_setor<T extends Prisma.conversa$atendimento_setorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversa$atendimento_setorArgs<ExtArgs>>): Prisma.Prisma__conversa_setorClient<runtime.Types.Result.GetResult<Prisma.$conversa_setorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  finalizacoes<T extends Prisma.conversa$finalizacoesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversa$finalizacoesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_finalizacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  conversa_transferencia<T extends Prisma.conversa$conversa_transferenciaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversa$conversa_transferenciaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_transferenciaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mensagens<T extends Prisma.conversa$mensagensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversa$mensagensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$mensagemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1565,6 +1681,30 @@ export type conversaDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * conversa.finalizacoes
+ */
+export type conversa$finalizacoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the conversa_finalizacao
+   */
+  select?: Prisma.conversa_finalizacaoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the conversa_finalizacao
+   */
+  omit?: Prisma.conversa_finalizacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.conversa_finalizacaoInclude<ExtArgs> | null
+  where?: Prisma.conversa_finalizacaoWhereInput
+  orderBy?: Prisma.conversa_finalizacaoOrderByWithRelationInput | Prisma.conversa_finalizacaoOrderByWithRelationInput[]
+  cursor?: Prisma.conversa_finalizacaoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Conversa_finalizacaoScalarFieldEnum | Prisma.Conversa_finalizacaoScalarFieldEnum[]
+}
+
+/**
  * conversa.conversa_leitura
  */
 export type conversa$conversa_leituraArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1632,27 +1772,27 @@ export type conversa$atendimento_setorArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
- * conversa.finalizacoes
+ * conversa.conversa_transferencia
  */
-export type conversa$finalizacoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type conversa$conversa_transferenciaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the conversa_finalizacao
+   * Select specific fields to fetch from the conversa_transferencia
    */
-  select?: Prisma.conversa_finalizacaoSelect<ExtArgs> | null
+  select?: Prisma.conversa_transferenciaSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the conversa_finalizacao
+   * Omit specific fields from the conversa_transferencia
    */
-  omit?: Prisma.conversa_finalizacaoOmit<ExtArgs> | null
+  omit?: Prisma.conversa_transferenciaOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.conversa_finalizacaoInclude<ExtArgs> | null
-  where?: Prisma.conversa_finalizacaoWhereInput
-  orderBy?: Prisma.conversa_finalizacaoOrderByWithRelationInput | Prisma.conversa_finalizacaoOrderByWithRelationInput[]
-  cursor?: Prisma.conversa_finalizacaoWhereUniqueInput
+  include?: Prisma.conversa_transferenciaInclude<ExtArgs> | null
+  where?: Prisma.conversa_transferenciaWhereInput
+  orderBy?: Prisma.conversa_transferenciaOrderByWithRelationInput | Prisma.conversa_transferenciaOrderByWithRelationInput[]
+  cursor?: Prisma.conversa_transferenciaWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.Conversa_finalizacaoScalarFieldEnum | Prisma.Conversa_finalizacaoScalarFieldEnum[]
+  distinct?: Prisma.Conversa_transferenciaScalarFieldEnum | Prisma.Conversa_transferenciaScalarFieldEnum[]
 }
 
 /**

@@ -30,12 +30,14 @@ export type Conversa_setorAvgAggregateOutputType = {
   conversa_id: number | null
   setor_id: number | null
   usuario_id: number | null
+  usuario_visivel_desde_mensagem_id: number | null
 }
 
 export type Conversa_setorSumAggregateOutputType = {
   conversa_id: number | null
   setor_id: number | null
   usuario_id: number | null
+  usuario_visivel_desde_mensagem_id: number | null
 }
 
 export type Conversa_setorMinAggregateOutputType = {
@@ -44,6 +46,7 @@ export type Conversa_setorMinAggregateOutputType = {
   usuario_id: number | null
   criada_em: Date | null
   ocultada_para_usuario_em: Date | null
+  usuario_visivel_desde_mensagem_id: number | null
 }
 
 export type Conversa_setorMaxAggregateOutputType = {
@@ -52,6 +55,7 @@ export type Conversa_setorMaxAggregateOutputType = {
   usuario_id: number | null
   criada_em: Date | null
   ocultada_para_usuario_em: Date | null
+  usuario_visivel_desde_mensagem_id: number | null
 }
 
 export type Conversa_setorCountAggregateOutputType = {
@@ -60,6 +64,7 @@ export type Conversa_setorCountAggregateOutputType = {
   usuario_id: number
   criada_em: number
   ocultada_para_usuario_em: number
+  usuario_visivel_desde_mensagem_id: number
   _all: number
 }
 
@@ -68,12 +73,14 @@ export type Conversa_setorAvgAggregateInputType = {
   conversa_id?: true
   setor_id?: true
   usuario_id?: true
+  usuario_visivel_desde_mensagem_id?: true
 }
 
 export type Conversa_setorSumAggregateInputType = {
   conversa_id?: true
   setor_id?: true
   usuario_id?: true
+  usuario_visivel_desde_mensagem_id?: true
 }
 
 export type Conversa_setorMinAggregateInputType = {
@@ -82,6 +89,7 @@ export type Conversa_setorMinAggregateInputType = {
   usuario_id?: true
   criada_em?: true
   ocultada_para_usuario_em?: true
+  usuario_visivel_desde_mensagem_id?: true
 }
 
 export type Conversa_setorMaxAggregateInputType = {
@@ -90,6 +98,7 @@ export type Conversa_setorMaxAggregateInputType = {
   usuario_id?: true
   criada_em?: true
   ocultada_para_usuario_em?: true
+  usuario_visivel_desde_mensagem_id?: true
 }
 
 export type Conversa_setorCountAggregateInputType = {
@@ -98,6 +107,7 @@ export type Conversa_setorCountAggregateInputType = {
   usuario_id?: true
   criada_em?: true
   ocultada_para_usuario_em?: true
+  usuario_visivel_desde_mensagem_id?: true
   _all?: true
 }
 
@@ -193,6 +203,7 @@ export type Conversa_setorGroupByOutputType = {
   usuario_id: number
   criada_em: Date
   ocultada_para_usuario_em: Date | null
+  usuario_visivel_desde_mensagem_id: number | null
   _count: Conversa_setorCountAggregateOutputType | null
   _avg: Conversa_setorAvgAggregateOutputType | null
   _sum: Conversa_setorSumAggregateOutputType | null
@@ -224,6 +235,7 @@ export type conversa_setorWhereInput = {
   usuario_id?: Prisma.IntFilter<"conversa_setor"> | number
   criada_em?: Prisma.DateTimeFilter<"conversa_setor"> | Date | string
   ocultada_para_usuario_em?: Prisma.DateTimeNullableFilter<"conversa_setor"> | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.IntNullableFilter<"conversa_setor"> | number | null
   conversa?: Prisma.XOR<Prisma.ConversaScalarRelationFilter, Prisma.conversaWhereInput>
   setor?: Prisma.XOR<Prisma.SetoresScalarRelationFilter, Prisma.setoresWhereInput>
   usuario?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
@@ -235,6 +247,7 @@ export type conversa_setorOrderByWithRelationInput = {
   usuario_id?: Prisma.SortOrder
   criada_em?: Prisma.SortOrder
   ocultada_para_usuario_em?: Prisma.SortOrderInput | Prisma.SortOrder
+  usuario_visivel_desde_mensagem_id?: Prisma.SortOrderInput | Prisma.SortOrder
   conversa?: Prisma.conversaOrderByWithRelationInput
   setor?: Prisma.setoresOrderByWithRelationInput
   usuario?: Prisma.cadastroOrderByWithRelationInput
@@ -249,6 +262,7 @@ export type conversa_setorWhereUniqueInput = Prisma.AtLeast<{
   usuario_id?: Prisma.IntFilter<"conversa_setor"> | number
   criada_em?: Prisma.DateTimeFilter<"conversa_setor"> | Date | string
   ocultada_para_usuario_em?: Prisma.DateTimeNullableFilter<"conversa_setor"> | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.IntNullableFilter<"conversa_setor"> | number | null
   conversa?: Prisma.XOR<Prisma.ConversaScalarRelationFilter, Prisma.conversaWhereInput>
   setor?: Prisma.XOR<Prisma.SetoresScalarRelationFilter, Prisma.setoresWhereInput>
   usuario?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
@@ -260,6 +274,7 @@ export type conversa_setorOrderByWithAggregationInput = {
   usuario_id?: Prisma.SortOrder
   criada_em?: Prisma.SortOrder
   ocultada_para_usuario_em?: Prisma.SortOrderInput | Prisma.SortOrder
+  usuario_visivel_desde_mensagem_id?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.conversa_setorCountOrderByAggregateInput
   _avg?: Prisma.conversa_setorAvgOrderByAggregateInput
   _max?: Prisma.conversa_setorMaxOrderByAggregateInput
@@ -276,11 +291,13 @@ export type conversa_setorScalarWhereWithAggregatesInput = {
   usuario_id?: Prisma.IntWithAggregatesFilter<"conversa_setor"> | number
   criada_em?: Prisma.DateTimeWithAggregatesFilter<"conversa_setor"> | Date | string
   ocultada_para_usuario_em?: Prisma.DateTimeNullableWithAggregatesFilter<"conversa_setor"> | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.IntNullableWithAggregatesFilter<"conversa_setor"> | number | null
 }
 
 export type conversa_setorCreateInput = {
   criada_em?: Date | string
   ocultada_para_usuario_em?: Date | string | null
+  usuario_visivel_desde_mensagem_id?: number | null
   conversa: Prisma.conversaCreateNestedOneWithoutAtendimento_setorInput
   setor: Prisma.setoresCreateNestedOneWithoutAtendimentosInput
   usuario: Prisma.cadastroCreateNestedOneWithoutConversas_atendidasInput
@@ -292,11 +309,13 @@ export type conversa_setorUncheckedCreateInput = {
   usuario_id: number
   criada_em?: Date | string
   ocultada_para_usuario_em?: Date | string | null
+  usuario_visivel_desde_mensagem_id?: number | null
 }
 
 export type conversa_setorUpdateInput = {
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ocultada_para_usuario_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   conversa?: Prisma.conversaUpdateOneRequiredWithoutAtendimento_setorNestedInput
   setor?: Prisma.setoresUpdateOneRequiredWithoutAtendimentosNestedInput
   usuario?: Prisma.cadastroUpdateOneRequiredWithoutConversas_atendidasNestedInput
@@ -308,6 +327,7 @@ export type conversa_setorUncheckedUpdateInput = {
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ocultada_para_usuario_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type conversa_setorCreateManyInput = {
@@ -316,11 +336,13 @@ export type conversa_setorCreateManyInput = {
   usuario_id: number
   criada_em?: Date | string
   ocultada_para_usuario_em?: Date | string | null
+  usuario_visivel_desde_mensagem_id?: number | null
 }
 
 export type conversa_setorUpdateManyMutationInput = {
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ocultada_para_usuario_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type conversa_setorUncheckedUpdateManyInput = {
@@ -329,6 +351,7 @@ export type conversa_setorUncheckedUpdateManyInput = {
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ocultada_para_usuario_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type Conversa_setorListRelationFilter = {
@@ -352,12 +375,14 @@ export type conversa_setorCountOrderByAggregateInput = {
   usuario_id?: Prisma.SortOrder
   criada_em?: Prisma.SortOrder
   ocultada_para_usuario_em?: Prisma.SortOrder
+  usuario_visivel_desde_mensagem_id?: Prisma.SortOrder
 }
 
 export type conversa_setorAvgOrderByAggregateInput = {
   conversa_id?: Prisma.SortOrder
   setor_id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
+  usuario_visivel_desde_mensagem_id?: Prisma.SortOrder
 }
 
 export type conversa_setorMaxOrderByAggregateInput = {
@@ -366,6 +391,7 @@ export type conversa_setorMaxOrderByAggregateInput = {
   usuario_id?: Prisma.SortOrder
   criada_em?: Prisma.SortOrder
   ocultada_para_usuario_em?: Prisma.SortOrder
+  usuario_visivel_desde_mensagem_id?: Prisma.SortOrder
 }
 
 export type conversa_setorMinOrderByAggregateInput = {
@@ -374,12 +400,14 @@ export type conversa_setorMinOrderByAggregateInput = {
   usuario_id?: Prisma.SortOrder
   criada_em?: Prisma.SortOrder
   ocultada_para_usuario_em?: Prisma.SortOrder
+  usuario_visivel_desde_mensagem_id?: Prisma.SortOrder
 }
 
 export type conversa_setorSumOrderByAggregateInput = {
   conversa_id?: Prisma.SortOrder
   setor_id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
+  usuario_visivel_desde_mensagem_id?: Prisma.SortOrder
 }
 
 export type conversa_setorCreateNestedManyWithoutUsuarioInput = {
@@ -501,6 +529,7 @@ export type conversa_setorUncheckedUpdateManyWithoutSetorNestedInput = {
 export type conversa_setorCreateWithoutUsuarioInput = {
   criada_em?: Date | string
   ocultada_para_usuario_em?: Date | string | null
+  usuario_visivel_desde_mensagem_id?: number | null
   conversa: Prisma.conversaCreateNestedOneWithoutAtendimento_setorInput
   setor: Prisma.setoresCreateNestedOneWithoutAtendimentosInput
 }
@@ -510,6 +539,7 @@ export type conversa_setorUncheckedCreateWithoutUsuarioInput = {
   setor_id: number
   criada_em?: Date | string
   ocultada_para_usuario_em?: Date | string | null
+  usuario_visivel_desde_mensagem_id?: number | null
 }
 
 export type conversa_setorCreateOrConnectWithoutUsuarioInput = {
@@ -547,11 +577,13 @@ export type conversa_setorScalarWhereInput = {
   usuario_id?: Prisma.IntFilter<"conversa_setor"> | number
   criada_em?: Prisma.DateTimeFilter<"conversa_setor"> | Date | string
   ocultada_para_usuario_em?: Prisma.DateTimeNullableFilter<"conversa_setor"> | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.IntNullableFilter<"conversa_setor"> | number | null
 }
 
 export type conversa_setorCreateWithoutConversaInput = {
   criada_em?: Date | string
   ocultada_para_usuario_em?: Date | string | null
+  usuario_visivel_desde_mensagem_id?: number | null
   setor: Prisma.setoresCreateNestedOneWithoutAtendimentosInput
   usuario: Prisma.cadastroCreateNestedOneWithoutConversas_atendidasInput
 }
@@ -561,6 +593,7 @@ export type conversa_setorUncheckedCreateWithoutConversaInput = {
   usuario_id: number
   criada_em?: Date | string
   ocultada_para_usuario_em?: Date | string | null
+  usuario_visivel_desde_mensagem_id?: number | null
 }
 
 export type conversa_setorCreateOrConnectWithoutConversaInput = {
@@ -582,6 +615,7 @@ export type conversa_setorUpdateToOneWithWhereWithoutConversaInput = {
 export type conversa_setorUpdateWithoutConversaInput = {
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ocultada_para_usuario_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   setor?: Prisma.setoresUpdateOneRequiredWithoutAtendimentosNestedInput
   usuario?: Prisma.cadastroUpdateOneRequiredWithoutConversas_atendidasNestedInput
 }
@@ -591,11 +625,13 @@ export type conversa_setorUncheckedUpdateWithoutConversaInput = {
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ocultada_para_usuario_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type conversa_setorCreateWithoutSetorInput = {
   criada_em?: Date | string
   ocultada_para_usuario_em?: Date | string | null
+  usuario_visivel_desde_mensagem_id?: number | null
   conversa: Prisma.conversaCreateNestedOneWithoutAtendimento_setorInput
   usuario: Prisma.cadastroCreateNestedOneWithoutConversas_atendidasInput
 }
@@ -605,6 +641,7 @@ export type conversa_setorUncheckedCreateWithoutSetorInput = {
   usuario_id: number
   criada_em?: Date | string
   ocultada_para_usuario_em?: Date | string | null
+  usuario_visivel_desde_mensagem_id?: number | null
 }
 
 export type conversa_setorCreateOrConnectWithoutSetorInput = {
@@ -638,11 +675,13 @@ export type conversa_setorCreateManyUsuarioInput = {
   setor_id: number
   criada_em?: Date | string
   ocultada_para_usuario_em?: Date | string | null
+  usuario_visivel_desde_mensagem_id?: number | null
 }
 
 export type conversa_setorUpdateWithoutUsuarioInput = {
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ocultada_para_usuario_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   conversa?: Prisma.conversaUpdateOneRequiredWithoutAtendimento_setorNestedInput
   setor?: Prisma.setoresUpdateOneRequiredWithoutAtendimentosNestedInput
 }
@@ -652,6 +691,7 @@ export type conversa_setorUncheckedUpdateWithoutUsuarioInput = {
   setor_id?: Prisma.IntFieldUpdateOperationsInput | number
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ocultada_para_usuario_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type conversa_setorUncheckedUpdateManyWithoutUsuarioInput = {
@@ -659,6 +699,7 @@ export type conversa_setorUncheckedUpdateManyWithoutUsuarioInput = {
   setor_id?: Prisma.IntFieldUpdateOperationsInput | number
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ocultada_para_usuario_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type conversa_setorCreateManySetorInput = {
@@ -666,11 +707,13 @@ export type conversa_setorCreateManySetorInput = {
   usuario_id: number
   criada_em?: Date | string
   ocultada_para_usuario_em?: Date | string | null
+  usuario_visivel_desde_mensagem_id?: number | null
 }
 
 export type conversa_setorUpdateWithoutSetorInput = {
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ocultada_para_usuario_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   conversa?: Prisma.conversaUpdateOneRequiredWithoutAtendimento_setorNestedInput
   usuario?: Prisma.cadastroUpdateOneRequiredWithoutConversas_atendidasNestedInput
 }
@@ -680,6 +723,7 @@ export type conversa_setorUncheckedUpdateWithoutSetorInput = {
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ocultada_para_usuario_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type conversa_setorUncheckedUpdateManyWithoutSetorInput = {
@@ -687,6 +731,7 @@ export type conversa_setorUncheckedUpdateManyWithoutSetorInput = {
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ocultada_para_usuario_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  usuario_visivel_desde_mensagem_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
@@ -697,6 +742,7 @@ export type conversa_setorSelect<ExtArgs extends runtime.Types.Extensions.Intern
   usuario_id?: boolean
   criada_em?: boolean
   ocultada_para_usuario_em?: boolean
+  usuario_visivel_desde_mensagem_id?: boolean
   conversa?: boolean | Prisma.conversaDefaultArgs<ExtArgs>
   setor?: boolean | Prisma.setoresDefaultArgs<ExtArgs>
   usuario?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
@@ -710,9 +756,10 @@ export type conversa_setorSelectScalar = {
   usuario_id?: boolean
   criada_em?: boolean
   ocultada_para_usuario_em?: boolean
+  usuario_visivel_desde_mensagem_id?: boolean
 }
 
-export type conversa_setorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"conversa_id" | "setor_id" | "usuario_id" | "criada_em" | "ocultada_para_usuario_em", ExtArgs["result"]["conversa_setor"]>
+export type conversa_setorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"conversa_id" | "setor_id" | "usuario_id" | "criada_em" | "ocultada_para_usuario_em" | "usuario_visivel_desde_mensagem_id", ExtArgs["result"]["conversa_setor"]>
 export type conversa_setorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   conversa?: boolean | Prisma.conversaDefaultArgs<ExtArgs>
   setor?: boolean | Prisma.setoresDefaultArgs<ExtArgs>
@@ -732,6 +779,7 @@ export type $conversa_setorPayload<ExtArgs extends runtime.Types.Extensions.Inte
     usuario_id: number
     criada_em: Date
     ocultada_para_usuario_em: Date | null
+    usuario_visivel_desde_mensagem_id: number | null
   }, ExtArgs["result"]["conversa_setor"]>
   composites: {}
 }
@@ -1109,6 +1157,7 @@ export interface conversa_setorFieldRefs {
   readonly usuario_id: Prisma.FieldRef<"conversa_setor", 'Int'>
   readonly criada_em: Prisma.FieldRef<"conversa_setor", 'DateTime'>
   readonly ocultada_para_usuario_em: Prisma.FieldRef<"conversa_setor", 'DateTime'>
+  readonly usuario_visivel_desde_mensagem_id: Prisma.FieldRef<"conversa_setor", 'Int'>
 }
     
 

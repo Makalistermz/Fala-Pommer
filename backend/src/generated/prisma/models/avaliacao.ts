@@ -28,86 +28,86 @@ export type AggregateAvaliacao = {
 
 export type AvaliacaoAvgAggregateOutputType = {
   id: number | null
-  finalizacao_id: number | null
-  avaliador_id: number | null
   nota: number | null
+  avaliador_id: number | null
+  finalizacao_id: number | null
 }
 
 export type AvaliacaoSumAggregateOutputType = {
   id: number | null
-  finalizacao_id: number | null
-  avaliador_id: number | null
   nota: number | null
+  avaliador_id: number | null
+  finalizacao_id: number | null
 }
 
 export type AvaliacaoMinAggregateOutputType = {
   id: number | null
-  finalizacao_id: number | null
-  avaliador_id: number | null
   nota: number | null
   descricao: string | null
+  avaliador_id: number | null
   criada_em: Date | null
+  finalizacao_id: number | null
 }
 
 export type AvaliacaoMaxAggregateOutputType = {
   id: number | null
-  finalizacao_id: number | null
-  avaliador_id: number | null
   nota: number | null
   descricao: string | null
+  avaliador_id: number | null
   criada_em: Date | null
+  finalizacao_id: number | null
 }
 
 export type AvaliacaoCountAggregateOutputType = {
   id: number
-  finalizacao_id: number
-  avaliador_id: number
   nota: number
   descricao: number
+  avaliador_id: number
   criada_em: number
+  finalizacao_id: number
   _all: number
 }
 
 
 export type AvaliacaoAvgAggregateInputType = {
   id?: true
-  finalizacao_id?: true
-  avaliador_id?: true
   nota?: true
+  avaliador_id?: true
+  finalizacao_id?: true
 }
 
 export type AvaliacaoSumAggregateInputType = {
   id?: true
-  finalizacao_id?: true
-  avaliador_id?: true
   nota?: true
+  avaliador_id?: true
+  finalizacao_id?: true
 }
 
 export type AvaliacaoMinAggregateInputType = {
   id?: true
-  finalizacao_id?: true
-  avaliador_id?: true
   nota?: true
   descricao?: true
+  avaliador_id?: true
   criada_em?: true
+  finalizacao_id?: true
 }
 
 export type AvaliacaoMaxAggregateInputType = {
   id?: true
-  finalizacao_id?: true
-  avaliador_id?: true
   nota?: true
   descricao?: true
+  avaliador_id?: true
   criada_em?: true
+  finalizacao_id?: true
 }
 
 export type AvaliacaoCountAggregateInputType = {
   id?: true
-  finalizacao_id?: true
-  avaliador_id?: true
   nota?: true
   descricao?: true
+  avaliador_id?: true
   criada_em?: true
+  finalizacao_id?: true
   _all?: true
 }
 
@@ -199,11 +199,11 @@ export type avaliacaoGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
 
 export type AvaliacaoGroupByOutputType = {
   id: number
-  finalizacao_id: number
-  avaliador_id: number
   nota: number
   descricao: string | null
+  avaliador_id: number
   criada_em: Date
+  finalizacao_id: number
   _count: AvaliacaoCountAggregateOutputType | null
   _avg: AvaliacaoAvgAggregateOutputType | null
   _sum: AvaliacaoSumAggregateOutputType | null
@@ -231,24 +231,24 @@ export type avaliacaoWhereInput = {
   OR?: Prisma.avaliacaoWhereInput[]
   NOT?: Prisma.avaliacaoWhereInput | Prisma.avaliacaoWhereInput[]
   id?: Prisma.IntFilter<"avaliacao"> | number
-  finalizacao_id?: Prisma.IntFilter<"avaliacao"> | number
-  avaliador_id?: Prisma.IntFilter<"avaliacao"> | number
   nota?: Prisma.IntFilter<"avaliacao"> | number
   descricao?: Prisma.StringNullableFilter<"avaliacao"> | string | null
+  avaliador_id?: Prisma.IntFilter<"avaliacao"> | number
   criada_em?: Prisma.DateTimeFilter<"avaliacao"> | Date | string
-  finalizacao?: Prisma.XOR<Prisma.Conversa_finalizacaoScalarRelationFilter, Prisma.conversa_finalizacaoWhereInput>
+  finalizacao_id?: Prisma.IntFilter<"avaliacao"> | number
   avaliador?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
+  finalizacao?: Prisma.XOR<Prisma.Conversa_finalizacaoScalarRelationFilter, Prisma.conversa_finalizacaoWhereInput>
 }
 
 export type avaliacaoOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  finalizacao_id?: Prisma.SortOrder
-  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
   descricao?: Prisma.SortOrderInput | Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
   criada_em?: Prisma.SortOrder
-  finalizacao?: Prisma.conversa_finalizacaoOrderByWithRelationInput
+  finalizacao_id?: Prisma.SortOrder
   avaliador?: Prisma.cadastroOrderByWithRelationInput
+  finalizacao?: Prisma.conversa_finalizacaoOrderByWithRelationInput
   _relevance?: Prisma.avaliacaoOrderByRelevanceInput
 }
 
@@ -258,22 +258,22 @@ export type avaliacaoWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.avaliacaoWhereInput | Prisma.avaliacaoWhereInput[]
   OR?: Prisma.avaliacaoWhereInput[]
   NOT?: Prisma.avaliacaoWhereInput | Prisma.avaliacaoWhereInput[]
-  finalizacao_id?: Prisma.IntFilter<"avaliacao"> | number
-  avaliador_id?: Prisma.IntFilter<"avaliacao"> | number
   nota?: Prisma.IntFilter<"avaliacao"> | number
   descricao?: Prisma.StringNullableFilter<"avaliacao"> | string | null
+  avaliador_id?: Prisma.IntFilter<"avaliacao"> | number
   criada_em?: Prisma.DateTimeFilter<"avaliacao"> | Date | string
-  finalizacao?: Prisma.XOR<Prisma.Conversa_finalizacaoScalarRelationFilter, Prisma.conversa_finalizacaoWhereInput>
+  finalizacao_id?: Prisma.IntFilter<"avaliacao"> | number
   avaliador?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
+  finalizacao?: Prisma.XOR<Prisma.Conversa_finalizacaoScalarRelationFilter, Prisma.conversa_finalizacaoWhereInput>
 }, "id" | "finalizacao_id_avaliador_id">
 
 export type avaliacaoOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  finalizacao_id?: Prisma.SortOrder
-  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
   descricao?: Prisma.SortOrderInput | Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
   criada_em?: Prisma.SortOrder
+  finalizacao_id?: Prisma.SortOrder
   _count?: Prisma.avaliacaoCountOrderByAggregateInput
   _avg?: Prisma.avaliacaoAvgOrderByAggregateInput
   _max?: Prisma.avaliacaoMaxOrderByAggregateInput
@@ -286,54 +286,54 @@ export type avaliacaoScalarWhereWithAggregatesInput = {
   OR?: Prisma.avaliacaoScalarWhereWithAggregatesInput[]
   NOT?: Prisma.avaliacaoScalarWhereWithAggregatesInput | Prisma.avaliacaoScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"avaliacao"> | number
-  finalizacao_id?: Prisma.IntWithAggregatesFilter<"avaliacao"> | number
-  avaliador_id?: Prisma.IntWithAggregatesFilter<"avaliacao"> | number
   nota?: Prisma.IntWithAggregatesFilter<"avaliacao"> | number
   descricao?: Prisma.StringNullableWithAggregatesFilter<"avaliacao"> | string | null
+  avaliador_id?: Prisma.IntWithAggregatesFilter<"avaliacao"> | number
   criada_em?: Prisma.DateTimeWithAggregatesFilter<"avaliacao"> | Date | string
+  finalizacao_id?: Prisma.IntWithAggregatesFilter<"avaliacao"> | number
 }
 
 export type avaliacaoCreateInput = {
   nota: number
   descricao?: string | null
   criada_em?: Date | string
-  finalizacao: Prisma.conversa_finalizacaoCreateNestedOneWithoutAvaliacoesInput
   avaliador: Prisma.cadastroCreateNestedOneWithoutAvaliacoes_realizadasInput
+  finalizacao: Prisma.conversa_finalizacaoCreateNestedOneWithoutAvaliacoesInput
 }
 
 export type avaliacaoUncheckedCreateInput = {
   id?: number
-  finalizacao_id: number
-  avaliador_id: number
   nota: number
   descricao?: string | null
+  avaliador_id: number
   criada_em?: Date | string
+  finalizacao_id: number
 }
 
 export type avaliacaoUpdateInput = {
   nota?: Prisma.IntFieldUpdateOperationsInput | number
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  finalizacao?: Prisma.conversa_finalizacaoUpdateOneRequiredWithoutAvaliacoesNestedInput
   avaliador?: Prisma.cadastroUpdateOneRequiredWithoutAvaliacoes_realizadasNestedInput
+  finalizacao?: Prisma.conversa_finalizacaoUpdateOneRequiredWithoutAvaliacoesNestedInput
 }
 
 export type avaliacaoUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  finalizacao_id?: Prisma.IntFieldUpdateOperationsInput | number
-  avaliador_id?: Prisma.IntFieldUpdateOperationsInput | number
   nota?: Prisma.IntFieldUpdateOperationsInput | number
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avaliador_id?: Prisma.IntFieldUpdateOperationsInput | number
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacao_id?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type avaliacaoCreateManyInput = {
   id?: number
-  finalizacao_id: number
-  avaliador_id: number
   nota: number
   descricao?: string | null
+  avaliador_id: number
   criada_em?: Date | string
+  finalizacao_id: number
 }
 
 export type avaliacaoUpdateManyMutationInput = {
@@ -344,11 +344,11 @@ export type avaliacaoUpdateManyMutationInput = {
 
 export type avaliacaoUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  finalizacao_id?: Prisma.IntFieldUpdateOperationsInput | number
-  avaliador_id?: Prisma.IntFieldUpdateOperationsInput | number
   nota?: Prisma.IntFieldUpdateOperationsInput | number
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avaliador_id?: Prisma.IntFieldUpdateOperationsInput | number
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacao_id?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type AvaliacaoListRelationFilter = {
@@ -374,43 +374,43 @@ export type avaliacaoFinalizacao_idAvaliador_idCompoundUniqueInput = {
 
 export type avaliacaoCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  finalizacao_id?: Prisma.SortOrder
-  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
   descricao?: Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
   criada_em?: Prisma.SortOrder
+  finalizacao_id?: Prisma.SortOrder
 }
 
 export type avaliacaoAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  finalizacao_id?: Prisma.SortOrder
-  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
+  finalizacao_id?: Prisma.SortOrder
 }
 
 export type avaliacaoMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  finalizacao_id?: Prisma.SortOrder
-  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
   descricao?: Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
   criada_em?: Prisma.SortOrder
+  finalizacao_id?: Prisma.SortOrder
 }
 
 export type avaliacaoMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  finalizacao_id?: Prisma.SortOrder
-  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
   descricao?: Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
   criada_em?: Prisma.SortOrder
+  finalizacao_id?: Prisma.SortOrder
 }
 
 export type avaliacaoSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  finalizacao_id?: Prisma.SortOrder
-  avaliador_id?: Prisma.SortOrder
   nota?: Prisma.SortOrder
+  avaliador_id?: Prisma.SortOrder
+  finalizacao_id?: Prisma.SortOrder
 }
 
 export type avaliacaoCreateNestedManyWithoutAvaliadorInput = {
@@ -506,10 +506,10 @@ export type avaliacaoCreateWithoutAvaliadorInput = {
 
 export type avaliacaoUncheckedCreateWithoutAvaliadorInput = {
   id?: number
-  finalizacao_id: number
   nota: number
   descricao?: string | null
   criada_em?: Date | string
+  finalizacao_id: number
 }
 
 export type avaliacaoCreateOrConnectWithoutAvaliadorInput = {
@@ -543,11 +543,11 @@ export type avaliacaoScalarWhereInput = {
   OR?: Prisma.avaliacaoScalarWhereInput[]
   NOT?: Prisma.avaliacaoScalarWhereInput | Prisma.avaliacaoScalarWhereInput[]
   id?: Prisma.IntFilter<"avaliacao"> | number
-  finalizacao_id?: Prisma.IntFilter<"avaliacao"> | number
-  avaliador_id?: Prisma.IntFilter<"avaliacao"> | number
   nota?: Prisma.IntFilter<"avaliacao"> | number
   descricao?: Prisma.StringNullableFilter<"avaliacao"> | string | null
+  avaliador_id?: Prisma.IntFilter<"avaliacao"> | number
   criada_em?: Prisma.DateTimeFilter<"avaliacao"> | Date | string
+  finalizacao_id?: Prisma.IntFilter<"avaliacao"> | number
 }
 
 export type avaliacaoCreateWithoutFinalizacaoInput = {
@@ -559,9 +559,9 @@ export type avaliacaoCreateWithoutFinalizacaoInput = {
 
 export type avaliacaoUncheckedCreateWithoutFinalizacaoInput = {
   id?: number
-  avaliador_id: number
   nota: number
   descricao?: string | null
+  avaliador_id: number
   criada_em?: Date | string
 }
 
@@ -593,10 +593,10 @@ export type avaliacaoUpdateManyWithWhereWithoutFinalizacaoInput = {
 
 export type avaliacaoCreateManyAvaliadorInput = {
   id?: number
-  finalizacao_id: number
   nota: number
   descricao?: string | null
   criada_em?: Date | string
+  finalizacao_id: number
 }
 
 export type avaliacaoUpdateWithoutAvaliadorInput = {
@@ -608,25 +608,25 @@ export type avaliacaoUpdateWithoutAvaliadorInput = {
 
 export type avaliacaoUncheckedUpdateWithoutAvaliadorInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  finalizacao_id?: Prisma.IntFieldUpdateOperationsInput | number
   nota?: Prisma.IntFieldUpdateOperationsInput | number
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacao_id?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type avaliacaoUncheckedUpdateManyWithoutAvaliadorInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  finalizacao_id?: Prisma.IntFieldUpdateOperationsInput | number
   nota?: Prisma.IntFieldUpdateOperationsInput | number
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finalizacao_id?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type avaliacaoCreateManyFinalizacaoInput = {
   id?: number
-  avaliador_id: number
   nota: number
   descricao?: string | null
+  avaliador_id: number
   criada_em?: Date | string
 }
 
@@ -639,17 +639,17 @@ export type avaliacaoUpdateWithoutFinalizacaoInput = {
 
 export type avaliacaoUncheckedUpdateWithoutFinalizacaoInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  avaliador_id?: Prisma.IntFieldUpdateOperationsInput | number
   nota?: Prisma.IntFieldUpdateOperationsInput | number
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avaliador_id?: Prisma.IntFieldUpdateOperationsInput | number
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type avaliacaoUncheckedUpdateManyWithoutFinalizacaoInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  avaliador_id?: Prisma.IntFieldUpdateOperationsInput | number
   nota?: Prisma.IntFieldUpdateOperationsInput | number
   descricao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avaliador_id?: Prisma.IntFieldUpdateOperationsInput | number
   criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -657,45 +657,45 @@ export type avaliacaoUncheckedUpdateManyWithoutFinalizacaoInput = {
 
 export type avaliacaoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  finalizacao_id?: boolean
-  avaliador_id?: boolean
   nota?: boolean
   descricao?: boolean
+  avaliador_id?: boolean
   criada_em?: boolean
-  finalizacao?: boolean | Prisma.conversa_finalizacaoDefaultArgs<ExtArgs>
+  finalizacao_id?: boolean
   avaliador?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
+  finalizacao?: boolean | Prisma.conversa_finalizacaoDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["avaliacao"]>
 
 
 
 export type avaliacaoSelectScalar = {
   id?: boolean
-  finalizacao_id?: boolean
-  avaliador_id?: boolean
   nota?: boolean
   descricao?: boolean
+  avaliador_id?: boolean
   criada_em?: boolean
+  finalizacao_id?: boolean
 }
 
-export type avaliacaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "finalizacao_id" | "avaliador_id" | "nota" | "descricao" | "criada_em", ExtArgs["result"]["avaliacao"]>
+export type avaliacaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nota" | "descricao" | "avaliador_id" | "criada_em" | "finalizacao_id", ExtArgs["result"]["avaliacao"]>
 export type avaliacaoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  finalizacao?: boolean | Prisma.conversa_finalizacaoDefaultArgs<ExtArgs>
   avaliador?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
+  finalizacao?: boolean | Prisma.conversa_finalizacaoDefaultArgs<ExtArgs>
 }
 
 export type $avaliacaoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "avaliacao"
   objects: {
-    finalizacao: Prisma.$conversa_finalizacaoPayload<ExtArgs>
     avaliador: Prisma.$cadastroPayload<ExtArgs>
+    finalizacao: Prisma.$conversa_finalizacaoPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    finalizacao_id: number
-    avaliador_id: number
     nota: number
     descricao: string | null
+    avaliador_id: number
     criada_em: Date
+    finalizacao_id: number
   }, ExtArgs["result"]["avaliacao"]>
   composites: {}
 }
@@ -1036,8 +1036,8 @@ readonly fields: avaliacaoFieldRefs;
  */
 export interface Prisma__avaliacaoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  finalizacao<T extends Prisma.conversa_finalizacaoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversa_finalizacaoDefaultArgs<ExtArgs>>): Prisma.Prisma__conversa_finalizacaoClient<runtime.Types.Result.GetResult<Prisma.$conversa_finalizacaoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   avaliador<T extends Prisma.cadastroDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastroDefaultArgs<ExtArgs>>): Prisma.Prisma__cadastroClient<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  finalizacao<T extends Prisma.conversa_finalizacaoDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversa_finalizacaoDefaultArgs<ExtArgs>>): Prisma.Prisma__conversa_finalizacaoClient<runtime.Types.Result.GetResult<Prisma.$conversa_finalizacaoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1068,11 +1068,11 @@ export interface Prisma__avaliacaoClient<T, Null = never, ExtArgs extends runtim
  */
 export interface avaliacaoFieldRefs {
   readonly id: Prisma.FieldRef<"avaliacao", 'Int'>
-  readonly finalizacao_id: Prisma.FieldRef<"avaliacao", 'Int'>
-  readonly avaliador_id: Prisma.FieldRef<"avaliacao", 'Int'>
   readonly nota: Prisma.FieldRef<"avaliacao", 'Int'>
   readonly descricao: Prisma.FieldRef<"avaliacao", 'String'>
+  readonly avaliador_id: Prisma.FieldRef<"avaliacao", 'Int'>
   readonly criada_em: Prisma.FieldRef<"avaliacao", 'DateTime'>
+  readonly finalizacao_id: Prisma.FieldRef<"avaliacao", 'Int'>
 }
     
 

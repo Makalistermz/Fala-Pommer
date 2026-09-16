@@ -28,16 +28,17 @@ model cadastro {
   desativado_por                   Int?
   motivo_desativacao               String?                    @db.VarChar(500)
   versao_token                     Int                        @default(0) @db.UnsignedInt
+  avaliacoes_realizadas            avaliacao[]                @relation("AvaliadorAvaliacao")
   responsavel_desativacao          cadastro?                  @relation("CadastroDesativadoPor", fields: [desativado_por], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_cadastro_desativado_por")
   desativacoes_realizadas          cadastro[]                 @relation("CadastroDesativadoPor")
   secretaria                       secretaria?                @relation(fields: [secretaria_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_secretaria")
   setor                            setores?                   @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
   codigo_recuperacao_2fa           codigo_recuperacao_2fa[]
+  finalizacoes_realizadas          conversa_finalizacao[]     @relation("ResponsavelFinalizacao")
   conversa_leitura                 conversa_leitura[]
   conversa_participante            conversa_participante[]
   conversas_atendidas              conversa_setor[]           @relation("UsuarioAtendido")
-  avaliacoes_realizadas            avaliacao[]                @relation("AvaliadorAvaliacao")
-  finalizacoes_realizadas          conversa_finalizacao[]     @relation("ResponsavelFinalizacao")
+  conversa_transferencia           conversa_transferencia[]
   desafio_login_2fa                desafio_login_2fa[]
   erro_autenticacao                erro_autenticacao[]
   historicos_como_administrador    historico_administrativo[] @relation("HistoricoAdministrador")
@@ -56,13 +57,13 @@ model cadastro {
 model sessao {
   id                 String       @id @default(cuid())
   usuario_id         Int
-  versao_token       Int          @db.UnsignedInt
   refresh_token_hash String       @unique(map: "uq_sessao_refresh_token_hash") @db.Char(64)
   nome_dispositivo   String?      @db.VarChar(150)
   plataforma         String?      @db.VarChar(30)
   ultimo_uso_em      DateTime     @default(now()) @db.DateTime(0)
   revogada_em        DateTime?    @db.DateTime(0)
   criado_em          DateTime     @default(now()) @db.DateTime(0)
+  versao_token       Int          @db.UnsignedInt
   usuario            cadastro     @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_sessao_usuario")
   tokens_push        token_push[]
 
@@ -77,8 +78,8 @@ model token_push {
   plataforma    String   @db.VarChar(20)
   criado_em     DateTime @default(now()) @db.DateTime(0)
   atualizado_em DateTime @updatedAt @db.DateTime(0)
-  usuario       cadastro @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_token_push_usuario")
   sessao        sessao   @relation(fields: [sessao_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_token_push_sessao")
+  usuario       cadastro @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_token_push_usuario")
 
   @@index([usuario_id], map: "idx_token_push_usuario")
   @@index([sessao_id], map: "idx_token_push_sessao")
@@ -107,15 +108,16 @@ model login_evento {
 }
 
 model conversa {
-  id                    Int                     @id @default(autoincrement())
-  tipo                  conversa_tipo           @default(privada)
-  nome                  String?                 @db.VarChar(120)
-  criada_em             DateTime                @default(now()) @db.DateTime(0)
-  conversa_leitura      conversa_leitura[]
-  conversa_participante conversa_participante[]
-  atendimento_setor     conversa_setor?
-  finalizacoes          conversa_finalizacao[]
-  mensagens             mensagem[]
+  id                     Int                      @id @default(autoincrement())
+  tipo                   conversa_tipo            @default(privada)
+  nome                   String?                  @db.VarChar(120)
+  criada_em              DateTime                 @default(now()) @db.DateTime(0)
+  finalizacoes           conversa_finalizacao[]
+  conversa_leitura       conversa_leitura[]
+  conversa_participante  conversa_participante[]
+  atendimento_setor      conversa_setor?
+  conversa_transferencia conversa_transferencia[]
+  mensagens              mensagem[]
 }
 
 model conversa_participante {
@@ -132,50 +134,63 @@ model conversa_participante {
 }
 
 model conversa_setor {
-  conversa_id              Int       @id
-  setor_id                 Int
-  usuario_id               Int
-  criada_em                DateTime  @default(now()) @db.DateTime(0)
-  ocultada_para_usuario_em DateTime?
-  conversa                 conversa  @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_conversa_setor_conversa")
-  setor                    setores   @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_conversa_setor_setor")
-  usuario                  cadastro  @relation("UsuarioAtendido", fields: [usuario_id], references: [id], onUpdate: Restrict, map: "fk_conversa_setor_usuario")
+  conversa_id                       Int       @id
+  setor_id                          Int
+  usuario_id                        Int
+  criada_em                         DateTime  @default(now()) @db.DateTime(0)
+  ocultada_para_usuario_em          DateTime?
+  usuario_visivel_desde_mensagem_id Int?
+  conversa                          conversa  @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_conversa_setor_conversa")
+  setor                             setores   @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_conversa_setor_setor")
+  usuario                           cadastro  @relation("UsuarioAtendido", fields: [usuario_id], references: [id], onUpdate: Restrict, map: "fk_conversa_setor_usuario")
 
   @@index([setor_id, usuario_id, ocultada_para_usuario_em], map: "idx_conversa_setor_usuario_visibilidade")
   @@index([usuario_id], map: "idx_conversa_setor_usuario")
+  @@index([usuario_visivel_desde_mensagem_id], map: "idx_conversa_setor_inicio_visibilidade_usuario")
 }
 
 model mensagem {
-  id               Int                    @id @default(autoincrement())
-  conversa_id      Int
-  remetente_id     Int
-  origem           mensagem_origem
-  sistema          Boolean                @default(false)
-  conteudo         String                 @db.Text
-  enviada_em       DateTime               @default(now()) @db.DateTime(0)
-  arquivo_nome     String?                @db.VarChar(255)
-  arquivo_url      String?                @db.VarChar(500)
-  arquivo_tipo     String?                @db.VarChar(20)
-  arquivo_mime     String?                @db.VarChar(150)
-  arquivo_tamanho  Int?
-  conversa_leitura conversa_leitura[]
-  conversa         conversa               @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_mensagem_conversa")
-  remetente        cadastro               @relation("RemetenteMensagem", fields: [remetente_id], references: [id], onUpdate: Restrict, map: "fk_mensagem_remetente")
-  finalizacoes     conversa_finalizacao[] @relation("MensagemFinalizacao")
+  id                     Int                     @id @default(autoincrement())
+  conversa_id            Int
+  remetente_id           Int
+  origem                 mensagem_origem
+  sistema                Boolean                 @default(false)
+  visibilidade           mensagem_visibilidade   @default(todos)
+  transferencia_id       Int?
+  setor_id               Int?
+  conteudo               String                  @db.Text
+  enviada_em             DateTime                @default(now()) @db.DateTime(0)
+  arquivo_nome           String?                 @db.VarChar(255)
+  arquivo_url            String?                 @db.VarChar(500)
+  arquivo_tipo           String?                 @db.VarChar(20)
+  arquivo_mime           String?                 @db.VarChar(150)
+  arquivo_tamanho        Int?
+  finalizacoes           conversa_finalizacao[]  @relation("MensagemFinalizacao")
+  conversa_leitura       conversa_leitura[]
+  conversa               conversa                @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_mensagem_conversa")
+  remetente              cadastro                @relation("RemetenteMensagem", fields: [remetente_id], references: [id], onUpdate: Restrict, map: "fk_mensagem_remetente")
+  setores                setores?                @relation(fields: [setor_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_mensagem_setor")
+  conversa_transferencia conversa_transferencia? @relation(fields: [transferencia_id], references: [id], onUpdate: Restrict, map: "fk_mensagem_transferencia")
 
   @@index([conversa_id, enviada_em], map: "idx_mensagem_conversa_data")
   @@index([remetente_id], map: "idx_mensagem_remetente")
   @@index([conversa_id, id], map: "idx_mensagem_conversa_id")
+  @@index([conversa_id, visibilidade, id], map: "idx_mensagem_conversa_visibilidade_id")
+  @@index([setor_id], map: "idx_mensagem_setor")
+  @@index([transferencia_id], map: "idx_mensagem_transferencia")
 }
 
 model setores {
-  id            Int              @id @default(autoincrement())
-  setor         String           @db.VarChar(150)
-  sigla_setor   String           @db.VarChar(20)
-  secretaria_id Int?
-  cadastros     cadastro[]
-  atendimentos  conversa_setor[]
-  secretaria    secretaria?      @relation(fields: [secretaria_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_setores_secretaria")
+  id                                                                      Int                      @id @default(autoincrement())
+  setor                                                                   String                   @db.VarChar(150)
+  sigla_setor                                                             String                   @db.VarChar(20)
+  secretaria_id                                                           Int?
+  cadastros                                                               cadastro[]
+  atendimentos                                                            conversa_setor[]
+  conversa_transferencia_conversa_transferencia_setor_destino_idTosetores conversa_transferencia[] @relation("conversa_transferencia_setor_destino_idTosetores")
+  conversa_transferencia_conversa_transferencia_setor_origem_idTosetores  conversa_transferencia[] @relation("conversa_transferencia_setor_origem_idTosetores")
+  mensagem                                                                mensagem[]
+  secretaria                                                              secretaria?              @relation(fields: [secretaria_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_setores_secretaria")
 
   @@index([secretaria_id], map: "idx_setores_secretaria_id")
 }
@@ -252,13 +267,13 @@ model historico_administrativo {
 
 model avaliacao {
   id             Int                  @id @default(autoincrement())
-  finalizacao_id Int
-  avaliador_id   Int
   nota           Int
   descricao      String?              @db.VarChar(500)
+  avaliador_id   Int
   criada_em      DateTime             @default(now()) @db.DateTime(0)
-  finalizacao    conversa_finalizacao @relation(fields: [finalizacao_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_avaliacao_finalizacao")
+  finalizacao_id Int
   avaliador      cadastro             @relation("AvaliadorAvaliacao", fields: [avaliador_id], references: [id], onUpdate: Restrict, map: "fk_avaliacao_avaliador")
+  finalizacao    conversa_finalizacao @relation(fields: [finalizacao_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_avaliacao_finalizacao")
 
   @@unique([finalizacao_id, avaliador_id], map: "uq_avaliacao_finalizacao_avaliador")
   @@index([avaliador_id], map: "idx_avaliacao_avaliador")
@@ -270,14 +285,34 @@ model conversa_finalizacao {
   finalizada_por_id  Int
   ultima_mensagem_id Int?
   finalizada_em      DateTime    @default(now()) @db.DateTime(0)
+  avaliacoes         avaliacao[]
   conversa           conversa    @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_finalizacao_conversa")
   finalizada_por     cadastro    @relation("ResponsavelFinalizacao", fields: [finalizada_por_id], references: [id], onUpdate: Restrict, map: "fk_finalizacao_responsavel")
-  ultima_mensagem    mensagem?   @relation("MensagemFinalizacao", fields: [ultima_mensagem_id], references: [id], onDelete: SetNull, onUpdate: Restrict, map: "fk_finalizacao_ultima_mensagem")
-  avaliacoes         avaliacao[]
+  ultima_mensagem    mensagem?   @relation("MensagemFinalizacao", fields: [ultima_mensagem_id], references: [id], onUpdate: Restrict, map: "fk_finalizacao_ultima_mensagem")
 
   @@unique([conversa_id, ultima_mensagem_id], map: "uq_finalizacao_conversa_mensagem")
   @@index([finalizada_por_id], map: "idx_finalizacao_responsavel")
   @@index([ultima_mensagem_id], map: "idx_finalizacao_ultima_mensagem")
+}
+
+model conversa_transferencia {
+  id                                                       Int        @id @default(autoincrement())
+  conversa_id                                              Int
+  setor_origem_id                                          Int
+  setor_destino_id                                         Int
+  transferida_por_id                                       Int
+  motivo                                                   String     @db.VarChar(500)
+  transferida_em                                           DateTime   @default(now()) @db.DateTime(0)
+  conversa                                                 conversa   @relation(fields: [conversa_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "fk_transferencia_conversa")
+  cadastro                                                 cadastro   @relation(fields: [transferida_por_id], references: [id], onUpdate: Restrict, map: "fk_transferencia_responsavel")
+  setores_conversa_transferencia_setor_destino_idTosetores setores    @relation("conversa_transferencia_setor_destino_idTosetores", fields: [setor_destino_id], references: [id], onUpdate: Restrict, map: "fk_transferencia_setor_destino")
+  setores_conversa_transferencia_setor_origem_idTosetores  setores    @relation("conversa_transferencia_setor_origem_idTosetores", fields: [setor_origem_id], references: [id], onUpdate: Restrict, map: "fk_transferencia_setor_origem")
+  mensagem                                                 mensagem[]
+
+  @@index([conversa_id, transferida_em], map: "idx_transferencia_conversa_data")
+  @@index([transferida_por_id], map: "idx_transferencia_responsavel")
+  @@index([setor_destino_id, transferida_em], map: "idx_transferencia_setor_destino_data")
+  @@index([setor_origem_id, transferida_em], map: "idx_transferencia_setor_origem_data")
 }
 
 enum desafio_2fa_finalidade {
@@ -312,4 +347,10 @@ enum cadastro_tipo_usuario {
 enum historico_administrativo_acao {
   usuario_desativado
   usuario_reativado
+}
+
+enum mensagem_visibilidade {
+  todos
+  equipe
+  cidadao
 }

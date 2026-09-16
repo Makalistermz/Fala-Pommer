@@ -228,10 +228,10 @@ export type conversa_finalizacaoWhereInput = {
   finalizada_por_id?: Prisma.IntFilter<"conversa_finalizacao"> | number
   ultima_mensagem_id?: Prisma.IntNullableFilter<"conversa_finalizacao"> | number | null
   finalizada_em?: Prisma.DateTimeFilter<"conversa_finalizacao"> | Date | string
+  avaliacoes?: Prisma.AvaliacaoListRelationFilter
   conversa?: Prisma.XOR<Prisma.ConversaScalarRelationFilter, Prisma.conversaWhereInput>
   finalizada_por?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
   ultima_mensagem?: Prisma.XOR<Prisma.MensagemNullableScalarRelationFilter, Prisma.mensagemWhereInput> | null
-  avaliacoes?: Prisma.AvaliacaoListRelationFilter
 }
 
 export type conversa_finalizacaoOrderByWithRelationInput = {
@@ -240,10 +240,10 @@ export type conversa_finalizacaoOrderByWithRelationInput = {
   finalizada_por_id?: Prisma.SortOrder
   ultima_mensagem_id?: Prisma.SortOrderInput | Prisma.SortOrder
   finalizada_em?: Prisma.SortOrder
+  avaliacoes?: Prisma.avaliacaoOrderByRelationAggregateInput
   conversa?: Prisma.conversaOrderByWithRelationInput
   finalizada_por?: Prisma.cadastroOrderByWithRelationInput
   ultima_mensagem?: Prisma.mensagemOrderByWithRelationInput
-  avaliacoes?: Prisma.avaliacaoOrderByRelationAggregateInput
 }
 
 export type conversa_finalizacaoWhereUniqueInput = Prisma.AtLeast<{
@@ -256,10 +256,10 @@ export type conversa_finalizacaoWhereUniqueInput = Prisma.AtLeast<{
   finalizada_por_id?: Prisma.IntFilter<"conversa_finalizacao"> | number
   ultima_mensagem_id?: Prisma.IntNullableFilter<"conversa_finalizacao"> | number | null
   finalizada_em?: Prisma.DateTimeFilter<"conversa_finalizacao"> | Date | string
+  avaliacoes?: Prisma.AvaliacaoListRelationFilter
   conversa?: Prisma.XOR<Prisma.ConversaScalarRelationFilter, Prisma.conversaWhereInput>
   finalizada_por?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
   ultima_mensagem?: Prisma.XOR<Prisma.MensagemNullableScalarRelationFilter, Prisma.mensagemWhereInput> | null
-  avaliacoes?: Prisma.AvaliacaoListRelationFilter
 }, "id" | "conversa_id_ultima_mensagem_id">
 
 export type conversa_finalizacaoOrderByWithAggregationInput = {
@@ -288,10 +288,10 @@ export type conversa_finalizacaoScalarWhereWithAggregatesInput = {
 
 export type conversa_finalizacaoCreateInput = {
   finalizada_em?: Date | string
+  avaliacoes?: Prisma.avaliacaoCreateNestedManyWithoutFinalizacaoInput
   conversa: Prisma.conversaCreateNestedOneWithoutFinalizacoesInput
   finalizada_por: Prisma.cadastroCreateNestedOneWithoutFinalizacoes_realizadasInput
   ultima_mensagem?: Prisma.mensagemCreateNestedOneWithoutFinalizacoesInput
-  avaliacoes?: Prisma.avaliacaoCreateNestedManyWithoutFinalizacaoInput
 }
 
 export type conversa_finalizacaoUncheckedCreateInput = {
@@ -305,10 +305,10 @@ export type conversa_finalizacaoUncheckedCreateInput = {
 
 export type conversa_finalizacaoUpdateInput = {
   finalizada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  avaliacoes?: Prisma.avaliacaoUpdateManyWithoutFinalizacaoNestedInput
   conversa?: Prisma.conversaUpdateOneRequiredWithoutFinalizacoesNestedInput
   finalizada_por?: Prisma.cadastroUpdateOneRequiredWithoutFinalizacoes_realizadasNestedInput
   ultima_mensagem?: Prisma.mensagemUpdateOneWithoutFinalizacoesNestedInput
-  avaliacoes?: Prisma.avaliacaoUpdateManyWithoutFinalizacaoNestedInput
 }
 
 export type conversa_finalizacaoUncheckedUpdateInput = {
@@ -540,9 +540,9 @@ export type conversa_finalizacaoUpdateOneRequiredWithoutAvaliacoesNestedInput = 
 
 export type conversa_finalizacaoCreateWithoutFinalizada_porInput = {
   finalizada_em?: Date | string
+  avaliacoes?: Prisma.avaliacaoCreateNestedManyWithoutFinalizacaoInput
   conversa: Prisma.conversaCreateNestedOneWithoutFinalizacoesInput
   ultima_mensagem?: Prisma.mensagemCreateNestedOneWithoutFinalizacoesInput
-  avaliacoes?: Prisma.avaliacaoCreateNestedManyWithoutFinalizacaoInput
 }
 
 export type conversa_finalizacaoUncheckedCreateWithoutFinalizada_porInput = {
@@ -592,9 +592,9 @@ export type conversa_finalizacaoScalarWhereInput = {
 
 export type conversa_finalizacaoCreateWithoutConversaInput = {
   finalizada_em?: Date | string
+  avaliacoes?: Prisma.avaliacaoCreateNestedManyWithoutFinalizacaoInput
   finalizada_por: Prisma.cadastroCreateNestedOneWithoutFinalizacoes_realizadasInput
   ultima_mensagem?: Prisma.mensagemCreateNestedOneWithoutFinalizacoesInput
-  avaliacoes?: Prisma.avaliacaoCreateNestedManyWithoutFinalizacaoInput
 }
 
 export type conversa_finalizacaoUncheckedCreateWithoutConversaInput = {
@@ -633,9 +633,9 @@ export type conversa_finalizacaoUpdateManyWithWhereWithoutConversaInput = {
 
 export type conversa_finalizacaoCreateWithoutUltima_mensagemInput = {
   finalizada_em?: Date | string
+  avaliacoes?: Prisma.avaliacaoCreateNestedManyWithoutFinalizacaoInput
   conversa: Prisma.conversaCreateNestedOneWithoutFinalizacoesInput
   finalizada_por: Prisma.cadastroCreateNestedOneWithoutFinalizacoes_realizadasInput
-  avaliacoes?: Prisma.avaliacaoCreateNestedManyWithoutFinalizacaoInput
 }
 
 export type conversa_finalizacaoUncheckedCreateWithoutUltima_mensagemInput = {
@@ -727,9 +727,9 @@ export type conversa_finalizacaoCreateManyFinalizada_porInput = {
 
 export type conversa_finalizacaoUpdateWithoutFinalizada_porInput = {
   finalizada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  avaliacoes?: Prisma.avaliacaoUpdateManyWithoutFinalizacaoNestedInput
   conversa?: Prisma.conversaUpdateOneRequiredWithoutFinalizacoesNestedInput
   ultima_mensagem?: Prisma.mensagemUpdateOneWithoutFinalizacoesNestedInput
-  avaliacoes?: Prisma.avaliacaoUpdateManyWithoutFinalizacaoNestedInput
 }
 
 export type conversa_finalizacaoUncheckedUpdateWithoutFinalizada_porInput = {
@@ -756,9 +756,9 @@ export type conversa_finalizacaoCreateManyConversaInput = {
 
 export type conversa_finalizacaoUpdateWithoutConversaInput = {
   finalizada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  avaliacoes?: Prisma.avaliacaoUpdateManyWithoutFinalizacaoNestedInput
   finalizada_por?: Prisma.cadastroUpdateOneRequiredWithoutFinalizacoes_realizadasNestedInput
   ultima_mensagem?: Prisma.mensagemUpdateOneWithoutFinalizacoesNestedInput
-  avaliacoes?: Prisma.avaliacaoUpdateManyWithoutFinalizacaoNestedInput
 }
 
 export type conversa_finalizacaoUncheckedUpdateWithoutConversaInput = {
@@ -785,9 +785,9 @@ export type conversa_finalizacaoCreateManyUltima_mensagemInput = {
 
 export type conversa_finalizacaoUpdateWithoutUltima_mensagemInput = {
   finalizada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  avaliacoes?: Prisma.avaliacaoUpdateManyWithoutFinalizacaoNestedInput
   conversa?: Prisma.conversaUpdateOneRequiredWithoutFinalizacoesNestedInput
   finalizada_por?: Prisma.cadastroUpdateOneRequiredWithoutFinalizacoes_realizadasNestedInput
-  avaliacoes?: Prisma.avaliacaoUpdateManyWithoutFinalizacaoNestedInput
 }
 
 export type conversa_finalizacaoUncheckedUpdateWithoutUltima_mensagemInput = {
@@ -842,10 +842,10 @@ export type conversa_finalizacaoSelect<ExtArgs extends runtime.Types.Extensions.
   finalizada_por_id?: boolean
   ultima_mensagem_id?: boolean
   finalizada_em?: boolean
+  avaliacoes?: boolean | Prisma.conversa_finalizacao$avaliacoesArgs<ExtArgs>
   conversa?: boolean | Prisma.conversaDefaultArgs<ExtArgs>
   finalizada_por?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
   ultima_mensagem?: boolean | Prisma.conversa_finalizacao$ultima_mensagemArgs<ExtArgs>
-  avaliacoes?: boolean | Prisma.conversa_finalizacao$avaliacoesArgs<ExtArgs>
   _count?: boolean | Prisma.Conversa_finalizacaoCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversa_finalizacao"]>
 
@@ -861,20 +861,20 @@ export type conversa_finalizacaoSelectScalar = {
 
 export type conversa_finalizacaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversa_id" | "finalizada_por_id" | "ultima_mensagem_id" | "finalizada_em", ExtArgs["result"]["conversa_finalizacao"]>
 export type conversa_finalizacaoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  avaliacoes?: boolean | Prisma.conversa_finalizacao$avaliacoesArgs<ExtArgs>
   conversa?: boolean | Prisma.conversaDefaultArgs<ExtArgs>
   finalizada_por?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
   ultima_mensagem?: boolean | Prisma.conversa_finalizacao$ultima_mensagemArgs<ExtArgs>
-  avaliacoes?: boolean | Prisma.conversa_finalizacao$avaliacoesArgs<ExtArgs>
   _count?: boolean | Prisma.Conversa_finalizacaoCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $conversa_finalizacaoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "conversa_finalizacao"
   objects: {
+    avaliacoes: Prisma.$avaliacaoPayload<ExtArgs>[]
     conversa: Prisma.$conversaPayload<ExtArgs>
     finalizada_por: Prisma.$cadastroPayload<ExtArgs>
     ultima_mensagem: Prisma.$mensagemPayload<ExtArgs> | null
-    avaliacoes: Prisma.$avaliacaoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1222,10 +1222,10 @@ readonly fields: conversa_finalizacaoFieldRefs;
  */
 export interface Prisma__conversa_finalizacaoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  avaliacoes<T extends Prisma.conversa_finalizacao$avaliacoesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversa_finalizacao$avaliacoesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$avaliacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversa<T extends Prisma.conversaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversaDefaultArgs<ExtArgs>>): Prisma.Prisma__conversaClient<runtime.Types.Result.GetResult<Prisma.$conversaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   finalizada_por<T extends Prisma.cadastroDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastroDefaultArgs<ExtArgs>>): Prisma.Prisma__cadastroClient<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   ultima_mensagem<T extends Prisma.conversa_finalizacao$ultima_mensagemArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversa_finalizacao$ultima_mensagemArgs<ExtArgs>>): Prisma.Prisma__mensagemClient<runtime.Types.Result.GetResult<Prisma.$mensagemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  avaliacoes<T extends Prisma.conversa_finalizacao$avaliacoesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversa_finalizacao$avaliacoesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$avaliacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1608,25 +1608,6 @@ export type conversa_finalizacaoDeleteManyArgs<ExtArgs extends runtime.Types.Ext
 }
 
 /**
- * conversa_finalizacao.ultima_mensagem
- */
-export type conversa_finalizacao$ultima_mensagemArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the mensagem
-   */
-  select?: Prisma.mensagemSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the mensagem
-   */
-  omit?: Prisma.mensagemOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.mensagemInclude<ExtArgs> | null
-  where?: Prisma.mensagemWhereInput
-}
-
-/**
  * conversa_finalizacao.avaliacoes
  */
 export type conversa_finalizacao$avaliacoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1648,6 +1629,25 @@ export type conversa_finalizacao$avaliacoesArgs<ExtArgs extends runtime.Types.Ex
   take?: number
   skip?: number
   distinct?: Prisma.AvaliacaoScalarFieldEnum | Prisma.AvaliacaoScalarFieldEnum[]
+}
+
+/**
+ * conversa_finalizacao.ultima_mensagem
+ */
+export type conversa_finalizacao$ultima_mensagemArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the mensagem
+   */
+  select?: Prisma.mensagemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the mensagem
+   */
+  omit?: Prisma.mensagemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.mensagemInclude<ExtArgs> | null
+  where?: Prisma.mensagemWhereInput
 }
 
 /**

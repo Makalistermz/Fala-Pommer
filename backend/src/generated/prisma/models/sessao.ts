@@ -39,37 +39,37 @@ export type SessaoSumAggregateOutputType = {
 export type SessaoMinAggregateOutputType = {
   id: string | null
   usuario_id: number | null
-  versao_token: number | null
   refresh_token_hash: string | null
   nome_dispositivo: string | null
   plataforma: string | null
   ultimo_uso_em: Date | null
   revogada_em: Date | null
   criado_em: Date | null
+  versao_token: number | null
 }
 
 export type SessaoMaxAggregateOutputType = {
   id: string | null
   usuario_id: number | null
-  versao_token: number | null
   refresh_token_hash: string | null
   nome_dispositivo: string | null
   plataforma: string | null
   ultimo_uso_em: Date | null
   revogada_em: Date | null
   criado_em: Date | null
+  versao_token: number | null
 }
 
 export type SessaoCountAggregateOutputType = {
   id: number
   usuario_id: number
-  versao_token: number
   refresh_token_hash: number
   nome_dispositivo: number
   plataforma: number
   ultimo_uso_em: number
   revogada_em: number
   criado_em: number
+  versao_token: number
   _all: number
 }
 
@@ -87,37 +87,37 @@ export type SessaoSumAggregateInputType = {
 export type SessaoMinAggregateInputType = {
   id?: true
   usuario_id?: true
-  versao_token?: true
   refresh_token_hash?: true
   nome_dispositivo?: true
   plataforma?: true
   ultimo_uso_em?: true
   revogada_em?: true
   criado_em?: true
+  versao_token?: true
 }
 
 export type SessaoMaxAggregateInputType = {
   id?: true
   usuario_id?: true
-  versao_token?: true
   refresh_token_hash?: true
   nome_dispositivo?: true
   plataforma?: true
   ultimo_uso_em?: true
   revogada_em?: true
   criado_em?: true
+  versao_token?: true
 }
 
 export type SessaoCountAggregateInputType = {
   id?: true
   usuario_id?: true
-  versao_token?: true
   refresh_token_hash?: true
   nome_dispositivo?: true
   plataforma?: true
   ultimo_uso_em?: true
   revogada_em?: true
   criado_em?: true
+  versao_token?: true
   _all?: true
 }
 
@@ -210,13 +210,13 @@ export type sessaoGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 export type SessaoGroupByOutputType = {
   id: string
   usuario_id: number
-  versao_token: number
   refresh_token_hash: string
   nome_dispositivo: string | null
   plataforma: string | null
   ultimo_uso_em: Date
   revogada_em: Date | null
   criado_em: Date
+  versao_token: number
   _count: SessaoCountAggregateOutputType | null
   _avg: SessaoAvgAggregateOutputType | null
   _sum: SessaoSumAggregateOutputType | null
@@ -245,13 +245,13 @@ export type sessaoWhereInput = {
   NOT?: Prisma.sessaoWhereInput | Prisma.sessaoWhereInput[]
   id?: Prisma.StringFilter<"sessao"> | string
   usuario_id?: Prisma.IntFilter<"sessao"> | number
-  versao_token?: Prisma.IntFilter<"sessao"> | number
   refresh_token_hash?: Prisma.StringFilter<"sessao"> | string
   nome_dispositivo?: Prisma.StringNullableFilter<"sessao"> | string | null
   plataforma?: Prisma.StringNullableFilter<"sessao"> | string | null
   ultimo_uso_em?: Prisma.DateTimeFilter<"sessao"> | Date | string
   revogada_em?: Prisma.DateTimeNullableFilter<"sessao"> | Date | string | null
   criado_em?: Prisma.DateTimeFilter<"sessao"> | Date | string
+  versao_token?: Prisma.IntFilter<"sessao"> | number
   usuario?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
   tokens_push?: Prisma.Token_pushListRelationFilter
 }
@@ -259,13 +259,13 @@ export type sessaoWhereInput = {
 export type sessaoOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
-  versao_token?: Prisma.SortOrder
   refresh_token_hash?: Prisma.SortOrder
   nome_dispositivo?: Prisma.SortOrderInput | Prisma.SortOrder
   plataforma?: Prisma.SortOrderInput | Prisma.SortOrder
   ultimo_uso_em?: Prisma.SortOrder
   revogada_em?: Prisma.SortOrderInput | Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  versao_token?: Prisma.SortOrder
   usuario?: Prisma.cadastroOrderByWithRelationInput
   tokens_push?: Prisma.token_pushOrderByRelationAggregateInput
   _relevance?: Prisma.sessaoOrderByRelevanceInput
@@ -278,12 +278,12 @@ export type sessaoWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.sessaoWhereInput[]
   NOT?: Prisma.sessaoWhereInput | Prisma.sessaoWhereInput[]
   usuario_id?: Prisma.IntFilter<"sessao"> | number
-  versao_token?: Prisma.IntFilter<"sessao"> | number
   nome_dispositivo?: Prisma.StringNullableFilter<"sessao"> | string | null
   plataforma?: Prisma.StringNullableFilter<"sessao"> | string | null
   ultimo_uso_em?: Prisma.DateTimeFilter<"sessao"> | Date | string
   revogada_em?: Prisma.DateTimeNullableFilter<"sessao"> | Date | string | null
   criado_em?: Prisma.DateTimeFilter<"sessao"> | Date | string
+  versao_token?: Prisma.IntFilter<"sessao"> | number
   usuario?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
   tokens_push?: Prisma.Token_pushListRelationFilter
 }, "id" | "refresh_token_hash">
@@ -291,13 +291,13 @@ export type sessaoWhereUniqueInput = Prisma.AtLeast<{
 export type sessaoOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
-  versao_token?: Prisma.SortOrder
   refresh_token_hash?: Prisma.SortOrder
   nome_dispositivo?: Prisma.SortOrderInput | Prisma.SortOrder
   plataforma?: Prisma.SortOrderInput | Prisma.SortOrder
   ultimo_uso_em?: Prisma.SortOrder
   revogada_em?: Prisma.SortOrderInput | Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  versao_token?: Prisma.SortOrder
   _count?: Prisma.sessaoCountOrderByAggregateInput
   _avg?: Prisma.sessaoAvgOrderByAggregateInput
   _max?: Prisma.sessaoMaxOrderByAggregateInput
@@ -311,24 +311,24 @@ export type sessaoScalarWhereWithAggregatesInput = {
   NOT?: Prisma.sessaoScalarWhereWithAggregatesInput | Prisma.sessaoScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"sessao"> | string
   usuario_id?: Prisma.IntWithAggregatesFilter<"sessao"> | number
-  versao_token?: Prisma.IntWithAggregatesFilter<"sessao"> | number
   refresh_token_hash?: Prisma.StringWithAggregatesFilter<"sessao"> | string
   nome_dispositivo?: Prisma.StringNullableWithAggregatesFilter<"sessao"> | string | null
   plataforma?: Prisma.StringNullableWithAggregatesFilter<"sessao"> | string | null
   ultimo_uso_em?: Prisma.DateTimeWithAggregatesFilter<"sessao"> | Date | string
   revogada_em?: Prisma.DateTimeNullableWithAggregatesFilter<"sessao"> | Date | string | null
   criado_em?: Prisma.DateTimeWithAggregatesFilter<"sessao"> | Date | string
+  versao_token?: Prisma.IntWithAggregatesFilter<"sessao"> | number
 }
 
 export type sessaoCreateInput = {
   id?: string
-  versao_token: number
   refresh_token_hash: string
   nome_dispositivo?: string | null
   plataforma?: string | null
   ultimo_uso_em?: Date | string
   revogada_em?: Date | string | null
   criado_em?: Date | string
+  versao_token: number
   usuario: Prisma.cadastroCreateNestedOneWithoutSessoesInput
   tokens_push?: Prisma.token_pushCreateNestedManyWithoutSessaoInput
 }
@@ -336,25 +336,25 @@ export type sessaoCreateInput = {
 export type sessaoUncheckedCreateInput = {
   id?: string
   usuario_id: number
-  versao_token: number
   refresh_token_hash: string
   nome_dispositivo?: string | null
   plataforma?: string | null
   ultimo_uso_em?: Date | string
   revogada_em?: Date | string | null
   criado_em?: Date | string
+  versao_token: number
   tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutSessaoInput
 }
 
 export type sessaoUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   refresh_token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   nome_dispositivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plataforma?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   usuario?: Prisma.cadastroUpdateOneRequiredWithoutSessoesNestedInput
   tokens_push?: Prisma.token_pushUpdateManyWithoutSessaoNestedInput
 }
@@ -362,49 +362,49 @@ export type sessaoUpdateInput = {
 export type sessaoUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
-  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   refresh_token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   nome_dispositivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plataforma?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutSessaoNestedInput
 }
 
 export type sessaoCreateManyInput = {
   id?: string
   usuario_id: number
-  versao_token: number
   refresh_token_hash: string
   nome_dispositivo?: string | null
   plataforma?: string | null
   ultimo_uso_em?: Date | string
   revogada_em?: Date | string | null
   criado_em?: Date | string
+  versao_token: number
 }
 
 export type sessaoUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   refresh_token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   nome_dispositivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plataforma?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type sessaoUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
-  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   refresh_token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   nome_dispositivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plataforma?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type SessaoListRelationFilter = {
@@ -426,13 +426,13 @@ export type sessaoOrderByRelevanceInput = {
 export type sessaoCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
-  versao_token?: Prisma.SortOrder
   refresh_token_hash?: Prisma.SortOrder
   nome_dispositivo?: Prisma.SortOrder
   plataforma?: Prisma.SortOrder
   ultimo_uso_em?: Prisma.SortOrder
   revogada_em?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  versao_token?: Prisma.SortOrder
 }
 
 export type sessaoAvgOrderByAggregateInput = {
@@ -443,25 +443,25 @@ export type sessaoAvgOrderByAggregateInput = {
 export type sessaoMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
-  versao_token?: Prisma.SortOrder
   refresh_token_hash?: Prisma.SortOrder
   nome_dispositivo?: Prisma.SortOrder
   plataforma?: Prisma.SortOrder
   ultimo_uso_em?: Prisma.SortOrder
   revogada_em?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  versao_token?: Prisma.SortOrder
 }
 
 export type sessaoMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   usuario_id?: Prisma.SortOrder
-  versao_token?: Prisma.SortOrder
   refresh_token_hash?: Prisma.SortOrder
   nome_dispositivo?: Prisma.SortOrder
   plataforma?: Prisma.SortOrder
   ultimo_uso_em?: Prisma.SortOrder
   revogada_em?: Prisma.SortOrder
   criado_em?: Prisma.SortOrder
+  versao_token?: Prisma.SortOrder
 }
 
 export type sessaoSumOrderByAggregateInput = {
@@ -532,25 +532,25 @@ export type sessaoUpdateOneRequiredWithoutTokens_pushNestedInput = {
 
 export type sessaoCreateWithoutUsuarioInput = {
   id?: string
-  versao_token: number
   refresh_token_hash: string
   nome_dispositivo?: string | null
   plataforma?: string | null
   ultimo_uso_em?: Date | string
   revogada_em?: Date | string | null
   criado_em?: Date | string
+  versao_token: number
   tokens_push?: Prisma.token_pushCreateNestedManyWithoutSessaoInput
 }
 
 export type sessaoUncheckedCreateWithoutUsuarioInput = {
   id?: string
-  versao_token: number
   refresh_token_hash: string
   nome_dispositivo?: string | null
   plataforma?: string | null
   ultimo_uso_em?: Date | string
   revogada_em?: Date | string | null
   criado_em?: Date | string
+  versao_token: number
   tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutSessaoInput
 }
 
@@ -586,37 +586,37 @@ export type sessaoScalarWhereInput = {
   NOT?: Prisma.sessaoScalarWhereInput | Prisma.sessaoScalarWhereInput[]
   id?: Prisma.StringFilter<"sessao"> | string
   usuario_id?: Prisma.IntFilter<"sessao"> | number
-  versao_token?: Prisma.IntFilter<"sessao"> | number
   refresh_token_hash?: Prisma.StringFilter<"sessao"> | string
   nome_dispositivo?: Prisma.StringNullableFilter<"sessao"> | string | null
   plataforma?: Prisma.StringNullableFilter<"sessao"> | string | null
   ultimo_uso_em?: Prisma.DateTimeFilter<"sessao"> | Date | string
   revogada_em?: Prisma.DateTimeNullableFilter<"sessao"> | Date | string | null
   criado_em?: Prisma.DateTimeFilter<"sessao"> | Date | string
+  versao_token?: Prisma.IntFilter<"sessao"> | number
 }
 
 export type sessaoCreateWithoutTokens_pushInput = {
   id?: string
-  versao_token: number
   refresh_token_hash: string
   nome_dispositivo?: string | null
   plataforma?: string | null
   ultimo_uso_em?: Date | string
   revogada_em?: Date | string | null
   criado_em?: Date | string
+  versao_token: number
   usuario: Prisma.cadastroCreateNestedOneWithoutSessoesInput
 }
 
 export type sessaoUncheckedCreateWithoutTokens_pushInput = {
   id?: string
   usuario_id: number
-  versao_token: number
   refresh_token_hash: string
   nome_dispositivo?: string | null
   plataforma?: string | null
   ultimo_uso_em?: Date | string
   revogada_em?: Date | string | null
   criado_em?: Date | string
+  versao_token: number
 }
 
 export type sessaoCreateOrConnectWithoutTokens_pushInput = {
@@ -637,72 +637,72 @@ export type sessaoUpdateToOneWithWhereWithoutTokens_pushInput = {
 
 export type sessaoUpdateWithoutTokens_pushInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   refresh_token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   nome_dispositivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plataforma?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   usuario?: Prisma.cadastroUpdateOneRequiredWithoutSessoesNestedInput
 }
 
 export type sessaoUncheckedUpdateWithoutTokens_pushInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
-  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   refresh_token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   nome_dispositivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plataforma?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type sessaoCreateManyUsuarioInput = {
   id?: string
-  versao_token: number
   refresh_token_hash: string
   nome_dispositivo?: string | null
   plataforma?: string | null
   ultimo_uso_em?: Date | string
   revogada_em?: Date | string | null
   criado_em?: Date | string
+  versao_token: number
 }
 
 export type sessaoUpdateWithoutUsuarioInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   refresh_token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   nome_dispositivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plataforma?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   tokens_push?: Prisma.token_pushUpdateManyWithoutSessaoNestedInput
 }
 
 export type sessaoUncheckedUpdateWithoutUsuarioInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   refresh_token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   nome_dispositivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plataforma?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutSessaoNestedInput
 }
 
 export type sessaoUncheckedUpdateManyWithoutUsuarioInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   refresh_token_hash?: Prisma.StringFieldUpdateOperationsInput | string
   nome_dispositivo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plataforma?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ultimo_uso_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   revogada_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   criado_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -739,13 +739,13 @@ export type SessaoCountOutputTypeCountTokens_pushArgs<ExtArgs extends runtime.Ty
 export type sessaoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   usuario_id?: boolean
-  versao_token?: boolean
   refresh_token_hash?: boolean
   nome_dispositivo?: boolean
   plataforma?: boolean
   ultimo_uso_em?: boolean
   revogada_em?: boolean
   criado_em?: boolean
+  versao_token?: boolean
   usuario?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
   tokens_push?: boolean | Prisma.sessao$tokens_pushArgs<ExtArgs>
   _count?: boolean | Prisma.SessaoCountOutputTypeDefaultArgs<ExtArgs>
@@ -756,16 +756,16 @@ export type sessaoSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type sessaoSelectScalar = {
   id?: boolean
   usuario_id?: boolean
-  versao_token?: boolean
   refresh_token_hash?: boolean
   nome_dispositivo?: boolean
   plataforma?: boolean
   ultimo_uso_em?: boolean
   revogada_em?: boolean
   criado_em?: boolean
+  versao_token?: boolean
 }
 
-export type sessaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "usuario_id" | "versao_token" | "refresh_token_hash" | "nome_dispositivo" | "plataforma" | "ultimo_uso_em" | "revogada_em" | "criado_em", ExtArgs["result"]["sessao"]>
+export type sessaoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "usuario_id" | "refresh_token_hash" | "nome_dispositivo" | "plataforma" | "ultimo_uso_em" | "revogada_em" | "criado_em" | "versao_token", ExtArgs["result"]["sessao"]>
 export type sessaoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   usuario?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
   tokens_push?: boolean | Prisma.sessao$tokens_pushArgs<ExtArgs>
@@ -781,13 +781,13 @@ export type $sessaoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     usuario_id: number
-    versao_token: number
     refresh_token_hash: string
     nome_dispositivo: string | null
     plataforma: string | null
     ultimo_uso_em: Date
     revogada_em: Date | null
     criado_em: Date
+    versao_token: number
   }, ExtArgs["result"]["sessao"]>
   composites: {}
 }
@@ -1161,13 +1161,13 @@ export interface Prisma__sessaoClient<T, Null = never, ExtArgs extends runtime.T
 export interface sessaoFieldRefs {
   readonly id: Prisma.FieldRef<"sessao", 'String'>
   readonly usuario_id: Prisma.FieldRef<"sessao", 'Int'>
-  readonly versao_token: Prisma.FieldRef<"sessao", 'Int'>
   readonly refresh_token_hash: Prisma.FieldRef<"sessao", 'String'>
   readonly nome_dispositivo: Prisma.FieldRef<"sessao", 'String'>
   readonly plataforma: Prisma.FieldRef<"sessao", 'String'>
   readonly ultimo_uso_em: Prisma.FieldRef<"sessao", 'DateTime'>
   readonly revogada_em: Prisma.FieldRef<"sessao", 'DateTime'>
   readonly criado_em: Prisma.FieldRef<"sessao", 'DateTime'>
+  readonly versao_token: Prisma.FieldRef<"sessao", 'Int'>
 }
     
 

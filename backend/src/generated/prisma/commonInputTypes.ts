@@ -260,6 +260,13 @@ export type Enummensagem_origemFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel> | $Enums.mensagem_origem
 }
 
+export type Enummensagem_visibilidadeFilter<$PrismaModel = never> = {
+  equals?: $Enums.mensagem_visibilidade | Prisma.Enummensagem_visibilidadeFieldRefInput<$PrismaModel>
+  in?: $Enums.mensagem_visibilidade[]
+  notIn?: $Enums.mensagem_visibilidade[]
+  not?: Prisma.NestedEnummensagem_visibilidadeFilter<$PrismaModel> | $Enums.mensagem_visibilidade
+}
+
 export type Enummensagem_origemWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.mensagem_origem | Prisma.Enummensagem_origemFieldRefInput<$PrismaModel>
   in?: $Enums.mensagem_origem[]
@@ -268,6 +275,16 @@ export type Enummensagem_origemWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel>
   _max?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel>
+}
+
+export type Enummensagem_visibilidadeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.mensagem_visibilidade | Prisma.Enummensagem_visibilidadeFieldRefInput<$PrismaModel>
+  in?: $Enums.mensagem_visibilidade[]
+  notIn?: $Enums.mensagem_visibilidade[]
+  not?: Prisma.NestedEnummensagem_visibilidadeWithAggregatesFilter<$PrismaModel> | $Enums.mensagem_visibilidade
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnummensagem_visibilidadeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnummensagem_visibilidadeFilter<$PrismaModel>
 }
 
 export type Enumdesafio_2fa_finalidadeFilter<$PrismaModel = never> = {
@@ -584,6 +601,13 @@ export type NestedEnummensagem_origemFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel> | $Enums.mensagem_origem
 }
 
+export type NestedEnummensagem_visibilidadeFilter<$PrismaModel = never> = {
+  equals?: $Enums.mensagem_visibilidade | Prisma.Enummensagem_visibilidadeFieldRefInput<$PrismaModel>
+  in?: $Enums.mensagem_visibilidade[]
+  notIn?: $Enums.mensagem_visibilidade[]
+  not?: Prisma.NestedEnummensagem_visibilidadeFilter<$PrismaModel> | $Enums.mensagem_visibilidade
+}
+
 export type NestedEnummensagem_origemWithAggregatesFilter<$PrismaModel = never> = {
   equals?: $Enums.mensagem_origem | Prisma.Enummensagem_origemFieldRefInput<$PrismaModel>
   in?: $Enums.mensagem_origem[]
@@ -592,6 +616,16 @@ export type NestedEnummensagem_origemWithAggregatesFilter<$PrismaModel = never> 
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel>
   _max?: Prisma.NestedEnummensagem_origemFilter<$PrismaModel>
+}
+
+export type NestedEnummensagem_visibilidadeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.mensagem_visibilidade | Prisma.Enummensagem_visibilidadeFieldRefInput<$PrismaModel>
+  in?: $Enums.mensagem_visibilidade[]
+  notIn?: $Enums.mensagem_visibilidade[]
+  not?: Prisma.NestedEnummensagem_visibilidadeWithAggregatesFilter<$PrismaModel> | $Enums.mensagem_visibilidade
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnummensagem_visibilidadeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnummensagem_visibilidadeFilter<$PrismaModel>
 }
 
 export type NestedEnumdesafio_2fa_finalidadeFilter<$PrismaModel = never> = {

@@ -30,6 +30,8 @@ export type MensagemAvgAggregateOutputType = {
   id: number | null
   conversa_id: number | null
   remetente_id: number | null
+  transferencia_id: number | null
+  setor_id: number | null
   arquivo_tamanho: number | null
 }
 
@@ -37,6 +39,8 @@ export type MensagemSumAggregateOutputType = {
   id: number | null
   conversa_id: number | null
   remetente_id: number | null
+  transferencia_id: number | null
+  setor_id: number | null
   arquivo_tamanho: number | null
 }
 
@@ -46,6 +50,9 @@ export type MensagemMinAggregateOutputType = {
   remetente_id: number | null
   origem: $Enums.mensagem_origem | null
   sistema: boolean | null
+  visibilidade: $Enums.mensagem_visibilidade | null
+  transferencia_id: number | null
+  setor_id: number | null
   conteudo: string | null
   enviada_em: Date | null
   arquivo_nome: string | null
@@ -61,6 +68,9 @@ export type MensagemMaxAggregateOutputType = {
   remetente_id: number | null
   origem: $Enums.mensagem_origem | null
   sistema: boolean | null
+  visibilidade: $Enums.mensagem_visibilidade | null
+  transferencia_id: number | null
+  setor_id: number | null
   conteudo: string | null
   enviada_em: Date | null
   arquivo_nome: string | null
@@ -76,6 +86,9 @@ export type MensagemCountAggregateOutputType = {
   remetente_id: number
   origem: number
   sistema: number
+  visibilidade: number
+  transferencia_id: number
+  setor_id: number
   conteudo: number
   enviada_em: number
   arquivo_nome: number
@@ -91,6 +104,8 @@ export type MensagemAvgAggregateInputType = {
   id?: true
   conversa_id?: true
   remetente_id?: true
+  transferencia_id?: true
+  setor_id?: true
   arquivo_tamanho?: true
 }
 
@@ -98,6 +113,8 @@ export type MensagemSumAggregateInputType = {
   id?: true
   conversa_id?: true
   remetente_id?: true
+  transferencia_id?: true
+  setor_id?: true
   arquivo_tamanho?: true
 }
 
@@ -107,6 +124,9 @@ export type MensagemMinAggregateInputType = {
   remetente_id?: true
   origem?: true
   sistema?: true
+  visibilidade?: true
+  transferencia_id?: true
+  setor_id?: true
   conteudo?: true
   enviada_em?: true
   arquivo_nome?: true
@@ -122,6 +142,9 @@ export type MensagemMaxAggregateInputType = {
   remetente_id?: true
   origem?: true
   sistema?: true
+  visibilidade?: true
+  transferencia_id?: true
+  setor_id?: true
   conteudo?: true
   enviada_em?: true
   arquivo_nome?: true
@@ -137,6 +160,9 @@ export type MensagemCountAggregateInputType = {
   remetente_id?: true
   origem?: true
   sistema?: true
+  visibilidade?: true
+  transferencia_id?: true
+  setor_id?: true
   conteudo?: true
   enviada_em?: true
   arquivo_nome?: true
@@ -239,6 +265,9 @@ export type MensagemGroupByOutputType = {
   remetente_id: number
   origem: $Enums.mensagem_origem
   sistema: boolean
+  visibilidade: $Enums.mensagem_visibilidade
+  transferencia_id: number | null
+  setor_id: number | null
   conteudo: string
   enviada_em: Date
   arquivo_nome: string | null
@@ -277,6 +306,9 @@ export type mensagemWhereInput = {
   remetente_id?: Prisma.IntFilter<"mensagem"> | number
   origem?: Prisma.Enummensagem_origemFilter<"mensagem"> | $Enums.mensagem_origem
   sistema?: Prisma.BoolFilter<"mensagem"> | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFilter<"mensagem"> | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.IntNullableFilter<"mensagem"> | number | null
+  setor_id?: Prisma.IntNullableFilter<"mensagem"> | number | null
   conteudo?: Prisma.StringFilter<"mensagem"> | string
   enviada_em?: Prisma.DateTimeFilter<"mensagem"> | Date | string
   arquivo_nome?: Prisma.StringNullableFilter<"mensagem"> | string | null
@@ -284,10 +316,12 @@ export type mensagemWhereInput = {
   arquivo_tipo?: Prisma.StringNullableFilter<"mensagem"> | string | null
   arquivo_mime?: Prisma.StringNullableFilter<"mensagem"> | string | null
   arquivo_tamanho?: Prisma.IntNullableFilter<"mensagem"> | number | null
+  finalizacoes?: Prisma.Conversa_finalizacaoListRelationFilter
   conversa_leitura?: Prisma.Conversa_leituraListRelationFilter
   conversa?: Prisma.XOR<Prisma.ConversaScalarRelationFilter, Prisma.conversaWhereInput>
   remetente?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
-  finalizacoes?: Prisma.Conversa_finalizacaoListRelationFilter
+  setores?: Prisma.XOR<Prisma.SetoresNullableScalarRelationFilter, Prisma.setoresWhereInput> | null
+  conversa_transferencia?: Prisma.XOR<Prisma.Conversa_transferenciaNullableScalarRelationFilter, Prisma.conversa_transferenciaWhereInput> | null
 }
 
 export type mensagemOrderByWithRelationInput = {
@@ -296,6 +330,9 @@ export type mensagemOrderByWithRelationInput = {
   remetente_id?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   sistema?: Prisma.SortOrder
+  visibilidade?: Prisma.SortOrder
+  transferencia_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  setor_id?: Prisma.SortOrderInput | Prisma.SortOrder
   conteudo?: Prisma.SortOrder
   enviada_em?: Prisma.SortOrder
   arquivo_nome?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -303,10 +340,12 @@ export type mensagemOrderByWithRelationInput = {
   arquivo_tipo?: Prisma.SortOrderInput | Prisma.SortOrder
   arquivo_mime?: Prisma.SortOrderInput | Prisma.SortOrder
   arquivo_tamanho?: Prisma.SortOrderInput | Prisma.SortOrder
+  finalizacoes?: Prisma.conversa_finalizacaoOrderByRelationAggregateInput
   conversa_leitura?: Prisma.conversa_leituraOrderByRelationAggregateInput
   conversa?: Prisma.conversaOrderByWithRelationInput
   remetente?: Prisma.cadastroOrderByWithRelationInput
-  finalizacoes?: Prisma.conversa_finalizacaoOrderByRelationAggregateInput
+  setores?: Prisma.setoresOrderByWithRelationInput
+  conversa_transferencia?: Prisma.conversa_transferenciaOrderByWithRelationInput
   _relevance?: Prisma.mensagemOrderByRelevanceInput
 }
 
@@ -319,6 +358,9 @@ export type mensagemWhereUniqueInput = Prisma.AtLeast<{
   remetente_id?: Prisma.IntFilter<"mensagem"> | number
   origem?: Prisma.Enummensagem_origemFilter<"mensagem"> | $Enums.mensagem_origem
   sistema?: Prisma.BoolFilter<"mensagem"> | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFilter<"mensagem"> | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.IntNullableFilter<"mensagem"> | number | null
+  setor_id?: Prisma.IntNullableFilter<"mensagem"> | number | null
   conteudo?: Prisma.StringFilter<"mensagem"> | string
   enviada_em?: Prisma.DateTimeFilter<"mensagem"> | Date | string
   arquivo_nome?: Prisma.StringNullableFilter<"mensagem"> | string | null
@@ -326,10 +368,12 @@ export type mensagemWhereUniqueInput = Prisma.AtLeast<{
   arquivo_tipo?: Prisma.StringNullableFilter<"mensagem"> | string | null
   arquivo_mime?: Prisma.StringNullableFilter<"mensagem"> | string | null
   arquivo_tamanho?: Prisma.IntNullableFilter<"mensagem"> | number | null
+  finalizacoes?: Prisma.Conversa_finalizacaoListRelationFilter
   conversa_leitura?: Prisma.Conversa_leituraListRelationFilter
   conversa?: Prisma.XOR<Prisma.ConversaScalarRelationFilter, Prisma.conversaWhereInput>
   remetente?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
-  finalizacoes?: Prisma.Conversa_finalizacaoListRelationFilter
+  setores?: Prisma.XOR<Prisma.SetoresNullableScalarRelationFilter, Prisma.setoresWhereInput> | null
+  conversa_transferencia?: Prisma.XOR<Prisma.Conversa_transferenciaNullableScalarRelationFilter, Prisma.conversa_transferenciaWhereInput> | null
 }, "id">
 
 export type mensagemOrderByWithAggregationInput = {
@@ -338,6 +382,9 @@ export type mensagemOrderByWithAggregationInput = {
   remetente_id?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   sistema?: Prisma.SortOrder
+  visibilidade?: Prisma.SortOrder
+  transferencia_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  setor_id?: Prisma.SortOrderInput | Prisma.SortOrder
   conteudo?: Prisma.SortOrder
   enviada_em?: Prisma.SortOrder
   arquivo_nome?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -361,6 +408,9 @@ export type mensagemScalarWhereWithAggregatesInput = {
   remetente_id?: Prisma.IntWithAggregatesFilter<"mensagem"> | number
   origem?: Prisma.Enummensagem_origemWithAggregatesFilter<"mensagem"> | $Enums.mensagem_origem
   sistema?: Prisma.BoolWithAggregatesFilter<"mensagem"> | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeWithAggregatesFilter<"mensagem"> | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.IntNullableWithAggregatesFilter<"mensagem"> | number | null
+  setor_id?: Prisma.IntNullableWithAggregatesFilter<"mensagem"> | number | null
   conteudo?: Prisma.StringWithAggregatesFilter<"mensagem"> | string
   enviada_em?: Prisma.DateTimeWithAggregatesFilter<"mensagem"> | Date | string
   arquivo_nome?: Prisma.StringNullableWithAggregatesFilter<"mensagem"> | string | null
@@ -373,6 +423,7 @@ export type mensagemScalarWhereWithAggregatesInput = {
 export type mensagemCreateInput = {
   origem: $Enums.mensagem_origem
   sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
   conteudo: string
   enviada_em?: Date | string
   arquivo_nome?: string | null
@@ -380,10 +431,12 @@ export type mensagemCreateInput = {
   arquivo_tipo?: string | null
   arquivo_mime?: string | null
   arquivo_tamanho?: number | null
+  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutUltima_mensagemInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutMensagemInput
   conversa: Prisma.conversaCreateNestedOneWithoutMensagensInput
   remetente: Prisma.cadastroCreateNestedOneWithoutMensagens_enviadasInput
-  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutUltima_mensagemInput
+  setores?: Prisma.setoresCreateNestedOneWithoutMensagemInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedOneWithoutMensagemInput
 }
 
 export type mensagemUncheckedCreateInput = {
@@ -392,6 +445,9 @@ export type mensagemUncheckedCreateInput = {
   remetente_id: number
   origem: $Enums.mensagem_origem
   sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  transferencia_id?: number | null
+  setor_id?: number | null
   conteudo: string
   enviada_em?: Date | string
   arquivo_nome?: string | null
@@ -399,13 +455,14 @@ export type mensagemUncheckedCreateInput = {
   arquivo_tipo?: string | null
   arquivo_mime?: string | null
   arquivo_tamanho?: number | null
-  conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutMensagemInput
   finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutUltima_mensagemInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutMensagemInput
 }
 
 export type mensagemUpdateInput = {
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -413,10 +470,12 @@ export type mensagemUpdateInput = {
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tamanho?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutUltima_mensagemNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutMensagemNestedInput
   conversa?: Prisma.conversaUpdateOneRequiredWithoutMensagensNestedInput
   remetente?: Prisma.cadastroUpdateOneRequiredWithoutMensagens_enviadasNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutUltima_mensagemNestedInput
+  setores?: Prisma.setoresUpdateOneWithoutMensagemNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateOneWithoutMensagemNestedInput
 }
 
 export type mensagemUncheckedUpdateInput = {
@@ -425,6 +484,9 @@ export type mensagemUncheckedUpdateInput = {
   remetente_id?: Prisma.IntFieldUpdateOperationsInput | number
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -432,8 +494,8 @@ export type mensagemUncheckedUpdateInput = {
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tamanho?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutMensagemNestedInput
   finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutUltima_mensagemNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutMensagemNestedInput
 }
 
 export type mensagemCreateManyInput = {
@@ -442,6 +504,9 @@ export type mensagemCreateManyInput = {
   remetente_id: number
   origem: $Enums.mensagem_origem
   sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  transferencia_id?: number | null
+  setor_id?: number | null
   conteudo: string
   enviada_em?: Date | string
   arquivo_nome?: string | null
@@ -454,6 +519,7 @@ export type mensagemCreateManyInput = {
 export type mensagemUpdateManyMutationInput = {
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -469,6 +535,9 @@ export type mensagemUncheckedUpdateManyInput = {
   remetente_id?: Prisma.IntFieldUpdateOperationsInput | number
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -500,6 +569,9 @@ export type mensagemCountOrderByAggregateInput = {
   remetente_id?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   sistema?: Prisma.SortOrder
+  visibilidade?: Prisma.SortOrder
+  transferencia_id?: Prisma.SortOrder
+  setor_id?: Prisma.SortOrder
   conteudo?: Prisma.SortOrder
   enviada_em?: Prisma.SortOrder
   arquivo_nome?: Prisma.SortOrder
@@ -513,6 +585,8 @@ export type mensagemAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   conversa_id?: Prisma.SortOrder
   remetente_id?: Prisma.SortOrder
+  transferencia_id?: Prisma.SortOrder
+  setor_id?: Prisma.SortOrder
   arquivo_tamanho?: Prisma.SortOrder
 }
 
@@ -522,6 +596,9 @@ export type mensagemMaxOrderByAggregateInput = {
   remetente_id?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   sistema?: Prisma.SortOrder
+  visibilidade?: Prisma.SortOrder
+  transferencia_id?: Prisma.SortOrder
+  setor_id?: Prisma.SortOrder
   conteudo?: Prisma.SortOrder
   enviada_em?: Prisma.SortOrder
   arquivo_nome?: Prisma.SortOrder
@@ -537,6 +614,9 @@ export type mensagemMinOrderByAggregateInput = {
   remetente_id?: Prisma.SortOrder
   origem?: Prisma.SortOrder
   sistema?: Prisma.SortOrder
+  visibilidade?: Prisma.SortOrder
+  transferencia_id?: Prisma.SortOrder
+  setor_id?: Prisma.SortOrder
   conteudo?: Prisma.SortOrder
   enviada_em?: Prisma.SortOrder
   arquivo_nome?: Prisma.SortOrder
@@ -550,6 +630,8 @@ export type mensagemSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   conversa_id?: Prisma.SortOrder
   remetente_id?: Prisma.SortOrder
+  transferencia_id?: Prisma.SortOrder
+  setor_id?: Prisma.SortOrder
   arquivo_tamanho?: Prisma.SortOrder
 }
 
@@ -646,6 +728,52 @@ export type Enummensagem_origemFieldUpdateOperationsInput = {
   set?: $Enums.mensagem_origem
 }
 
+export type Enummensagem_visibilidadeFieldUpdateOperationsInput = {
+  set?: $Enums.mensagem_visibilidade
+}
+
+export type mensagemCreateNestedManyWithoutSetoresInput = {
+  create?: Prisma.XOR<Prisma.mensagemCreateWithoutSetoresInput, Prisma.mensagemUncheckedCreateWithoutSetoresInput> | Prisma.mensagemCreateWithoutSetoresInput[] | Prisma.mensagemUncheckedCreateWithoutSetoresInput[]
+  connectOrCreate?: Prisma.mensagemCreateOrConnectWithoutSetoresInput | Prisma.mensagemCreateOrConnectWithoutSetoresInput[]
+  createMany?: Prisma.mensagemCreateManySetoresInputEnvelope
+  connect?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+}
+
+export type mensagemUncheckedCreateNestedManyWithoutSetoresInput = {
+  create?: Prisma.XOR<Prisma.mensagemCreateWithoutSetoresInput, Prisma.mensagemUncheckedCreateWithoutSetoresInput> | Prisma.mensagemCreateWithoutSetoresInput[] | Prisma.mensagemUncheckedCreateWithoutSetoresInput[]
+  connectOrCreate?: Prisma.mensagemCreateOrConnectWithoutSetoresInput | Prisma.mensagemCreateOrConnectWithoutSetoresInput[]
+  createMany?: Prisma.mensagemCreateManySetoresInputEnvelope
+  connect?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+}
+
+export type mensagemUpdateManyWithoutSetoresNestedInput = {
+  create?: Prisma.XOR<Prisma.mensagemCreateWithoutSetoresInput, Prisma.mensagemUncheckedCreateWithoutSetoresInput> | Prisma.mensagemCreateWithoutSetoresInput[] | Prisma.mensagemUncheckedCreateWithoutSetoresInput[]
+  connectOrCreate?: Prisma.mensagemCreateOrConnectWithoutSetoresInput | Prisma.mensagemCreateOrConnectWithoutSetoresInput[]
+  upsert?: Prisma.mensagemUpsertWithWhereUniqueWithoutSetoresInput | Prisma.mensagemUpsertWithWhereUniqueWithoutSetoresInput[]
+  createMany?: Prisma.mensagemCreateManySetoresInputEnvelope
+  set?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  disconnect?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  delete?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  connect?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  update?: Prisma.mensagemUpdateWithWhereUniqueWithoutSetoresInput | Prisma.mensagemUpdateWithWhereUniqueWithoutSetoresInput[]
+  updateMany?: Prisma.mensagemUpdateManyWithWhereWithoutSetoresInput | Prisma.mensagemUpdateManyWithWhereWithoutSetoresInput[]
+  deleteMany?: Prisma.mensagemScalarWhereInput | Prisma.mensagemScalarWhereInput[]
+}
+
+export type mensagemUncheckedUpdateManyWithoutSetoresNestedInput = {
+  create?: Prisma.XOR<Prisma.mensagemCreateWithoutSetoresInput, Prisma.mensagemUncheckedCreateWithoutSetoresInput> | Prisma.mensagemCreateWithoutSetoresInput[] | Prisma.mensagemUncheckedCreateWithoutSetoresInput[]
+  connectOrCreate?: Prisma.mensagemCreateOrConnectWithoutSetoresInput | Prisma.mensagemCreateOrConnectWithoutSetoresInput[]
+  upsert?: Prisma.mensagemUpsertWithWhereUniqueWithoutSetoresInput | Prisma.mensagemUpsertWithWhereUniqueWithoutSetoresInput[]
+  createMany?: Prisma.mensagemCreateManySetoresInputEnvelope
+  set?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  disconnect?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  delete?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  connect?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  update?: Prisma.mensagemUpdateWithWhereUniqueWithoutSetoresInput | Prisma.mensagemUpdateWithWhereUniqueWithoutSetoresInput[]
+  updateMany?: Prisma.mensagemUpdateManyWithWhereWithoutSetoresInput | Prisma.mensagemUpdateManyWithWhereWithoutSetoresInput[]
+  deleteMany?: Prisma.mensagemScalarWhereInput | Prisma.mensagemScalarWhereInput[]
+}
+
 export type mensagemCreateNestedOneWithoutConversa_leituraInput = {
   create?: Prisma.XOR<Prisma.mensagemCreateWithoutConversa_leituraInput, Prisma.mensagemUncheckedCreateWithoutConversa_leituraInput>
   connectOrCreate?: Prisma.mensagemCreateOrConnectWithoutConversa_leituraInput
@@ -678,9 +806,52 @@ export type mensagemUpdateOneWithoutFinalizacoesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.mensagemUpdateToOneWithWhereWithoutFinalizacoesInput, Prisma.mensagemUpdateWithoutFinalizacoesInput>, Prisma.mensagemUncheckedUpdateWithoutFinalizacoesInput>
 }
 
+export type mensagemCreateNestedManyWithoutConversa_transferenciaInput = {
+  create?: Prisma.XOR<Prisma.mensagemCreateWithoutConversa_transferenciaInput, Prisma.mensagemUncheckedCreateWithoutConversa_transferenciaInput> | Prisma.mensagemCreateWithoutConversa_transferenciaInput[] | Prisma.mensagemUncheckedCreateWithoutConversa_transferenciaInput[]
+  connectOrCreate?: Prisma.mensagemCreateOrConnectWithoutConversa_transferenciaInput | Prisma.mensagemCreateOrConnectWithoutConversa_transferenciaInput[]
+  createMany?: Prisma.mensagemCreateManyConversa_transferenciaInputEnvelope
+  connect?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+}
+
+export type mensagemUncheckedCreateNestedManyWithoutConversa_transferenciaInput = {
+  create?: Prisma.XOR<Prisma.mensagemCreateWithoutConversa_transferenciaInput, Prisma.mensagemUncheckedCreateWithoutConversa_transferenciaInput> | Prisma.mensagemCreateWithoutConversa_transferenciaInput[] | Prisma.mensagemUncheckedCreateWithoutConversa_transferenciaInput[]
+  connectOrCreate?: Prisma.mensagemCreateOrConnectWithoutConversa_transferenciaInput | Prisma.mensagemCreateOrConnectWithoutConversa_transferenciaInput[]
+  createMany?: Prisma.mensagemCreateManyConversa_transferenciaInputEnvelope
+  connect?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+}
+
+export type mensagemUpdateManyWithoutConversa_transferenciaNestedInput = {
+  create?: Prisma.XOR<Prisma.mensagemCreateWithoutConversa_transferenciaInput, Prisma.mensagemUncheckedCreateWithoutConversa_transferenciaInput> | Prisma.mensagemCreateWithoutConversa_transferenciaInput[] | Prisma.mensagemUncheckedCreateWithoutConversa_transferenciaInput[]
+  connectOrCreate?: Prisma.mensagemCreateOrConnectWithoutConversa_transferenciaInput | Prisma.mensagemCreateOrConnectWithoutConversa_transferenciaInput[]
+  upsert?: Prisma.mensagemUpsertWithWhereUniqueWithoutConversa_transferenciaInput | Prisma.mensagemUpsertWithWhereUniqueWithoutConversa_transferenciaInput[]
+  createMany?: Prisma.mensagemCreateManyConversa_transferenciaInputEnvelope
+  set?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  disconnect?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  delete?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  connect?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  update?: Prisma.mensagemUpdateWithWhereUniqueWithoutConversa_transferenciaInput | Prisma.mensagemUpdateWithWhereUniqueWithoutConversa_transferenciaInput[]
+  updateMany?: Prisma.mensagemUpdateManyWithWhereWithoutConversa_transferenciaInput | Prisma.mensagemUpdateManyWithWhereWithoutConversa_transferenciaInput[]
+  deleteMany?: Prisma.mensagemScalarWhereInput | Prisma.mensagemScalarWhereInput[]
+}
+
+export type mensagemUncheckedUpdateManyWithoutConversa_transferenciaNestedInput = {
+  create?: Prisma.XOR<Prisma.mensagemCreateWithoutConversa_transferenciaInput, Prisma.mensagemUncheckedCreateWithoutConversa_transferenciaInput> | Prisma.mensagemCreateWithoutConversa_transferenciaInput[] | Prisma.mensagemUncheckedCreateWithoutConversa_transferenciaInput[]
+  connectOrCreate?: Prisma.mensagemCreateOrConnectWithoutConversa_transferenciaInput | Prisma.mensagemCreateOrConnectWithoutConversa_transferenciaInput[]
+  upsert?: Prisma.mensagemUpsertWithWhereUniqueWithoutConversa_transferenciaInput | Prisma.mensagemUpsertWithWhereUniqueWithoutConversa_transferenciaInput[]
+  createMany?: Prisma.mensagemCreateManyConversa_transferenciaInputEnvelope
+  set?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  disconnect?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  delete?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  connect?: Prisma.mensagemWhereUniqueInput | Prisma.mensagemWhereUniqueInput[]
+  update?: Prisma.mensagemUpdateWithWhereUniqueWithoutConversa_transferenciaInput | Prisma.mensagemUpdateWithWhereUniqueWithoutConversa_transferenciaInput[]
+  updateMany?: Prisma.mensagemUpdateManyWithWhereWithoutConversa_transferenciaInput | Prisma.mensagemUpdateManyWithWhereWithoutConversa_transferenciaInput[]
+  deleteMany?: Prisma.mensagemScalarWhereInput | Prisma.mensagemScalarWhereInput[]
+}
+
 export type mensagemCreateWithoutRemetenteInput = {
   origem: $Enums.mensagem_origem
   sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
   conteudo: string
   enviada_em?: Date | string
   arquivo_nome?: string | null
@@ -688,9 +859,11 @@ export type mensagemCreateWithoutRemetenteInput = {
   arquivo_tipo?: string | null
   arquivo_mime?: string | null
   arquivo_tamanho?: number | null
+  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutUltima_mensagemInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutMensagemInput
   conversa: Prisma.conversaCreateNestedOneWithoutMensagensInput
-  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutUltima_mensagemInput
+  setores?: Prisma.setoresCreateNestedOneWithoutMensagemInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedOneWithoutMensagemInput
 }
 
 export type mensagemUncheckedCreateWithoutRemetenteInput = {
@@ -698,6 +871,9 @@ export type mensagemUncheckedCreateWithoutRemetenteInput = {
   conversa_id: number
   origem: $Enums.mensagem_origem
   sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  transferencia_id?: number | null
+  setor_id?: number | null
   conteudo: string
   enviada_em?: Date | string
   arquivo_nome?: string | null
@@ -705,8 +881,8 @@ export type mensagemUncheckedCreateWithoutRemetenteInput = {
   arquivo_tipo?: string | null
   arquivo_mime?: string | null
   arquivo_tamanho?: number | null
-  conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutMensagemInput
   finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutUltima_mensagemInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutMensagemInput
 }
 
 export type mensagemCreateOrConnectWithoutRemetenteInput = {
@@ -744,6 +920,9 @@ export type mensagemScalarWhereInput = {
   remetente_id?: Prisma.IntFilter<"mensagem"> | number
   origem?: Prisma.Enummensagem_origemFilter<"mensagem"> | $Enums.mensagem_origem
   sistema?: Prisma.BoolFilter<"mensagem"> | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFilter<"mensagem"> | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.IntNullableFilter<"mensagem"> | number | null
+  setor_id?: Prisma.IntNullableFilter<"mensagem"> | number | null
   conteudo?: Prisma.StringFilter<"mensagem"> | string
   enviada_em?: Prisma.DateTimeFilter<"mensagem"> | Date | string
   arquivo_nome?: Prisma.StringNullableFilter<"mensagem"> | string | null
@@ -756,6 +935,7 @@ export type mensagemScalarWhereInput = {
 export type mensagemCreateWithoutConversaInput = {
   origem: $Enums.mensagem_origem
   sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
   conteudo: string
   enviada_em?: Date | string
   arquivo_nome?: string | null
@@ -763,9 +943,11 @@ export type mensagemCreateWithoutConversaInput = {
   arquivo_tipo?: string | null
   arquivo_mime?: string | null
   arquivo_tamanho?: number | null
+  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutUltima_mensagemInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutMensagemInput
   remetente: Prisma.cadastroCreateNestedOneWithoutMensagens_enviadasInput
-  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutUltima_mensagemInput
+  setores?: Prisma.setoresCreateNestedOneWithoutMensagemInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedOneWithoutMensagemInput
 }
 
 export type mensagemUncheckedCreateWithoutConversaInput = {
@@ -773,6 +955,9 @@ export type mensagemUncheckedCreateWithoutConversaInput = {
   remetente_id: number
   origem: $Enums.mensagem_origem
   sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  transferencia_id?: number | null
+  setor_id?: number | null
   conteudo: string
   enviada_em?: Date | string
   arquivo_nome?: string | null
@@ -780,8 +965,8 @@ export type mensagemUncheckedCreateWithoutConversaInput = {
   arquivo_tipo?: string | null
   arquivo_mime?: string | null
   arquivo_tamanho?: number | null
-  conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutMensagemInput
   finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutUltima_mensagemInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutMensagemInput
 }
 
 export type mensagemCreateOrConnectWithoutConversaInput = {
@@ -810,9 +995,10 @@ export type mensagemUpdateManyWithWhereWithoutConversaInput = {
   data: Prisma.XOR<Prisma.mensagemUpdateManyMutationInput, Prisma.mensagemUncheckedUpdateManyWithoutConversaInput>
 }
 
-export type mensagemCreateWithoutConversa_leituraInput = {
+export type mensagemCreateWithoutSetoresInput = {
   origem: $Enums.mensagem_origem
   sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
   conteudo: string
   enviada_em?: Date | string
   arquivo_nome?: string | null
@@ -820,9 +1006,74 @@ export type mensagemCreateWithoutConversa_leituraInput = {
   arquivo_tipo?: string | null
   arquivo_mime?: string | null
   arquivo_tamanho?: number | null
+  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutUltima_mensagemInput
+  conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutMensagemInput
   conversa: Prisma.conversaCreateNestedOneWithoutMensagensInput
   remetente: Prisma.cadastroCreateNestedOneWithoutMensagens_enviadasInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedOneWithoutMensagemInput
+}
+
+export type mensagemUncheckedCreateWithoutSetoresInput = {
+  id?: number
+  conversa_id: number
+  remetente_id: number
+  origem: $Enums.mensagem_origem
+  sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  transferencia_id?: number | null
+  conteudo: string
+  enviada_em?: Date | string
+  arquivo_nome?: string | null
+  arquivo_url?: string | null
+  arquivo_tipo?: string | null
+  arquivo_mime?: string | null
+  arquivo_tamanho?: number | null
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutUltima_mensagemInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutMensagemInput
+}
+
+export type mensagemCreateOrConnectWithoutSetoresInput = {
+  where: Prisma.mensagemWhereUniqueInput
+  create: Prisma.XOR<Prisma.mensagemCreateWithoutSetoresInput, Prisma.mensagemUncheckedCreateWithoutSetoresInput>
+}
+
+export type mensagemCreateManySetoresInputEnvelope = {
+  data: Prisma.mensagemCreateManySetoresInput | Prisma.mensagemCreateManySetoresInput[]
+  skipDuplicates?: boolean
+}
+
+export type mensagemUpsertWithWhereUniqueWithoutSetoresInput = {
+  where: Prisma.mensagemWhereUniqueInput
+  update: Prisma.XOR<Prisma.mensagemUpdateWithoutSetoresInput, Prisma.mensagemUncheckedUpdateWithoutSetoresInput>
+  create: Prisma.XOR<Prisma.mensagemCreateWithoutSetoresInput, Prisma.mensagemUncheckedCreateWithoutSetoresInput>
+}
+
+export type mensagemUpdateWithWhereUniqueWithoutSetoresInput = {
+  where: Prisma.mensagemWhereUniqueInput
+  data: Prisma.XOR<Prisma.mensagemUpdateWithoutSetoresInput, Prisma.mensagemUncheckedUpdateWithoutSetoresInput>
+}
+
+export type mensagemUpdateManyWithWhereWithoutSetoresInput = {
+  where: Prisma.mensagemScalarWhereInput
+  data: Prisma.XOR<Prisma.mensagemUpdateManyMutationInput, Prisma.mensagemUncheckedUpdateManyWithoutSetoresInput>
+}
+
+export type mensagemCreateWithoutConversa_leituraInput = {
+  origem: $Enums.mensagem_origem
+  sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  conteudo: string
+  enviada_em?: Date | string
+  arquivo_nome?: string | null
+  arquivo_url?: string | null
+  arquivo_tipo?: string | null
+  arquivo_mime?: string | null
+  arquivo_tamanho?: number | null
   finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutUltima_mensagemInput
+  conversa: Prisma.conversaCreateNestedOneWithoutMensagensInput
+  remetente: Prisma.cadastroCreateNestedOneWithoutMensagens_enviadasInput
+  setores?: Prisma.setoresCreateNestedOneWithoutMensagemInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedOneWithoutMensagemInput
 }
 
 export type mensagemUncheckedCreateWithoutConversa_leituraInput = {
@@ -831,6 +1082,9 @@ export type mensagemUncheckedCreateWithoutConversa_leituraInput = {
   remetente_id: number
   origem: $Enums.mensagem_origem
   sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  transferencia_id?: number | null
+  setor_id?: number | null
   conteudo: string
   enviada_em?: Date | string
   arquivo_nome?: string | null
@@ -860,6 +1114,7 @@ export type mensagemUpdateToOneWithWhereWithoutConversa_leituraInput = {
 export type mensagemUpdateWithoutConversa_leituraInput = {
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -867,9 +1122,11 @@ export type mensagemUpdateWithoutConversa_leituraInput = {
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tamanho?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutUltima_mensagemNestedInput
   conversa?: Prisma.conversaUpdateOneRequiredWithoutMensagensNestedInput
   remetente?: Prisma.cadastroUpdateOneRequiredWithoutMensagens_enviadasNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutUltima_mensagemNestedInput
+  setores?: Prisma.setoresUpdateOneWithoutMensagemNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateOneWithoutMensagemNestedInput
 }
 
 export type mensagemUncheckedUpdateWithoutConversa_leituraInput = {
@@ -878,6 +1135,9 @@ export type mensagemUncheckedUpdateWithoutConversa_leituraInput = {
   remetente_id?: Prisma.IntFieldUpdateOperationsInput | number
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -891,6 +1151,7 @@ export type mensagemUncheckedUpdateWithoutConversa_leituraInput = {
 export type mensagemCreateWithoutFinalizacoesInput = {
   origem: $Enums.mensagem_origem
   sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
   conteudo: string
   enviada_em?: Date | string
   arquivo_nome?: string | null
@@ -901,6 +1162,8 @@ export type mensagemCreateWithoutFinalizacoesInput = {
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutMensagemInput
   conversa: Prisma.conversaCreateNestedOneWithoutMensagensInput
   remetente: Prisma.cadastroCreateNestedOneWithoutMensagens_enviadasInput
+  setores?: Prisma.setoresCreateNestedOneWithoutMensagemInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedOneWithoutMensagemInput
 }
 
 export type mensagemUncheckedCreateWithoutFinalizacoesInput = {
@@ -909,6 +1172,9 @@ export type mensagemUncheckedCreateWithoutFinalizacoesInput = {
   remetente_id: number
   origem: $Enums.mensagem_origem
   sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  transferencia_id?: number | null
+  setor_id?: number | null
   conteudo: string
   enviada_em?: Date | string
   arquivo_nome?: string | null
@@ -938,6 +1204,7 @@ export type mensagemUpdateToOneWithWhereWithoutFinalizacoesInput = {
 export type mensagemUpdateWithoutFinalizacoesInput = {
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -948,6 +1215,8 @@ export type mensagemUpdateWithoutFinalizacoesInput = {
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutMensagemNestedInput
   conversa?: Prisma.conversaUpdateOneRequiredWithoutMensagensNestedInput
   remetente?: Prisma.cadastroUpdateOneRequiredWithoutMensagens_enviadasNestedInput
+  setores?: Prisma.setoresUpdateOneWithoutMensagemNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateOneWithoutMensagemNestedInput
 }
 
 export type mensagemUncheckedUpdateWithoutFinalizacoesInput = {
@@ -956,6 +1225,9 @@ export type mensagemUncheckedUpdateWithoutFinalizacoesInput = {
   remetente_id?: Prisma.IntFieldUpdateOperationsInput | number
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -966,11 +1238,77 @@ export type mensagemUncheckedUpdateWithoutFinalizacoesInput = {
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutMensagemNestedInput
 }
 
+export type mensagemCreateWithoutConversa_transferenciaInput = {
+  origem: $Enums.mensagem_origem
+  sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  conteudo: string
+  enviada_em?: Date | string
+  arquivo_nome?: string | null
+  arquivo_url?: string | null
+  arquivo_tipo?: string | null
+  arquivo_mime?: string | null
+  arquivo_tamanho?: number | null
+  finalizacoes?: Prisma.conversa_finalizacaoCreateNestedManyWithoutUltima_mensagemInput
+  conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutMensagemInput
+  conversa: Prisma.conversaCreateNestedOneWithoutMensagensInput
+  remetente: Prisma.cadastroCreateNestedOneWithoutMensagens_enviadasInput
+  setores?: Prisma.setoresCreateNestedOneWithoutMensagemInput
+}
+
+export type mensagemUncheckedCreateWithoutConversa_transferenciaInput = {
+  id?: number
+  conversa_id: number
+  remetente_id: number
+  origem: $Enums.mensagem_origem
+  sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  setor_id?: number | null
+  conteudo: string
+  enviada_em?: Date | string
+  arquivo_nome?: string | null
+  arquivo_url?: string | null
+  arquivo_tipo?: string | null
+  arquivo_mime?: string | null
+  arquivo_tamanho?: number | null
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutUltima_mensagemInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutMensagemInput
+}
+
+export type mensagemCreateOrConnectWithoutConversa_transferenciaInput = {
+  where: Prisma.mensagemWhereUniqueInput
+  create: Prisma.XOR<Prisma.mensagemCreateWithoutConversa_transferenciaInput, Prisma.mensagemUncheckedCreateWithoutConversa_transferenciaInput>
+}
+
+export type mensagemCreateManyConversa_transferenciaInputEnvelope = {
+  data: Prisma.mensagemCreateManyConversa_transferenciaInput | Prisma.mensagemCreateManyConversa_transferenciaInput[]
+  skipDuplicates?: boolean
+}
+
+export type mensagemUpsertWithWhereUniqueWithoutConversa_transferenciaInput = {
+  where: Prisma.mensagemWhereUniqueInput
+  update: Prisma.XOR<Prisma.mensagemUpdateWithoutConversa_transferenciaInput, Prisma.mensagemUncheckedUpdateWithoutConversa_transferenciaInput>
+  create: Prisma.XOR<Prisma.mensagemCreateWithoutConversa_transferenciaInput, Prisma.mensagemUncheckedCreateWithoutConversa_transferenciaInput>
+}
+
+export type mensagemUpdateWithWhereUniqueWithoutConversa_transferenciaInput = {
+  where: Prisma.mensagemWhereUniqueInput
+  data: Prisma.XOR<Prisma.mensagemUpdateWithoutConversa_transferenciaInput, Prisma.mensagemUncheckedUpdateWithoutConversa_transferenciaInput>
+}
+
+export type mensagemUpdateManyWithWhereWithoutConversa_transferenciaInput = {
+  where: Prisma.mensagemScalarWhereInput
+  data: Prisma.XOR<Prisma.mensagemUpdateManyMutationInput, Prisma.mensagemUncheckedUpdateManyWithoutConversa_transferenciaInput>
+}
+
 export type mensagemCreateManyRemetenteInput = {
   id?: number
   conversa_id: number
   origem: $Enums.mensagem_origem
   sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  transferencia_id?: number | null
+  setor_id?: number | null
   conteudo: string
   enviada_em?: Date | string
   arquivo_nome?: string | null
@@ -983,6 +1321,7 @@ export type mensagemCreateManyRemetenteInput = {
 export type mensagemUpdateWithoutRemetenteInput = {
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -990,9 +1329,11 @@ export type mensagemUpdateWithoutRemetenteInput = {
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tamanho?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutUltima_mensagemNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutMensagemNestedInput
   conversa?: Prisma.conversaUpdateOneRequiredWithoutMensagensNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutUltima_mensagemNestedInput
+  setores?: Prisma.setoresUpdateOneWithoutMensagemNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateOneWithoutMensagemNestedInput
 }
 
 export type mensagemUncheckedUpdateWithoutRemetenteInput = {
@@ -1000,6 +1341,9 @@ export type mensagemUncheckedUpdateWithoutRemetenteInput = {
   conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1007,8 +1351,8 @@ export type mensagemUncheckedUpdateWithoutRemetenteInput = {
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tamanho?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutMensagemNestedInput
   finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutUltima_mensagemNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutMensagemNestedInput
 }
 
 export type mensagemUncheckedUpdateManyWithoutRemetenteInput = {
@@ -1016,6 +1360,9 @@ export type mensagemUncheckedUpdateManyWithoutRemetenteInput = {
   conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1030,6 +1377,9 @@ export type mensagemCreateManyConversaInput = {
   remetente_id: number
   origem: $Enums.mensagem_origem
   sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  transferencia_id?: number | null
+  setor_id?: number | null
   conteudo: string
   enviada_em?: Date | string
   arquivo_nome?: string | null
@@ -1042,6 +1392,7 @@ export type mensagemCreateManyConversaInput = {
 export type mensagemUpdateWithoutConversaInput = {
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1049,9 +1400,11 @@ export type mensagemUpdateWithoutConversaInput = {
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tamanho?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutUltima_mensagemNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutMensagemNestedInput
   remetente?: Prisma.cadastroUpdateOneRequiredWithoutMensagens_enviadasNestedInput
-  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutUltima_mensagemNestedInput
+  setores?: Prisma.setoresUpdateOneWithoutMensagemNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateOneWithoutMensagemNestedInput
 }
 
 export type mensagemUncheckedUpdateWithoutConversaInput = {
@@ -1059,6 +1412,9 @@ export type mensagemUncheckedUpdateWithoutConversaInput = {
   remetente_id?: Prisma.IntFieldUpdateOperationsInput | number
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1066,8 +1422,8 @@ export type mensagemUncheckedUpdateWithoutConversaInput = {
   arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   arquivo_tamanho?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutMensagemNestedInput
   finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutUltima_mensagemNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutMensagemNestedInput
 }
 
 export type mensagemUncheckedUpdateManyWithoutConversaInput = {
@@ -1075,6 +1431,151 @@ export type mensagemUncheckedUpdateManyWithoutConversaInput = {
   remetente_id?: Prisma.IntFieldUpdateOperationsInput | number
   origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
   sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  conteudo?: Prisma.StringFieldUpdateOperationsInput | string
+  enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tamanho?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type mensagemCreateManySetoresInput = {
+  id?: number
+  conversa_id: number
+  remetente_id: number
+  origem: $Enums.mensagem_origem
+  sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  transferencia_id?: number | null
+  conteudo: string
+  enviada_em?: Date | string
+  arquivo_nome?: string | null
+  arquivo_url?: string | null
+  arquivo_tipo?: string | null
+  arquivo_mime?: string | null
+  arquivo_tamanho?: number | null
+}
+
+export type mensagemUpdateWithoutSetoresInput = {
+  origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
+  sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  conteudo?: Prisma.StringFieldUpdateOperationsInput | string
+  enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tamanho?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutUltima_mensagemNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutMensagemNestedInput
+  conversa?: Prisma.conversaUpdateOneRequiredWithoutMensagensNestedInput
+  remetente?: Prisma.cadastroUpdateOneRequiredWithoutMensagens_enviadasNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateOneWithoutMensagemNestedInput
+}
+
+export type mensagemUncheckedUpdateWithoutSetoresInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
+  remetente_id?: Prisma.IntFieldUpdateOperationsInput | number
+  origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
+  sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  conteudo?: Prisma.StringFieldUpdateOperationsInput | string
+  enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tamanho?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutUltima_mensagemNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutMensagemNestedInput
+}
+
+export type mensagemUncheckedUpdateManyWithoutSetoresInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
+  remetente_id?: Prisma.IntFieldUpdateOperationsInput | number
+  origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
+  sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  transferencia_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  conteudo?: Prisma.StringFieldUpdateOperationsInput | string
+  enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tamanho?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+}
+
+export type mensagemCreateManyConversa_transferenciaInput = {
+  id?: number
+  conversa_id: number
+  remetente_id: number
+  origem: $Enums.mensagem_origem
+  sistema?: boolean
+  visibilidade?: $Enums.mensagem_visibilidade
+  setor_id?: number | null
+  conteudo: string
+  enviada_em?: Date | string
+  arquivo_nome?: string | null
+  arquivo_url?: string | null
+  arquivo_tipo?: string | null
+  arquivo_mime?: string | null
+  arquivo_tamanho?: number | null
+}
+
+export type mensagemUpdateWithoutConversa_transferenciaInput = {
+  origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
+  sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  conteudo?: Prisma.StringFieldUpdateOperationsInput | string
+  enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tamanho?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  finalizacoes?: Prisma.conversa_finalizacaoUpdateManyWithoutUltima_mensagemNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutMensagemNestedInput
+  conversa?: Prisma.conversaUpdateOneRequiredWithoutMensagensNestedInput
+  remetente?: Prisma.cadastroUpdateOneRequiredWithoutMensagens_enviadasNestedInput
+  setores?: Prisma.setoresUpdateOneWithoutMensagemNestedInput
+}
+
+export type mensagemUncheckedUpdateWithoutConversa_transferenciaInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
+  remetente_id?: Prisma.IntFieldUpdateOperationsInput | number
+  origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
+  sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  conteudo?: Prisma.StringFieldUpdateOperationsInput | string
+  enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tipo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_mime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  arquivo_tamanho?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  finalizacoes?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutUltima_mensagemNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutMensagemNestedInput
+}
+
+export type mensagemUncheckedUpdateManyWithoutConversa_transferenciaInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  conversa_id?: Prisma.IntFieldUpdateOperationsInput | number
+  remetente_id?: Prisma.IntFieldUpdateOperationsInput | number
+  origem?: Prisma.Enummensagem_origemFieldUpdateOperationsInput | $Enums.mensagem_origem
+  sistema?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibilidade?: Prisma.Enummensagem_visibilidadeFieldUpdateOperationsInput | $Enums.mensagem_visibilidade
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   conteudo?: Prisma.StringFieldUpdateOperationsInput | string
   enviada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   arquivo_nome?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1090,13 +1591,13 @@ export type mensagemUncheckedUpdateManyWithoutConversaInput = {
  */
 
 export type MensagemCountOutputType = {
-  conversa_leitura: number
   finalizacoes: number
+  conversa_leitura: number
 }
 
 export type MensagemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  conversa_leitura?: boolean | MensagemCountOutputTypeCountConversa_leituraArgs
   finalizacoes?: boolean | MensagemCountOutputTypeCountFinalizacoesArgs
+  conversa_leitura?: boolean | MensagemCountOutputTypeCountConversa_leituraArgs
 }
 
 /**
@@ -1112,15 +1613,15 @@ export type MensagemCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
 /**
  * MensagemCountOutputType without action
  */
-export type MensagemCountOutputTypeCountConversa_leituraArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.conversa_leituraWhereInput
+export type MensagemCountOutputTypeCountFinalizacoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.conversa_finalizacaoWhereInput
 }
 
 /**
  * MensagemCountOutputType without action
  */
-export type MensagemCountOutputTypeCountFinalizacoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.conversa_finalizacaoWhereInput
+export type MensagemCountOutputTypeCountConversa_leituraArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.conversa_leituraWhereInput
 }
 
 
@@ -1130,6 +1631,9 @@ export type mensagemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   remetente_id?: boolean
   origem?: boolean
   sistema?: boolean
+  visibilidade?: boolean
+  transferencia_id?: boolean
+  setor_id?: boolean
   conteudo?: boolean
   enviada_em?: boolean
   arquivo_nome?: boolean
@@ -1137,10 +1641,12 @@ export type mensagemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   arquivo_tipo?: boolean
   arquivo_mime?: boolean
   arquivo_tamanho?: boolean
+  finalizacoes?: boolean | Prisma.mensagem$finalizacoesArgs<ExtArgs>
   conversa_leitura?: boolean | Prisma.mensagem$conversa_leituraArgs<ExtArgs>
   conversa?: boolean | Prisma.conversaDefaultArgs<ExtArgs>
   remetente?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
-  finalizacoes?: boolean | Prisma.mensagem$finalizacoesArgs<ExtArgs>
+  setores?: boolean | Prisma.mensagem$setoresArgs<ExtArgs>
+  conversa_transferencia?: boolean | Prisma.mensagem$conversa_transferenciaArgs<ExtArgs>
   _count?: boolean | Prisma.MensagemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["mensagem"]>
 
@@ -1152,6 +1658,9 @@ export type mensagemSelectScalar = {
   remetente_id?: boolean
   origem?: boolean
   sistema?: boolean
+  visibilidade?: boolean
+  transferencia_id?: boolean
+  setor_id?: boolean
   conteudo?: boolean
   enviada_em?: boolean
   arquivo_nome?: boolean
@@ -1161,22 +1670,26 @@ export type mensagemSelectScalar = {
   arquivo_tamanho?: boolean
 }
 
-export type mensagemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversa_id" | "remetente_id" | "origem" | "sistema" | "conteudo" | "enviada_em" | "arquivo_nome" | "arquivo_url" | "arquivo_tipo" | "arquivo_mime" | "arquivo_tamanho", ExtArgs["result"]["mensagem"]>
+export type mensagemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversa_id" | "remetente_id" | "origem" | "sistema" | "visibilidade" | "transferencia_id" | "setor_id" | "conteudo" | "enviada_em" | "arquivo_nome" | "arquivo_url" | "arquivo_tipo" | "arquivo_mime" | "arquivo_tamanho", ExtArgs["result"]["mensagem"]>
 export type mensagemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  finalizacoes?: boolean | Prisma.mensagem$finalizacoesArgs<ExtArgs>
   conversa_leitura?: boolean | Prisma.mensagem$conversa_leituraArgs<ExtArgs>
   conversa?: boolean | Prisma.conversaDefaultArgs<ExtArgs>
   remetente?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
-  finalizacoes?: boolean | Prisma.mensagem$finalizacoesArgs<ExtArgs>
+  setores?: boolean | Prisma.mensagem$setoresArgs<ExtArgs>
+  conversa_transferencia?: boolean | Prisma.mensagem$conversa_transferenciaArgs<ExtArgs>
   _count?: boolean | Prisma.MensagemCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $mensagemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "mensagem"
   objects: {
+    finalizacoes: Prisma.$conversa_finalizacaoPayload<ExtArgs>[]
     conversa_leitura: Prisma.$conversa_leituraPayload<ExtArgs>[]
     conversa: Prisma.$conversaPayload<ExtArgs>
     remetente: Prisma.$cadastroPayload<ExtArgs>
-    finalizacoes: Prisma.$conversa_finalizacaoPayload<ExtArgs>[]
+    setores: Prisma.$setoresPayload<ExtArgs> | null
+    conversa_transferencia: Prisma.$conversa_transferenciaPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1184,6 +1697,9 @@ export type $mensagemPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     remetente_id: number
     origem: $Enums.mensagem_origem
     sistema: boolean
+    visibilidade: $Enums.mensagem_visibilidade
+    transferencia_id: number | null
+    setor_id: number | null
     conteudo: string
     enviada_em: Date
     arquivo_nome: string | null
@@ -1531,10 +2047,12 @@ readonly fields: mensagemFieldRefs;
  */
 export interface Prisma__mensagemClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  finalizacoes<T extends Prisma.mensagem$finalizacoesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.mensagem$finalizacoesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_finalizacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversa_leitura<T extends Prisma.mensagem$conversa_leituraArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.mensagem$conversa_leituraArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_leituraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversa<T extends Prisma.conversaDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.conversaDefaultArgs<ExtArgs>>): Prisma.Prisma__conversaClient<runtime.Types.Result.GetResult<Prisma.$conversaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   remetente<T extends Prisma.cadastroDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastroDefaultArgs<ExtArgs>>): Prisma.Prisma__cadastroClient<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  finalizacoes<T extends Prisma.mensagem$finalizacoesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.mensagem$finalizacoesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_finalizacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  setores<T extends Prisma.mensagem$setoresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.mensagem$setoresArgs<ExtArgs>>): Prisma.Prisma__setoresClient<runtime.Types.Result.GetResult<Prisma.$setoresPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  conversa_transferencia<T extends Prisma.mensagem$conversa_transferenciaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.mensagem$conversa_transferenciaArgs<ExtArgs>>): Prisma.Prisma__conversa_transferenciaClient<runtime.Types.Result.GetResult<Prisma.$conversa_transferenciaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1569,6 +2087,9 @@ export interface mensagemFieldRefs {
   readonly remetente_id: Prisma.FieldRef<"mensagem", 'Int'>
   readonly origem: Prisma.FieldRef<"mensagem", 'mensagem_origem'>
   readonly sistema: Prisma.FieldRef<"mensagem", 'Boolean'>
+  readonly visibilidade: Prisma.FieldRef<"mensagem", 'mensagem_visibilidade'>
+  readonly transferencia_id: Prisma.FieldRef<"mensagem", 'Int'>
+  readonly setor_id: Prisma.FieldRef<"mensagem", 'Int'>
   readonly conteudo: Prisma.FieldRef<"mensagem", 'String'>
   readonly enviada_em: Prisma.FieldRef<"mensagem", 'DateTime'>
   readonly arquivo_nome: Prisma.FieldRef<"mensagem", 'String'>
@@ -1924,6 +2445,30 @@ export type mensagemDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * mensagem.finalizacoes
+ */
+export type mensagem$finalizacoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the conversa_finalizacao
+   */
+  select?: Prisma.conversa_finalizacaoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the conversa_finalizacao
+   */
+  omit?: Prisma.conversa_finalizacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.conversa_finalizacaoInclude<ExtArgs> | null
+  where?: Prisma.conversa_finalizacaoWhereInput
+  orderBy?: Prisma.conversa_finalizacaoOrderByWithRelationInput | Prisma.conversa_finalizacaoOrderByWithRelationInput[]
+  cursor?: Prisma.conversa_finalizacaoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Conversa_finalizacaoScalarFieldEnum | Prisma.Conversa_finalizacaoScalarFieldEnum[]
+}
+
+/**
  * mensagem.conversa_leitura
  */
 export type mensagem$conversa_leituraArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1948,27 +2493,41 @@ export type mensagem$conversa_leituraArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
- * mensagem.finalizacoes
+ * mensagem.setores
  */
-export type mensagem$finalizacoesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type mensagem$setoresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the conversa_finalizacao
+   * Select specific fields to fetch from the setores
    */
-  select?: Prisma.conversa_finalizacaoSelect<ExtArgs> | null
+  select?: Prisma.setoresSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the conversa_finalizacao
+   * Omit specific fields from the setores
    */
-  omit?: Prisma.conversa_finalizacaoOmit<ExtArgs> | null
+  omit?: Prisma.setoresOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.conversa_finalizacaoInclude<ExtArgs> | null
-  where?: Prisma.conversa_finalizacaoWhereInput
-  orderBy?: Prisma.conversa_finalizacaoOrderByWithRelationInput | Prisma.conversa_finalizacaoOrderByWithRelationInput[]
-  cursor?: Prisma.conversa_finalizacaoWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.Conversa_finalizacaoScalarFieldEnum | Prisma.Conversa_finalizacaoScalarFieldEnum[]
+  include?: Prisma.setoresInclude<ExtArgs> | null
+  where?: Prisma.setoresWhereInput
+}
+
+/**
+ * mensagem.conversa_transferencia
+ */
+export type mensagem$conversa_transferenciaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the conversa_transferencia
+   */
+  select?: Prisma.conversa_transferenciaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the conversa_transferencia
+   */
+  omit?: Prisma.conversa_transferenciaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.conversa_transferenciaInclude<ExtArgs> | null
+  where?: Prisma.conversa_transferenciaWhereInput
 }
 
 /**

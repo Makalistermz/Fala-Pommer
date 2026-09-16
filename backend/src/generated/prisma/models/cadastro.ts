@@ -344,16 +344,17 @@ export type cadastroWhereInput = {
   desativado_por?: Prisma.IntNullableFilter<"cadastro"> | number | null
   motivo_desativacao?: Prisma.StringNullableFilter<"cadastro"> | string | null
   versao_token?: Prisma.IntFilter<"cadastro"> | number
+  avaliacoes_realizadas?: Prisma.AvaliacaoListRelationFilter
   responsavel_desativacao?: Prisma.XOR<Prisma.CadastroNullableScalarRelationFilter, Prisma.cadastroWhereInput> | null
   desativacoes_realizadas?: Prisma.CadastroListRelationFilter
   secretaria?: Prisma.XOR<Prisma.SecretariaNullableScalarRelationFilter, Prisma.secretariaWhereInput> | null
   setor?: Prisma.XOR<Prisma.SetoresNullableScalarRelationFilter, Prisma.setoresWhereInput> | null
   codigo_recuperacao_2fa?: Prisma.Codigo_recuperacao_2faListRelationFilter
+  finalizacoes_realizadas?: Prisma.Conversa_finalizacaoListRelationFilter
   conversa_leitura?: Prisma.Conversa_leituraListRelationFilter
   conversa_participante?: Prisma.Conversa_participanteListRelationFilter
   conversas_atendidas?: Prisma.Conversa_setorListRelationFilter
-  avaliacoes_realizadas?: Prisma.AvaliacaoListRelationFilter
-  finalizacoes_realizadas?: Prisma.Conversa_finalizacaoListRelationFilter
+  conversa_transferencia?: Prisma.Conversa_transferenciaListRelationFilter
   desafio_login_2fa?: Prisma.Desafio_login_2faListRelationFilter
   erro_autenticacao?: Prisma.Erro_autenticacaoListRelationFilter
   historicos_como_administrador?: Prisma.Historico_administrativoListRelationFilter
@@ -384,16 +385,17 @@ export type cadastroOrderByWithRelationInput = {
   desativado_por?: Prisma.SortOrderInput | Prisma.SortOrder
   motivo_desativacao?: Prisma.SortOrderInput | Prisma.SortOrder
   versao_token?: Prisma.SortOrder
+  avaliacoes_realizadas?: Prisma.avaliacaoOrderByRelationAggregateInput
   responsavel_desativacao?: Prisma.cadastroOrderByWithRelationInput
   desativacoes_realizadas?: Prisma.cadastroOrderByRelationAggregateInput
   secretaria?: Prisma.secretariaOrderByWithRelationInput
   setor?: Prisma.setoresOrderByWithRelationInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faOrderByRelationAggregateInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoOrderByRelationAggregateInput
   conversa_leitura?: Prisma.conversa_leituraOrderByRelationAggregateInput
   conversa_participante?: Prisma.conversa_participanteOrderByRelationAggregateInput
   conversas_atendidas?: Prisma.conversa_setorOrderByRelationAggregateInput
-  avaliacoes_realizadas?: Prisma.avaliacaoOrderByRelationAggregateInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoOrderByRelationAggregateInput
+  conversa_transferencia?: Prisma.conversa_transferenciaOrderByRelationAggregateInput
   desafio_login_2fa?: Prisma.desafio_login_2faOrderByRelationAggregateInput
   erro_autenticacao?: Prisma.erro_autenticacaoOrderByRelationAggregateInput
   historicos_como_administrador?: Prisma.historico_administrativoOrderByRelationAggregateInput
@@ -428,16 +430,17 @@ export type cadastroWhereUniqueInput = Prisma.AtLeast<{
   desativado_por?: Prisma.IntNullableFilter<"cadastro"> | number | null
   motivo_desativacao?: Prisma.StringNullableFilter<"cadastro"> | string | null
   versao_token?: Prisma.IntFilter<"cadastro"> | number
+  avaliacoes_realizadas?: Prisma.AvaliacaoListRelationFilter
   responsavel_desativacao?: Prisma.XOR<Prisma.CadastroNullableScalarRelationFilter, Prisma.cadastroWhereInput> | null
   desativacoes_realizadas?: Prisma.CadastroListRelationFilter
   secretaria?: Prisma.XOR<Prisma.SecretariaNullableScalarRelationFilter, Prisma.secretariaWhereInput> | null
   setor?: Prisma.XOR<Prisma.SetoresNullableScalarRelationFilter, Prisma.setoresWhereInput> | null
   codigo_recuperacao_2fa?: Prisma.Codigo_recuperacao_2faListRelationFilter
+  finalizacoes_realizadas?: Prisma.Conversa_finalizacaoListRelationFilter
   conversa_leitura?: Prisma.Conversa_leituraListRelationFilter
   conversa_participante?: Prisma.Conversa_participanteListRelationFilter
   conversas_atendidas?: Prisma.Conversa_setorListRelationFilter
-  avaliacoes_realizadas?: Prisma.AvaliacaoListRelationFilter
-  finalizacoes_realizadas?: Prisma.Conversa_finalizacaoListRelationFilter
+  conversa_transferencia?: Prisma.Conversa_transferenciaListRelationFilter
   desafio_login_2fa?: Prisma.Desafio_login_2faListRelationFilter
   erro_autenticacao?: Prisma.Erro_autenticacaoListRelationFilter
   historicos_como_administrador?: Prisma.Historico_administrativoListRelationFilter
@@ -516,16 +519,17 @@ export type cadastroCreateInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -556,13 +560,14 @@ export type cadastroUncheckedCreateInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -589,16 +594,17 @@ export type cadastroUpdateInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -629,13 +635,14 @@ export type cadastroUncheckedUpdateInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -1194,6 +1201,20 @@ export type cadastroUpdateOneRequiredWithoutFinalizacoes_realizadasNestedInput =
   update?: Prisma.XOR<Prisma.XOR<Prisma.cadastroUpdateToOneWithWhereWithoutFinalizacoes_realizadasInput, Prisma.cadastroUpdateWithoutFinalizacoes_realizadasInput>, Prisma.cadastroUncheckedUpdateWithoutFinalizacoes_realizadasInput>
 }
 
+export type cadastroCreateNestedOneWithoutConversa_transferenciaInput = {
+  create?: Prisma.XOR<Prisma.cadastroCreateWithoutConversa_transferenciaInput, Prisma.cadastroUncheckedCreateWithoutConversa_transferenciaInput>
+  connectOrCreate?: Prisma.cadastroCreateOrConnectWithoutConversa_transferenciaInput
+  connect?: Prisma.cadastroWhereUniqueInput
+}
+
+export type cadastroUpdateOneRequiredWithoutConversa_transferenciaNestedInput = {
+  create?: Prisma.XOR<Prisma.cadastroCreateWithoutConversa_transferenciaInput, Prisma.cadastroUncheckedCreateWithoutConversa_transferenciaInput>
+  connectOrCreate?: Prisma.cadastroCreateOrConnectWithoutConversa_transferenciaInput
+  upsert?: Prisma.cadastroUpsertWithoutConversa_transferenciaInput
+  connect?: Prisma.cadastroWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.cadastroUpdateToOneWithWhereWithoutConversa_transferenciaInput, Prisma.cadastroUpdateWithoutConversa_transferenciaInput>, Prisma.cadastroUncheckedUpdateWithoutConversa_transferenciaInput>
+}
+
 export type cadastroCreateWithoutDesativacoes_realizadasInput = {
   nome: string
   data_nascimento: Date | string
@@ -1210,15 +1231,16 @@ export type cadastroCreateWithoutDesativacoes_realizadasInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -1249,12 +1271,13 @@ export type cadastroUncheckedCreateWithoutDesativacoes_realizadasInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -1286,15 +1309,16 @@ export type cadastroCreateWithoutResponsavel_desativacaoInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -1324,13 +1348,14 @@ export type cadastroUncheckedCreateWithoutResponsavel_desativacaoInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -1378,15 +1403,16 @@ export type cadastroUpdateWithoutDesativacoes_realizadasInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -1417,12 +1443,13 @@ export type cadastroUncheckedUpdateWithoutDesativacoes_realizadasInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -1490,16 +1517,17 @@ export type cadastroCreateWithoutSessoesInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -1529,13 +1557,14 @@ export type cadastroUncheckedCreateWithoutSessoesInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -1577,16 +1606,17 @@ export type cadastroUpdateWithoutSessoesInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -1616,13 +1646,14 @@ export type cadastroUncheckedUpdateWithoutSessoesInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -1648,16 +1679,17 @@ export type cadastroCreateWithoutTokens_pushInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -1687,13 +1719,14 @@ export type cadastroUncheckedCreateWithoutTokens_pushInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -1735,16 +1768,17 @@ export type cadastroUpdateWithoutTokens_pushInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -1774,13 +1808,14 @@ export type cadastroUncheckedUpdateWithoutTokens_pushInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -1806,16 +1841,17 @@ export type cadastroCreateWithoutErro_autenticacaoInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
   historicos_como_usuario_alvo?: Prisma.historico_administrativoCreateNestedManyWithoutUsuario_alvoInput
@@ -1845,13 +1881,14 @@ export type cadastroUncheckedCreateWithoutErro_autenticacaoInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutUsuario_alvoInput
@@ -1893,16 +1930,17 @@ export type cadastroUpdateWithoutErro_autenticacaoInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUpdateManyWithoutUsuario_alvoNestedInput
@@ -1932,13 +1970,14 @@ export type cadastroUncheckedUpdateWithoutErro_autenticacaoInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedUpdateManyWithoutUsuario_alvoNestedInput
@@ -1964,16 +2003,17 @@ export type cadastroCreateWithoutLogin_eventoInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -2003,13 +2043,14 @@ export type cadastroUncheckedCreateWithoutLogin_eventoInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -2051,16 +2092,17 @@ export type cadastroUpdateWithoutLogin_eventoInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -2090,13 +2132,14 @@ export type cadastroUncheckedUpdateWithoutLogin_eventoInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -2122,15 +2165,16 @@ export type cadastroCreateWithoutConversa_participanteInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -2161,12 +2205,13 @@ export type cadastroUncheckedCreateWithoutConversa_participanteInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -2209,15 +2254,16 @@ export type cadastroUpdateWithoutConversa_participanteInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -2248,12 +2294,13 @@ export type cadastroUncheckedUpdateWithoutConversa_participanteInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -2280,15 +2327,16 @@ export type cadastroCreateWithoutConversas_atendidasInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -2319,12 +2367,13 @@ export type cadastroUncheckedCreateWithoutConversas_atendidasInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -2367,15 +2416,16 @@ export type cadastroUpdateWithoutConversas_atendidasInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -2406,12 +2456,13 @@ export type cadastroUncheckedUpdateWithoutConversas_atendidasInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -2438,16 +2489,17 @@ export type cadastroCreateWithoutMensagens_enviadasInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -2477,13 +2529,14 @@ export type cadastroUncheckedCreateWithoutMensagens_enviadasInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -2525,16 +2578,17 @@ export type cadastroUpdateWithoutMensagens_enviadasInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -2564,13 +2618,14 @@ export type cadastroUncheckedUpdateWithoutMensagens_enviadasInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -2596,15 +2651,16 @@ export type cadastroCreateWithoutSetorInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -2634,13 +2690,14 @@ export type cadastroUncheckedCreateWithoutSetorInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -2693,15 +2750,16 @@ export type cadastroCreateWithoutConversa_leituraInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -2732,12 +2790,13 @@ export type cadastroUncheckedCreateWithoutConversa_leituraInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -2780,15 +2839,16 @@ export type cadastroUpdateWithoutConversa_leituraInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -2819,12 +2879,13 @@ export type cadastroUncheckedUpdateWithoutConversa_leituraInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -2851,15 +2912,16 @@ export type cadastroCreateWithoutCodigo_recuperacao_2faInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -2890,12 +2952,13 @@ export type cadastroUncheckedCreateWithoutCodigo_recuperacao_2faInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -2938,15 +3001,16 @@ export type cadastroUpdateWithoutCodigo_recuperacao_2faInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -2977,12 +3041,13 @@ export type cadastroUncheckedUpdateWithoutCodigo_recuperacao_2faInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -3009,16 +3074,17 @@ export type cadastroCreateWithoutDesafio_login_2faInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
   historicos_como_usuario_alvo?: Prisma.historico_administrativoCreateNestedManyWithoutUsuario_alvoInput
@@ -3048,13 +3114,14 @@ export type cadastroUncheckedCreateWithoutDesafio_login_2faInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutUsuario_alvoInput
@@ -3096,16 +3163,17 @@ export type cadastroUpdateWithoutDesafio_login_2faInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUpdateManyWithoutUsuario_alvoNestedInput
@@ -3135,13 +3203,14 @@ export type cadastroUncheckedUpdateWithoutDesafio_login_2faInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedUpdateManyWithoutUsuario_alvoNestedInput
@@ -3167,15 +3236,16 @@ export type cadastroCreateWithoutSecretariaInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -3205,13 +3275,14 @@ export type cadastroUncheckedCreateWithoutSecretariaInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -3264,16 +3335,17 @@ export type cadastroCreateWithoutHistoricos_como_administradorInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_usuario_alvo?: Prisma.historico_administrativoCreateNestedManyWithoutUsuario_alvoInput
@@ -3303,13 +3375,14 @@ export type cadastroUncheckedCreateWithoutHistoricos_como_administradorInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutUsuario_alvoInput
@@ -3340,16 +3413,17 @@ export type cadastroCreateWithoutHistoricos_como_usuario_alvoInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -3379,13 +3453,14 @@ export type cadastroUncheckedCreateWithoutHistoricos_como_usuario_alvoInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -3427,16 +3502,17 @@ export type cadastroUpdateWithoutHistoricos_como_administradorInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUpdateManyWithoutUsuario_alvoNestedInput
@@ -3466,13 +3542,14 @@ export type cadastroUncheckedUpdateWithoutHistoricos_como_administradorInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedUpdateManyWithoutUsuario_alvoNestedInput
@@ -3509,16 +3586,17 @@ export type cadastroUpdateWithoutHistoricos_como_usuario_alvoInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -3548,13 +3626,14 @@ export type cadastroUncheckedUpdateWithoutHistoricos_como_usuario_alvoInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -3585,10 +3664,11 @@ export type cadastroCreateWithoutAvaliacoes_realizadasInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -3621,10 +3701,11 @@ export type cadastroUncheckedCreateWithoutAvaliacoes_realizadasInput = {
   versao_token?: number
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -3672,10 +3753,11 @@ export type cadastroUpdateWithoutAvaliacoes_realizadasInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -3708,10 +3790,11 @@ export type cadastroUncheckedUpdateWithoutAvaliacoes_realizadasInput = {
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -3738,6 +3821,7 @@ export type cadastroCreateWithoutFinalizacoes_realizadasInput = {
   desativado_em?: Date | string | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
   responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
@@ -3746,7 +3830,7 @@ export type cadastroCreateWithoutFinalizacoes_realizadasInput = {
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
@@ -3777,12 +3861,13 @@ export type cadastroUncheckedCreateWithoutFinalizacoes_realizadasInput = {
   desativado_por?: number | null
   motivo_desativacao?: string | null
   versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
@@ -3825,6 +3910,7 @@ export type cadastroUpdateWithoutFinalizacoes_realizadasInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
@@ -3833,7 +3919,7 @@ export type cadastroUpdateWithoutFinalizacoes_realizadasInput = {
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -3864,12 +3950,175 @@ export type cadastroUncheckedUpdateWithoutFinalizacoes_realizadasInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
+  desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
+  historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
+  historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedUpdateManyWithoutUsuario_alvoNestedInput
+  login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
+  mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
+  sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
+}
+
+export type cadastroCreateWithoutConversa_transferenciaInput = {
+  nome: string
+  data_nascimento: Date | string
+  cpf: string
+  telefone: string
+  email: string
+  senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
+  foto_perfil_url?: string | null
+  dois_fatores_email_ativo?: boolean
+  dois_fatores_email_confirmado_em?: Date | string | null
+  desativado_em?: Date | string | null
+  motivo_desativacao?: string | null
+  versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
+  responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
+  desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
+  setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
+  conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
+  conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
+  desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
+  erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
+  historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
+  historicos_como_usuario_alvo?: Prisma.historico_administrativoCreateNestedManyWithoutUsuario_alvoInput
+  login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
+  mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
+  sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
+}
+
+export type cadastroUncheckedCreateWithoutConversa_transferenciaInput = {
+  id?: number
+  nome: string
+  data_nascimento: Date | string
+  cpf: string
+  telefone: string
+  email: string
+  senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
+  setor_id?: number | null
+  foto_perfil_url?: string | null
+  dois_fatores_email_ativo?: boolean
+  dois_fatores_email_confirmado_em?: Date | string | null
+  secretaria_id?: number | null
+  desativado_em?: Date | string | null
+  desativado_por?: number | null
+  motivo_desativacao?: string | null
+  versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
+  desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
+  conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
+  conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
+  desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
+  erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
+  historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
+  historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutUsuario_alvoInput
+  login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
+  mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
+  sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
+}
+
+export type cadastroCreateOrConnectWithoutConversa_transferenciaInput = {
+  where: Prisma.cadastroWhereUniqueInput
+  create: Prisma.XOR<Prisma.cadastroCreateWithoutConversa_transferenciaInput, Prisma.cadastroUncheckedCreateWithoutConversa_transferenciaInput>
+}
+
+export type cadastroUpsertWithoutConversa_transferenciaInput = {
+  update: Prisma.XOR<Prisma.cadastroUpdateWithoutConversa_transferenciaInput, Prisma.cadastroUncheckedUpdateWithoutConversa_transferenciaInput>
+  create: Prisma.XOR<Prisma.cadastroCreateWithoutConversa_transferenciaInput, Prisma.cadastroUncheckedCreateWithoutConversa_transferenciaInput>
+  where?: Prisma.cadastroWhereInput
+}
+
+export type cadastroUpdateToOneWithWhereWithoutConversa_transferenciaInput = {
+  where?: Prisma.cadastroWhereInput
+  data: Prisma.XOR<Prisma.cadastroUpdateWithoutConversa_transferenciaInput, Prisma.cadastroUncheckedUpdateWithoutConversa_transferenciaInput>
+}
+
+export type cadastroUpdateWithoutConversa_transferenciaInput = {
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  data_nascimento?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cpf?: Prisma.StringFieldUpdateOperationsInput | string
+  telefone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
+  responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
+  desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
+  setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
+  conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
+  conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
+  desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
+  erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
+  historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
+  historicos_como_usuario_alvo?: Prisma.historico_administrativoUpdateManyWithoutUsuario_alvoNestedInput
+  login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
+  mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
+  sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
+}
+
+export type cadastroUncheckedUpdateWithoutConversa_transferenciaInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  data_nascimento?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cpf?: Prisma.StringFieldUpdateOperationsInput | string
+  telefone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
+  desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
+  conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
+  conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -3917,15 +4166,16 @@ export type cadastroUpdateWithoutResponsavel_desativacaoInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -3955,13 +4205,14 @@ export type cadastroUncheckedUpdateWithoutResponsavel_desativacaoInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -4030,15 +4281,16 @@ export type cadastroUpdateWithoutSetorInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -4068,13 +4320,14 @@ export type cadastroUncheckedUpdateWithoutSetorInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -4143,15 +4396,16 @@ export type cadastroUpdateWithoutSecretariaInput = {
   desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
   responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
@@ -4181,13 +4435,14 @@ export type cadastroUncheckedUpdateWithoutSecretariaInput = {
   desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
-  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
-  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -4225,13 +4480,14 @@ export type cadastroUncheckedUpdateManyWithoutSecretariaInput = {
  */
 
 export type CadastroCountOutputType = {
+  avaliacoes_realizadas: number
   desativacoes_realizadas: number
   codigo_recuperacao_2fa: number
+  finalizacoes_realizadas: number
   conversa_leitura: number
   conversa_participante: number
   conversas_atendidas: number
-  avaliacoes_realizadas: number
-  finalizacoes_realizadas: number
+  conversa_transferencia: number
   desafio_login_2fa: number
   erro_autenticacao: number
   historicos_como_administrador: number
@@ -4243,13 +4499,14 @@ export type CadastroCountOutputType = {
 }
 
 export type CadastroCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  avaliacoes_realizadas?: boolean | CadastroCountOutputTypeCountAvaliacoes_realizadasArgs
   desativacoes_realizadas?: boolean | CadastroCountOutputTypeCountDesativacoes_realizadasArgs
   codigo_recuperacao_2fa?: boolean | CadastroCountOutputTypeCountCodigo_recuperacao_2faArgs
+  finalizacoes_realizadas?: boolean | CadastroCountOutputTypeCountFinalizacoes_realizadasArgs
   conversa_leitura?: boolean | CadastroCountOutputTypeCountConversa_leituraArgs
   conversa_participante?: boolean | CadastroCountOutputTypeCountConversa_participanteArgs
   conversas_atendidas?: boolean | CadastroCountOutputTypeCountConversas_atendidasArgs
-  avaliacoes_realizadas?: boolean | CadastroCountOutputTypeCountAvaliacoes_realizadasArgs
-  finalizacoes_realizadas?: boolean | CadastroCountOutputTypeCountFinalizacoes_realizadasArgs
+  conversa_transferencia?: boolean | CadastroCountOutputTypeCountConversa_transferenciaArgs
   desafio_login_2fa?: boolean | CadastroCountOutputTypeCountDesafio_login_2faArgs
   erro_autenticacao?: boolean | CadastroCountOutputTypeCountErro_autenticacaoArgs
   historicos_como_administrador?: boolean | CadastroCountOutputTypeCountHistoricos_como_administradorArgs
@@ -4273,6 +4530,13 @@ export type CadastroCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
 /**
  * CadastroCountOutputType without action
  */
+export type CadastroCountOutputTypeCountAvaliacoes_realizadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.avaliacaoWhereInput
+}
+
+/**
+ * CadastroCountOutputType without action
+ */
 export type CadastroCountOutputTypeCountDesativacoes_realizadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.cadastroWhereInput
 }
@@ -4282,6 +4546,13 @@ export type CadastroCountOutputTypeCountDesativacoes_realizadasArgs<ExtArgs exte
  */
 export type CadastroCountOutputTypeCountCodigo_recuperacao_2faArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.codigo_recuperacao_2faWhereInput
+}
+
+/**
+ * CadastroCountOutputType without action
+ */
+export type CadastroCountOutputTypeCountFinalizacoes_realizadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.conversa_finalizacaoWhereInput
 }
 
 /**
@@ -4308,15 +4579,8 @@ export type CadastroCountOutputTypeCountConversas_atendidasArgs<ExtArgs extends 
 /**
  * CadastroCountOutputType without action
  */
-export type CadastroCountOutputTypeCountAvaliacoes_realizadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.avaliacaoWhereInput
-}
-
-/**
- * CadastroCountOutputType without action
- */
-export type CadastroCountOutputTypeCountFinalizacoes_realizadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.conversa_finalizacaoWhereInput
+export type CadastroCountOutputTypeCountConversa_transferenciaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.conversa_transferenciaWhereInput
 }
 
 /**
@@ -4396,16 +4660,17 @@ export type cadastroSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   desativado_por?: boolean
   motivo_desativacao?: boolean
   versao_token?: boolean
+  avaliacoes_realizadas?: boolean | Prisma.cadastro$avaliacoes_realizadasArgs<ExtArgs>
   responsavel_desativacao?: boolean | Prisma.cadastro$responsavel_desativacaoArgs<ExtArgs>
   desativacoes_realizadas?: boolean | Prisma.cadastro$desativacoes_realizadasArgs<ExtArgs>
   secretaria?: boolean | Prisma.cadastro$secretariaArgs<ExtArgs>
   setor?: boolean | Prisma.cadastro$setorArgs<ExtArgs>
   codigo_recuperacao_2fa?: boolean | Prisma.cadastro$codigo_recuperacao_2faArgs<ExtArgs>
+  finalizacoes_realizadas?: boolean | Prisma.cadastro$finalizacoes_realizadasArgs<ExtArgs>
   conversa_leitura?: boolean | Prisma.cadastro$conversa_leituraArgs<ExtArgs>
   conversa_participante?: boolean | Prisma.cadastro$conversa_participanteArgs<ExtArgs>
   conversas_atendidas?: boolean | Prisma.cadastro$conversas_atendidasArgs<ExtArgs>
-  avaliacoes_realizadas?: boolean | Prisma.cadastro$avaliacoes_realizadasArgs<ExtArgs>
-  finalizacoes_realizadas?: boolean | Prisma.cadastro$finalizacoes_realizadasArgs<ExtArgs>
+  conversa_transferencia?: boolean | Prisma.cadastro$conversa_transferenciaArgs<ExtArgs>
   desafio_login_2fa?: boolean | Prisma.cadastro$desafio_login_2faArgs<ExtArgs>
   erro_autenticacao?: boolean | Prisma.cadastro$erro_autenticacaoArgs<ExtArgs>
   historicos_como_administrador?: boolean | Prisma.cadastro$historicos_como_administradorArgs<ExtArgs>
@@ -4443,16 +4708,17 @@ export type cadastroSelectScalar = {
 
 export type cadastroOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome" | "data_nascimento" | "cpf" | "telefone" | "email" | "senha" | "token_recuperacao" | "token_recuperacao_expira_em" | "tipo_usuario" | "setor_id" | "foto_perfil_url" | "dois_fatores_email_ativo" | "dois_fatores_email_confirmado_em" | "secretaria_id" | "desativado_em" | "desativado_por" | "motivo_desativacao" | "versao_token", ExtArgs["result"]["cadastro"]>
 export type cadastroInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  avaliacoes_realizadas?: boolean | Prisma.cadastro$avaliacoes_realizadasArgs<ExtArgs>
   responsavel_desativacao?: boolean | Prisma.cadastro$responsavel_desativacaoArgs<ExtArgs>
   desativacoes_realizadas?: boolean | Prisma.cadastro$desativacoes_realizadasArgs<ExtArgs>
   secretaria?: boolean | Prisma.cadastro$secretariaArgs<ExtArgs>
   setor?: boolean | Prisma.cadastro$setorArgs<ExtArgs>
   codigo_recuperacao_2fa?: boolean | Prisma.cadastro$codigo_recuperacao_2faArgs<ExtArgs>
+  finalizacoes_realizadas?: boolean | Prisma.cadastro$finalizacoes_realizadasArgs<ExtArgs>
   conversa_leitura?: boolean | Prisma.cadastro$conversa_leituraArgs<ExtArgs>
   conversa_participante?: boolean | Prisma.cadastro$conversa_participanteArgs<ExtArgs>
   conversas_atendidas?: boolean | Prisma.cadastro$conversas_atendidasArgs<ExtArgs>
-  avaliacoes_realizadas?: boolean | Prisma.cadastro$avaliacoes_realizadasArgs<ExtArgs>
-  finalizacoes_realizadas?: boolean | Prisma.cadastro$finalizacoes_realizadasArgs<ExtArgs>
+  conversa_transferencia?: boolean | Prisma.cadastro$conversa_transferenciaArgs<ExtArgs>
   desafio_login_2fa?: boolean | Prisma.cadastro$desafio_login_2faArgs<ExtArgs>
   erro_autenticacao?: boolean | Prisma.cadastro$erro_autenticacaoArgs<ExtArgs>
   historicos_como_administrador?: boolean | Prisma.cadastro$historicos_como_administradorArgs<ExtArgs>
@@ -4467,16 +4733,17 @@ export type cadastroInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type $cadastroPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "cadastro"
   objects: {
+    avaliacoes_realizadas: Prisma.$avaliacaoPayload<ExtArgs>[]
     responsavel_desativacao: Prisma.$cadastroPayload<ExtArgs> | null
     desativacoes_realizadas: Prisma.$cadastroPayload<ExtArgs>[]
     secretaria: Prisma.$secretariaPayload<ExtArgs> | null
     setor: Prisma.$setoresPayload<ExtArgs> | null
     codigo_recuperacao_2fa: Prisma.$codigo_recuperacao_2faPayload<ExtArgs>[]
+    finalizacoes_realizadas: Prisma.$conversa_finalizacaoPayload<ExtArgs>[]
     conversa_leitura: Prisma.$conversa_leituraPayload<ExtArgs>[]
     conversa_participante: Prisma.$conversa_participantePayload<ExtArgs>[]
     conversas_atendidas: Prisma.$conversa_setorPayload<ExtArgs>[]
-    avaliacoes_realizadas: Prisma.$avaliacaoPayload<ExtArgs>[]
-    finalizacoes_realizadas: Prisma.$conversa_finalizacaoPayload<ExtArgs>[]
+    conversa_transferencia: Prisma.$conversa_transferenciaPayload<ExtArgs>[]
     desafio_login_2fa: Prisma.$desafio_login_2faPayload<ExtArgs>[]
     erro_autenticacao: Prisma.$erro_autenticacaoPayload<ExtArgs>[]
     historicos_como_administrador: Prisma.$historico_administrativoPayload<ExtArgs>[]
@@ -4846,16 +5113,17 @@ readonly fields: cadastroFieldRefs;
  */
 export interface Prisma__cadastroClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  avaliacoes_realizadas<T extends Prisma.cadastro$avaliacoes_realizadasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$avaliacoes_realizadasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$avaliacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   responsavel_desativacao<T extends Prisma.cadastro$responsavel_desativacaoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$responsavel_desativacaoArgs<ExtArgs>>): Prisma.Prisma__cadastroClient<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   desativacoes_realizadas<T extends Prisma.cadastro$desativacoes_realizadasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$desativacoes_realizadasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   secretaria<T extends Prisma.cadastro$secretariaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$secretariaArgs<ExtArgs>>): Prisma.Prisma__secretariaClient<runtime.Types.Result.GetResult<Prisma.$secretariaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   setor<T extends Prisma.cadastro$setorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$setorArgs<ExtArgs>>): Prisma.Prisma__setoresClient<runtime.Types.Result.GetResult<Prisma.$setoresPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   codigo_recuperacao_2fa<T extends Prisma.cadastro$codigo_recuperacao_2faArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$codigo_recuperacao_2faArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$codigo_recuperacao_2faPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  finalizacoes_realizadas<T extends Prisma.cadastro$finalizacoes_realizadasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$finalizacoes_realizadasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_finalizacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversa_leitura<T extends Prisma.cadastro$conversa_leituraArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$conversa_leituraArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_leituraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversa_participante<T extends Prisma.cadastro$conversa_participanteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$conversa_participanteArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_participantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversas_atendidas<T extends Prisma.cadastro$conversas_atendidasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$conversas_atendidasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_setorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  avaliacoes_realizadas<T extends Prisma.cadastro$avaliacoes_realizadasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$avaliacoes_realizadasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$avaliacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  finalizacoes_realizadas<T extends Prisma.cadastro$finalizacoes_realizadasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$finalizacoes_realizadasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_finalizacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  conversa_transferencia<T extends Prisma.cadastro$conversa_transferenciaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$conversa_transferenciaArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_transferenciaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   desafio_login_2fa<T extends Prisma.cadastro$desafio_login_2faArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$desafio_login_2faArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$desafio_login_2faPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   erro_autenticacao<T extends Prisma.cadastro$erro_autenticacaoArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$erro_autenticacaoArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$erro_autenticacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   historicos_como_administrador<T extends Prisma.cadastro$historicos_como_administradorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$historicos_como_administradorArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$historico_administrativoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -5260,6 +5528,30 @@ export type cadastroDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * cadastro.avaliacoes_realizadas
+ */
+export type cadastro$avaliacoes_realizadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the avaliacao
+   */
+  select?: Prisma.avaliacaoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the avaliacao
+   */
+  omit?: Prisma.avaliacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.avaliacaoInclude<ExtArgs> | null
+  where?: Prisma.avaliacaoWhereInput
+  orderBy?: Prisma.avaliacaoOrderByWithRelationInput | Prisma.avaliacaoOrderByWithRelationInput[]
+  cursor?: Prisma.avaliacaoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AvaliacaoScalarFieldEnum | Prisma.AvaliacaoScalarFieldEnum[]
+}
+
+/**
  * cadastro.responsavel_desativacao
  */
 export type cadastro$responsavel_desativacaoArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5365,6 +5657,30 @@ export type cadastro$codigo_recuperacao_2faArgs<ExtArgs extends runtime.Types.Ex
 }
 
 /**
+ * cadastro.finalizacoes_realizadas
+ */
+export type cadastro$finalizacoes_realizadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the conversa_finalizacao
+   */
+  select?: Prisma.conversa_finalizacaoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the conversa_finalizacao
+   */
+  omit?: Prisma.conversa_finalizacaoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.conversa_finalizacaoInclude<ExtArgs> | null
+  where?: Prisma.conversa_finalizacaoWhereInput
+  orderBy?: Prisma.conversa_finalizacaoOrderByWithRelationInput | Prisma.conversa_finalizacaoOrderByWithRelationInput[]
+  cursor?: Prisma.conversa_finalizacaoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Conversa_finalizacaoScalarFieldEnum | Prisma.Conversa_finalizacaoScalarFieldEnum[]
+}
+
+/**
  * cadastro.conversa_leitura
  */
 export type cadastro$conversa_leituraArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -5437,51 +5753,27 @@ export type cadastro$conversas_atendidasArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
- * cadastro.avaliacoes_realizadas
+ * cadastro.conversa_transferencia
  */
-export type cadastro$avaliacoes_realizadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type cadastro$conversa_transferenciaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the avaliacao
+   * Select specific fields to fetch from the conversa_transferencia
    */
-  select?: Prisma.avaliacaoSelect<ExtArgs> | null
+  select?: Prisma.conversa_transferenciaSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the avaliacao
+   * Omit specific fields from the conversa_transferencia
    */
-  omit?: Prisma.avaliacaoOmit<ExtArgs> | null
+  omit?: Prisma.conversa_transferenciaOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.avaliacaoInclude<ExtArgs> | null
-  where?: Prisma.avaliacaoWhereInput
-  orderBy?: Prisma.avaliacaoOrderByWithRelationInput | Prisma.avaliacaoOrderByWithRelationInput[]
-  cursor?: Prisma.avaliacaoWhereUniqueInput
+  include?: Prisma.conversa_transferenciaInclude<ExtArgs> | null
+  where?: Prisma.conversa_transferenciaWhereInput
+  orderBy?: Prisma.conversa_transferenciaOrderByWithRelationInput | Prisma.conversa_transferenciaOrderByWithRelationInput[]
+  cursor?: Prisma.conversa_transferenciaWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.AvaliacaoScalarFieldEnum | Prisma.AvaliacaoScalarFieldEnum[]
-}
-
-/**
- * cadastro.finalizacoes_realizadas
- */
-export type cadastro$finalizacoes_realizadasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the conversa_finalizacao
-   */
-  select?: Prisma.conversa_finalizacaoSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the conversa_finalizacao
-   */
-  omit?: Prisma.conversa_finalizacaoOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.conversa_finalizacaoInclude<ExtArgs> | null
-  where?: Prisma.conversa_finalizacaoWhereInput
-  orderBy?: Prisma.conversa_finalizacaoOrderByWithRelationInput | Prisma.conversa_finalizacaoOrderByWithRelationInput[]
-  cursor?: Prisma.conversa_finalizacaoWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.Conversa_finalizacaoScalarFieldEnum | Prisma.Conversa_finalizacaoScalarFieldEnum[]
+  distinct?: Prisma.Conversa_transferenciaScalarFieldEnum | Prisma.Conversa_transferenciaScalarFieldEnum[]
 }
 
 /**

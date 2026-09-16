@@ -260,9 +260,15 @@ function Home() {
     const [modalTransferirConversa, setModalTransferirConversa] = useState(false);
     const botaoFecharModalTransferenciaRef = useRef<HTMLButtonElement>(null);
     const [buscaPessoaGrupo, setBuscaPessoaGrupo] = useState("");
+    const [buscarSetorTranfConversa, setBuscarSetorTranfConversa] = useState("");
+    const [secretariaTransferenciaSelecionadaId,
+        setSecretariaTransferenciaSelecionadaId] = useState<number | null>(null);
     const [contatosDisponiveisModalAdicionarPessoas,
         setContatosDisponiveisModalAdicionarPessoas] =
         useState<UsuarioConversa[]>([]);
+    const [setoresDisponiveisTransferencia,
+        setSetoresDisponiveisTransferencia] =
+        useState<Setor[]>([]);
     const [contatosModalAdicionarPessoasSelecionados,
         setContatosModalAdicionarPessoasSelecionados] =
         useState<Set<number>>(new Set());
@@ -277,6 +283,7 @@ function Home() {
     const botaoFecharModalAdicionarPessoaRef =
         useRef<HTMLButtonElement>(null);
     const inputBuscaPessoaGrupoRef = useRef<HTMLInputElement>(null);
+    const inputBuscaSetorTransferenciaRef = useRef<HTMLInputElement>(null);
 
     const [usuarios, setUsuarios] = useState<UsuarioConversa[]>([]);
 
@@ -876,7 +883,7 @@ function Home() {
         const overflowAnterior = document.body.style.overflow;
         const elementoComFocoAnterior = document.activeElement;
         document.body.style.overflow = "hidden";
-        botaoFecharModalTransferenciaRef.current?.focus();
+        inputBuscaSetorTransferenciaRef.current?.focus();
 
         function fecharComEscape(evento: KeyboardEvent) {
             if (evento.key === "Escape") {
@@ -1410,7 +1417,26 @@ function Home() {
             return;
         }
 
+        setBuscarSetorTranfConversa("");
+        setSecretariaTransferenciaSelecionadaId(null);
+        setSetoresDisponiveisTransferencia([]);
         setModalTransferirConversa(true);
+
+        try {
+            const resposta = await apiFetch(
+                "/setores/disponiveis-transferencia",
+            );
+
+            if (!resposta.ok) {
+                throw new Error("Não foi possível carregar os setores.");
+            }
+
+            const dados = await resposta.json() as Setor[];
+            setSetoresDisponiveisTransferencia(dados);
+        } catch (erro) {
+            console.error("Erro ao carregar setores para transferência:", erro);
+            setSetoresDisponiveisTransferencia([]);
+        }
     }
 
     async function adicionarPessoasAoGrupo() {
@@ -1998,6 +2024,54 @@ function Home() {
 
             return descricao.toLowerCase().includes(busca);
         });
+
+    const setoresDisponiveisParaEnvio =
+        setoresDisponiveisTransferencia.filter((setor) => {
+            const busca = buscarSetorTranfConversa.trim().toLowerCase();
+            const descricao = [
+                setor.setor,
+                setor.sigla_setor,
+                setor.secretaria?.nome,
+                setor.secretaria?.sigla_secretaria,
+            ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+
+            return descricao.includes(busca);
+        });
+
+    const secretariasDisponiveisParaEnvio =
+        setoresDisponiveisParaEnvio.reduce<
+            Array<NonNullable<Setor["secretaria"]>>
+        >((secretarias, setor) => {
+            if (
+                setor.secretaria &&
+                !secretarias.some(
+                    (secretaria) => secretaria.id === setor.secretaria?.id,
+                )
+            ) {
+                secretarias.push(setor.secretaria);
+            }
+
+            return secretarias;
+        }, []);
+
+    const setoresDaSecretariaSelecionada =
+        secretariaTransferenciaSelecionadaId === null
+            ? []
+            : setoresDisponiveisParaEnvio.filter(
+                (setor) =>
+                    setor.secretaria?.id ===
+                    secretariaTransferenciaSelecionadaId,
+            );
+
+    const secretariaTransferenciaSelecionada =
+        setoresDisponiveisTransferencia.find(
+            (setor) =>
+                setor.secretaria?.id ===
+                secretariaTransferenciaSelecionadaId,
+        )?.secretaria ?? null;
 
     function adicionarEAbrirConversa(conversa: Conversa) {
         const conversaNormalizada: Conversa = {
@@ -4386,8 +4460,9 @@ function Home() {
                         <header className="modal-grupo__cabecalho modal-transferencia__cabecalho">
                             <div className="modal-grupo__titulo">
                                 <span className="modal-grupo__icone" aria-hidden="true">
-                                    <svg width="14" height="14" fill="currentColor" className="bi bi-arrow-down-up" viewBox="0 0 16 18">
-                                        <path fill-rule="evenodd" d="M11.5 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L11 2.707V14.5a.5.5 0 0 0 .5.5m-7-14a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L4 13.293V1.5a.5.5 0 0 1 .5-.5"/>
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M5 8h13M15 5l3 3-3 3" />
+                                        <path d="M19 16H6M9 13l-3 3 3 3" />
                                     </svg>
                                 </span>
 
@@ -4417,8 +4492,211 @@ function Home() {
                                 </svg>
                             </button>
                         </header>
-                        <div className="modal-transferencia__corpo" />
-                        <footer className="modal-grupo__rodape modal-transferencia__rodape" />
+
+                        <div
+                            className="modal-transferencia__etapas"
+                            aria-label="Etapas da escolha do destino"
+                        >
+                            <button
+                                type="button"
+                                className={
+                                    secretariaTransferenciaSelecionada
+                                        ? "modal-transferencia__etapa modal-transferencia__etapa--concluida"
+                                        : "modal-transferencia__etapa modal-transferencia__etapa--ativa"
+                                }
+                                onClick={() =>
+                                    setSecretariaTransferenciaSelecionadaId(null)
+                                }
+                                aria-current={
+                                    secretariaTransferenciaSelecionada
+                                        ? undefined
+                                        : "step"
+                                }
+                            >
+                                <span>1</span>
+                                Secretaria
+                            </button>
+                            <span
+                                className={
+                                    secretariaTransferenciaSelecionada
+                                        ? "modal-transferencia__linha modal-transferencia__linha--ativa"
+                                        : "modal-transferencia__linha"
+                                }
+                                aria-hidden="true"
+                            />
+                            <div
+                                className={
+                                    secretariaTransferenciaSelecionada
+                                        ? "modal-transferencia__etapa modal-transferencia__etapa--ativa"
+                                        : "modal-transferencia__etapa"
+                                }
+                                aria-current={
+                                    secretariaTransferenciaSelecionada
+                                        ? "step"
+                                        : undefined
+                                }
+                            >
+                                <span>2</span>
+                                Setor
+                            </div>
+                        </div>
+
+                        <div className="modal-grupo__pesquisa modal-transferencia__pesquisa">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="11" cy="11" r="7" />
+                                <path d="m16 16 4 4" />
+                            </svg>
+                            <input
+                                ref={inputBuscaSetorTransferenciaRef}
+                                type="search"
+                                value={buscarSetorTranfConversa}
+                                onChange={(evento) =>
+                                    setBuscarSetorTranfConversa(evento.target.value)
+                                }
+                                placeholder={
+                                    secretariaTransferenciaSelecionada
+                                        ? "Pesquisar setor"
+                                        : "Pesquisar secretaria"
+                                }
+                                aria-label={
+                                    secretariaTransferenciaSelecionada
+                                        ? "Pesquisar setor"
+                                        : "Pesquisar secretaria"
+                                }
+                                autoComplete="off"
+                            />
+                        </div>
+
+                        <div className="modal-grupo__rotulo-lista modal-transferencia__rotulo-lista">
+                            {secretariaTransferenciaSelecionada ? (
+                                <button
+                                    type="button"
+                                    className="modal-transferencia__voltar"
+                                    onClick={() =>
+                                        setSecretariaTransferenciaSelecionadaId(null)
+                                    }
+                                >
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="m15 18-6-6 6-6" />
+                                    </svg>
+                                    <span>
+                                        {secretariaTransferenciaSelecionada.nome}
+                                    </span>
+                                </button>
+                            ) : (
+                                <span>ESCOLHA UMA SECRETARIA</span>
+                            )}
+                            <span className="modal-transferencia__quantidade">
+                                {secretariaTransferenciaSelecionada
+                                    ? setoresDaSecretariaSelecionada.length
+                                    : secretariasDisponiveisParaEnvio.length}
+                            </span>
+                        </div>
+
+                        <div
+                            className="modal-grupo__contatos modal-transferencia__lista"
+                            data-lenis-prevent
+                            aria-live="polite"
+                        >
+                            {secretariaTransferenciaSelecionada
+                                ? setoresDaSecretariaSelecionada.map((setor) => (
+                                    <button
+                                        key={setor.id}
+                                        type="button"
+                                        className="modal-grupo__contato modal-transferencia__item"
+                                    >
+                                        <span className="modal-transferencia__item-icone">
+                                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                <rect x="4" y="7" width="16" height="13" rx="2" />
+                                                <path d="M9 7V5h6v2M4 12h16M10 12v2h4v-2" />
+                                            </svg>
+                                        </span>
+                                        <span className="modal-grupo__dados">
+                                            <strong>{setor.setor}</strong>
+                                            <span>{setor.sigla_setor}</span>
+                                        </span>
+                                        <span className="modal-transferencia__disponivel">
+                                            <span aria-hidden="true" />
+                                            Disponível
+                                        </span>
+                                    </button>
+                                ))
+                                : secretariasDisponiveisParaEnvio.map(
+                                    (secretaria) => (
+                                        <button
+                                            key={secretaria.id}
+                                            type="button"
+                                            className="modal-grupo__contato modal-transferencia__item"
+                                            onClick={() => {
+                                                setSecretariaTransferenciaSelecionadaId(
+                                                    secretaria.id,
+                                                );
+                                                setBuscarSetorTranfConversa("");
+                                            }}
+                                        >
+                                            <span className="modal-transferencia__item-icone modal-transferencia__item-icone--secretaria">
+                                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                                    <path d="M4 20h16M6 20V8l6-4 6 4v12" />
+                                                    <path d="M9 11h1M14 11h1M9 15h1M14 15h1" />
+                                                </svg>
+                                            </span>
+                                            <span className="modal-grupo__dados">
+                                                <strong>{secretaria.nome}</strong>
+                                                <span>
+                                                    {secretaria.sigla_secretaria} •{" "}
+                                                    {
+                                                        setoresDisponiveisParaEnvio.filter(
+                                                            (setor) =>
+                                                                setor.secretaria?.id ===
+                                                                secretaria.id,
+                                                        ).length
+                                                    }{" "}
+                                                    setores
+                                                </span>
+                                            </span>
+                                            <span
+                                                className="modal-grupo__selecao"
+                                                aria-hidden="true"
+                                            >
+                                                <svg viewBox="0 0 16 16">
+                                                    <path d="m6 3 5 5-5 5" />
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    ),
+                                )}
+
+                            {secretariaTransferenciaSelecionada &&
+                                setoresDaSecretariaSelecionada.length === 0 && (
+                                <div className="modal-transferencia__vazio">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <circle cx="11" cy="11" r="7" />
+                                        <path d="m16 16 4 4" />
+                                    </svg>
+                                    <strong>Nenhum setor encontrado</strong>
+                                    <span>Tente pesquisar por outro termo.</span>
+                                </div>
+                            )}
+
+                            {!secretariaTransferenciaSelecionada &&
+                                secretariasDisponiveisParaEnvio.length === 0 && (
+                                <div className="modal-transferencia__vazio">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <circle cx="11" cy="11" r="7" />
+                                        <path d="m16 16 4 4" />
+                                    </svg>
+                                    <strong>Nenhuma secretaria encontrada</strong>
+                                    <span>Tente pesquisar por outro termo.</span>
+                                </div>
+                            )}
+                        </div>
+
+                        <footer className="modal-grupo__rodape modal-transferencia__rodape">
+                            <span className="modal-transferencia__legenda">
+                                <span aria-hidden="true" />
+                                Somente setores com funcionários vinculados
+                            </span>
+                        </footer>
                     </section>
                 </div>
             )

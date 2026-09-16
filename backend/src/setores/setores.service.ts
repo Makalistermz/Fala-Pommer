@@ -76,6 +76,10 @@ export class SetoresService {
         }));
     }
 
+    async listarDisponiveisParaTransferencia() {
+        return this.listarComFuncionarios();
+    }
+
     async criar(dados: CriarSetorDTO) {
         const setorExistente = await this.prisma.setores.findFirst({
             where: {

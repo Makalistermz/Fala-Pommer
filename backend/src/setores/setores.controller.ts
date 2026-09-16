@@ -36,6 +36,12 @@ export class SetoresController {
         return this.setoresService.listarComFuncionarios();
     }
 
+    @Get("disponiveis-transferencia")
+    @Perfis("funcionario", "admin", "superAdmin")
+    listarDisponiveisParaTransferencia() {
+        return this.setoresService.listarDisponiveisParaTransferencia();
+    }
+
     @Post()
     @Perfis("admin", "superAdmin")
     criar(

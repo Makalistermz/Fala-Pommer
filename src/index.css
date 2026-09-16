@@ -288,6 +288,99 @@ html.tema-escuro:not(.alto-contraste) .modal-transferencia__corpo {
   background: var(--tema-superficie);
 }
 
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__etapa {
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__etapa > span {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__etapa--ativa {
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__etapa--ativa > span {
+  border-color: #548ddd;
+  background: #315f9e;
+  color: #ffffff;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__etapa--concluida {
+  color: #8de0b0;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__etapa--concluida > span {
+  border-color: #32694f;
+  background: #193f31;
+  color: #8de0b0;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__linha {
+  background: var(--tema-borda);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__linha--ativa {
+  background: #32694f;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__quantidade {
+  background: #1d385d;
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__voltar:hover {
+  background: var(--tema-superficie-interativa);
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__item {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+  box-shadow: 0 2px 7px rgb(0 0 0 / 15%);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__item:hover {
+  border-color: #45658f;
+  background: var(--tema-superficie-interativa);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 22%);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__item-icone {
+  border-color: #315982;
+  background: #183653;
+  color: #8fbdff;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__item-icone--secretaria {
+  border-color: #32694f;
+  background: #193f31;
+  color: #8de0b0;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__item .modal-grupo__selecao {
+  background: #263750;
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__item:hover .modal-grupo__selecao {
+  background: #31527d;
+  color: #b8d4ff;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-transferencia__disponivel,
+  .modal-transferencia__legenda,
+  .modal-transferencia__vazio
+) {
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia__vazio strong {
+  color: var(--tema-texto);
+}
+
 html.tema-escuro:not(.alto-contraste) .modal-grupo__icone {
   border-color: rgb(143 185 255 / 22%);
   background: rgb(58 101 164 / 20%);

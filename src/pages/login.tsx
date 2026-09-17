@@ -76,7 +76,21 @@ function formatarCodigoRecuperacao(valor: string) {
 
 function Login() {
   const googleButtonContainerRef = useRef<HTMLDivElement>(null);
-  const [googleButtonWidth, setGoogleButtonWidth] = useState(430);
+  const [googleButtonWidth, setGoogleButtonWidth] = useState(400);
+  const [googleButtonType, setGoogleButtonType] = useState<"standard" | "icon">(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 480px)").matches
+        ? "icon"
+        : "standard",
+  );
+  const [googleButtonTheme, setGoogleButtonTheme] = useState<"outline" | "filled_blue">(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 480px)").matches
+        ? "filled_blue"
+        : "outline",
+  );
   const [etapa, setEtapa] = useState<"credenciais" | "verificacao">(
     "credenciais",
   );
@@ -113,7 +127,7 @@ function Login() {
     if (!container) return;
 
     const atualizarLargura = () => {
-      setGoogleButtonWidth(Math.min(430, Math.floor(container.clientWidth)));
+      setGoogleButtonWidth(Math.min(400, Math.floor(container.clientWidth)));
     };
 
     atualizarLargura();
@@ -122,6 +136,20 @@ function Login() {
     observer.observe(container);
 
     return () => observer.disconnect();
+
+  }, []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 480px)");
+    const atualizarTipoBotao = () => {
+      setGoogleButtonType(mediaQuery.matches ? "icon" : "standard");
+      setGoogleButtonTheme(mediaQuery.matches ? "filled_blue" : "outline");
+    };
+
+    atualizarTipoBotao();
+    mediaQuery.addEventListener("change", atualizarTipoBotao);
+
+    return () => mediaQuery.removeEventListener("change", atualizarTipoBotao);
   }, []);
 
   useEffect(() => {
@@ -429,12 +457,18 @@ function Login() {
                   ref={googleButtonContainerRef}
                 >
                   <GoogleLogin
+                    key={`${googleButtonType}-${googleButtonWidth}-${googleButtonTheme}`}
                     onSuccess={handleSuccess}
                     onError={handleError}
-                    theme="outline"
-                    shape="rectangular"
                     text="signin_with"
-                    width={googleButtonWidth}
+                    type={googleButtonType}
+                    theme={googleButtonTheme}
+                    shape="rectangular"
+                    width={
+                      googleButtonType === "standard"
+                        ? googleButtonWidth
+                        : undefined
+                    }
                   />
                 </div>
               </div>

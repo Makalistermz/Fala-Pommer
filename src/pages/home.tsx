@@ -79,6 +79,8 @@ interface UltimaMensagem {
     id: number;
     conteudo: string;
     origem: "usuario" | "setor";
+    sistema?: boolean;
+    transferenciaId?: number | null;
     arquivoNome?: string | null;
     arquivoTipo?: string | null;
     enviadaEm: string;
@@ -317,10 +319,6 @@ function Home() {
     const balõesRef = useRef<Map<number, HTMLElement>>(new Map());
     const idsAnimadosRef = useRef<Set<number>>(new Set());
     const conversaAbertaIdRef = useRef<number | null>(null);
-    const setorConversaCidadaoRef = useRef<{
-        conversaId: number;
-        setorId: number;
-    } | null>(null);
     const ultimaMensagemChatIdRef = useRef(0);
     const historicoChatCarregadoRef = useRef(false);
     const somNotificacaoRef = useRef<HTMLAudioElement | null>(null);
@@ -1202,6 +1200,43 @@ function Home() {
                                 ) !== finalizacao.id;
                             })
                             : undefined;
+                    const conversaRecebidaPorEncaminhamento =
+                        tipoUsuarioLogado === "user"
+                            ? [...conversasSetores]
+                                .sort((conversaA, conversaB) =>
+                                    new Date(
+                                        conversaB.ultimaMensagem?.enviadaEm ??
+                                            conversaB.criadaEm,
+                                    ).getTime() -
+                                    new Date(
+                                        conversaA.ultimaMensagem?.enviadaEm ??
+                                            conversaA.criadaEm,
+                                    ).getTime()
+                                )
+                                .find((conversa) => {
+                                const ultimaMensagem =
+                                    conversa.ultimaMensagem;
+
+                                if (
+                                    !ultimaMensagem?.sistema ||
+                                    !ultimaMensagem.transferenciaId
+                                ) {
+                                    return false;
+                                }
+
+                                const estadoAnterior =
+                                    estadoConversasRef.current.get(
+                                        conversa.id,
+                                    );
+
+                                return (
+                                    estadoAnterior
+                                        ? estadoAnterior.ultimaMensagemId !==
+                                            ultimaMensagem.id
+                                        : conversa.mensagensNaoLidas > 0
+                                );
+                            })
+                            : undefined;
 
                     estadoConversasRef.current = new Map(
                         todasConversas.map((conversa) => [
@@ -1241,6 +1276,12 @@ function Home() {
                     });
 
                     if (tipoUsuarioLogado === "user") {
+                        if (conversaRecebidaPorEncaminhamento) {
+                            void abrirConversa(
+                                conversaRecebidaPorEncaminhamento,
+                            );
+                        }
+
                         const conversaComAvaliacaoPendente =
                             conversasSetores.find(
                                 (conversa) =>
@@ -1302,43 +1343,6 @@ function Home() {
             );
         };
     }, [usuario]);
-
-    useEffect(() => {
-        if (
-            usuario?.tipo !== "user" ||
-            conversaSelecionada?.tipo !== "setor"
-        ) {
-            setorConversaCidadaoRef.current = null;
-
-            if (!conversaSelecionada) {
-                setMensagensChat([]);
-            }
-
-            return;
-        }
-
-        const conversaAtual = {
-            conversaId: conversaSelecionada.id,
-            setorId: conversaSelecionada.setor.id,
-        };
-        const conversaAnterior = setorConversaCidadaoRef.current;
-
-        setorConversaCidadaoRef.current = conversaAtual;
-
-        if (
-            conversaAnterior?.conversaId === conversaAtual.conversaId &&
-            conversaAnterior.setorId !== conversaAtual.setorId
-        ) {
-            void abrirConversa(conversaSelecionada);
-        }
-    }, [
-        usuario?.tipo,
-        conversaSelecionada?.id,
-        conversaSelecionada?.tipo,
-        conversaSelecionada?.tipo === "setor"
-            ? conversaSelecionada.setor.id
-            : null,
-    ]);
 
     async function abrirNovaConversa() {
         if (!usuario) {
@@ -1536,23 +1540,6 @@ function Home() {
                 );
             }
 
-            pararDeInformarDigitacao();
-            cancelarGravacaoAudio();
-            conversaAbertaIdRef.current = null;
-            ultimaMensagemChatIdRef.current = 0;
-            historicoChatCarregadoRef.current = false;
-            alturaAntesDoHistoricoRef.current = null;
-            setorConversaCidadaoRef.current = null;
-
-            setConversas((conversasAtuais) =>
-                conversasAtuais.filter((conversa) => conversa.id !== conversaId),
-            );
-            setConversaSelecionada(null);
-            setMensagensChat([]);
-            setUsuariosDigitando([]);
-            setChatMobileAberto(false);
-            setCarregandoMensagensAnteriores(false);
-            setTemMensagensAnteriores(false);
             setSetorTransferenciaSelecionado(null);
             setMensagemTransferencia("");
             setModalTransferirConversa(false);
@@ -1561,7 +1548,7 @@ function Home() {
                 aberto: true,
                 tipo: "sucesso",
                 mensagem:
-                    `Conversa transferida para o setor ${
+                    `Atendimento encaminhado para o setor ${
                         resultado?.setorDestino?.nome ??
                         setorTransferenciaSelecionado.setor
                     }.`,

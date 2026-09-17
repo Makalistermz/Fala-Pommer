@@ -1218,6 +1218,8 @@ export class ConversasService {
                                     id: true,
                                     conteudo: true,
                                     origem: true,
+                                    sistema: true,
+                                    transferencia_id: true,
                                     arquivo_nome: true,
                                     arquivo_tipo: true,
                                     enviada_em: true
@@ -1305,11 +1307,7 @@ export class ConversasService {
                         atendimento.conversa
                             .conversa_leitura[0]
                             ?.ultima_mensagem_lida_id ?? null,
-                    visivelDesdeMensagemId:
-                        usuarioLogado.tipo_usuario === "user"
-                            ? atendimento
-                                .usuario_visivel_desde_mensagem_id
-                            : null,
+                    visivelDesdeMensagemId: null,
                     visibilidades: visibilidadesAtendimento
                 }))
             );
@@ -1370,6 +1368,10 @@ export class ConversasService {
                             ultimaMensagem.conteudo,
                         origem:
                             ultimaMensagem.origem,
+                        sistema:
+                            ultimaMensagem.sistema,
+                        transferenciaId:
+                            ultimaMensagem.transferencia_id,
                         arquivoNome:
                             ultimaMensagem.arquivo_nome,
                         arquivoTipo:
@@ -1614,6 +1616,9 @@ export class ConversasService {
                             usuario_id: usuarioId,
                             ocultada_para_usuario_em: null
                         },
+                        orderBy: {
+                            criada_em: "desc"
+                        },
                         include: {
                             conversa: {
                                 select: {
@@ -1648,6 +1653,63 @@ export class ConversasService {
 
                 if (atendimentoExistente) {
                     return atendimentoExistente;
+                }
+
+                const atendimentoOculto =
+                    await transacao.conversa_setor.findFirst({
+                        where: {
+                            setor_id: setorId,
+                            usuario_id: usuarioId
+                        },
+                        orderBy: {
+                            criada_em: "desc"
+                        },
+                        select: {
+                            conversa_id: true
+                        }
+                    });
+
+                if (atendimentoOculto) {
+                    return transacao.conversa_setor.update({
+                        where: {
+                            conversa_id:
+                                atendimentoOculto.conversa_id
+                        },
+                        data: {
+                            ocultada_para_usuario_em: null,
+                            usuario_visivel_desde_mensagem_id: null
+                        },
+                        include: {
+                            conversa: {
+                                select: {
+                                    id: true,
+                                    tipo: true,
+                                    criada_em: true
+                                }
+                            },
+                            setor: {
+                                select: {
+                                    id: true,
+                                    setor: true,
+                                    sigla_setor: true,
+                                    secretaria: {
+                                        select: {
+                                            id: true,
+                                            secretaria: true,
+                                            sigla_secretaria: true
+                                        }
+                                    }
+                                }
+                            },
+                            usuario: {
+                                select: {
+                                    id: true,
+                                    nome: true,
+                                    foto_perfil_url: true
+                                }
+                            }
+                        }
+                    });
                 }
 
                 return transacao.conversa_setor.create({
@@ -1980,19 +2042,13 @@ export class ConversasService {
                 conversaId
             );
 
-        const atendimentoDoCidadao =
-            contexto.conversa.tipo === "setor" &&
-            contexto.usuarioLogado.tipo_usuario === "user";
         const visivelDesdeMensagemId =
             contexto.conversa.tipo === "privada"
                 ? contexto.conversa.conversa_participante.find(
                     (participante) =>
                         participante.usuario_id === usuarioLogadoId
                 )?.visivel_desde_mensagem_id ?? null
-                : atendimentoDoCidadao
-                    ? contexto.atendimento
-                        ?.usuario_visivel_desde_mensagem_id ?? null
-                    : null;
+                : null;
         const visibilidades =
             contexto.conversa.tipo === "setor"
                 ? contexto.usuarioLogado.tipo_usuario === "user"
@@ -2144,19 +2200,13 @@ export class ConversasService {
                 conversaId
             );
 
-        const atendimentoDoCidadao =
-            contexto.conversa.tipo === "setor" &&
-            contexto.usuarioLogado.tipo_usuario === "user";
         const visivelDesdeMensagemId =
             contexto.conversa.tipo === "privada"
                 ? contexto.conversa.conversa_participante.find(
                     (participante) =>
                         participante.usuario_id === usuarioLogadoId
                 )?.visivel_desde_mensagem_id ?? null
-                : atendimentoDoCidadao
-                    ? contexto.atendimento
-                        ?.usuario_visivel_desde_mensagem_id ?? null
-                    : null;
+                : null;
         const visibilidades =
             contexto.conversa.tipo === "setor"
                 ? contexto.usuarioLogado.tipo_usuario === "user"
@@ -2828,6 +2878,7 @@ export class ConversasService {
                         select: {
                             conversa_id: true,
                             setor_id: true,
+                            usuario_id: true,
                             setor: {
                                 select: {
                                     id: true,
@@ -2929,6 +2980,89 @@ export class ConversasService {
                     );
                 }
 
+                // Serializa a busca/criação do atendimento de destino para
+                // impedir novas conversas duplicadas do mesmo cidadão/setor.
+                await transacao.$queryRaw<Array<{ id: number }>>`
+                    SELECT id
+                    FROM cadastro
+                    WHERE id = ${atendimentoAtual.usuario_id}
+                    FOR UPDATE
+                `;
+
+                let atendimentoDestino =
+                    await transacao.conversa_setor.findFirst({
+                        where: {
+                            setor_id: setorDestino.id,
+                            usuario_id: atendimentoAtual.usuario_id,
+                            ocultada_para_usuario_em: null
+                        },
+                        orderBy: {
+                            criada_em: "desc"
+                        },
+                        select: {
+                            conversa_id: true
+                        }
+                    });
+                let conversaDestinoReutilizada = true;
+
+                if (!atendimentoDestino) {
+                    const atendimentoDestinoOculto =
+                        await transacao.conversa_setor.findFirst({
+                            where: {
+                                setor_id: setorDestino.id,
+                                usuario_id: atendimentoAtual.usuario_id
+                            },
+                            orderBy: {
+                                criada_em: "desc"
+                            },
+                            select: {
+                                conversa_id: true
+                            }
+                        });
+
+                    if (atendimentoDestinoOculto) {
+                        atendimentoDestino =
+                            await transacao.conversa_setor.update({
+                                where: {
+                                    conversa_id:
+                                        atendimentoDestinoOculto.conversa_id
+                                },
+                                data: {
+                                    ocultada_para_usuario_em: null,
+                                    usuario_visivel_desde_mensagem_id: null
+                                },
+                                select: {
+                                    conversa_id: true
+                                }
+                            });
+                    } else {
+                        atendimentoDestino =
+                            await transacao.conversa_setor.create({
+                                data: {
+                                    conversa: {
+                                        create: {
+                                            tipo: "setor"
+                                        }
+                                    },
+                                    setor: {
+                                        connect: {
+                                            id: setorDestino.id
+                                        }
+                                    },
+                                    usuario: {
+                                        connect: {
+                                            id: atendimentoAtual.usuario_id
+                                        }
+                                    }
+                                },
+                                select: {
+                                    conversa_id: true
+                                }
+                            });
+                        conversaDestinoReutilizada = false;
+                    }
+                }
+
                 const transferencia =
                     await transacao.conversa_transferencia.create({
                         data: {
@@ -2946,20 +3080,21 @@ export class ConversasService {
                     });
 
                 const conteudoMensagemEquipe =
-                    `${contexto.usuarioLogado.nome} transferiu esta conversa ` +
-                    `do setor ${atendimentoAtual.setor.setor} para o setor ` +
-                    `${setorDestino.setor}.\nMotivo: ${motivo}`;
+                    `${contexto.usuarioLogado.nome} encaminhou um atendimento ` +
+                    `do setor ${atendimentoAtual.setor.setor}.\n` +
+                    `Motivo: ${motivo}`;
 
                 const mensagemEquipe =
                     await transacao.mensagem.create({
                         data: {
-                            conversa_id: conversaId,
+                            conversa_id:
+                                atendimentoDestino.conversa_id,
                             remetente_id: usuarioLogadoId,
                             origem: "setor",
                             sistema: true,
                             visibilidade: "equipe",
                             transferencia_id: transferencia.id,
-                            setor_id: atendimentoAtual.setor.id,
+                            setor_id: setorDestino.id,
                             conteudo: conteudoMensagemEquipe
                         },
                         select: {
@@ -2968,12 +3103,13 @@ export class ConversasService {
                     });
 
                 const conteudoMensagemCidadao =
-                    `Sua conversa foi transferida para o setor ` +
+                    `Seu atendimento foi encaminhado para o setor ` +
                     `${setorDestino.setor}.`;
                 const mensagemCidadao =
                     await transacao.mensagem.create({
                         data: {
-                            conversa_id: conversaId,
+                            conversa_id:
+                                atendimentoDestino.conversa_id,
                             remetente_id: usuarioLogadoId,
                             origem: "setor",
                             sistema: true,
@@ -2987,20 +3123,12 @@ export class ConversasService {
                         }
                     });
 
-                await transacao.conversa_setor.update({
-                    where: {
-                        conversa_id: conversaId
-                    },
-                    data: {
-                        setor_id: setorDestino.id,
-                        usuario_visivel_desde_mensagem_id:
-                            mensagemCidadao.id
-                    }
-                });
-
                 return {
                     transferenciaId: transferencia.id,
                     transferidaEm: transferencia.transferida_em,
+                    conversaDestinoId:
+                        atendimentoDestino.conversa_id,
+                    conversaDestinoReutilizada,
                     mensagemEquipeId: mensagemEquipe.id,
                     mensagemCidadaoId: mensagemCidadao.id,
                     conteudoMensagemCidadao,
@@ -3015,14 +3143,8 @@ export class ConversasService {
             }
         );
 
-        for (const [chave, estado] of this.usuariosDigitando) {
-            if (estado.conversaId === conversaId) {
-                this.usuariosDigitando.delete(chave);
-            }
-        }
-
         void this.notificacoesService.enviarNovaMensagem({
-            conversaId,
+            conversaId: resultado.conversaDestinoId,
             mensagemId: resultado.mensagemCidadaoId,
             remetenteId: usuarioLogadoId,
             remetenteNome: resultado.setorDestino.setor,
@@ -3032,6 +3154,9 @@ export class ConversasService {
 
         return {
             conversaId,
+            conversaDestinoId: resultado.conversaDestinoId,
+            conversaDestinoReutilizada:
+                resultado.conversaDestinoReutilizada,
             transferenciaId: resultado.transferenciaId,
             transferidaEm: resultado.transferidaEm,
             setorOrigem: {

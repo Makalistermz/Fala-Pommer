@@ -1245,7 +1245,7 @@ describe("ConversasService", () => {
     });
   });
 
-  it("transfere o atendimento e cria avisos separados para equipe e cidadão", async () => {
+  it("encaminha para a conversa já existente do setor sem alterar a origem", async () => {
     const transferidaEm = new Date("2026-09-17T12:00:00.000Z");
 
     prismaMock.cadastro.findUnique.mockResolvedValue({
@@ -1277,6 +1277,7 @@ describe("ConversasService", () => {
     prismaMock.conversa_setor.findUnique.mockResolvedValue({
       conversa_id: 10,
       setor_id: 2,
+      usuario_id: 7,
       setor: {
         id: 2,
         setor: "Protocolo",
@@ -1296,6 +1297,9 @@ describe("ConversasService", () => {
       id: 20,
       transferida_em: transferidaEm,
     });
+    prismaMock.conversa_setor.findFirst.mockResolvedValue({
+      conversa_id: 40,
+    });
     prismaMock.mensagem.create
       .mockResolvedValueOnce({ id: 30 })
       .mockResolvedValueOnce({ id: 31 });
@@ -1308,6 +1312,8 @@ describe("ConversasService", () => {
       }),
     ).resolves.toEqual({
       conversaId: 10,
+      conversaDestinoId: 40,
+      conversaDestinoReutilizada: true,
       transferenciaId: 20,
       transferidaEm,
       setorOrigem: { id: 2, nome: "Protocolo", sigla: "PRO" },
@@ -1318,10 +1324,10 @@ describe("ConversasService", () => {
       1,
       expect.objectContaining({
         data: expect.objectContaining({
-          conversa_id: 10,
+          conversa_id: 40,
           visibilidade: "equipe",
           transferencia_id: 20,
-          setor_id: 2,
+          setor_id: 3,
           sistema: true,
         }),
       }),
@@ -1330,7 +1336,7 @@ describe("ConversasService", () => {
       2,
       expect.objectContaining({
         data: expect.objectContaining({
-          conversa_id: 10,
+          conversa_id: 40,
           visibilidade: "cidadao",
           transferencia_id: 20,
           setor_id: 3,
@@ -1338,13 +1344,89 @@ describe("ConversasService", () => {
         }),
       }),
     );
-    expect(prismaMock.conversa_setor.update).toHaveBeenCalledWith({
-      where: { conversa_id: 10 },
-      data: {
-        setor_id: 3,
-        usuario_visivel_desde_mensagem_id: 31,
+    expect(prismaMock.conversa_setor.create).not.toHaveBeenCalled();
+    expect(prismaMock.conversa_setor.update).not.toHaveBeenCalled();
+  });
+
+  it("cria a conversa do setor de destino somente quando ainda não existe", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      nome: "Funcionário de origem",
+      tipo_usuario: "funcionario",
+      setor_id: 2,
+      secretaria_id: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "setor",
+      conversa_participante: [],
+      atendimento_setor: {
+        conversa_id: 10,
+        setor_id: 2,
+        usuario_id: 7,
+        ocultada_para_usuario_em: null,
+        setor: {
+          id: 2,
+          setor: "Protocolo",
+          sigla_setor: "PRO",
+          secretaria_id: 4,
+        },
+        usuario: { id: 7, nome: "Cidadão" },
       },
     });
+    prismaMock.conversa_setor.findUnique.mockResolvedValue({
+      conversa_id: 10,
+      setor_id: 2,
+      usuario_id: 7,
+      setor: {
+        id: 2,
+        setor: "Protocolo",
+        sigla_setor: "PRO",
+        secretaria_id: 4,
+      },
+      conversa: { tipo: "setor" },
+    });
+    prismaMock.setores.findUnique.mockResolvedValue({
+      id: 3,
+      setor: "Tributos",
+      sigla_setor: "TRI",
+      secretaria_id: 5,
+      cadastros: [{ id: 8 }],
+    });
+    prismaMock.conversa_setor.findFirst.mockResolvedValue(null);
+    prismaMock.conversa_setor.create.mockResolvedValue({
+      conversa_id: 41,
+    });
+    prismaMock.conversa_transferencia.create.mockResolvedValue({
+      id: 21,
+      transferida_em: new Date("2026-09-17T13:00:00.000Z"),
+    });
+    prismaMock.mensagem.create
+      .mockResolvedValueOnce({ id: 32 })
+      .mockResolvedValueOnce({ id: 33 });
+
+    await expect(
+      service.transferirConversa(1, 10, {
+        setorDestinoId: 3,
+        motivo: "Necessita de análise tributária.",
+      }),
+    ).resolves.toEqual(
+      expect.objectContaining({
+        conversaId: 10,
+        conversaDestinoId: 41,
+        conversaDestinoReutilizada: false,
+      }),
+    );
+    expect(prismaMock.conversa_setor.findFirst).toHaveBeenCalledTimes(2);
+    expect(prismaMock.conversa_setor.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: {
+          conversa: { create: { tipo: "setor" } },
+          setor: { connect: { id: 3 } },
+          usuario: { connect: { id: 7 } },
+        },
+      }),
+    );
   });
 
   it("marca como lida somente a última mensagem visível para o cidadão", async () => {
@@ -1392,10 +1474,47 @@ describe("ConversasService", () => {
       where: {
         conversa_id: 10,
         visibilidade: { in: ["todos", "cidadao"] },
-        id: { gte: 31 },
       },
       orderBy: { id: "desc" },
       select: { id: true },
+    });
+  });
+
+  it("mantém todo o histórico da conversa de setor visível para o cidadão", async () => {
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 7,
+      nome: "Cidadão",
+      tipo_usuario: "user",
+      setor_id: null,
+      secretaria_id: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "setor",
+      conversa_participante: [],
+      atendimento_setor: {
+        setor_id: 3,
+        usuario_id: 7,
+        ocultada_para_usuario_em: null,
+        usuario_visivel_desde_mensagem_id: 31,
+        setor: {
+          id: 3,
+          setor: "Tributos",
+          sigla_setor: "TRI",
+          secretaria_id: 5,
+        },
+        usuario: { id: 7, nome: "Cidadão" },
+      },
+    });
+    prismaMock.mensagem.findMany.mockResolvedValue([]);
+
+    await expect(service.listarMensagens(7, 10)).resolves.toEqual([]);
+
+    const consulta =
+      prismaMock.mensagem.findMany.mock.calls.at(-1)?.[0];
+    expect(consulta.where).toEqual({
+      conversa_id: 10,
+      visibilidade: { in: ["todos", "cidadao"] },
     });
   });
 });

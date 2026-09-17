@@ -41,6 +41,7 @@ export class SetoresService {
                 cadastros: {
                     some: {
                         tipo_usuario: 'funcionario',
+                        desativado_em: null,
                     },
                 },
             },

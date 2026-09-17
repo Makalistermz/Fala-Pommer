@@ -41,7 +41,9 @@ describe("ConversasService", () => {
     conversa_setor: {
       findMany: jest.fn(),
       findFirst: jest.fn(),
+      findUnique: jest.fn(),
       create: jest.fn(),
+      update: jest.fn(),
     },
     conversa_participante: {
       updateMany: jest.fn(),
@@ -50,10 +52,18 @@ describe("ConversasService", () => {
     },
     conversa_leitura: {
       deleteMany: jest.fn(),
+      upsert: jest.fn(),
     },
     mensagem: {
       findMany: jest.fn(),
+      findFirst: jest.fn(),
       groupBy: jest.fn(),
+      create: jest.fn(),
+    },
+    setores: {
+      findUnique: jest.fn(),
+    },
+    conversa_transferencia: {
       create: jest.fn(),
     },
     avaliacao: {
@@ -1232,6 +1242,160 @@ describe("ConversasService", () => {
     await expect(service.atualizarDigitacao(9, 10, true)).resolves.toEqual({
       conversaId: 10,
       digitando: true,
+    });
+  });
+
+  it("transfere o atendimento e cria avisos separados para equipe e cidadão", async () => {
+    const transferidaEm = new Date("2026-09-17T12:00:00.000Z");
+
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 1,
+      nome: "Funcionário de origem",
+      tipo_usuario: "funcionario",
+      setor_id: 2,
+      secretaria_id: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "setor",
+      conversa_participante: [],
+      atendimento_setor: {
+        conversa_id: 10,
+        setor_id: 2,
+        usuario_id: 7,
+        ocultada_para_usuario_em: null,
+        usuario_visivel_desde_mensagem_id: null,
+        setor: {
+          id: 2,
+          setor: "Protocolo",
+          sigla_setor: "PRO",
+          secretaria_id: 4,
+        },
+        usuario: { id: 7, nome: "Cidadão" },
+      },
+    });
+    prismaMock.conversa_setor.findUnique.mockResolvedValue({
+      conversa_id: 10,
+      setor_id: 2,
+      setor: {
+        id: 2,
+        setor: "Protocolo",
+        sigla_setor: "PRO",
+        secretaria_id: 4,
+      },
+      conversa: { tipo: "setor" },
+    });
+    prismaMock.setores.findUnique.mockResolvedValue({
+      id: 3,
+      setor: "Tributos",
+      sigla_setor: "TRI",
+      secretaria_id: 5,
+      cadastros: [{ id: 8 }],
+    });
+    prismaMock.conversa_transferencia.create.mockResolvedValue({
+      id: 20,
+      transferida_em: transferidaEm,
+    });
+    prismaMock.mensagem.create
+      .mockResolvedValueOnce({ id: 30 })
+      .mockResolvedValueOnce({ id: 31 });
+    prismaMock.conversa_setor.update.mockResolvedValue({});
+
+    await expect(
+      service.transferirConversa(1, 10, {
+        setorDestinoId: 3,
+        motivo: "Necessita de análise tributária.",
+      }),
+    ).resolves.toEqual({
+      conversaId: 10,
+      transferenciaId: 20,
+      transferidaEm,
+      setorOrigem: { id: 2, nome: "Protocolo", sigla: "PRO" },
+      setorDestino: { id: 3, nome: "Tributos", sigla: "TRI" },
+    });
+
+    expect(prismaMock.mensagem.create).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        data: expect.objectContaining({
+          conversa_id: 10,
+          visibilidade: "equipe",
+          transferencia_id: 20,
+          setor_id: 2,
+          sistema: true,
+        }),
+      }),
+    );
+    expect(prismaMock.mensagem.create).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        data: expect.objectContaining({
+          conversa_id: 10,
+          visibilidade: "cidadao",
+          transferencia_id: 20,
+          setor_id: 3,
+          sistema: true,
+        }),
+      }),
+    );
+    expect(prismaMock.conversa_setor.update).toHaveBeenCalledWith({
+      where: { conversa_id: 10 },
+      data: {
+        setor_id: 3,
+        usuario_visivel_desde_mensagem_id: 31,
+      },
+    });
+  });
+
+  it("marca como lida somente a última mensagem visível para o cidadão", async () => {
+    const lidaEm = new Date("2026-09-17T12:30:00.000Z");
+
+    prismaMock.cadastro.findUnique.mockResolvedValue({
+      id: 7,
+      nome: "Cidadão",
+      tipo_usuario: "user",
+      setor_id: null,
+      secretaria_id: null,
+    });
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "setor",
+      conversa_participante: [],
+      atendimento_setor: {
+        setor_id: 3,
+        usuario_id: 7,
+        ocultada_para_usuario_em: null,
+        usuario_visivel_desde_mensagem_id: 31,
+        setor: {
+          id: 3,
+          setor: "Tributos",
+          sigla_setor: "TRI",
+          secretaria_id: 5,
+        },
+        usuario: { id: 7, nome: "Cidadão" },
+      },
+    });
+    prismaMock.mensagem.findFirst.mockResolvedValue({ id: 35 });
+    prismaMock.conversa_leitura.upsert.mockResolvedValue({
+      conversa_id: 10,
+      ultima_mensagem_lida_id: 35,
+      lida_em: lidaEm,
+    });
+
+    await expect(service.marcarComoLida(7, 10)).resolves.toEqual({
+      conversaId: 10,
+      ultimaMensagemLidaId: 35,
+      lidaEm,
+      mensagensNaoLidas: 0,
+    });
+    expect(prismaMock.mensagem.findFirst).toHaveBeenCalledWith({
+      where: {
+        conversa_id: 10,
+        visibilidade: { in: ["todos", "cidadao"] },
+        id: { gte: 31 },
+      },
+      orderBy: { id: "desc" },
+      select: { id: true },
     });
   });
 });

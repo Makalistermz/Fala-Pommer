@@ -430,6 +430,15 @@ html.tema-escuro:not(.alto-contraste) .modal-transferencia__item:hover {
   box-shadow: 0 8px 20px rgb(0 0 0 / 22%);
 }
 
+html.tema-escuro:not(.alto-contraste) :is(
+  .modal-transferencia__item--atual,
+  .modal-transferencia__item--atual:hover
+) {
+  border-color: var(--tema-borda);
+  background: #202c3d;
+  box-shadow: none;
+}
+
 html.tema-escuro:not(.alto-contraste) .modal-transferencia__item-icone {
   border-color: #315982;
   background: #183653;
@@ -1258,6 +1267,10 @@ html.tema-escuro:not(.alto-contraste) .modal-transferencia-confirmacao__mensagem
 
 html.tema-escuro:not(.alto-contraste) .modal-transferencia-confirmacao__mensagem small {
   color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-transferencia-confirmacao__erro {
+  color: #ff9b95;
 }
 
 html.tema-escuro:not(.alto-contraste) .modal-transferencia-confirmacao__mensagem textarea {

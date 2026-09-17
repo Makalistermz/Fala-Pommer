@@ -1774,6 +1774,15 @@ button.modal-transferencia__etapa {
     box-shadow: 0 7px 18px rgba(19, 81, 180, 0.09);
 }
 
+.modal-transferencia__item--atual,
+.modal-transferencia__item--atual:hover {
+    cursor: not-allowed;
+    border-color: #d7dce5;
+    background: #f5f6f8;
+    box-shadow: none;
+    opacity: 0.72;
+}
+
 .modal-transferencia__item:focus-visible,
 .modal-transferencia__voltar:focus-visible,
 .modal-transferencia__etapa:focus-visible {
@@ -1839,6 +1848,12 @@ button.modal-transferencia__etapa {
     background: #12b76a;
     box-shadow: 0 0 0 3px rgba(18, 183, 106, 0.12);
     animation: pulsar 1.8s ease-out infinite;
+}
+
+.modal-transferencia__disponivel--atual > span {
+    background: #98a2b3;
+    box-shadow: none;
+    animation: none;
 }
 
 @keyframes pulsar {
@@ -1927,6 +1942,18 @@ button.modal-transferencia__etapa {
 .modal-transferencia-confirmacao__obrigatorio {
     margin-left: 3px;
     color: #b42318;
+}
+
+.modal-transferencia-confirmacao__erro {
+    color: #b42318;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.modal-transferencia-confirmacao__mensagem textarea:disabled {
+    cursor: wait;
+    opacity: 0.7;
 }
 
 .modal-transferencia-confirmacao__mensagem textarea::placeholder {

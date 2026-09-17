@@ -2138,15 +2138,48 @@ export class ConversasService {
         usuarioLogadoId: number,
         conversaId: number
     ) {
-        await this.verificarAcessoConversa(
-            usuarioLogadoId,
-            conversaId
-        );
+        const contexto =
+            await this.verificarAcessoConversa(
+                usuarioLogadoId,
+                conversaId
+            );
+
+        const atendimentoDoCidadao =
+            contexto.conversa.tipo === "setor" &&
+            contexto.usuarioLogado.tipo_usuario === "user";
+        const visivelDesdeMensagemId =
+            contexto.conversa.tipo === "privada"
+                ? contexto.conversa.conversa_participante.find(
+                    (participante) =>
+                        participante.usuario_id === usuarioLogadoId
+                )?.visivel_desde_mensagem_id ?? null
+                : atendimentoDoCidadao
+                    ? contexto.atendimento
+                        ?.usuario_visivel_desde_mensagem_id ?? null
+                    : null;
+        const visibilidades =
+            contexto.conversa.tipo === "setor"
+                ? contexto.usuarioLogado.tipo_usuario === "user"
+                    ? ["todos", "cidadao"] as const
+                    : ["todos", "equipe"] as const
+                : null;
 
         const ultimaMensagem =
             await this.prisma.mensagem.findFirst({
                 where: {
-                    conversa_id: conversaId
+                    conversa_id: conversaId,
+
+                    ...(visibilidades && {
+                        visibilidade: {
+                            in: [...visibilidades]
+                        }
+                    }),
+
+                    ...(visivelDesdeMensagemId !== null && {
+                        id: {
+                            gte: visivelDesdeMensagemId
+                        }
+                    })
                 },
 
                 orderBy: {

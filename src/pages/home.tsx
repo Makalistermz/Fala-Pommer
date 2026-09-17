@@ -261,6 +261,8 @@ function Home() {
     const [setorTransferenciaSelecionado, setSetorTransferenciaSelecionado] =
         useState<Setor | null>(null);
     const [mensagemTransferencia, setMensagemTransferencia] = useState("");
+    const [transferindoConversa, setTransferindoConversa] = useState(false);
+    const [erroTransferencia, setErroTransferencia] = useState("");
     const botaoFecharModalTransferenciaRef = useRef<HTMLButtonElement>(null);
     const [buscaPessoaGrupo, setBuscaPessoaGrupo] = useState("");
     const [buscarSetorTranfConversa, setBuscarSetorTranfConversa] = useState("");
@@ -315,6 +317,10 @@ function Home() {
     const balõesRef = useRef<Map<number, HTMLElement>>(new Map());
     const idsAnimadosRef = useRef<Set<number>>(new Set());
     const conversaAbertaIdRef = useRef<number | null>(null);
+    const setorConversaCidadaoRef = useRef<{
+        conversaId: number;
+        setorId: number;
+    } | null>(null);
     const ultimaMensagemChatIdRef = useRef(0);
     const historicoChatCarregadoRef = useRef(false);
     const somNotificacaoRef = useRef<HTMLAudioElement | null>(null);
@@ -1229,9 +1235,9 @@ function Home() {
                             return conversaAtualizada;
                         }
 
-                        return conversaAtual.tipo === "grupo"
-                            ? null
-                            : conversaAtual;
+                        return conversaAtual.tipo === "privada"
+                            ? conversaAtual
+                            : null;
                     });
 
                     if (tipoUsuarioLogado === "user") {
@@ -1296,6 +1302,43 @@ function Home() {
             );
         };
     }, [usuario]);
+
+    useEffect(() => {
+        if (
+            usuario?.tipo !== "user" ||
+            conversaSelecionada?.tipo !== "setor"
+        ) {
+            setorConversaCidadaoRef.current = null;
+
+            if (!conversaSelecionada) {
+                setMensagensChat([]);
+            }
+
+            return;
+        }
+
+        const conversaAtual = {
+            conversaId: conversaSelecionada.id,
+            setorId: conversaSelecionada.setor.id,
+        };
+        const conversaAnterior = setorConversaCidadaoRef.current;
+
+        setorConversaCidadaoRef.current = conversaAtual;
+
+        if (
+            conversaAnterior?.conversaId === conversaAtual.conversaId &&
+            conversaAnterior.setorId !== conversaAtual.setorId
+        ) {
+            void abrirConversa(conversaSelecionada);
+        }
+    }, [
+        usuario?.tipo,
+        conversaSelecionada?.id,
+        conversaSelecionada?.tipo,
+        conversaSelecionada?.tipo === "setor"
+            ? conversaSelecionada.setor.id
+            : null,
+    ]);
 
     async function abrirNovaConversa() {
         if (!usuario) {
@@ -1423,6 +1466,10 @@ function Home() {
         setBuscarSetorTranfConversa("");
         setSecretariaTransferenciaSelecionadaId(null);
         setSetoresDisponiveisTransferencia([]);
+        setSetorTransferenciaSelecionado(null);
+        setMensagemTransferencia("");
+        setErroTransferencia("");
+        setTransferindoConversa(false);
         setModalTransferirConversa(true);
 
         try {
@@ -1439,6 +1486,95 @@ function Home() {
         } catch (erro) {
             console.error("Erro ao carregar setores para transferência:", erro);
             setSetoresDisponiveisTransferencia([]);
+        }
+    }
+
+    async function confirmarTransferenciaConversa() {
+        if (
+            conversaSelecionada?.tipo !== "setor" ||
+            !setorTransferenciaSelecionado ||
+            mensagemTransferencia.trim().length < 10 ||
+            transferindoConversa
+        ) {
+            return;
+        }
+
+        const conversaId = conversaSelecionada.id;
+        const setorDestinoId = setorTransferenciaSelecionado.id;
+        const motivo = mensagemTransferencia.trim();
+
+        setErroTransferencia("");
+        setTransferindoConversa(true);
+
+        try {
+            const resposta = await apiFetch(
+                `/conversas/${conversaId}/transferencias`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        setorDestinoId,
+                        motivo,
+                    }),
+                },
+            );
+            const resultado = await resposta.json().catch(() => null) as {
+                setorDestino?: {
+                    nome?: string;
+                };
+                message?: string | string[];
+            } | null;
+
+            if (!resposta.ok) {
+                throw new Error(
+                    Array.isArray(resultado?.message)
+                        ? resultado.message.join(" ")
+                        : resultado?.message ||
+                            "Não foi possível transferir a conversa.",
+                );
+            }
+
+            pararDeInformarDigitacao();
+            cancelarGravacaoAudio();
+            conversaAbertaIdRef.current = null;
+            ultimaMensagemChatIdRef.current = 0;
+            historicoChatCarregadoRef.current = false;
+            alturaAntesDoHistoricoRef.current = null;
+            setorConversaCidadaoRef.current = null;
+
+            setConversas((conversasAtuais) =>
+                conversasAtuais.filter((conversa) => conversa.id !== conversaId),
+            );
+            setConversaSelecionada(null);
+            setMensagensChat([]);
+            setUsuariosDigitando([]);
+            setChatMobileAberto(false);
+            setCarregandoMensagensAnteriores(false);
+            setTemMensagensAnteriores(false);
+            setSetorTransferenciaSelecionado(null);
+            setMensagemTransferencia("");
+            setModalTransferirConversa(false);
+
+            setFeedbackFinalizacao({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem:
+                    `Conversa transferida para o setor ${
+                        resultado?.setorDestino?.nome ??
+                        setorTransferenciaSelecionado.setor
+                    }.`,
+            });
+        } catch (erro) {
+            console.error("Erro ao transferir conversa:", erro);
+            setErroTransferencia(
+                erro instanceof Error
+                    ? erro.message
+                    : "Não foi possível transferir a conversa.",
+            );
+        } finally {
+            setTransferindoConversa(false);
         }
     }
 
@@ -4602,14 +4738,25 @@ function Home() {
                             aria-live="polite"
                         >
                             {secretariaTransferenciaSelecionada
-                                ? setoresDaSecretariaSelecionada.map((setor) => (
+                                ? setoresDaSecretariaSelecionada.map((setor) => {
+                                    const setorAtual =
+                                        conversaSelecionada?.tipo === "setor" &&
+                                        setor.id === conversaSelecionada.setor.id;
+
+                                    return (
                                     <button
                                         key={setor.id}
                                         type="button"
-                                        className="modal-grupo__contato modal-transferencia__item"
+                                        className={`modal-grupo__contato modal-transferencia__item${
+                                            setorAtual
+                                                ? " modal-transferencia__item--atual"
+                                                : ""
+                                        }`}
+                                        disabled={setorAtual}
                                         onClick={() => {
                                             setSetorTransferenciaSelecionado(setor);
                                             setMensagemTransferencia("");
+                                            setErroTransferencia("");
                                             setModalTransferirConversa(false);
                                         }}
                                     >
@@ -4623,12 +4770,19 @@ function Home() {
                                             <strong>{setor.setor}</strong>
                                             <span>{setor.sigla_setor}</span>
                                         </span>
-                                        <span className="modal-transferencia__disponivel">
+                                        <span
+                                            className={`modal-transferencia__disponivel${
+                                                setorAtual
+                                                    ? " modal-transferencia__disponivel--atual"
+                                                    : ""
+                                            }`}
+                                        >
                                             <span aria-hidden="true" />
-                                            Disponível
+                                            {setorAtual ? "Setor atual" : "Disponível"}
                                         </span>
                                     </button>
-                                ))
+                                    );
+                                })
                                 : secretariasDisponiveisParaEnvio.map(
                                     (secretaria) => (
                                         <button
@@ -4934,16 +5088,18 @@ function Home() {
                     : ""
             }
             textoConfirmar="Confirmar"
-            confirmarDesabilitado={mensagemTransferencia.trim().length < 10}
+            textoCarregando="Transferindo..."
+            carregando={transferindoConversa}
+            confirmarDesabilitado={
+                mensagemTransferencia.trim().length < 10
+            }
             aoCancelar={() => {
                 setSetorTransferenciaSelecionado(null);
                 setMensagemTransferencia("");
+                setErroTransferencia("");
                 setModalTransferirConversa(true);
             }}
-            aoConfirmar={() => {
-                setSetorTransferenciaSelecionado(null);
-                setMensagemTransferencia("");
-            }}
+            aoConfirmar={() => void confirmarTransferenciaConversa()}
         >
             <label
                 className="modal-transferencia-confirmacao__mensagem"
@@ -4973,8 +5129,22 @@ function Home() {
                     maxLength={500}
                     minLength={10}
                     required
-                    aria-describedby="mensagem-transferencia-ajuda"
+                    aria-describedby={
+                        erroTransferencia
+                            ? "mensagem-transferencia-ajuda mensagem-transferencia-erro"
+                            : "mensagem-transferencia-ajuda"
+                    }
+                    disabled={transferindoConversa}
                 />
+                {erroTransferencia && (
+                    <span
+                        id="mensagem-transferencia-erro"
+                        className="modal-transferencia-confirmacao__erro"
+                        role="alert"
+                    >
+                        {erroTransferencia}
+                    </span>
+                )}
             </label>
         </ModalConfirmacao>
 

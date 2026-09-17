@@ -12,6 +12,7 @@ import { mkdir, unlink, writeFile } from "node:fs/promises";
 import { randomUUID } from "node:crypto";
 import { join } from "node:path";
 import { CriarAvaliacaoDto } from "./dto/criar-avaliacao.dto";
+import { TransferirConversaDto } from "./dto/transferir-conversa.dto";
 import { Prisma } from "../generated/prisma/client";
 import { NotificacoesService } from "../notificacoes/notificacoes.service";
 
@@ -1144,6 +1145,12 @@ export class ConversasService {
             );
         }
 
+        const visibilidadesAtendimento: Array<
+            "todos" | "equipe" | "cidadao"
+        > = usuarioLogado.tipo_usuario === "user"
+            ? ["todos", "cidadao"]
+            : ["todos", "equipe"];
+
         const filtro: {
             usuario_id?: number;
             setor_id?: number;
@@ -1195,6 +1202,12 @@ export class ConversasService {
                             criada_em: true,
 
                             mensagens: {
+                                where: {
+                                    visibilidade: {
+                                        in: visibilidadesAtendimento
+                                    }
+                                },
+
                                 orderBy: {
                                     enviada_em: "desc"
                                 },
@@ -1291,7 +1304,13 @@ export class ConversasService {
                     ultimaMensagemLidaId:
                         atendimento.conversa
                             .conversa_leitura[0]
-                            ?.ultima_mensagem_lida_id ?? null
+                            ?.ultima_mensagem_lida_id ?? null,
+                    visivelDesdeMensagemId:
+                        usuarioLogado.tipo_usuario === "user"
+                            ? atendimento
+                                .usuario_visivel_desde_mensagem_id
+                            : null,
+                    visibilidades: visibilidadesAtendimento
                 }))
             );
 
@@ -1381,6 +1400,9 @@ export class ConversasService {
             id: number;
             ultimaMensagemLidaId: number | null;
             visivelDesdeMensagemId?: number | null;
+            visibilidades?: Array<
+                "todos" | "equipe" | "cidadao"
+            >;
         }>
     ) {
         if (conversas.length === 0) {
@@ -1397,6 +1419,12 @@ export class ConversasService {
                         remetente_id: {
                             not: usuarioLogadoId
                         },
+
+                        ...(conversa.visibilidades && {
+                            visibilidade: {
+                                in: conversa.visibilidades
+                            }
+                        }),
 
                         id: {
                             gt: Math.max(
@@ -1806,6 +1834,10 @@ export class ConversasService {
                                 conversa_id: conversaId,
                                 remetente_id: usuarioLogadoId,
                                 origem,
+                                setor_id:
+                                    origem === "setor"
+                                        ? contexto.atendimento?.setor_id ?? null
+                                        : null,
                                 conteudo: conteudoLimpo,
                                 enviada_em: enviadaEm,
                                 arquivo_nome: dadosArquivo?.nome ?? null,
@@ -1948,12 +1980,24 @@ export class ConversasService {
                 conversaId
             );
 
+        const atendimentoDoCidadao =
+            contexto.conversa.tipo === "setor" &&
+            contexto.usuarioLogado.tipo_usuario === "user";
         const visivelDesdeMensagemId =
             contexto.conversa.tipo === "privada"
                 ? contexto.conversa.conversa_participante.find(
                     (participante) =>
                         participante.usuario_id === usuarioLogadoId
                 )?.visivel_desde_mensagem_id ?? null
+                : atendimentoDoCidadao
+                    ? contexto.atendimento
+                        ?.usuario_visivel_desde_mensagem_id ?? null
+                    : null;
+        const visibilidades =
+            contexto.conversa.tipo === "setor"
+                ? contexto.usuarioLogado.tipo_usuario === "user"
+                    ? ["todos", "cidadao"] as const
+                    : ["todos", "equipe"] as const
                 : null;
 
         const limite = consulta.limite ?? 50;
@@ -1964,6 +2008,12 @@ export class ConversasService {
             await this.prisma.mensagem.findMany({
                 where: {
                     conversa_id: conversaId,
+
+                    ...(visibilidades && {
+                        visibilidade: {
+                            in: [...visibilidades]
+                        }
+                    }),
 
                     ...(
                         visivelDesdeMensagemId !== null ||
@@ -1992,6 +2042,14 @@ export class ConversasService {
                             tipo_usuario: true,
                             foto_perfil_url: true
                         }
+                    },
+
+                    setores: {
+                        select: {
+                            id: true,
+                            setor: true,
+                            sigla_setor: true
+                        }
                     }
                 },
 
@@ -2012,15 +2070,17 @@ export class ConversasService {
         return mensagensEmOrdemCronologica.map((mensagem) => {
             const atendimento =
                 contexto.atendimento;
+            const setorDaMensagem =
+                mensagem.setores ?? atendimento?.setor;
 
             const remetenteExibido =
                 mensagem.origem === "setor" &&
-                atendimento
+                setorDaMensagem
                     ? {
                         tipo: "setor" as const,
                         id: mensagem.remetente.id,
                         nome: mensagem.remetente.nome,
-                        sigla_setor: atendimento.setor.sigla_setor,
+                        sigla_setor: setorDaMensagem.sigla_setor,
                         tipo_usuario: mensagem.remetente.tipo_usuario,
                         fotoPerfilUrl: mensagem.remetente.foto_perfil_url
                     }
@@ -2671,5 +2731,286 @@ export class ConversasService {
 
             throw erro;
         }
+    }
+
+    async transferirConversa(
+        usuarioLogadoId: number,
+        conversaId: number,
+        dados: TransferirConversaDto
+    ) {
+        const contexto = await this.verificarAcessoConversa(
+            usuarioLogadoId,
+            conversaId
+        );
+
+        if (
+            contexto.conversa.tipo !== "setor" ||
+            !contexto.atendimento
+        ) {
+            throw new BadRequestException(
+                "Somente conversas de atendimento podem ser transferidas."
+            );
+        }
+
+        if (contexto.usuarioLogado.tipo_usuario === "user") {
+            throw new ForbiddenException(
+                "Usuários comuns não podem transferir conversas."
+            );
+        }
+
+        const motivo = dados.motivo.trim();
+
+        if (motivo.length < 10 || motivo.length > 500) {
+            throw new BadRequestException(
+                "O motivo deve ter entre 10 e 500 caracteres."
+            );
+        }
+
+        const setorOrigemEsperadoId =
+            contexto.atendimento.setor_id;
+
+        const resultado = await this.prisma.$transaction(
+            async (transacao) => {
+                const linhasBloqueadas =
+                    await transacao.$queryRaw<
+                        Array<{ conversa_id: number }>
+                    >`
+                        SELECT conversa_id
+                        FROM conversa_setor
+                        WHERE conversa_id = ${conversaId}
+                        FOR UPDATE
+                    `;
+
+                if (linhasBloqueadas.length === 0) {
+                    throw new NotFoundException(
+                        "Atendimento de setor não encontrado."
+                    );
+                }
+
+                const atendimentoAtual =
+                    await transacao.conversa_setor.findUnique({
+                        where: {
+                            conversa_id: conversaId
+                        },
+                        select: {
+                            conversa_id: true,
+                            setor_id: true,
+                            setor: {
+                                select: {
+                                    id: true,
+                                    setor: true,
+                                    sigla_setor: true,
+                                    secretaria_id: true
+                                }
+                            },
+                            conversa: {
+                                select: {
+                                    tipo: true
+                                }
+                            }
+                        }
+                    });
+
+                if (!atendimentoAtual) {
+                    throw new NotFoundException(
+                        "Atendimento de setor não encontrado."
+                    );
+                }
+
+                if (atendimentoAtual.conversa.tipo !== "setor") {
+                    throw new BadRequestException(
+                        "Somente conversas de atendimento podem ser transferidas."
+                    );
+                }
+
+                if (
+                    atendimentoAtual.setor_id !==
+                    setorOrigemEsperadoId
+                ) {
+                    throw new ConflictException(
+                        "A conversa já foi transferida por outro usuário."
+                    );
+                }
+
+                if (
+                    contexto.usuarioLogado.tipo_usuario === "funcionario" &&
+                    contexto.usuarioLogado.setor_id !==
+                        atendimentoAtual.setor_id
+                ) {
+                    throw new ForbiddenException(
+                        "Esta conversa não pertence mais ao seu setor."
+                    );
+                }
+
+                if (
+                    contexto.usuarioLogado.tipo_usuario === "admin" &&
+                    contexto.usuarioLogado.secretaria_id !==
+                        atendimentoAtual.setor.secretaria_id
+                ) {
+                    throw new ForbiddenException(
+                        "Esta conversa não pertence mais à sua secretaria."
+                    );
+                }
+
+                if (
+                    atendimentoAtual.setor_id ===
+                    dados.setorDestinoId
+                ) {
+                    throw new BadRequestException(
+                        "A conversa já pertence ao setor selecionado."
+                    );
+                }
+
+                const setorDestino =
+                    await transacao.setores.findUnique({
+                        where: {
+                            id: dados.setorDestinoId
+                        },
+                        select: {
+                            id: true,
+                            setor: true,
+                            sigla_setor: true,
+                            secretaria_id: true,
+                            cadastros: {
+                                where: {
+                                    tipo_usuario: "funcionario",
+                                    desativado_em: null
+                                },
+                                take: 1,
+                                select: {
+                                    id: true
+                                }
+                            }
+                        }
+                    });
+
+                if (!setorDestino) {
+                    throw new NotFoundException(
+                        "Setor de destino não encontrado."
+                    );
+                }
+
+                if (setorDestino.cadastros.length === 0) {
+                    throw new BadRequestException(
+                        "O setor de destino não possui funcionários disponíveis."
+                    );
+                }
+
+                const transferencia =
+                    await transacao.conversa_transferencia.create({
+                        data: {
+                            conversa_id: conversaId,
+                            setor_origem_id:
+                                atendimentoAtual.setor.id,
+                            setor_destino_id: setorDestino.id,
+                            transferida_por_id: usuarioLogadoId,
+                            motivo
+                        },
+                        select: {
+                            id: true,
+                            transferida_em: true
+                        }
+                    });
+
+                const conteudoMensagemEquipe =
+                    `${contexto.usuarioLogado.nome} transferiu esta conversa ` +
+                    `do setor ${atendimentoAtual.setor.setor} para o setor ` +
+                    `${setorDestino.setor}.\nMotivo: ${motivo}`;
+
+                const mensagemEquipe =
+                    await transacao.mensagem.create({
+                        data: {
+                            conversa_id: conversaId,
+                            remetente_id: usuarioLogadoId,
+                            origem: "setor",
+                            sistema: true,
+                            visibilidade: "equipe",
+                            transferencia_id: transferencia.id,
+                            setor_id: atendimentoAtual.setor.id,
+                            conteudo: conteudoMensagemEquipe
+                        },
+                        select: {
+                            id: true
+                        }
+                    });
+
+                const conteudoMensagemCidadao =
+                    `Sua conversa foi transferida para o setor ` +
+                    `${setorDestino.setor}.`;
+                const mensagemCidadao =
+                    await transacao.mensagem.create({
+                        data: {
+                            conversa_id: conversaId,
+                            remetente_id: usuarioLogadoId,
+                            origem: "setor",
+                            sistema: true,
+                            visibilidade: "cidadao",
+                            transferencia_id: transferencia.id,
+                            setor_id: setorDestino.id,
+                            conteudo: conteudoMensagemCidadao
+                        },
+                        select: {
+                            id: true
+                        }
+                    });
+
+                await transacao.conversa_setor.update({
+                    where: {
+                        conversa_id: conversaId
+                    },
+                    data: {
+                        setor_id: setorDestino.id,
+                        usuario_visivel_desde_mensagem_id:
+                            mensagemCidadao.id
+                    }
+                });
+
+                return {
+                    transferenciaId: transferencia.id,
+                    transferidaEm: transferencia.transferida_em,
+                    mensagemEquipeId: mensagemEquipe.id,
+                    mensagemCidadaoId: mensagemCidadao.id,
+                    conteudoMensagemCidadao,
+                    setorOrigem: atendimentoAtual.setor,
+                    setorDestino: {
+                        id: setorDestino.id,
+                        setor: setorDestino.setor,
+                        sigla_setor: setorDestino.sigla_setor,
+                        secretaria_id: setorDestino.secretaria_id
+                    }
+                };
+            }
+        );
+
+        for (const [chave, estado] of this.usuariosDigitando) {
+            if (estado.conversaId === conversaId) {
+                this.usuariosDigitando.delete(chave);
+            }
+        }
+
+        void this.notificacoesService.enviarNovaMensagem({
+            conversaId,
+            mensagemId: resultado.mensagemCidadaoId,
+            remetenteId: usuarioLogadoId,
+            remetenteNome: resultado.setorDestino.setor,
+            conteudo: resultado.conteudoMensagemCidadao,
+            possuiArquivo: false
+        });
+
+        return {
+            conversaId,
+            transferenciaId: resultado.transferenciaId,
+            transferidaEm: resultado.transferidaEm,
+            setorOrigem: {
+                id: resultado.setorOrigem.id,
+                nome: resultado.setorOrigem.setor,
+                sigla: resultado.setorOrigem.sigla_setor
+            },
+            setorDestino: {
+                id: resultado.setorDestino.id,
+                nome: resultado.setorDestino.setor,
+                sigla: resultado.setorDestino.sigla_setor
+            }
+        };
     }
 }

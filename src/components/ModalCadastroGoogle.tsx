@@ -35,7 +35,7 @@ export function ModalCadastroGoogle({
         className="modal-cadastro-google"
         role="dialog"
         aria-modal="true"
-        aria-label="Completar cadastro com Google"
+        aria-labelledby="modal-cadastro-google-titulo"
         onClick={(evento) => evento.stopPropagation()}
       >
         {children}

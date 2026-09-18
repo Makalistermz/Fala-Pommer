@@ -91,6 +91,7 @@ function Login() {
     "credenciais",
   );
   const [desafio, setDesafio] = useState<DesafioLogin | null>(null);
+  const [informacoesGoogle, setInformacoesGoogle] = useState<RespostaApi | null>(null);
   const [codigo, setCodigo] = useState("");
   const [usarRecuperacao, setUsarRecuperacao] = useState(false);
   const [carregando, setCarregando] = useState(false);
@@ -375,6 +376,8 @@ function Login() {
 
       const resultado = await lerResposta(resposta);
 
+      setInformacoesGoogle(resultado);
+
       await processarResultadoLogin(resultado);
     } catch (erro) {
       mostrarErro(erro);
@@ -404,6 +407,11 @@ function Login() {
       />
     );
   }
+
+  const estiloObrigatorio: React.CSSProperties = {
+      color: 'red',
+  }
+  const obrigatorio = <span style={estiloObrigatorio}>*</span>;
 
   return (
     <main className="login">
@@ -607,7 +615,107 @@ function Login() {
         aberto={cadastroGooglePendente !== null}
         aoFechar={() => setCadastroGooglePendente(null)}
       >
-        {/* Configure aqui o formulário usando cadastroGooglePendente. */}
+        <form className="modal-cadastro-google__formulario" method="POST">
+        <header className="modal-cadastro-google__cabecalho">
+          <div className="modal-cadastro-google__titulo">
+            <span className="modal-cadastro-google__icone" aria-hidden="true">
+              <svg width="16" height="16" fill="currentColor" className="bi bi-clipboard-plus" viewBox="0 0 16 16">
+                <path fillRule="evenodd" d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7"/>
+                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+              </svg>
+            </span>
+
+            <div>
+              <span className="modal-cadastro-google__etapa">
+                COMPLETE O CADASTRO
+              </span>
+              <h2 id="modal-cadastro-google-titulo">Cadastro</h2>
+              <p>Termine o  cadastro para acessar o sistema</p>
+            </div>
+          </div>
+        </header>
+
+        <div className="modal-cadastro-google__conteudo">
+            <div>
+              <label htmlFor="nome">
+                Nome Completo 
+                <span>{obrigatorio}</span>
+              </label>
+
+              <input id="nome" placeholder="Digite seu nome completo" autoComplete="additional-name" required type="text" name="nome" value={informacoesGoogle?.perfil_google?.nome} />
+            </div>
+
+            <div>
+              <label htmlFor="dataNascimento">
+                Data de nascimento 
+                <span>{obrigatorio}</span>
+              </label>
+
+              <input id="dataNascimento" required type="date" name="dataNascimento" />
+            </div>
+
+            <div>
+              <label htmlFor="cpf">
+                CPF
+                <span>{obrigatorio}</span>
+              </label>
+
+              <input id="cpf" inputMode="numeric" placeholder="Ex: 999.999.999-99" autoComplete="off" maxLength={14} required type="text" name="cpf" />
+            </div>
+
+            <div>
+              <label htmlFor="numeroTelefone">
+                Telefone
+                <span>{obrigatorio}</span> 
+              </label>
+
+              <input id="numeroTelefone" inputMode="tel" autoComplete="tel" placeholder="Ex: (27) 99999-9999" maxLength={15} required type="tel" name="numeroTelefone" />
+            </div>
+
+            <div>
+              <label htmlFor="email">
+                E-mail
+                <span>{obrigatorio}</span>
+              </label>
+
+              <input id="email" placeholder="Digite seu e-mail" autoComplete="email" required type="email" name="email" value={informacoesGoogle?.perfil_google?.email} />
+            </div>
+
+            <div>
+              <label htmlFor="senha">
+                Senha
+                <span>{obrigatorio}</span>
+              </label>
+
+              <input id="senha" placeholder="Digite sua senha" autoComplete="new-password" required minLength={8} type="password" name="senha"/>
+            </div>
+
+            <div>
+              <label htmlFor="confirmarSenha">
+                Confirmar senha
+                <span>{obrigatorio}</span>
+              </label>
+
+              <input id="confirmarSenha" placeholder="Confirme sua senha" autoComplete="new-password" required minLength={8} type="password" name="confirmarSenha"/>
+            </div>
+        </div>
+
+        <footer className="modal-cadastro-google__rodape">
+          <div className="modal-cadastro-google__resumo">
+            <span
+              className="modal-cadastro-google__icon"
+              aria-live="polite"
+            >
+              <svg width="16" height="16" fill="currentColor" className="bi bi-exclamation-diamond-fill" viewBox="0 0 16 16">
+                <path d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+              </svg>
+              Cadastro não finalizado
+            </span>
+          </div>
+          <button type="submit">Finalizar cadastro</button>
+        </footer>
+        </form>
       </ModalCadastroGoogle>
     </main>
   );

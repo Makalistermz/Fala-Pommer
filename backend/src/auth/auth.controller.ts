@@ -28,6 +28,7 @@ import { PerfisGuard } from "./guards/perfis.guard";
 import { TwoFactorEmailService } from "./two-factor-email.service";
 import { SenhaDoisFatoresDto } from "./dto/senha-2fa.dto";
 import { CodigoDoisFatoresDto } from "./dto/codigo-2fa.dto";
+import { GoogleLoginDto } from "./dto/google-login-dto";
 import { ReenviarDoisFatoresDto } from "./dto/reenviar-2fa.dto";
 import { CodigoRecuperacaoDoisFatoresDto } from "./dto/codigo-recuperacao-2fa.dto";
 import { TokenDesafioDoisFatoresDto } from "./dto/token-desafio-2fa.dto";
@@ -401,5 +402,23 @@ export class AuthController {
             sameSite: "lax",
             path: "/auth"
         });
+    }
+
+    @Post("google")
+    @HttpCode(HttpStatus.OK)
+    async loginGoogle(
+        @Body() dados: GoogleLoginDto,
+        @Req() requisicao: Request,
+        @Res({ passthrough: true }) resposta: Response
+    ) {
+        const resultado = await this.authService.signInGoogle(
+            dados.credential
+        );
+
+        return this.entregarAutenticacao(
+            resultado,
+            requisicao,
+            resposta
+        );
     }
 }

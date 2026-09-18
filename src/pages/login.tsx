@@ -14,8 +14,6 @@ import {
   type CredentialResponse,
 } from "@react-oauth/google";
 
-import { jwtDecode } from "jwt-decode";
-
 interface GoogleUser {
   iss: string;
   nbf: number;
@@ -340,19 +338,35 @@ function Login() {
     setCodigo("");
   }
 
-  function handleSuccess(response: CredentialResponse) {
-    const token = response.credential;
+  async function handleSuccess(response: CredentialResponse) {
+    const credential = response.credential;
 
-    if (!token) {
-      console.error("O Google não retornou uma credencial.");
+    if (!credential) {
+      mostrarErro(new Error("O Google não retornou uma credencial."));
       return;
     }
 
-    const usuario = jwtDecode<GoogleUser>(token);
+    setCarregando(true);
 
-    console.log("Usuário:", usuario);
-    console.log("Nome:", usuario.name);
-    console.log("E-mail:", usuario.email);
+    try {
+      const resposta = await requisicaoPublica("/auth/google", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          credential,
+        }),
+      });
+
+      const resultado = await lerResposta(resposta);
+
+      await concluirAcesso(resultado);
+    } catch (erro) {
+      mostrarErro(erro);
+    } finally {
+      setCarregando(false);
+    }
   }
 
   function handleError() {

@@ -15,6 +15,10 @@ import {
   type CredentialResponse,
 } from "@react-oauth/google";
 
+import {
+  GoogleReCaptchaProvider,
+} from "react-google-recaptcha-v3";
+
 interface PerfilGoogle {
   nome: string;
   email: string;
@@ -508,71 +512,151 @@ function Login() {
   const obrigatorio = <span style={estiloObrigatorio}>*</span>;
 
   return (
-    <main className="login">
-      <section className="login__formulario">
-        <header className="login__cabecalho">
-          <img src={brasao} alt="Brasão da Prefeitura" />
-          <span>Prefeitura Municipal de Santa Maria de Jetibá</span>
-        </header>
+    <GoogleReCaptchaProvider
+      reCaptchaKey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+    >
+      <main className="login">
+        <section className="login__formulario">
+          <header className="login__cabecalho">
+            <img src={brasao} alt="Brasão da Prefeitura" />
+            <span>Prefeitura Municipal de Santa Maria de Jetibá</span>
+          </header>
 
-        <div className="login__conteudo">
-          <h1>
-            {etapa === "credenciais"
-              ? "Bem-vindo de volta"
-              : "Verifique seu acesso"}
-          </h1>
-          <p>
-            {etapa === "credenciais"
-              ? "Informe seus dados para entrar"
-              : usarRecuperacao
-                ? "Informe um dos seus códigos de recuperação"
-                : `Enviamos um código para ${desafio?.emailMascarado || "seu e-mail"}`}
-          </p>
+          <div className="login__conteudo">
+            <h1>
+              {etapa === "credenciais"
+                ? "Bem-vindo de volta"
+                : "Verifique seu acesso"}
+            </h1>
+            <p>
+              {etapa === "credenciais"
+                ? "Informe seus dados para entrar"
+                : usarRecuperacao
+                  ? "Informe um dos seus códigos de recuperação"
+                  : `Enviamos um código para ${desafio?.emailMascarado || "seu e-mail"}`}
+            </p>
 
-          {etapa === "credenciais" ? (
-            <>
-              {biometriaPendente && (
-                <button
-                  className="login__botao"
-                  type="button"
-                  disabled={carregando}
-                  onClick={tentarBiometria}
-                >
-                  Tentar novamente com biometria
-                </button>
-              )}
+            {etapa === "credenciais" ? (
+              <>
+                {biometriaPendente && (
+                  <button
+                    className="login__botao"
+                    type="button"
+                    disabled={carregando}
+                    onClick={tentarBiometria}
+                  >
+                    Tentar novamente com biometria
+                  </button>
+                )}
 
-              <form onSubmit={entrar}>
-                <div className="campo">
-                  <label htmlFor="email">E-mail</label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="Digite seu e-mail"
-                    autoComplete="email"
-                    required
-                  />
+                <form onSubmit={entrar}>
+                  <div className="campo">
+                    <label htmlFor="email">E-mail</label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="Digite seu e-mail"
+                      autoComplete="email"
+                      required
+                    />
+                  </div>
+
+                  <div className="campo">
+                    <label htmlFor="senha">Senha</label>
+                    <input
+                      id="senha"
+                      name="senha"
+                      type="password"
+                      placeholder="Digite sua senha"
+                      autoComplete="current-password"
+                      required
+                    />
+                  </div>
+
+                  <div className="login__opcoes">
+                    <label className="lembrar">
+                      <input type="checkbox" name="lembrar" />
+                      Lembrar de mim
+                    </label>
+                    <Link to="/recuperar-senha">Esqueci minha senha</Link>
+                  </div>
+
+                  <button
+                    className="login__botao"
+                    type="submit"
+                    disabled={carregando}
+                  >
+                    {carregando ? "Entrando..." : "Entrar"}
+                  </button>
+                </form>
+
+                <div className="login__google">
+                  <p>Ou continue com</p>
+                  <div
+                    className="login__google-botao"
+                    ref={googleButtonContainerRef}
+                  >
+                    <GoogleLogin
+                      key={`${googleButtonType}-${googleButtonWidth}-${googleButtonTheme}`}
+                      onSuccess={handleSuccess}
+                      onError={handleError}
+                      text="signin_with"
+                      type={googleButtonType}
+                      theme={googleButtonTheme}
+                      shape="rectangular"
+                      width={
+                        googleButtonType === "standard"
+                          ? googleButtonWidth
+                          : undefined
+                      }
+                    />
+                  </div>
+                </div>
+
+                <p className="login__cadastro">
+                  Ainda não possui conta? <Link to="/cadastro">Cadastre-se</Link>
+                </p>
+              </>
+            ) : (
+              <form className="login-2fa" onSubmit={confirmarSegundaEtapa}>
+                <div className="login-2fa__aviso" aria-live="polite">
+                  <strong>
+                    {usarRecuperacao ? "Código de recuperação" : "Código por e-mail"}
+                  </strong>
+                  <span>
+                    {usarRecuperacao
+                      ? "Cada código funciona uma única vez."
+                      : "O código possui 6 dígitos e expira em 5 minutos."}
+                  </span>
                 </div>
 
                 <div className="campo">
-                  <label htmlFor="senha">Senha</label>
-                  <input
-                    id="senha"
-                    name="senha"
-                    type="password"
-                    placeholder="Digite sua senha"
-                    autoComplete="current-password"
-                    required
-                  />
-                </div>
-
-                <div className="login__opcoes">
-                  <label className="lembrar">
-                    <input type="checkbox" name="lembrar" />
-                    Lembrar de mim
+                  <label htmlFor="codigo-2fa">
+                    {usarRecuperacao
+                      ? "Código de recuperação"
+                      : "Código de verificação"}
                   </label>
-                  <Link to="/recuperar-senha">Esqueci minha senha</Link>
+                  <input
+                    id="codigo-2fa"
+                    name="codigo"
+                    type="text"
+                    inputMode={usarRecuperacao ? "text" : "numeric"}
+                    autoComplete="one-time-code"
+                    placeholder={usarRecuperacao ? "ABCD-EFGH" : "000000"}
+                    value={codigo}
+                    onChange={(evento) =>
+                      setCodigo(
+                        usarRecuperacao
+                          ? formatarCodigoRecuperacao(evento.target.value)
+                          : evento.target.value.replace(/\D/g, "").slice(0, 6),
+                      )
+                    }
+                    minLength={usarRecuperacao ? 9 : 6}
+                    maxLength={usarRecuperacao ? 9 : 6}
+                    required
+                    autoFocus
+                  />
                 </div>
 
                 <button
@@ -580,274 +664,198 @@ function Login() {
                   type="submit"
                   disabled={carregando}
                 >
-                  {carregando ? "Entrando..." : "Entrar"}
+                  {carregando ? "Verificando..." : "Verificar e entrar"}
                 </button>
-              </form>
 
-              <div className="login__google">
-                <p>Ou continue com</p>
-                <div
-                  className="login__google-botao"
-                  ref={googleButtonContainerRef}
-                >
-                  <GoogleLogin
-                    key={`${googleButtonType}-${googleButtonWidth}-${googleButtonTheme}`}
-                    onSuccess={handleSuccess}
-                    onError={handleError}
-                    text="signin_with"
-                    type={googleButtonType}
-                    theme={googleButtonTheme}
-                    shape="rectangular"
-                    width={
-                      googleButtonType === "standard"
-                        ? googleButtonWidth
-                        : undefined
-                    }
-                  />
+                <div className="login-2fa__acoes">
+                  {!usarRecuperacao && (
+                    <button
+                      type="button"
+                      onClick={reenviarCodigo}
+                      disabled={carregando || segundosReenvio > 0}
+                    >
+                      {segundosReenvio > 0
+                        ? `Reenviar em ${segundosReenvio}s`
+                        : "Reenviar código"}
+                    </button>
+                  )}
+                  <button type="button" onClick={alternarTipoCodigo}>
+                    {usarRecuperacao
+                      ? "Usar código enviado por e-mail"
+                      : "Usar código de recuperação"}
+                  </button>
+                  <button type="button" onClick={voltarParaCredenciais}>
+                    Voltar ao login
+                  </button>
                 </div>
-              </div>
+              </form>
+            )}
+          </div>
+        </section>
 
-              <p className="login__cadastro">
-                Ainda não possui conta? <Link to="/cadastro">Cadastre-se</Link>
-              </p>
-            </>
-          ) : (
-            <form className="login-2fa" onSubmit={confirmarSegundaEtapa}>
-              <div className="login-2fa__aviso" aria-live="polite">
-                <strong>
-                  {usarRecuperacao ? "Código de recuperação" : "Código por e-mail"}
-                </strong>
-                <span>
-                  {usarRecuperacao
-                    ? "Cada código funciona uma única vez."
-                    : "O código possui 6 dígitos e expira em 5 minutos."}
+        <section className="login__ilustracao">
+          <img
+            src={imagemLogin}
+            alt="Ilustração de comunicação e atendimento"
+          />
+        </section>
+
+        <ModalCadastroGoogle
+          aberto={cadastroGooglePendente !== null}
+          aoFechar={fecharCadastroGoogle}
+        >
+          <form
+            className="modal-cadastro-google__formulario"
+            method="POST"
+            onSubmit={concluirCadastroGoogle}
+          >
+          <header className="modal-cadastro-google__cabecalho">
+            <div className="modal-cadastro-google__titulo">
+              <span className="modal-cadastro-google__icone" aria-hidden="true">
+                <svg width="16" height="16" fill="currentColor" className="bi bi-clipboard-plus" viewBox="0 0 16 16">
+                  <path fillRule="evenodd" d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7"/>
+                  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
+                  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
+                </svg>
+              </span>
+
+              <div>
+                <span className="modal-cadastro-google__etapa">
+                  COMPLETE O CADASTRO
                 </span>
+                <h2 id="modal-cadastro-google-titulo">Cadastro</h2>
+                <p>Termine o  cadastro para acessar o sistema</p>
               </div>
+            </div>
+          </header>
 
-              <div className="campo">
-                <label htmlFor="codigo-2fa">
-                  {usarRecuperacao
-                    ? "Código de recuperação"
-                    : "Código de verificação"}
+          <div className="modal-cadastro-google__conteudo">
+              <div>
+                <label htmlFor="cadastroGoogleNome">
+                  Nome Completo 
+                  <span>{obrigatorio}</span>
                 </label>
+
                 <input
-                  id="codigo-2fa"
-                  name="codigo"
-                  type="text"
-                  inputMode={usarRecuperacao ? "text" : "numeric"}
-                  autoComplete="one-time-code"
-                  placeholder={usarRecuperacao ? "ABCD-EFGH" : "000000"}
-                  value={codigo}
-                  onChange={(evento) =>
-                    setCodigo(
-                      usarRecuperacao
-                        ? formatarCodigoRecuperacao(evento.target.value)
-                        : evento.target.value.replace(/\D/g, "").slice(0, 6),
-                    )
-                  }
-                  minLength={usarRecuperacao ? 9 : 6}
-                  maxLength={usarRecuperacao ? 9 : 6}
+                  id="cadastroGoogleNome"
+                  placeholder="Digite seu nome completo"
+                  autoComplete="additional-name"
                   required
-                  autoFocus
+                  type="text"
+                  name="nome"
+                  defaultValue={cadastroGooglePendente?.perfil.nome}
                 />
               </div>
 
-              <button
-                className="login__botao"
-                type="submit"
-                disabled={carregando}
+              <div>
+                <label htmlFor="cadastroGoogleDataNascimento">
+                  Data de nascimento 
+                  <span>{obrigatorio}</span>
+                </label>
+
+                <input id="cadastroGoogleDataNascimento" required type="date" name="dataNascimento" />
+              </div>
+
+              <div>
+                <label htmlFor="cadastroGoogleCpf">
+                  CPF
+                  <span>{obrigatorio}</span>
+                </label>
+
+                <input id="cadastroGoogleCpf" inputMode="numeric" onInput={aplicarMascaraCpf} placeholder="Ex: 999.999.999-99" autoComplete="off" maxLength={14} required type="text" name="cpf" />
+              </div>
+
+              <div>
+                <label htmlFor="cadastroGoogleNumeroTelefone">
+                  Telefone
+                  <span>{obrigatorio}</span> 
+                </label>
+
+                <input id="cadastroGoogleNumeroTelefone" inputMode="tel" onInput={aplicarMascaraTelefone} autoComplete="tel" placeholder="Ex: (27) 99999-9999" maxLength={15} required type="tel" name="numeroTelefone" />
+              </div>
+
+              <div>
+                <label htmlFor="cadastroGoogleEmail">
+                  E-mail
+                  <span>{obrigatorio}</span>
+                </label>
+
+                <input
+                  id="cadastroGoogleEmail"
+                  placeholder="Digite seu e-mail"
+                  autoComplete="email"
+                  required
+                  readOnly
+                  type="email"
+                  name="email"
+                  value={cadastroGooglePendente?.perfil.email ?? ""}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="cadastroGoogleSenha">
+                  Senha
+                  <span>{obrigatorio}</span>
+                </label>
+
+                <input id="cadastroGoogleSenha" placeholder="Digite sua senha" autoComplete="new-password" required minLength={8} type="password" name="senha" onChange={verificarForcaSenhaGoogle}/>
+              </div>
+
+              <div>
+                <label htmlFor="cadastroGoogleConfirmarSenha">
+                  Confirmar senha
+                  <span>{obrigatorio}</span>
+                </label>
+
+                <input id="cadastroGoogleConfirmarSenha" placeholder="Confirme sua senha" autoComplete="new-password" required minLength={8} type="password" name="confirmarSenha"/>
+              </div>
+
+              {forcaSenhaGoogle && (
+                <div className="container-forca-senha modal-cadastro-google__forca-senha">
+                  <p>
+                    Força da senha:
+                    <span className={`senha-${forcaSenhaGoogle}`}>
+                      {" "}
+                      {forcaSenhaGoogle === "Media" ? "Média" : forcaSenhaGoogle}
+                    </span>
+                  </p>
+                  <div className={`barra-progressiva-${forcaSenhaGoogle} barra-progressiva`}></div>
+                </div>
+              )}
+          </div>
+
+          <footer className="modal-cadastro-google__rodape">
+            <div className="modal-cadastro-google__resumo">
+              <span
+                className="modal-cadastro-google__icon"
+                aria-live="polite"
               >
-                {carregando ? "Verificando..." : "Verificar e entrar"}
-              </button>
-
-              <div className="login-2fa__acoes">
-                {!usarRecuperacao && (
-                  <button
-                    type="button"
-                    onClick={reenviarCodigo}
-                    disabled={carregando || segundosReenvio > 0}
-                  >
-                    {segundosReenvio > 0
-                      ? `Reenviar em ${segundosReenvio}s`
-                      : "Reenviar código"}
-                  </button>
-                )}
-                <button type="button" onClick={alternarTipoCodigo}>
-                  {usarRecuperacao
-                    ? "Usar código enviado por e-mail"
-                    : "Usar código de recuperação"}
-                </button>
-                <button type="button" onClick={voltarParaCredenciais}>
-                  Voltar ao login
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-      </section>
-
-      <section className="login__ilustracao">
-        <img
-          src={imagemLogin}
-          alt="Ilustração de comunicação e atendimento"
-        />
-      </section>
-
-      <ModalCadastroGoogle
-        aberto={cadastroGooglePendente !== null}
-        aoFechar={fecharCadastroGoogle}
-      >
-        <form
-          className="modal-cadastro-google__formulario"
-          method="POST"
-          onSubmit={concluirCadastroGoogle}
-        >
-        <header className="modal-cadastro-google__cabecalho">
-          <div className="modal-cadastro-google__titulo">
-            <span className="modal-cadastro-google__icone" aria-hidden="true">
-              <svg width="16" height="16" fill="currentColor" className="bi bi-clipboard-plus" viewBox="0 0 16 16">
-                <path fillRule="evenodd" d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7"/>
-                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
-                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
-              </svg>
-            </span>
-
-            <div>
-              <span className="modal-cadastro-google__etapa">
-                COMPLETE O CADASTRO
+                <svg width="16" height="16" fill="currentColor" className="bi bi-exclamation-diamond-fill" viewBox="0 0 16 16">
+                  <path d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                </svg>
+                Cadastro não finalizado
               </span>
-              <h2 id="modal-cadastro-google-titulo">Cadastro</h2>
-              <p>Termine o  cadastro para acessar o sistema</p>
             </div>
-          </div>
-        </header>
+            <button type="submit" disabled={carregando}>
+              {carregando ? "Finalizando..." : "Finalizar cadastro"}
+            </button>
+          </footer>
+          </form>
+        </ModalCadastroGoogle>
 
-        <div className="modal-cadastro-google__conteudo">
-            <div>
-              <label htmlFor="cadastroGoogleNome">
-                Nome Completo 
-                <span>{obrigatorio}</span>
-              </label>
-
-              <input
-                id="cadastroGoogleNome"
-                placeholder="Digite seu nome completo"
-                autoComplete="additional-name"
-                required
-                type="text"
-                name="nome"
-                defaultValue={cadastroGooglePendente?.perfil.nome}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="cadastroGoogleDataNascimento">
-                Data de nascimento 
-                <span>{obrigatorio}</span>
-              </label>
-
-              <input id="cadastroGoogleDataNascimento" required type="date" name="dataNascimento" />
-            </div>
-
-            <div>
-              <label htmlFor="cadastroGoogleCpf">
-                CPF
-                <span>{obrigatorio}</span>
-              </label>
-
-              <input id="cadastroGoogleCpf" inputMode="numeric" onInput={aplicarMascaraCpf} placeholder="Ex: 999.999.999-99" autoComplete="off" maxLength={14} required type="text" name="cpf" />
-            </div>
-
-            <div>
-              <label htmlFor="cadastroGoogleNumeroTelefone">
-                Telefone
-                <span>{obrigatorio}</span> 
-              </label>
-
-              <input id="cadastroGoogleNumeroTelefone" inputMode="tel" onInput={aplicarMascaraTelefone} autoComplete="tel" placeholder="Ex: (27) 99999-9999" maxLength={15} required type="tel" name="numeroTelefone" />
-            </div>
-
-            <div>
-              <label htmlFor="cadastroGoogleEmail">
-                E-mail
-                <span>{obrigatorio}</span>
-              </label>
-
-              <input
-                id="cadastroGoogleEmail"
-                placeholder="Digite seu e-mail"
-                autoComplete="email"
-                required
-                readOnly
-                type="email"
-                name="email"
-                value={cadastroGooglePendente?.perfil.email ?? ""}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="cadastroGoogleSenha">
-                Senha
-                <span>{obrigatorio}</span>
-              </label>
-
-              <input id="cadastroGoogleSenha" placeholder="Digite sua senha" autoComplete="new-password" required minLength={8} type="password" name="senha" onChange={verificarForcaSenhaGoogle}/>
-            </div>
-
-            <div>
-              <label htmlFor="cadastroGoogleConfirmarSenha">
-                Confirmar senha
-                <span>{obrigatorio}</span>
-              </label>
-
-              <input id="cadastroGoogleConfirmarSenha" placeholder="Confirme sua senha" autoComplete="new-password" required minLength={8} type="password" name="confirmarSenha"/>
-            </div>
-
-            {forcaSenhaGoogle && (
-              <div className="container-forca-senha modal-cadastro-google__forca-senha">
-                <p>
-                  Força da senha:
-                  <span className={`senha-${forcaSenhaGoogle}`}>
-                    {" "}
-                    {forcaSenhaGoogle === "Media" ? "Média" : forcaSenhaGoogle}
-                  </span>
-                </p>
-                <div className={`barra-progressiva-${forcaSenhaGoogle} barra-progressiva`}></div>
-              </div>
-            )}
-        </div>
-
-        <footer className="modal-cadastro-google__rodape">
-          <div className="modal-cadastro-google__resumo">
-            <span
-              className="modal-cadastro-google__icon"
-              aria-live="polite"
-            >
-              <svg width="16" height="16" fill="currentColor" className="bi bi-exclamation-diamond-fill" viewBox="0 0 16 16">
-                <path d="M9.05.435c-.58-.58-1.52-.58-2.1 0L.436 6.95c-.58.58-.58 1.519 0 2.098l6.516 6.516c.58.58 1.519.58 2.098 0l6.516-6.516c.58-.58.58-1.519 0-2.098zM8 4c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995A.905.905 0 0 1 8 4m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-              </svg>
-              Cadastro não finalizado
-            </span>
-          </div>
-          <button type="submit" disabled={carregando}>
-            {carregando ? "Finalizando..." : "Finalizar cadastro"}
-          </button>
-        </footer>
-        </form>
-      </ModalCadastroGoogle>
-
-      <ModalFeedback
-        aberto={feedback.aberto}
-        tipo={feedback.tipo}
-        mensagem={feedback.mensagem}
-        aoFechar={() => {
-          setFeedback((estadoAtual) => ({
-            ...estadoAtual,
-            aberto: false,
-          }));
-        }}
-      />
-    </main>
+        <ModalFeedback
+          aberto={feedback.aberto}
+          tipo={feedback.tipo}
+          mensagem={feedback.mensagem}
+          aoFechar={() => {
+            setFeedback((estadoAtual) => ({
+              ...estadoAtual,
+              aberto: false,
+            }));
+          }}
+        />
+      </main>
+    </GoogleReCaptchaProvider>
   );
 }
 

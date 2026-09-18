@@ -6,6 +6,7 @@ import "./css/LoginCadastro.css";
 import "./css/RecuperarSenha.css";
 import { Link, Navigate, useNavigate } from "react-router";
 import { ModalFeedback } from "../components/ModalFeedback";
+import { ModalCadastroGoogle } from "../components/ModalCadastroGoogle";
 import { useAutenticacao } from "../components/AutenticacaoContext";
 import { requisicaoPublica } from "../services/api";
 
@@ -14,31 +15,28 @@ import {
   type CredentialResponse,
 } from "@react-oauth/google";
 
-interface GoogleUser {
-  iss: string;
-  nbf: number;
-  aud: string;
-  sub: string;
+interface PerfilGoogle {
+  nome: string;
   email: string;
-  email_verified: boolean;
-  azp: string;
-  name: string;
-  picture: string;
-  given_name: string;
-  family_name: string;
-  iat: number;
-  exp: number;
-  jti: string;
+  foto?: string;
+}
+
+interface CadastroGooglePendente {
+  token: string;
+  perfil: PerfilGoogle;
 }
 
 interface RespostaApi {
   message?: string | string[];
   requer_segunda_etapa?: boolean;
+  requer_complemento_cadastro?: boolean;
   access_token?: string;
   refresh_token?: string;
   token?: string;
+  cadastro_token?: string;
   email_mascarado?: string;
   expira_em?: string;
+  perfil_google?: PerfilGoogle;
   usuario?: {
     tipo: "user" | "admin" | "funcionario" | "superAdmin";
   };
@@ -96,6 +94,8 @@ function Login() {
   const [codigo, setCodigo] = useState("");
   const [usarRecuperacao, setUsarRecuperacao] = useState(false);
   const [carregando, setCarregando] = useState(false);
+  const [cadastroGooglePendente, setCadastroGooglePendente] =
+    useState<CadastroGooglePendente | null>(null);
   const [segundosReenvio, setSegundosReenvio] = useState(0);
   const [feedback, setFeedback] = useState({
     aberto: false,
@@ -202,6 +202,39 @@ function Login() {
     });
   }
 
+  async function processarResultadoLogin(resultado: RespostaApi) {
+    if (resultado.requer_complemento_cadastro) {
+      if (!resultado.cadastro_token || !resultado.perfil_google) {
+        throw new Error("Não foi possível iniciar o cadastro com Google.");
+      }
+
+      setCadastroGooglePendente({
+        token: resultado.cadastro_token,
+        perfil: resultado.perfil_google,
+      });
+      return;
+    }
+
+    if (resultado.requer_segunda_etapa) {
+      if (!resultado.token || !resultado.email_mascarado) {
+        throw new Error("Não foi possível iniciar a segunda etapa.");
+      }
+
+      setDesafio({
+        token: resultado.token,
+        emailMascarado: resultado.email_mascarado,
+        expiraEm: resultado.expira_em,
+      });
+      setCodigo("");
+      setUsarRecuperacao(false);
+      setSegundosReenvio(60);
+      setEtapa("verificacao");
+      return;
+    }
+
+    await concluirAcesso(resultado);
+  }
+
   async function entrar(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setCarregando(true);
@@ -220,25 +253,7 @@ function Login() {
         }),
       });
       const resultado = await lerResposta(resposta);
-
-      if (resultado.requer_segunda_etapa) {
-        if (!resultado.token || !resultado.email_mascarado) {
-          throw new Error("Não foi possível iniciar a segunda etapa.");
-        }
-
-        setDesafio({
-          token: resultado.token,
-          emailMascarado: resultado.email_mascarado,
-          expiraEm: resultado.expira_em,
-        });
-        setCodigo("");
-        setUsarRecuperacao(false);
-        setSegundosReenvio(60);
-        setEtapa("verificacao");
-        return;
-      }
-
-      await concluirAcesso(resultado);
+      await processarResultadoLogin(resultado);
     } catch (erro) {
       mostrarErro(erro);
     } finally {
@@ -276,8 +291,7 @@ function Login() {
         body: JSON.stringify(corpo),
       });
       const resultado = await lerResposta(resposta);
-
-      await concluirAcesso(resultado);
+      await processarResultadoLogin(resultado);
     } catch (erro) {
       mostrarErro(erro);
     } finally {
@@ -361,7 +375,7 @@ function Login() {
 
       const resultado = await lerResposta(resposta);
 
-      await concluirAcesso(resultado);
+      await processarResultadoLogin(resultado);
     } catch (erro) {
       mostrarErro(erro);
     } finally {
@@ -588,6 +602,13 @@ function Login() {
           }));
         }}
       />
+
+      <ModalCadastroGoogle
+        aberto={cadastroGooglePendente !== null}
+        aoFechar={() => setCadastroGooglePendente(null)}
+      >
+        {/* Configure aqui o formulário usando cadastroGooglePendente. */}
+      </ModalCadastroGoogle>
     </main>
   );
 }

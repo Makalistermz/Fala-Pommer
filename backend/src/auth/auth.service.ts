@@ -486,47 +486,76 @@ export class AuthService {
     }
 
     async signInGoogle(credential: string) {
-    let payload;
+        let payload;
 
-    try {
-        const ticket = await googleClient.verifyIdToken({
-            idToken: credential,
-            audience: process.env.GOOGLE_CLIENT_ID,
-        });
+        try {
+            const ticket = await googleClient.verifyIdToken({
+                idToken: credential,
+                audience: process.env.GOOGLE_CLIENT_ID
+            });
 
-        payload = ticket.getPayload();
-    } catch {
-        throw new UnauthorizedException(
-            "Credencial do Google inválida."
-        );
+            payload = ticket.getPayload();
+        } catch {
+            throw new UnauthorizedException(
+                "Credencial do Google inválida."
+            );
+        }
+
+        if (!payload?.sub || !payload.email || !payload.email_verified) {
+            throw new UnauthorizedException(
+                "A conta Google não forneceu um e-mail verificado."
+            );
+        }
+
+        const email = payload.email.trim().toLowerCase();
+        const usuario = await this.usuariosService.buscarPorEmail(email);
+
+        if (!usuario) {
+            // Este token não autentica o usuário. Ele preserva por quinze
+            // minutos a identidade Google para a futura conclusão do cadastro.
+            const cadastroToken = await this.jwtService.signAsync(
+                {
+                    finalidade: "cadastro_google",
+                    google_sub: payload.sub,
+                    email,
+                    nome: payload.name ?? email.split("@")[0],
+                    foto: payload.picture
+                },
+                {
+                    expiresIn: "15m"
+                }
+            );
+
+            return {
+                requer_complemento_cadastro: true,
+                cadastro_token: cadastroToken,
+                perfil_google: {
+                    nome: payload.name ?? email.split("@")[0],
+                    email,
+                    foto: payload.picture
+                }
+            };
+        }
+
+        if (
+            usuario.desativado_em &&
+            usuario.tipo_usuario !== "user"
+        ) {
+            throw new UnauthorizedException(
+                "Esta conta está desativada."
+            );
+        }
+
+        if (usuario.dois_fatores_email_ativo) {
+            const desafio =
+                await this.twoFactorEmailService.iniciarLogin(usuario.id);
+
+            return {
+                requer_segunda_etapa: true,
+                ...desafio
+            };
+        }
+
+        return this.concluirLogin(usuario);
     }
-
-    if (!payload?.sub || !payload.email) {
-        throw new UnauthorizedException(
-            "A conta Google não forneceu os dados necessários."
-        );
-    }
-
-    const usuario = await this.usuariosService.buscarPorEmail(
-        payload.email.toLowerCase()
-    );
-
-    if (!usuario) {
-        throw new UnauthorizedException(
-            "Não existe uma conta cadastrada com este e-mail."
-        );
-    }
-
-    if (usuario.dois_fatores_email_ativo) {
-        const desafio =
-            await this.twoFactorEmailService.iniciarLogin(usuario.id);
-
-        return {
-            requer_segunda_etapa: true,
-            ...desafio,
-        };
-    }
-
-    return this.concluirLogin(usuario);
-}
 }

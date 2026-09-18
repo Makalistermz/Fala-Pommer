@@ -183,6 +183,7 @@ JWT_SECRET="substitua_por_uma_chave_longa_e_segura"
 
 FRONTEND_URL=http://localhost:5173
 PORT=3000
+GOOGLE_CLIENT_ID=seu_client_id_google
 
 SMTP_HOST=smtp.exemplo.com
 SMTP_PORT=587

@@ -1,0 +1,19 @@
+.modal-cadastro-google-fundo {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgb(0 0 0 / 55%);
+  backdrop-filter: blur(4px);
+}
+
+.modal-cadastro-google {
+  width: min(100%, 520px);
+  min-height: 300px;
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 25%);
+}

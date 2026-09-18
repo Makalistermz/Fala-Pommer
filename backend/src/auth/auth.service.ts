@@ -10,6 +10,7 @@ import * as bcrypt from "bcrypt";
 import { PrismaService } from "../prisma/prisma.service";
 import { TwoFactorEmailService } from "./two-factor-email.service";
 import { createHash, randomBytes } from "node:crypto";
+import { OAuth2Client } from "google-auth-library";
 
 const NOMES_MESES = [
     "Janeiro",
@@ -25,6 +26,8 @@ const NOMES_MESES = [
     "Novembro",
     "Dezembro"
 ];
+
+const googleClient = new OAuth2Client();
 
 const FORMATADOR_MES_SAO_PAULO = new Intl.DateTimeFormat("pt-BR", {
     timeZone: "America/Sao_Paulo",
@@ -481,4 +484,49 @@ export class AuthService {
             }))
         };
     }
+
+    async signInGoogle(credential: string) {
+    let payload;
+
+    try {
+        const ticket = await googleClient.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        payload = ticket.getPayload();
+    } catch {
+        throw new UnauthorizedException(
+            "Credencial do Google inválida."
+        );
+    }
+
+    if (!payload?.sub || !payload.email) {
+        throw new UnauthorizedException(
+            "A conta Google não forneceu os dados necessários."
+        );
+    }
+
+    const usuario = await this.usuariosService.buscarPorEmail(
+        payload.email.toLowerCase()
+    );
+
+    if (!usuario) {
+        throw new UnauthorizedException(
+            "Não existe uma conta cadastrada com este e-mail."
+        );
+    }
+
+    if (usuario.dois_fatores_email_ativo) {
+        const desafio =
+            await this.twoFactorEmailService.iniciarLogin(usuario.id);
+
+        return {
+            requer_segunda_etapa: true,
+            ...desafio,
+        };
+    }
+
+    return this.concluirLogin(usuario);
+}
 }

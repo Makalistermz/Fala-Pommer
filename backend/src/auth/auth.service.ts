@@ -537,15 +537,6 @@ export class AuthService {
             };
         }
 
-        if (
-            usuario.desativado_em &&
-            usuario.tipo_usuario !== "user"
-        ) {
-            throw new UnauthorizedException(
-                "Esta conta está desativada."
-            );
-        }
-
         if (usuario.dois_fatores_email_ativo) {
             const desafio =
                 await this.twoFactorEmailService.iniciarLogin(usuario.id);

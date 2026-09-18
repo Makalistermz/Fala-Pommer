@@ -356,7 +356,11 @@ function Login() {
   }
 
   function handleError() {
-    console.error("Falha na autenticação do Google.");
+    setFeedback({
+      aberto: true,
+      tipo: "erro",
+      mensagem: "Falha na autenticação do Google.",
+    });
   }
 
   if (situacaoAutenticacao === "carregando") {

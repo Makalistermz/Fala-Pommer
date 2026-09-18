@@ -138,6 +138,21 @@
   grid-column: 1 / -1;
 }
 
+.modal-cadastro-google__conteudo .modal-cadastro-google__forca-senha {
+  grid-column: 1 / -1;
+  gap: 6px;
+}
+
+.modal-cadastro-google__forca-senha p {
+  margin: 0;
+}
+
+.modal-cadastro-google__conteudo input[readonly] {
+  background: #f3f6fa;
+  color: #475467;
+  cursor: not-allowed;
+}
+
 .modal-cadastro-google__conteudo label {
   color: #222222;
   font-size: 0.95rem;

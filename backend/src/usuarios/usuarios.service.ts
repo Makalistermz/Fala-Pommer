@@ -11,7 +11,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import { CriarUsuarioDto } from "./dto/criar-usuario.dto";
 import { AtualizarUsuarioDto } from "./dto/atualizar-usuario.dto";
 import { AtualizarMeuPerfilDto } from "./dto/atualizar-meu-perfil.dto";
-import { EmailService } from "src/email/email.service";
+import { EmailService } from "../email/email.service";
 
 import * as bcrypt from "bcrypt";
 import { randomUUID } from "node:crypto";
@@ -33,7 +33,8 @@ export class UsuariosService {
     ) {}
 
     async cadastrar(
-        dados: CriarUsuarioDto
+        dados: CriarUsuarioDto,
+        fotoPerfilUrl?: string
     ) {
         if (dados.senha !== dados.confirmarSenha) {
             throw new BadRequestException(
@@ -136,7 +137,8 @@ export class UsuariosService {
                 cpf: cpfLimpo,
                 telefone: telefoneLimpo,
                 email,
-                senha: senhaHash
+                senha: senhaHash,
+                foto_perfil_url: fotoPerfilUrl
             },
 
             select: {

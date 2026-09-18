@@ -1,4 +1,4 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
@@ -14,9 +14,11 @@ jest.mock('bcrypt', () => ({
 describe('AuthService - autenticação em duas etapas', () => {
   const usuariosMock = {
     buscarPorEmail: jest.fn(),
+    cadastrar: jest.fn(),
   };
   const jwtMock = {
     signAsync: jest.fn(),
+    verifyAsync: jest.fn(),
   };
   const prismaMock = {
     cadastro: {
@@ -71,6 +73,97 @@ describe('AuthService - autenticação em duas etapas', () => {
       prismaMock as unknown as PrismaService,
       twoFactorMock as unknown as TwoFactorEmailService,
     );
+  });
+
+  it('conclui o cadastro Google, salva a foto e inicia a sessao', async () => {
+    jwtMock.verifyAsync.mockResolvedValue({
+      finalidade: 'cadastro_google',
+      google_sub: 'google-123',
+      email: 'Usuario@Exemplo.com',
+      nome: 'Usuario Google',
+      foto: 'https://lh3.googleusercontent.com/foto',
+    });
+    usuariosMock.cadastrar.mockResolvedValue({ id: usuario.id });
+    usuariosMock.buscarPorEmail.mockResolvedValue({
+      ...usuario,
+      email: 'usuario@exemplo.com',
+      dois_fatores_email_ativo: false,
+    });
+
+    const resultado = await service.concluirCadastroGoogle({
+      cadastroToken: 'token-cadastro-google',
+      nome: 'Usuario Google',
+      dataNascimento: '1990-05-20',
+      cpf: '123.456.789-09',
+      numeroTelefone: '(27) 99999-9999',
+      email: 'usuario@exemplo.com',
+      senha: 'Senha!123',
+      confirmarSenha: 'Senha!123',
+    });
+
+    expect(jwtMock.verifyAsync).toHaveBeenCalledWith(
+      'token-cadastro-google',
+    );
+    expect(usuariosMock.cadastrar).toHaveBeenCalledWith(
+      {
+        nome: 'Usuario Google',
+        dataNascimento: '1990-05-20',
+        cpf: '123.456.789-09',
+        numeroTelefone: '(27) 99999-9999',
+        email: 'usuario@exemplo.com',
+        senha: 'Senha!123',
+        confirmarSenha: 'Senha!123',
+      },
+      'https://lh3.googleusercontent.com/foto',
+    );
+    expect(resultado).toEqual(
+      expect.objectContaining({
+        access_token: 'jwt-final',
+        usuario: expect.objectContaining({
+          email: 'usuario@exemplo.com',
+        }),
+      }),
+    );
+  });
+
+  it('rejeita quando o e-mail difere da conta Google', async () => {
+    jwtMock.verifyAsync.mockResolvedValue({
+      finalidade: 'cadastro_google',
+      google_sub: 'google-123',
+      email: 'google@exemplo.com',
+    });
+
+    await expect(
+      service.concluirCadastroGoogle({
+        cadastroToken: 'token-cadastro-google',
+        nome: 'Usuario Google',
+        dataNascimento: '1990-05-20',
+        cpf: '123.456.789-09',
+        numeroTelefone: '(27) 99999-9999',
+        email: 'outro@exemplo.com',
+        senha: 'Senha!123',
+        confirmarSenha: 'Senha!123',
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+    expect(usuariosMock.cadastrar).not.toHaveBeenCalled();
+  });
+
+  it('rejeita token de cadastro Google expirado ou adulterado', async () => {
+    jwtMock.verifyAsync.mockRejectedValue(new Error('token invalido'));
+
+    await expect(
+      service.concluirCadastroGoogle({
+        cadastroToken: 'token-invalido',
+        nome: 'Usuario Google',
+        dataNascimento: '1990-05-20',
+        cpf: '123.456.789-09',
+        numeroTelefone: '(27) 99999-9999',
+        email: 'usuario@exemplo.com',
+        senha: 'Senha!123',
+        confirmarSenha: 'Senha!123',
+      }),
+    ).rejects.toBeInstanceOf(UnauthorizedException);
+    expect(usuariosMock.cadastrar).not.toHaveBeenCalled();
   });
 
   it('interrompe o login e retorna somente o desafio quando o 2FA está ativo', async () => {

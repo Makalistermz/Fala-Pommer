@@ -70,6 +70,23 @@ function formatarCodigoRecuperacao(valor: string) {
   return `${codigoLimpo.slice(0, 4)}-${codigoLimpo.slice(4)}`;
 }
 
+function aplicarMascaraCpf(event: React.FormEvent<HTMLInputElement>) {
+  event.currentTarget.value = event.currentTarget.value
+    .replace(/\D/g, "")
+    .slice(0, 11)
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+}
+
+function aplicarMascaraTelefone(event: React.FormEvent<HTMLInputElement>) {
+  event.currentTarget.value = event.currentTarget.value
+    .replace(/\D/g, "")
+    .slice(0, 11)
+    .replace(/^(\d{2})(\d)/, "($1) $2")
+    .replace(/(\d)(\d{4})$/, "$1-$2");
+}
+
 function Login() {
   const googleButtonContainerRef = useRef<HTMLDivElement>(null);
   const [googleButtonWidth, setGoogleButtonWidth] = useState(400);
@@ -91,12 +108,14 @@ function Login() {
     "credenciais",
   );
   const [desafio, setDesafio] = useState<DesafioLogin | null>(null);
-  const [informacoesGoogle, setInformacoesGoogle] = useState<RespostaApi | null>(null);
   const [codigo, setCodigo] = useState("");
   const [usarRecuperacao, setUsarRecuperacao] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [cadastroGooglePendente, setCadastroGooglePendente] =
     useState<CadastroGooglePendente | null>(null);
+  const [forcaSenhaGoogle, setForcaSenhaGoogle] = useState<
+    "" | "Fraca" | "Media" | "Forte"
+  >("");
   const [segundosReenvio, setSegundosReenvio] = useState(0);
   const [feedback, setFeedback] = useState({
     aberto: false,
@@ -201,6 +220,83 @@ function Login() {
           ? erro.message
           : "Não foi possível conectar com o servidor.",
     });
+  }
+
+  function verificarForcaSenhaGoogle(
+    evento: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const senha = evento.target.value;
+    const temMinuscula = /[a-z]/.test(senha);
+    const temMaiuscula = /[A-Z]/.test(senha);
+    const temNumero = /[0-9]/.test(senha);
+    const temEspecial = /[^0-9A-Za-z\s]/.test(senha);
+    const temTamanhoMinimo = senha.length >= 8;
+
+    if (senha === "") {
+      setForcaSenhaGoogle("");
+      return;
+    }
+
+    if (
+      temTamanhoMinimo &&
+      temMinuscula &&
+      temMaiuscula &&
+      temNumero &&
+      temEspecial
+    ) {
+      setForcaSenhaGoogle("Forte");
+      return;
+    }
+
+    if (temTamanhoMinimo && temMinuscula && temMaiuscula && temNumero) {
+      setForcaSenhaGoogle("Media");
+      return;
+    }
+
+    setForcaSenhaGoogle("Fraca");
+  }
+
+  function fecharCadastroGoogle() {
+    setCadastroGooglePendente(null);
+    setForcaSenhaGoogle("");
+  }
+
+  async function concluirCadastroGoogle(
+    event: React.SubmitEvent<HTMLFormElement>,
+  ) {
+    event.preventDefault();
+
+    if (!cadastroGooglePendente) return;
+
+    const formulario = new FormData(event.currentTarget);
+    setCarregando(true);
+
+    try {
+      const resposta = await requisicaoPublica("/auth/google/cadastro", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cadastroToken: cadastroGooglePendente.token,
+          nome: formulario.get("nome"),
+          dataNascimento: formulario.get("dataNascimento"),
+          cpf: formulario.get("cpf"),
+          numeroTelefone: formulario.get("numeroTelefone"),
+          email: cadastroGooglePendente.perfil.email,
+          senha: formulario.get("senha"),
+          confirmarSenha: formulario.get("confirmarSenha"),
+        }),
+      });
+      const resultado = await lerResposta(resposta);
+
+      fecharCadastroGoogle();
+      await concluirAcesso(resultado);
+    } catch (erro) {
+      mostrarErro(erro);
+    } finally {
+      setCarregando(false);
+    }
   }
 
   async function processarResultadoLogin(resultado: RespostaApi) {
@@ -375,8 +471,6 @@ function Login() {
       });
 
       const resultado = await lerResposta(resposta);
-
-      setInformacoesGoogle(resultado);
 
       await processarResultadoLogin(resultado);
     } catch (erro) {
@@ -599,23 +693,15 @@ function Login() {
         />
       </section>
 
-      <ModalFeedback
-        aberto={feedback.aberto}
-        tipo={feedback.tipo}
-        mensagem={feedback.mensagem}
-        aoFechar={() => {
-          setFeedback((estadoAtual) => ({
-            ...estadoAtual,
-            aberto: false,
-          }));
-        }}
-      />
-
       <ModalCadastroGoogle
         aberto={cadastroGooglePendente !== null}
-        aoFechar={() => setCadastroGooglePendente(null)}
+        aoFechar={fecharCadastroGoogle}
       >
-        <form className="modal-cadastro-google__formulario" method="POST">
+        <form
+          className="modal-cadastro-google__formulario"
+          method="POST"
+          onSubmit={concluirCadastroGoogle}
+        >
         <header className="modal-cadastro-google__cabecalho">
           <div className="modal-cadastro-google__titulo">
             <span className="modal-cadastro-google__icone" aria-hidden="true">
@@ -638,67 +724,97 @@ function Login() {
 
         <div className="modal-cadastro-google__conteudo">
             <div>
-              <label htmlFor="nome">
+              <label htmlFor="cadastroGoogleNome">
                 Nome Completo 
                 <span>{obrigatorio}</span>
               </label>
 
-              <input id="nome" placeholder="Digite seu nome completo" autoComplete="additional-name" required type="text" name="nome" value={informacoesGoogle?.perfil_google?.nome} />
+              <input
+                id="cadastroGoogleNome"
+                placeholder="Digite seu nome completo"
+                autoComplete="additional-name"
+                required
+                type="text"
+                name="nome"
+                defaultValue={cadastroGooglePendente?.perfil.nome}
+              />
             </div>
 
             <div>
-              <label htmlFor="dataNascimento">
+              <label htmlFor="cadastroGoogleDataNascimento">
                 Data de nascimento 
                 <span>{obrigatorio}</span>
               </label>
 
-              <input id="dataNascimento" required type="date" name="dataNascimento" />
+              <input id="cadastroGoogleDataNascimento" required type="date" name="dataNascimento" />
             </div>
 
             <div>
-              <label htmlFor="cpf">
+              <label htmlFor="cadastroGoogleCpf">
                 CPF
                 <span>{obrigatorio}</span>
               </label>
 
-              <input id="cpf" inputMode="numeric" placeholder="Ex: 999.999.999-99" autoComplete="off" maxLength={14} required type="text" name="cpf" />
+              <input id="cadastroGoogleCpf" inputMode="numeric" onInput={aplicarMascaraCpf} placeholder="Ex: 999.999.999-99" autoComplete="off" maxLength={14} required type="text" name="cpf" />
             </div>
 
             <div>
-              <label htmlFor="numeroTelefone">
+              <label htmlFor="cadastroGoogleNumeroTelefone">
                 Telefone
                 <span>{obrigatorio}</span> 
               </label>
 
-              <input id="numeroTelefone" inputMode="tel" autoComplete="tel" placeholder="Ex: (27) 99999-9999" maxLength={15} required type="tel" name="numeroTelefone" />
+              <input id="cadastroGoogleNumeroTelefone" inputMode="tel" onInput={aplicarMascaraTelefone} autoComplete="tel" placeholder="Ex: (27) 99999-9999" maxLength={15} required type="tel" name="numeroTelefone" />
             </div>
 
             <div>
-              <label htmlFor="email">
+              <label htmlFor="cadastroGoogleEmail">
                 E-mail
                 <span>{obrigatorio}</span>
               </label>
 
-              <input id="email" placeholder="Digite seu e-mail" autoComplete="email" required type="email" name="email" value={informacoesGoogle?.perfil_google?.email} />
+              <input
+                id="cadastroGoogleEmail"
+                placeholder="Digite seu e-mail"
+                autoComplete="email"
+                required
+                readOnly
+                type="email"
+                name="email"
+                value={cadastroGooglePendente?.perfil.email ?? ""}
+              />
             </div>
 
             <div>
-              <label htmlFor="senha">
+              <label htmlFor="cadastroGoogleSenha">
                 Senha
                 <span>{obrigatorio}</span>
               </label>
 
-              <input id="senha" placeholder="Digite sua senha" autoComplete="new-password" required minLength={8} type="password" name="senha"/>
+              <input id="cadastroGoogleSenha" placeholder="Digite sua senha" autoComplete="new-password" required minLength={8} type="password" name="senha" onChange={verificarForcaSenhaGoogle}/>
             </div>
 
             <div>
-              <label htmlFor="confirmarSenha">
+              <label htmlFor="cadastroGoogleConfirmarSenha">
                 Confirmar senha
                 <span>{obrigatorio}</span>
               </label>
 
-              <input id="confirmarSenha" placeholder="Confirme sua senha" autoComplete="new-password" required minLength={8} type="password" name="confirmarSenha"/>
+              <input id="cadastroGoogleConfirmarSenha" placeholder="Confirme sua senha" autoComplete="new-password" required minLength={8} type="password" name="confirmarSenha"/>
             </div>
+
+            {forcaSenhaGoogle && (
+              <div className="container-forca-senha modal-cadastro-google__forca-senha">
+                <p>
+                  Força da senha:
+                  <span className={`senha-${forcaSenhaGoogle}`}>
+                    {" "}
+                    {forcaSenhaGoogle === "Media" ? "Média" : forcaSenhaGoogle}
+                  </span>
+                </p>
+                <div className={`barra-progressiva-${forcaSenhaGoogle} barra-progressiva`}></div>
+              </div>
+            )}
         </div>
 
         <footer className="modal-cadastro-google__rodape">
@@ -713,10 +829,24 @@ function Login() {
               Cadastro não finalizado
             </span>
           </div>
-          <button type="submit">Finalizar cadastro</button>
+          <button type="submit" disabled={carregando}>
+            {carregando ? "Finalizando..." : "Finalizar cadastro"}
+          </button>
         </footer>
         </form>
       </ModalCadastroGoogle>
+
+      <ModalFeedback
+        aberto={feedback.aberto}
+        tipo={feedback.tipo}
+        mensagem={feedback.mensagem}
+        aoFechar={() => {
+          setFeedback((estadoAtual) => ({
+            ...estadoAtual,
+            aberto: false,
+          }));
+        }}
+      />
     </main>
   );
 }

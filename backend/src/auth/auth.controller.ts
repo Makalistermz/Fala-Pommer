@@ -34,6 +34,7 @@ import { CodigoRecuperacaoDoisFatoresDto } from "./dto/codigo-recuperacao-2fa.dt
 import { TokenDesafioDoisFatoresDto } from "./dto/token-desafio-2fa.dto";
 import { DesativarComCodigoRecuperacaoDto } from "./dto/desativar-recuperacao-2fa.dto";
 import { RenovarSessaoDto } from "./dto/renovar-sessao.dto";
+import { ConcluirCadastroGoogleDto } from "./dto/concluir-cadastro-google.dto";
 
 const COOKIE_REFRESH_TOKEN = "fala_pommer_refresh_token";
 const DURACAO_COOKIE_REFRESH_MS = 400 * 24 * 60 * 60 * 1000;
@@ -414,6 +415,22 @@ export class AuthController {
         const resultado = await this.authService.signInGoogle(
             dados.credential
         );
+
+        return this.entregarAutenticacao(
+            resultado,
+            requisicao,
+            resposta
+        );
+    }
+
+    @Post("google/cadastro")
+    @HttpCode(HttpStatus.OK)
+    async concluirCadastroGoogle(
+        @Body() dados: ConcluirCadastroGoogleDto,
+        @Req() requisicao: Request,
+        @Res({ passthrough: true }) resposta: Response
+    ) {
+        const resultado = await this.authService.concluirCadastroGoogle(dados);
 
         return this.entregarAutenticacao(
             resultado,

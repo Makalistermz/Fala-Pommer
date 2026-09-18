@@ -1,5 +1,6 @@
 // Contém as regras de autenticação dos usuários.
 import {
+    BadRequestException,
     Injectable,
     UnauthorizedException
 } from "@nestjs/common";
@@ -11,6 +12,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import { TwoFactorEmailService } from "./two-factor-email.service";
 import { createHash, randomBytes } from "node:crypto";
 import { OAuth2Client } from "google-auth-library";
+import { ConcluirCadastroGoogleDto } from "./dto/concluir-cadastro-google.dto";
 
 const NOMES_MESES = [
     "Janeiro",
@@ -28,6 +30,14 @@ const NOMES_MESES = [
 ];
 
 const googleClient = new OAuth2Client();
+
+type CadastroGooglePayload = {
+    finalidade?: string;
+    google_sub?: string;
+    email?: string;
+    nome?: string;
+    foto?: string;
+};
 
 const FORMATADOR_MES_SAO_PAULO = new Intl.DateTimeFormat("pt-BR", {
     timeZone: "America/Sao_Paulo",
@@ -545,6 +555,63 @@ export class AuthService {
                 requer_segunda_etapa: true,
                 ...desafio
             };
+        }
+
+        return this.concluirLogin(usuario);
+    }
+
+    async concluirCadastroGoogle(dados: ConcluirCadastroGoogleDto) {
+        let payload: CadastroGooglePayload;
+
+        try {
+            payload = await this.jwtService.verifyAsync<CadastroGooglePayload>(
+                dados.cadastroToken
+            );
+        } catch {
+            throw new UnauthorizedException(
+                "A autorização do cadastro com Google expirou. Entre com o Google novamente."
+            );
+        }
+
+        if (
+            payload.finalidade !== "cadastro_google" ||
+            !payload.google_sub ||
+            !payload.email
+        ) {
+            throw new UnauthorizedException(
+                "Autorização de cadastro com Google inválida."
+            );
+        }
+
+        const emailGoogle = payload.email.trim().toLowerCase();
+
+        if (dados.email.trim().toLowerCase() !== emailGoogle) {
+            throw new BadRequestException(
+                "O e-mail informado deve ser o mesmo da conta Google."
+            );
+        }
+
+        await this.usuariosService.cadastrar(
+            {
+                nome: dados.nome,
+                dataNascimento: dados.dataNascimento,
+                cpf: dados.cpf,
+                numeroTelefone: dados.numeroTelefone,
+                email: emailGoogle,
+                senha: dados.senha,
+                confirmarSenha: dados.confirmarSenha
+            },
+            typeof payload.foto === "string" && payload.foto.length <= 500
+                ? payload.foto
+                : undefined
+        );
+
+        const usuario = await this.usuariosService.buscarPorEmail(emailGoogle);
+
+        if (!usuario) {
+            throw new UnauthorizedException(
+                "Não foi possível iniciar a sessão após o cadastro."
+            );
         }
 
         return this.concluirLogin(usuario);

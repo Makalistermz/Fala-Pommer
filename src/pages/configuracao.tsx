@@ -7,6 +7,7 @@ import ContaSeguranca from "./configPages/conta-seguranca";
 import Aparencia from "./configPages/aparencia";
 import Acessibilidade from "./configPages/acessibilidade";
 import { apiFetch } from "../services/api";
+import { useAutenticacao } from "../components/AutenticacaoContext";
 import "./css/configuracao.css";
 
 type ItemMenu = {
@@ -66,6 +67,7 @@ const itensMenu: ItemMenu[] = [
 
 
 function Configuracao() {
+    const { usuario } = useAutenticacao();
     const [menuAberto, setMenuAberto] = useState(true);
     const [itemAtivo, setItemAtivo] = useState("meu-perfil");
     const [perfil, setPerfil] = useState<Perfil | null>(null);
@@ -176,7 +178,11 @@ function Configuracao() {
                 </nav>
 
                 <div className="admin-sidebar-footer">
-                    <Link className="admin-nav-item" to="/home" title={!menuAberto ? "Voltar ao início" : undefined}>
+                    <Link
+                        className="admin-nav-item"
+                        to={usuario?.tipo === "user" ? "/sectors" : "/home"}
+                        title={!menuAberto ? "Voltar ao início" : undefined}
+                    >
                         <span className="admin-nav-icon">
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5Z" />

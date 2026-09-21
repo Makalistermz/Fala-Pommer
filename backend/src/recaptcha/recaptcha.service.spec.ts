@@ -16,6 +16,7 @@ describe('RecaptchaService', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    configMock.get.mockReturnValue(undefined);
     service = new RecaptchaService(configMock as unknown as ConfigService);
   });
 
@@ -66,6 +67,21 @@ describe('RecaptchaService', () => {
     await expect(
       service.validar('token', 'recuperar_senha'),
     ).rejects.toBeInstanceOf(ForbiddenException);
+  });
+
+  it('aplica o limite configurado especificamente para a ação', async () => {
+    configMock.get.mockImplementation((chave: string) =>
+      chave === 'RECAPTCHA_SCORE_CADASTRO' ? '0.7' : undefined,
+    );
+    simularRespostaGoogle({
+      success: true,
+      score: 0.65,
+      action: 'cadastro',
+    });
+
+    await expect(service.validar('token', 'cadastro')).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
   });
 
   it('informa indisponibilidade quando não consegue consultar o Google', async () => {

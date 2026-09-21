@@ -1,20 +1,43 @@
 import {
   ForbiddenException,
   Injectable,
+  Logger,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 export type AcaoRecaptcha = 'login' | 'cadastro' | 'recuperar_senha';
 
+const configuracaoPorAcao: Record<
+  AcaoRecaptcha,
+  { variavel: string; padrao: number }
+> = {
+  login: {
+    variavel: 'RECAPTCHA_SCORE_LOGIN',
+    padrao: 0.5,
+  },
+  cadastro: {
+    variavel: 'RECAPTCHA_SCORE_CADASTRO',
+    padrao: 0.6,
+  },
+  recuperar_senha: {
+    variavel: 'RECAPTCHA_SCORE_RECUPERACAO',
+    padrao: 0.5,
+  },
+};
+
 interface RespostaRecaptcha {
   success: boolean;
   score?: number;
   action?: string;
+  hostname?: string;
+  'error-codes'?: string[];
 }
 
 @Injectable()
 export class RecaptchaService {
+  private readonly logger = new Logger(RecaptchaService.name);
+
   constructor(private readonly configService: ConfigService) {}
 
   async validar(token: string, acaoEsperada: AcaoRecaptcha) {
@@ -51,7 +74,7 @@ export class RecaptchaService {
     }
 
     const resultado = (await resposta.json()) as RespostaRecaptcha;
-    const scoreMinimo = this.obterScoreMinimo();
+    const scoreMinimo = this.obterScoreMinimo(acaoEsperada);
 
     if (
       !resultado.success ||
@@ -59,17 +82,37 @@ export class RecaptchaService {
       typeof resultado.score !== 'number' ||
       resultado.score < scoreMinimo
     ) {
+      this.logger.warn(
+        `reCAPTCHA rejeitado: ${JSON.stringify({
+          acaoEsperada,
+          acaoRecebida: resultado.action,
+          sucesso: resultado.success,
+          score: resultado.score,
+          scoreMinimo,
+          hostname: resultado.hostname,
+          erros: resultado['error-codes'],
+        })}`,
+      );
+
       throw new ForbiddenException(
         'Não foi possível confirmar a verificação de segurança.',
       );
     }
+
   }
 
-  private obterScoreMinimo() {
+  private obterScoreMinimo(acao: AcaoRecaptcha) {
+    const configuracao = configuracaoPorAcao[acao];
     const valorConfigurado = Number(
-      this.configService.get('RECAPTCHA_MIN_SCORE') ?? 0.5,
+      this.configService.get(configuracao.variavel) ??
+        this.configService.get('RECAPTCHA_MIN_SCORE') ??
+        configuracao.padrao,
     );
 
-    return Number.isFinite(valorConfigurado) ? valorConfigurado : 0.5;
+    return Number.isFinite(valorConfigurado) &&
+      valorConfigurado >= 0 &&
+      valorConfigurado <= 1
+      ? valorConfigurado
+      : configuracao.padrao;
   }
 }

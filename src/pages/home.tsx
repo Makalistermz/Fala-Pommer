@@ -4922,6 +4922,11 @@ function Home() {
                             (arquivoEmVisualizacao.mime === "application/pdf" ||
                             arquivoEmVisualizacao.mime.startsWith("text/") ? (
                                 <iframe
+                                    className={
+                                        arquivoEmVisualizacao.mime.startsWith("text/")
+                                            ? "visualizador-arquivo__texto"
+                                            : undefined
+                                    }
                                     src={obterUrlArquivo(arquivoEmVisualizacao.url)}
                                     title={`Visualização de ${arquivoEmVisualizacao.nome}`}
                                 />

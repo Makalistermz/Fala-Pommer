@@ -2578,6 +2578,10 @@ button.modal-transferencia__etapa {
     background: #ffffff;
 }
 
+.visualizador-arquivo__conteudo > .visualizador-arquivo__texto {
+    color-scheme: light;
+}
+
 .visualizador-arquivo__indisponivel {
     display: flex;
     width: min(460px, calc(100% - 32px));

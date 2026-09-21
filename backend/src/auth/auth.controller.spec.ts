@@ -1,6 +1,7 @@
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { TwoFactorEmailService } from './two-factor-email.service';
+import { RecaptchaService } from '../recaptcha/recaptcha.service';
 
 describe('AuthController - rotas de autenticação em duas etapas', () => {
   const authMock = {
@@ -19,6 +20,9 @@ describe('AuthController - rotas de autenticação em duas etapas', () => {
     confirmarDesativacao: jest.fn(),
     confirmarDesativacaoComCodigoRecuperacao: jest.fn(),
     reenviarCodigoConfiguracao: jest.fn(),
+  };
+  const recaptchaMock = {
+    validar: jest.fn(),
   };
 
   let controller: AuthController;
@@ -40,6 +44,7 @@ describe('AuthController - rotas de autenticação em duas etapas', () => {
     controller = new AuthController(
       authMock as unknown as AuthService,
       twoFactorMock as unknown as TwoFactorEmailService,
+      recaptchaMock as unknown as RecaptchaService,
     );
   });
 
@@ -222,7 +227,11 @@ describe('AuthController - rotas de autenticação em duas etapas', () => {
     });
 
     const resultado = await controller.login(
-      { email: 'usuario@teste.com', senha: 'Senha!123' },
+      {
+        email: 'usuario@teste.com',
+        senha: 'Senha!123',
+        recaptchaToken: 'token-recaptcha',
+      },
       requisicao as never,
       resposta as never,
     );
@@ -231,6 +240,10 @@ describe('AuthController - rotas de autenticação em duas etapas', () => {
       access_token: 'jwt',
       usuario: { tipo: 'user' },
     });
+    expect(recaptchaMock.validar).toHaveBeenCalledWith(
+      'token-recaptcha',
+      'login',
+    );
     expect(resposta.cookie).toHaveBeenCalledWith(
       'fala_pommer_refresh_token',
       'c'.repeat(86),

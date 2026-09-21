@@ -7,7 +7,7 @@ import {
   IsString,
   MinLength,
 } from "class-validator";
-import { IsCPF, IsCNPJ } from 'cpf-cnpj-validator/class-validator'
+import { IsCPF } from 'cpf-cnpj-validator/class-validator'
 
 export class CriarUsuarioDto {
   @IsString()

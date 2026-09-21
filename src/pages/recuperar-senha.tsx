@@ -3,9 +3,11 @@ import { useState } from "react";
 import { Link } from "react-router";
 import imagemRecuperacao from "../assets/img/imagem-recuperar-senha.png";
 import { ModalFeedback } from "../components/ModalFeedback";
+import { useRecaptchaToken } from "../hooks/useRecaptchaToken";
 import "./css/RecuperarSenha.css";
 
 function RecuperarSenha() {
+  const gerarTokenRecaptcha = useRecaptchaToken();
   const [carregando, setCarregando] = useState(false);
 
   const [feedback, setFeedback] = useState({
@@ -26,6 +28,7 @@ function RecuperarSenha() {
     setCarregando(true);
 
     try {
+      const recaptchaToken = await gerarTokenRecaptcha("recuperar_senha");
       const resposta = await fetch(
         `${import.meta.env.VITE_API_URL}/recuperacao-senha/solicitar`,
         {
@@ -35,6 +38,7 @@ function RecuperarSenha() {
           },
           body: JSON.stringify({
             email,
+            recaptchaToken,
           }),
         },
       );
@@ -69,7 +73,10 @@ function RecuperarSenha() {
       setFeedback({
         aberto: true,
         tipo: "erro",
-        mensagem: "Não foi possível conectar com o servidor.",
+        mensagem:
+          erro instanceof Error
+            ? erro.message
+            : "Não foi possível conectar com o servidor.",
       });
     } finally {
       setCarregando(false);

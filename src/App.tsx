@@ -14,6 +14,7 @@ import Administracao from "./pages/administracao";
 import { initLenis } from "./library/lenis.ts"
 import Configuracao from "./pages/configuracao.tsx"
 import NaoEncontrada from "./pages/naoEncontrada.tsx";
+import RecaptchaLayout from "./components/reCAPTCHALayout.tsx";
 
 function App() {
     useEffect(() => {
@@ -26,9 +27,11 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/cadastro" element={<Cadastro />} />
-      <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+        <Route element={<RecaptchaLayout />}>
+          <Route path="/" element={<Login />} />
+          <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+        </Route>
       <Route path="/redefinir-senha" element={<RedefinirSenha />} />
       <Route path="/sem-permissao" element={<SemPermissao />} />
       <Route path="*" element={<NaoEncontrada />} />

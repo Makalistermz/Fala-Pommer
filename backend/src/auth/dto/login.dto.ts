@@ -26,4 +26,10 @@ export class LoginDto {
         message: "Informe sua senha."
     })
     senha!: string;
+
+    @IsString()
+    @IsNotEmpty({
+        message: "A verificação de segurança é obrigatória."
+    })
+    recaptchaToken!: string;
 }

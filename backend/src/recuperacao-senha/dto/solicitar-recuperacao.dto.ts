@@ -1,6 +1,6 @@
 // Valida o e-mail informado na solicitação de recuperação.
 import { Transform } from "class-transformer";
-import { IsEmail, IsNotEmpty, isString, IsString, minLength, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 
 export class SolicitarRecuperacaoDto {
     @Transform(({ value }) =>
@@ -18,4 +18,10 @@ export class SolicitarRecuperacaoDto {
         message: "Informe um e-mail válido."
     })
     email!: string;
+
+    @IsString()
+    @IsNotEmpty({
+        message: "A verificação de segurança é obrigatória."
+    })
+    recaptchaToken!: string;
 }

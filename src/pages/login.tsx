@@ -9,15 +9,12 @@ import { ModalFeedback } from "../components/ModalFeedback";
 import { ModalCadastroGoogle } from "../components/ModalCadastroGoogle";
 import { useAutenticacao } from "../components/AutenticacaoContext";
 import { requisicaoPublica } from "../services/api";
+import { useRecaptchaToken } from "../hooks/useRecaptchaToken";
 
 import {
   GoogleLogin,
   type CredentialResponse,
 } from "@react-oauth/google";
-
-import {
-  GoogleReCaptchaProvider,
-} from "react-google-recaptcha-v3";
 
 interface PerfilGoogle {
   nome: string;
@@ -92,6 +89,7 @@ function aplicarMascaraTelefone(event: React.FormEvent<HTMLInputElement>) {
 }
 
 function Login() {
+  const gerarTokenRecaptcha = useRecaptchaToken();
   const googleButtonContainerRef = useRef<HTMLDivElement>(null);
   const [googleButtonWidth, setGoogleButtonWidth] = useState(400);
   const [googleButtonType, setGoogleButtonType] = useState<"standard" | "icon">(
@@ -343,6 +341,7 @@ function Login() {
     const formulario = new FormData(event.currentTarget);
 
     try {
+      const recaptchaToken = await gerarTokenRecaptcha("login");
       const resposta = await requisicaoPublica("/auth/login", {
         method: "POST",
         headers: {
@@ -351,6 +350,7 @@ function Login() {
         body: JSON.stringify({
           email: formulario.get("email"),
           senha: formulario.get("senha"),
+          recaptchaToken,
         }),
       });
       const resultado = await lerResposta(resposta);
@@ -512,9 +512,6 @@ function Login() {
   const obrigatorio = <span style={estiloObrigatorio}>*</span>;
 
   return (
-    <GoogleReCaptchaProvider
-      reCaptchaKey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
-    >
       <main className="login">
         <section className="login__formulario">
           <header className="login__cabecalho">
@@ -855,7 +852,6 @@ function Login() {
           }}
         />
       </main>
-    </GoogleReCaptchaProvider>
   );
 }
 

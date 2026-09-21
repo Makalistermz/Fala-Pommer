@@ -35,6 +35,7 @@ import { TokenDesafioDoisFatoresDto } from "./dto/token-desafio-2fa.dto";
 import { DesativarComCodigoRecuperacaoDto } from "./dto/desativar-recuperacao-2fa.dto";
 import { RenovarSessaoDto } from "./dto/renovar-sessao.dto";
 import { ConcluirCadastroGoogleDto } from "./dto/concluir-cadastro-google.dto";
+import { RecaptchaService } from "../recaptcha/recaptcha.service";
 
 const COOKIE_REFRESH_TOKEN = "fala_pommer_refresh_token";
 const DURACAO_COOKIE_REFRESH_MS = 400 * 24 * 60 * 60 * 1000;
@@ -45,7 +46,8 @@ const CLIENTE_CAPACITOR = "capacitor";
 export class AuthController {
     constructor(
         private readonly authService: AuthService,
-        private readonly twoFactorEmailService: TwoFactorEmailService
+        private readonly twoFactorEmailService: TwoFactorEmailService,
+        private readonly recaptchaService: RecaptchaService
     ) {}
 
     @Post("2fa/login/confirm")
@@ -325,6 +327,11 @@ export class AuthController {
         @Req() requisicao: Request,
         @Res({ passthrough: true }) resposta: Response
     ) {
+        await this.recaptchaService.validar(
+            dados.recaptchaToken,
+            "login"
+        );
+
         const resultado = await this.authService.signIn(
             dados.email,
             dados.senha

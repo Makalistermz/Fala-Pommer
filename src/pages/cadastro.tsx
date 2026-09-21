@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import imagemCadastro from "../assets/img/imagem-pagina-cadastro.png";
 import { ModalFeedback } from "../components/ModalFeedback";
 import { Link } from "react-router";
+import { useRecaptchaToken } from "../hooks/useRecaptchaToken";
 
 function aplicarMascaraCpf(event: React.FormEvent<HTMLInputElement>) {
     event.currentTarget.value = event.currentTarget.value
@@ -22,6 +23,7 @@ function aplicarMascaraTelefone(event: React.FormEvent<HTMLInputElement>) {
 }
 
 function Cadastro() {
+    const gerarTokenRecaptcha = useRecaptchaToken();
 
     const [feedback, setFeedback] = useState({
         aberto: false,
@@ -40,12 +42,16 @@ function Cadastro() {
         const dados = Object.fromEntries(dadosFormulario.entries());
 
         try {
+            const recaptchaToken = await gerarTokenRecaptcha("cadastro");
             const resposta = await fetch(`${import.meta.env.VITE_API_URL}/usuarios`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(dados),
+                body: JSON.stringify({
+                    ...dados,
+                    recaptchaToken,
+                }),
             });
 
             const resultado = await resposta.json();
@@ -78,7 +84,9 @@ function Cadastro() {
             setFeedback({
                 aberto: true,
                 tipo: "erro",
-                mensagem: "Não foi possível conectar com o servidor."
+                mensagem: erro instanceof Error
+                    ? erro.message
+                    : "Não foi possível conectar com o servidor."
             });
         }
     }

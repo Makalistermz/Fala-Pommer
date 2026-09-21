@@ -12,9 +12,10 @@ import { ConversasModule } from './conversas/conversas.module';
 import { SetoresModule } from './setores/setores.module';
 import { SecretariaModule } from './secretaria/secretaria.module';
 import { NotificacoesModule } from './notificacoes/notificacoes.module';
+import { RecaptchaModule } from './recaptcha/recaptcha.module';
 
 @Module({
-  imports: [PrismaModule, UsuariosModule, RecuperacaoSenhaModule, EmailModule, AuthModule, ConfigModule.forRoot({isGlobal: true}), NotificacoesModule, ConversasModule, SetoresModule, SecretariaModule],
+  imports: [PrismaModule, UsuariosModule, RecuperacaoSenhaModule, EmailModule, AuthModule, ConfigModule.forRoot({isGlobal: true, envFilePath: ['.env', '../.env']}), RecaptchaModule, NotificacoesModule, ConversasModule, SetoresModule, SecretariaModule],
   controllers: [AppController],
   providers: [AppService],
 })

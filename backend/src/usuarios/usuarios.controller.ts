@@ -15,7 +15,7 @@ import {
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 
-import { CriarUsuarioDto } from "./dto/criar-usuario.dto";
+import { CriarUsuarioComRecaptchaDto } from "./dto/criar-usuario-com-recaptcha.dto";
 import { AtualizarUsuarioDto } from "./dto/atualizar-usuario.dto";
 import { AtualizarMeuPerfilDto } from "./dto/atualizar-meu-perfil.dto";
 import { DesativarUsuarioDto } from "./dto/desativar-usuario.dto";
@@ -31,11 +31,13 @@ import {
     AuthGuard,
     type RequisicaoAutenticada
 } from "../auth/auth.guard";
+import { RecaptchaService } from "../recaptcha/recaptcha.service";
 
 @Controller("usuarios")
 export class UsuariosController {
     constructor(
-        private readonly usuariosService: UsuariosService
+        private readonly usuariosService: UsuariosService,
+        private readonly recaptchaService: RecaptchaService
     ) {}
 
     @Get("conversas")
@@ -178,9 +180,14 @@ export class UsuariosController {
     }
 
     @Post()
-    cadastrar(
-        @Body() dados: CriarUsuarioDto
+    async cadastrar(
+        @Body() dados: CriarUsuarioComRecaptchaDto
     ) {
+        await this.recaptchaService.validar(
+            dados.recaptchaToken,
+            "cadastro"
+        );
+
         return this.usuariosService.cadastrar(
             dados
         );

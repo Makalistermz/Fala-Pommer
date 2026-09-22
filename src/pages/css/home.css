@@ -1396,6 +1396,61 @@ html.plano-fundo-conversa-5 .mensagens {
     background: #dceaff;
 }
 
+.config-mensagens {
+    position: absolute;
+    z-index: 1;
+    top: 6px;
+    right: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.config-mensagens__ativo {
+    flex-shrink: 0;
+}
+
+.config-mensagens > svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    pointer-events: none;
+}
+
+.config-mensagens__ativo:hover {
+    background-color: rgba(0, 0, 0, 0.24);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.mensagem-balao:hover .config-mensagens__ativo {
+    opacity: 1;
+    animation: config-mensagens__enter .3s 1 ease-in-out ;
+}
+
+@media (hover: none), (pointer: coarse) {
+    .config-mensagens {
+        opacity: 1;
+    }
+}
+
+@keyframes config-mensagens__enter {
+    0% {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 .mensagem-balao--digitando {
     display: flex;
     min-width: 58px;
@@ -2992,6 +3047,10 @@ button.modal-transferencia__etapa {
         --home-panel-gap: 0px;
         --largura-conversas: 100%;
         grid-template-columns: 1fr;
+    }
+
+    .config-mensagens {
+        opacity: 1;
     }
 
     .conversas,

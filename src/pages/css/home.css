@@ -1397,6 +1397,7 @@ html.plano-fundo-conversa-5 .mensagens {
 }
 
 .config-mensagens {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1409,10 +1410,20 @@ html.plano-fundo-conversa-5 .mensagens {
 }
 
 .config-mensagens__ativo {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    padding: 0;
     flex-shrink: 0;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
 }
 
-.config-mensagens > svg {
+.config-mensagens__ativo > svg {
     display: block;
     width: 16px;
     height: 16px;
@@ -1422,13 +1433,15 @@ html.plano-fundo-conversa-5 .mensagens {
 
 .config-mensagens__ativo:hover {
     background-color: rgba(0, 0, 0, 0.15);
-    border-radius: 50%;
-    cursor: pointer;
 }
 
-.mensagem-balao:hover .config-mensagens__ativo {
+.mensagem-balao:hover .config-mensagens {
     opacity: 1;
     animation: config-mensagens__enter .3s 1 ease-in-out ;
+}
+
+.config-mensagens--aberto {
+    opacity: 1;
 }
 
 @keyframes config-mensagens__enter {
@@ -1441,6 +1454,79 @@ html.plano-fundo-conversa-5 .mensagens {
         opacity: 1;
         transform: translateX(0);
     }
+}
+
+.opcoes-mensagens {
+    position: absolute;
+    z-index: 30;
+    top: calc(100% + 8px);
+    right: auto;
+    left: 0;
+    width: min(170px, calc(100vw - 32px));
+    padding: 6px;
+    border: 1px solid #d5dce8;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 12px 28px rgba(15, 38, 73, 0.2);
+}
+
+.opcoes-mensagens--mensagem-esquerda {
+    right: auto;
+    left: 0;
+}
+
+.opcoes-mensagens--mensagem-direita {
+    right: 0;
+    left: auto;
+}
+
+.opcoes-mensagens__item {
+    display: flex;
+    width: 100%;
+    min-height: 40px;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #172033;
+    font-family: var(--fonte-dm-sans);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+.opcoes-mensagens__item:hover {
+    background: #eaf2ff;
+    color: #1351b4;
+}
+
+.opcoes-mensagens__item:focus-visible {
+    outline: 2px solid #1351b4;
+    outline-offset: -2px;
+}
+
+.opcoes-mensagens__item svg {
+    width: 19px;
+    height: 19px;
+    flex: 0 0 19px;
+}
+
+html.tema-escuro:not(.alto-contraste) .opcoes-mensagens {
+    border-color: #34435a;
+    background: #1b2739;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.38);
+}
+
+html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item {
+    color: #edf2f8;
+}
+
+html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item:hover {
+    background: #203d65;
+    color: #8ab6ff;
 }
 
 .mensagem-balao--digitando {
@@ -3047,7 +3133,7 @@ button.modal-transferencia__etapa {
         flex-basis: clamp(20px, 3vw, 24px);
     }
 
-    .config-mensagens > svg {
+    .config-mensagens__ativo > svg {
         width: clamp(14px, 2vw, 16px);
         height: clamp(14px, 2vw, 16px);
     }

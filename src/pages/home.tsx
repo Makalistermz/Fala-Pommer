@@ -353,8 +353,35 @@ function Home() {
     const menuRef = useRef<HTMLDivElement>(null);
 
     const [menuAbertoArquivos, setMenuAbertoArquivo] = useState(false);
+    const [opcoesMensagens, setOpcoesMensagens] = useState<number | null>(null);
     const acaoArquivosRef = useRef<HTMLDivElement>(null);
     const botaoArquivosRef = useRef<HTMLButtonElement>(null);
+
+    useEffect(() => {
+        if (opcoesMensagens === null) {
+            return;
+        }
+
+        function fecharOpcoesAoClicarFora(evento: PointerEvent) {
+            const alvo = evento.target;
+
+            if (
+                alvo instanceof Element &&
+                (alvo.closest(".opcoes-mensagens") ||
+                    alvo.closest(".config-mensagens"))
+            ) {
+                return;
+            }
+
+            setOpcoesMensagens(null);
+        }
+
+        document.addEventListener("pointerdown", fecharOpcoesAoClicarFora);
+
+        return () => {
+            document.removeEventListener("pointerdown", fecharOpcoesAoClicarFora);
+        };
+    }, [opcoesMensagens]);
 
     const [conversas, setConversas] = useState<Conversa[]>([]);
 
@@ -3647,10 +3674,60 @@ function Home() {
                                         </span>
                                     )}
 
-                                    <span className="config-mensagens config-mensagens__ativo">
-                                        <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-down" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
-                                        </svg>
+                                    <span
+                                        className={`config-mensagens ${
+                                            opcoesMensagens === item.id
+                                                ? "config-mensagens--aberto"
+                                                : ""
+                                        }`}
+                                    >
+                                        <button
+                                            type="button"
+                                            className="config-mensagens__ativo"
+                                            aria-expanded={opcoesMensagens === item.id}
+                                            onClick={() =>
+                                                setOpcoesMensagens((mensagemId) =>
+                                                    mensagemId === item.id ? null : item.id,
+                                                )
+                                            }
+                                        >
+                                            <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-down" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                                            </svg>
+                                        </button>
+
+                                        {opcoesMensagens === item.id && (
+                                            <div
+                                                className={`opcoes-mensagens ${
+                                                    enviadaPorMim
+                                                        ? "opcoes-mensagens--mensagem-direita"
+                                                        : "opcoes-mensagens--mensagem-esquerda"
+                                                }`}
+                                                role="menu"
+                                                aria-label="Opções da mensagem"
+                                            >
+                                                <button
+                                                    type="button"
+                                                    className="opcoes-mensagens__item"
+                                                    role="menuitem"
+                                                >
+                                                    <svg
+                                                        viewBox="0 0 24 24"
+                                                        fill="none"
+                                                        aria-hidden="true"
+                                                    >
+                                                        <path
+                                                            d="M9 8l-5 4 5 4v-3h4.5c2.8 0 5 1.4 6.5 4-1-5-3.5-7-7.5-7H9V8Z"
+                                                            stroke="currentColor"
+                                                            strokeWidth="1.8"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                        />
+                                                    </svg>
+                                                    <span>Responder</span>
+                                                </button>
+                                            </div>
+                                        )}
                                     </span>
                                 </header>
 

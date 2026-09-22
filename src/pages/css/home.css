@@ -1397,15 +1397,13 @@ html.plano-fundo-conversa-5 .mensagens {
 }
 
 .config-mensagens {
-    position: absolute;
-    z-index: 1;
-    top: 6px;
-    right: 6px;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 24px;
     height: 24px;
+    flex: 0 0 24px;
+    margin-left: auto;
     border-radius: 50%;
     opacity: 0;
 }
@@ -1423,7 +1421,7 @@ html.plano-fundo-conversa-5 .mensagens {
 }
 
 .config-mensagens__ativo:hover {
-    background-color: rgba(0, 0, 0, 0.24);
+    background-color: rgba(0, 0, 0, 0.15);
     border-radius: 50%;
     cursor: pointer;
 }
@@ -1431,12 +1429,6 @@ html.plano-fundo-conversa-5 .mensagens {
 .mensagem-balao:hover .config-mensagens__ativo {
     opacity: 1;
     animation: config-mensagens__enter .3s 1 ease-in-out ;
-}
-
-@media (hover: none), (pointer: coarse) {
-    .config-mensagens {
-        opacity: 1;
-    }
 }
 
 @keyframes config-mensagens__enter {
@@ -3050,7 +3042,14 @@ button.modal-transferencia__etapa {
     }
 
     .config-mensagens {
-        opacity: 1;
+        width: clamp(20px, 3vw, 24px);
+        height: clamp(20px, 3vw, 24px);
+        flex-basis: clamp(20px, 3vw, 24px);
+    }
+
+    .config-mensagens > svg {
+        width: clamp(14px, 2vw, 16px);
+        height: clamp(14px, 2vw, 16px);
     }
 
     .conversas,
@@ -3165,6 +3164,10 @@ button.modal-transferencia__etapa {
 
     .mensagem-linha--com-avatar .mensagem-balao {
         max-width: calc(85% - 42px);
+    }
+
+    .mensagem-balao p {
+        font-size: 12px;
     }
 
     .chat-header {

@@ -3642,7 +3642,11 @@ function Home() {
                                 </div>
                             )}
                             <article
-                                className="mensagem-balao"
+                                className={`mensagem-balao ${
+                                    opcoesMensagens === item.id
+                                        ? "mensagem-balao--opcoes-abertas"
+                                        : ""
+                                }`}
                                 ref={(el) => {
                                 if (el) balõesRef.current.set(item.id, el);
                                 else balõesRef.current.delete(item.id);

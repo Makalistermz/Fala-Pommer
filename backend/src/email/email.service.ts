@@ -197,7 +197,7 @@ export class EmailService {
     async enviarRecuperacaoSenha(email: string, token: string) {
         try {
             const linkRecuperacao =
-                `${process.env.FRONTEND_URL}/RedefinirSenha?token=${encodeURIComponent(token)}`;
+                `${process.env.FRONTEND_URL}/redefinir-senha?token=${encodeURIComponent(token)}`;
 
             this.transporter.sendMail({
                 from: `"Fala Pommer" <${process.env.SMTP_USER}>`,

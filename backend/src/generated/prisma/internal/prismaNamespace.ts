@@ -1776,6 +1776,7 @@ export const MensagemScalarFieldEnum = {
   visibilidade: 'visibilidade',
   transferencia_id: 'transferencia_id',
   setor_id: 'setor_id',
+  mensagem_respondida_id: 'mensagem_respondida_id',
   conteudo: 'conteudo',
   enviada_em: 'enviada_em',
   arquivo_nome: 'arquivo_nome',

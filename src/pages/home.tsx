@@ -391,6 +391,8 @@ function Home() {
         null,
     );
 
+    const [responderMensagem, setResponderMensagem] = useState(null);
+
     const [arquivoEmVisualizacao, setArquivoEmVisualizacao] =
         useState<ArquivoMensagem | null>(null);
     const botaoFecharVisualizadorRef = useRef<HTMLButtonElement>(null);
@@ -3829,36 +3831,36 @@ function Home() {
                 {podeEnviarMensagem && (
                 <footer className="chat-input">
                     {arquivoSelecionado && (
-                    <div className="chat-input__arquivo">
-                        <div className="chat-input__arquivo-icone">
-                        <svg
-                            width="18"
-                            height="18"
-                            viewBox="0 0 16 16"
-                            fill="currentColor"
-                            aria-hidden="true"
-                        >
-                            <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z" />
-                        </svg>
+                        <div className="chat-input__arquivo">
+                            <div className="chat-input__arquivo-icone">
+                            <svg
+                                width="18"
+                                height="18"
+                                viewBox="0 0 16 16"
+                                fill="currentColor"
+                                aria-hidden="true"
+                            >
+                                <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z" />
+                            </svg>
+                            </div>
+
+                            <div className="chat-input__arquivo-dados">
+                            <strong>{arquivoSelecionado.name}</strong>
+
+                            <span>
+                                {formatarTamanhoArquivo(arquivoSelecionado.size)}
+                            </span>
+                            </div>
+
+                            <button
+                            className="chat-input__arquivo-remover"
+                            type="button"
+                            aria-label="Remover arquivo"
+                            onClick={() => setArquivoSelecionado(null)}
+                            >
+                            ×
+                            </button>
                         </div>
-
-                        <div className="chat-input__arquivo-dados">
-                        <strong>{arquivoSelecionado.name}</strong>
-
-                        <span>
-                            {formatarTamanhoArquivo(arquivoSelecionado.size)}
-                        </span>
-                        </div>
-
-                        <button
-                        className="chat-input__arquivo-remover"
-                        type="button"
-                        aria-label="Remover arquivo"
-                        onClick={() => setArquivoSelecionado(null)}
-                        >
-                        ×
-                        </button>
-                    </div>
                     )}
 
                     <div className="chat-input__conteudo">

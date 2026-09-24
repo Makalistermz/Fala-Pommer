@@ -391,7 +391,7 @@ function Home() {
         null,
     );
 
-    const [responderMensagem, setResponderMensagem] = useState(null);
+    const [responderMensagem, setResponderMensagem] = useState<MensagemChat | null>(null);
 
     const [arquivoEmVisualizacao, setArquivoEmVisualizacao] =
         useState<ArquivoMensagem | null>(null);
@@ -3716,6 +3716,7 @@ function Home() {
                                                     type="button"
                                                     className="opcoes-mensagens__item"
                                                     role="menuitem"
+                                                    onClick={() => setResponderMensagem(item)}
                                                 >
                                                     <svg
                                                         viewBox="0 0 24 24"
@@ -3857,6 +3858,32 @@ function Home() {
                             type="button"
                             aria-label="Remover arquivo"
                             onClick={() => setArquivoSelecionado(null)}
+                            >
+                            ×
+                            </button>
+                        </div>
+                    )}
+
+                    {responderMensagem && (
+                        <div className="chat-input__responder">
+                            <span
+                                className="chat-input__responder-borda"
+                                aria-hidden="true"
+                            />
+
+                            <div className="chat-input__responder-dados">
+                                <strong>a</strong>
+
+                                <span>
+                                    a
+                                </span>
+                            </div>
+
+                            <button
+                            className="chat-input__responder-remover"
+                            type="button"
+                            aria-label="Remover mensagem"
+                            onClick={() => setResponderMensagem(null)}
                             >
                             ×
                             </button>

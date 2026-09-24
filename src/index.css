@@ -349,6 +349,34 @@ html.tema-escuro:not(.alto-contraste) .chat-input__arquivo-remover:hover {
   color: #ffaaa5;
 }
 
+html.tema-escuro:not(.alto-contraste) .chat-input__responder {
+  background: var(--tema-superficie-elevada);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__responder-borda {
+  background: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__responder-dados strong {
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .chat-input__responder-dados span,
+  .chat-input__responder-remover
+) {
+  color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__responder-remover:hover {
+  background: #5b2528;
+  color: #ffaaa5;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-input__responder-remover:focus-visible {
+  outline-color: var(--tema-destaque);
+}
+
 html.tema-escuro:not(.alto-contraste) :is(
   .modal-grupo__janela,
   .modal-dados-grupo,

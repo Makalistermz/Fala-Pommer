@@ -2977,6 +2977,17 @@ function Home() {
         );
     }
 
+    function irParaMensagemRespondida() {
+        if (!responderMensagem) {
+            return;
+        }
+
+        balõesRef.current.get(responderMensagem.id)?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+        });
+    }
+
     const respostaFoiEnviadaPorMim =
         responderMensagem !== null &&
         mensagemFoiEnviadaPeloUsuario(
@@ -3887,6 +3898,7 @@ function Home() {
                                     ? "chat-input__responder-euMesmo"
                                     : ""
                             }`}
+                            onClick={irParaMensagemRespondida}
                         >
                             <span
                                 className="chat-input__responder-borda"
@@ -3910,7 +3922,10 @@ function Home() {
                             className="chat-input__responder-remover"
                             type="button"
                             aria-label="Remover mensagem"
-                            onClick={() => setResponderMensagem(null)}
+                            onClick={(evento) => {
+                                evento.stopPropagation();
+                                setResponderMensagem(null);
+                            }}
                             >
                             ×
                             </button>

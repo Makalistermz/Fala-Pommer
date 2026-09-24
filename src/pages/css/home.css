@@ -2872,6 +2872,7 @@ button.modal-transferencia__etapa {
 
     background: #eceef1c7;
     border-radius: 12px;
+    cursor: pointer;
     overflow: hidden;
 }
 

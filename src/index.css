@@ -235,6 +235,8 @@ html.tema-escuro:not(.alto-contraste) .chat-vazio__icone {
 }
 
 html.tema-escuro:not(.alto-contraste) .mensagem-balao {
+  --mensagem-localizada-fundo: #315d99;
+
   border-color: #34435a;
   background: #1b2739;
   box-shadow: 0 2px 7px rgb(0 0 0 / 18%);

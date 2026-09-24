@@ -2982,10 +2982,19 @@ function Home() {
             return;
         }
 
-        balõesRef.current.get(responderMensagem.id)?.scrollIntoView({
+        const balao = balõesRef.current.get(responderMensagem.id);
+
+        if (!balao) {
+            return;
+        }
+
+        balao.scrollIntoView({
             behavior: "smooth",
             block: "center",
         });
+        balao.classList.remove("mensagem-balao--localizada");
+        void balao.offsetWidth;
+        balao.classList.add("mensagem-balao--localizada");
     }
 
     const respostaFoiEnviadaPorMim =

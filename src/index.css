@@ -255,6 +255,42 @@ html.tema-escuro:not(.alto-contraste) .mensagem-balao__perfil {
   background: #203d65;
 }
 
+html.tema-escuro:not(.alto-contraste) .mensagem-balao__resposta {
+  background: rgb(114 167 255 / 12%);
+}
+
+html.tema-escuro:not(.alto-contraste) .mensagem-balao__resposta:hover {
+  background: rgb(114 167 255 / 20%);
+}
+
+html.tema-escuro:not(.alto-contraste) .mensagem-balao__resposta:focus-visible {
+  outline-color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .mensagem-balao__resposta-borda {
+  background-color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .mensagem-balao__resposta-dados strong {
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste)
+  .mensagem-balao__resposta--eu-mesmo
+  .mensagem-balao__resposta-borda {
+  background-color: var(--rosa-escuro);
+}
+
+html.tema-escuro:not(.alto-contraste)
+  .mensagem-balao__resposta--eu-mesmo
+  .mensagem-balao__resposta-dados strong {
+  color: var(--rosa-escuro);
+}
+
+html.tema-escuro:not(.alto-contraste) .mensagem-balao__resposta-dados > span {
+  color: var(--tema-texto-secundario);
+}
+
 html.tema-escuro:not(.alto-contraste) .chat-input__emojis {
   border-color: var(--tema-borda);
   background: var(--tema-superficie) !important;

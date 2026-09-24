@@ -1602,6 +1602,81 @@ html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item:hover {
     text-transform: uppercase;
 }
 
+.mensagem-balao__resposta {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    margin: 2px 0 8px;
+    padding: 8px 10px 8px 12px;
+    box-sizing: border-box;
+
+    display: flex;
+    border: 0;
+    border-radius: 8px;
+    overflow: hidden;
+
+    background: rgba(19, 81, 180, 0.09);
+    color: inherit;
+    cursor: pointer;
+    text-align: left;
+}
+
+.mensagem-balao__resposta:hover {
+    background: rgba(19, 81, 180, 0.15);
+}
+
+.mensagem-balao__resposta:focus-visible {
+    outline: 2px solid #1570ef;
+    outline-offset: 2px;
+}
+
+.mensagem-balao__resposta-borda {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 4px;
+    background: #1570ef;
+}
+
+.mensagem-balao__resposta--eu-mesmo .mensagem-balao__resposta-borda {
+    background: var(--rosa-escuro);
+}
+
+.mensagem-balao__resposta-dados {
+    min-width: 0;
+    flex: 1;
+}
+
+.mensagem-balao__resposta-dados strong {
+    margin: 0 0 2px;
+    overflow: hidden;
+    color: #1351b4;
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mensagem-balao__resposta--eu-mesmo .mensagem-balao__resposta-dados strong {
+    color: var(--rosa-escuro);
+}
+
+.mensagem-balao__resposta-dados > span {
+    display: -webkit-box;
+    overflow: hidden;
+
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow-wrap: anywhere;
+
+    color: #475467;
+    font-family: var(--fonte-dm-sans);
+    font-size: 12px;
+    line-height: 1.35;
+    white-space: normal;
+}
+
 .mensagem-balao p {
     margin: 0;
     padding-right: 50px;

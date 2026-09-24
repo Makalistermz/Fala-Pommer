@@ -175,6 +175,19 @@ interface MensagemChat {
     };
 
     arquivo?: ArquivoMensagem | null;
+    respondendoA?: {
+        id: number;
+        conteudo: string;
+        remetente: {
+            tipo: "usuario" | "setor" | "admin" | "superAdmin";
+            id: number;
+            nome: string;
+            fotoPerfilUrl?: string | null;
+            tipoUsuario?: TipoUsuario;
+            sigla_setor?: string;
+        };
+        arquivo?: ArquivoMensagem | null;
+    } | null;
 }
 
 interface ArquivoMensagem {
@@ -2086,10 +2099,19 @@ function Home() {
         try {
             const corpo = arquivoSelecionado
                 ? new FormData()
-                : JSON.stringify({ conteudo });
+                : JSON.stringify({
+                    conteudo,
+                    mensagemRespondidaId: responderMensagem?.id,
+                });
 
             if (corpo instanceof FormData) {
                 if (conteudo) corpo.append("conteudo", conteudo);
+                if (responderMensagem) {
+                    corpo.append(
+                        "mensagemRespondidaId",
+                        String(responderMensagem.id),
+                    );
+                }
                 corpo.append("arquivo", arquivoSelecionado!);
             }
 
@@ -2131,6 +2153,7 @@ function Home() {
 
             setMensagem("");
             setArquivoSelecionado(null);
+            setResponderMensagem(null);
         } catch (erro) {
             console.error("Erro ao enviar mensagem:", erro);
             window.alert(
@@ -2977,12 +3000,8 @@ function Home() {
         );
     }
 
-    function irParaMensagemRespondida() {
-        if (!responderMensagem) {
-            return;
-        }
-
-        const balao = balõesRef.current.get(responderMensagem.id);
+    function irParaMensagem(mensagemId: number) {
+        const balao = balõesRef.current.get(mensagemId);
 
         if (!balao) {
             return;
@@ -2995,6 +3014,12 @@ function Home() {
         balao.classList.remove("mensagem-balao--localizada");
         void balao.offsetWidth;
         balao.classList.add("mensagem-balao--localizada");
+    }
+
+    function irParaMensagemRespondida() {
+        if (responderMensagem) {
+            irParaMensagem(responderMensagem.id);
+        }
     }
 
     const respostaFoiEnviadaPorMim =
@@ -3650,6 +3675,9 @@ function Home() {
                             usuario,
                             conversaSelecionada,
                         );
+                        const mensagemRespondida = item.respondendoA ?? null;
+                        const mensagemRespondidaEnviadaPorMim =
+                            mensagemRespondida?.remetente.id === usuario?.sub;
                         const exibirAvatarGrupo =
                             conversaSelecionada.tipo === "grupo" &&
                             !enviadaPorMim;
@@ -3773,6 +3801,39 @@ function Home() {
                                         )}
                                     </span>
                                 </header>
+
+                                {mensagemRespondida && (
+                                    <button
+                                        type="button"
+                                        className={`mensagem-balao__resposta ${
+                                            mensagemRespondidaEnviadaPorMim
+                                                ? "mensagem-balao__resposta--eu-mesmo"
+                                                : ""
+                                        }`}
+                                        onClick={() =>
+                                            irParaMensagem(
+                                                mensagemRespondida.id,
+                                            )
+                                        }
+                                        aria-label="Ir para a mensagem respondida"
+                                    >
+                                        <span
+                                            className="mensagem-balao__resposta-borda"
+                                            aria-hidden="true"
+                                        />
+                                        <span className="mensagem-balao__resposta-dados">
+                                            <strong>
+                                                {mensagemRespondidaEnviadaPorMim
+                                                    ? "Você"
+                                                    : mensagemRespondida.remetente.nome}
+                                            </strong>
+                                            <span>
+                                                {mensagemRespondida.conteudo ||
+                                                    mensagemRespondida.arquivo?.nome}
+                                            </span>
+                                        </span>
+                                    </button>
+                                )}
 
                                 {item.arquivo?.tipo === "imagem" && (
                                     <button

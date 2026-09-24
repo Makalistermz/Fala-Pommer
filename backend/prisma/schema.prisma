@@ -158,6 +158,7 @@ model mensagem {
   visibilidade           mensagem_visibilidade   @default(todos)
   transferencia_id       Int?
   setor_id               Int?
+  mensagem_respondida_id Int?
   conteudo               String                  @db.Text
   enviada_em             DateTime                @default(now()) @db.DateTime(0)
   arquivo_nome           String?                 @db.VarChar(255)
@@ -171,6 +172,8 @@ model mensagem {
   remetente              cadastro                @relation("RemetenteMensagem", fields: [remetente_id], references: [id], onUpdate: Restrict, map: "fk_mensagem_remetente")
   setores                setores?                @relation(fields: [setor_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_mensagem_setor")
   conversa_transferencia conversa_transferencia? @relation(fields: [transferencia_id], references: [id], onUpdate: Restrict, map: "fk_mensagem_transferencia")
+  mensagem_respondida    mensagem?                @relation("RespostaMensagem", fields: [mensagem_respondida_id], references: [id], onDelete: SetNull, onUpdate: Restrict, map: "fk_mensagem_respondida")
+  respostas              mensagem[]               @relation("RespostaMensagem")
 
   @@index([conversa_id, enviada_em], map: "idx_mensagem_conversa_data")
   @@index([remetente_id], map: "idx_mensagem_remetente")
@@ -178,6 +181,7 @@ model mensagem {
   @@index([conversa_id, visibilidade, id], map: "idx_mensagem_conversa_visibilidade_id")
   @@index([setor_id], map: "idx_mensagem_setor")
   @@index([transferencia_id], map: "idx_mensagem_transferencia")
+  @@index([mensagem_respondida_id], map: "idx_mensagem_respondida")
 }
 
 model setores {

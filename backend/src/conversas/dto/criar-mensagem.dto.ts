@@ -1,6 +1,7 @@
 // Valida os dados usados para enviar uma mensagem.
 import { Transform } from "class-transformer";
 import {
+    IsNumber,
     IsOptional,
     IsString,
     MaxLength
@@ -16,4 +17,8 @@ export class CriarMensagemDto {
     @IsString()
     @MaxLength(4000)
     conteudo?: string;
+
+    @IsOptional()
+    @IsNumber()
+    mensagemRespondidaId?: number;
 }

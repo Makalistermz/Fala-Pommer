@@ -1796,6 +1796,7 @@ export class ConversasService {
         usuarioLogadoId: number,
         conversaId: number,
         conteudo?: string,
+        mensagemRespondidaId?: number,
         arquivo?: ArquivoMensagemUpload
     ) {
         const conteudoLimpo = conteudo?.trim() ?? "";

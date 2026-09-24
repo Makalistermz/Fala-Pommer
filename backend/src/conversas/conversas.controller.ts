@@ -313,6 +313,7 @@ export class ConversasController {
             requisicao.usuario!.sub,
             conversaId,
             dados.conteudo,
+            dados.mensagemRespondidaId,
             arquivo
         );
     }

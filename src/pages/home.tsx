@@ -2298,6 +2298,14 @@ function Home() {
     async function abrirConversa(conversa: Conversa) {
         pararDeInformarDigitacao();
         cancelarGravacaoAudio();
+
+        if (
+            conversaSelecionada?.id !== conversa.id ||
+            conversaSelecionada.tipo !== conversa.tipo
+        ) {
+            setResponderMensagem(null);
+        }
+
         conversaAbertaIdRef.current = conversa.id;
         ultimaMensagemChatIdRef.current = 0;
         historicoChatCarregadoRef.current = false;

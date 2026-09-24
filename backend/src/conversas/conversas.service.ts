@@ -1946,6 +1946,8 @@ export class ConversasService {
                                     origem === "setor"
                                         ? contexto.atendimento?.setor_id ?? null
                                         : null,
+                                mensagem_respondida_id:
+                                    mensagemRespondidaId ?? null,
                                 conteudo: conteudoLimpo,
                                 enviada_em: enviadaEm,
                                 arquivo_nome: dadosArquivo?.nome ?? null,
@@ -1962,6 +1964,35 @@ export class ConversasService {
                                         nome: true,
                                         tipo_usuario: true,
                                         foto_perfil_url: true
+                                    }
+                                },
+
+                                mensagem_respondida: {
+                                    select: {
+                                        id: true,
+                                        conteudo: true,
+                                        origem: true,
+                                        visibilidade: true,
+                                        arquivo_nome: true,
+                                        arquivo_url: true,
+                                        arquivo_tipo: true,
+                                        arquivo_mime: true,
+                                        arquivo_tamanho: true,
+                                        remetente: {
+                                            select: {
+                                                id: true,
+                                                nome: true,
+                                                tipo_usuario: true,
+                                                foto_perfil_url: true
+                                            }
+                                        },
+                                        setores: {
+                                            select: {
+                                                id: true,
+                                                setor: true,
+                                                sigla_setor: true
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -2031,6 +2062,42 @@ export class ConversasService {
                         tipoUsuario:
                             mensagem.remetente.tipo_usuario
                     };
+            const mensagemRespondida =
+                mensagem.mensagem_respondida;
+            const setorDaMensagemRespondida =
+                mensagemRespondida?.setores ?? atendimento?.setor;
+            const remetenteMensagemRespondida =
+                mensagemRespondida?.origem === "setor" &&
+                setorDaMensagemRespondida
+                    ? {
+                        tipo: "setor" as const,
+                        id: mensagemRespondida.remetente.id,
+                        nome: mensagemRespondida.remetente.nome,
+                        sigla_setor:
+                            setorDaMensagemRespondida.sigla_setor,
+                        tipo_usuario:
+                            mensagemRespondida.remetente.tipo_usuario,
+                        fotoPerfilUrl:
+                            mensagemRespondida.remetente.foto_perfil_url
+                    }
+                    : mensagemRespondida
+                        ? {
+                            tipo:
+                                mensagemRespondida.remetente.tipo_usuario ===
+                                "admin"
+                                    ? "admin" as const
+                                : mensagemRespondida.remetente.tipo_usuario ===
+                                    "superAdmin"
+                                    ? "superAdmin" as const
+                                : "usuario" as const,
+                            id: mensagemRespondida.remetente.id,
+                            nome: mensagemRespondida.remetente.nome,
+                            fotoPerfilUrl:
+                                mensagemRespondida.remetente.foto_perfil_url,
+                            tipoUsuario:
+                                mensagemRespondida.remetente.tipo_usuario
+                        }
+                        : null;
 
             void this.notificacoesService.enviarNovaMensagem({
                 conversaId,
@@ -2049,7 +2116,25 @@ export class ConversasService {
                 sistema: false,
                 enviadaEm: mensagem.enviada_em,
                 remetente: remetenteExibido,
-                arquivo: dadosArquivo
+                arquivo: dadosArquivo,
+                respondendoA:
+                    mensagemRespondida && remetenteMensagemRespondida
+                        ? {
+                            id: mensagemRespondida.id,
+                            conteudo: mensagemRespondida.conteudo,
+                            remetente: remetenteMensagemRespondida,
+                            arquivo: mensagemRespondida.arquivo_url
+                                ? {
+                                    nome: mensagemRespondida.arquivo_nome!,
+                                    url: mensagemRespondida.arquivo_url,
+                                    tipo: mensagemRespondida.arquivo_tipo!,
+                                    mime: mensagemRespondida.arquivo_mime!,
+                                    tamanho:
+                                        mensagemRespondida.arquivo_tamanho!
+                                }
+                                : null
+                        }
+                        : null
             };
         } catch (erro) {
             if (caminhoArquivo) {
@@ -2152,6 +2237,35 @@ export class ConversasService {
                             setor: true,
                             sigla_setor: true
                         }
+                    },
+
+                    mensagem_respondida: {
+                        select: {
+                            id: true,
+                            conteudo: true,
+                            origem: true,
+                            visibilidade: true,
+                            arquivo_nome: true,
+                            arquivo_url: true,
+                            arquivo_tipo: true,
+                            arquivo_mime: true,
+                            arquivo_tamanho: true,
+                            remetente: {
+                                select: {
+                                    id: true,
+                                    nome: true,
+                                    tipo_usuario: true,
+                                    foto_perfil_url: true
+                                }
+                            },
+                            setores: {
+                                select: {
+                                    id: true,
+                                    setor: true,
+                                    sigla_setor: true
+                                }
+                            }
+                        }
                     }
                 },
 
@@ -2200,6 +2314,59 @@ export class ConversasService {
                         tipoUsuario:
                             mensagem.remetente.tipo_usuario
                     };
+            const mensagemRespondidaCandidata =
+                mensagem.mensagem_respondida;
+            const mensagemRespondida =
+                mensagemRespondidaCandidata &&
+                (
+                    visibilidades === null ||
+                    visibilidades.some(
+                        (visibilidade) =>
+                            visibilidade ===
+                            mensagemRespondidaCandidata.visibilidade
+                    )
+                ) &&
+                (
+                    visivelDesdeMensagemId === null ||
+                    mensagemRespondidaCandidata.id >=
+                        visivelDesdeMensagemId
+                )
+                    ? mensagemRespondidaCandidata
+                    : null;
+            const setorDaMensagemRespondida =
+                mensagemRespondida?.setores ?? atendimento?.setor;
+            const remetenteMensagemRespondida =
+                mensagemRespondida?.origem === "setor" &&
+                setorDaMensagemRespondida
+                    ? {
+                        tipo: "setor" as const,
+                        id: mensagemRespondida.remetente.id,
+                        nome: mensagemRespondida.remetente.nome,
+                        sigla_setor:
+                            setorDaMensagemRespondida.sigla_setor,
+                        tipo_usuario:
+                            mensagemRespondida.remetente.tipo_usuario,
+                        fotoPerfilUrl:
+                            mensagemRespondida.remetente.foto_perfil_url
+                    }
+                    : mensagemRespondida
+                        ? {
+                            tipo:
+                                mensagemRespondida.remetente.tipo_usuario ===
+                                "admin"
+                                    ? "admin" as const
+                                : mensagemRespondida.remetente.tipo_usuario ===
+                                    "superAdmin"
+                                    ? "superAdmin" as const
+                                : "usuario" as const,
+                            id: mensagemRespondida.remetente.id,
+                            nome: mensagemRespondida.remetente.nome,
+                            fotoPerfilUrl:
+                                mensagemRespondida.remetente.foto_perfil_url,
+                            tipoUsuario:
+                                mensagemRespondida.remetente.tipo_usuario
+                        }
+                        : null;
 
             const podeVerAutorReal =
                 contexto.conversa.tipo === "privada" ||
@@ -2224,6 +2391,24 @@ export class ConversasService {
                         tamanho: mensagem.arquivo_tamanho!
                     }
                     : null,
+                respondendoA:
+                    mensagemRespondida && remetenteMensagemRespondida
+                        ? {
+                            id: mensagemRespondida.id,
+                            conteudo: mensagemRespondida.conteudo,
+                            remetente: remetenteMensagemRespondida,
+                            arquivo: mensagemRespondida.arquivo_url
+                                ? {
+                                    nome: mensagemRespondida.arquivo_nome!,
+                                    url: mensagemRespondida.arquivo_url,
+                                    tipo: mensagemRespondida.arquivo_tipo!,
+                                    mime: mensagemRespondida.arquivo_mime!,
+                                    tamanho:
+                                        mensagemRespondida.arquivo_tamanho!
+                                }
+                                : null
+                        }
+                        : null,
 
                 ...(podeVerAutorReal && {
                     autorReal: {

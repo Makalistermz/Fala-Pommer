@@ -3155,10 +3155,6 @@ button.modal-transferencia__etapa {
     font-size: 14px;
 }
 
-.chat-input__responder-dados span {
-    font-size: 10px;
-}
-
 .chat-input__campo input::placeholder {
     color: #98a2b3;
 }
@@ -3390,6 +3386,10 @@ button.modal-transferencia__etapa {
     .chat-header__dados span {
         max-width: min(45vw, 190px);
         font-size: 12px;
+    }
+
+    .chat-input__responder-dados span {
+        font-size: 10px;
     }
 
     .chat-header__finalizar {

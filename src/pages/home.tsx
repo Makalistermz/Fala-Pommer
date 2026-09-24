@@ -2969,6 +2969,14 @@ function Home() {
         );
     }
 
+    const respostaFoiEnviadaPorMim =
+        responderMensagem !== null &&
+        mensagemFoiEnviadaPeloUsuario(
+            responderMensagem,
+            usuario,
+            conversaSelecionada,
+        );
+
     return (
         <main className={`home ${chatMobileAberto ? "home--chat-mobile-aberto" : ""}`}>
         <aside className="conversas" data-lenis-prevent>
@@ -3865,17 +3873,28 @@ function Home() {
                     )}
 
                     {responderMensagem && (
-                        <div className="chat-input__responder">
+                        <div
+                            className={`chat-input__responder ${
+                                respostaFoiEnviadaPorMim
+                                    ? "chat-input__responder-euMesmo"
+                                    : ""
+                            }`}
+                        >
                             <span
                                 className="chat-input__responder-borda"
                                 aria-hidden="true"
                             />
 
                             <div className="chat-input__responder-dados">
-                                <strong>a</strong>
+                                <strong>
+                                    {respostaFoiEnviadaPorMim
+                                        ? "Você"
+                                        : responderMensagem.remetente.nome}
+                                </strong>
 
                                 <span>
-                                    a
+                                    {responderMensagem.conteudo ||
+                                        responderMensagem.arquivo?.nome}
                                 </span>
                             </div>
 

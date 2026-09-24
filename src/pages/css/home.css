@@ -2860,9 +2860,11 @@ button.modal-transferencia__etapa {
 
 .chat-input__responder {
     position: relative;
+    width: 100%;
     max-width: 100%;
     margin-bottom: 10px;
     padding: 10px 12px;
+    box-sizing: border-box;
 
     display: flex;
     align-items: center;
@@ -2871,6 +2873,14 @@ button.modal-transferencia__etapa {
     background: #eceef1c7;
     border-radius: 12px;
     overflow: hidden;
+}
+
+.chat-input__responder-euMesmo .chat-input__responder-borda {
+    background: var(--rosa-escuro) !important;
+}
+
+.chat-input__responder-euMesmo .chat-input__responder-dados strong {
+    color: var(--rosa-escuro) !important;
 }
 
 .chat-input__responder-borda {
@@ -2904,14 +2914,22 @@ button.modal-transferencia__etapa {
 }
 
 .chat-input__responder-dados span {
+    display: -webkit-box;
+    max-width: 100%;
     overflow: hidden;
+
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow-wrap: anywhere;
 
     color: #475467;
     font-family: var(--fonte-dm-sans);
     font-size: 13px;
     line-height: 1.35;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    text-align: justify;
+    white-space: normal;
 }
 
 .chat-input__responder-remover {
@@ -3135,6 +3153,10 @@ button.modal-transferencia__etapa {
 
     font-family: var(--fonte-dm-sans);
     font-size: 14px;
+}
+
+.chat-input__responder-dados span {
+    font-size: 10px;
 }
 
 .chat-input__campo input::placeholder {

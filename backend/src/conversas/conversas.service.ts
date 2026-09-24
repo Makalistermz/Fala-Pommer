@@ -1821,6 +1821,51 @@ export class ConversasService {
             );
         }
 
+        if (mensagemRespondidaId !== undefined) {
+            const visivelDesdeMensagemId =
+                contexto.conversa.tipo === "privada"
+                    ? contexto.conversa.conversa_participante.find(
+                        (participante) =>
+                            participante.usuario_id === usuarioLogadoId
+                    )?.visivel_desde_mensagem_id ?? null
+                    : null;
+            const visibilidades =
+                contexto.conversa.tipo === "setor"
+                    ? contexto.usuarioLogado.tipo_usuario === "user"
+                        ? ["todos", "cidadao"] as const
+                        : ["todos", "equipe"] as const
+                    : null;
+
+            const mensagemRespondida =
+                await this.prisma.mensagem.findFirst({
+                    where: {
+                        id: {
+                            equals: mensagemRespondidaId,
+                            ...(visivelDesdeMensagemId !== null && {
+                                gte: visivelDesdeMensagemId
+                            })
+                        },
+                        conversa_id: conversaId,
+
+                        ...(visibilidades && {
+                            visibilidade: {
+                                in: [...visibilidades]
+                            }
+                        })
+                    },
+
+                    select: {
+                        id: true
+                    }
+                });
+
+            if (!mensagemRespondida) {
+                throw new BadRequestException(
+                    "A mensagem respondida não existe ou não está disponível nesta conversa."
+                );
+            }
+        }
+
         if (contexto.conversa.tipo === "privada") {
             if (
                 contexto.usuarioLogado.tipo_usuario ===

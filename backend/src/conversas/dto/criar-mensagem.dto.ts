@@ -1,10 +1,11 @@
 // Valida os dados usados para enviar uma mensagem.
 import { Transform } from "class-transformer";
 import {
-    IsNumber,
+    IsInt,
     IsOptional,
     IsString,
-    MaxLength
+    MaxLength,
+    Min
 } from "class-validator";
 
 export class CriarMensagemDto {
@@ -18,7 +19,16 @@ export class CriarMensagemDto {
     @MaxLength(4000)
     conteudo?: string;
 
+    @Transform(({ value }) => {
+        if (typeof value === "string") {
+            const valor = value.trim();
+            return valor === "" ? undefined : Number(valor);
+        }
+
+        return value;
+    })
     @IsOptional()
-    @IsNumber()
+    @IsInt()
+    @Min(1)
     mensagemRespondidaId?: number;
 }

@@ -71,7 +71,7 @@ function Privacidade() {
               <h2>Visão geral</h2>
             </div>
             <p>
-              O Fala Pommer é uma plataforma municipal de atendimento digital entre
+              O Fala Pommer é uma plataforma municipal de comunicação digital entre
               cidadãos, funcionários e setores públicos. A Prefeitura Municipal de Santa
               Maria de Jetibá atua como controladora dos dados pessoais tratados no sistema.
             </p>
@@ -215,8 +215,8 @@ function Privacidade() {
             </ul>
             <p>
               Não comercializamos dados pessoais. O compartilhamento com autoridades ou
-              outros órgãos ocorrerá quando houver previsão legal ou necessidade para o
-              atendimento de uma atribuição pública.
+              outros órgãos ocorrerá quando houver previsão legal ou necessidade para a
+              comunicação de uma atribuição pública.
             </p>
           </section>
 

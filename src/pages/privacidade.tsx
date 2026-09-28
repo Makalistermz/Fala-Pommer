@@ -77,8 +77,9 @@ function Privacidade() {
             </p>
             <p>
               Este aviso se aplica ao site e ao aplicativo Android. O tratamento observa a
-              Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018), os princípios
-              da administração pública e as normas de transparência aplicáveis.
+              Lei Geral de Proteção de Dados Pessoais — LGPD (Lei nº 13.709/2018), o Marco
+              Civil da Internet (Lei nº 12.965/2014), os princípios da administração pública
+              e as demais normas aplicáveis.
             </p>
             <div className="privacidade__destaque">
               <strong>Controlador</strong>

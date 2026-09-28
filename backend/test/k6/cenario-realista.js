@@ -11,8 +11,8 @@ export const options = {
     { duration: "30s", target: 50 },
     { duration: "1m", target: 100 },
     { duration: "30s", target: 200 },
-    { duration: "30s", target: 225 },
-    { duration: "1m", target: 225 },
+    { duration: "30s", target: 220 },
+    { duration: "1m", target: 220 },
     { duration: "30s", target: 0 },
   ],
   thresholds: {

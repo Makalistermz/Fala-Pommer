@@ -2,6 +2,10 @@
     visibility: hidden !important;
 }
 
+html.aviso-privacidade-visivel .recaptcha-aviso {
+    visibility: hidden;
+}
+
 .recaptcha-aviso {
     position: fixed;
     right: 0.75rem;

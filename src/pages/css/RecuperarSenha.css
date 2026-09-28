@@ -157,6 +157,19 @@
   text-decoration: underline;
 }
 
+.recuperacao .acesso-privacidade {
+  margin: 16px 0 0 !important;
+  color: #667085;
+  font-size: 0.82rem !important;
+  text-align: center;
+}
+
+.recuperacao .acesso-privacidade a {
+  color: #1351b4;
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
 .recuperacao__ilustracao {
   position: sticky;
   top: 0;

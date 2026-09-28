@@ -506,6 +506,97 @@
     gap: 14px;
 }
 
+.privacidade-dados {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.privacidade-dados__resumo {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 20px;
+    padding: 24px;
+    border: 1px solid #dfe5ee;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #eef5ff, #ffffff 62%);
+    box-shadow: 0 8px 24px rgba(15, 38, 73, 0.07);
+}
+
+.privacidade-dados__icone {
+    display: grid;
+    width: 62px;
+    height: 62px;
+    place-items: center;
+    border: 1px solid #cfe0f7;
+    border-radius: 16px;
+    background: #ffffff;
+    color: #1351b4;
+}
+
+.privacidade-dados__icone svg {
+    width: 32px;
+    height: 32px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.privacidade-dados__etiqueta {
+    color: #1351b4;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.privacidade-dados__resumo h2 {
+    margin: 5px 0 7px;
+    color: #172033;
+    font-size: 1.3rem;
+}
+
+.privacidade-dados__resumo p {
+    max-width: 720px;
+    margin: 0;
+    color: #667085;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+html.tema-escuro:not(.alto-contraste) .privacidade-dados__resumo {
+    border-color: var(--tema-borda);
+    background: linear-gradient(135deg, var(--tema-superficie-elevada), var(--tema-superficie) 62%);
+}
+
+html.tema-escuro:not(.alto-contraste) .privacidade-dados__icone {
+    border-color: var(--tema-borda);
+    background: var(--tema-superficie-interativa);
+    color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .privacidade-dados__resumo h2 {
+    color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) .privacidade-dados__resumo p {
+    color: var(--tema-texto-secundario);
+}
+
+html.alto-contraste .privacidade-dados__resumo,
+html.alto-contraste .privacidade-dados__icone {
+    border-color: #ffffff;
+    background: #000000;
+    color: #ffffff;
+}
+
+html.alto-contraste .privacidade-dados__resumo :is(h2, p, span) {
+    color: #ffffff;
+}
+
 .conta-seguranca__item {
     position: relative;
     overflow: hidden;
@@ -1404,6 +1495,11 @@ a.conta-seguranca__acao {
     .acessibilidade,
     .conta-seguranca {
         gap: 12px;
+    }
+
+    .privacidade-dados__resumo {
+        grid-template-columns: 1fr;
+        padding: 20px;
     }
 
     .aparencia {

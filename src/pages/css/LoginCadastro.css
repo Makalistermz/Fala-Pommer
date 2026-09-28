@@ -215,6 +215,23 @@ body {
   margin-top: 28px;
 }
 
+.acesso-privacidade {
+  margin: 18px 0 0;
+  color: #667085;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.acesso-privacidade a {
+  color: #1351b4;
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+.acesso-privacidade a:hover {
+  text-decoration-thickness: 2px;
+}
+
 .login__ilustracao {
   display: flex;
   align-items: center;

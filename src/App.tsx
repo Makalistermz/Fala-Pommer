@@ -1,6 +1,7 @@
 // Define as rotas disponíveis na aplicação.
 import { Routes, Route } from "react-router";
 import { useEffect } from "react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import "./App.css";
 import Login from "./pages/login";
 import Cadastro from "./pages/cadastro";
@@ -15,6 +16,8 @@ import { initLenis } from "./library/lenis.ts"
 import Configuracao from "./pages/configuracao.tsx"
 import NaoEncontrada from "./pages/naoEncontrada.tsx";
 import RecaptchaLayout from "./components/reCAPTCHALayout.tsx";
+import AvisoPrivacidade from "./components/AvisoPrivacidade.tsx";
+import Privacidade from "./pages/privacidade.tsx";
 
 function App() {
     useEffect(() => {
@@ -26,12 +29,21 @@ function App() {
     }, []);
 
   return (
-    <Routes>
+    <>
+      <Routes>
         <Route element={<RecaptchaLayout />}>
-          <Route path="/" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+                <Login />
+              </GoogleOAuthProvider>
+            }
+          />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/recuperar-senha" element={<RecuperarSenha />} />
         </Route>
+      <Route path="/privacidade" element={<Privacidade />} />
       <Route path="/redefinir-senha" element={<RedefinirSenha />} />
       <Route path="/sem-permissao" element={<SemPermissao />} />
       <Route path="*" element={<NaoEncontrada />} />
@@ -76,7 +88,9 @@ function App() {
         <Route path="/sectors" element={<Sectors />} />
       </Route>
 
-    </Routes>
+      </Routes>
+      <AvisoPrivacidade />
+    </>
   );
 }
 

@@ -6,6 +6,7 @@ import MeuPerfil from "./configPages/meu-perfil";
 import ContaSeguranca from "./configPages/conta-seguranca";
 import Aparencia from "./configPages/aparencia";
 import Acessibilidade from "./configPages/acessibilidade";
+import PrivacidadeDados from "./configPages/privacidade-dados";
 import { apiFetch } from "../services/api";
 import { useAutenticacao } from "../components/AutenticacaoContext";
 import "./css/configuracao.css";
@@ -63,6 +64,16 @@ const itensMenu: ItemMenu[] = [
             </svg>
         ),
     },
+    {
+        id: "privacidade-dados",
+        label: "Privacidade e dados",
+        icon: (
+            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 16 16">
+                <path d="M8 1.2 2.8 3.4V7c0 3.5 2.2 6.6 5.2 7.7 3-1.1 5.2-4.2 5.2-7.7V3.4L8 1.2Z" />
+                <path d="m5.8 8 1.5 1.5 3.1-3.2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+        ),
+    },
 ];
 
 
@@ -84,7 +95,10 @@ function Configuracao() {
                 return <Aparencia />;
 
             case "acessibilidade":
-                return <Acessibilidade />
+                return <Acessibilidade />;
+
+            case "privacidade-dados":
+                return <PrivacidadeDados />;
         }
     }
 

@@ -602,6 +602,7 @@ function Login() {
                       type={googleButtonType}
                       theme={googleButtonTheme}
                       shape="rectangular"
+                      use_fedcm_for_button
                       width={
                         googleButtonType === "standard"
                           ? googleButtonWidth

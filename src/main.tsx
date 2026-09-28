@@ -2,7 +2,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import App from "./App.tsx";
 import { NavegacaoAudioProvider } from "./components/NavegacaoAudioProvider.tsx";
 import { inicializarAltoContraste } from "./library/altoContraste.ts";
@@ -12,7 +11,6 @@ import { inicializarTemaAparencia } from "./library/temaAparencia.ts";
 import { AutenticacaoProvider } from "./components/AutenticacaoProvider.tsx";
 import "./index.css";
 
-const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 inicializarAltoContraste();
 inicializarTextoAmpliado();
 inicializarPlanoFundoConversa();
@@ -21,14 +19,12 @@ inicializarTemaAparencia();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <GoogleOAuthProvider clientId={googleClientId}>
-        {/* Disponibiliza a sessão restaurada para todas as rotas da aplicação. */}
-        <AutenticacaoProvider>
-          <NavegacaoAudioProvider>
-            <App />
-          </NavegacaoAudioProvider>
-        </AutenticacaoProvider>
-      </GoogleOAuthProvider>
+      {/* Disponibiliza a sessão restaurada para todas as rotas da aplicação. */}
+      <AutenticacaoProvider>
+        <NavegacaoAudioProvider>
+          <App />
+        </NavegacaoAudioProvider>
+      </AutenticacaoProvider>
     </BrowserRouter>
   </StrictMode>
 );

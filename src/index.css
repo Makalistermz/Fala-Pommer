@@ -1093,6 +1093,53 @@ html.tema-escuro:not(.alto-contraste) :is(
   color: var(--tema-destaque);
 }
 
+html.tema-escuro:not(.alto-contraste)
+  .conta-seguranca__indicador.bi-arrow-right:not(.icone-seta-sair) {
+  background: var(--tema-superficie-elevada);
+  color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste)
+  .conta-seguranca__item:hover
+  .conta-seguranca__indicador.bi-arrow-right:not(.icone-seta-sair) {
+  background: var(--tema-superficie-interativa);
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste)
+  .conta-seguranca__indicador.icone-seta-sair {
+  background: rgb(239 68 68 / 16%);
+  color: #ff7b7b;
+}
+
+html.tema-escuro:not(.alto-contraste)
+  .conta-seguranca__indicador.icone-seta-sair
+  svg {
+  color: #ff7b7b;
+}
+
+html.tema-escuro:not(.alto-contraste)
+  .conta-seguranca__indicador
+  .conta-seguranca__alternador {
+  border-color: #40516b;
+  background-color: var(--tema-superficie-interativa);
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 35%);
+}
+
+html.tema-escuro:not(.alto-contraste)
+  .conta-seguranca__indicador
+  .conta-seguranca__alternador--ativo {
+  border-color: #22c55e;
+  background-color: #15803d;
+}
+
+html.tema-escuro:not(.alto-contraste)
+  .conta-seguranca__indicador
+  .alternador-configuracao.conta-seguranca__alternador--ativo {
+  border-color: #72a7ff;
+  background-color: #1351b4;
+}
+
 html.tema-escuro:not(.alto-contraste) .admin-toggle {
   border-color: var(--tema-fundo);
   background: var(--tema-superficie-elevada);

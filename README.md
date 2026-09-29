@@ -180,6 +180,7 @@ Crie outro arquivo **backend/.env**:
 ```env
 DATABASE_URL="mysql://usuario:senha@localhost:3306/fala_pommer"
 JWT_SECRET="substitua_por_uma_chave_longa_e_segura"
+MESSAGE_ENCRYPTION_KEY="chave_base64_de_32_bytes"
 
 FRONTEND_URL=http://localhost:5173
 PORT=3000
@@ -190,6 +191,18 @@ SMTP_PORT=587
 SMTP_USER=usuario_smtp
 SMTP_PASSWORD=senha_smtp
 ```
+
+Gere `MESSAGE_ENCRYPTION_KEY` uma única vez e mantenha o mesmo valor em
+todas as instâncias do backend. Ela deve ser uma chave aleatória de 32 bytes
+em Base64 canônico. Por exemplo:
+
+```bash
+node -e "process.stdout.write(require('node:crypto').randomBytes(32).toString('base64'))"
+```
+
+Guarde essa chave em um gerenciador de segredos no ambiente de produção.
+Se ela for perdida ou alterada, as mensagens já criptografadas não poderão
+ser recuperadas.
 
 As notificações push são opcionais. Para ativá-las no backend, configure uma credencial padrão do Google ou informe:
 

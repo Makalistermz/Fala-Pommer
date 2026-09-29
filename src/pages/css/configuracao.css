@@ -1024,6 +1024,10 @@ a.conta-seguranca__acao {
     color: #172033;
 }
 
+.acessibilidade__acao.acessibilidade__acao--detalhes {
+    grid-template-columns: minmax(0, 1fr) auto;
+}
+
 .acessibilidade__conteudo {
     display: flex;
     flex-direction: column;
@@ -1068,6 +1072,33 @@ a.conta-seguranca__acao {
 .acessibilidade__indicador {
     justify-self: center;
     align-self: center;
+}
+
+.acessibilidade__seta {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border: 1px solid #d7e3f4;
+    border-radius: 10px;
+    background: #edf3fc;
+    color: #1351b4;
+    transition:
+        border-color 180ms ease,
+        background-color 180ms ease,
+        color 180ms ease,
+        transform 180ms ease;
+}
+
+.acessibilidade__seta svg {
+    width: 18px;
+    height: 18px;
+}
+
+.acessibilidade__item--daltonismo:hover .acessibilidade__seta {
+    border-color: #c5d8f2;
+    background: #dce9fb;
+    transform: translateX(3px);
 }
 
 .acessibilidade__alternador {
@@ -1578,6 +1609,11 @@ a.conta-seguranca__acao {
         left: 21px;
     }
 
+    .acessibilidade__seta {
+        width: 34px;
+        height: 34px;
+    }
+
     .conta-seguranca__item .bi-arrow-right,
     .conta-seguranca__item .icone-seta-sair {
         width: 34px;
@@ -1661,6 +1697,7 @@ a.conta-seguranca__acao {
     .conta-seguranca__alternador,
     .conta-seguranca__alternador::after,
     .acessibilidade__item,
+    .acessibilidade__seta,
     .acessibilidade__alternador,
     .acessibilidade__alternador::after,
     .meu-perfil__alterar-foto,

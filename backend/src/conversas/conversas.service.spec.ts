@@ -3,6 +3,7 @@ import { BadRequestException, ForbiddenException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { ConversasService } from "./conversas.service";
 import { NotificacoesService } from "../notificacoes/notificacoes.service";
+import { MensagensCriptografiaService } from "../criptografia/mensagens-criptografia.service";
 
 describe("ConversasService", () => {
   const mensagem = (id: number) => ({
@@ -75,6 +76,10 @@ describe("ConversasService", () => {
   const notificacoesMock = {
     enviarNovaMensagem: jest.fn().mockResolvedValue(undefined),
   };
+  const criptografiaMock = {
+    criptografar: jest.fn((conteudo: string) => conteudo),
+    descriptografar: jest.fn((conteudo: string) => conteudo),
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -103,6 +108,7 @@ describe("ConversasService", () => {
     service = new ConversasService(
       prismaMock as unknown as PrismaService,
       notificacoesMock as unknown as NotificacoesService,
+      criptografiaMock as unknown as MensagensCriptografiaService,
     );
   });
 

@@ -1,5 +1,7 @@
 import { PrismaService } from '../prisma/prisma.service';
 import { UsuariosService } from './usuarios.service';
+import { EmailService } from '../email/email.service';
+import { MensagensCriptografiaService } from '../criptografia/mensagens-criptografia.service';
 
 describe('UsuariosService - desativação', () => {
   const transacaoMock = {
@@ -39,6 +41,9 @@ describe('UsuariosService - desativação', () => {
   };
 
   let service: UsuariosService;
+  const criptografiaMock = {
+    criptografar: jest.fn((conteudo: string) => conteudo),
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -73,7 +78,11 @@ describe('UsuariosService - desativação', () => {
       desativado_em: new Date(),
     });
 
-    service = new UsuariosService(prismaMock as unknown as PrismaService);
+    service = new UsuariosService(
+      prismaMock as unknown as PrismaService,
+      undefined as unknown as EmailService,
+      criptografiaMock as unknown as MensagensCriptografiaService,
+    );
   });
 
   it('transforma em user, remove grupos e oculta as conversas antigas', async () => {

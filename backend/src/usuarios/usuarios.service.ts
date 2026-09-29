@@ -12,6 +12,7 @@ import { CriarUsuarioDto } from "./dto/criar-usuario.dto";
 import { AtualizarUsuarioDto } from "./dto/atualizar-usuario.dto";
 import { AtualizarMeuPerfilDto } from "./dto/atualizar-meu-perfil.dto";
 import { EmailService } from "../email/email.service";
+import { MensagensCriptografiaService } from "../criptografia/mensagens-criptografia.service";
 
 import * as bcrypt from "bcrypt";
 import { randomUUID } from "node:crypto";
@@ -29,7 +30,8 @@ export type ArquivoFotoPerfilUpload = {
 export class UsuariosService {
     constructor(
         private readonly prisma: PrismaService,
-        private readonly emailService: EmailService
+        private readonly emailService: EmailService,
+        private readonly criptografiaMensagens: MensagensCriptografiaService
     ) {}
 
     async cadastrar(
@@ -991,8 +993,10 @@ export class UsuariosService {
                         conversa_id: grupo.conversa_id,
                         remetente_id: administradorId,
                         origem: "usuario",
-                        conteudo:
+                        conteudo: this.criptografiaMensagens.criptografar(
                             `${usuario.nome} foi removido do grupo porque seu perfil foi desativado.`,
+                            grupo.conversa_id
+                        ),
                         enviada_em: desativadoEm
                     }))
                 });

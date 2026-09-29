@@ -15,6 +15,7 @@ import { CriarAvaliacaoDto } from "./dto/criar-avaliacao.dto";
 import { TransferirConversaDto } from "./dto/transferir-conversa.dto";
 import { Prisma } from "../generated/prisma/client";
 import { NotificacoesService } from "../notificacoes/notificacoes.service";
+import { MensagensCriptografiaService } from "../criptografia/mensagens-criptografia.service";
 
 export type ArquivoMensagemUpload = {
     originalname: string;
@@ -39,7 +40,8 @@ export class ConversasService {
 
     constructor(
         private readonly prisma: PrismaService,
-        private readonly notificacoesService: NotificacoesService
+        private readonly notificacoesService: NotificacoesService,
+        private readonly criptografiaMensagens: MensagensCriptografiaService
     ) {}
 
     async listarAvaliacoes() {
@@ -316,7 +318,10 @@ export class ConversasService {
                 ultimaMensagem: ultimaMensagem
                     ? {
                         id: ultimaMensagem.id,
-                        conteudo: ultimaMensagem.conteudo,
+                        conteudo: this.criptografiaMensagens.descriptografar(
+                            ultimaMensagem.conteudo,
+                            conversa.id
+                        ),
                         origem: ultimaMensagem.origem,
                         arquivoNome: ultimaMensagem.arquivo_nome,
                         arquivoTipo: ultimaMensagem.arquivo_tipo,
@@ -636,7 +641,10 @@ export class ConversasService {
                 ultimaMensagem: ultimaMensagem
                     ? {
                         id: ultimaMensagem.id,
-                        conteudo: ultimaMensagem.conteudo,
+                        conteudo: this.criptografiaMensagens.descriptografar(
+                            ultimaMensagem.conteudo,
+                            grupo.id
+                        ),
                         origem: ultimaMensagem.origem,
                         arquivoNome: ultimaMensagem.arquivo_nome,
                         arquivoTipo: ultimaMensagem.arquivo_tipo,
@@ -1068,7 +1076,10 @@ export class ConversasService {
                         remetente_id: usuarioLogado.id,
                         origem: "usuario",
                         sistema: true,
-                        conteudo: `${usuarioLogado.nome} saiu do grupo`
+                        conteudo: this.criptografiaMensagens.criptografar(
+                            `${usuarioLogado.nome} saiu do grupo.`,
+                            conversaId
+                        )
                     }
                 });
 
@@ -1365,7 +1376,10 @@ export class ConversasService {
                     ? {
                         id: ultimaMensagem.id,
                         conteudo:
-                            ultimaMensagem.conteudo,
+                            this.criptografiaMensagens.descriptografar(
+                                ultimaMensagem.conteudo,
+                                atendimento.conversa.id
+                            ),
                         origem:
                             ultimaMensagem.origem,
                         sistema:
@@ -1948,7 +1962,11 @@ export class ConversasService {
                                         : null,
                                 mensagem_respondida_id:
                                     mensagemRespondidaId ?? null,
-                                conteudo: conteudoLimpo,
+                                conteudo:
+                                    this.criptografiaMensagens.criptografar(
+                                        conteudoLimpo,
+                                        conversaId
+                                    ),
                                 enviada_em: enviadaEm,
                                 arquivo_nome: dadosArquivo?.nome ?? null,
                                 arquivo_url: dadosArquivo?.url ?? null,
@@ -2064,6 +2082,12 @@ export class ConversasService {
                     };
             const mensagemRespondida =
                 mensagem.mensagem_respondida;
+            const conteudoMensagemRespondida = mensagemRespondida
+                ? this.criptografiaMensagens.descriptografar(
+                    mensagemRespondida.conteudo,
+                    conversaId
+                )
+                : null;
             const setorDaMensagemRespondida =
                 mensagemRespondida?.setores ?? atendimento?.setor;
             const remetenteMensagemRespondida =
@@ -2104,14 +2128,14 @@ export class ConversasService {
                 mensagemId: mensagem.id,
                 remetenteId: usuarioLogadoId,
                 remetenteNome: mensagem.remetente.nome,
-                conteudo: mensagem.conteudo,
+                conteudo: conteudoLimpo,
                 possuiArquivo: dadosArquivo !== null
             });
 
             return {
                 id: mensagem.id,
                 conversaId: mensagem.conversa_id,
-                conteudo: mensagem.conteudo,
+                conteudo: conteudoLimpo,
                 origem: mensagem.origem,
                 sistema: false,
                 enviadaEm: mensagem.enviada_em,
@@ -2121,7 +2145,7 @@ export class ConversasService {
                     mensagemRespondida && remetenteMensagemRespondida
                         ? {
                             id: mensagemRespondida.id,
-                            conteudo: mensagemRespondida.conteudo,
+                            conteudo: conteudoMensagemRespondida!,
                             remetente: remetenteMensagemRespondida,
                             arquivo: mensagemRespondida.arquivo_url
                                 ? {
@@ -2377,7 +2401,10 @@ export class ConversasService {
             return {
                 id: mensagem.id,
                 conversaId: mensagem.conversa_id,
-                conteudo: mensagem.conteudo,
+                conteudo: this.criptografiaMensagens.descriptografar(
+                    mensagem.conteudo,
+                    conversaId
+                ),
                 origem: mensagem.origem,
                 sistema: mensagem.sistema,
                 enviadaEm: mensagem.enviada_em,
@@ -2395,7 +2422,11 @@ export class ConversasService {
                     mensagemRespondida && remetenteMensagemRespondida
                         ? {
                             id: mensagemRespondida.id,
-                            conteudo: mensagemRespondida.conteudo,
+                            conteudo:
+                                this.criptografiaMensagens.descriptografar(
+                                    mensagemRespondida.conteudo,
+                                    conversaId
+                                ),
                             remetente: remetenteMensagemRespondida,
                             arquivo: mensagemRespondida.arquivo_url
                                 ? {
@@ -3326,7 +3357,11 @@ export class ConversasService {
                             visibilidade: "equipe",
                             transferencia_id: transferencia.id,
                             setor_id: setorDestino.id,
-                            conteudo: conteudoMensagemEquipe
+                            conteudo:
+                                this.criptografiaMensagens.criptografar(
+                                    conteudoMensagemEquipe,
+                                    atendimentoDestino.conversa_id
+                                )
                         },
                         select: {
                             id: true
@@ -3347,7 +3382,11 @@ export class ConversasService {
                             visibilidade: "cidadao",
                             transferencia_id: transferencia.id,
                             setor_id: setorDestino.id,
-                            conteudo: conteudoMensagemCidadao
+                            conteudo:
+                                this.criptografiaMensagens.criptografar(
+                                    conteudoMensagemCidadao,
+                                    atendimentoDestino.conversa_id
+                                )
                         },
                         select: {
                             id: true

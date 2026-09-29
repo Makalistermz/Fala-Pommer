@@ -15,7 +15,7 @@ import { NotificacoesModule } from './notificacoes/notificacoes.module';
 import { RecaptchaModule } from './recaptcha/recaptcha.module';
 
 @Module({
-  imports: [PrismaModule, UsuariosModule, RecuperacaoSenhaModule, EmailModule, AuthModule, ConfigModule.forRoot({isGlobal: true, envFilePath: ['.env', '../.env']}), RecaptchaModule, NotificacoesModule, ConversasModule, SetoresModule, SecretariaModule],
+  imports: [PrismaModule, UsuariosModule, RecuperacaoSenhaModule, EmailModule, AuthModule, ConfigModule.forRoot({isGlobal: true, envFilePath: ['.env.local', '.env', '../.env']}), RecaptchaModule, NotificacoesModule, ConversasModule, SetoresModule, SecretariaModule],
   controllers: [AppController],
   providers: [AppService],
 })

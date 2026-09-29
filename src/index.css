@@ -1415,21 +1415,32 @@ html.tema-escuro:not(.alto-contraste):has(
 }
 
 html.alto-contraste {
-  color-scheme: light;
-  --azul-escuro: #003478;
-  --azul-claro: #e2edff;
-  --rosa-escuro: #a50032;
-  --amarelo: #ffcc00;
-  --verde-claro: #007a51;
-  --verde-escuro: #005c3d;
-  --branco: #ffffff;
+  color-scheme: dark;
+  --contraste-fundo: #000000;
+  --contraste-superficie: #101010;
+  --contraste-texto: #ffffff;
+  --contraste-destaque: #ffdd00;
+  --contraste-link: #9fc5ff;
+  --contraste-desabilitado: #b8b8b8;
+  --azul-escuro: #ffffff;
+  --azul-claro: #000000;
+  --rosa-escuro: #ff9fbd;
+  --amarelo: #ffdd00;
+  --verde-claro: #7dffb2;
+  --verde-escuro: #7dffb2;
+  --verde-sucesso: #7dffb2;
+  --vermelho: #ff8d8d;
+  --branco: #000000;
+  --texto-principal: #ffffff;
+  --texto-secundario: #e5e5e5;
+  --borda: #ffffff;
 }
 
 html.alto-contraste,
 html.alto-contraste body,
 html.alto-contraste #root {
-  background: #ffffff !important;
-  color: #000000 !important;
+  background: var(--contraste-fundo) !important;
+  color: var(--contraste-texto) !important;
 }
 
 html.alto-contraste body * {
@@ -1448,6 +1459,9 @@ html.alto-contraste body :where(
   nav,
   form,
   dialog,
+  fieldset,
+  details,
+  summary,
   ul,
   ol,
   li,
@@ -1458,10 +1472,10 @@ html.alto-contraste body :where(
   td,
   th
 ) {
-  border-color: #000000 !important;
-  background-color: #ffffff !important;
+  border-color: var(--contraste-texto) !important;
+  background-color: var(--contraste-fundo) !important;
   background-image: none !important;
-  color: #000000 !important;
+  color: var(--contraste-texto) !important;
 }
 
 html.alto-contraste body :where(
@@ -1478,103 +1492,210 @@ html.alto-contraste body :where(
   label,
   legend,
   dt,
-  dd
+  dd,
+  time,
+  code,
+  th,
+  td
 ) {
-  color: #000000 !important;
+  color: var(--contraste-texto) !important;
 }
 
 html.alto-contraste body svg {
-  color: #000000 !important;
+  color: inherit !important;
+}
+
+html.alto-contraste body svg :is(
+  path,
+  circle,
+  rect,
+  line,
+  polyline,
+  polygon
+)[stroke]:not([stroke="none"]) {
+  stroke: currentColor !important;
+}
+
+html.alto-contraste body svg :is(
+  path,
+  circle,
+  rect,
+  polygon
+)[fill]:not([fill="none"]) {
+  fill: currentColor !important;
 }
 
 html.alto-contraste body :where(a, button, [role="button"], [role="switch"]) {
-  border: 2px solid #000000 !important;
-  background-color: #000000 !important;
-  color: #ffffff !important;
+  border: 2px solid var(--contraste-texto) !important;
+  background-color: var(--contraste-destaque) !important;
+  color: #000000 !important;
   font-weight: 700 !important;
 }
 
 html.alto-contraste body :is(button, a, [role="button"], [role="switch"]) * {
-  color: inherit !important;
-}
-
-html.alto-contraste body a {
-  background-color: #ffffff !important;
-  color: #0000b8 !important;
-  text-decoration: underline !important;
-  text-decoration-thickness: 2px !important;
-}
-
-html.alto-contraste body :where(input, textarea, select) {
-  border: 2px solid #000000 !important;
-  background: #ffffff !important;
   color: #000000 !important;
 }
 
+html.alto-contraste body a {
+  background-color: transparent !important;
+  color: var(--contraste-link) !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 3px !important;
+}
+
+html.alto-contraste body a * {
+  color: inherit !important;
+}
+
+html.alto-contraste body :where(input, textarea, select, option) {
+  border: 2px solid var(--contraste-texto) !important;
+  background: var(--contraste-fundo) !important;
+  color: var(--contraste-texto) !important;
+  caret-color: var(--contraste-destaque) !important;
+}
+
 html.alto-contraste body :where(input, textarea)::placeholder {
-  color: #333333 !important;
+  color: #d4d4d4 !important;
   opacity: 1;
 }
 
 html.alto-contraste body :where(*:focus-visible) {
-  outline: 4px solid #005fcc !important;
+  outline: 4px solid var(--contraste-destaque) !important;
   outline-offset: 3px !important;
 }
 
-html.alto-contraste body :where(button, input, textarea, select):disabled {
+html.alto-contraste body :where(button, input, textarea, select):disabled,
+html.alto-contraste body [aria-disabled="true"] {
+  border-color: var(--contraste-desabilitado) !important;
+  background: #242424 !important;
+  color: var(--contraste-desabilitado) !important;
   border-style: dashed !important;
   opacity: 1 !important;
 }
 
-html.alto-contraste body [aria-current="page"] {
-  outline: 4px solid #ffcc00 !important;
-  outline-offset: -4px !important;
+html.alto-contraste body :is(
+  [aria-current="page"],
+  [aria-selected="true"],
+  .admin-nav-item.ativo,
+  .criar-sectors__pasta--ativa,
+  .gerenciar-user__pasta--ativa,
+  .criar-avaliacao__pasta--ativa
+) {
+  border-color: var(--contraste-texto) !important;
+  background: var(--contraste-destaque) !important;
+  color: #000000 !important;
 }
 
-html.alto-contraste body svg:not([fill="none"]) {
-  fill: currentColor !important;
+html.alto-contraste body :is(
+  [aria-current="page"],
+  [aria-selected="true"],
+  .admin-nav-item.ativo,
+  .criar-sectors__pasta--ativa,
+  .gerenciar-user__pasta--ativa,
+  .criar-avaliacao__pasta--ativa
+) * {
+  color: #000000 !important;
 }
 
-html.alto-contraste body svg[fill="none"] {
-  stroke: currentColor !important;
+html.alto-contraste body :where(input[type="checkbox"], input[type="radio"]) {
+  accent-color: var(--contraste-destaque) !important;
 }
 
 html.alto-contraste body :where(.modal-fundo, .modal-confirmacao-fundo) {
-  background: rgba(0, 0, 0, 0.82) !important;
+  background: rgba(255, 255, 255, 0.22) !important;
 }
 
-html.alto-contraste body :where(.modal-feedback, .modal-confirmacao) {
-  border: 4px solid #000000 !important;
-  background: #ffffff !important;
-  color: #000000 !important;
+html.alto-contraste body :where(
+  .modal-feedback,
+  .modal-confirmacao,
+  .modal-grupo__janela,
+  .modal-dados-grupo,
+  .modal-finalizar,
+  .duas-etapas-modal,
+  .visualizador-arquivo
+) {
+  border: 3px solid var(--contraste-texto) !important;
+  background: var(--contraste-fundo) !important;
+  color: var(--contraste-texto) !important;
 }
 
-html.alto-contraste body .acessibilidade__alternador[aria-checked="true"] {
-  border-color: #000000 !important;
-  background-color: #ffcc00 !important;
+html.alto-contraste body [role="switch"][aria-checked="false"] {
+  border-color: var(--contraste-texto) !important;
+  background-color: var(--contraste-fundo) !important;
+  color: var(--contraste-texto) !important;
 }
 
-html.alto-contraste body .acessibilidade__alternador[aria-checked="true"]::after {
+html.alto-contraste body [role="switch"][aria-checked="false"]::after {
+  background-color: var(--contraste-texto) !important;
+}
+
+html.alto-contraste body [role="switch"][aria-checked="true"] {
+  border-color: var(--contraste-texto) !important;
+  background-color: var(--contraste-destaque) !important;
+}
+
+html.alto-contraste body [role="switch"][aria-checked="true"]::after {
   background-color: #000000 !important;
 }
 
-html.alto-contraste body :is(.conversa-item, .nova-conversa__usuario) {
-  border: 2px solid #000000 !important;
-  background: #ffffff !important;
-  color: #000000 !important;
+html.alto-contraste body :is(
+  .conversa-item,
+  .nova-conversa__usuario,
+  .acessibilidade__item,
+  .conta-seguranca__item
+) {
+  border: 2px solid var(--contraste-texto) !important;
+  background: var(--contraste-fundo) !important;
+  color: var(--contraste-texto) !important;
 }
 
 html.alto-contraste body :is(
   .conversa-item:hover,
   .conversa-item.contato-ativo,
-  .nova-conversa__usuario:hover
+  .nova-conversa__usuario:hover,
+  .acessibilidade__item:focus-within,
+  .conta-seguranca__item:focus-within
 ) {
-  background: #fff2a8 !important;
+  background: var(--contraste-destaque) !important;
+  color: #000000 !important;
+}
+
+html.alto-contraste body :is(
+  .acessibilidade__item,
+  .conta-seguranca__item
+)::before {
+  background: var(--contraste-destaque) !important;
+}
+
+html.alto-contraste body :is(
+  .acessibilidade__item:focus-within,
+  .conta-seguranca__item:focus-within
+) :is(.acessibilidade__icone, .conta-seguranca__icone) {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+html.alto-contraste body :is(
+  .acessibilidade__item:focus-within,
+  .conta-seguranca__item:focus-within
+) :is(.acessibilidade__icone, .conta-seguranca__icone) * {
+  color: #ffffff !important;
+}
+
+html.alto-contraste body :is(
+  .conversa-item:hover,
+  .conversa-item.contato-ativo,
+  .nova-conversa__usuario:hover,
+  .acessibilidade__item:focus-within,
+  .conta-seguranca__item:focus-within
+) * {
+  color: #000000 !important;
 }
 
 html.alto-contraste body :is(.conversa-dados, .nova-conversa__dados) {
   background: transparent !important;
-  color: #000000 !important;
+  color: inherit !important;
 }
 
 html.alto-contraste body :is(
@@ -1585,7 +1706,7 @@ html.alto-contraste body :is(
   .chat-header__dados strong,
   .chat-header__dados span
 ) {
-  color: #000000 !important;
+  color: inherit !important;
 }
 
 html.alto-contraste body :is(
@@ -1593,9 +1714,9 @@ html.alto-contraste body :is(
   .nova-conversa__avatar,
   .chat-header__avatar
 ) {
-  border: 2px solid #000000 !important;
-  background: #000000 !important;
-  color: #ffffff !important;
+  border: 2px solid var(--contraste-texto) !important;
+  background: var(--contraste-destaque) !important;
+  color: #000000 !important;
 }
 
 html.alto-contraste body :is(
@@ -1603,17 +1724,140 @@ html.alto-contraste body :is(
   .nova-conversa__avatar,
   .chat-header__avatar
 ) > span {
-  color: #ffffff !important;
+  color: #000000 !important;
 }
 
 html.alto-contraste body .conversa-nao-lidas {
-  border: 2px solid #000000 !important;
-  background: #000000 !important;
+  border: 2px solid var(--contraste-texto) !important;
+  background: var(--contraste-destaque) !important;
+  color: #000000 !important;
+}
+
+html.alto-contraste body .mensagem-balao {
+  border: 2px solid var(--contraste-texto) !important;
+  background: var(--contraste-fundo) !important;
+  color: var(--contraste-texto) !important;
+}
+
+html.alto-contraste body .mensagem-balao * {
+  color: var(--contraste-texto) !important;
+}
+
+html.alto-contraste body .mensagem-linha--enviada .mensagem-balao {
+  border-color: var(--contraste-texto) !important;
+  background: var(--contraste-destaque) !important;
+  color: #000000 !important;
+}
+
+html.alto-contraste body .mensagem-linha--enviada .mensagem-balao * {
+  color: #000000 !important;
+}
+
+html.alto-contraste body .mensagem-balao__resposta {
+  border: 2px solid var(--contraste-texto) !important;
+  background: var(--contraste-superficie) !important;
+}
+
+html.alto-contraste body .mensagem-linha--enviada .mensagem-balao__resposta {
+  border-color: #000000 !important;
+  background: #ffffff !important;
+}
+
+html.alto-contraste body :is(.mensagem-sistema, .mensagens__status) {
+  border: 2px solid var(--contraste-texto) !important;
+  background: var(--contraste-destaque) !important;
+  color: #000000 !important;
+}
+
+html.alto-contraste body :is(.mensagem-sistema, .mensagens__status) * {
+  color: #000000 !important;
+}
+
+html.alto-contraste body :is(
+  .duas-etapas-modal__erro,
+  .modal-transferencia-confirmacao__erro,
+  .modal-grupo__mensagem--erro,
+  .modal-grupo__erro,
+  .grafico-status-erro,
+  .relatorios-logs__mensagem--erro,
+  .avaliacoes-setores__mensagem--erro
+) {
+  border-color: #ff8d8d !important;
+  color: #ffb3b3 !important;
+}
+
+html.alto-contraste body :is(.modal-erro .modal-icone, .modal-confirmacao__icone) {
+  border: 2px solid var(--contraste-texto) !important;
+  background: #ff8d8d !important;
+  color: #000000 !important;
+}
+
+html.alto-contraste body .modal-sucesso .modal-icone {
+  border: 2px solid var(--contraste-texto) !important;
+  background: #7dffb2 !important;
+  color: #000000 !important;
+}
+
+html.alto-contraste body .modal-confirmacao__confirmar {
+  border-color: var(--contraste-texto) !important;
+  background: #b90027 !important;
   color: #ffffff !important;
 }
 
+html.alto-contraste body .modal-confirmacao__confirmar * {
+  color: #ffffff !important;
+}
+
+html.alto-contraste body :is(
+  .usuarios__status--ativa,
+  .avaliacoes-setores__desempenho--acima,
+  .relatorios-logs__status--encerrado,
+  .variacao-desativados--diminuindo,
+  .status-historico--diminuindo
+) {
+  border: 2px solid var(--contraste-texto) !important;
+  background: #7dffb2 !important;
+  color: #000000 !important;
+}
+
+html.alto-contraste body :is(
+  .usuarios__status--desativada,
+  .avaliacoes-setores__desempenho--abaixo,
+  .variacao-desativados--aumentando,
+  .status-historico--aumentando
+) {
+  border: 2px solid var(--contraste-texto) !important;
+  background: #ff8d8d !important;
+  color: #000000 !important;
+}
+
+html.alto-contraste body :is(
+  .avaliacoes-setores__desempenho--na-media,
+  .relatorios-logs__status--aberto
+) {
+  border: 2px solid var(--contraste-texto) !important;
+  background: var(--contraste-destaque) !important;
+  color: #000000 !important;
+}
+
+html.alto-contraste body :is(
+  .usuarios__status--ativa,
+  .avaliacoes-setores__desempenho--acima,
+  .relatorios-logs__status--encerrado,
+  .variacao-desativados--diminuindo,
+  .status-historico--diminuindo,
+  .usuarios__status--desativada,
+  .avaliacoes-setores__desempenho--abaixo,
+  .variacao-desativados--aumentando,
+  .status-historico--aumentando,
+  .avaliacoes-setores__desempenho--na-media,
+  .relatorios-logs__status--aberto
+) * {
+  color: #000000 !important;
+}
+
 html.alto-contraste body ::selection {
-  background: #ffcc00;
+  background: var(--contraste-destaque);
   color: #000000;
 }
 

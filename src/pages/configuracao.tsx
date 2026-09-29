@@ -94,11 +94,11 @@ function Configuracao() {
             case "conta-seguranca":
                 return <ContaSeguranca />;
 
-            case "acessibilidade":
-                return <Acessibilidade />;
-
             case "privacidade-dados":
                 return <PrivacidadeDados />;
+
+            case "acessibilidade":
+                return <Acessibilidade />;
         }
     }
 

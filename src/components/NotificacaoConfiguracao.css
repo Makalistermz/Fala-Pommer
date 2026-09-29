@@ -50,7 +50,7 @@
 
 .notificacao-configuracao__conteudo strong {
     font-family: var(--fonte-poppins);
-    font-size: 17px;
+    font-size: 1.0625rem;
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1.25;
@@ -59,13 +59,13 @@
 .notificacao-configuracao__conteudo p {
     margin: 0;
     color: #273142;
-    font-size: 14px;
+    font-size: 0.875rem;
     line-height: 1.35;
 }
 
 .notificacao-configuracao__conteudo span {
     color: #7a8494;
-    font-size: 12px;
+    font-size: 0.75rem;
     line-height: 1.4;
 }
 
@@ -192,16 +192,16 @@ html.alto-contraste body .notificacao-configuracao__conteudo :is(p, span) {
     }
 
     .notificacao-configuracao__conteudo strong {
-        font-size: 15px;
+        font-size: 0.9375rem;
     }
 
     .notificacao-configuracao__conteudo p {
-        font-size: 12.5px;
+        font-size: 0.78125rem;
         line-height: 1.35;
     }
 
     .notificacao-configuracao__conteudo span {
-        font-size: 11px;
+        font-size: 0.6875rem;
     }
 
     .notificacao-configuracao__fechar {

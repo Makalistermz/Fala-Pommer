@@ -35,7 +35,7 @@
     margin-bottom: 5px;
     color: #1351b4;
     font-family: var(--fonte-dm-sans);
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.08em;
 }
@@ -44,7 +44,7 @@
     margin: 0;
     color: #172033;
     font-family: var(--fonte-poppins);
-    font-size: 22px;
+    font-size: 1.375rem;
     font-weight: 600;
 }
 
@@ -94,7 +94,7 @@
     margin: 0;
     color: #475467;
     font-family: var(--fonte-dm-sans);
-    font-size: clamp(14px, 2vw, 16px);
+    font-size: clamp(0.875rem, 2vw, 1rem);
     line-height: 1.55;
     overflow-wrap: anywhere;
 }
@@ -111,7 +111,7 @@
     margin-bottom: 10px;
     color: #344054;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 600;
 }
 
@@ -132,7 +132,7 @@
     color: #cbd1da;
     background: #ffffff;
     cursor: pointer;
-    font-size: 27px;
+    font-size: 1.6875rem;
     line-height: 1;
     transition:
         border-color 0.15s ease,
@@ -164,7 +164,7 @@
     background: #ffffff;
     outline: none;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
     line-height: 1.5;
     transition:
         border-color 0.2s ease,
@@ -195,7 +195,7 @@
     border-radius: 10px;
     cursor: pointer;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 600;
 }
 
@@ -275,7 +275,7 @@
 
     .modal-finalizar__introducao p {
         max-width: none;
-        font-size: 14px;
+        font-size: 0.875rem;
         line-height: 1.5;
     }
 

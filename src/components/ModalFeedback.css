@@ -40,7 +40,7 @@
     border-radius: 50%;
     color: #ffffff;
 
-    font-size: 32px;
+    font-size: 2rem;
     font-weight: 700;
 }
 
@@ -55,7 +55,7 @@
 .modal-feedback h2 {
     margin-bottom: 12px;
     color: #252525;
-    font-size: 24px;
+    font-size: 1.5rem;
 }
 
 .modal-feedback p {
@@ -73,7 +73,7 @@
     background: #1351b4;
     color: #ffffff;
 
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
 

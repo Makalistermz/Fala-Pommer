@@ -37,7 +37,7 @@
 .sem-permissao__marca span {
     color: var(--branco);
 
-    font-size: 24px;
+    font-size: 1.5rem;
     font-weight: 600;
 }
 
@@ -79,7 +79,7 @@
 
     color: var(--azul-escuro);
 
-    font-size: 17px;
+    font-size: 1.0625rem;
     font-weight: 700;
     letter-spacing: 4px;
 }
@@ -89,7 +89,7 @@
 
     color: #172033;
 
-    font-size: 48px;
+    font-size: 3rem;
     font-weight: 700;
     line-height: 1.1;
 }
@@ -99,7 +99,7 @@
 
     color: #263244;
 
-    font-size: 19px;
+    font-size: 1.1875rem;
 }
 
 .sem-permissao__ajuda {
@@ -107,7 +107,7 @@
 
     color: #677386;
 
-    font-size: 15px;
+    font-size: 0.9375rem;
 }
 
 
@@ -141,7 +141,7 @@
     color: var(--branco);
 
     font-family: var(--fonte-poppins);
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
 
     cursor: pointer;
@@ -163,7 +163,7 @@
 .sem-permissao__inicio {
     color: var(--azul-escuro);
 
-    font-size: 15px;
+    font-size: 0.9375rem;
     text-decoration: underline;
     text-underline-offset: 4px;
 }
@@ -183,7 +183,7 @@
     }
 
     .sem-permissao__marca span {
-        font-size: 20px;
+        font-size: 1.25rem;
     }
 
     .sem-permissao__conteudo {
@@ -195,16 +195,16 @@
     }
 
     .sem-permissao__conteudo h1 {
-        font-size: 34px;
+        font-size: 2.125rem;
     }
 
     .sem-permissao__descricao {
-        font-size: 16px;
+        font-size: 1rem;
     }
 
     .sem-permissao__ajuda {
         max-width: 400px;
-        font-size: 14px;
+        font-size: 0.875rem;
     }
 
     .sem-permissao__acoes {

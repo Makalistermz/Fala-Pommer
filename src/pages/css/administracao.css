@@ -56,14 +56,14 @@
 
 .admin-brand strong {
     font-family: var(--fonte-poppins);
-    font-size: 17px;
+    font-size: 1.0625rem;
     line-height: 1.25;
 }
 
 .admin-brand span {
     margin-top: 2px;
     color: #bed3f5;
-    font-size: 12px;
+    font-size: 0.75rem;
     letter-spacing: 0.04em;
 }
 
@@ -118,7 +118,7 @@
 .admin-nav-title {
     margin: 0 12px 8px;
     color: #91b2e4;
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: 700;
     letter-spacing: 0.16em;
     white-space: nowrap;
@@ -137,7 +137,7 @@
     border-radius: 10px;
     background: transparent;
     color: #d9e7fb;
-    font: 500 15px/1 var(--fonte-dm-sans);
+    font: 500 0.9375rem/1 var(--fonte-dm-sans);
     text-align: left;
     text-decoration: none;
     white-space: nowrap;
@@ -217,7 +217,7 @@
 
 .admin-eyebrow {
     color: #6e7e99;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.14em;
 }
@@ -226,7 +226,7 @@
     margin: 5px 0 0;
     color: #172033;
     font-family: var(--fonte-poppins);
-    font-size: clamp(25px, 3vw, 34px);
+    font-size: clamp(1.5625rem, 3vw, 2.125rem);
     line-height: 1.2;
 }
 
@@ -257,14 +257,14 @@
     border-radius: 20px;
     background: rgba(255, 255, 255, 0.1);
     color: #dce9ff;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 600;
 }
 
 .admin-welcome h2 {
     margin: 18px 0 8px;
     font-family: var(--fonte-poppins);
-    font-size: clamp(26px, 4vw, 40px);
+    font-size: clamp(1.625rem, 4vw, 2.5rem);
     line-height: 1.15;
 }
 
@@ -272,7 +272,7 @@
     max-width: 520px;
     margin: 0;
     color: #d4e3fa;
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.6;
 }
 
@@ -349,7 +349,7 @@
 }
 
 .info-cards small {
-    font-size: 16px;
+    font-size: 1rem;
     font-family: var(--fonte-dm-sans);
     color: rgba(0, 0, 0, 0.5);
 }
@@ -731,7 +731,7 @@
     margin: 4px 0 0;
     color: #172033;
     font-family: var(--fonte-poppins);
-    font-size: 22px;
+    font-size: 1.375rem;
 }
 
 .grafico-card-header > strong {
@@ -739,12 +739,12 @@
     border-radius: 20px;
     background: #eaf1fc;
     color: #1351b4;
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 .grafico-card-legenda {
     color: #6e7e99;
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: 700;
     letter-spacing: 0.14em;
 }
@@ -796,7 +796,7 @@
     color: var(--azul-escuro);
 
     font-family: var(--fonte-dm-sans);
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 700;
 
     letter-spacing: 1.5px;
@@ -808,7 +808,7 @@
     color: #172033;
 
     font-family: var(--fonte-poppins);
-    font-size: 22px;
+    font-size: 1.375rem;
     font-weight: 600;
 }
 
@@ -828,7 +828,7 @@
     border-radius: 10px;
 
     font-family: var(--fonte-poppins);
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
 }
 
@@ -1225,7 +1225,7 @@
 
 .usuarios__header span {
     color: #1351b4;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.14em;
 }
@@ -1234,13 +1234,13 @@
     margin: 6px 0 4px;
     color: #172033;
     font-family: var(--fonte-poppins);
-    font-size: 22px;
+    font-size: 1.375rem;
 }
 
 .usuarios__header p {
     margin: 0;
     color: #6e7e99;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .usuarios__header > strong {
@@ -1249,7 +1249,7 @@
     border-radius: 10px;
     background: #e7f0ff;
     color: #1351b4;
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 .usuarios__pesquisa {
@@ -1263,7 +1263,7 @@
 
 .usuarios__pesquisa label {
     color: #475467;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 700;
 }
 
@@ -1302,7 +1302,7 @@
     min-width: 790px;
     border-collapse: collapse;
     color: #344054;
-    font-size: 14px;
+    font-size: 0.875rem;
     text-align: left;
 }
 
@@ -1310,7 +1310,7 @@
     padding: 13px 20px;
     background: #f6f8fc;
     color: #6e7e99;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -1345,7 +1345,7 @@
     justify-content: center;
     padding: 5px 10px;
     border-radius: 999px;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 700;
 }
 
@@ -1397,7 +1397,7 @@
     background: #ffffff;
     color: #1351b4;
     font: inherit;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
     transition:
@@ -1424,7 +1424,7 @@
     background: #ffffff;
     color: rgb(255, 94, 0);
     font: inherit;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
     transition: 
@@ -1451,7 +1451,7 @@
     background: #ffffff;
     color: #16753a;
     font: inherit;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
     transition:
@@ -1483,7 +1483,7 @@
 
 .usuarios__modal-motivo label {
     color: #344054;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 700;
 }
 
@@ -1510,7 +1510,7 @@
 .usuarios__modal-motivo small {
     align-self: flex-end;
     color: #667085;
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 .usuarios__painel-fundo {
@@ -1556,7 +1556,7 @@
 
 .info__painel-lateral label {
     font-family: var(--fonte-dm-sans);
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
 }
 
@@ -1587,7 +1587,7 @@
     padding: 10px;
     color: white;
     font-family: var(--fonte-dm-sans);
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 500;
 }
 
@@ -1612,7 +1612,7 @@
     border-radius: 8px;
     background: #ffffff;
     color: #344054;
-    font-size: 24px;
+    font-size: 1.5rem;
     line-height: 1;
     cursor: pointer;
 }
@@ -1675,7 +1675,7 @@
     box-shadow: 0 -3px 12px rgba(15, 38, 73, 0.04);
     color: #52647d;
     font: inherit;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 700;
     letter-spacing: 0.01em;
     cursor: pointer;
@@ -1796,7 +1796,7 @@
     box-shadow: 0 -3px 12px rgba(15, 38, 73, 0.04);
     color: #52647d;
     font: inherit;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 700;
     letter-spacing: 0.01em;
     cursor: pointer;
@@ -1917,7 +1917,7 @@
     box-shadow: 0 -3px 12px rgba(15, 38, 73, 0.04);
     color: #52647d;
     font: inherit;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 700;
     letter-spacing: 0.01em;
     cursor: pointer;
@@ -2081,7 +2081,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
 
 .secretaria__header span {
     color: #1351b4;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.14em;
 }
@@ -2090,13 +2090,13 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     margin: 6px 0 4px;
     color: #172033;
     font-family: var(--fonte-poppins);
-    font-size: 22px;
+    font-size: 1.375rem;
 }
 
 .secretaria__header p {
     margin: 0;
     color: #6e7e99;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .secretaria__header > strong {
@@ -2105,7 +2105,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     border-radius: 10px;
     background: #e7f0ff;
     color: #1351b4;
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 .formulario-secretaria {
@@ -2160,7 +2160,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     background-color: var(--azul-escuro);
     cursor: pointer;
     color: white;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 400;
 }
 
@@ -2196,7 +2196,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
 
 .setores__header span {
     color: #1351b4;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.14em;
 }
@@ -2205,13 +2205,13 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     margin: 6px 0 4px;
     color: #172033;
     font-family: var(--fonte-poppins);
-    font-size: 22px;
+    font-size: 1.375rem;
 }
 
 .setores__header p {
     margin: 0;
     color: #6e7e99;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .setores__header > strong {
@@ -2220,7 +2220,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     border-radius: 10px;
     background: #e7f0ff;
     color: #1351b4;
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 .formulario-setor {
@@ -2285,7 +2285,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     background-color: var(--azul-escuro);
     cursor: pointer;
     color: white;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 400;
 }
 
@@ -2308,7 +2308,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     min-width: 790px;
     border-collapse: collapse;
     color: #344054;
-    font-size: 14px;
+    font-size: 0.875rem;
     text-align: left;
 }
 
@@ -2316,7 +2316,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     padding: 13px 20px;
     background: #f6f8fc;
     color: #6e7e99;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -2348,7 +2348,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     background: #ffffff;
     color: #b42318;
     font: inherit;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
     transition:
@@ -2400,7 +2400,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
 .relatorios-logs__header span,
 .avaliacoes-setores__header span {
     color: #1351b4;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.14em;
 }
@@ -2410,14 +2410,14 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     margin: 6px 0 4px;
     color: #172033;
     font-family: var(--fonte-poppins);
-    font-size: 22px;
+    font-size: 1.375rem;
 }
 
 .relatorios-logs__header p,
 .avaliacoes-setores__header p {
     margin: 0;
     color: #6e7e99;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .relatorios-logs__header > strong,
@@ -2427,7 +2427,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     border-radius: 10px;
     background: #e7f0ff;
     color: #1351b4;
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 .relatorios-logs__tabela-container,
@@ -2441,7 +2441,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     min-width: 790px;
     border-collapse: collapse;
     color: #344054;
-    font-size: 14px;
+    font-size: 0.875rem;
     text-align: left;
 }
 
@@ -2450,7 +2450,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     padding: 13px 20px;
     background: #f6f8fc;
     color: #6e7e99;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -2485,7 +2485,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     padding: 6px 10px;
     border: 1px solid transparent;
     border-radius: 999px;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 700;
     line-height: 1;
     white-space: nowrap;
@@ -2529,7 +2529,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     align-items: center;
     padding: 5px 9px;
     border-radius: 999px;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 700;
     white-space: nowrap;
 }
@@ -2578,7 +2578,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     background: #ffffff;
     color: #344054;
     font: inherit;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
     transition:
@@ -2798,7 +2798,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
         flex: 1 1 0;
         gap: 6px;
         padding: 12px 8px 9px;
-        font-size: 13px;
+        font-size: 0.8125rem;
         line-height: 1.25;
         text-align: center;
         overflow-wrap: anywhere;
@@ -2831,7 +2831,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
         max-width: calc(50% - 3px);
         flex: 0 1 160px;
         padding: 12px 9px 9px;
-        font-size: 13px;
+        font-size: 0.8125rem;
     }
 
     .criar-sectors__pasta--ativa {
@@ -2857,7 +2857,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     }
 
     .secretaria__header h2 {
-        font-size: 19px;
+        font-size: 1.1875rem;
     }
 
     .formulario-secretaria {
@@ -2882,7 +2882,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     }
 
     .setores__header h2 {
-        font-size: 19px;
+        font-size: 1.1875rem;
     }
 
     .formulario-setor {
@@ -2919,7 +2919,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
     }
 
     .grafico-card-header h2 {
-        font-size: 18px;
+        font-size: 1.125rem;
     }
 
     .grafico-container,
@@ -2935,7 +2935,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
 
     .relatorios-logs__header h2,
     .avaliacoes-setores__header h2 {
-        font-size: 19px;
+        font-size: 1.1875rem;
     }
 
     .relatorios-logs__paginacao,
@@ -3024,7 +3024,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
         flex: 1 1 0;
         gap: 0;
         padding: 12px 4px 9px;
-        font-size: 11px;
+        font-size: 0.6875rem;
         line-height: 1.25;
         text-align: center;
         overflow-wrap: anywhere;
@@ -3080,7 +3080,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
         flex: 1 1 0;
         padding-right: 7px;
         padding-left: 7px;
-        font-size: 12.5px;
+        font-size: 0.78125rem;
     }
 
     .criar-sectors__pasta--ativa {

@@ -1617,6 +1617,21 @@ html.alto-contraste body ::selection {
   color: #000000;
 }
 
+html {
+  font-size: 100%;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+/*
+ * O modo ampliado escala os tamanhos originais, que são definidos em rem.
+ * Isso preserva a hierarquia entre títulos, textos e legendas e permite
+ * que os componentes recalculem seu espaço em vez de cortar o conteúdo.
+ */
+html.texto-ampliado {
+  font-size: 140%;
+}
+
 html.texto-ampliado body :where(
   h1,
   h2,
@@ -1636,36 +1651,51 @@ html.texto-ampliado body :where(
   dt,
   dd,
   time
-):not(:has(h1, h2, h3, h4, h5, h6, p, span, strong, small, label, legend, a, button, li, dt, dd, time)) {
-  font-size: 125% !important;
-}
-
-html.texto-ampliado body :where(input, textarea, select, option) {
-  font-size: 125% !important;
-}
-
-html.texto-ampliado body :where(
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  label,
-  legend,
-  li,
-  dt,
-  dd
 ) {
+  min-width: 0;
   overflow-wrap: anywhere;
 }
 
+html.texto-ampliado body :where(input, textarea, select, button) {
+  line-height: 1.4;
+}
+
 html.texto-ampliado body :where(
-  .conversa-avatar,
-  .nova-conversa__avatar,
-  .chat-header__avatar,
-  .admin-profile-avatar
+  .conversa-dados,
+  .nova-conversa__dados,
+  .chat-header__dados,
+  .acessibilidade__conteudo,
+  .conta-seguranca__conteudo,
+  .admin-profile-info,
+  .modal-feedback__conteudo,
+  .modal-confirmacao__conteudo
 ) {
-  font-size: 125% !important;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  html.texto-ampliado {
+    font-size: 135%;
+  }
+}
+
+@media (max-width: 600px) {
+  html.texto-ampliado {
+    font-size: 130%;
+  }
+
+  html.texto-ampliado .acessibilidade__acao {
+    grid-template-columns: 42px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  html.texto-ampliado .acessibilidade__icone {
+    grid-row: 1 / span 2;
+  }
+
+  html.texto-ampliado .acessibilidade__indicador {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: 8px;
+  }
 }

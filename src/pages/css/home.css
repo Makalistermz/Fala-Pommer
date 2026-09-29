@@ -70,7 +70,7 @@
     overflow: hidden;
     color: var(--branco);
     font-family: var(--fonte-poppins);
-    font-size: 17px;
+    font-size: 1.0625rem;
     font-weight: 600;
     line-height: 1.25;
     text-overflow: ellipsis;
@@ -254,7 +254,7 @@
     background: transparent;
     color: #344054;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .pesquisa-input::placeholder {
@@ -282,7 +282,7 @@
     background: #ffffff;
     color: #52617a;
     font-family: var(--fonte-dm-sans);
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
     transition:
@@ -357,7 +357,7 @@
     color: var(--branco);
     box-shadow: 0 5px 12px rgba(19, 81, 180, 0.18);
     font-family: var(--fonte-poppins);
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
     overflow: hidden;
 }
@@ -378,7 +378,7 @@
     overflow: hidden;
     color: #172033;
     font-family: var(--fonte-dm-sans);
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -389,7 +389,7 @@
     overflow: hidden;
     color: #6e7e99;
     font-family: var(--fonte-dm-sans);
-    font-size: 13px;
+    font-size: 0.8125rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -416,7 +416,7 @@
     color: #ffffff;
     box-shadow: 0 3px 8px rgba(22, 136, 33, 0.24);
     font-family: var(--fonte-dm-sans);
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 700;
     line-height: 1;
 }
@@ -458,7 +458,7 @@
     margin: 0;
 
     font-family: var(--fonte-poppins);
-    font-size: 20px;
+    font-size: 1.25rem;
     font-weight: 600;
 }
 
@@ -509,7 +509,7 @@
     background: transparent;
 
     font-family: var(--fonte-dm-sans);
-    font-size: 15px;
+    font-size: 0.9375rem;
 }
 
 /* TÍTULO */
@@ -518,7 +518,7 @@
     padding: 12px 22px 8px;
     color: #6e7e99;
     font-family: var(--fonte-dm-sans);
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: 700;
     letter-spacing: 0.16em;
 }
@@ -567,7 +567,7 @@
     color: var(--branco);
     box-shadow: 0 5px 12px rgba(19, 81, 180, 0.18);
     font-family: var(--fonte-poppins);
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
     overflow: hidden;
 }
@@ -590,14 +590,14 @@
 .nova-conversa__dados strong {
     color: #172033;
     font-family: var(--fonte-dm-sans);
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
 }
 
 .nova-conversa__dados span {
     color: #6e7e99;
     font-family: var(--fonte-dm-sans);
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 /* MENSAGENS */
@@ -610,7 +610,7 @@
     text-align: center;
 
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .chat {
@@ -624,7 +624,7 @@
 
     color: #667085;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
     text-align: center;
 }
 
@@ -659,7 +659,7 @@
     margin: 0 0 8px;
     color: #172033;
     font-family: var(--fonte-poppins);
-    font-size: 21px;
+    font-size: 1.3125rem;
     font-weight: 600;
 }
 
@@ -668,7 +668,7 @@
     margin: 0;
     color: #6e7e99;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
     line-height: 1.5;
 }
 
@@ -719,7 +719,7 @@
     border-radius: 50%;
     box-shadow: 0 5px 12px rgba(19, 81, 180, 0.18);
     font-family: var(--fonte-dm-sans);
-    font-size: 18px;
+    font-size: 1.125rem;
     font-weight: 600;
     overflow: hidden;
 }
@@ -753,13 +753,13 @@
 .chat-header__dados span {
     color: #667085;
     font-family: var(--fonte-dm-sans);
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 .chat-header__dados strong {
     color: #172033;
     font-family: var(--fonte-poppins);
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
 }
 
@@ -817,7 +817,7 @@
     overflow: hidden;
     color: #172033;
     font-family: var(--fonte-poppins);
-    font-size: 19px;
+    font-size: 1.1875rem;
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -901,7 +901,7 @@
     overflow: hidden;
     color: #172033;
     font-family: var(--fonte-poppins);
-    font-size: 18px;
+    font-size: 1.125rem;
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -910,7 +910,7 @@
 .modal-dados-grupo__identificacao > span {
     color: #667085;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .modal-dados-grupo__participantes {
@@ -932,7 +932,7 @@
     margin: 0;
     color: #344054;
     font-family: var(--fonte-poppins);
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 600;
 }
 
@@ -943,7 +943,7 @@
     color: #1351b4;
     background: #e7f0ff;
     font-family: var(--fonte-dm-sans);
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 700;
     text-align: center;
 }
@@ -991,7 +991,7 @@
     color: #ffffff;
     background: linear-gradient(145deg, #0b326b, #2878df);
     font-family: var(--fonte-poppins);
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 600;
 }
 
@@ -1022,7 +1022,7 @@
     overflow: hidden;
     color: #172033;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1031,7 +1031,7 @@
 .modal-dados-grupo__participante-dados > span {
     color: #667085;
     font-family: var(--fonte-dm-sans);
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 .modal-dados-grupo__voce {
@@ -1040,7 +1040,7 @@
     color: #1351b4;
     background: #e7f0ff;
     font-family: var(--fonte-dm-sans);
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: 700;
     text-transform: uppercase;
 }
@@ -1052,7 +1052,7 @@
     color: #667085;
     background: #f8fafc;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
     text-align: center;
 }
 
@@ -1137,7 +1137,7 @@
     background: #ffffff;
     cursor: pointer;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 600;
     transition:
         background-color 0.2s ease,
@@ -1293,7 +1293,7 @@ html.plano-fundo-conversa-5 .mensagens {
     margin: auto;
     color: #667085;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .mensagens__carregar-anteriores {
@@ -1304,7 +1304,7 @@ html.plano-fundo-conversa-5 .mensagens {
     background: rgba(255, 255, 255, 0.92);
     color: #24466f;
     font-family: var(--fonte-dm-sans);
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
 }
@@ -1329,7 +1329,7 @@ html.plano-fundo-conversa-5 .mensagens {
     background: rgba(255, 255, 255, 0.92);
     box-shadow: 0 1px 2px rgba(15, 38, 73, 0.12);
     font-family: var(--fonte-dm-sans);
-    font-size: 12px;
+    font-size: 0.75rem;
     line-height: 1.35;
     text-align: center;
 }
@@ -1361,7 +1361,7 @@ html.plano-fundo-conversa-5 .mensagens {
     color: #ffffff;
     box-shadow: 0 3px 9px rgba(15, 38, 73, 0.18);
     font-family: var(--fonte-poppins);
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 600;
 }
 
@@ -1508,7 +1508,7 @@ html.plano-fundo-conversa-5 .mensagens {
     background: transparent;
     color: #172033;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 600;
     text-align: left;
     cursor: pointer;
@@ -1574,7 +1574,7 @@ html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item:hover {
     margin-bottom: 3px;
     color: #1351b4;
     font-family: var(--fonte-dm-sans);
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 700;
 }
 
@@ -1595,7 +1595,7 @@ html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item:hover {
     background: #e7f0ff;
     color: #1351b4;
     font-family: var(--fonte-dm-sans);
-    font-size: 9px;
+    font-size: 0.5625rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     line-height: 1.2;
@@ -1652,7 +1652,7 @@ html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item:hover {
     margin: 0 0 2px;
     overflow: hidden;
     color: #1351b4;
-    font-size: 12px;
+    font-size: 0.75rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -1672,7 +1672,7 @@ html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item:hover {
 
     color: #475467;
     font-family: var(--fonte-dm-sans);
-    font-size: 12px;
+    font-size: 0.75rem;
     line-height: 1.35;
     white-space: normal;
 }
@@ -1682,7 +1682,7 @@ html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item:hover {
     padding-right: 50px;
     color: #172033;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
     line-height: 1.45;
     overflow-wrap: anywhere;
     white-space: pre-wrap;
@@ -1726,7 +1726,7 @@ html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item:hover {
     border-radius: 999px;
     background: rgba(15, 23, 42, 0.78);
     color: #ffffff;
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: 700;
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -1772,7 +1772,7 @@ html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item:hover {
     border-radius: 8px;
     background: #e7f0ff;
     color: #1351b4;
-    font-size: 24px;
+    font-size: 1.5rem;
 }
 
 .mensagem-anexo__dados {
@@ -1784,7 +1784,7 @@ html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item:hover {
     overflow: hidden;
     margin: 0;
     color: #172033;
-    font-size: 13px;
+    font-size: 0.8125rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -1793,12 +1793,12 @@ html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item:hover {
     display: block;
     margin-top: 2px;
     color: #667085;
-    font-size: 11px;
+    font-size: 0.6875rem;
 }
 
 .mensagem-anexo__abrir {
     color: #1351b4;
-    font-size: 26px;
+    font-size: 1.625rem;
     line-height: 1;
 }
 
@@ -1876,7 +1876,7 @@ html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item:hover {
     background: transparent;
     color: #98a2b3;
     font-family: var(--fonte-dm-sans);
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 600;
 }
 
@@ -1892,7 +1892,7 @@ button.modal-transferencia__etapa {
     border: 1px solid #d5dce8;
     border-radius: 50%;
     background: #ffffff;
-    font-size: 11px;
+    font-size: 0.6875rem;
 }
 
 .modal-transferencia__etapa--ativa {
@@ -1946,7 +1946,7 @@ button.modal-transferencia__etapa {
     border-radius: 999px;
     background: #eaf2ff;
     color: #1351b4;
-    font-size: 11px;
+    font-size: 0.6875rem;
     letter-spacing: 0;
 }
 
@@ -2059,7 +2059,7 @@ button.modal-transferencia__etapa {
     align-items: center;
     gap: 7px;
     color: #667085;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 600;
 }
 
@@ -2121,11 +2121,11 @@ button.modal-transferencia__etapa {
 .modal-transferencia__vazio strong {
     margin-bottom: 3px;
     color: #344054;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .modal-transferencia__vazio span {
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 .modal-transferencia-confirmacao__mensagem {
@@ -2251,7 +2251,7 @@ button.modal-transferencia__etapa {
     display: block;
     margin-bottom: 3px;
     color: #bcd7ff;
-    font-size: 9px;
+    font-size: 0.5625rem;
     font-weight: 700;
     letter-spacing: 0.16em;
 }
@@ -2260,14 +2260,14 @@ button.modal-transferencia__etapa {
     margin: 0;
     color: #ffffff;
     font-family: var(--fonte-poppins);
-    font-size: 22px;
+    font-size: 1.375rem;
     font-weight: 600;
 }
 
 .modal-grupo__cabecalho p {
     margin: 4px 0 0;
     color: #d9e8ff;
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 .modal-grupo__fechar {
@@ -2316,7 +2316,7 @@ button.modal-transferencia__etapa {
     display: block;
     margin: 0 0 6px 2px;
     color: #344054;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 600;
 }
 
@@ -2358,7 +2358,7 @@ button.modal-transferencia__etapa {
     background: transparent;
     color: #172033;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .modal-grupo__nome input::placeholder {
@@ -2368,7 +2368,7 @@ button.modal-transferencia__etapa {
 .modal-grupo__nome small {
     flex: 0 0 auto;
     color: #98a2b3;
-    font-size: 10px;
+    font-size: 0.625rem;
 }
 
 .modal-grupo__pesquisa {
@@ -2409,7 +2409,7 @@ button.modal-transferencia__etapa {
     background: transparent;
     color: #172033;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .modal-grupo__pesquisa input::placeholder {
@@ -2422,7 +2422,7 @@ button.modal-transferencia__etapa {
     justify-content: space-between;
     padding: 9px 22px 10px;
     color: #6e7e99;
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: 700;
     letter-spacing: 0.14em;
 }
@@ -2480,7 +2480,7 @@ button.modal-transferencia__etapa {
     color: #ffffff;
     box-shadow: 0 5px 13px rgba(19, 81, 180, 0.2);
     font-family: var(--fonte-poppins);
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
 }
 
@@ -2511,7 +2511,7 @@ button.modal-transferencia__etapa {
 
 .modal-grupo__dados strong {
     color: #172033;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 600;
 }
 
@@ -2522,7 +2522,7 @@ button.modal-transferencia__etapa {
     border-radius: 999px;
     background: #edf2f7;
     color: #5c6b80;
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: 600;
 }
 
@@ -2572,7 +2572,7 @@ button.modal-transferencia__etapa {
     margin: 0;
     padding: 42px 20px;
     color: #667085;
-    font-size: 14px;
+    font-size: 0.875rem;
     text-align: center;
 }
 
@@ -2596,7 +2596,7 @@ button.modal-transferencia__etapa {
     align-items: center;
     gap: 7px;
     color: #667085;
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 .modal-grupo__resumo {
@@ -2610,7 +2610,7 @@ button.modal-transferencia__etapa {
     max-width: 360px;
     overflow: hidden;
     color: #b42318;
-    font-size: 11px;
+    font-size: 0.6875rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -2638,7 +2638,7 @@ button.modal-transferencia__etapa {
     background: #1351b4;
     color: #ffffff;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0 6px 14px rgba(19, 81, 180, 0.2);
@@ -2717,7 +2717,7 @@ button.modal-transferencia__etapa {
 .visualizador-arquivo__dados strong {
     overflow: hidden;
     color: #172033;
-    font-size: 14px;
+    font-size: 0.875rem;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -2725,7 +2725,7 @@ button.modal-transferencia__etapa {
 .visualizador-arquivo__dados span {
     margin-top: 2px;
     color: #667085;
-    font-size: 11px;
+    font-size: 0.6875rem;
 }
 
 .visualizador-arquivo__acoes {
@@ -2828,7 +2828,7 @@ button.modal-transferencia__etapa {
     border-radius: 18px;
     background: #e7f0ff;
     color: #1351b4;
-    font-size: 38px;
+    font-size: 2.375rem;
 }
 
 .visualizador-arquivo__indisponivel strong {
@@ -2839,7 +2839,7 @@ button.modal-transferencia__etapa {
 .visualizador-arquivo__indisponivel p {
     margin: 8px 0 22px;
     color: #667085;
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 .visualizador-arquivo__indisponivel a {
@@ -2847,7 +2847,7 @@ button.modal-transferencia__etapa {
     border-radius: 8px;
     background: #1351b4;
     color: #ffffff;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 700;
     text-decoration: none;
 }
@@ -2858,7 +2858,7 @@ button.modal-transferencia__etapa {
     bottom: 2px;
     color: #667085;
     font-family: var(--fonte-dm-sans);
-    font-size: 10px;
+    font-size: 0.625rem;
 }
 
 .chat-input {
@@ -2913,7 +2913,7 @@ button.modal-transferencia__etapa {
 
     color: #1d2939;
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 500;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -2922,7 +2922,7 @@ button.modal-transferencia__etapa {
 .chat-input__arquivo-dados span {
     color: #667085;
     font-family: var(--fonte-dm-sans);
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 .chat-input__arquivo-remover {
@@ -2936,7 +2936,7 @@ button.modal-transferencia__etapa {
     border-radius: 8px;
     cursor: pointer;
 
-    font-size: 22px;
+    font-size: 1.375rem;
     line-height: 1;
 }
 
@@ -2995,7 +2995,7 @@ button.modal-transferencia__etapa {
 
     color: #1570ef;
     font-family: var(--fonte-dm-sans);
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 600;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -3013,7 +3013,7 @@ button.modal-transferencia__etapa {
 
     color: #475467;
     font-family: var(--fonte-dm-sans);
-    font-size: 13px;
+    font-size: 0.8125rem;
     line-height: 1.35;
     text-overflow: ellipsis;
     text-align: justify;
@@ -3031,7 +3031,7 @@ button.modal-transferencia__etapa {
     border-radius: 8px;
     cursor: pointer;
 
-    font-size: 22px;
+    font-size: 1.375rem;
     line-height: 1;
 }
 
@@ -3240,7 +3240,7 @@ button.modal-transferencia__etapa {
     outline: none;
 
     font-family: var(--fonte-dm-sans);
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .chat-input__campo input::placeholder {
@@ -3444,7 +3444,7 @@ button.modal-transferencia__etapa {
     }
 
     .mensagem-balao p {
-        font-size: 12px;
+        font-size: 0.75rem;
     }
 
     .chat-header {
@@ -3464,20 +3464,20 @@ button.modal-transferencia__etapa {
     .chat-header__avatar {
         width: 40px;
         height: 40px;
-        font-size: 16px;
+        font-size: 1rem;
     }
 
     .chat-header__dados strong {
-        font-size: 14px;
+        font-size: 0.875rem;
     }
 
     .chat-header__dados span {
         max-width: min(45vw, 190px);
-        font-size: 12px;
+        font-size: 0.75rem;
     }
 
     .chat-input__responder-dados span {
-        font-size: 10px;
+        font-size: 0.625rem;
     }
 
     .chat-header__finalizar {
@@ -3549,12 +3549,12 @@ button.modal-transferencia__etapa {
     }
 
     .modal-grupo__cabecalho h2 {
-        font-size: 20px;
+        font-size: 1.25rem;
     }
 
     .modal-grupo__cabecalho p {
         max-width: 240px;
-        font-size: 12px;
+        font-size: 0.75rem;
     }
 
     .modal-grupo__pesquisa {
@@ -3607,7 +3607,7 @@ button.modal-transferencia__etapa {
     }
 
     .header-name span {
-        font-size: 18px;
+        font-size: 1.125rem;
     }
 
     .header-menu {
@@ -3627,7 +3627,7 @@ button.modal-transferencia__etapa {
     }
 
     .pesquisa-input {
-        font-size: 14px;
+        font-size: 0.875rem;
     }
 
     .filtros {
@@ -3648,7 +3648,7 @@ button.modal-transferencia__etapa {
 
     .filtro-item {
         flex-shrink: 0;
-        font-size: 14px;
+        font-size: 0.875rem;
         margin-top: 5px;
     }
 
@@ -3695,11 +3695,11 @@ button.modal-transferencia__etapa {
     }
 
     .mensagem-balao__cabecalho strong {
-        font-size: 10px;
+        font-size: 0.625rem;
     }
 
     .mensagem-balao__perfil {
-        font-size: 8px;
+        font-size: 0.5rem;
     }
 }
 

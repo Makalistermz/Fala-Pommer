@@ -18,7 +18,7 @@
     background: linear-gradient(145deg, #dceaff, #b9d2fb);
     color: #1351b4;
     font-family: var(--fonte-poppins);
-    font-size: clamp(12px, 3.5vw, 26px);
+    font-size: clamp(0.75rem, 3.5vw, 1.625rem);
     font-weight: 600;
     letter-spacing: -0.04em;
     overflow: hidden;
@@ -43,12 +43,12 @@
 }
 
 .admin-profile-name {
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 .admin-profile-role {
     padding: 5px 10px;
-    font-size: 10px;
+    font-size: 0.625rem;
     text-transform: uppercase;
     text-align: center;
     background: #e7f0ff;
@@ -111,7 +111,7 @@
     background: linear-gradient(145deg, #dceaff, #b9d2fb);
     color: #1351b4;
     font-family: var(--fonte-poppins);
-    font-size: clamp(32px, 3.5vw, 46px);
+    font-size: clamp(2rem, 3.5vw, 2.875rem);
     font-weight: 600;
     letter-spacing: -0.04em;
     overflow: hidden;
@@ -139,7 +139,7 @@
     overflow: hidden;
     color: #101828;
     font-family: var(--fonte-poppins);
-    font-size: clamp(20px, 2.2vw, 27px);
+    font-size: clamp(1.25rem, 2.2vw, 1.6875rem);
     font-weight: 650;
     line-height: 1.25;
     text-overflow: ellipsis;
@@ -152,7 +152,7 @@
     border-radius: 6px;
     background: #e7f0ff;
     color: #1351b4;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 700;
     text-transform: uppercase;
 }
@@ -229,7 +229,7 @@
 
 .meu-perfil__campo label {
     color: #344054;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 700;
 }
 
@@ -243,7 +243,7 @@
     background: #ffffff;
     color: #172033;
     font: inherit;
-    font-size: 15px;
+    font-size: 0.9375rem;
     transition:
         border-color 160ms ease,
         box-shadow 160ms ease;
@@ -320,7 +320,7 @@
 .meu-perfil__recorte-modal h2 {
     margin: 0 0 18px;
     font-family: var(--fonte-poppins);
-    font-size: 21px;
+    font-size: 1.3125rem;
 }
 
 .meu-perfil__recorte-area {
@@ -375,7 +375,7 @@
     margin: 0;
     color: #101828;
     font-family: var(--fonte-poppins);
-    font-size: clamp(19px, 2vw, 23px);
+    font-size: clamp(1.1875rem, 2vw, 1.4375rem);
     font-weight: 650;
 }
 
@@ -418,7 +418,7 @@
 
 .meu-perfil__preferencia-texto {
     color: #172033;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 500;
 }
 
@@ -489,7 +489,7 @@
 .meu-perfil__seguranca-info p {
     margin: 0 0 15px;
     color: #172033;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 500;
 }
 
@@ -698,7 +698,7 @@ a.conta-seguranca__acao {
 
 .conta-seguranca__titulo {
     font-family: var(--fonte-dm-sans);
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: -0.01em;
 }
@@ -707,7 +707,7 @@ a.conta-seguranca__acao {
     max-width: 680px;
     font-family: var(--fonte-dm-sans);
     color: #667085;
-    font-size: 13.5px;
+    font-size: 0.84375rem;
     line-height: 1.55;
 }
 
@@ -842,7 +842,7 @@ a.conta-seguranca__acao {
     margin: 0 0 10px;
     color: #101828;
     font-family: var(--fonte-poppins);
-    font-size: clamp(20px, 3vw, 24px);
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
     line-height: 1.3;
 }
 
@@ -858,7 +858,7 @@ a.conta-seguranca__acao {
     gap: 7px;
     margin-top: 17px;
     color: #344054;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 700;
 }
 
@@ -872,7 +872,7 @@ a.conta-seguranca__acao {
     background: #ffffff;
     color: #172033;
     font: inherit;
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 .duas-etapas-modal__campo input:focus {
@@ -886,7 +886,7 @@ a.conta-seguranca__acao {
     border-radius: 7px;
     background: #fff0f0;
     color: #a31212 !important;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .duas-etapas-modal__link {
@@ -965,7 +965,7 @@ a.conta-seguranca__acao {
     border-radius: 6px;
     background: #ffffff;
     color: #172033;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-align: center;
@@ -1035,7 +1035,7 @@ a.conta-seguranca__acao {
 
 .acessibilidade__titulo {
     font-family: var(--fonte-dm-sans);
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: -0.01em;
 }
@@ -1044,7 +1044,7 @@ a.conta-seguranca__acao {
     max-width: 680px;
     font-family: var(--fonte-dm-sans);
     color: #667085;
-    font-size: 13.5px;
+    font-size: 0.84375rem;
     line-height: 1.55;
 }
 
@@ -1153,7 +1153,7 @@ a.conta-seguranca__acao {
 
 .aparencia__titulo {
     color: #172033;
-    font-size: 17px;
+    font-size: 1.0625rem;
     font-weight: 700;
     font-family: var(--fonte-dm-sans);
 }
@@ -1208,7 +1208,7 @@ a.conta-seguranca__acao {
 
 .aparencia__rotulo{
     color: #273247;
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 650;
     font-family: var(--fonte-dm-sans);
 }
@@ -1342,7 +1342,7 @@ a.conta-seguranca__acao {
     box-shadow: 0 3px 10px rgba(15, 38, 73, 0.22);
     color: #ffffff;
     content: "\2713";
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 700;
 }
 
@@ -1552,12 +1552,12 @@ a.conta-seguranca__acao {
 
     .acessibilidade__titulo,
     .conta-seguranca__titulo {
-        font-size: 14.5px;
+        font-size: 0.90625rem;
     }
 
     .acessibilidade__descricao,
     .conta-seguranca__descricao {
-        font-size: 12px;
+        font-size: 0.75rem;
         line-height: 1.45;
     }
 
@@ -1604,7 +1604,7 @@ a.conta-seguranca__acao {
     .meu-perfil__avatar {
         width: 88px;
         height: 88px;
-        font-size: 34px;
+        font-size: 2.125rem;
     }
 
     .meu-perfil__nome {
@@ -1631,7 +1631,7 @@ a.conta-seguranca__acao {
     }
 
     .meu-perfil__preferencia-texto {
-        font-size: 14px;
+        font-size: 0.875rem;
     }
 
     .meu-perfil__switch {

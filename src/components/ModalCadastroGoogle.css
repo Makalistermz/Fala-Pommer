@@ -96,7 +96,7 @@
   display: block;
   margin-bottom: 3px;
   color: #bcd7ff;
-  font-size: 9px;
+  font-size: 0.5625rem;
   font-weight: 700;
   letter-spacing: 0.16em;
 }
@@ -105,14 +105,14 @@
   margin: 0;
   color: #ffffff;
   font-family: var(--fonte-poppins);
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 600;
 }
 
 .modal-cadastro-google__cabecalho p {
   margin: 4px 0 0;
   color: #d9e8ff;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .modal-cadastro-google__formulario {
@@ -219,7 +219,7 @@
   align-items: center;
   gap: 7px;
   color: #667085;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .modal-cadastro-google__icon svg {
@@ -247,7 +247,7 @@
   background: #1351b4;
   color: #ffffff;
   font-family: var(--fonte-dm-sans);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 6px 14px rgb(19 81 180 / 20%);
@@ -325,12 +325,12 @@
   }
 
   .modal-cadastro-google__cabecalho h2 {
-    font-size: 20px;
+    font-size: 1.25rem;
   }
 
   .modal-cadastro-google__cabecalho p {
     max-width: 240px;
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 
   .modal-cadastro-google__conteudo {

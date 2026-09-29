@@ -150,6 +150,29 @@ function Acessibilidade() {
                         </span>
                     </div>
                 </section>
+
+                <section
+                    className="acessibilidade__item acessibilidade__item--daltonismo"
+                    aria-labelledby="daltonismo-titulo"
+                    aria-describedby="daltonismo-descricao"
+                >
+                    <div className="acessibilidade__acao acessibilidade__acao--detalhes">
+                        <div className="acessibilidade__conteudo">
+                            <strong id="daltonismo-titulo" className="acessibilidade__titulo">
+                                Modo para daltonismo
+                            </strong>
+                            <span id="daltonismo-descricao" className="acessibilidade__descricao">
+                                Ajusta as cores da interface para otimizar o contraste e a identificação visual para diferentes tipos de daltonismo.
+                            </span>
+                        </div>
+
+                        <span className="acessibilidade__indicador acessibilidade__seta" aria-hidden="true">
+                            <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-right" viewBox="0 0 16 16">
+                                <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+                            </svg>
+                        </span>
+                    </div>
+                </section>
             </main>
 
             {notificacao && (

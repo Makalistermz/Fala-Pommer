@@ -206,7 +206,8 @@ function Acessibilidade() {
                             <div className="opcoes-acessibilidade__opcao">
                                 <input className="opcoes-acessibilidade__controle" type="radio" name="tritanopia" id="tritanopia" />
                                 <label className="opcoes-acessibilidade__rotulo" htmlFor="tritanopia">
-                                    <strong className="opcoes-acessibilidade__titulo">Reduz a percepção do azul, alterando a distinção entre cores como azul, verde, amarelo e rosa.</strong>
+                                    <strong className="opcoes-acessibilidade__titulo">Tritanopia</strong>
+                                    <span className="opcoes-acessibilidade__descricao">Reduz a percepção do azul, alterando a distinção entre cores como azul, verde, amarelo e rosa.</span>
                                 </label>
                             </div>
                             <div className="opcoes-acessibilidade__opcao">

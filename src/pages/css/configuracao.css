@@ -1149,6 +1149,83 @@ a.conta-seguranca__acao {
     animation: toggleEffectsActive 0.55s ease-out;
 }
 
+.opcoes-acessibilidade {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 18px 24px 22px;
+    border-top: 1px solid #e3e8ef;
+    background: rgba(248, 250, 252, 0.72);
+}
+
+.opcoes-acessibilidade__opcao {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid #dfe5ee;
+    border-radius: 12px;
+    background: #ffffff;
+    transition:
+        border-color 180ms ease,
+        background-color 180ms ease,
+        box-shadow 180ms ease;
+}
+
+.opcoes-acessibilidade__opcao:hover {
+    border-color: rgba(19, 81, 180, 0.42);
+    background: #f8fbff;
+}
+
+.opcoes-acessibilidade__opcao:has(.opcoes-acessibilidade__controle:checked) {
+    border-color: #1351b4;
+    background: #f2f7ff;
+    box-shadow: 0 0 0 3px rgba(19, 81, 180, 0.1);
+}
+
+.opcoes-acessibilidade__controle {
+    width: 18px;
+    height: 18px;
+    margin: 2px 0 0;
+    accent-color: #1351b4;
+    cursor: pointer;
+}
+
+.opcoes-acessibilidade__controle:focus-visible {
+    outline: 3px solid rgba(19, 81, 180, 0.3);
+    outline-offset: 3px;
+}
+
+.opcoes-acessibilidade__rotulo {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.opcoes-acessibilidade__titulo {
+    color: #172033;
+    font-family: var(--fonte-dm-sans);
+    font-size: 0.90625rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.opcoes-acessibilidade__controle:checked
+    + .opcoes-acessibilidade__rotulo
+    .opcoes-acessibilidade__titulo {
+    color: #1351b4;
+}
+
+.opcoes-acessibilidade__descricao {
+    color: #667085;
+    font-family: var(--fonte-dm-sans);
+    font-size: 0.78125rem;
+    line-height: 1.5;
+}
+
 .aparencia {
     width: 100%;
     padding: clamp(20px, 2.8vw, 32px);
@@ -1493,6 +1570,10 @@ a.conta-seguranca__acao {
         height: 46px;
     }
 
+    .opcoes-acessibilidade {
+        padding: 18px 20px 20px;
+    }
+
     .aparencia__opcoes-tema {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -1527,6 +1608,15 @@ a.conta-seguranca__acao {
     .acessibilidade,
     .conta-seguranca {
         gap: 12px;
+    }
+
+    .opcoes-acessibilidade {
+        grid-template-columns: 1fr;
+        padding: 14px 16px 16px;
+    }
+
+    .opcoes-acessibilidade__opcao {
+        padding: 12px;
     }
 
     .privacidade-dados__resumo {

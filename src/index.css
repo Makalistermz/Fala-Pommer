@@ -1120,6 +1120,45 @@ html.tema-escuro:not(.alto-contraste)
   color: var(--tema-texto);
 }
 
+html.tema-escuro:not(.alto-contraste) .opcoes-acessibilidade {
+  border-color: var(--tema-borda);
+  background: rgb(11 18 32 / 35%);
+}
+
+html.tema-escuro:not(.alto-contraste) .opcoes-acessibilidade__opcao {
+  border-color: var(--tema-borda);
+  background: var(--tema-superficie-elevada);
+}
+
+html.tema-escuro:not(.alto-contraste) .opcoes-acessibilidade__opcao:hover {
+  border-color: var(--tema-destaque);
+  background: var(--tema-superficie-interativa);
+}
+
+html.tema-escuro:not(.alto-contraste)
+  .opcoes-acessibilidade__opcao:has(.opcoes-acessibilidade__controle:checked) {
+  border-color: var(--tema-destaque);
+  background: #172f52;
+  box-shadow: 0 0 0 3px rgb(114 167 255 / 14%);
+}
+
+html.tema-escuro:not(.alto-contraste) .opcoes-acessibilidade__controle {
+  accent-color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .opcoes-acessibilidade__titulo,
+  .opcoes-acessibilidade__controle:checked
+    + .opcoes-acessibilidade__rotulo
+    .opcoes-acessibilidade__titulo
+) {
+  color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) .opcoes-acessibilidade__descricao {
+  color: var(--tema-texto-secundario);
+}
+
 html.tema-escuro:not(.alto-contraste)
   .conta-seguranca__indicador.icone-seta-sair {
   background: rgb(239 68 68 / 16%);
@@ -1683,6 +1722,17 @@ html.alto-contraste body :is(
 }
 
 html.alto-contraste body .acessibilidade__seta {
+  border: 2px solid var(--contraste-texto) !important;
+  background: var(--contraste-fundo) !important;
+  color: var(--contraste-texto) !important;
+}
+
+html.alto-contraste body .opcoes-acessibilidade {
+  border-color: var(--contraste-texto) !important;
+  background: var(--contraste-fundo) !important;
+}
+
+html.alto-contraste body .opcoes-acessibilidade__opcao {
   border: 2px solid var(--contraste-texto) !important;
   background: var(--contraste-fundo) !important;
   color: var(--contraste-texto) !important;

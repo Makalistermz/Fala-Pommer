@@ -12,7 +12,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@allystudio/color-vision-simulator": "^0.1.0",
     "@aparajita/capacitor-biometric-auth": "^10.0.0",
     "@aparajita/capacitor-secure-storage": "^8.0.0",
     "@capacitor/android": "^8.5.1",

@@ -1167,6 +1167,7 @@ a.conta-seguranca__acao {
     border: 1px solid #dfe5ee;
     border-radius: 12px;
     background: #ffffff;
+    cursor: pointer;
     transition:
         border-color 180ms ease,
         background-color 180ms ease,

@@ -190,28 +190,28 @@ function Acessibilidade() {
                     {mostrarOpcaoDalto && (
                         <div className="opcoes-acessibilidade">
                             <div className="opcoes-acessibilidade__opcao">
-                                <input className="opcoes-acessibilidade__controle" type="radio" name="protanopia" id="protanopia" />
+                                <input className="opcoes-acessibilidade__controle" type="radio" name="daltonismo" value="protanopia" id="protanopia" />
                                 <label className="opcoes-acessibilidade__rotulo" htmlFor="protanopia">
                                     <strong className="opcoes-acessibilidade__titulo">Protanopia</strong>
                                     <span className="opcoes-acessibilidade__descricao">Reduz a percepção do vermelho, alterando a forma como tons vermelhos e verdes são vistos.</span>
                                 </label>
                             </div>
                             <div className="opcoes-acessibilidade__opcao">
-                                <input className="opcoes-acessibilidade__controle" type="radio" name="deuteranopia" id="deuteranopia" />
+                                <input className="opcoes-acessibilidade__controle" type="radio" name="daltonismo" value="deuteranopia" id="deuteranopia" />
                                 <label className="opcoes-acessibilidade__rotulo" htmlFor="deuteranopia">
                                     <strong className="opcoes-acessibilidade__titulo">Deuteranopia</strong>
                                     <span className="opcoes-acessibilidade__descricao">Reduz a percepção do verde, dificultando a diferenciação entre verde, vermelho e amarelo.</span>
                                 </label>
                             </div>
                             <div className="opcoes-acessibilidade__opcao">
-                                <input className="opcoes-acessibilidade__controle" type="radio" name="tritanopia" id="tritanopia" />
+                                <input className="opcoes-acessibilidade__controle" type="radio" name="daltonismo" value="tritanopia" id="tritanopia" />
                                 <label className="opcoes-acessibilidade__rotulo" htmlFor="tritanopia">
                                     <strong className="opcoes-acessibilidade__titulo">Tritanopia</strong>
                                     <span className="opcoes-acessibilidade__descricao">Reduz a percepção do azul, alterando a distinção entre cores como azul, verde, amarelo e rosa.</span>
                                 </label>
                             </div>
                             <div className="opcoes-acessibilidade__opcao">
-                                <input className="opcoes-acessibilidade__controle" type="radio" name="acromatopsia" id="acromatopsia" />
+                                <input className="opcoes-acessibilidade__controle" type="radio" name="daltonismo" value="acromatopsia" id="acromatopsia" />
                                 <label className="opcoes-acessibilidade__rotulo" htmlFor="acromatopsia">
                                     <strong className="opcoes-acessibilidade__titulo">Acromatopsia</strong>
                                     <span className="opcoes-acessibilidade__descricao">Ausência total da visão de cores; a interface é percebida em escala de cinza.</span>

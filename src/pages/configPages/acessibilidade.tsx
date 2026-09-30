@@ -1,6 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavegacaoAudio } from "../../components/NavegacaoAudioContext";
 import { NotificacaoConfiguracao } from "../../components/NotificacaoConfiguracao";
+import { 
+    createColorVisionSimulator,
+    COLOR_VISION_PRESETS,
+    formatColorVisionType,
+    type ColorVisionType 
+} from '@allystudio/color-vision-simulator'
+
 import {
     aplicarAltoContraste,
     obterPreferenciaAltoContraste,
@@ -13,6 +20,10 @@ import {
 function Acessibilidade() {
     const { navegacaoAudioAtiva, setNavegacaoAudioAtiva } = useNavegacaoAudio();
     const [mostrarOpcaoDalto, setMostrarOpcaoDalto] = useState(false);
+    const [ simulador ] = useState(() => createColorVisionSimulator());
+    const [ eAtivo, setEAtivo ] = useState(false);
+    const [ tipoVisao, setTipoVisao] = useState<ColorVisionType>('protanopia');
+
     const [altoContrasteAtivo, setAltoContrasteAtivo] = useState(
         obterPreferenciaAltoContraste
     );
@@ -63,6 +74,26 @@ function Acessibilidade() {
 
     function renderizarOpcaoDalto() {
         setMostrarOpcaoDalto(anterior => !anterior);
+    }
+
+    useEffect(() => {
+        const unsubscribe = simulador.onStateChange((estado) => {
+            setEAtivo(estado.isActive)
+            setTipoVisao(estado.visionType)
+        });
+
+        return unsubscribe;
+    }, [simulador]);
+
+    const tiposDeVisao: ColorVisionType[] = [
+        'protanopia', 'deuteranopia', 'tritanopia', 'achromatopsia', 'normal'
+    ];
+
+    function selecionarTipoVisao(tipo: ColorVisionType) {
+        const ativo = tipo !== COLOR_VISION_PRESETS.NORMAL;
+
+        simulador.configure(tipo, ativo);
+        mostrarNotificacao(ativo);
     }
 
     return (
@@ -190,31 +221,100 @@ function Acessibilidade() {
                     {mostrarOpcaoDalto && (
                         <div className="opcoes-acessibilidade">
                             <div className="opcoes-acessibilidade__opcao">
-                                <input className="opcoes-acessibilidade__controle" type="radio" name="daltonismo" value="protanopia" id="protanopia" />
+                                <input 
+                                    className="opcoes-acessibilidade__controle" 
+                                    type="radio" 
+                                    name="daltonismo" 
+                                    id="protanopia"
+                                    value={COLOR_VISION_PRESETS.PROTANOPIA}
+                                    checked={
+                                        eAtivo &&
+                                        tipoVisao === COLOR_VISION_PRESETS.PROTANOPIA
+                                    }
+                                    onChange={() =>
+                                        selecionarTipoVisao(COLOR_VISION_PRESETS.PROTANOPIA)
+                                    } 
+                                />
                                 <label className="opcoes-acessibilidade__rotulo" htmlFor="protanopia">
                                     <strong className="opcoes-acessibilidade__titulo">Protanopia</strong>
                                     <span className="opcoes-acessibilidade__descricao">Reduz a percepção do vermelho, alterando a forma como tons vermelhos e verdes são vistos.</span>
                                 </label>
                             </div>
                             <div className="opcoes-acessibilidade__opcao">
-                                <input className="opcoes-acessibilidade__controle" type="radio" name="daltonismo" value="deuteranopia" id="deuteranopia" />
+                                <input 
+                                    className="opcoes-acessibilidade__controle" 
+                                    type="radio" 
+                                    name="daltonismo" 
+                                    id="deuteranopia" 
+                                    value={COLOR_VISION_PRESETS.DEUTERANOPIA}
+                                    checked={
+                                        eAtivo &&
+                                        tipoVisao === COLOR_VISION_PRESETS.DEUTERANOPIA
+                                    }
+                                    onChange={() =>
+                                        selecionarTipoVisao(COLOR_VISION_PRESETS.DEUTERANOPIA)
+                                    } 
+                                />
                                 <label className="opcoes-acessibilidade__rotulo" htmlFor="deuteranopia">
                                     <strong className="opcoes-acessibilidade__titulo">Deuteranopia</strong>
                                     <span className="opcoes-acessibilidade__descricao">Reduz a percepção do verde, dificultando a diferenciação entre verde, vermelho e amarelo.</span>
                                 </label>
                             </div>
                             <div className="opcoes-acessibilidade__opcao">
-                                <input className="opcoes-acessibilidade__controle" type="radio" name="daltonismo" value="tritanopia" id="tritanopia" />
+                                <input 
+                                    className="opcoes-acessibilidade__controle" 
+                                    type="radio" 
+                                    name="daltonismo" 
+                                    id="tritanopia" 
+                                    value={COLOR_VISION_PRESETS.TRITANOPIA}
+                                    checked={
+                                        eAtivo &&
+                                        tipoVisao === COLOR_VISION_PRESETS.TRITANOPIA
+                                    }
+                                    onChange={() =>
+                                        selecionarTipoVisao(COLOR_VISION_PRESETS.TRITANOPIA)
+                                    } 
+                                />
                                 <label className="opcoes-acessibilidade__rotulo" htmlFor="tritanopia">
                                     <strong className="opcoes-acessibilidade__titulo">Tritanopia</strong>
                                     <span className="opcoes-acessibilidade__descricao">Reduz a percepção do azul, alterando a distinção entre cores como azul, verde, amarelo e rosa.</span>
                                 </label>
                             </div>
                             <div className="opcoes-acessibilidade__opcao">
-                                <input className="opcoes-acessibilidade__controle" type="radio" name="daltonismo" value="acromatopsia" id="acromatopsia" />
-                                <label className="opcoes-acessibilidade__rotulo" htmlFor="acromatopsia">
+                                <input 
+                                    className="opcoes-acessibilidade__controle" 
+                                    type="radio" 
+                                    name="daltonismo" 
+                                    id="achromatopsia" 
+                                    value={COLOR_VISION_PRESETS.ACHROMATOPSIA}
+                                    checked={
+                                        eAtivo &&
+                                        tipoVisao === COLOR_VISION_PRESETS.ACHROMATOPSIA
+                                    }
+                                    onChange={() =>
+                                        selecionarTipoVisao(COLOR_VISION_PRESETS.ACHROMATOPSIA)
+                                    } 
+                                />
+                                <label className="opcoes-acessibilidade__rotulo" htmlFor="achromatopsia">
                                     <strong className="opcoes-acessibilidade__titulo">Acromatopsia</strong>
                                     <span className="opcoes-acessibilidade__descricao">Ausência total da visão de cores; a interface é percebida em escala de cinza.</span>
+                                </label>
+                            </div>
+                            <div className="opcoes-acessibilidade__opcao">
+                                <input
+                                    className="opcoes-acessibilidade__controle"
+                                    type="radio"
+                                    name="daltonismo"
+                                    id="visao-normal"
+                                    value={COLOR_VISION_PRESETS.NORMAL}
+                                    checked={!eAtivo}
+                                    onChange={() =>
+                                        selecionarTipoVisao(COLOR_VISION_PRESETS.NORMAL)
+                                    }
+                                />
+                                <label className="opcoes-acessibilidade__rotulo" htmlFor="visao-normal">
+                                    <strong className="opcoes-acessibilidade__titulo">Visão normal</strong>
+                                    <span className="opcoes-acessibilidade__descricao">Desativa a simulação de daltonismo e restaura as cores originais.</span>
                                 </label>
                             </div>
                         </div>

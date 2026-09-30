@@ -12,6 +12,7 @@ import {
 
 function Acessibilidade() {
     const { navegacaoAudioAtiva, setNavegacaoAudioAtiva } = useNavegacaoAudio();
+    const [mostrarOpcaoDalto, setMostrarOpcaoDalto] = useState(false);
     const [altoContrasteAtivo, setAltoContrasteAtivo] = useState(
         obterPreferenciaAltoContraste
     );
@@ -58,6 +59,10 @@ function Acessibilidade() {
             fala.lang = "pt-BR";
             window.speechSynthesis.speak(fala);
         }
+    }
+
+    function renderizarOpcaoDalto() {
+        setMostrarOpcaoDalto(anterior => !anterior);
     }
 
     return (
@@ -156,7 +161,10 @@ function Acessibilidade() {
                     aria-labelledby="daltonismo-titulo"
                     aria-describedby="daltonismo-descricao"
                 >
-                    <div className="acessibilidade__acao acessibilidade__acao--detalhes">
+                    <div 
+                        className="acessibilidade__acao acessibilidade__acao--detalhes"
+                        onClick={renderizarOpcaoDalto}
+                    >
                         <div className="acessibilidade__conteudo">
                             <strong id="daltonismo-titulo" className="acessibilidade__titulo">
                                 Modo para daltonismo
@@ -167,11 +175,50 @@ function Acessibilidade() {
                         </div>
 
                         <span className="acessibilidade__indicador acessibilidade__seta" aria-hidden="true">
-                            <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-right" viewBox="0 0 16 16">
+                            {mostrarOpcaoDalto 
+                                ? <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                                </svg>
+
+                                : <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-right" viewBox="0 0 16 16">
                                 <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
-                            </svg>
+                            </svg> 
+                            }
                         </span>
                     </div>
+
+                    {mostrarOpcaoDalto && (
+                        <div className="opcoes-acessibilidade">
+                            <div>
+                                <input type="radio" name="protanopia" id="protanopia" />
+                                <label htmlFor="protanopia">
+                                    <strong>Protanopia</strong>
+                                    <span>Reduz a percepção do vermelho, alterando a forma como tons vermelhos e verdes são vistos.</span>
+                                </label>
+                            </div>
+                            <div>
+                                <input type="radio" name="deuteranopia" id="deuteranopia" />
+                                <label htmlFor="deuteranopia">
+                                    <strong>Deuteranopia</strong>
+                                    <span>Reduz a percepção do verde, dificultando a diferenciação entre verde, vermelho e amarelo.</span>
+                                </label>
+                            </div>
+                            <div>
+                                <input type="radio" name="tritanopia" id="tritanopia" />
+                                <label htmlFor="tritanopia">
+                                    <strong>Reduz a percepção do azul, alterando a distinção entre cores como azul, verde, amarelo e rosa.</strong>
+                                </label>
+                            </div>
+                            <div>
+                                <input type="radio" name="acromatopsia" id="acromatopsia" />
+                                <label htmlFor="acromatopsia">
+                                    <strong>Acromatopsia</strong>
+                                    <span>Ausência total da visão de cores; a interface é percebida em escala de cinza.</span>
+                                </label>
+                            </div>
+                        </div>
+                    )}
+
                 </section>
             </main>
 

@@ -1258,35 +1258,44 @@
 }
 
 .mensagens {
+    --imagem-plano-fundo-conversa: url(../../assets/img/background-mensagens.png);
+
     display: flex;
     flex-direction: column;;
     padding: 24px;
     gap: 7px;
     min-height: 0;
     overflow-y: auto;
-    background-image: url(../../assets/img/background-mensagens.png);
+    background-image: var(--imagem-plano-fundo-conversa);
     background-repeat: no-repeat;
     background-size: cover;
 }
 
 html.plano-fundo-conversa-1 .mensagens {
-    background-image: url(../../assets/img/background-mensagens.png);
+    --imagem-plano-fundo-conversa: url(../../assets/img/background-mensagens.png);
 }
 
 html.plano-fundo-conversa-2 .mensagens {
-    background-image: url(../../assets/img/background-mensagens2.png);
+    --imagem-plano-fundo-conversa: url(../../assets/img/background-mensagens2.png);
 }
 
 html.plano-fundo-conversa-3 .mensagens {
-    background-image: url(../../assets/img/background-mensagens3.png);
+    --imagem-plano-fundo-conversa: url(../../assets/img/background-mensagens3.png);
 }
 
 html.plano-fundo-conversa-4 .mensagens {
-    background-image: url(../../assets/img/background-mensagens4.png);
+    --imagem-plano-fundo-conversa: url(../../assets/img/background-mensagens4.png);
 }
 
 html.plano-fundo-conversa-5 .mensagens {
-    background-image: url(../../assets/img/background-mensagens5.png);
+    --imagem-plano-fundo-conversa: url(../../assets/img/background-mensagens5.png);
+}
+
+html.alto-contraste body .mensagens {
+    background-color: #000000 !important;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.58)),
+        var(--imagem-plano-fundo-conversa) !important;
 }
 
 .mensagens__status {

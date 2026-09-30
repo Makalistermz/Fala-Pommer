@@ -1616,7 +1616,7 @@ html.alto-contraste body :where(a, button, [role="button"], [role="switch"]) {
   font-weight: 700 !important;
 }
 
-html.alto-contraste body :is(button, a, [role="button"], [role="switch"]) * {
+html.alto-contraste body :is(button, [role="button"], [role="switch"]) * {
   color: #000000 !important;
 }
 
@@ -1630,6 +1630,17 @@ html.alto-contraste body a {
 
 html.alto-contraste body a * {
   color: inherit !important;
+}
+
+html.alto-contraste body :is(a.menu-modal-button, a.admin-nav-item) {
+  border-color: var(--contraste-texto) !important;
+  background-color: var(--contraste-destaque) !important;
+  color: #000000 !important;
+  text-decoration: none !important;
+}
+
+html.alto-contraste body :is(a.menu-modal-button, a.admin-nav-item) * {
+  color: #000000 !important;
 }
 
 html.alto-contraste body :where(input, textarea, select, option) {
@@ -1782,6 +1793,10 @@ html.alto-contraste body :is(.conversa-dados, .nova-conversa__dados) {
   color: inherit !important;
 }
 
+html.alto-contraste body .nova-conversa__dados {
+  border-bottom: 0 !important;
+}
+
 html.alto-contraste body :is(
   .conversa-dados strong,
   .conversa-dados > span,
@@ -1826,6 +1841,10 @@ html.alto-contraste body .mensagem-balao {
 html.alto-contraste body .mensagem-balao * {
   color: var(--contraste-texto) !important;
 }
+
+html.alto-contraste .mensagem-linha {
+  background-color: transparent !important;
+} 
 
 html.alto-contraste body .mensagem-linha--enviada .mensagem-balao {
   border-color: var(--contraste-texto) !important;
@@ -1938,6 +1957,51 @@ html.alto-contraste body :is(
   .relatorios-logs__status--aberto
 ) * {
   color: #000000 !important;
+}
+
+html.alto-contraste body :is(
+  .filtro-conteudo,
+  .acessibilidade__acao,
+  .acessibilidade__conteudo,
+  .conta-seguranca__acao,
+  .conta-seguranca__conteudo,
+  .mensagem-balao__cabecalho,
+  .notificacao-configuracao__conteudo
+) {
+  background: transparent !important;
+}
+
+html.alto-contraste body .filtro-item :is(.filtro-conteudo, .filtro-texto) {
+  color: #000000 !important;
+}
+
+html.alto-contraste body :is(
+  a.conta-seguranca__acao,
+  button.conta-seguranca__acao--botao
+) {
+  border: 0 !important;
+  background: transparent !important;
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+html.alto-contraste body :is(
+  a.conta-seguranca__acao,
+  button.conta-seguranca__acao--botao
+) * {
+  color: inherit !important;
+}
+
+html.alto-contraste body .conta-seguranca__item .conta-seguranca__icone,
+html.alto-contraste body .conta-seguranca__item :is(.bi-arrow-right, .icone-seta-sair) {
+  border: 2px solid var(--contraste-texto) !important;
+  background: var(--contraste-fundo) !important;
+  color: var(--contraste-texto) !important;
+}
+
+html.alto-contraste body .conta-seguranca__item .conta-seguranca__icone *,
+html.alto-contraste body .conta-seguranca__item :is(.bi-arrow-right, .icone-seta-sair) * {
+  color: var(--contraste-texto) !important;
 }
 
 html.alto-contraste body ::selection {

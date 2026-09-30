@@ -1348,38 +1348,52 @@ a.conta-seguranca__acao {
 }
 
 .aparencia__opcao-cor--1 {
-    background-image: url(../../assets/img/background-mensagens.png);
+    --imagem-plano-fundo-conversa: url(../../assets/img/background-mensagens.png);
+
+    background-image: var(--imagem-plano-fundo-conversa);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 .aparencia__opcao-cor--2 {
-    background-image: url(../../assets/img/background-mensagens2.png);
+    --imagem-plano-fundo-conversa: url(../../assets/img/background-mensagens2.png);
+
+    background-image: var(--imagem-plano-fundo-conversa);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 .aparencia__opcao-cor--3 {
-    background-image: url(../../assets/img/background-mensagens3.png);
+    --imagem-plano-fundo-conversa: url(../../assets/img/background-mensagens3.png);
+
+    background-image: var(--imagem-plano-fundo-conversa);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 .aparencia__opcao-cor--4 {
-    background-image: url(../../assets/img/background-mensagens4.png);
+    --imagem-plano-fundo-conversa: url(../../assets/img/background-mensagens4.png);
+
+    background-image: var(--imagem-plano-fundo-conversa);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 .aparencia__opcao-cor--5 {
-    background-image: url(../../assets/img/background-mensagens5.png);
+    --imagem-plano-fundo-conversa: url(../../assets/img/background-mensagens5.png);
+
+    background-image: var(--imagem-plano-fundo-conversa);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+html.alto-contraste body .aparencia__opcao-cor {
+    background-image: var(--imagem-plano-fundo-conversa) !important;
 }
 
 @keyframes toggleEffectsActive {

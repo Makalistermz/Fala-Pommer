@@ -142,8 +142,13 @@ html.alto-contraste body .notificacao-configuracao {
     color: #000000 !important;
 }
 
-html.alto-contraste body .notificacao-configuracao__conteudo :is(p, span) {
+html.alto-contraste body .notificacao-configuracao__conteudo :is(strong, p, span) {
     color: #000000 !important;
+}
+
+html.alto-contraste body .notificacao-configuracao__icone {
+    background: #000000 !important;
+    color: #ffffff !important;
 }
 
 @keyframes notificacaoConfiguracaoEntrada {

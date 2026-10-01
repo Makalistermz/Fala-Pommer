@@ -291,7 +291,7 @@
 
 .menu-modal {
     position: absolute;
-    top: calc(var(--home-page-padding) + 76px);
+    top: calc(var(--home-page-padding) + 56px);
     right: calc(100% - var(--largura-barra-lateral) - var(--home-page-padding) - var(--largura-conversas) + 16px);
     z-index: 10;
     display: flex;

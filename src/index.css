@@ -143,7 +143,10 @@ html.tema-escuro:not(.alto-contraste) :is(
 .chat-header,
 .nova-conversa__header,
 .conversas__conteudo,
-.nova-conversa--aberta
+.nova-conversa--aberta,
+.chat-input,
+.chat,
+.chat-vazio
 ) {
   background-color: var(--tema-fundo) !important;
 }

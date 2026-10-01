@@ -81,11 +81,19 @@
     margin-top: auto;
     flex: 0 0 38px;
     place-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.78);
     border-radius: 50%;
     color: #ffffff;
     font-size: 0.875rem;
     font-weight: 600;
+    cursor: pointer;
+}
+
+.home-sidebar__perfil:hover {
+    scale: 1.04;
+}
+
+.home-sidebar__perfil:active {
+    scale: .96;
 }
 
 .home-sidebar__perfil > span {

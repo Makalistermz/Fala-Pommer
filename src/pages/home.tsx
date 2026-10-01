@@ -3032,6 +3032,37 @@ function Home() {
 
     return (
         <main className={`home ${chatMobileAberto ? "home--chat-mobile-aberto" : ""}`}>
+        <aside className="home-sidebar" aria-hidden="true">
+            <img
+                className="home-sidebar__marca"
+                src={brasao}
+                alt=""
+                width={32}
+                height={40}
+            />
+
+            <div className="home-sidebar__navegacao">
+                <span className="home-sidebar__item home-sidebar__item--ativo">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
+                        <path d="M8 10h.01M12 10h.01M16 10h.01" />
+                    </svg>
+                </span>
+
+                <span className="home-sidebar__item">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="3" />
+                        <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 0 1-4 0v-.09A1.7 1.7 0 0 0 8.94 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.57 15 1.7 1.7 0 0 0 3 14H3a2 2 0 0 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.94a1.7 1.7 0 0 0-.34-1.88L4.2 7a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.57h.01A1.7 1.7 0 0 0 10 3V3a2 2 0 0 1 4 0v.09a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9v.01A1.7 1.7 0 0 0 21 10h.09a2 2 0 0 1 0 4H21A1.7 1.7 0 0 0 19.4 15z" />
+                    </svg>
+                </span>
+            </div>
+
+            <div className="home-sidebar__perfil">
+                <span>{usuario?.email?.charAt(0).toUpperCase() || "U"}</span>
+                <i />
+            </div>
+        </aside>
+
         <aside className="conversas" data-lenis-prevent>
             <header className="conversas-header">
             <div className="header-name">

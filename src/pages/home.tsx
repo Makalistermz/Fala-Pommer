@@ -3116,26 +3116,19 @@ function Home() {
                 {usuario && (
                 <button
                     type="button"
-                    className="header-menu-button"
+                    className="header-menu-button header-menu-button--nova-conversa"
                     onClick={abrirNovaConversa}
                     aria-label="Nova conversa"
                 >
                     <span className="header-menu-icon">
-                    <svg
-                        width="24"
-                        height="24"
-                        className="header-menu-svg mensagem"
-                        viewBox="0 0 16 16"
-                    >
-                        <path
-                        className="conversa-icone-path"
-                        d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z"
-                        />
-                        <path
-                        className="conversa-icone-path"
-                        d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"
-                        />
-                    </svg>
+                        <svg
+                            width="24"
+                            height="24"
+                            className="header-menu-svg mensagem"
+                            viewBox="0 0 16 16"
+                        >
+                            <path className="conversa-icone-path" fill="black" fill-rule="evenodd" transform="translate(0.5 0.5) scale(0.68)" d="M19.33 4C20.81 4 22 5.2 22 6.67v10.66c0 1.48-1.2 2.67-2.67 2.67H5.67A2.67 2.67 0 0 1 3 17.33V8.85L.94 5.53A1 1 0 0 1 1.8 4h17.54Zm-9.8 9h1.98v1.97c0 .43.25.85.67.98a1 1 0 0 0 1.31-.94v-2.02h1.98c.43 0 .85-.25.98-.67a1 1 0 0 0-.94-1.31h-2.02V9.03c0-.43-.25-.85-.67-.98a1 1 0 0 0-1.31.94v2.02H9.49a1 1 0 0 0-.94 1.31c.13.42.55.67.98.67Z" clip-rule="evenodd"></path>
+                        </svg>
                     </span>
                 </button>
                 )}
@@ -3149,34 +3142,34 @@ function Home() {
                 aria-expanded={menuAberto}
                 aria-controls="menu-principal"
                 >
-                <span className="header-menu-icon">
-                    <svg
-                    className="header-menu-svg"
-                    viewBox="0 0 24 24"
-                    height="24"
-                    width="24"
-                    preserveAspectRatio="xMidYMid meet"
-                    >
-                    <circle
-                        className="menu-dot menu-dot-top"
-                        cx="12"
-                        cy="6"
-                        r="2"
-                    />
-                    <circle
-                        className="menu-dot menu-dot-middle"
-                        cx="12"
-                        cy="12"
-                        r="2"
-                    />
-                    <circle
-                        className="menu-dot menu-dot-bottom"
-                        cx="12"
-                        cy="18"
-                        r="2"
-                    />
-                    </svg>
-                </span>
+                    <span className="header-menu-icon">
+                        <svg
+                        className="header-menu-svg"
+                        viewBox="0 0 24 24"
+                        height="24"
+                        width="24"
+                        preserveAspectRatio="xMidYMid meet"
+                        >
+                        <circle
+                            className="menu-dot menu-dot-top"
+                            cx="12"
+                            cy="6"
+                            r="2"
+                        />
+                        <circle
+                            className="menu-dot menu-dot-middle"
+                            cx="12"
+                            cy="12"
+                            r="2"
+                        />
+                        <circle
+                            className="menu-dot menu-dot-bottom"
+                            cx="12"
+                            cy="18"
+                            r="2"
+                        />
+                        </svg>
+                    </span>
                 </button>
             </div>
             </header>

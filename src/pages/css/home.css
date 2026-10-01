@@ -200,6 +200,43 @@
     color: #ffffff;
 }
 
+.header-menu-button.header-menu-button--nova-conversa {
+    width: clamp(36px, 3vw, 40px);
+    height: clamp(36px, 3vw, 40px);
+    padding: 0;
+    flex: 0 0 auto;
+    border-radius: 50%;
+}
+
+.header-menu-button--nova-conversa:hover {
+    border-radius: 50%;
+    background: transparent;
+}
+
+.header-menu-button--nova-conversa .mensagem {
+    display: block;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: clamp(8px, 0.75vw, 10px);
+    border-radius: 50%;
+    background-color: var(--azul-escuro);
+    transform: none;
+}
+
+.header-menu-button--nova-conversa .mensagem:hover {
+    box-shadow: 0px 0px 4px 4px rgba(210, 213, 255, 0.692);
+    scale: 1.06;
+}
+
+.header-menu-button--nova-conversa .mensagem:active {
+    scale: .9;
+}
+
+.header-menu-button--nova-conversa .conversa-icone-path {
+    fill: var(--branco);
+}
+
 .header-menu-button:focus-visible,
 .conversa-item:focus-visible,
 .filtro-item:focus-visible {
@@ -208,7 +245,7 @@
 }
 
 .menu-dot {
-    fill: var(--branco);
+    fill: black;
     transition: transform 0.25s ease;
 }
 
@@ -223,10 +260,6 @@
 
 .header-menu-button:hover .menu-dot-bottom {
     transform: translateY(2px);
-}
-
-.conversa-icone-path {
-    fill: var(--branco);
 }
 
 .mensagem{

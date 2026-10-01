@@ -52,14 +52,27 @@
     display: grid;
     width: 40px;
     height: 40px;
+    padding: 0;
     flex: 0 0 40px;
     place-items: center;
+    border: 0;
     border-radius: 10px;
+    background: transparent;
     color: #ffffff;
+    font: inherit;
+    cursor: pointer;
+}
+
+.home-sidebar__item:hover {
+    background: rgba(32, 32, 32, 0.404);
+}
+
+.home-sidebar__item:active {
+    scale: 0.92;
 }
 
 .home-sidebar__item--ativo {
-    background: rgba(68, 163, 255, 0.55);
+    background: rgba(35, 115, 194, 0.55) !important;
     box-shadow: 0 5px 14px rgba(0, 42, 105, 0.18);
 }
 

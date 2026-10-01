@@ -1,5 +1,6 @@
 // Exibe a área principal de conversas do sistema.
 import brasao from "../assets/img/brasao.webp";
+import iconeFalaPommer from "../assets/img/fala-pommer-icon-arredondado.webp"
 import somNovaMensagem from "../assets/audio/notificacao.mp3";
 import "./css/home.css";
 import {
@@ -3035,7 +3036,7 @@ function Home() {
         <aside className="home-sidebar" aria-hidden="true">
             <img
                 className="home-sidebar__marca"
-                src={brasao}
+                src={iconeFalaPommer}
                 alt=""
                 width={32}
                 height={40}

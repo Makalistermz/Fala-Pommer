@@ -3209,11 +3209,21 @@ function Home() {
                         : ""
                 }`}
                 >
-                <div className="conversa-avatar">
-                    {renderizarAvatar(
-                        nomeDaConversa(conversa),
-                        fotoDaConversa(conversa)
-                    )}
+                <div className= {conversa?.tipo !== "grupo" 
+                        ? "conversa-avatar" 
+                        : "conversa-grupo-avatar"
+                    }
+                >
+                    {conversa?.tipo === "grupo" 
+                        ? <svg width="16" height="16" fill="currentColor" className="bi bi-people-fill" viewBox="0 0 16 16">
+                            <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                        </svg>
+
+                        : renderizarAvatar(
+                            nomeDaConversa(conversa),
+                            fotoDaConversa(conversa)
+                        )
+                    }
                 </div>
 
                 <div className="conversa-dados">
@@ -3458,11 +3468,21 @@ function Home() {
                             }
                         }}
                     >
-                        <div className="chat-header__avatar">
-                            {renderizarAvatar(
-                                nomeDaConversa(conversaSelecionada),
-                                fotoDaConversa(conversaSelecionada)
-                            )}
+                        <div className={conversaSelecionada?.tipo !== "grupo" 
+                                ? "chat-header__avatar" 
+                                : "chat-header__avatar-grupo"
+                            }
+                        >
+                            {conversaSelecionada?.tipo === "grupo" 
+                                ? <svg width="16" height="16" fill="currentColor" className="bi bi-people-fill" viewBox="0 0 16 16">
+                                    <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                                </svg>
+
+                                : renderizarAvatar(
+                                    nomeDaConversa(conversaSelecionada),
+                                    fotoDaConversa(conversaSelecionada)
+                                )
+                            }
                         </div>
                         <div className="chat-header__dados">
                             <strong>{nomeDaConversa(conversaSelecionada)}</strong>

@@ -797,7 +797,11 @@
 }
 
 .chat-vazio {
-    min-height: 100%;
+    grid-row: 1 / -1;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    box-sizing: border-box;
     padding: 32px;
     display: flex;
     flex-direction: column;
@@ -810,17 +814,129 @@
 }
 
 .chat-vazio__icone {
-    width: 76px;
-    height: 76px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #c9dcf8;
-    border-radius: 50%;
-    background: #e7f0ff;
+    width: clamp(190px, 25vw, 270px);
+    height: auto;
+    margin-bottom: clamp(18px, 2.5vw, 28px);
     color: #1351b4;
-    box-shadow: 0 12px 25px rgba(19, 81, 180, 0.12);
+}
+
+.chat-vazio__icone > svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.chat-vazio__halo {
+    fill: rgba(220, 234, 255, 0.58);
+}
+
+.chat-vazio__trilha {
+    fill: none;
+    stroke: rgba(19, 81, 180, 0.24);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 2 11;
+    animation: chat-vazio-percorre-trilha 12s linear infinite;
+}
+
+.chat-vazio__forma {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: chat-vazio-pulso 3.2s ease-in-out infinite;
+}
+
+.chat-vazio__forma--rosa {
+    fill: #ef476f;
+}
+
+.chat-vazio__forma--verde {
+    fill: #06a77d;
+    animation-delay: 500ms;
+}
+
+.chat-vazio__forma--amarela {
+    fill: #f4ba28;
+    animation-delay: 900ms;
+}
+
+.chat-vazio__balao {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.chat-vazio__balao--traseiro {
+    animation: chat-vazio-flutua-traseiro 4.8s ease-in-out infinite;
+}
+
+.chat-vazio__balao--traseiro path {
+    fill: #dceaff;
+    stroke: #bdd3f5;
+    stroke-width: 6;
+    stroke-linejoin: round;
+}
+
+.chat-vazio__balao--traseiro circle {
+    fill: #ffffff;
+}
+
+.chat-vazio__balao--principal {
+    animation: chat-vazio-flutua-principal 4.2s ease-in-out infinite;
+}
+
+.chat-vazio__balao--principal path {
+    fill: #ffffff;
+    stroke: url(#chat-vazio-gradiente);
+    stroke-width: 7;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 13px 13px rgba(19, 81, 180, 0.15));
+}
+
+.chat-vazio__balao--principal circle {
+    fill: #1351b4;
+}
+
+.chat-vazio__brilho {
+    fill: none;
+    stroke: #2878df;
+    stroke-width: 5;
+    stroke-linecap: round;
+    animation: chat-vazio-pulso 4.2s 350ms ease-in-out infinite;
+}
+
+@keyframes chat-vazio-flutua-principal {
+    0%, 100% {
+        transform: translateY(0) rotate(-1deg);
+    }
+    50% {
+        transform: translateY(-7px) rotate(1deg);
+    }
+}
+
+@keyframes chat-vazio-flutua-traseiro {
+    0%, 100% {
+        transform: translateY(0) rotate(1deg);
+    }
+    50% {
+        transform: translateY(6px) rotate(-1deg);
+    }
+}
+
+@keyframes chat-vazio-pulso {
+    0%, 100% {
+        opacity: 0.72;
+        transform: scale(0.9);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.08);
+    }
+}
+
+@keyframes chat-vazio-percorre-trilha {
+    to {
+        stroke-dashoffset: -130;
+    }
 }
 
 .chat-vazio h2 {

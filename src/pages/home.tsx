@@ -4395,28 +4395,52 @@ function Home() {
             </>
             ) : (
             <div className="chat-vazio">
-                <div className="chat-vazio__icone">
-                <svg
-                    width="38"
-                    height="38"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden="true"
-                >
-                    <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
-                    <path d="M8 10h.01" />
-                    <path d="M12 10h.01" />
-                    <path d="M16 10h.01" />
-                </svg>
+                <div className="chat-vazio__icone" aria-hidden="true">
+                    <svg viewBox="0 0 260 190">
+                        <defs>
+                            <linearGradient id="chat-vazio-gradiente" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0" stopColor="#2878df" />
+                                <stop offset="1" stopColor="#1351b4" />
+                            </linearGradient>
+                        </defs>
+
+                        <ellipse
+                            className="chat-vazio__halo"
+                            cx="130"
+                            cy="104"
+                            rx="104"
+                            ry="68"
+                        />
+                        <path
+                            className="chat-vazio__trilha"
+                            d="M17 149c38 25 70 19 96-3 27-23 49-31 81-19 19 8 34 5 49-5"
+                        />
+
+                        <circle className="chat-vazio__forma chat-vazio__forma--rosa" cx="31" cy="58" r="8" />
+                        <circle className="chat-vazio__forma chat-vazio__forma--verde" cx="226" cy="148" r="7" />
+                        <path className="chat-vazio__forma chat-vazio__forma--amarela" d="m218 36 3.8 9.2L231 49l-9.2 3.8L218 62l-3.8-9.2L205 49l9.2-3.8Z" />
+
+                        <g className="chat-vazio__balao chat-vazio__balao--traseiro">
+                            <path d="M126 65h65c15 0 27 12 27 27v28c0 15-12 27-27 27h-13v18l-24-18h-28c-15 0-27-12-27-27V92c0-15 12-27 27-27Z" />
+                            <circle cx="178" cy="105" r="7" />
+                        </g>
+
+                        <g className="chat-vazio__balao chat-vazio__balao--principal">
+                            <path d="M54 39h101c17 0 30 13 30 30v34c0 17-13 30-30 30h-46l-29 23v-23H54c-17 0-30-13-30-30V69c0-17 13-30 30-30Z" />
+                            <circle cx="78" cy="86" r="7" />
+                            <circle cx="105" cy="86" r="7" />
+                            <circle cx="132" cy="86" r="7" />
+                        </g>
+
+                        <g className="chat-vazio__brilho">
+                            <path d="M199 42v-13M209 47l9-9M211 58h13" />
+                        </g>
+                    </svg>
                 </div>
 
-                <h2>Nenhuma conversa selecionada</h2>
+                <h2>Bem-vindo ao Fala Pommer</h2>
 
-                <p>Selecione um contato ao lado para iniciar uma conversa.</p>
+                <p>Selecione uma conversa ao lado para começar.</p>
             </div>
             )}
         </section>

@@ -350,7 +350,7 @@ html.tema-escuro:not(.alto-contraste) :is(
   .conversa-grupo-avatar,
   .chat-header__avatar-grupo
 ) {
-  background-color: #333072 !important;
+  background-color: #514da5 !important;
 }
 
 html.tema-escuro:not(.alto-contraste) :is(

@@ -27,7 +27,7 @@
     padding: 18px 0 20px;
     flex-direction: column;
     overflow: hidden;
-    background: linear-gradient(180deg, #0b4eaa 0%, #1264d5 100%);
+    background: var(--azul-escuro);
     color: #ffffff;
     box-shadow: 4px 0 18px rgba(12, 73, 158, 0.14);
 }

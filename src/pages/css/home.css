@@ -896,14 +896,6 @@
     fill: #1351b4;
 }
 
-.chat-vazio__brilho {
-    fill: none;
-    stroke: #2878df;
-    stroke-width: 5;
-    stroke-linecap: round;
-    animation: chat-vazio-pulso 4.2s 350ms ease-in-out infinite;
-}
-
 @keyframes chat-vazio-flutua-principal {
     0%, 100% {
         transform: translateY(0) rotate(-1deg);
@@ -919,17 +911,6 @@
     }
     50% {
         transform: translateY(6px) rotate(-1deg);
-    }
-}
-
-@keyframes chat-vazio-pulso {
-    0%, 100% {
-        opacity: 0.72;
-        transform: scale(0.9);
-    }
-    50% {
-        opacity: 1;
-        transform: scale(1.08);
     }
 }
 

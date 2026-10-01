@@ -4431,10 +4431,6 @@ function Home() {
                             <circle cx="105" cy="86" r="7" />
                             <circle cx="132" cy="86" r="7" />
                         </g>
-
-                        <g className="chat-vazio__brilho">
-                            <path d="M199 42v-13M209 47l9-9M211 58h13" />
-                        </g>
                     </svg>
                 </div>
 

@@ -63,7 +63,7 @@ html.paleta-acessivel:not(.alto-contraste) {
 /* O tema claro continua sendo o visual padrão. */
 html.tema-escuro:not(.alto-contraste) {
   color-scheme: dark;
-  --azul-claro: #172d4d;
+  --azul-claro: #172d4d86;
   --tema-fundo: #0b1220;
   --tema-superficie: #111b2c;
   --tema-superficie-elevada: #17243a;
@@ -134,12 +134,55 @@ html.tema-escuro:not(.alto-contraste) #root {
   color: var(--tema-texto);
 }
 
-html.tema-escuro:not(.alto-contraste) :is(.conversas-header, .nova-conversa__header) {
+html.tema-escuro:not(.alto-contraste) :is(.nova-conversa__header) {
   background: var(--azul-claro);
+}
+
+html.tema-escuro:not(.alto-contraste) :is( 
+.conversas-header, 
+.chat-header,
+.nova-conversa__header,
+.conversas__conteudo,
+.nova-conversa--aberta
+) {
+  background-color: var(--tema-fundo) !important;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(.home-sidebar,) {
+  background-color: var(--azul-claro);
 }
 
 html.tema-escuro:not(.alto-contraste) :is(.menu-modal-button, .admin-profile-name) {
   color: white;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(.home-sidebar__item--ativo) {
+  background-color: var(--tema-borda) !important;
+}
+
+html.tema-escuro:not(.alto-contraste) .home-sidebar__item:hover {
+  background-color: var(--azul-claro);
+}
+
+html.tema-escuro:not(.alto-contraste) .menu-dot {
+  fill: white;
+}
+
+html.tema-escuro:not(.alto-contraste) .mensagem {
+  background-color: var(--azul-claro);
+}
+
+html.tema-escuro:not(.alto-contraste) .mensagem:hover {
+  box-shadow: 0px 0px 4px 4px #1d2d463a;
+}
+
+html.tema-escuro:not(.alto-contraste) .conversa-icone-path {
+  fill: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .mensagem-grupo__avatar {
+  background: linear-gradient(145deg, #2f39be, #181a3b) !important;
+  border: 2px solid rgb(25, 19, 78);
 }
 
 html.tema-escuro:not(.alto-contraste) .admin-profile-role {
@@ -161,8 +204,8 @@ html.tema-escuro:not(.alto-contraste) .conta-seguranca__item--sessoes {
 }
 
 html.tema-escuro:not(.alto-contraste) :is(.admin-nav-item.ativo, .admin-profile-role) {
-  background: var(--tema-superficie-elevada);
-  color: white;
+  background: #172f52;
+  color: var(--tema-destaque);
 }
 
 html.tema-escuro:not(.alto-contraste) .admin-nav-item:hover {
@@ -286,6 +329,48 @@ html.tema-escuro:not(.alto-contraste) :is(
   color: var(--tema-destaque);
 }
 
+html.tema-escuro:not(.alto-contraste) :is(
+  .conversa-setor-avatar,
+  .chat-header__avatar-setor
+) {
+  background-color: #15243fb2 !important;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .conversa-setor-avatar svg,
+  .chat-header__avatar-setor svg
+) {
+  fill: #165777;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .conversa-grupo-avatar,
+  .chat-header__avatar-grupo
+) {
+  background-color: #333072 !important;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .conversa-grupo-avatar svg,
+  .chat-header__avatar-grupo svg
+) {
+  fill: #0d1470;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .conversa-avatar,
+  .chat-header__avatar
+) {
+  background-color: #273791 !important;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .conversa-avatar span,
+  .chat-header__avatar span
+) {
+  color: #091769;
+}
+
 html.tema-escuro:not(.alto-contraste) .conversa-item.contato-ativo {
   border-color: #416da8;
   background: #182f50;
@@ -306,10 +391,40 @@ html.tema-escuro:not(.alto-contraste) .chat-vazio {
 }
 
 html.tema-escuro:not(.alto-contraste) .chat-vazio__icone {
-  border-color: #355b91;
-  background: #172f52;
   color: var(--tema-destaque);
-  box-shadow: 0 12px 25px rgb(0 0 0 / 20%);
+  background: transparent;
+  box-shadow: none;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-vazio__halo {
+  fill: rgb(45 77 122 / 42%);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-vazio__trilha {
+  stroke: rgb(114 167 255 / 38%);
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-vazio__balao--traseiro path {
+  fill: #172f52;
+  stroke: #294b78;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-vazio__balao--traseiro circle {
+  fill: #9fc2ff;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-vazio__balao--principal path {
+  fill: var(--tema-superficie-elevada);
+  stroke: var(--tema-destaque);
+  filter: drop-shadow(0 14px 16px rgb(0 0 0 / 32%));
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-vazio__balao--principal circle {
+  fill: #8ab6ff;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-vazio__brilho {
+  stroke: #8ab6ff;
 }
 
 html.tema-escuro:not(.alto-contraste) .mensagem-balao {
@@ -685,13 +800,15 @@ html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo button:ho
   color: var(--tema-destaque);
 }
 
-html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo .chat-header__menu-sair-grupo {
-  color: #ff8a80;
+html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo .chat-header__menu-sair-grupo,
+html.tema-escuro:not(.alto-contraste) .sair {
+  color: #ff8a80 !important;
 }
 
-html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo .chat-header__menu-sair-grupo:hover {
-  background: #7f1d1d;
-  color: #ffffff;
+html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo .chat-header__menu-sair-grupo:hover,
+html.tema-escuro:not(.alto-contraste) .sair:hover {
+  background: #7f1d1d !important;
+  color: #ffffff !important;
 }
 
 html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo .chat-header__menu-finalizar {

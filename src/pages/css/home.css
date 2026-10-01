@@ -500,7 +500,8 @@
 }
 
 .conversa-avatar,
-.conversa-grupo-avatar {
+.conversa-grupo-avatar,
+.conversa-setor-avatar {
     position: relative;
     width: 44px;
     height: 44px;
@@ -520,6 +521,11 @@
 
 .conversa-grupo-avatar {
     background: rgb(224, 224, 255) !important;
+    color: var(--azul-escuro) !important;
+}
+
+.conversa-setor-avatar {
+    background-color: rgb(199, 223, 255) !important;
     color: var(--azul-escuro) !important;
 }
 
@@ -866,7 +872,8 @@
 }
 
 .chat-header__avatar,
-.chat-header__avatar-grupo {
+.chat-header__avatar-grupo,
+.chat-header__avatar-setor {
     position: relative;
     width: 46px;
     height: 46px;
@@ -889,6 +896,11 @@
 .chat-header__avatar-grupo {
     color: var(--azul-escuro) !important;
     background: rgb(224, 224, 255) !important;
+}
+
+.chat-header__avatar-setor {
+    background-color: rgb(199, 223, 255) !important;
+    color: var(--azul-escuro) !important;
 }
 
 .conversa-avatar img,

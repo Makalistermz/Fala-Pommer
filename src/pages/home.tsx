@@ -3291,9 +3291,12 @@ function Home() {
                         : ""
                 }`}
                 >
-                <div className= {conversa?.tipo !== "grupo" 
-                        ? "conversa-avatar" 
-                        : "conversa-grupo-avatar"
+                <div className= {conversa?.tipo === "grupo" 
+                        ? "conversa-grupo-avatar" 
+                        : (conversa?.tipo === "setor" 
+                            ? "conversa-setor-avatar" 
+                            : "conversa-avatar"
+                        )
                     }
                 >
                     {conversa?.tipo === "grupo" 
@@ -3301,9 +3304,31 @@ function Home() {
                             <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
                         </svg>
 
-                        : renderizarAvatar(
-                            nomeDaConversa(conversa),
-                            fotoDaConversa(conversa)
+                        : (conversa?.tipo === "setor" 
+                            ? <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                fill="currentColor"
+                                role="img"
+                                aria-label="Atendimento"
+                            >
+                                <g transform="scale(0.25)">
+                                    <path d=" M45 20 C43.5 13.5 38.5 9 32 9 C25.5 9 20.5 13.5 19 20 C20 21 20.5 22.5 20 24 V27 C20 33 25.5 37 32 35.5 C30.5 34 31 31.5 32.5 30.5 C34 29.5 37.5 29.5 39 30.5 L43 29 C44 27 44 25 44 24 C43.5 22.5 44 21 45 20Z" />
+                                    <path d=" M24 38H40 C48.5 38 55 44.5 55 53 C55 59 51.5 61 45 61 H19 C12.5 61 9 59 9 53 C9 44.5 15.5 38 24 38Z" />
+
+                                    <path d="M15.5 22V21A16.5 16.5 0 0 1 48.5 21V22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+
+                                    <path d=" M15.5 20 A3 3 0 0 1 18.5 23 V28.5 A3 3 0 0 1 12.5 28.5 V23 A3 3 0 0 1 15.5 20Z M48.5 20 A3 3 0 0 1 51.5 23 V28.5 A3 3 0 0 1 45.5 28.5 V23 A3 3 0 0 1 48.5 20Z" />
+                                    <path d="M48 29C45 32 41 33.5 37 33.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                    />
+                                    <path d="M35 31.8H37 A1.7 1.7 0 0 1 37 35.2 H35 A1.7 1.7 0 0 1 35 31.8Z" />
+                                </g>
+                            </svg> 
+                            : renderizarAvatar(
+                                nomeDaConversa(conversa),
+                                fotoDaConversa(conversa)
+                            )
                         )
                     }
                 </div>
@@ -3550,9 +3575,12 @@ function Home() {
                             }
                         }}
                     >
-                        <div className={conversaSelecionada?.tipo !== "grupo" 
-                                ? "chat-header__avatar" 
-                                : "chat-header__avatar-grupo"
+                        <div className={conversaSelecionada?.tipo === "grupo" 
+                                ? "chat-header__avatar-grupo" 
+                                : (conversaSelecionada?.tipo === "setor" 
+                                    ? "chat-header__avatar-setor" 
+                                    : "chat-header__avatar"
+                                )
                             }
                         >
                             {conversaSelecionada?.tipo === "grupo" 
@@ -3560,9 +3588,31 @@ function Home() {
                                     <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
                                 </svg>
 
-                                : renderizarAvatar(
-                                    nomeDaConversa(conversaSelecionada),
-                                    fotoDaConversa(conversaSelecionada)
+                                : (conversaSelecionada?.tipo === "setor" 
+                                    ? <svg
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 16 16"
+                                        fill="currentColor"
+                                        role="img"
+                                        aria-label="Atendimento"
+                                    >
+                                        <g transform="scale(0.25)">
+                                            <path d=" M45 20 C43.5 13.5 38.5 9 32 9 C25.5 9 20.5 13.5 19 20 C20 21 20.5 22.5 20 24 V27 C20 33 25.5 37 32 35.5 C30.5 34 31 31.5 32.5 30.5 C34 29.5 37.5 29.5 39 30.5 L43 29 C44 27 44 25 44 24 C43.5 22.5 44 21 45 20Z" />
+                                            <path d=" M24 38H40 C48.5 38 55 44.5 55 53 C55 59 51.5 61 45 61 H19 C12.5 61 9 59 9 53 C9 44.5 15.5 38 24 38Z" />
+
+                                            <path d="M15.5 22V21A16.5 16.5 0 0 1 48.5 21V22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+
+                                            <path d=" M15.5 20 A3 3 0 0 1 18.5 23 V28.5 A3 3 0 0 1 12.5 28.5 V23 A3 3 0 0 1 15.5 20Z M48.5 20 A3 3 0 0 1 51.5 23 V28.5 A3 3 0 0 1 45.5 28.5 V23 A3 3 0 0 1 48.5 20Z" />
+                                            <path d="M48 29C45 32 41 33.5 37 33.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                            />
+                                            <path d="M35 31.8H37 A1.7 1.7 0 0 1 37 35.2 H35 A1.7 1.7 0 0 1 35 31.8Z" />
+                                        </g>
+                                    </svg> 
+                                    : renderizarAvatar(
+                                        nomeDaConversa(conversaSelecionada),
+                                        fotoDaConversa(conversaSelecionada)
+                                    )
                                 )
                             }
                         </div>

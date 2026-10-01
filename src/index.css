@@ -1288,6 +1288,18 @@ html.tema-escuro:not(.alto-contraste) :is(
   color: var(--tema-destaque);
 }
 
+html.tema-escuro:not(.alto-contraste) :is(
+  .meu-perfil__seguranca-icone
+) {
+  background-color: #10421f;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .meu-perfil__seguranca-icone svg
+) {
+  color: #338a4d !important;
+}
+
 html.tema-escuro:not(.alto-contraste)
   .conta-seguranca__indicador.bi-arrow-right:not(.icone-seta-sair) {
   background: var(--tema-superficie-elevada);

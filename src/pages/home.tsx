@@ -1,6 +1,5 @@
 // Exibe a área principal de conversas do sistema.
 import brasao from "../assets/img/brasao.webp";
-import iconeFalaPommer from "../assets/img/fala-pommer-icon-arredondado.webp"
 import somNovaMensagem from "../assets/audio/notificacao.mp3";
 import "./css/home.css";
 import {
@@ -58,6 +57,11 @@ interface UsuarioAutenticado {
     sub: number;
     email: string;
     tipo: TipoUsuario;
+}
+
+interface PerfilUsuario {
+    nome: string;
+    foto_perfil_url: string | null;
 }
 
 interface UsuarioDigitando {
@@ -1106,6 +1110,7 @@ function Home() {
     }
 
     const [usuario, setUsuario] = useState<UsuarioAutenticado | null>(null);
+    const [perfilUsuario, setPerfilUsuario] = useState<PerfilUsuario | null>(null);
 
     useEffect(() => {
         async function buscarPerfil() {
@@ -1127,6 +1132,34 @@ function Home() {
         }
 
         buscarPerfil();
+    }, []);
+
+    useEffect(() => {
+        let ativo = true;
+
+        async function buscarDadosDoPerfil() {
+            try {
+                const resposta = await apiFetch("/usuarios/me");
+
+                if (!resposta.ok) {
+                    return;
+                }
+
+                const dados = await resposta.json() as PerfilUsuario;
+
+                if (ativo) {
+                    setPerfilUsuario(dados);
+                }
+            } catch (erro) {
+                console.error("Erro ao buscar dados do perfil:", erro);
+            }
+        }
+
+        void buscarDadosDoPerfil();
+
+        return () => {
+            ativo = false;
+        };
     }, []);
 
     useEffect(() => {
@@ -3036,7 +3069,7 @@ function Home() {
         <aside className="home-sidebar" aria-hidden="true">
             <img
                 className="home-sidebar__marca"
-                src={iconeFalaPommer}
+                src={brasao}
                 alt=""
                 width={32}
                 height={40}
@@ -3059,7 +3092,10 @@ function Home() {
             </div>
 
             <div className="home-sidebar__perfil">
-                <span>{usuario?.email?.charAt(0).toUpperCase() || "U"}</span>
+                {renderizarAvatar(
+                    perfilUsuario?.nome || "Usuário",
+                    perfilUsuario?.foto_perfil_url,
+                )}
                 <i />
             </div>
         </aside>

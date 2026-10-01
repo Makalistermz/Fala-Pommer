@@ -196,8 +196,8 @@
 }
 
 .sair:hover {
-    background: #fee4e2;
-    color: #b42318;
+    background: #ff726838 !important;
+    color: #da190b !important;
     cursor: pointer;
 }
 

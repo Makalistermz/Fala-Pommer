@@ -312,6 +312,12 @@
     margin: 0;
     padding: 0 10px 14px;
     overflow-y: auto;
+
+    scrollbar-width: none;
+}
+
+.lista-conversas::-webkit-scrollbar {
+    display: none;
 }
 
 .conversa-item {
@@ -3444,6 +3450,12 @@ button.modal-transferencia__etapa {
         overflow-x: hidden;
         overflow-y: auto;
         overscroll-behavior: contain;
+
+        scrollbar-width: none;
+    }
+
+    .conversas__conteudo::-webkit-scrollbar {
+        display: none;
     }
 
     .lista-conversas {

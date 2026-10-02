@@ -65,7 +65,7 @@
 }
 
 .home-sidebar__item:hover {
-    background: rgba(32, 32, 32, 0.404);
+    background: rgba(86, 99, 247, 0.404);
 }
 
 .home-sidebar__item:active {
@@ -85,6 +85,30 @@
     stroke-width: 1.9;
     stroke-linecap: round;
     stroke-linejoin: round;
+}
+
+.home-sidebar__item-frida {
+    position: relative;
+}
+
+.home-sidebar__item-frida::before {
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    width: 40px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    content: "";
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.home-sidebar__frida {
+    display: block;
+    width: 80%;
+    height: 80%;
+    max-width: 100%;
+    object-fit: contain;
 }
 
 .home-sidebar__perfil {

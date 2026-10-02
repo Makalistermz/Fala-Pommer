@@ -52,7 +52,7 @@ function Comunidades() {
                             </svg>
                         </div>
                         <span className="comunidades-acoes__texto">
-                            Nova Comunidade
+                            Nova comunidade
                         </span>
                     </button>
                 </section>

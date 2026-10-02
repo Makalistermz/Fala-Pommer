@@ -207,6 +207,23 @@ export class ConversasController {
     }
 
     /*
+     * Informa até qual mensagem enviada pelo usuário os destinatários
+     * visualizaram. O frontend usa esse marco para colorir os dois vistos.
+     */
+    @Get(":conversaId/status-leitura")
+    @Perfis("user", "funcionario", "admin", "superAdmin")
+    obterStatusLeitura(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Param("conversaId", ParseIntPipe)
+        conversaId: number
+    ) {
+        return this.conversasService.obterStatusLeitura(
+            requisicao.usuario!.sub,
+            conversaId
+        );
+    }
+
+    /*
      * Registra que o usuário leu todas as mensagens
      * recebidas até o momento nesta conversa.
      */

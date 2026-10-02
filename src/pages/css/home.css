@@ -2023,6 +2023,10 @@ html.tema-escuro:not(.alto-contraste) .opcoes-mensagens__item:hover {
     white-space: pre-wrap;
 }
 
+.mensagem-linha--enviada .mensagem-balao p {
+    padding-right: 68px;
+}
+
 .mensagem-anexo {
     display: block;
     width: min(100%, 420px);
@@ -3187,13 +3191,36 @@ button.modal-transferencia__etapa {
     text-decoration: none;
 }
 
-.mensagem-balao time {
+.mensagem-balao__rodape {
     position: absolute;
     right: 9px;
     bottom: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mensagem-balao__rodape time {
     color: #667085;
     font-family: var(--fonte-dm-sans);
     font-size: 0.625rem;
+}
+
+.mensagem-status {
+    color: #667085;
+    font-family: Arial, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.18em;
+}
+
+.mensagem-status--enviando {
+    letter-spacing: 0;
+}
+
+.mensagem-status--visualizada {
+    color: #1687e8;
 }
 
 .chat-input {

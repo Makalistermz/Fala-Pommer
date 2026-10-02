@@ -2541,6 +2541,97 @@ export class ConversasService {
         };
     }
 
+    /*
+     * Retorna um marco de leitura para as mensagens enviadas pelo usuário.
+     * Em conversas privadas e grupos, todos os participantes ativos precisam
+     * ter lido a mensagem. Em atendimentos, basta a leitura do cidadão ou de
+     * um integrante da equipe, conforme quem esteja consultando o status.
+     */
+    async obterStatusLeitura(
+        usuarioLogadoId: number,
+        conversaId: number
+    ) {
+        const contexto = await this.verificarAcessoConversa(
+            usuarioLogadoId,
+            conversaId
+        );
+
+        const participantesAtivos =
+            contexto.conversa.conversa_participante
+                .filter(
+                    (participante) =>
+                        participante.usuario_id !== usuarioLogadoId &&
+                        participante.ocultada_em === null
+                )
+                .map((participante) => participante.usuario_id);
+
+        const atendimento = contexto.atendimento;
+        const usuarioEhCidadaoDoAtendimento =
+            contexto.conversa.tipo === "setor" &&
+            atendimento?.usuario_id === usuarioLogadoId;
+
+        const destinatariosObrigatorios =
+            contexto.conversa.tipo === "setor"
+                ? usuarioEhCidadaoDoAtendimento
+                    ? null
+                    : atendimento
+                      ? [atendimento.usuario_id]
+                      : []
+                : participantesAtivos;
+
+        const leituras = await this.prisma.conversa_leitura.findMany({
+            where: {
+                conversa_id: conversaId,
+                usuario_id:
+                    destinatariosObrigatorios === null
+                        ? { not: usuarioLogadoId }
+                        : { in: destinatariosObrigatorios },
+                ultima_mensagem_lida_id: {
+                    not: null
+                }
+            },
+            select: {
+                usuario_id: true,
+                ultima_mensagem_lida_id: true
+            }
+        });
+
+        let ultimaMensagemVisualizadaId: number | null = null;
+
+        if (destinatariosObrigatorios === null) {
+            // Para a mensagem do cidadão, a leitura por qualquer atendente
+            // representa que ela foi visualizada pela equipe responsável.
+            ultimaMensagemVisualizadaId = leituras.reduce<number | null>(
+                (maiorId, leitura) => {
+                    const mensagemId = leitura.ultima_mensagem_lida_id;
+
+                    return mensagemId !== null &&
+                        (maiorId === null || mensagemId > maiorId)
+                        ? mensagemId
+                        : maiorId;
+                },
+                null
+            );
+        } else if (
+            destinatariosObrigatorios.length > 0 &&
+            destinatariosObrigatorios.every((usuarioId) =>
+                leituras.some((leitura) => leitura.usuario_id === usuarioId)
+            )
+        ) {
+            // O menor marco representa a última mensagem vista por todos.
+            ultimaMensagemVisualizadaId = Math.min(
+                ...leituras.map(
+                    (leitura) => leitura.ultima_mensagem_lida_id!
+                )
+            );
+        }
+
+        return {
+            conversaId,
+            ultimaMensagemVisualizadaId
+        };
+    }
+
     async atualizarDigitacao(
         usuarioLogadoId: number,
         conversaId: number,

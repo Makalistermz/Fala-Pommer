@@ -53,6 +53,7 @@ describe("ConversasService", () => {
     },
     conversa_leitura: {
       deleteMany: jest.fn(),
+      findMany: jest.fn(),
       upsert: jest.fn(),
     },
     mensagem: {
@@ -91,6 +92,7 @@ describe("ConversasService", () => {
     prismaMock.conversa_participante.delete.mockResolvedValue({});
     prismaMock.conversa_participante.count.mockResolvedValue(2);
     prismaMock.conversa_leitura.deleteMany.mockResolvedValue({ count: 0 });
+    prismaMock.conversa_leitura.findMany.mockResolvedValue([]);
     prismaMock.cadastro.findUnique.mockResolvedValue({
       id: 1,
       nome: "Usuário",
@@ -217,6 +219,50 @@ describe("ConversasService", () => {
       }),
     );
     expect(resultado.map((item) => item.id)).toEqual([1, 2, 3]);
+  });
+
+  it("informa a última mensagem visualizada pelo outro participante", async () => {
+    prismaMock.conversa.findUnique.mockResolvedValue({
+      id: 10,
+      tipo: "privada",
+      conversa_participante: [
+        {
+          usuario_id: 1,
+          ocultada_em: null,
+          visivel_desde_mensagem_id: null,
+          cadastro: { tipo_usuario: "user" },
+        },
+        {
+          usuario_id: 2,
+          ocultada_em: null,
+          visivel_desde_mensagem_id: null,
+          cadastro: { tipo_usuario: "admin" },
+        },
+      ],
+      atendimento_setor: null,
+    });
+    prismaMock.conversa_leitura.findMany.mockResolvedValue([
+      {
+        usuario_id: 2,
+        ultima_mensagem_lida_id: 18,
+      },
+    ]);
+
+    await expect(service.obterStatusLeitura(1, 10)).resolves.toEqual({
+      conversaId: 10,
+      ultimaMensagemVisualizadaId: 18,
+    });
+    expect(prismaMock.conversa_leitura.findMany).toHaveBeenCalledWith({
+      where: {
+        conversa_id: 10,
+        usuario_id: { in: [2] },
+        ultima_mensagem_lida_id: { not: null },
+      },
+      select: {
+        usuario_id: true,
+        ultima_mensagem_lida_id: true,
+      },
+    });
   });
 
   it("identifica o aviso de saída como mensagem do sistema", async () => {

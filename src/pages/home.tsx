@@ -212,6 +212,8 @@ interface MensagemChat {
     origem: "usuario" | "setor";
     sistema: boolean;
     enviadaEm: string;
+    // Existe apenas enquanto a mensagem ainda aguarda confirmação da API.
+    statusEntrega?: "enviando";
 
     remetente: {
         tipo: "usuario" | "setor" | "admin" | "superAdmin";
@@ -368,6 +370,8 @@ function Home() {
     const [chatMobileAberto, setChatMobileAberto] = useState(false);
 
     const [mensagensChat, setMensagensChat] = useState<MensagemChat[]>([]);
+    const [ultimaMensagemVisualizadaId, setUltimaMensagemVisualizadaId] =
+        useState<number | null>(null);
     const [usuariosDigitando, setUsuariosDigitando] =
         useState<UsuarioDigitando[]>([]);
 
@@ -386,6 +390,7 @@ function Home() {
     const idsAnimadosRef = useRef<Set<number>>(new Set());
     const conversaAbertaIdRef = useRef<number | null>(null);
     const ultimaMensagemChatIdRef = useRef(0);
+    const proximaMensagemTemporariaIdRef = useRef(-1);
     const historicoChatCarregadoRef = useRef(false);
     const somNotificacaoRef = useRef<HTMLAudioElement | null>(null);
     const audioNotificacaoLiberadoRef = useRef(false);
@@ -2165,12 +2170,23 @@ function Home() {
         );
     }
 
+    // Classifica o anexo local para que ele possa aparecer enquanto é enviado.
+    function identificarTipoArquivoTemporario(
+        arquivo: File,
+    ): ArquivoMensagem["tipo"] {
+        if (arquivo.type.startsWith("image/")) return "imagem";
+        if (arquivo.type.startsWith("video/")) return "video";
+        if (arquivo.type.startsWith("audio/")) return "audio";
+        return "documento";
+    }
+
     async function enviarMensagem() {
         const conteudo = mensagem.trim();
 
         if (
             (!conteudo && !arquivoSelecionado) ||
             !conversaSelecionada ||
+            !usuario ||
             enviandoMensagem
         ) {
             return;
@@ -2178,32 +2194,101 @@ function Home() {
 
         pararDeInformarDigitacao();
 
+        const conversaDestino = conversaSelecionada;
+        const arquivoParaEnviar = arquivoSelecionado;
+        const respostaParaEnviar = responderMensagem;
+        const mensagemTemporariaId = proximaMensagemTemporariaIdRef.current--;
+        const urlArquivoTemporario = arquivoParaEnviar
+            ? URL.createObjectURL(arquivoParaEnviar)
+            : null;
+        const remetenteTemporario: MensagemChat["remetente"] =
+            conversaDestino.tipo === "setor" && usuario.tipo === "funcionario"
+                ? {
+                    tipo: "setor",
+                    id: usuario.sub,
+                    nome: perfilUsuario?.nome ?? "Você",
+                    fotoPerfilUrl: perfilUsuario?.foto_perfil_url,
+                    tipoUsuario: usuario.tipo,
+                    sigla_setor: conversaDestino.setor.sigla,
+                }
+                : {
+                    tipo:
+                        usuario.tipo === "admin"
+                            ? "admin"
+                            : usuario.tipo === "superAdmin"
+                              ? "superAdmin"
+                              : "usuario",
+                    id: usuario.sub,
+                    nome: perfilUsuario?.nome ?? "Você",
+                    fotoPerfilUrl: perfilUsuario?.foto_perfil_url,
+                    tipoUsuario: usuario.tipo,
+                };
+        const mensagemTemporaria: MensagemChat = {
+            id: mensagemTemporariaId,
+            conversaId: conversaDestino.id,
+            conteudo,
+            origem:
+                conversaDestino.tipo === "setor" &&
+                usuario.tipo === "funcionario"
+                    ? "setor"
+                    : "usuario",
+            sistema: false,
+            enviadaEm: new Date().toISOString(),
+            statusEntrega: "enviando",
+            remetente: remetenteTemporario,
+            arquivo:
+                arquivoParaEnviar && urlArquivoTemporario
+                    ? {
+                        nome: arquivoParaEnviar.name,
+                        url: urlArquivoTemporario,
+                        tipo: identificarTipoArquivoTemporario(
+                            arquivoParaEnviar,
+                        ),
+                        mime: arquivoParaEnviar.type,
+                        tamanho: arquivoParaEnviar.size,
+                    }
+                    : null,
+            respondendoA: respostaParaEnviar
+                ? {
+                    id: respostaParaEnviar.id,
+                    conteudo: respostaParaEnviar.conteudo,
+                    remetente: respostaParaEnviar.remetente,
+                    arquivo: respostaParaEnviar.arquivo,
+                }
+                : null,
+        };
+
+        // Um visto representa a mensagem local ainda sem confirmação da API.
+        setMensagensChat((mensagensAtuais) => [
+            ...mensagensAtuais,
+            mensagemTemporaria,
+        ]);
         setEnviandoMensagem(true);
 
         try {
-            const corpo = arquivoSelecionado
+            const corpo = arquivoParaEnviar
                 ? new FormData()
                 : JSON.stringify({
                     conteudo,
-                    mensagemRespondidaId: responderMensagem?.id,
+                    mensagemRespondidaId: respostaParaEnviar?.id,
                 });
 
             if (corpo instanceof FormData) {
                 if (conteudo) corpo.append("conteudo", conteudo);
-                if (responderMensagem) {
+                if (respostaParaEnviar) {
                     corpo.append(
                         "mensagemRespondidaId",
-                        String(responderMensagem.id),
+                        String(respostaParaEnviar.id),
                     );
                 }
-                corpo.append("arquivo", arquivoSelecionado!);
+                corpo.append("arquivo", arquivoParaEnviar!);
             }
 
             const resposta = await apiFetch(
-                `/conversas/${conversaSelecionada.id}/mensagens`,
+                `/conversas/${conversaDestino.id}/mensagens`,
                 {
                 method: "POST",
-                headers: arquivoSelecionado
+                headers: arquivoParaEnviar
                     ? undefined
                     : {
                         "Content-Type": "application/json",
@@ -2229,9 +2314,14 @@ function Home() {
                 novaMensagem.id,
             );
             setMensagensChat((mensagensAtuais) =>
-                mensagensAtuais.some((item) => item.id === novaMensagem.id)
-                    ? mensagensAtuais
-                    : [...mensagensAtuais, novaMensagem],
+                [
+                    ...mensagensAtuais.filter(
+                        (item) =>
+                            item.id !== mensagemTemporariaId &&
+                            item.id !== novaMensagem.id,
+                    ),
+                    novaMensagem,
+                ],
             );
             atualizarConversaComMensagem(novaMensagem);
 
@@ -2239,6 +2329,11 @@ function Home() {
             setArquivoSelecionado(null);
             setResponderMensagem(null);
         } catch (erro) {
+            setMensagensChat((mensagensAtuais) =>
+                mensagensAtuais.filter(
+                    (item) => item.id !== mensagemTemporariaId,
+                ),
+            );
             console.error("Erro ao enviar mensagem:", erro);
             window.alert(
                 erro instanceof Error
@@ -2246,6 +2341,9 @@ function Home() {
                     : "Não foi possível enviar a mensagem.",
             );
         } finally {
+            if (urlArquivoTemporario) {
+                URL.revokeObjectURL(urlArquivoTemporario);
+            }
             setEnviandoMensagem(false);
         }
     }
@@ -2402,6 +2500,33 @@ function Home() {
         }
     }
 
+    // Consulta o maior ID que os destinatários já visualizaram.
+    async function atualizarStatusVisualizacao(conversaId: number) {
+        try {
+            const resposta = await apiFetch(
+                `/conversas/${conversaId}/status-leitura`,
+            );
+
+            if (!resposta.ok) {
+                throw new Error(
+                    "Não foi possível consultar a visualização das mensagens.",
+                );
+            }
+
+            const status = await resposta.json() as {
+                ultimaMensagemVisualizadaId: number | null;
+            };
+
+            if (conversaAbertaIdRef.current === conversaId) {
+                setUltimaMensagemVisualizadaId(
+                    status.ultimaMensagemVisualizadaId,
+                );
+            }
+        } catch (erro) {
+            console.error("Erro ao consultar status de leitura:", erro);
+        }
+    }
+
     async function abrirConversa(conversa: Conversa) {
         pararDeInformarDigitacao();
         cancelarGravacaoAudio();
@@ -2422,6 +2547,7 @@ function Home() {
         setUsuariosDigitando([]);
         setChatMobileAberto(true);
         setMensagensChat([]);
+        setUltimaMensagemVisualizadaId(null);
         setCarregandoMensagens(true);
         setCarregandoMensagensAnteriores(false);
         setTemMensagensAnteriores(false);
@@ -2450,7 +2576,10 @@ function Home() {
             setTemMensagensAnteriores(
                 dados.length === LIMITE_HISTORICO_MENSAGENS,
             );
-            await marcarConversaComoLida(conversa.id);
+            await Promise.all([
+                marcarConversaComoLida(conversa.id),
+                atualizarStatusVisualizacao(conversa.id),
+            ]);
         } catch (erro) {
             console.error(erro);
 
@@ -2527,6 +2656,7 @@ function Home() {
         historicoChatCarregadoRef.current = false;
         alturaAntesDoHistoricoRef.current = null;
         setChatMobileAberto(false);
+        setUltimaMensagemVisualizadaId(null);
         setUsuariosDigitando([]);
         setCarregandoMensagensAnteriores(false);
         setTemMensagensAnteriores(false);
@@ -2762,9 +2892,12 @@ function Home() {
             try {
                 const ultimaMensagemId =
                     ultimaMensagemChatIdRef.current;
-                const resposta = await apiFetch(
-                    `/conversas/${conversaId}/mensagens?depoisDe=${ultimaMensagemId}&limite=${LIMITE_NOVAS_MENSAGENS}`,
-                );
+                const [resposta] = await Promise.all([
+                    apiFetch(
+                        `/conversas/${conversaId}/mensagens?depoisDe=${ultimaMensagemId}&limite=${LIMITE_NOVAS_MENSAGENS}`,
+                    ),
+                    atualizarStatusVisualizacao(conversaId!),
+                ]);
 
                 if (!resposta.ok) {
                     throw new Error("Não foi possível atualizar as mensagens.");
@@ -3059,7 +3192,7 @@ function Home() {
     }
 
     function obterUrlArquivo(url: string) {
-        return url.startsWith("http")
+        return url.startsWith("http") || url.startsWith("blob:")
             ? url
             : `${import.meta.env.VITE_API_URL}${url}`;
     }
@@ -3919,6 +4052,19 @@ function Home() {
                         const exibirAvatarGrupo =
                             conversaSelecionada.tipo === "grupo" &&
                             !enviadaPorMim;
+                        const statusEntrega =
+                            item.statusEntrega === "enviando"
+                                ? "enviando"
+                                : ultimaMensagemVisualizadaId !== null &&
+                                    item.id <= ultimaMensagemVisualizadaId
+                                  ? "visualizada"
+                                  : "recebida";
+                        const descricaoStatusEntrega =
+                            statusEntrega === "enviando"
+                                ? "Mensagem ainda não recebida"
+                                : statusEntrega === "visualizada"
+                                  ? "Mensagem visualizada"
+                                  : "Mensagem recebida";
 
                         return (
                             <div
@@ -4127,12 +4273,25 @@ function Home() {
 
                                 {item.conteudo && <p>{item.conteudo}</p>}
 
-                                <time dateTime={item.enviadaEm}>
-                                {new Intl.DateTimeFormat("pt-BR", {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                }).format(new Date(item.enviadaEm))}
-                                </time>
+                                <footer className="mensagem-balao__rodape">
+                                    <time dateTime={item.enviadaEm}>
+                                    {new Intl.DateTimeFormat("pt-BR", {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                    }).format(new Date(item.enviadaEm))}
+                                    </time>
+                                    {enviadaPorMim && (
+                                        <span
+                                            className={`mensagem-status mensagem-status--${statusEntrega}`}
+                                            aria-label={descricaoStatusEntrega}
+                                            title={descricaoStatusEntrega}
+                                        >
+                                            {statusEntrega === "enviando"
+                                                ? "✓"
+                                                : "✓✓"}
+                                        </span>
+                                    )}
+                                </footer>
                             </article>
                             </div>
                         );

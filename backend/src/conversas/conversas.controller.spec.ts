@@ -6,6 +6,7 @@ import { ConversasService } from "./conversas.service";
 describe("ConversasController", () => {
   const conversasServiceMock = {
     listarMensagens: jest.fn(),
+    obterStatusLeitura: jest.fn(),
     sairDoGrupo: jest.fn(),
   };
 
@@ -47,5 +48,20 @@ describe("ConversasController", () => {
     controller.sairDoGrupo(requisicao, 30);
 
     expect(conversasServiceMock.sairDoGrupo).toHaveBeenCalledWith(7, 30);
+  });
+
+  it("encaminha a consulta do status de leitura", () => {
+    const requisicao = {
+      usuario: {
+        sub: 7,
+      },
+    } as RequisicaoAutenticada;
+
+    controller.obterStatusLeitura(requisicao, 15);
+
+    expect(conversasServiceMock.obterStatusLeitura).toHaveBeenCalledWith(
+      7,
+      15,
+    );
   });
 });

@@ -63,7 +63,7 @@ html.paleta-acessivel:not(.alto-contraste) {
 /* O tema claro continua sendo o visual padrão. */
 html.tema-escuro:not(.alto-contraste) {
   color-scheme: dark;
-  --azul-claro: #172d4d86;
+  --azul-claro: #172d4d;
   --tema-fundo: #0b1220;
   --tema-superficie: #111b2c;
   --tema-superficie-elevada: #17243a;
@@ -164,7 +164,7 @@ html.tema-escuro:not(.alto-contraste) :is(.home-sidebar__item--ativo) {
 }
 
 html.tema-escuro:not(.alto-contraste) .home-sidebar__item:hover {
-  background-color: var(--azul-claro);
+  background-color: #314b753d;
 }
 
 html.tema-escuro:not(.alto-contraste) .menu-dot {
@@ -207,7 +207,7 @@ html.tema-escuro:not(.alto-contraste) .conta-seguranca__item--sessoes {
 }
 
 html.tema-escuro:not(.alto-contraste) :is(.admin-nav-item.ativo, .admin-profile-role) {
-  background: #172f52;
+  background: #18355f !important;
   color: var(--tema-destaque);
 }
 
@@ -321,6 +321,13 @@ html.tema-escuro:not(.alto-contraste) .filtro-item {
   color: var(--tema-texto-secundario);
 }
 
+html.tema-escuro:not(.alto-contraste) .filtro-item.ativo {
+  background-color: #29448f91 !important;
+  border-color: #183d83 !important;
+  color: var(--tema-texto-secundario) !important;
+  box-shadow: 0px 0px 3px 3px rgba(9, 42, 192, 0.26);
+}
+
 html.tema-escuro:not(.alto-contraste) :is(
   .filtro-item:hover,
   .conversa-item:hover,
@@ -333,45 +340,67 @@ html.tema-escuro:not(.alto-contraste) :is(
 }
 
 html.tema-escuro:not(.alto-contraste) :is(
-  .conversa-setor-avatar,
-  .chat-header__avatar-setor
-) {
-  background-color: #15243fb2 !important;
-}
-
-html.tema-escuro:not(.alto-contraste) :is(
-  .conversa-setor-avatar svg,
-  .chat-header__avatar-setor svg
-) {
-  fill: #165777;
-}
-
-html.tema-escuro:not(.alto-contraste) :is(
   .conversa-grupo-avatar,
-  .chat-header__avatar-grupo
+  .chat-header__avatar-grupo,
+  .modal-dados-grupo__avatar-principal
 ) {
   background-color: #514da5 !important;
 }
 
 html.tema-escuro:not(.alto-contraste) :is(
   .conversa-grupo-avatar svg,
-  .chat-header__avatar-grupo svg
+  .chat-header__avatar-grupo svg,
+  .modal-dados-grupo__avatar-principal svg
 ) {
   fill: #0d1470;
 }
 
 html.tema-escuro:not(.alto-contraste) :is(
   .conversa-avatar,
-  .chat-header__avatar
+  .chat-header__avatar,
+  .nova-conversa__avatar
 ) {
-  background-color: #273791 !important;
+  background-color: #4558c2 !important;
 }
 
 html.tema-escuro:not(.alto-contraste) :is(
   .conversa-avatar span,
-  .chat-header__avatar span
+  .chat-header__avatar span,
+  .nova-conversa__avatar span
 ) {
   color: #091769;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .admin-profile-avatar,
+  .meu-perfil__avatar,
+  .home-sidebar__perfil,
+  .modal-grupo__avatar,
+  .modal-dados-grupo__participante-avatar,
+  .mensagem-grupo__avatar
+) {
+  background: linear-gradient(145deg, #4558c2, #4558c2) !important;
+  color: #091769;
+}
+
+html.tema-escuro:not(.alto-contraste) .mensagem-grupo__avatar {
+  border: none;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .conversa-setor-avatar,
+  .chat-header__avatar-setor,
+  .nova-coversa__avatar-setor
+) {
+  background-color: #1049b46c !important;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(
+  .conversa-setor-avatar svg,
+  .chat-header__avatar-setor svg,
+  .nova-coversa__avatar-setor svg
+) {
+  fill: #1b87bd;
 }
 
 html.tema-escuro:not(.alto-contraste) .conversa-item.contato-ativo {

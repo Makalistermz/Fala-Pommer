@@ -96,6 +96,7 @@
     flex: 0 0 38px;
     place-items: center;
     border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
     color: #ffffff;
     font-size: 0.875rem;
     font-weight: 600;
@@ -525,7 +526,10 @@
     color: var(--azul-escuro) !important;
 }
 
-.conversa-setor-avatar {
+/*alterar .nova-conversa__avatar pois esta pegando na parte de novos contatos e não apenas no setor!*/
+
+.conversa-setor-avatar,
+.nova-coversa__avatar-setor {
     background-color: rgb(199, 223, 255) !important;
     color: var(--azul-escuro) !important;
 }
@@ -1152,17 +1156,18 @@
     display: grid;
     place-items: center;
     border-radius: 50%;
-    color: #ffffff;
-    background: linear-gradient(145deg, #0b326b, #2878df);
+    color: var(--azul-escuro);
+    background-color: rgb(224, 224, 255) !important;
     box-shadow: 0 8px 20px rgba(19, 81, 180, 0.22);
 }
+
+
 
 .modal-dados-grupo__avatar-principal svg {
     width: 32px;
     height: 32px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
+    fill: currentColor;
+    stroke-width: .9;
     stroke-linecap: round;
     stroke-linejoin: round;
 }
@@ -1641,7 +1646,6 @@ html.alto-contraste body .mensagens {
     flex: 0 0 34px;
     place-items: center;
     overflow: hidden;
-    border: 2px solid rgba(255, 255, 255, 0.92);
     border-radius: 50%;
     background: linear-gradient(145deg, #0b326b, #2878df);
     color: #ffffff;

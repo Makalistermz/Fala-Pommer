@@ -15,8 +15,8 @@
     flex: 0 0 auto;
     place-items: center;
     border-radius: 50%;
-    background: linear-gradient(145deg, #dceaff, #b9d2fb);
-    color: #1351b4;
+    background-color: #1351b4;
+    color: #ffffff;
     font-family: var(--fonte-poppins);
     font-size: clamp(0.75rem, 3.5vw, 1.625rem);
     font-weight: 600;
@@ -108,8 +108,8 @@
     flex: 0 0 auto;
     place-items: center;
     border-radius: 50%;
-    background: linear-gradient(145deg, #dceaff, #b9d2fb);
-    color: #1351b4;
+    background-color: #1351b4;
+    color: #ffffff;
     font-family: var(--fonte-poppins);
     font-size: clamp(2rem, 3.5vw, 2.875rem);
     font-weight: 600;

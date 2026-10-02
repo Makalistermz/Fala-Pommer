@@ -185,12 +185,20 @@
 }
 
 .conversas-header {
+    position: sticky;
+    z-index: 10;
+    top: 0;
     display: flex;
-    min-height: 92px;
+    width: 100%;
+    min-height: clamp(64px, 8vw, 78px);
     align-items: center;
     justify-content: space-between;
-    padding: 18px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    gap: 16px;
+    padding: 14px clamp(16px, 4vw, 28px);
+    border-bottom: 1px solid rgba(15, 38, 73, 0.1);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 3px 12px rgba(15, 38, 73, 0.06);
+    backdrop-filter: blur(10px);
 }
 
 .header-name {
@@ -210,9 +218,10 @@
 .header-name span {
     overflow: hidden;
     font-family: var(--fonte-poppins);
-    font-size: 1.0625rem;
+    font-size: clamp(1.05rem, 0.9rem + 0.6vw, 1.35rem);
     font-weight: 600;
-    line-height: 1.25;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -4037,7 +4046,6 @@ button.modal-transferencia__etapa {
         padding: 24px 18px;
     }
 
-    .conversas-header,
     .nova-conversa__header {
         min-height: 76px;
         padding-inline: 15px;
@@ -4051,10 +4059,6 @@ button.modal-transferencia__etapa {
         width: 35px;
         height: 35px;
         flex-basis: 35px;
-    }
-
-    .header-name span {
-        font-size: 1.125rem;
     }
 
     .header-menu {
@@ -4147,6 +4151,19 @@ button.modal-transferencia__etapa {
 
     .mensagem-balao__perfil {
         font-size: 0.5rem;
+    }
+}
+
+/* Mantém o título Fala Pommer alinhado ao cabeçalho de Comunidades. */
+@media (max-width: 480px) {
+    .conversas-header {
+        min-height: 60px;
+        gap: 12px;
+        padding: 10px 14px;
+    }
+
+    .header-name span {
+        font-size: 1rem;
     }
 }
 

@@ -3337,12 +3337,6 @@ function Home() {
                 <>
                     <header className="conversas-header">
                     <div className="header-name">
-                        <img
-                        className="header-logo"
-                        src={brasao}
-                        alt="Brasão da prefeitura"
-                        width={40}
-                        />
                         <span className="header-title">Fala Pommer</span>
                     </div>
                     <div className="header-menu">

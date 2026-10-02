@@ -26,7 +26,7 @@
     color: #172033;
     font-family: var(--fonte-poppins, "Poppins", sans-serif);
     font-size: clamp(1.05rem, 0.9rem + 0.6vw, 1.35rem);
-    font-weight: 700;
+    font-weight: 600;
     line-height: 1.2;
     letter-spacing: -0.02em;
     text-overflow: ellipsis;

@@ -79,6 +79,87 @@
     outline-offset: 3px;
 }
 
+/* Conteúdo rolável abaixo do cabeçalho. */
+.comunidades-conteudo {
+    min-width: 0;
+    min-height: 0;
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 5px;
+}
+
+.comunidades-acoes {
+    width: 100%;
+}
+
+/* Cartão usado para iniciar a criação de uma comunidade. */
+.comunidades-acoes__nova {
+    display: flex;
+    width: 100%;
+    min-height: 72px;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 13px;
+    border: 0;
+    border-radius: 14px;
+    box-shadow: none;
+    background-color: transparent;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        background-color 180ms ease,
+        box-shadow 180ms ease,
+        transform 180ms ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.comunidades-acoes__nova:hover {
+    background: #dddddd;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.14);
+    transform: translateY(-1px);
+}
+
+.comunidades-acoes__nova:active {
+    background-color: rgb(243, 243, 243);
+    box-shadow: none;
+    transform: translateY(0) scale(0.99);
+}
+
+.comunidades-acoes__nova:focus-visible {
+    outline: 3px solid rgba(32, 198, 106, 0.48);
+    outline-offset: 2px;
+}
+
+.comunidades-acoes__icone {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--azul-escuro);
+    color: #ffffff;
+    box-shadow: none;
+}
+
+.comunidades-acoes__icone-svg {
+    display: block;
+    width: 25px;
+    height: 25px;
+}
+
+.comunidades-acoes__texto {
+    min-width: 0;
+    overflow: hidden;
+    font-family: var(--fonte-dm-sans, sans-serif);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 @media (max-width: 480px) {
     .comunidades-header__conteudo {
         min-height: 60px;
@@ -95,10 +176,38 @@
         height: 40px;
         flex-basis: 40px;
     }
+
+    .comunidades-conteudo {
+        padding: 7px 5px;
+    }
+
+    .comunidades-acoes__nova {
+        min-height: 66px;
+        gap: 12px;
+        padding: 10px 11px;
+        border-radius: 12px;
+    }
+
+    .comunidades-acoes__icone {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+        border-radius: 11px;
+    }
+
+    .comunidades-acoes__icone-svg {
+        width: 23px;
+        height: 23px;
+    }
+
+    .comunidades-acoes__texto {
+        font-size: 0.875rem;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .comunidades-header__adicionar {
+    .comunidades-header__adicionar,
+    .comunidades-acoes__nova {
         transition: none;
     }
 }

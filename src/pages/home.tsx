@@ -25,6 +25,7 @@ import { ModalFeedback } from "../components/ModalFeedback";
 import { useAutenticacao } from "../components/AutenticacaoContext";
 import { apiFetch } from "../services/api";
 import { inicializarNotificacoes } from "../services/notificacoes.service";
+import Comunidades from "../components/Comunidades";
 import { Capacitor } from '@capacitor/core';
 import { Haptics } from '@capacitor/haptics';
 
@@ -3195,190 +3196,326 @@ function Home() {
         </aside>
 
         <aside className="conversas" data-lenis-prevent>
-            <header className="conversas-header">
-            <div className="header-name">
-                <img
-                className="header-logo"
-                src={brasao}
-                alt="Brasão da prefeitura"
-                width={40}
-                />
-                <span className="header-title">Fala Pommer</span>
-            </div>
+            {itemSidebarAtivo === "comunidades" && (
+                <Comunidades />
+            )}
 
-            <div className="header-menu">
-                {usuario && (
-                <button
-                    type="button"
-                    className="header-menu-button header-menu-button--nova-conversa"
-                    onClick={abrirNovaConversa}
-                    aria-label="Nova conversa"
-                >
-                    <span className="header-menu-icon">
-                        <svg
-                            width="24"
-                            height="24"
-                            className="header-menu-svg mensagem"
-                            viewBox="0 0 16 16"
-                        >
-                            <path className="conversa-icone-path" fill="black" fill-rule="evenodd" transform="translate(0.5 0.5) scale(0.68)" d="M19.33 4C20.81 4 22 5.2 22 6.67v10.66c0 1.48-1.2 2.67-2.67 2.67H5.67A2.67 2.67 0 0 1 3 17.33V8.85L.94 5.53A1 1 0 0 1 1.8 4h17.54Zm-9.8 9h1.98v1.97c0 .43.25.85.67.98a1 1 0 0 0 1.31-.94v-2.02h1.98c.43 0 .85-.25.98-.67a1 1 0 0 0-.94-1.31h-2.02V9.03c0-.43-.25-.85-.67-.98a1 1 0 0 0-1.31.94v2.02H9.49a1 1 0 0 0-.94 1.31c.13.42.55.67.98.67Z" clip-rule="evenodd"></path>
-                        </svg>
-                    </span>
-                </button>
-                )}
-
-                <button
-                ref={botaoMenuRef}
-                type="button"
-                className="header-menu-button"
-                onClick={() => setMenuAberto((aberto) => !aberto)}
-                aria-label={menuAberto ? "Fechar menu" : "Abrir menu"}
-                aria-expanded={menuAberto}
-                aria-controls="menu-principal"
-                >
-                    <span className="header-menu-icon">
-                        <svg
-                        className="header-menu-svg"
-                        viewBox="0 0 24 24"
-                        height="24"
-                        width="24"
-                        preserveAspectRatio="xMidYMid meet"
-                        >
-                        <circle
-                            className="menu-dot menu-dot-top"
-                            cx="12"
-                            cy="6"
-                            r="2"
+            {itemSidebarAtivo === "conversas" && (
+                <>
+                    <header className="conversas-header">
+                    <div className="header-name">
+                        <img
+                        className="header-logo"
+                        src={brasao}
+                        alt="Brasão da prefeitura"
+                        width={40}
                         />
-                        <circle
-                            className="menu-dot menu-dot-middle"
-                            cx="12"
-                            cy="12"
-                            r="2"
-                        />
-                        <circle
-                            className="menu-dot menu-dot-bottom"
-                            cx="12"
-                            cy="18"
-                            r="2"
-                        />
-                        </svg>
-                    </span>
-                </button>
-            </div>
-            </header>
-
-            <div className="conversas__conteudo">
-            <div className="pesquisa">
-            <div className="pesquisa-container">
-                <div className="pesquisa-icone-container">
-                <span className="pesquisa-icone">
-                    <svg
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-search"
-                    viewBox="0 0 16 16"
-                    >
-                    <path
-                        className="pesquisa-icone-path"
-                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
-                    />
-                    </svg>
-                </span>
-                </div>
-
-                <div className="pesquisa-input-container">
-                <input
-                    className="pesquisa-input"
-                    name="pesquisa-input"
-                    role="textbox"
-                    aria-label="Pesquisar conversa"
-                    autoComplete="off"
-                    dir="ltr"
-                    placeholder="Pesquisar conversa"
-                    type="search"
-                    value={buscaConversa}
-                    onChange={(event) => setBuscaConversa(event.target.value)}
-                />
-                </div>
-            </div>
-            </div>
-
-            <div className="filtros">
-            <div className="filtros-lista">
-                <button
-                type="button"
-                className={`filtro-item filtro-todos ${
-                    filtroAtivo === "todos" ? "ativo" : ""
-                }`}
-                onClick={() => setFiltroAtivo("todos")}
-                aria-pressed={filtroAtivo === "todos"}
-                >
-                <div className="filtro-conteudo">
-                    <span className="filtro-texto">Todos</span>
-                </div>
-                </button>
-
-                <button
-                type="button"
-                className={`filtro-item filtro-nao-lidas ${
-                    filtroAtivo === "nao-lidas" ? "ativo" : ""
-                }`}
-                onClick={() => setFiltroAtivo("nao-lidas")}
-                aria-pressed={filtroAtivo === "nao-lidas"}
-                >
-                <div className="filtro-conteudo">
-                    <span className="filtro-texto">Não lidas</span>
-                </div>
-                </button>
-
-                {usuario && usuario.tipo !== "user" && (
-                    <button
-                    type="button"
-                    className={`filtro-item filtro-grupos ${
-                        filtroAtivo === "grupos" ? "ativo" : ""
-                    }`}
-                    onClick={() => setFiltroAtivo("grupos")}
-                    aria-pressed={filtroAtivo === "grupos"}
-                    >
-                    <div className="filtro-conteudo">
-                        <span className="filtro-texto">Grupos</span>
+                        <span className="header-title">Fala Pommer</span>
                     </div>
-                    </button>
-                )}
-            </div>
-            </div>
-
-            <section className="lista-conversas">
-            {conversasFiltradas.map((conversa) => (
-                <button
-                key={conversa.id}
-                type="button"
-                onClick={() => void abrirConversa(conversa)}
-                className={`conversa-item ${
-                    conversaSelecionada?.id === conversa.id ? "contato-ativo" : ""
-                } ${
-                    conversa.mensagensNaoLidas > 0
-                        ? "conversa-item--nao-lida"
-                        : ""
-                }`}
-                >
-                    <div className= {conversa?.tipo === "grupo"
-                            ? "conversa-grupo-avatar"
-                            : (conversa?.tipo === "setor"
-                                ? "conversa-setor-avatar"
-                                : "conversa-avatar"
-                            )
-                        }
-                    >
-                        {conversa?.tipo === "grupo"
-                            ? <svg width="16" height="16" fill="currentColor" className="bi bi-people-fill" viewBox="0 0 16 16">
-                                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                    <div className="header-menu">
+                        {usuario && (
+                        <button
+                            type="button"
+                            className="header-menu-button header-menu-button--nova-conversa"
+                            onClick={abrirNovaConversa}
+                            aria-label="Nova conversa"
+                        >
+                            <span className="header-menu-icon">
+                                <svg
+                                    width="24"
+                                    height="24"
+                                    className="header-menu-svg mensagem"
+                                    viewBox="0 0 16 16"
+                                >
+                                    <path className="conversa-icone-path" fill="black" fill-rule="evenodd" transform="translate(0.5 0.5) scale(0.68)" d="M19.33 4C20.81 4 22 5.2 22 6.67v10.66c0 1.48-1.2 2.67-2.67 2.67H5.67A2.67 2.67 0 0 1 3 17.33V8.85L.94 5.53A1 1 0 0 1 1.8 4h17.54Zm-9.8 9h1.98v1.97c0 .43.25.85.67.98a1 1 0 0 0 1.31-.94v-2.02h1.98c.43 0 .85-.25.98-.67a1 1 0 0 0-.94-1.31h-2.02V9.03c0-.43-.25-.85-.67-.98a1 1 0 0 0-1.31.94v2.02H9.49a1 1 0 0 0-.94 1.31c.13.42.55.67.98.67Z" clip-rule="evenodd"></path>
+                                </svg>
+                            </span>
+                        </button>
+                        )}
+                        <button
+                        ref={botaoMenuRef}
+                        type="button"
+                        className="header-menu-button"
+                        onClick={() => setMenuAberto((aberto) => !aberto)}
+                        aria-label={menuAberto ? "Fechar menu" : "Abrir menu"}
+                        aria-expanded={menuAberto}
+                        aria-controls="menu-principal"
+                        >
+                            <span className="header-menu-icon">
+                                <svg
+                                className="header-menu-svg"
+                                viewBox="0 0 24 24"
+                                height="24"
+                                width="24"
+                                preserveAspectRatio="xMidYMid meet"
+                                >
+                                <circle
+                                    className="menu-dot menu-dot-top"
+                                    cx="12"
+                                    cy="6"
+                                    r="2"
+                                />
+                                <circle
+                                    className="menu-dot menu-dot-middle"
+                                    cx="12"
+                                    cy="12"
+                                    r="2"
+                                />
+                                <circle
+                                    className="menu-dot menu-dot-bottom"
+                                    cx="12"
+                                    cy="18"
+                                    r="2"
+                                />
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+                    </header>
+                    <div className="conversas__conteudo">
+                    <div className="pesquisa">
+                    <div className="pesquisa-container">
+                        <div className="pesquisa-icone-container">
+                        <span className="pesquisa-icone">
+                            <svg
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            className="bi bi-search"
+                            viewBox="0 0 16 16"
+                            >
+                            <path
+                                className="pesquisa-icone-path"
+                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
+                            />
                             </svg>
-
-                            : (conversa?.tipo === "setor"
-                                ? <svg
+                        </span>
+                        </div>
+                        <div className="pesquisa-input-container">
+                        <input
+                            className="pesquisa-input"
+                            name="pesquisa-input"
+                            role="textbox"
+                            aria-label="Pesquisar conversa"
+                            autoComplete="off"
+                            dir="ltr"
+                            placeholder="Pesquisar conversa"
+                            type="search"
+                            value={buscaConversa}
+                            onChange={(event) => setBuscaConversa(event.target.value)}
+                        />
+                        </div>
+                    </div>
+                    </div>
+                    <div className="filtros">
+                    <div className="filtros-lista">
+                        <button
+                        type="button"
+                        className={`filtro-item filtro-todos ${
+                            filtroAtivo === "todos" ? "ativo" : ""
+                        }`}
+                        onClick={() => setFiltroAtivo("todos")}
+                        aria-pressed={filtroAtivo === "todos"}
+                        >
+                        <div className="filtro-conteudo">
+                            <span className="filtro-texto">Todos</span>
+                        </div>
+                        </button>
+                        <button
+                        type="button"
+                        className={`filtro-item filtro-nao-lidas ${
+                            filtroAtivo === "nao-lidas" ? "ativo" : ""
+                        }`}
+                        onClick={() => setFiltroAtivo("nao-lidas")}
+                        aria-pressed={filtroAtivo === "nao-lidas"}
+                        >
+                        <div className="filtro-conteudo">
+                            <span className="filtro-texto">Não lidas</span>
+                        </div>
+                        </button>
+                        {usuario && usuario.tipo !== "user" && (
+                            <button
+                            type="button"
+                            className={`filtro-item filtro-grupos ${
+                                filtroAtivo === "grupos" ? "ativo" : ""
+                            }`}
+                            onClick={() => setFiltroAtivo("grupos")}
+                            aria-pressed={filtroAtivo === "grupos"}
+                            >
+                            <div className="filtro-conteudo">
+                                <span className="filtro-texto">Grupos</span>
+                            </div>
+                            </button>
+                        )}
+                    </div>
+                    </div>
+                    <section className="lista-conversas">
+                    {conversasFiltradas.map((conversa) => (
+                        <button
+                        key={conversa.id}
+                        type="button"
+                        onClick={() => void abrirConversa(conversa)}
+                        className={`conversa-item ${
+                            conversaSelecionada?.id === conversa.id ? "contato-ativo" : ""
+                        } ${
+                            conversa.mensagensNaoLidas > 0
+                                ? "conversa-item--nao-lida"
+                                : ""
+                        }`}
+                        >
+                            <div className= {conversa?.tipo === "grupo"
+                                    ? "conversa-grupo-avatar"
+                                    : (conversa?.tipo === "setor"
+                                        ? "conversa-setor-avatar"
+                                        : "conversa-avatar"
+                                    )
+                                }
+                            >
+                                {conversa?.tipo === "grupo"
+                                    ? <svg width="16" height="16" fill="currentColor" className="bi bi-people-fill" viewBox="0 0 16 16">
+                                        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                                    </svg>
+                                    : (conversa?.tipo === "setor"
+                                        ? <svg
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 16 16"
+                                            fill="currentColor"
+                                            role="img"
+                                            aria-label="Atendimento"
+                                        >
+                                            <g transform="scale(0.25)">
+                                                <path d=" M45 20 C43.5 13.5 38.5 9 32 9 C25.5 9 20.5 13.5 19 20 C20 21 20.5 22.5 20 24 V27 C20 33 25.5 37 32 35.5 C30.5 34 31 31.5 32.5 30.5 C34 29.5 37.5 29.5 39 30.5 L43 29 C44 27 44 25 44 24 C43.5 22.5 44 21 45 20Z" />
+                                                <path d=" M24 38H40 C48.5 38 55 44.5 55 53 C55 59 51.5 61 45 61 H19 C12.5 61 9 59 9 53 C9 44.5 15.5 38 24 38Z" />
+                                                <path d="M15.5 22V21A16.5 16.5 0 0 1 48.5 21V22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                                                <path d=" M15.5 20 A3 3 0 0 1 18.5 23 V28.5 A3 3 0 0 1 12.5 28.5 V23 A3 3 0 0 1 15.5 20Z M48.5 20 A3 3 0 0 1 51.5 23 V28.5 A3 3 0 0 1 45.5 28.5 V23 A3 3 0 0 1 48.5 20Z" />
+                                                <path d="M48 29C45 32 41 33.5 37 33.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                                />
+                                                <path d="M35 31.8H37 A1.7 1.7 0 0 1 37 35.2 H35 A1.7 1.7 0 0 1 35 31.8Z" />
+                                            </g>
+                                        </svg>
+                                        : renderizarAvatar(
+                                            nomeDaConversa(conversa),
+                                            fotoDaConversa(conversa)
+                                        )
+                                    )
+                                }
+                            </div>
+                            <div className="conversa-dados">
+                                <strong>{nomeDaConversa(conversa)}</strong>
+                                <span>
+                                {conversa.ultimaMensagem?.conteudo ||
+                                    (conversa.ultimaMensagem?.arquivoNome
+                                        ? `📎 ${conversa.ultimaMensagem.arquivoNome}`
+                                        : "Conversa iniciada")}
+                                </span>
+                            </div>
+                            <div className="conversa-meta">
+                                <time
+                                    className="conversa-horario"
+                                    dateTime={
+                                        conversa.ultimaMensagem?.enviadaEm ?? conversa.criadaEm
+                                    }
+                                >
+                                    {formatarDataUltimaMensagem(
+                                        conversa.ultimaMensagem?.enviadaEm ??
+                                            conversa.criadaEm,
+                                    )}
+                                </time>
+                                {conversa.mensagensNaoLidas > 0 && (
+                                    <span
+                                    className="conversa-nao-lidas"
+                                    aria-label={`${conversa.mensagensNaoLidas} ${
+                                        conversa.mensagensNaoLidas === 1
+                                            ? "mensagem não lida"
+                                            : "mensagens não lidas"
+                                    }`}
+                                    >
+                                    {conversa.mensagensNaoLidas > 99
+                                        ? "99+"
+                                        : conversa.mensagensNaoLidas}
+                                    </span>
+                                )}
+                            </div>
+                        </button>
+                    ))}
+                    {conversasFiltradas.length === 0 && (
+                        <p className="lista-conversas__vazia">
+                        {filtroAtivo === "nao-lidas"
+                            ? "Nenhuma conversa não lida."
+                            : filtroAtivo === "grupos"
+                                ? "Nenhum grupo disponível."
+                                : buscaConversa.trim()
+                                    ? "Nenhuma conversa encontrada."
+                                    : "Nenhuma conversa disponível."}
+                        </p>
+                    )}
+                    </section>
+                    </div>
+                    <div
+                    className={`nova-conversa ${
+                        novaConversaAberta ? "nova-conversa--aberta" : ""
+                    }`}
+                    >
+                    <header className="nova-conversa__header">
+                        <button
+                        className="nova-conversa__voltar"
+                        onClick={() => setNovaConversaAberta(false)}
+                        aria-label="Voltar"
+                        >
+                        <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                        >
+                            <path
+                            fillRule="evenodd"
+                            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
+                            />
+                        </svg>
+                        </button>
+                        <h2>Nova conversa</h2>
+                    </header>
+                    <div className="nova-conversa__pesquisa">
+                        <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
+                        <input
+                        type="text"
+                        placeholder={
+                            usuario?.tipo === "user"
+                            ? "Pesquisar setor"
+                            : (usuario?.tipo === "admin" || usuario?.tipo === "superAdmin")
+                                ? "Pesquisar contato"
+                                : "Pesquisar usuário"
+                        }
+                        value={buscaUsuario}
+                        onChange={(event) => setBuscaUsuario(event.target.value)}
+                        />
+                    </div>
+                    <div className="nova-conversa__titulo-lista">
+                        {usuario?.tipo === "user"
+                        ? "SETORES"
+                        : (usuario?.tipo === "admin" || usuario?.tipo === "superAdmin")
+                            ? "CONTATOS"
+                            : "USUÁRIOS"}
+                    </div>
+                    <div className="nova-conversa__usuarios">
+                        {carregandoUsuarios && (
+                        <p className="nova-conversa__mensagem">Carregando...</p>
+                        )}
+                        {!carregandoUsuarios &&
+                        usuario?.tipo === "user" &&
+                        setoresFiltrados.map((setor) => (
+                            <button
+                            key={setor.id}
+                            type="button"
+                            className="nova-conversa__usuario"
+                            onClick={() => void selecionarSetor(setor)}
+                            >
+                            <div className="nova-conversa__avatar nova-coversa__avatar-setor">
+                                <svg
                                     width="16"
                                     height="16"
                                     viewBox="0 0 16 16"
@@ -3389,227 +3526,70 @@ function Home() {
                                     <g transform="scale(0.25)">
                                         <path d=" M45 20 C43.5 13.5 38.5 9 32 9 C25.5 9 20.5 13.5 19 20 C20 21 20.5 22.5 20 24 V27 C20 33 25.5 37 32 35.5 C30.5 34 31 31.5 32.5 30.5 C34 29.5 37.5 29.5 39 30.5 L43 29 C44 27 44 25 44 24 C43.5 22.5 44 21 45 20Z" />
                                         <path d=" M24 38H40 C48.5 38 55 44.5 55 53 C55 59 51.5 61 45 61 H19 C12.5 61 9 59 9 53 C9 44.5 15.5 38 24 38Z" />
-
                                         <path d="M15.5 22V21A16.5 16.5 0 0 1 48.5 21V22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-
                                         <path d=" M15.5 20 A3 3 0 0 1 18.5 23 V28.5 A3 3 0 0 1 12.5 28.5 V23 A3 3 0 0 1 15.5 20Z M48.5 20 A3 3 0 0 1 51.5 23 V28.5 A3 3 0 0 1 45.5 28.5 V23 A3 3 0 0 1 48.5 20Z" />
                                         <path d="M48 29C45 32 41 33.5 37 33.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
                                         />
                                         <path d="M35 31.8H37 A1.7 1.7 0 0 1 37 35.2 H35 A1.7 1.7 0 0 1 35 31.8Z" />
                                     </g>
                                 </svg>
-                                : renderizarAvatar(
-                                    nomeDaConversa(conversa),
-                                    fotoDaConversa(conversa)
-                                )
-                            )
-                        }
-                    </div>
-
-                    <div className="conversa-dados">
-                        <strong>{nomeDaConversa(conversa)}</strong>
-
-                        <span>
-                        {conversa.ultimaMensagem?.conteudo ||
-                            (conversa.ultimaMensagem?.arquivoNome
-                                ? `📎 ${conversa.ultimaMensagem.arquivoNome}`
-                                : "Conversa iniciada")}
-                        </span>
-                    </div>
-
-                    <div className="conversa-meta">
-                        <time
-                            className="conversa-horario"
-                            dateTime={
-                                conversa.ultimaMensagem?.enviadaEm ?? conversa.criadaEm
-                            }
-                        >
-                            {formatarDataUltimaMensagem(
-                                conversa.ultimaMensagem?.enviadaEm ??
-                                    conversa.criadaEm,
-                            )}
-                        </time>
-
-                        {conversa.mensagensNaoLidas > 0 && (
-                            <span
-                            className="conversa-nao-lidas"
-                            aria-label={`${conversa.mensagensNaoLidas} ${
-                                conversa.mensagensNaoLidas === 1
-                                    ? "mensagem não lida"
-                                    : "mensagens não lidas"
-                            }`}
+                            </div>
+                            <div className="nova-conversa__dados">
+                                <strong>{setor.setor}</strong>
+                                <span>
+                                    {setor.secretaria?.nome ?? "Sem secretaria"}
+                                </span>
+                            </div>
+                            </button>
+                        ))}
+                        {!carregandoUsuarios &&
+                        usuario?.tipo !== "user" &&
+                        usuariosFiltrados.map((usuario) => (
+                            <button
+                            key={usuario.id}
+                            type="button"
+                            className="nova-conversa__usuario"
+                            onClick={() => void selecionarUsuario(usuario)}
                             >
-                            {conversa.mensagensNaoLidas > 99
-                                ? "99+"
-                                : conversa.mensagensNaoLidas}
-                            </span>
+                            <div className="nova-conversa__avatar">
+                                {renderizarAvatar(
+                                    usuario.nome,
+                                    usuario.foto_perfil_url
+                                )}
+                            </div>
+                            <div className="nova-conversa__dados">
+                                <strong>{usuario.nome}</strong>
+                                <span>
+                                {usuario.tipoUsuario === "funcionario"
+                                    ? (usuario.setor?.nome ?? "Funcionário")
+                                    : usuario.tipoUsuario === "admin"
+                                    ? "Administrador"
+                                    : usuario.tipoUsuario === "superAdmin"
+                                    ? "Super Administrador"
+                                    : "Usuário Fala Pommer"}
+                                </span>
+                            </div>
+                            </button>
+                        ))}
+                        {!carregandoUsuarios &&
+                        usuario?.tipo === "user" &&
+                        setoresFiltrados.length === 0 && (
+                            <p className="nova-conversa__mensagem">
+                            Nenhum setor encontrado.
+                            </p>
+                        )}
+                        {!carregandoUsuarios &&
+                        usuario?.tipo !== "user" &&
+                        usuariosFiltrados.length === 0 && (
+                            <p className="nova-conversa__mensagem">
+                            Nenhum contato encontrado.
+                            </p>
                         )}
                     </div>
-                </button>
-            ))}
-
-            {conversasFiltradas.length === 0 && (
-                <p className="lista-conversas__vazia">
-                {filtroAtivo === "nao-lidas"
-                    ? "Nenhuma conversa não lida."
-                    : filtroAtivo === "grupos"
-                        ? "Nenhum grupo disponível."
-                        : buscaConversa.trim()
-                            ? "Nenhuma conversa encontrada."
-                            : "Nenhuma conversa disponível."}
-                </p>
+                    </div>
+                </>
             )}
-            </section>
-            </div>
-
-            <div
-            className={`nova-conversa ${
-                novaConversaAberta ? "nova-conversa--aberta" : ""
-            }`}
-            >
-            <header className="nova-conversa__header">
-                <button
-                className="nova-conversa__voltar"
-                onClick={() => setNovaConversaAberta(false)}
-                aria-label="Voltar"
-                >
-                <svg
-                    width="22"
-                    height="22"
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
-                >
-                    <path
-                    fillRule="evenodd"
-                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"
-                    />
-                </svg>
-                </button>
-
-                <h2>Nova conversa</h2>
-            </header>
-
-            <div className="nova-conversa__pesquisa">
-                <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                </svg>
-
-                <input
-                type="text"
-                placeholder={
-                    usuario?.tipo === "user"
-                    ? "Pesquisar setor"
-                    : (usuario?.tipo === "admin" || usuario?.tipo === "superAdmin")
-                        ? "Pesquisar contato"
-                        : "Pesquisar usuário"
-                }
-                value={buscaUsuario}
-                onChange={(event) => setBuscaUsuario(event.target.value)}
-                />
-            </div>
-
-            <div className="nova-conversa__titulo-lista">
-                {usuario?.tipo === "user"
-                ? "SETORES"
-                : (usuario?.tipo === "admin" || usuario?.tipo === "superAdmin")
-                    ? "CONTATOS"
-                    : "USUÁRIOS"}
-            </div>
-
-            <div className="nova-conversa__usuarios">
-                {carregandoUsuarios && (
-                <p className="nova-conversa__mensagem">Carregando...</p>
-                )}
-
-                {!carregandoUsuarios &&
-                usuario?.tipo === "user" &&
-                setoresFiltrados.map((setor) => (
-                    <button
-                    key={setor.id}
-                    type="button"
-                    className="nova-conversa__usuario"
-                    onClick={() => void selecionarSetor(setor)}
-                    >
-                    <div className="nova-conversa__avatar nova-coversa__avatar-setor">
-                        <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="currentColor"
-                            role="img"
-                            aria-label="Atendimento"
-                        >
-                            <g transform="scale(0.25)">
-                                <path d=" M45 20 C43.5 13.5 38.5 9 32 9 C25.5 9 20.5 13.5 19 20 C20 21 20.5 22.5 20 24 V27 C20 33 25.5 37 32 35.5 C30.5 34 31 31.5 32.5 30.5 C34 29.5 37.5 29.5 39 30.5 L43 29 C44 27 44 25 44 24 C43.5 22.5 44 21 45 20Z" />
-                                <path d=" M24 38H40 C48.5 38 55 44.5 55 53 C55 59 51.5 61 45 61 H19 C12.5 61 9 59 9 53 C9 44.5 15.5 38 24 38Z" />
-
-                                <path d="M15.5 22V21A16.5 16.5 0 0 1 48.5 21V22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-
-                                <path d=" M15.5 20 A3 3 0 0 1 18.5 23 V28.5 A3 3 0 0 1 12.5 28.5 V23 A3 3 0 0 1 15.5 20Z M48.5 20 A3 3 0 0 1 51.5 23 V28.5 A3 3 0 0 1 45.5 28.5 V23 A3 3 0 0 1 48.5 20Z" />
-                                <path d="M48 29C45 32 41 33.5 37 33.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                />
-                                <path d="M35 31.8H37 A1.7 1.7 0 0 1 37 35.2 H35 A1.7 1.7 0 0 1 35 31.8Z" />
-                            </g>
-                        </svg> 
-                    </div>
-
-                    <div className="nova-conversa__dados">
-                        <strong>{setor.setor}</strong>
-                        <span>
-                            {setor.secretaria?.nome ?? "Sem secretaria"}
-                        </span>
-                    </div>
-                    </button>
-                ))}
-
-                {!carregandoUsuarios &&
-                usuario?.tipo !== "user" &&
-                usuariosFiltrados.map((usuario) => (
-                    <button
-                    key={usuario.id}
-                    type="button"
-                    className="nova-conversa__usuario"
-                    onClick={() => void selecionarUsuario(usuario)}
-                    >
-                    <div className="nova-conversa__avatar">
-                        {renderizarAvatar(
-                            usuario.nome,
-                            usuario.foto_perfil_url
-                        )}
-                    </div>
-
-                    <div className="nova-conversa__dados">
-                        <strong>{usuario.nome}</strong>
-                        <span>
-                        {usuario.tipoUsuario === "funcionario"
-                            ? (usuario.setor?.nome ?? "Funcionário")
-                            : usuario.tipoUsuario === "admin"
-                            ? "Administrador"
-                            : usuario.tipoUsuario === "superAdmin"
-                            ? "Super Administrador" 
-                            : "Usuário Fala Pommer"}
-                        </span>
-                    </div>
-                    </button>
-                ))}
-
-                {!carregandoUsuarios &&
-                usuario?.tipo === "user" &&
-                setoresFiltrados.length === 0 && (
-                    <p className="nova-conversa__mensagem">
-                    Nenhum setor encontrado.
-                    </p>
-                )}
-
-                {!carregandoUsuarios &&
-                usuario?.tipo !== "user" &&
-                usuariosFiltrados.length === 0 && (
-                    <p className="nova-conversa__mensagem">
-                    Nenhum contato encontrado.
-                    </p>
-                )}
-            </div>
-            </div>
+            
         </aside>
 
         <section className="chat">

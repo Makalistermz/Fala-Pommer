@@ -575,6 +575,29 @@
     font-weight: 600;
 }
 
+.conversa-meta {
+    min-height: 44px;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.conversa-horario {
+    color: #6e7e99;
+    font-family: var(--fonte-dm-sans);
+    font-size: 0.75rem;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.conversa-item--nao-lida .conversa-horario {
+    color: #168821;
+    font-weight: 600;
+}
+
 .conversa-nao-lidas {
     display: inline-flex;
     min-width: 23px;

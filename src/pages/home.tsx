@@ -37,6 +37,52 @@ const INTERVALO_RENOVACAO_DIGITACAO_MS = 2_000;
 const TEMPO_PARAR_DIGITACAO_MS = 2_500;
 const LIMITE_HISTORICO_MENSAGENS = 50;
 const LIMITE_NOVAS_MENSAGENS = 100;
+const FORMATADOR_HORARIO = new Intl.DateTimeFormat("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+});
+const FORMATADOR_DATA = new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+});
+
+function formatarDataUltimaMensagem(dataOriginal: string) {
+    const data = new Date(dataOriginal);
+
+    if (Number.isNaN(data.getTime())) {
+        return "";
+    }
+
+    const hoje = new Date();
+    const diaAtual = Date.UTC(
+        hoje.getFullYear(),
+        hoje.getMonth(),
+        hoje.getDate(),
+    );
+    const diaDaMensagem = Date.UTC(
+        data.getFullYear(),
+        data.getMonth(),
+        data.getDate(),
+    );
+    const diasDecorridos = Math.round(
+        (diaAtual - diaDaMensagem) / (24 * 60 * 60 * 1_000),
+    );
+
+    if (diasDecorridos === 1) {
+        return "Ontem";
+    }
+
+    if (diasDecorridos > 1 && diasDecorridos <= 7) {
+        return Intl.DateTimeFormat('pt-br', {weekday: 'long'}).format(data);
+    }
+
+    if (diasDecorridos > 7) {
+        return `${FORMATADOR_DATA.format(data)}`;
+    }
+
+    return FORMATADOR_HORARIO.format(data);
+}
 
 interface UsuarioBasico {
     id: number;
@@ -3291,73 +3337,87 @@ function Home() {
                         : ""
                 }`}
                 >
-                <div className= {conversa?.tipo === "grupo" 
-                        ? "conversa-grupo-avatar" 
-                        : (conversa?.tipo === "setor" 
-                            ? "conversa-setor-avatar" 
-                            : "conversa-avatar"
-                        )
-                    }
-                >
-                    {conversa?.tipo === "grupo" 
-                        ? <svg width="16" height="16" fill="currentColor" className="bi bi-people-fill" viewBox="0 0 16 16">
-                            <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
-                        </svg>
-
-                        : (conversa?.tipo === "setor" 
-                            ? <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 16 16"
-                                fill="currentColor"
-                                role="img"
-                                aria-label="Atendimento"
-                            >
-                                <g transform="scale(0.25)">
-                                    <path d=" M45 20 C43.5 13.5 38.5 9 32 9 C25.5 9 20.5 13.5 19 20 C20 21 20.5 22.5 20 24 V27 C20 33 25.5 37 32 35.5 C30.5 34 31 31.5 32.5 30.5 C34 29.5 37.5 29.5 39 30.5 L43 29 C44 27 44 25 44 24 C43.5 22.5 44 21 45 20Z" />
-                                    <path d=" M24 38H40 C48.5 38 55 44.5 55 53 C55 59 51.5 61 45 61 H19 C12.5 61 9 59 9 53 C9 44.5 15.5 38 24 38Z" />
-
-                                    <path d="M15.5 22V21A16.5 16.5 0 0 1 48.5 21V22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-
-                                    <path d=" M15.5 20 A3 3 0 0 1 18.5 23 V28.5 A3 3 0 0 1 12.5 28.5 V23 A3 3 0 0 1 15.5 20Z M48.5 20 A3 3 0 0 1 51.5 23 V28.5 A3 3 0 0 1 45.5 28.5 V23 A3 3 0 0 1 48.5 20Z" />
-                                    <path d="M48 29C45 32 41 33.5 37 33.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                                    />
-                                    <path d="M35 31.8H37 A1.7 1.7 0 0 1 37 35.2 H35 A1.7 1.7 0 0 1 35 31.8Z" />
-                                </g>
-                            </svg> 
-                            : renderizarAvatar(
-                                nomeDaConversa(conversa),
-                                fotoDaConversa(conversa)
+                    <div className= {conversa?.tipo === "grupo"
+                            ? "conversa-grupo-avatar"
+                            : (conversa?.tipo === "setor"
+                                ? "conversa-setor-avatar"
+                                : "conversa-avatar"
                             )
-                        )
-                    }
-                </div>
-
-                <div className="conversa-dados">
-                    <strong>{nomeDaConversa(conversa)}</strong>
-
-                    <span>
-                    {conversa.ultimaMensagem?.conteudo ||
-                        (conversa.ultimaMensagem?.arquivoNome
-                            ? `📎 ${conversa.ultimaMensagem.arquivoNome}`
-                            : "Conversa iniciada")}
-                    </span>
-                </div>
-
-                {conversa.mensagensNaoLidas > 0 && (
-                    <span
-                    className="conversa-nao-lidas"
-                    aria-label={`${conversa.mensagensNaoLidas} ${
-                        conversa.mensagensNaoLidas === 1
-                            ? "mensagem não lida"
-                            : "mensagens não lidas"
-                    }`}
+                        }
                     >
-                    {conversa.mensagensNaoLidas > 99
-                        ? "99+"
-                        : conversa.mensagensNaoLidas}
-                    </span>
-                )}
+                        {conversa?.tipo === "grupo"
+                            ? <svg width="16" height="16" fill="currentColor" className="bi bi-people-fill" viewBox="0 0 16 16">
+                                <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                            </svg>
+
+                            : (conversa?.tipo === "setor"
+                                ? <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 16 16"
+                                    fill="currentColor"
+                                    role="img"
+                                    aria-label="Atendimento"
+                                >
+                                    <g transform="scale(0.25)">
+                                        <path d=" M45 20 C43.5 13.5 38.5 9 32 9 C25.5 9 20.5 13.5 19 20 C20 21 20.5 22.5 20 24 V27 C20 33 25.5 37 32 35.5 C30.5 34 31 31.5 32.5 30.5 C34 29.5 37.5 29.5 39 30.5 L43 29 C44 27 44 25 44 24 C43.5 22.5 44 21 45 20Z" />
+                                        <path d=" M24 38H40 C48.5 38 55 44.5 55 53 C55 59 51.5 61 45 61 H19 C12.5 61 9 59 9 53 C9 44.5 15.5 38 24 38Z" />
+
+                                        <path d="M15.5 22V21A16.5 16.5 0 0 1 48.5 21V22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+
+                                        <path d=" M15.5 20 A3 3 0 0 1 18.5 23 V28.5 A3 3 0 0 1 12.5 28.5 V23 A3 3 0 0 1 15.5 20Z M48.5 20 A3 3 0 0 1 51.5 23 V28.5 A3 3 0 0 1 45.5 28.5 V23 A3 3 0 0 1 48.5 20Z" />
+                                        <path d="M48 29C45 32 41 33.5 37 33.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                        />
+                                        <path d="M35 31.8H37 A1.7 1.7 0 0 1 37 35.2 H35 A1.7 1.7 0 0 1 35 31.8Z" />
+                                    </g>
+                                </svg>
+                                : renderizarAvatar(
+                                    nomeDaConversa(conversa),
+                                    fotoDaConversa(conversa)
+                                )
+                            )
+                        }
+                    </div>
+
+                    <div className="conversa-dados">
+                        <strong>{nomeDaConversa(conversa)}</strong>
+
+                        <span>
+                        {conversa.ultimaMensagem?.conteudo ||
+                            (conversa.ultimaMensagem?.arquivoNome
+                                ? `📎 ${conversa.ultimaMensagem.arquivoNome}`
+                                : "Conversa iniciada")}
+                        </span>
+                    </div>
+
+                    <div className="conversa-meta">
+                        <time
+                            className="conversa-horario"
+                            dateTime={
+                                conversa.ultimaMensagem?.enviadaEm ?? conversa.criadaEm
+                            }
+                        >
+                            {formatarDataUltimaMensagem(
+                                conversa.ultimaMensagem?.enviadaEm ??
+                                    conversa.criadaEm,
+                            )}
+                        </time>
+
+                        {conversa.mensagensNaoLidas > 0 && (
+                            <span
+                            className="conversa-nao-lidas"
+                            aria-label={`${conversa.mensagensNaoLidas} ${
+                                conversa.mensagensNaoLidas === 1
+                                    ? "mensagem não lida"
+                                    : "mensagens não lidas"
+                            }`}
+                            >
+                            {conversa.mensagensNaoLidas > 99
+                                ? "99+"
+                                : conversa.mensagensNaoLidas}
+                            </span>
+                        )}
+                    </div>
                 </button>
             ))}
 

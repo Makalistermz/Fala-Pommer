@@ -298,6 +298,7 @@ html.tema-escuro:not(.alto-contraste) :is(
 
 html.tema-escuro:not(.alto-contraste) :is(
   .conversa-dados > span,
+  .conversa-horario,
   .nova-conversa__dados span,
   .nova-conversa__titulo-lista,
   .nova-conversa__mensagem,
@@ -1953,6 +1954,7 @@ html.alto-contraste body .nova-conversa__dados {
 html.alto-contraste body :is(
   .conversa-dados strong,
   .conversa-dados > span,
+  .conversa-horario,
   .nova-conversa__dados strong,
   .nova-conversa__dados span,
   .chat-header__dados strong,

@@ -25,7 +25,7 @@ import { ModalFeedback } from "../components/ModalFeedback";
 import { useAutenticacao } from "../components/AutenticacaoContext";
 import { apiFetch } from "../services/api";
 import { inicializarNotificacoes } from "../services/notificacoes.service";
-import Comunidades from "../components/Comunidades";
+import Comunidades from "../components/home/Comunidades.tsx";
 import { Capacitor } from '@capacitor/core';
 import { Haptics } from '@capacitor/haptics';
 

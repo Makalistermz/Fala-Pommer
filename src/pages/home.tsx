@@ -3158,6 +3158,11 @@ function Home() {
                     </svg>
                 </button>
 
+                <span
+                    className="home-sidebar__divisor"
+                    aria-hidden="true"
+                />
+
                 <button
                     type="button"
                     className={`home-sidebar__item home-sidebar__item-frida ${

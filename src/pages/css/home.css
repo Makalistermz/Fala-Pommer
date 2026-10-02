@@ -87,20 +87,14 @@
     stroke-linejoin: round;
 }
 
-.home-sidebar__item-frida {
-    position: relative;
-}
-
-.home-sidebar__item-frida::before {
-    position: absolute;
-    top: -7px;
-    left: 50%;
+.home-sidebar__divisor {
+    display: block;
     width: 40px;
+    min-width: 40px;
     height: 1px;
+    min-height: 1px;
+    flex: 0 0 1px;
     background: rgba(255, 255, 255, 0.12);
-    content: "";
-    transform: translateX(-50%);
-    pointer-events: none;
 }
 
 .home-sidebar__frida {

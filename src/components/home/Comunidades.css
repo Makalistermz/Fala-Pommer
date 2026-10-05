@@ -375,7 +375,7 @@
     max-width: 460px;
     flex-direction: column;
     align-self: center;
-    gap: 28px;
+    gap: 36px;
 }
 
 /* Seletor de imagem inspirado na referência, usando o azul do sistema. */
@@ -511,6 +511,30 @@
 .nova-comunidade__imagem-aleatorio:focus-visible {
     outline: 3px solid rgba(19, 81, 180, 0.3);
     outline-offset: 3px;
+}
+
+.nova-comunidade__campo {
+    width: 100%;
+    min-width: 0;
+}
+
+.nova-comunidade__input {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px 4px;
+    border: none;
+    border-bottom: 2px solid var(--azul-claro);
+    background-color: transparent;
+    font: inherit;
+    font-size: 1rem;
+}
+
+.nova-comunidade__input:focus {
+    outline: none;
+    border-bottom-color: var(--azul-principal);
 }
 
 html.tema-escuro:not(.alto-contraste) .nova-comunidade {
@@ -710,6 +734,16 @@ html.tema-escuro:not(.alto-contraste) .comunidades-acoes__icone {
 
     .nova-comunidade__formulario {
         padding: 28px 18px;
+    }
+
+    .nova-comunidade__formulario-conteudo {
+        gap: 22px;
+    }
+
+    .nova-comunidade__input {
+        min-height: 48px;
+        padding-inline: 2px;
+        font-size: 1rem;
     }
 
     .nova-comunidade__icone {

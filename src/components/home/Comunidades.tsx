@@ -99,7 +99,7 @@ function Comunidades() {
                                         {descricaoPadrao}
                                     </span>
                                 </div>
-                                <div></div>
+                                <div className="nova-comunidade__descricao-linha" aria-hidden="true"></div>
                             </div>
                         </section>
                     </main>

@@ -537,6 +537,49 @@
     border-bottom-color: var(--azul-principal);
 }
 
+.nova-comunidade__campo--descricao {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 16px 0;
+    border: 1px solid rgba(19, 81, 180, 0.14);
+    border-radius: 14px 14px 4px 4px;
+    background: #f7f9fc;
+    box-shadow: 0 4px 14px rgba(15, 38, 73, 0.05);
+}
+
+.nova-comunidade__campo-rotulo {
+    color: #1351b4;
+    font-family: var(--fonte-dm-sans, sans-serif);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0.02em;
+}
+
+.nova-comunidade__campo--descricao .nova-comunidade__descricao {
+    min-height: 72px;
+    margin: 0;
+    color: #344054;
+    font-family: var(--fonte-dm-sans, sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.55;
+}
+
+.nova-comunidade__descricao-texto {
+    display: block;
+    overflow-wrap: anywhere;
+}
+
+.nova-comunidade__descricao-linha {
+    width: calc(100% + 32px);
+    height: 2px;
+    margin-left: -16px;
+    border-radius: 0 0 4px 4px;
+    background: var(--azul-principal, #1351b4);
+}
+
 html.tema-escuro:not(.alto-contraste) .nova-comunidade {
     border-bottom-color: var(--tema-borda);
     background: rgba(11, 18, 32, 0.94);
@@ -578,6 +621,24 @@ html.tema-escuro:not(.alto-contraste) .nova-comunidade__conteudo {
 html.tema-escuro:not(.alto-contraste) .nova-comunidade__formulario {
     background: var(--tema-superficie);
     color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) .nova-comunidade__campo--descricao {
+    border-color: var(--tema-borda);
+    background: var(--tema-superficie-elevada);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+html.tema-escuro:not(.alto-contraste) .nova-comunidade__campo-rotulo {
+    color: var(--tema-destaque);
+}
+
+html.tema-escuro:not(.alto-contraste) .nova-comunidade__campo--descricao .nova-comunidade__descricao {
+    color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .nova-comunidade__descricao-linha {
+    background: var(--tema-destaque);
 }
 
 html.tema-escuro:not(.alto-contraste) .nova-comunidade__imagem-preview {
@@ -744,6 +805,20 @@ html.tema-escuro:not(.alto-contraste) .comunidades-acoes__icone {
         min-height: 48px;
         padding-inline: 2px;
         font-size: 1rem;
+    }
+
+    .nova-comunidade__campo--descricao {
+        padding: 12px 14px 0;
+    }
+
+    .nova-comunidade__campo--descricao .nova-comunidade__descricao {
+        min-height: 78px;
+        font-size: 0.875rem;
+    }
+
+    .nova-comunidade__descricao-linha {
+        width: calc(100% + 28px);
+        margin-left: -14px;
     }
 
     .nova-comunidade__icone {

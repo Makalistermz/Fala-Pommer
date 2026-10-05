@@ -120,6 +120,15 @@ function Comunidades() {
                                 <div className="nova-comunidade__descricao-linha" aria-hidden="true"></div>
                             </div>
                         </section>
+
+                        <div className="nova-comunidade__acoes">
+                            <button
+                                className="nova-comunidade__comecar" 
+                                type="button"
+                            >
+                                Criar
+                            </button>
+                        </div>
                     </main>
                 }
             </>

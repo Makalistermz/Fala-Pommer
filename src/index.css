@@ -140,6 +140,7 @@ html.tema-escuro:not(.alto-contraste) :is(.nova-conversa__header) {
 
 html.tema-escuro:not(.alto-contraste) :is( 
 .conversas-header, 
+.comunidades-header,
 .chat-header,
 .nova-conversa__header,
 .conversas__conteudo,
@@ -149,6 +150,15 @@ html.tema-escuro:not(.alto-contraste) :is(
 .chat-vazio
 ) {
   background-color: var(--tema-fundo) !important;
+}
+
+html.tema-escuro:not(.alto-contraste) :is(.conversas-header, .comunidades-header) {
+  border-bottom: 1px solid rgba(188, 197, 209, 0.1);
+  box-shadow: 0 3px 12px rgba(189, 195, 202, 0.06);
+}
+
+html.tema-escuro:not(.alto-contraste) .comunidades-header__titulo {
+  color: white;
 }
 
 html.tema-escuro:not(.alto-contraste) :is(.home-sidebar,) {

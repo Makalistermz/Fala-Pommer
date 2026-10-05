@@ -500,7 +500,7 @@
     background: #0e4397;
     box-shadow: 0 9px 20px rgba(19, 81, 180, 0.34);
     transform: scale(1.04);
-    animation: rotate 1s ease;
+    animation: rotate .9s ease;
 }
 
 @keyframes rotate {

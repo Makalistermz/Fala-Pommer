@@ -1,11 +1,22 @@
 import "./Comunidades.css";
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 function Comunidades() {
     const [novaComunidade, setNovaComunidade] = useState(false);
     const [criarComunidade, setCriarComunidade] = useState(false);
-    
+
     const descricaoPadrao = "Olá! Esta comunidade foi criada para que os membros possam conversar em grupos de assuntos específicos e receber avisos importantes.";
+    const [descricaoComunidade, setDescricaoComunidade] = useState(descricaoPadrao);
+    const descricaoRef = useRef<HTMLTextAreaElement>(null);
+
+    useLayoutEffect(() => {
+        const campoDescricao = descricaoRef.current;
+
+        if (!campoDescricao) return;
+
+        campoDescricao.style.height = "auto";
+        campoDescricao.style.height = `${campoDescricao.scrollHeight}px`;
+    }, [descricaoComunidade, criarComunidade]);
 
     if (novaComunidade) {
         return (
@@ -93,12 +104,19 @@ function Comunidades() {
                             </div>
 
                             <div className="nova-comunidade__campo nova-comunidade__campo--descricao">
-                                <span className="nova-comunidade__campo-rotulo">Descrição da comunidade</span>
-                                <div className="nova-comunidade__descricao">
-                                    <span className="nova-comunidade__descricao-texto">
-                                        {descricaoPadrao}
-                                    </span>
-                                </div>
+                                <label className="nova-comunidade__campo-rotulo" htmlFor="descricao__comunidade">
+                                    Descrição da comunidade
+                                </label>
+                                <textarea
+                                    ref={descricaoRef}
+                                    className="nova-comunidade__descricao"
+                                    name="descricao__comunidade"
+                                    id="descricao__comunidade"
+                                    value={descricaoComunidade}
+                                    onChange={(evento) => setDescricaoComunidade(evento.target.value)}
+                                    placeholder="Digite uma descrição para a comunidade"
+                                    rows={3}
+                                />
                                 <div className="nova-comunidade__descricao-linha" aria-hidden="true"></div>
                             </div>
                         </section>

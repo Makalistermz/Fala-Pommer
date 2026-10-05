@@ -503,16 +503,6 @@
     animation: rotate .9s ease;
 }
 
-@keyframes rotate {
-    from {
-        rotate: 0deg;
-    }
-
-    to {
-        rotate: 360deg;
-    }
-}
-
 .nova-comunidade__imagem-aleatorio:active {
     box-shadow: 0 4px 10px rgba(19, 81, 180, 0.24);
     transform: rotate(0) scale(0.96);
@@ -685,6 +675,16 @@ html.tema-escuro:not(.alto-contraste) .comunidades-acoes__icone {
     background: var(--tema-superficie-interativa);
     color: var(--tema-destaque);
     box-shadow: inset 0 0 0 1px var(--tema-borda);
+}
+
+@keyframes rotate {
+    from {
+        rotate: 0deg;
+    }
+
+    to {
+        rotate: 360deg;
+    }
 }
 
 @media (max-width: 480px) {

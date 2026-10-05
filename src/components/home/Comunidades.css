@@ -313,9 +313,13 @@
 .nova-comunidade__acoes {
     display: flex;
     width: 100%;
+    min-width: 0;
+    max-width: 460px;
     flex: 0 0 auto;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    align-self: center;
     padding-top: clamp(24px, 4vh, 36px);
 }
 
@@ -371,6 +375,10 @@
 
 .nova-comunidade__formulario-conteudo {
     display: flex;
+    flex: 1;
+    align-items: center;
+    align-self: center;
+    text-align: center;
     width: 100%;
     max-width: 460px;
     flex-direction: column;

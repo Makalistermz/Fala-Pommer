@@ -16,6 +16,7 @@ interface Comunidade {
     imagem_comunidade: string | null;
 }
 
+//array de emojis
 export const emojis = [
     '😀', '🤩', '🫡', '🤔', '😍', '💙', '👥', '🤝',
     '🏘️', '🏡', '🏛️', '📍', '💬', '📢', '🔔', '📰',
@@ -25,6 +26,7 @@ export const emojis = [
     '🌳', '🌎', '♻️', '☀️', '🌧️', '✨', '🛡️', '🚨'
 ];
 
+//função que retorna uma cor aleatória
 function corAleatoria() {
     const letters = '0123456789ABCDEF';
     let color = '#';

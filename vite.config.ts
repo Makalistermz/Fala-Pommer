@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => {
       strictPort: true,
       // Mantém autenticação web e cookie na mesma origem durante o desenvolvimento.
       proxy: {
-        "^/(auth|usuarios|conversas|setores|secretaria)(?:/|$)": {
+        "^/(auth|usuarios|conversas|setores|secretaria|comunidades)(?:/|$)": {
           target: apiUrl,
           changeOrigin: true,
         },

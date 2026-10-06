@@ -2,6 +2,7 @@ import {
     BadRequestException,
     Body,
     Controller,
+    Get,
     Post,
     UploadedFile,
     UseGuards,
@@ -55,5 +56,10 @@ export class ComunidadesController {
         @UploadedFile() foto?: ArquivoFotoComunidadeUpload
     ) {
         return this.comunidadesService.criarComunidade(dados, foto);
+    }
+
+    @Get()
+    listarComunidade() {
+        return this.comunidadesService.listarComunidade()
     }
 }

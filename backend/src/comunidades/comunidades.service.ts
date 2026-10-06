@@ -72,5 +72,15 @@ export class ComunidadesService {
 
             throw erro;
         }
-    }
+    };
+
+    async listarComunidade() {
+        return this.prisma.comunidade.findMany({
+            select: {
+                nome_comunidade: true,
+                descricao_comunidade: true,
+                imagem_comunidade: true
+            }
+        });
+    };
 }

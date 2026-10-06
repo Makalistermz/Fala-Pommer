@@ -16,6 +16,7 @@ interface Comunidade {
     imagem_comunidade: string | null;
 }
 
+//retirar export
 //array de emojis
 export const emojis = [
     '😀', '🤩', '🫡', '🤔', '😍', '💙', '👥', '🤝',
@@ -26,8 +27,9 @@ export const emojis = [
     '🌳', '🌎', '♻️', '☀️', '🌧️', '✨', '🛡️', '🚨'
 ];
 
+//retirar export
 //função que retorna uma cor aleatória
-function corAleatoria() {
+export function corAleatoria() {
     const letters = '0123456789ABCDEF';
     let color = '#';
     for (let i = 0; i < 6; i++) {
@@ -119,6 +121,13 @@ function Comunidades() {
                         : resultado.message
                 );
             }
+
+            const comunidadeCriada = await resposta.json() as Comunidade;
+
+            setComunidades((comunidadesAtuais) => [
+                ...comunidadesAtuais,
+                comunidadeCriada
+            ]);
 
             setFeedback({
                 aberto: true,

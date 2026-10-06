@@ -7,8 +7,13 @@ type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 
 interface UsuarioAutenticado {
     sub: number;
-    email: string;
     tipo: TipoUsuario;
+}
+
+interface Comunidade {
+    nome_comunidade: string;
+    descricao_comunidade: string;
+    imagem_comunidade: string | null;
 }
 
 function Comunidades() {
@@ -106,23 +111,30 @@ function Comunidades() {
     }
 
     //busca as comunidades via Get
-    async function buscarComunidade() {
-        try {
-            const resposta = await apiFetch("/comunidades")
+    useEffect(() => {
+        async function buscarComunidade() {
+            try {
+                const resposta = await apiFetch("/comunidades")
 
-            if (!resposta.ok) {
-                return
+                if (!resposta.ok) {
+                    return
+                }
+
+                const dados = await resposta.json() as Comunidade[];
+                setComunidades(dados);
+
+            } catch (erro) {
+                console.error("Erro ao buscar comunidade:", erro);
+                setFeedback({
+                    aberto: true,
+                    tipo: "erro",
+                    mensagem: `Erro ao buscar comunidade: ${erro}`
+                });
             }
-
-            const dados = await resposta.json();
-            setComunidades(dados);
-
-        } catch (erro) {
-
         }
-    }
 
-    buscarComunidade;
+        buscarComunidade();
+    }, []);
     
     useEffect(() => {
         async function buscarPerfil() {
@@ -145,6 +157,9 @@ function Comunidades() {
 
         buscarPerfil();
     }, []);
+
+    const podeCriarComunidade =
+        usuario !== null && usuario.tipo !== "user";
 
     if (novaComunidade) {
         return (
@@ -323,7 +338,7 @@ function Comunidades() {
                         Comunidades
                     </strong>
                     
-                    {usuario?.tipo !== "user" && (
+                    {podeCriarComunidade && (
                         <button
                             type="button"
                             className="comunidades-header__adicionar"
@@ -350,7 +365,7 @@ function Comunidades() {
 
             <main className="comunidades-conteudo background-comunidades">
 
-                {usuario?.tipo !== "user" && (
+                {podeCriarComunidade && (
                     <section className="comunidades-acoes">
                         <button
                             type="button"

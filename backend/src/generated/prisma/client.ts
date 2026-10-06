@@ -129,3 +129,8 @@ export type conversa_finalizacao = Prisma.conversa_finalizacaoModel
  * 
  */
 export type conversa_transferencia = Prisma.conversa_transferenciaModel
+/**
+ * Model comunidade
+ * 
+ */
+export type comunidade = Prisma.comunidadeModel

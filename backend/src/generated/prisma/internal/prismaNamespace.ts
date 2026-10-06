@@ -414,7 +414,8 @@ export const ModelName = {
   historico_administrativo: 'historico_administrativo',
   avaliacao: 'avaliacao',
   conversa_finalizacao: 'conversa_finalizacao',
-  conversa_transferencia: 'conversa_transferencia'
+  conversa_transferencia: 'conversa_transferencia',
+  comunidade: 'comunidade'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -430,7 +431,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "sessao" | "token_push" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao" | "conversa_transferencia"
+    modelProps: "cadastro" | "sessao" | "token_push" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao" | "conversa_transferencia" | "comunidade"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1622,6 +1623,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    comunidade: {
+      payload: Prisma.$comunidadePayload<ExtArgs>
+      fields: Prisma.comunidadeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.comunidadeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidadePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.comunidadeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidadePayload>
+        }
+        findFirst: {
+          args: Prisma.comunidadeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidadePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.comunidadeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidadePayload>
+        }
+        findMany: {
+          args: Prisma.comunidadeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidadePayload>[]
+        }
+        create: {
+          args: Prisma.comunidadeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidadePayload>
+        }
+        createMany: {
+          args: Prisma.comunidadeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.comunidadeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidadePayload>
+        }
+        update: {
+          args: Prisma.comunidadeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidadePayload>
+        }
+        deleteMany: {
+          args: Prisma.comunidadeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.comunidadeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.comunidadeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidadePayload>
+        }
+        aggregate: {
+          args: Prisma.ComunidadeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateComunidade>
+        }
+        groupBy: {
+          args: Prisma.comunidadeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ComunidadeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.comunidadeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ComunidadeCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1897,6 +1964,16 @@ export const Conversa_transferenciaScalarFieldEnum = {
 export type Conversa_transferenciaScalarFieldEnum = (typeof Conversa_transferenciaScalarFieldEnum)[keyof typeof Conversa_transferenciaScalarFieldEnum]
 
 
+export const ComunidadeScalarFieldEnum = {
+  id: 'id',
+  nome_comunidade: 'nome_comunidade',
+  descricao_comunidade: 'descricao_comunidade',
+  imagem_comunidade: 'imagem_comunidade'
+} as const
+
+export type ComunidadeScalarFieldEnum = (typeof ComunidadeScalarFieldEnum)[keyof typeof ComunidadeScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2014,6 +2091,15 @@ export const conversa_transferenciaOrderByRelevanceFieldEnum = {
 } as const
 
 export type conversa_transferenciaOrderByRelevanceFieldEnum = (typeof conversa_transferenciaOrderByRelevanceFieldEnum)[keyof typeof conversa_transferenciaOrderByRelevanceFieldEnum]
+
+
+export const comunidadeOrderByRelevanceFieldEnum = {
+  nome_comunidade: 'nome_comunidade',
+  descricao_comunidade: 'descricao_comunidade',
+  imagem_comunidade: 'imagem_comunidade'
+} as const
+
+export type comunidadeOrderByRelevanceFieldEnum = (typeof comunidadeOrderByRelevanceFieldEnum)[keyof typeof comunidadeOrderByRelevanceFieldEnum]
 
 
 
@@ -2274,6 +2360,7 @@ export type GlobalOmitConfig = {
   avaliacao?: Prisma.avaliacaoOmit
   conversa_finalizacao?: Prisma.conversa_finalizacaoOmit
   conversa_transferencia?: Prisma.conversa_transferenciaOmit
+  comunidade?: Prisma.comunidadeOmit
 }
 
 /* Types for Logging */

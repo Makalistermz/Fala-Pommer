@@ -13,9 +13,10 @@ import { SetoresModule } from './setores/setores.module';
 import { SecretariaModule } from './secretaria/secretaria.module';
 import { NotificacoesModule } from './notificacoes/notificacoes.module';
 import { RecaptchaModule } from './recaptcha/recaptcha.module';
+import { ComunidadesModule } from './comunidades/comunidades.module';
 
 @Module({
-  imports: [PrismaModule, UsuariosModule, RecuperacaoSenhaModule, EmailModule, AuthModule, ConfigModule.forRoot({isGlobal: true, envFilePath: ['.env.local', '.env', '../.env']}), RecaptchaModule, NotificacoesModule, ConversasModule, SetoresModule, SecretariaModule],
+  imports: [PrismaModule, UsuariosModule, RecuperacaoSenhaModule, EmailModule, AuthModule, ConfigModule.forRoot({isGlobal: true, envFilePath: ['.env.local', '.env', '../.env']}), RecaptchaModule, NotificacoesModule, ConversasModule, SetoresModule, SecretariaModule, ComunidadesModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -153,6 +153,7 @@ function Comunidades() {
                                 <label
                                     className="nova-comunidade__imagem-preview"
                                     htmlFor="foto__comunidade"
+                                    title="Selecionar imagem"
                                 >
                                     {fotoPreview ? (
                                         <img

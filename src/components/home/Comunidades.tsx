@@ -244,9 +244,20 @@ function Comunidades() {
                                 <div className="nova-comunidade__descricao-linha" aria-hidden="true"></div>
                             </div>
 
-                            <div>
-                                <input type="checkbox" name="ocultar" id="ocultar" />
-                                <label htmlFor="ocultar">Ocultar comunidade para munícipes</label>
+                            <div className="nova-comunidade__privacidade">
+                                <input
+                                    className="nova-comunidade__privacidade-checkbox"
+                                    type="checkbox"
+                                    name="ocultar"
+                                    id="ocultar"
+                                />
+                                <label
+                                    className="nova-comunidade__privacidade-rotulo"
+                                    htmlFor="ocultar"
+                                >
+                                    <span className="nova-comunidade__privacidade-controle" aria-hidden="true"></span>
+                                    <span>Ocultar comunidade para munícipes</span>
+                                </label>
                             </div>
                         </section>
 

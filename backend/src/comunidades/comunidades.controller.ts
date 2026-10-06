@@ -1,5 +1,17 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { ComunidadesService } from './comunidades.service';
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Post,
+    UploadedFile,
+    UseGuards,
+    UseInterceptors
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+    type ArquivoFotoComunidadeUpload,
+    ComunidadesService
+} from './comunidades.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { PerfisGuard } from 'src/auth/guards/perfis.guard';
 import { Perfis } from 'src/auth/decorators/perfis.decorator';
@@ -14,9 +26,34 @@ export class ComunidadesController {
     @Post()
     @UseGuards(AuthGuard, PerfisGuard)
     @Perfis("admin", "superAdmin")
+    @UseInterceptors(FileInterceptor("foto", {
+        limits: {
+            fileSize: 5 * 1024 * 1024
+        },
+        fileFilter: (_requisicao, arquivo, callback) => {
+            const tiposPermitidos = new Set([
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ]);
+
+            if (!tiposPermitidos.has(arquivo.mimetype)) {
+                callback(
+                    new BadRequestException(
+                        "A foto deve estar nos formatos JPEG, PNG ou WebP."
+                    ),
+                    false
+                );
+                return;
+            }
+
+            callback(null, true);
+        }
+    }))
     criarComunidade (
-        @Body() dados: CriarComunidadeDto
+        @Body() dados: CriarComunidadeDto,
+        @UploadedFile() foto?: ArquivoFotoComunidadeUpload
     ) {
-        return this.comunidadesService.criarComunidade(dados);
+        return this.comunidadesService.criarComunidade(dados, foto);
     }
 }

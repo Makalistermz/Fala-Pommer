@@ -6,6 +6,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 function Comunidades() {
     const [novaComunidade, setNovaComunidade] = useState(false);
     const [criarComunidade, setCriarComunidade] = useState(false);
+    const [comunidades, setComunidades] = useState<unknown[]>([]);
     const [feedback, setFeedback] = useState({
         aberto: false,
         tipo: "erro" as "erro" | "sucesso",
@@ -88,6 +89,24 @@ function Comunidades() {
             });
         }
     }
+
+    async function buscarComunidade() {
+        try {
+            const resposta = await apiFetch("/comunidades")
+
+            if (!resposta.ok) {
+                return
+            }
+
+            const dados = await resposta.json();
+            setComunidades(dados);
+
+        } catch (erro) {
+
+        }
+    }
+
+    buscarComunidade;
 
     if (novaComunidade) {
         return (
@@ -224,6 +243,11 @@ function Comunidades() {
                                 />
                                 <div className="nova-comunidade__descricao-linha" aria-hidden="true"></div>
                             </div>
+
+                            <div>
+                                <input type="checkbox" name="ocultar" id="ocultar" />
+                                <label htmlFor="ocultar">Ocultar comunidade para munícipes</label>
+                            </div>
                         </section>
 
                         <div className="nova-comunidade__acoes">
@@ -298,6 +322,8 @@ function Comunidades() {
                         </span>
                     </button>
                 </section>
+
+
             </main>
 
             <ModalFeedback

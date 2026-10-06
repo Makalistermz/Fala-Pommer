@@ -105,6 +105,8 @@ function Comunidades() {
                                     name="nome__comunidade" 
                                     id="nome__comunidade" 
                                     placeholder="Nome da comunidade"
+                                    maxLength={150}
+                                    required
                                 />
                             </div>
 
@@ -124,6 +126,8 @@ function Comunidades() {
                                     onChange={(evento) => setDescricaoComunidade(evento.target.value)}
                                     placeholder="Digite uma descrição para a comunidade"
                                     rows={3}
+                                    maxLength={400}
+                                    required
                                 />
                                 <div className="nova-comunidade__descricao-linha" aria-hidden="true"></div>
                             </div>

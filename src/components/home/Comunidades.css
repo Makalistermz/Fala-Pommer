@@ -432,6 +432,12 @@
     scale: .98;
 }
 
+.nova-comunidade__imagem-selecionada {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .nova-comunidade__imagem-padrao {
     position: absolute;
     top: 50%;

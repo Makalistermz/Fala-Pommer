@@ -1,9 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CriarComunidadeDto } from './dto/criar-comunidade.dto';
 import { randomUUID } from 'node:crypto';
 import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { type JwtPayload } from '../auth/auth.guard';
 
 export type ArquivoFotoComunidadeUpload = {
     mimetype: string;
@@ -56,7 +57,8 @@ export class ComunidadesService {
                 data: {
                     nome_comunidade: dados.nome_comunidade,
                     descricao_comunidade: dados.descricao_comunidade,
-                    imagem_comunidade: fotoComunidadeUrl
+                    imagem_comunidade: fotoComunidadeUrl,
+                    ocultar_municipes: dados.ocultar_municipes
                 },
 
                 select: {
@@ -74,8 +76,11 @@ export class ComunidadesService {
         }
     };
 
-    async listarComunidade() {
+    async listarComunidade(tipoUsuario: JwtPayload["tipo"]) {
         return this.prisma.comunidade.findMany({
+            where: tipoUsuario === "user"
+                ? { ocultar_municipes: false }
+                : undefined,
             select: {
                 nome_comunidade: true,
                 descricao_comunidade: true,

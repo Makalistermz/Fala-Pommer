@@ -324,6 +324,7 @@ model comunidade {
   nome_comunidade      String  @db.VarChar(150)
   descricao_comunidade String  @db.VarChar(400)
   imagem_comunidade    String? @db.VarChar(500)
+  ocultar_municipes    Boolean @default(false)
 }
 
 enum desafio_2fa_finalidade {

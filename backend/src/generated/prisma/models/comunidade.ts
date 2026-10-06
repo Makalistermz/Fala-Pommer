@@ -39,6 +39,7 @@ export type ComunidadeMinAggregateOutputType = {
   nome_comunidade: string | null
   descricao_comunidade: string | null
   imagem_comunidade: string | null
+  ocultar_municipes: boolean | null
 }
 
 export type ComunidadeMaxAggregateOutputType = {
@@ -46,6 +47,7 @@ export type ComunidadeMaxAggregateOutputType = {
   nome_comunidade: string | null
   descricao_comunidade: string | null
   imagem_comunidade: string | null
+  ocultar_municipes: boolean | null
 }
 
 export type ComunidadeCountAggregateOutputType = {
@@ -53,6 +55,7 @@ export type ComunidadeCountAggregateOutputType = {
   nome_comunidade: number
   descricao_comunidade: number
   imagem_comunidade: number
+  ocultar_municipes: number
   _all: number
 }
 
@@ -70,6 +73,7 @@ export type ComunidadeMinAggregateInputType = {
   nome_comunidade?: true
   descricao_comunidade?: true
   imagem_comunidade?: true
+  ocultar_municipes?: true
 }
 
 export type ComunidadeMaxAggregateInputType = {
@@ -77,6 +81,7 @@ export type ComunidadeMaxAggregateInputType = {
   nome_comunidade?: true
   descricao_comunidade?: true
   imagem_comunidade?: true
+  ocultar_municipes?: true
 }
 
 export type ComunidadeCountAggregateInputType = {
@@ -84,6 +89,7 @@ export type ComunidadeCountAggregateInputType = {
   nome_comunidade?: true
   descricao_comunidade?: true
   imagem_comunidade?: true
+  ocultar_municipes?: true
   _all?: true
 }
 
@@ -178,6 +184,7 @@ export type ComunidadeGroupByOutputType = {
   nome_comunidade: string
   descricao_comunidade: string
   imagem_comunidade: string | null
+  ocultar_municipes: boolean
   _count: ComunidadeCountAggregateOutputType | null
   _avg: ComunidadeAvgAggregateOutputType | null
   _sum: ComunidadeSumAggregateOutputType | null
@@ -208,6 +215,7 @@ export type comunidadeWhereInput = {
   nome_comunidade?: Prisma.StringFilter<"comunidade"> | string
   descricao_comunidade?: Prisma.StringFilter<"comunidade"> | string
   imagem_comunidade?: Prisma.StringNullableFilter<"comunidade"> | string | null
+  ocultar_municipes?: Prisma.BoolFilter<"comunidade"> | boolean
 }
 
 export type comunidadeOrderByWithRelationInput = {
@@ -215,6 +223,7 @@ export type comunidadeOrderByWithRelationInput = {
   nome_comunidade?: Prisma.SortOrder
   descricao_comunidade?: Prisma.SortOrder
   imagem_comunidade?: Prisma.SortOrderInput | Prisma.SortOrder
+  ocultar_municipes?: Prisma.SortOrder
   _relevance?: Prisma.comunidadeOrderByRelevanceInput
 }
 
@@ -226,6 +235,7 @@ export type comunidadeWhereUniqueInput = Prisma.AtLeast<{
   nome_comunidade?: Prisma.StringFilter<"comunidade"> | string
   descricao_comunidade?: Prisma.StringFilter<"comunidade"> | string
   imagem_comunidade?: Prisma.StringNullableFilter<"comunidade"> | string | null
+  ocultar_municipes?: Prisma.BoolFilter<"comunidade"> | boolean
 }, "id">
 
 export type comunidadeOrderByWithAggregationInput = {
@@ -233,6 +243,7 @@ export type comunidadeOrderByWithAggregationInput = {
   nome_comunidade?: Prisma.SortOrder
   descricao_comunidade?: Prisma.SortOrder
   imagem_comunidade?: Prisma.SortOrderInput | Prisma.SortOrder
+  ocultar_municipes?: Prisma.SortOrder
   _count?: Prisma.comunidadeCountOrderByAggregateInput
   _avg?: Prisma.comunidadeAvgOrderByAggregateInput
   _max?: Prisma.comunidadeMaxOrderByAggregateInput
@@ -248,12 +259,14 @@ export type comunidadeScalarWhereWithAggregatesInput = {
   nome_comunidade?: Prisma.StringWithAggregatesFilter<"comunidade"> | string
   descricao_comunidade?: Prisma.StringWithAggregatesFilter<"comunidade"> | string
   imagem_comunidade?: Prisma.StringNullableWithAggregatesFilter<"comunidade"> | string | null
+  ocultar_municipes?: Prisma.BoolWithAggregatesFilter<"comunidade"> | boolean
 }
 
 export type comunidadeCreateInput = {
   nome_comunidade: string
   descricao_comunidade: string
   imagem_comunidade?: string | null
+  ocultar_municipes?: boolean
 }
 
 export type comunidadeUncheckedCreateInput = {
@@ -261,12 +274,14 @@ export type comunidadeUncheckedCreateInput = {
   nome_comunidade: string
   descricao_comunidade: string
   imagem_comunidade?: string | null
+  ocultar_municipes?: boolean
 }
 
 export type comunidadeUpdateInput = {
   nome_comunidade?: Prisma.StringFieldUpdateOperationsInput | string
   descricao_comunidade?: Prisma.StringFieldUpdateOperationsInput | string
   imagem_comunidade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ocultar_municipes?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type comunidadeUncheckedUpdateInput = {
@@ -274,6 +289,7 @@ export type comunidadeUncheckedUpdateInput = {
   nome_comunidade?: Prisma.StringFieldUpdateOperationsInput | string
   descricao_comunidade?: Prisma.StringFieldUpdateOperationsInput | string
   imagem_comunidade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ocultar_municipes?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type comunidadeCreateManyInput = {
@@ -281,12 +297,14 @@ export type comunidadeCreateManyInput = {
   nome_comunidade: string
   descricao_comunidade: string
   imagem_comunidade?: string | null
+  ocultar_municipes?: boolean
 }
 
 export type comunidadeUpdateManyMutationInput = {
   nome_comunidade?: Prisma.StringFieldUpdateOperationsInput | string
   descricao_comunidade?: Prisma.StringFieldUpdateOperationsInput | string
   imagem_comunidade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ocultar_municipes?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type comunidadeUncheckedUpdateManyInput = {
@@ -294,6 +312,7 @@ export type comunidadeUncheckedUpdateManyInput = {
   nome_comunidade?: Prisma.StringFieldUpdateOperationsInput | string
   descricao_comunidade?: Prisma.StringFieldUpdateOperationsInput | string
   imagem_comunidade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ocultar_municipes?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type comunidadeOrderByRelevanceInput = {
@@ -307,6 +326,7 @@ export type comunidadeCountOrderByAggregateInput = {
   nome_comunidade?: Prisma.SortOrder
   descricao_comunidade?: Prisma.SortOrder
   imagem_comunidade?: Prisma.SortOrder
+  ocultar_municipes?: Prisma.SortOrder
 }
 
 export type comunidadeAvgOrderByAggregateInput = {
@@ -318,6 +338,7 @@ export type comunidadeMaxOrderByAggregateInput = {
   nome_comunidade?: Prisma.SortOrder
   descricao_comunidade?: Prisma.SortOrder
   imagem_comunidade?: Prisma.SortOrder
+  ocultar_municipes?: Prisma.SortOrder
 }
 
 export type comunidadeMinOrderByAggregateInput = {
@@ -325,6 +346,7 @@ export type comunidadeMinOrderByAggregateInput = {
   nome_comunidade?: Prisma.SortOrder
   descricao_comunidade?: Prisma.SortOrder
   imagem_comunidade?: Prisma.SortOrder
+  ocultar_municipes?: Prisma.SortOrder
 }
 
 export type comunidadeSumOrderByAggregateInput = {
@@ -338,6 +360,7 @@ export type comunidadeSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   nome_comunidade?: boolean
   descricao_comunidade?: boolean
   imagem_comunidade?: boolean
+  ocultar_municipes?: boolean
 }, ExtArgs["result"]["comunidade"]>
 
 
@@ -347,9 +370,10 @@ export type comunidadeSelectScalar = {
   nome_comunidade?: boolean
   descricao_comunidade?: boolean
   imagem_comunidade?: boolean
+  ocultar_municipes?: boolean
 }
 
-export type comunidadeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome_comunidade" | "descricao_comunidade" | "imagem_comunidade", ExtArgs["result"]["comunidade"]>
+export type comunidadeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nome_comunidade" | "descricao_comunidade" | "imagem_comunidade" | "ocultar_municipes", ExtArgs["result"]["comunidade"]>
 
 export type $comunidadePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "comunidade"
@@ -359,6 +383,7 @@ export type $comunidadePayload<ExtArgs extends runtime.Types.Extensions.Internal
     nome_comunidade: string
     descricao_comunidade: string
     imagem_comunidade: string | null
+    ocultar_municipes: boolean
   }, ExtArgs["result"]["comunidade"]>
   composites: {}
 }
@@ -732,6 +757,7 @@ export interface comunidadeFieldRefs {
   readonly nome_comunidade: Prisma.FieldRef<"comunidade", 'String'>
   readonly descricao_comunidade: Prisma.FieldRef<"comunidade", 'String'>
   readonly imagem_comunidade: Prisma.FieldRef<"comunidade", 'String'>
+  readonly ocultar_municipes: Prisma.FieldRef<"comunidade", 'Boolean'>
 }
     
 

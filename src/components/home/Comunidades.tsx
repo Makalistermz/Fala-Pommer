@@ -19,6 +19,7 @@ function Comunidades() {
     const [fotoPreview, setFotoPreview] = useState<string | null>(null);
     const nomeComunidadeRef = useRef<HTMLInputElement>(null);
     const descricaoRef = useRef<HTMLTextAreaElement>(null);
+    const ocultarMunicipesRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (!fotoComunidade) {
@@ -52,6 +53,10 @@ function Comunidades() {
             corpo.append(
                 "descricao_comunidade",
                 descricaoComunidade
+            );
+            corpo.append(
+                "ocultar_municipes",
+                String(ocultarMunicipesRef.current?.checked ?? false)
             );
 
             if (fotoComunidade) {
@@ -246,6 +251,7 @@ function Comunidades() {
 
                             <div className="nova-comunidade__privacidade">
                                 <input
+                                    ref={ocultarMunicipesRef}
                                     className="nova-comunidade__privacidade-checkbox"
                                     type="checkbox"
                                     name="ocultar"

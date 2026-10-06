@@ -4,6 +4,7 @@ import {
     Controller,
     Get,
     Post,
+    Req,
     UploadedFile,
     UseGuards,
     UseInterceptors
@@ -13,9 +14,12 @@ import {
     type ArquivoFotoComunidadeUpload,
     ComunidadesService
 } from './comunidades.service';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { PerfisGuard } from 'src/auth/guards/perfis.guard';
-import { Perfis } from 'src/auth/decorators/perfis.decorator';
+import {
+    AuthGuard,
+    type RequisicaoAutenticada
+} from '../auth/auth.guard';
+import { PerfisGuard } from '../auth/guards/perfis.guard';
+import { Perfis } from '../auth/decorators/perfis.decorator';
 import { CriarComunidadeDto } from './dto/criar-comunidade.dto';
 
 @Controller('comunidades')
@@ -26,7 +30,7 @@ export class ComunidadesController {
 
     @Post()
     @UseGuards(AuthGuard, PerfisGuard)
-    @Perfis("admin", "superAdmin")
+    @Perfis("funcionario", "admin", "superAdmin")
     @UseInterceptors(FileInterceptor("foto", {
         limits: {
             fileSize: 5 * 1024 * 1024
@@ -59,7 +63,12 @@ export class ComunidadesController {
     }
 
     @Get()
-    listarComunidade() {
-        return this.comunidadesService.listarComunidade()
+    @UseGuards(AuthGuard)
+    listarComunidade(
+        @Req() requisicao: RequisicaoAutenticada
+    ) {
+        return this.comunidadesService.listarComunidade(
+            requisicao.usuario!.tipo
+        );
     }
 }

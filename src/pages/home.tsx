@@ -375,7 +375,7 @@ function Home() {
 
     const [conversaSelecionada, setConversaSelecionada] =
         useState<Conversa | null>(null);
-    const [comunidadeSelecionada, setComunidadeSelecionada] = useState<Comunidade | null>(null);
+    const [dados, setDados] = useState<Comunidade | null>(null);
     // Estados da entrada na comunidade; mensagens e anexos reutilizam os estados do chat abaixo.
     const [carregandoComunidade, setCarregandoComunidade] = useState(false);
     const [entrandoComunidade, setEntrandoComunidade] = useState(false);
@@ -2576,7 +2576,7 @@ function Home() {
     async function abrirConversa(conversa: Conversa) {
         if (conversa.tipo !== "comunidade") {
             comunidadeAbertaIdRef.current = null;
-            setComunidadeSelecionada(null);
+            setDados(null);
         }
         pararDeInformarDigitacao();
         cancelarGravacaoAudio();
@@ -2709,7 +2709,7 @@ function Home() {
         fecharChatMobile();
         cancelarGravacaoAudio();
         setConversaSelecionada(null);
-        setComunidadeSelecionada(comunidade);
+        setDados(comunidade);
         comunidadeAbertaIdRef.current = comunidade.id;
         setErroComunidade("");
         setCarregandoComunidade(comunidade.participa);
@@ -2727,7 +2727,7 @@ function Home() {
             // Uma resposta atrasada não pode substituir a comunidade/conversa aberta depois.
             if (comunidadeAbertaIdRef.current !== comunidade.id) return;
             const conversa = dados as ConversaComunidade;
-            setComunidadeSelecionada({ ...comunidade, totalParticipantes: conversa.totalParticipantes });
+            setDados({ ...comunidade, totalParticipantes: conversa.totalParticipantes });
             await abrirConversa(conversa);
         } catch (erro) {
             if (comunidadeAbertaIdRef.current === comunidade.id) {
@@ -2740,8 +2740,8 @@ function Home() {
 
     // Registra a participação antes de permitir leitura e envio de mensagens.
     async function entrarComunidade() {
-        if (!comunidadeSelecionada || entrandoComunidade) return;
-        const comunidadeId = comunidadeSelecionada.id;
+        if (!dados || entrandoComunidade) return;
+        const comunidadeId = dados.id;
         setEntrandoComunidade(true);
         setErroComunidade("");
         try {
@@ -2763,7 +2763,7 @@ function Home() {
     // Fecha a comunidade e impede que buscas pendentes reabram seu chat.
     function voltarDasComunidades() {
         comunidadeAbertaIdRef.current = null;
-        setComunidadeSelecionada(null);
+        setDados(null);
         setConversaSelecionada(null);
         cancelarGravacaoAudio();
         fecharChatMobile();
@@ -3390,7 +3390,7 @@ function Home() {
                     }`}
                     onClick={() => {
                         setItemSidebarAtivo("conversas");
-                        if (comunidadeSelecionada) {
+                        if (dados) {
                             voltarDasComunidades();
                         }
                     }}
@@ -3467,7 +3467,7 @@ function Home() {
 
         <aside className="conversas" data-lenis-prevent>
             {itemSidebarAtivo === "comunidades" && (
-                <Comunidades aoAbrir={abrirComunidade} comunidadeSelecionada={comunidadeSelecionada} />
+                <Comunidades aoAbrir={abrirComunidade} comunidadeSelecionada={dados} />
             )}
 
             {itemSidebarAtivo === "conversas" && (
@@ -3859,7 +3859,7 @@ function Home() {
 
         {/* A comunidade usa o chat desta página; somente a entrada aparece antes de carregar a conversa. */}
         <section className="chat">
-            {comunidadeSelecionada && !conversaSelecionada ? (
+            {dados && !conversaSelecionada ? (
                 <>
                     <header className="chat-header">
                         <div className="chat-header__usuario">
@@ -3869,23 +3869,23 @@ function Home() {
                                 </svg>
                             </button>
                             <div className="chat-header__avatar">
-                                {renderizarAvatar(comunidadeSelecionada.nome_comunidade, comunidadeSelecionada.imagem_comunidade)}
+                                {renderizarAvatar(dados.nome_comunidade, dados.imagem_comunidade)}
                             </div>
                             <div className="chat-header__dados">
-                                <strong>{comunidadeSelecionada.nome_comunidade}</strong>
-                                <span>{comunidadeSelecionada.totalParticipantes} participantes</span>
+                                <strong>{dados.nome_comunidade}</strong>
+                                <span>{dados.totalParticipantes} participantes</span>
                             </div>
                         </div>
                     </header>
                     {/* A classe mensagens mantém o papel de parede escolhido, inclusive na tela de entrada. */}
                     <div className="mensagens comunidade-entrada">
                         <div className="comunidade-entrada__cartao">
-                            <h2>{comunidadeSelecionada.nome_comunidade}</h2>
-                            <p>{comunidadeSelecionada.descricao_comunidade}</p>
+                            <h2>{dados.nome_comunidade}</h2>
+                            <p>{dados.descricao_comunidade}</p>
                             {carregandoComunidade ? (
                                 <p role="status">Carregando o chat da comunidade…</p>
-                            ) : comunidadeSelecionada.participa ? (
-                                <button type="button" onClick={() => void abrirComunidade(comunidadeSelecionada)}>
+                            ) : dados.participa ? (
+                                <button type="button" onClick={() => void abrirComunidade(dados)}>
                                     Tentar abrir o chat novamente
                                 </button>
                             ) : (
@@ -5900,7 +5900,7 @@ function Home() {
             </div>
         )}
 
-        {modalDadosComunidadeAberto && conversaSelecionada?.tipo === "comunidade" && (
+        {modalDadosComunidadeAberto && conversaSelecionada?.tipo === "comunidade" && dados && (
             <div
                 className="modal-dados__fundo"
                 onClick={() => setModalDadosComunidadeAberto(false)}
@@ -5909,10 +5909,11 @@ function Home() {
                     className="modal-dados modal-dados-comunidade"
                     role="dialog"
                     aria-modal="true"
-                    aria-label="Dados da comunidade"
+                    aria-labelledby="modal-dados-comunidade-titulo"
                     onClick={(evento) => evento.stopPropagation()}
                 >
                     <header className="modal-dados__cabecalho">
+                        <h2 id="modal-dados-comunidade-titulo">Dados da comunidade</h2>
                         <button
                             ref={botaoFecharModalDadosComunidadeRef}
                             type="button"
@@ -5924,7 +5925,39 @@ function Home() {
                             </svg>
                         </button>
                     </header>
-                    <div className="modal-dados__conteudo" />
+                    <div className="modal-dados__conteudo">
+                        <section>
+                            <div>
+                                <div className="chat-header__avatar">
+                                    {dados.imagem_comunidade !== null 
+                                        ? renderizarAvatar(dados.nome_comunidade, dados.imagem_comunidade)
+                                        
+                                        : <svg
+                                            width="16"
+                                            height="16"
+                                            fill="currentColor"
+                                            className="comunidades-acoes__icone-svg bi bi-people-fill"
+                                            viewBox="0 0 16 16"
+                                        >
+                                            <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
+                                        </svg>
+                                    }
+                                </div>
+                            </div>
+
+                            <div>
+                                <strong>{dados.nome_comunidade}</strong>
+                            </div>
+
+                            <div>
+                                <p>
+                                    Comunidade <span>·</span>{" "}
+                                    {dados.totalParticipantes}{" "}
+                                    {dados.totalParticipantes === 1 ? "membro" : "membros"}
+                                </p>
+                            </div>
+                        </section>
+                    </div>
                 </section>
             </div>
         )}

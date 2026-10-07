@@ -21,7 +21,8 @@ export type desafio_2fa_finalidade = (typeof desafio_2fa_finalidade)[keyof typeo
 export const conversa_tipo = {
   privada: 'privada',
   grupo: 'grupo',
-  setor: 'setor'
+  setor: 'setor',
+  comunidade: 'comunidade'
 } as const
 
 export type conversa_tipo = (typeof conversa_tipo)[keyof typeof conversa_tipo]

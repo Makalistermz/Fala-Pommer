@@ -25,7 +25,8 @@ import { ModalFeedback } from "../components/ModalFeedback";
 import { useAutenticacao } from "../components/AutenticacaoContext";
 import { apiFetch } from "../services/api";
 import { inicializarNotificacoes } from "../services/notificacoes.service";
-import Comunidades from "../components/home/Comunidades.tsx";
+import Comunidades, { type Comunidade } from "../components/home/Comunidades.tsx";
+import ChatComunidade from "../components/home/ChatComunidade";
 import { Capacitor } from '@capacitor/core';
 import { Haptics } from '@capacitor/haptics';
 
@@ -366,6 +367,7 @@ function Home() {
 
     const [conversaSelecionada, setConversaSelecionada] =
         useState<Conversa | null>(null);
+    const [comunidadeSelecionada, setComunidadeSelecionada] = useState<Comunidade | null>(null);
 
     const [chatMobileAberto, setChatMobileAberto] = useState(false);
 
@@ -2528,6 +2530,7 @@ function Home() {
     }
 
     async function abrirConversa(conversa: Conversa) {
+        setComunidadeSelecionada(null);
         pararDeInformarDigitacao();
         cancelarGravacaoAudio();
 
@@ -2647,6 +2650,14 @@ function Home() {
                 setCarregandoMensagensAnteriores(false);
             }
         }
+    }
+
+    function abrirComunidade(comunidade: Comunidade) {
+        fecharChatMobile();
+        cancelarGravacaoAudio();
+        setConversaSelecionada(null);
+        setComunidadeSelecionada(comunidade);
+        setChatMobileAberto(true);
     }
 
     function fecharChatMobile() {
@@ -3266,7 +3277,13 @@ function Home() {
                             ? "home-sidebar__item--ativo"
                             : ""
                     }`}
-                    onClick={() => setItemSidebarAtivo("conversas")}
+                    onClick={() => {
+                        setItemSidebarAtivo("conversas");
+                        if (comunidadeSelecionada) {
+                            setComunidadeSelecionada(null);
+                            fecharChatMobile();
+                        }
+                    }}
                     aria-label="Conversas"
                     aria-pressed={itemSidebarAtivo === "conversas"}
                     title="Conversas"
@@ -3285,7 +3302,14 @@ function Home() {
                             ? "home-sidebar__item--ativo"
                             : ""
                     }`}
-                    onClick={() => setItemSidebarAtivo("comunidades")}
+                    onClick={() => {
+                        setItemSidebarAtivo("comunidades");
+                        if (itemSidebarAtivo !== "comunidades") {
+                            fecharChatMobile();
+                            cancelarGravacaoAudio();
+                            setConversaSelecionada(null);
+                        }
+                    }}
                     aria-label="Comunidades"
                     aria-pressed={itemSidebarAtivo === "comunidades"}
                     title="Comunidades"
@@ -3333,7 +3357,7 @@ function Home() {
 
         <aside className="conversas" data-lenis-prevent>
             {itemSidebarAtivo === "comunidades" && (
-                <Comunidades />
+                <Comunidades aoAbrir={abrirComunidade} comunidadeSelecionada={comunidadeSelecionada} />
             )}
 
             {itemSidebarAtivo === "conversas" && (
@@ -3723,8 +3747,19 @@ function Home() {
             
         </aside>
 
-        <section className="chat">
-            {conversaSelecionada ? (
+        <section className={`chat ${comunidadeSelecionada ? 'chat--comunidade' : ''}`}>
+            {comunidadeSelecionada ? (
+                <ChatComunidade
+                    key={comunidadeSelecionada.id}
+                    comunidade={comunidadeSelecionada}
+                    usuarioId={usuario?.sub}
+                    aoAtualizar={setComunidadeSelecionada}
+                    aoVoltar={() => {
+                        setComunidadeSelecionada(null);
+                        fecharChatMobile();
+                    }}
+                />
+            ) : conversaSelecionada ? (
             <>
                 <header className="chat-header">
                 <div className="chat-header__usuario">

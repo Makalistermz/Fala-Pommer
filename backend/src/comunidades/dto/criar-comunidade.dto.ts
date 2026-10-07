@@ -1,13 +1,15 @@
 import { Transform } from "class-transformer";
-import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsString, MaxLength } from "class-validator";
 
 export class CriarComunidadeDto {
     @IsString()
     @IsNotEmpty()
+    @MaxLength(150)
     nome_comunidade!: string;
 
     @IsString()
     @IsNotEmpty()
+    @MaxLength(400)
     descricao_comunidade!: string;
 
     @Transform(({ value }) => {

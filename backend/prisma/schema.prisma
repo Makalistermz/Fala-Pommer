@@ -118,6 +118,7 @@ model conversa {
   atendimento_setor      conversa_setor?
   conversa_transferencia conversa_transferencia[]
   mensagens              mensagem[]
+  comunidade             comunidade?
 }
 
 model conversa_participante {
@@ -325,6 +326,8 @@ model comunidade {
   descricao_comunidade String  @db.VarChar(400)
   imagem_comunidade    String? @db.VarChar(500)
   ocultar_municipes    Boolean @default(false)
+  conversa_id         Int?    @unique(map: "uq_comunidade_conversa")
+  conversa            conversa? @relation(fields: [conversa_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_comunidade_conversa")
 }
 
 enum desafio_2fa_finalidade {
@@ -337,6 +340,7 @@ enum conversa_tipo {
   privada
   grupo
   setor
+  comunidade
 }
 
 enum mensagem_origem {

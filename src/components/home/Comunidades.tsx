@@ -10,10 +10,13 @@ interface UsuarioAutenticado {
     tipo: TipoUsuario;
 }
 
-interface Comunidade {
+export interface Comunidade {
+    id: number;
     nome_comunidade: string;
     descricao_comunidade: string;
     imagem_comunidade: string | null;
+    participa: boolean;
+    totalParticipantes: number;
 }
 
 function obterUrlImagemComunidade(url: string | null) {
@@ -67,11 +70,17 @@ async function gerarImagemIconeComunidade(emoji: string, cor: string) {
     return new File([imagem], "icone-comunidade.png", { type: "image/png" });
 }
 
-function Comunidades() {
+interface ComunidadesProps {
+    aoAbrir: (comunidade: Comunidade) => void;
+    comunidadeSelecionada: Comunidade | null;
+}
+
+function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
     const [novaComunidade, setNovaComunidade] = useState(false);
     const [criarComunidade, setCriarComunidade] = useState(false);
     const [usuario, setUsuario] = useState<UsuarioAutenticado | null>(null);
     const [comunidades, setComunidades] = useState<Comunidade[]>([]);
+    const [salvando, setSalvando] = useState(false);
     const [feedback, setFeedback] = useState({
         aberto: false,
         tipo: "erro" as "erro" | "sucesso",
@@ -138,8 +147,17 @@ function Comunidades() {
         campoDescricao.style.height = `${campoDescricao.scrollHeight}px`;
     }, [descricaoComunidade, criarComunidade]);
 
+    useEffect(() => {
+        if (!comunidadeSelecionada) return;
+        setComunidades((atuais) => atuais.map((comunidade) =>
+            comunidade.id === comunidadeSelecionada.id ? comunidadeSelecionada : comunidade
+        ));
+    }, [comunidadeSelecionada]);
+
     //envia as comunidades criadas via Post
     async function cadastrarComunidade() {
+        if (salvando) return;
+        setSalvando(true);
         try {
             const corpo = new FormData();
 
@@ -195,6 +213,12 @@ function Comunidades() {
 
             setNovaComunidade(false);
             setCriarComunidade(false);
+            setFotoComunidade(null);
+            setFotoPreview(null);
+            setIconeAleatorio(null);
+            setCorIconeAleatorio(null);
+            setDescricaoComunidade(descricaoPadrao);
+            aoAbrir(comunidadeCriada);
         } catch (erro) {
             console.error("Erro ao criar comunidade:", erro);
             setFeedback({
@@ -202,6 +226,8 @@ function Comunidades() {
                 tipo: "erro",
                 mensagem: `Erro ao criar comunidade: ${erro}`
             });
+        } finally {
+            setSalvando(false);
         }
     }
 
@@ -435,8 +461,9 @@ function Comunidades() {
                                 className="nova-comunidade__comecar" 
                                 type="button"
                                 onClick={cadastrarComunidade}
+                                disabled={salvando}
                             >
-                                Criar
+                                {salvando ? 'Criando…' : 'Criar'}
                             </button>
                         </div>
                     </main>
@@ -483,11 +510,13 @@ function Comunidades() {
                 {comunidades.map((comunidade) => (
                     <section
                         className="comunidades-acoes"
-                        key={comunidade.nome_comunidade}
+                        key={comunidade.id}
                     >
                         <button
                             type="button"
                             className="comunidades-acoes__nova"
+                            onClick={() => aoAbrir(comunidade)}
+                            aria-pressed={comunidadeSelecionada?.id === comunidade.id}
                         >
                             <div
                                 className="comunidades-acoes__icone"

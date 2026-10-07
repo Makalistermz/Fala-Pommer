@@ -1140,7 +1140,6 @@
     padding: 5px 8px;
     border-radius: 9px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
 }
 
 .header__avatar__dados--clicavel:focus-visible {

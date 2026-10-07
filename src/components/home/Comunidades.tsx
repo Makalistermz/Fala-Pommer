@@ -24,6 +24,49 @@ function obterUrlImagemComunidade(url: string | null) {
         : `${import.meta.env.VITE_API_URL}${url}`;
 }
 
+async function gerarImagemIconeComunidade(emoji: string, cor: string) {
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 512;
+
+    const contexto = canvas.getContext("2d");
+
+    if (!contexto) {
+        throw new Error("Não foi possível gerar a imagem do ícone da comunidade.");
+    }
+
+    const fonte = '248px "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
+    await document.fonts.load(fonte, emoji);
+
+    contexto.fillStyle = cor;
+    contexto.fillRect(0, 0, canvas.width, canvas.height);
+    contexto.font = fonte;
+    contexto.textAlign = "center";
+    contexto.textBaseline = "alphabetic";
+    contexto.fillStyle = "#ffffff";
+    contexto.shadowColor = "rgba(0, 0, 0, 0.25)";
+    contexto.shadowBlur = 19;
+    contexto.shadowOffsetY = 12;
+
+    const medidas = contexto.measureText(emoji);
+    const centroVertical = canvas.height / 2
+        + (medidas.actualBoundingBoxAscent - medidas.actualBoundingBoxDescent) / 2;
+
+    contexto.fillText(emoji, canvas.width / 2, centroVertical);
+
+    const imagem = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob((blob) => {
+            if (blob) {
+                resolve(blob);
+            } else {
+                reject(new Error("Não foi possível converter o ícone da comunidade em PNG."));
+            }
+        }, "image/png");
+    });
+
+    return new File([imagem], "icone-comunidade.png", { type: "image/png" });
+}
+
 function Comunidades() {
     const [novaComunidade, setNovaComunidade] = useState(false);
     const [criarComunidade, setCriarComunidade] = useState(false);
@@ -115,6 +158,12 @@ function Comunidades() {
 
             if (fotoComunidade) {
                 corpo.append("foto", fotoComunidade);
+            } else if (iconeAleatorio && corIconeAleatorio) {
+                const imagemIcone = await gerarImagemIconeComunidade(
+                    iconeAleatorio,
+                    corIconeAleatorio
+                );
+                corpo.append("foto", imagemIcone);
             }
 
             const resposta = await apiFetch("/comunidades", {

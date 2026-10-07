@@ -446,6 +446,25 @@
     object-fit: cover;
 }
 
+.nova-comunidade__avatar-aleatorio {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    place-items: center;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+
+.nova-comunidade__avatar-emoji {
+    position: relative;
+    z-index: 1;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    font-size: 4rem;
+    line-height: 1;
+    filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.25));
+    user-select: none;
+}
+
 .nova-comunidade__imagem-padrao {
     position: absolute;
     top: 50%;

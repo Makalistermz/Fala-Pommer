@@ -5791,17 +5791,17 @@ function Home() {
 
         {modalDadosGrupoAberto && conversaSelecionada?.tipo === "grupo" && (
             <div
-                className="modal-dados-grupo__fundo"
+                className="modal-dados__fundo"
                 onClick={() => setModalDadosGrupoAberto(false)}
             >
                 <section
-                    className="modal-dados-grupo"
+                    className="modal-dados modal-dados-grupo"
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="modal-dados-grupo-titulo"
                     onClick={(evento) => evento.stopPropagation()}
                 >
-                    <header className="modal-dados-grupo__cabecalho">
+                    <header className="modal-dados__cabecalho">
                         <h2 id="modal-dados-grupo-titulo">
                             Dados do grupo
                         </h2>
@@ -5817,7 +5817,7 @@ function Home() {
                         </button>
                     </header>
 
-                    <div className="modal-dados-grupo__conteudo">
+                    <div className="modal-dados__conteudo">
                         <div className="modal-dados-grupo__identidade">
                             <div
                                 className="modal-dados-grupo__avatar-principal"
@@ -5901,7 +5901,32 @@ function Home() {
         )}
 
         {modalDadosComunidadeAberto && conversaSelecionada?.tipo === "comunidade" && (
-            
+            <div
+                className="modal-dados__fundo"
+                onClick={() => setModalDadosComunidadeAberto(false)}
+            >
+                <section
+                    className="modal-dados modal-dados-comunidade"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Dados da comunidade"
+                    onClick={(evento) => evento.stopPropagation()}
+                >
+                    <header className="modal-dados__cabecalho">
+                        <button
+                            ref={botaoFecharModalDadosComunidadeRef}
+                            type="button"
+                            aria-label="Fechar"
+                            onClick={() => setModalDadosComunidadeAberto(false)}
+                        >
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="m6 6 12 12M18 6 6 18" />
+                            </svg>
+                        </button>
+                    </header>
+                    <div className="modal-dados__conteudo" />
+                </section>
+            </div>
         )}
 
         <ModalConfirmacao

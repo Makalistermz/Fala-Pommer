@@ -653,7 +653,7 @@ html.tema-escuro:not(.alto-contraste) .chat-input__responder-remover:focus-visib
 
 html.tema-escuro:not(.alto-contraste) :is(
   .modal-grupo__janela,
-  .modal-dados-grupo,
+  .modal-dados,
   .chat-header__menu-opcoes
 ) {
   border-color: var(--tema-borda);
@@ -896,7 +896,7 @@ html.tema-escuro:not(.alto-contraste) .mensagem-sistema {
 }
 
 html.tema-escuro:not(.alto-contraste) :is(
-  .modal-dados-grupo__cabecalho,
+  .modal-dados__cabecalho,
   .modal-dados-grupo__participantes,
   .modal-dados-grupo__participantes li + li
 ) {
@@ -904,7 +904,7 @@ html.tema-escuro:not(.alto-contraste) :is(
 }
 
 html.tema-escuro:not(.alto-contraste) :is(
-  .modal-dados-grupo__cabecalho h2,
+  .modal-dados__cabecalho h2,
   .modal-dados-grupo__identificacao strong,
   .modal-dados-grupo__secao-titulo h3,
   .modal-dados-grupo__participante-dados strong
@@ -940,13 +940,17 @@ html.tema-escuro:not(.alto-contraste) .modal-dados-grupo__sem-participantes {
   background: var(--tema-superficie-elevada);
 }
 
-html.tema-escuro:not(.alto-contraste) .modal-dados-grupo__cabecalho button {
+html.tema-escuro:not(.alto-contraste) .modal-dados__cabecalho button {
   color: var(--tema-texto-secundario);
 }
 
-html.tema-escuro:not(.alto-contraste) .modal-dados-grupo__cabecalho button:hover {
+html.tema-escuro:not(.alto-contraste) .modal-dados__cabecalho button:hover {
   background: var(--tema-superficie-interativa);
   color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-dados__cabecalho button:focus-visible {
+  outline-color: var(--tema-destaque);
 }
 
 html.tema-escuro:not(.alto-contraste) :is(
@@ -1869,7 +1873,7 @@ html.alto-contraste body :where(
   .modal-feedback,
   .modal-confirmacao,
   .modal-grupo__janela,
-  .modal-dados-grupo,
+  .modal-dados,
   .modal-finalizar,
   .duas-etapas-modal,
   .visualizador-arquivo

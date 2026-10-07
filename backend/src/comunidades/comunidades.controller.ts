@@ -100,6 +100,16 @@ export class ComunidadesController {
         return this.comunidadesService.listarMensagens(comunidadeId, requisicao.usuario!, consulta);
     }
 
+    // Após validar a participação, conecta a comunidade às rotas completas de conversas.
+    @Get(':comunidadeId/conversa')
+    @UseGuards(AuthGuard)
+    obterConversa(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Param('comunidadeId', ParseIntPipe) comunidadeId: number
+    ) {
+        return this.comunidadesService.obterConversa(comunidadeId, requisicao.usuario!);
+    }
+
     @Post(':comunidadeId/mensagens')
     @UseGuards(AuthGuard)
     enviarMensagem(

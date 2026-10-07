@@ -1,0 +1,47 @@
+/* A prévia ocupa o painel inteiro; o chat aberto usa o layout padrão de três linhas. */
+.chat.chat--comunidade {
+    grid-template-rows: minmax(0, 1fr);
+}
+
+.comunidade-entrada {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    min-width: 0;
+    min-height: 0;
+}
+
+.comunidade-entrada__conteudo {
+    align-items: center;
+    justify-content: center;
+}
+
+.comunidade-entrada__cartao {
+    max-width: 480px;
+    padding: 24px;
+    border: 1px solid var(--tema-borda, #d0d5dd);
+    border-radius: 16px;
+    background: var(--tema-superficie, #fff);
+    color: var(--tema-texto, #10214a);
+    font-family: var(--fonte-dm-sans, sans-serif);
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.comunidade-entrada__cartao p {
+    white-space: pre-wrap;
+}
+
+.comunidade-entrada__cartao button {
+    padding: 10px 18px;
+    border: 1px solid var(--tema-borda, #d0d5dd);
+    border-radius: 10px;
+    background: var(--tema-superficie-interativa, #eaf2ff);
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+.comunidade-entrada__cartao button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}

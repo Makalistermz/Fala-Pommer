@@ -3846,6 +3846,11 @@ button.modal-transferencia__etapa {
         display: none;
     }
 
+    .home--chat-mobile-aberto {
+        padding-bottom: 0;
+    }
+
+    .home--chat-mobile-aberto .home-sidebar,
     .home--chat-mobile-aberto .conversas {
         display: none;
     }

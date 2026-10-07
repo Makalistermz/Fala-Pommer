@@ -13,6 +13,7 @@ describe('ComunidadesService', () => {
     let mensagemFindMany: jest.Mock;
     let participanteUpsert: jest.Mock;
     let comunidadeUpdate: jest.Mock;
+    let conversaFindUnique: jest.Mock;
     const usuario = { sub: 7, tipo: 'funcionario' as const };
     const comunidade = {
         id: 1,
@@ -35,10 +36,16 @@ describe('ComunidadesService', () => {
         mensagemFindMany = jest.fn().mockResolvedValue([]);
         participanteUpsert = jest.fn().mockResolvedValue({});
         comunidadeUpdate = jest.fn().mockResolvedValue(comunidade);
+        conversaFindUnique = jest.fn().mockResolvedValue({
+            id: 12,
+            criada_em: new Date('2026-10-07T12:00:00Z'),
+            conversa_participante: [{ cadastro: { id: 7, nome: 'Criador', tipo_usuario: 'funcionario', foto_perfil_url: null } }]
+        });
         const banco = {
             comunidade: { findMany, create, findUnique, findUniqueOrThrow: findUnique, update: comunidadeUpdate },
             mensagem: { create: mensagemCreate, findMany: mensagemFindMany },
             conversa_participante: { upsert: participanteUpsert },
+            conversa: { findUniqueOrThrow: conversaFindUnique },
             $queryRaw: jest.fn().mockResolvedValue([{ id: 1 }])
         };
 
@@ -114,12 +121,23 @@ describe('ComunidadesService', () => {
         expect(resultado).toMatchObject({ id: 1, participa: true, totalParticipantes: 1 });
     });
 
+    it('retorna a conversa vinculada no formato esperado pelo chat do Home', async () => {
+        await expect(service.obterConversa(1, usuario)).resolves.toMatchObject({
+            id: 12, comunidadeId: 1, tipo: 'comunidade', nome: 'Comunidade',
+            totalParticipantes: 1, somenteLeitura: false,
+            participantes: [{ id: 7, nome: 'Criador', tipo_usuario: 'funcionario' }]
+        });
+        expect(conversaFindUnique).toHaveBeenCalledWith(expect.objectContaining({ where: { id: 12 } }));
+    });
+
     it('recusa mensagens e leitura de quem ainda não participa', async () => {
         findUnique.mockResolvedValue({ ...comunidade, conversa: { ...comunidade.conversa, conversa_participante: [] } });
         await expect(service.enviarMensagem(1, usuario, 'Olá')).rejects.toThrow(ForbiddenException);
         await expect(service.listarMensagens(1, usuario, {})).rejects.toThrow(ForbiddenException);
+        await expect(service.obterConversa(1, usuario)).rejects.toThrow(ForbiddenException);
         expect(mensagemCreate).not.toHaveBeenCalled();
         expect(mensagemFindMany).not.toHaveBeenCalled();
+        expect(conversaFindUnique).not.toHaveBeenCalled();
     });
 
     it('impede munícipes de entrar, ler ou escrever em uma comunidade oculta', async () => {
@@ -128,6 +146,7 @@ describe('ComunidadesService', () => {
         await expect(service.entrarComunidade(1, municipe)).rejects.toThrow(NotFoundException);
         await expect(service.listarMensagens(1, municipe, {})).rejects.toThrow(NotFoundException);
         await expect(service.enviarMensagem(1, municipe, 'Olá')).rejects.toThrow(NotFoundException);
+        await expect(service.obterConversa(1, municipe)).rejects.toThrow(NotFoundException);
         expect(participanteUpsert).not.toHaveBeenCalled();
         expect(mensagemCreate).not.toHaveBeenCalled();
     });

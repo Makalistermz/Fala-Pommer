@@ -1,9 +1,17 @@
 // Testa a paginação e a busca incremental de mensagens.
-import { BadRequestException, ForbiddenException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, NotFoundException } from "@nestjs/common";
+import { mkdir, writeFile } from "node:fs/promises";
 import { PrismaService } from "../prisma/prisma.service";
 import { ConversasService } from "./conversas.service";
 import { NotificacoesService } from "../notificacoes/notificacoes.service";
 import { MensagensCriptografiaService } from "../criptografia/mensagens-criptografia.service";
+
+// Valida anexos sem criar arquivos reais durante os testes.
+jest.mock("node:fs/promises", () => ({
+  mkdir: jest.fn().mockResolvedValue(undefined),
+  writeFile: jest.fn().mockResolvedValue(undefined),
+  unlink: jest.fn().mockResolvedValue(undefined),
+}));
 
 describe("ConversasService", () => {
   const mensagem = (id: number) => ({
@@ -1166,6 +1174,87 @@ describe("ConversasService", () => {
       service.enviarMensagem(9, 30, "Mensagem indevida"),
     ).rejects.toBeInstanceOf(ForbiddenException);
     expect(prismaMock.mensagem.create).not.toHaveBeenCalled();
+  });
+
+  describe("comunidades no chat do Home", () => {
+    beforeEach(() => {
+      prismaMock.conversa.findUnique.mockResolvedValue({
+        id: 10, tipo: 'comunidade', comunidade: { id: 4, ocultar_municipes: false },
+        conversa_participante: [{ usuario_id: 1, ocultada_em: null }],
+        atendimento_setor: null,
+      });
+      prismaMock.mensagem.findMany.mockResolvedValue([mensagem(1)]);
+      prismaMock.mensagem.create.mockImplementation(async ({ data }) => ({ ...mensagem(2), ...data }));
+    });
+
+    it("permite ao participante ler e enviar texto com emoji na comunidade pública", async () => {
+      await expect(service.listarMensagens(1, 10)).resolves.toHaveLength(1);
+      await expect(service.enviarMensagem(1, 10, 'Olá 👋')).resolves.toMatchObject({
+        conversaId: 10, conteudo: 'Olá 👋', origem: 'usuario',
+      });
+      expect(criptografiaMock.criptografar).toHaveBeenCalledWith('Olá 👋', 10);
+    });
+
+    it.each([
+      ['image/png', 'foto.png', 'imagem'],
+      ['video/mp4', 'video.mp4', 'video'],
+      ['audio/webm', 'gravacao.webm', 'audio'],
+      ['application/pdf', 'arquivo.pdf', 'documento'],
+    ])("envia %s pela rota comum de mensagens", async (mime, nome, tipo) => {
+      const buffer = Buffer.from('anexo de teste');
+      await expect(service.enviarMensagem(1, 10, undefined, undefined, {
+        mimetype: mime, originalname: nome, buffer, size: buffer.length,
+      })).resolves.toMatchObject({
+        conversaId: 10, arquivo: { nome, mime, tipo, tamanho: buffer.length },
+      });
+      expect(prismaMock.mensagem.create).toHaveBeenCalledWith(expect.objectContaining({
+        data: expect.objectContaining({ conversa_id: 10, arquivo_nome: nome, arquivo_mime: mime, arquivo_tipo: tipo }),
+      }));
+      expect(mkdir).toHaveBeenCalled();
+      expect(writeFile).toHaveBeenCalledWith(expect.any(String), buffer);
+    });
+
+    it("mantém as respostas vinculadas à conversa da comunidade", async () => {
+      prismaMock.mensagem.findFirst.mockResolvedValue({ id: 1 });
+      await service.enviarMensagem(1, 10, 'Respondendo', 1);
+      expect(prismaMock.mensagem.findFirst).toHaveBeenCalledWith(expect.objectContaining({
+        where: expect.objectContaining({ id: { equals: 1 }, conversa_id: 10 }),
+      }));
+      expect(prismaMock.mensagem.create).toHaveBeenCalledWith(expect.objectContaining({
+        data: expect.objectContaining({ mensagem_respondida_id: 1 }),
+      }));
+    });
+
+    it("permite consultar leitura e informar digitação", async () => {
+      await expect(service.obterStatusLeitura(1, 10)).resolves.toMatchObject({ conversaId: 10 });
+      await expect(service.atualizarDigitacao(1, 10, true)).resolves.toEqual({ conversaId: 10, digitando: true });
+    });
+
+    it.each([
+      { participantes: [] },
+      { participantes: [{ usuario_id: 1, ocultada_em: new Date() }] },
+    ])("recusa acesso sem participação ativa (%j)", async ({ participantes }) => {
+      prismaMock.conversa.findUnique.mockResolvedValue({
+        id: 10, tipo: 'comunidade', comunidade: { id: 4, ocultar_municipes: false },
+        conversa_participante: participantes,
+      });
+      await expect(service.listarMensagens(1, 10)).rejects.toThrow(ForbiddenException);
+      await expect(service.enviarMensagem(1, 10, 'Não permitido')).rejects.toThrow(ForbiddenException);
+      await expect(service.atualizarDigitacao(1, 10, true)).rejects.toThrow(ForbiddenException);
+      expect(prismaMock.mensagem.findMany).not.toHaveBeenCalled();
+      expect(prismaMock.mensagem.create).not.toHaveBeenCalled();
+      expect(writeFile).not.toHaveBeenCalled();
+    });
+
+    it("bloqueia o acesso direto do munícipe à comunidade oculta", async () => {
+      prismaMock.conversa.findUnique.mockResolvedValue({
+        id: 10, tipo: 'comunidade', comunidade: { id: 4, ocultar_municipes: true },
+        conversa_participante: [{ usuario_id: 1, ocultada_em: null }],
+      });
+      await expect(service.listarMensagens(1, 10)).rejects.toThrow(NotFoundException);
+      await expect(service.enviarMensagem(1, 10, 'Não permitido')).rejects.toThrow(NotFoundException);
+      expect(prismaMock.mensagem.create).not.toHaveBeenCalled();
+    });
   });
 
   it("permite que participante envie mensagem no grupo como usuário", async () => {

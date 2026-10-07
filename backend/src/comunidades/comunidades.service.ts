@@ -231,6 +231,40 @@ export class ComunidadesService {
         }));
     }
 
+    // Retorna o contrato do chat comum; o envio de anexos continua nas rotas de conversas.
+    async obterConversa(comunidadeId: number, usuario: Pick<JwtPayload, 'sub' | 'tipo'>) {
+        const comunidade = await this.verificarAcesso(comunidadeId, usuario);
+        const conversa = await this.prisma.conversa.findUniqueOrThrow({
+            where: { id: comunidade.conversa_id! },
+            select: {
+                id: true,
+                criada_em: true,
+                conversa_participante: {
+                    where: { ocultada_em: null },
+                    select: {
+                        cadastro: {
+                            select: { id: true, nome: true, tipo_usuario: true, foto_perfil_url: true }
+                        }
+                    }
+                }
+            }
+        });
+        return {
+            // Mensagens usam este ID, e não o ID da comunidade.
+            id: conversa.id,
+            tipo: 'comunidade' as const,
+            comunidadeId: comunidade.id,
+            nome: comunidade.nome_comunidade,
+            imagem: comunidade.imagem_comunidade,
+            criadaEm: conversa.criada_em,
+            participantes: conversa.conversa_participante.map((participante) => participante.cadastro),
+            totalParticipantes: conversa.conversa_participante.length,
+            somenteLeitura: false,
+            mensagensNaoLidas: 0,
+            ultimaMensagem: null
+        };
+    }
+
     async enviarMensagem(
         comunidadeId: number,
         usuario: Pick<JwtPayload, 'sub' | 'tipo'>,

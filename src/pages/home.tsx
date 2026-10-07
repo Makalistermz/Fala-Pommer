@@ -26,7 +26,6 @@ import { useAutenticacao } from "../components/AutenticacaoContext";
 import { apiFetch } from "../services/api";
 import { inicializarNotificacoes } from "../services/notificacoes.service";
 import Comunidades, { type Comunidade } from "../components/home/Comunidades.tsx";
-import ChatComunidade from "../components/home/ChatComunidade";
 import { Capacitor } from '@capacitor/core';
 import { Haptics } from '@capacitor/haptics';
 
@@ -204,7 +203,14 @@ interface ConversaGrupo {
     ultimaMensagem: UltimaMensagem | null;
 }
 
-type Conversa = ConversaSetor | ConversaPrivada | ConversaGrupo;
+// A comunidade usa o mesmo chat e os mesmos participantes; seu ID não é o ID da conversa.
+interface ConversaComunidade extends Omit<ConversaGrupo, "tipo"> {
+    tipo: "comunidade";
+    comunidadeId: number;
+    imagem: string | null;
+}
+
+type Conversa = ConversaSetor | ConversaPrivada | ConversaGrupo | ConversaComunidade;
 
 interface MensagemChat {
     id: number;
@@ -263,7 +269,7 @@ function mensagemFoiEnviadaPeloUsuario(
         return false;
     }
 
-    if (conversa.tipo === "grupo") {
+    if (conversa.tipo === "grupo" || conversa.tipo === "comunidade") {
         const remetenteRealId = item.autorReal?.id ?? item.remetente.id;
         return remetenteRealId === usuario.sub;
     }
@@ -368,6 +374,11 @@ function Home() {
     const [conversaSelecionada, setConversaSelecionada] =
         useState<Conversa | null>(null);
     const [comunidadeSelecionada, setComunidadeSelecionada] = useState<Comunidade | null>(null);
+    // Estados da entrada na comunidade; mensagens e anexos reutilizam os estados do chat abaixo.
+    const [carregandoComunidade, setCarregandoComunidade] = useState(false);
+    const [entrandoComunidade, setEntrandoComunidade] = useState(false);
+    const [erroComunidade, setErroComunidade] = useState("");
+    const comunidadeAbertaIdRef = useRef<number | null>(null);
 
     const [chatMobileAberto, setChatMobileAberto] = useState(false);
 
@@ -1403,7 +1414,7 @@ function Home() {
                             return conversaAtualizada;
                         }
 
-                        return conversaAtual.tipo === "privada"
+                        return conversaAtual.tipo === "privada" || conversaAtual.tipo === "comunidade"
                             ? conversaAtual
                             : null;
                     });
@@ -2182,6 +2193,7 @@ function Home() {
         return "documento";
     }
 
+    // O mesmo envio atende comunidades e conversas: texto/emojis ou FormData com anexos.
     async function enviarMensagem() {
         const conteudo = mensagem.trim();
 
@@ -2529,10 +2541,19 @@ function Home() {
         }
     }
 
+    // Todas as conversas, inclusive comunidades, carregam o histórico pelas mesmas rotas.
     async function abrirConversa(conversa: Conversa) {
-        setComunidadeSelecionada(null);
+        if (conversa.tipo !== "comunidade") {
+            comunidadeAbertaIdRef.current = null;
+            setComunidadeSelecionada(null);
+        }
         pararDeInformarDigitacao();
         cancelarGravacaoAudio();
+        setMensagem("");
+        setArquivoSelecionado(null);
+        setSeletorEmojiAberto(false);
+        setMenuAbertoArquivo(false);
+        setOpcoesMensagens(null);
 
         if (
             conversaSelecionada?.id !== conversa.id ||
@@ -2652,12 +2673,69 @@ function Home() {
         }
     }
 
-    function abrirComunidade(comunidade: Comunidade) {
+    // Seleciona a comunidade e, para quem já participa, abre seu chat completo dentro do Home.
+    async function abrirComunidade(comunidade: Comunidade) {
         fecharChatMobile();
         cancelarGravacaoAudio();
         setConversaSelecionada(null);
         setComunidadeSelecionada(comunidade);
+        comunidadeAbertaIdRef.current = comunidade.id;
+        setErroComunidade("");
+        setCarregandoComunidade(comunidade.participa);
+        setEntrandoComunidade(false);
         setChatMobileAberto(true);
+        if (!comunidade.participa) return;
+
+        try {
+            // O backend devolve o ID da conversa para reutilizar envio de texto, áudio e arquivos.
+            const resposta = await apiFetch(`/comunidades/${comunidade.id}/conversa`);
+            const dados = await resposta.json();
+            if (!resposta.ok) {
+                throw new Error(Array.isArray(dados.message) ? dados.message.join(", ") : dados.message);
+            }
+            // Uma resposta atrasada não pode substituir a comunidade/conversa aberta depois.
+            if (comunidadeAbertaIdRef.current !== comunidade.id) return;
+            const conversa = dados as ConversaComunidade;
+            setComunidadeSelecionada({ ...comunidade, totalParticipantes: conversa.totalParticipantes });
+            await abrirConversa(conversa);
+        } catch (erro) {
+            if (comunidadeAbertaIdRef.current === comunidade.id) {
+                setErroComunidade(erro instanceof Error ? erro.message : "Não foi possível abrir a comunidade.");
+            }
+        } finally {
+            if (comunidadeAbertaIdRef.current === comunidade.id) setCarregandoComunidade(false);
+        }
+    }
+
+    // Registra a participação antes de permitir leitura e envio de mensagens.
+    async function entrarComunidade() {
+        if (!comunidadeSelecionada || entrandoComunidade) return;
+        const comunidadeId = comunidadeSelecionada.id;
+        setEntrandoComunidade(true);
+        setErroComunidade("");
+        try {
+            const resposta = await apiFetch(`/comunidades/${comunidadeId}/entrar`, { method: "POST" });
+            const dados = await resposta.json();
+            if (!resposta.ok) {
+                throw new Error(Array.isArray(dados.message) ? dados.message.join(", ") : dados.message);
+            }
+            if (comunidadeAbertaIdRef.current === comunidadeId) await abrirComunidade(dados as Comunidade);
+        } catch (erro) {
+            if (comunidadeAbertaIdRef.current === comunidadeId) {
+                setErroComunidade(erro instanceof Error ? erro.message : "Não foi possível entrar na comunidade.");
+            }
+        } finally {
+            if (comunidadeAbertaIdRef.current === comunidadeId) setEntrandoComunidade(false);
+        }
+    }
+
+    // Fecha a comunidade e impede que buscas pendentes reabram seu chat.
+    function voltarDasComunidades() {
+        comunidadeAbertaIdRef.current = null;
+        setComunidadeSelecionada(null);
+        setConversaSelecionada(null);
+        cancelarGravacaoAudio();
+        fecharChatMobile();
     }
 
     function fecharChatMobile() {
@@ -2674,7 +2752,7 @@ function Home() {
     }
 
     function nomeDaConversa(conversa: Conversa) {
-        if (conversa.tipo === "grupo") {
+        if (conversa.tipo === "grupo" || conversa.tipo === "comunidade") {
             return conversa.nome;
         }
 
@@ -2688,6 +2766,7 @@ function Home() {
     }
 
     function fotoDaConversa(conversa: Conversa) {
+        if (conversa.tipo === "comunidade") return conversa.imagem;
         if (conversa.tipo === "grupo") {
             return null;
         }
@@ -2702,7 +2781,7 @@ function Home() {
     }
 
     function subtituloDaConversa(conversa: Conversa) {
-        if (conversa.tipo === "grupo") {
+        if (conversa.tipo === "grupo" || conversa.tipo === "comunidade") {
             return conversa.somenteLeitura
                 ? `${conversa.totalParticipantes} participantes • somente leitura`
                 : `${conversa.totalParticipantes} participantes`;
@@ -2747,7 +2826,7 @@ function Home() {
 
         const texto = conversa.tipo === "privada"
             ? `${conversa.contato.nome} ${conversa.contato.tipo_usuario}`
-            : conversa.tipo === "grupo"
+            : conversa.tipo === "grupo" || conversa.tipo === "comunidade"
                 ? `${conversa.nome} ${conversa.participantes
                     .map((participante) => participante.nome)
                     .join(" ")}`
@@ -2760,7 +2839,8 @@ function Home() {
         conversaSelecionada !== null &&
         !(
             (conversaSelecionada.tipo === "privada" ||
-                conversaSelecionada.tipo === "grupo") &&
+                conversaSelecionada.tipo === "grupo" ||
+                conversaSelecionada.tipo === "comunidade") &&
             conversaSelecionada.somenteLeitura
         );
 
@@ -3280,8 +3360,7 @@ function Home() {
                     onClick={() => {
                         setItemSidebarAtivo("conversas");
                         if (comunidadeSelecionada) {
-                            setComunidadeSelecionada(null);
-                            fecharChatMobile();
+                            voltarDasComunidades();
                         }
                     }}
                     aria-label="Conversas"
@@ -3747,18 +3826,46 @@ function Home() {
             
         </aside>
 
-        <section className={`chat ${comunidadeSelecionada ? 'chat--comunidade' : ''}`}>
-            {comunidadeSelecionada ? (
-                <ChatComunidade
-                    key={comunidadeSelecionada.id}
-                    comunidade={comunidadeSelecionada}
-                    usuarioId={usuario?.sub}
-                    aoAtualizar={setComunidadeSelecionada}
-                    aoVoltar={() => {
-                        setComunidadeSelecionada(null);
-                        fecharChatMobile();
-                    }}
-                />
+        {/* A comunidade usa o chat desta página; somente a entrada aparece antes de carregar a conversa. */}
+        <section className="chat">
+            {comunidadeSelecionada && !conversaSelecionada ? (
+                <>
+                    <header className="chat-header">
+                        <div className="chat-header__usuario">
+                            <button type="button" className="chat-header__voltar" onClick={voltarDasComunidades} aria-label="Voltar para as comunidades">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </button>
+                            <div className="chat-header__avatar">
+                                {renderizarAvatar(comunidadeSelecionada.nome_comunidade, comunidadeSelecionada.imagem_comunidade)}
+                            </div>
+                            <div className="chat-header__dados">
+                                <strong>{comunidadeSelecionada.nome_comunidade}</strong>
+                                <span>{comunidadeSelecionada.totalParticipantes} participantes</span>
+                            </div>
+                        </div>
+                    </header>
+                    {/* A classe mensagens mantém o papel de parede escolhido, inclusive na tela de entrada. */}
+                    <div className="mensagens comunidade-entrada">
+                        <div className="comunidade-entrada__cartao">
+                            <h2>{comunidadeSelecionada.nome_comunidade}</h2>
+                            <p>{comunidadeSelecionada.descricao_comunidade}</p>
+                            {carregandoComunidade ? (
+                                <p role="status">Carregando o chat da comunidade…</p>
+                            ) : comunidadeSelecionada.participa ? (
+                                <button type="button" onClick={() => void abrirComunidade(comunidadeSelecionada)}>
+                                    Tentar abrir o chat novamente
+                                </button>
+                            ) : (
+                                <button type="button" onClick={() => void entrarComunidade()} disabled={entrandoComunidade}>
+                                    {entrandoComunidade ? "Entrando…" : "Entrar na comunidade"}
+                                </button>
+                            )}
+                            {erroComunidade && <p role="alert">{erroComunidade}</p>}
+                        </div>
+                    </div>
+                </>
             ) : conversaSelecionada ? (
             <>
                 <header className="chat-header">
@@ -3766,8 +3873,8 @@ function Home() {
                     <button
                     type="button"
                     className="chat-header__voltar"
-                    aria-label="Voltar para as conversas"
-                    onClick={fecharChatMobile}
+                    aria-label={conversaSelecionada.tipo === "comunidade" ? "Voltar para as comunidades" : "Voltar para as conversas"}
+                    onClick={conversaSelecionada.tipo === "comunidade" ? voltarDasComunidades : fecharChatMobile}
                     >
                     <svg
                         width="24"
@@ -4083,7 +4190,7 @@ function Home() {
                         const mensagemRespondidaEnviadaPorMim =
                             mensagemRespondida?.remetente.id === usuario?.sub;
                         const exibirAvatarGrupo =
-                            conversaSelecionada.tipo === "grupo" &&
+                            (conversaSelecionada.tipo === "grupo" || conversaSelecionada.tipo === "comunidade") &&
                             !enviadaPorMim;
                         const statusEntrega =
                             item.statusEntrega === "enviando"
@@ -4356,6 +4463,7 @@ function Home() {
 
                 </div>
 
+                {/* O compositor é o mesmo para todos: arquivos, fotos/vídeos, emojis e gravação de áudio. */}
                 {podeEnviarMensagem && (
                 <footer className="chat-input">
                     {arquivoSelecionado && (

@@ -100,6 +100,16 @@ export class ComunidadesController {
         return this.comunidadesService.listarMensagens(comunidadeId, requisicao.usuario!, consulta);
     }
 
+    // O Home usa esta rota para abrir a comunidade no chat completo de conversas.
+    @Get(':comunidadeId/conversa')
+    @UseGuards(AuthGuard)
+    obterConversa(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Param('comunidadeId', ParseIntPipe) comunidadeId: number
+    ) {
+        return this.comunidadesService.obterConversa(comunidadeId, requisicao.usuario!);
+    }
+
     @Post(':comunidadeId/mensagens')
     @UseGuards(AuthGuard)
     enviarMensagem(

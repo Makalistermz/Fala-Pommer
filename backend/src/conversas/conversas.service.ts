@@ -2794,9 +2794,6 @@ export class ConversasService {
                     },
 
                     include: {
-                        comunidade: {
-                            select: { id: true, ocultar_municipes: true }
-                        },
                         conversa_participante: {
                             select: {
                                 usuario_id: true,
@@ -2843,24 +2840,6 @@ export class ConversasService {
             throw new NotFoundException(
                 "Conversa não encontrada."
             );
-        }
-
-        // Todas as ações do chat (texto, anexos, leitura e digitação) exigem participação ativa.
-        if (conversa.tipo === "comunidade") {
-            if (!conversa.comunidade || (
-                conversa.comunidade.ocultar_municipes && usuarioLogado.tipo_usuario === "user"
-            )) {
-                throw new NotFoundException("Comunidade não encontrada.");
-            }
-
-            const participa = conversa.conversa_participante.some((participante) =>
-                participante.usuario_id === usuarioLogadoId && participante.ocultada_em === null
-            );
-            if (!participa) {
-                throw new ForbiddenException("Entre na comunidade para acessar as mensagens.");
-            }
-
-            return { usuarioLogado, conversa, atendimento: null, somenteLeitura: false };
         }
 
         /*

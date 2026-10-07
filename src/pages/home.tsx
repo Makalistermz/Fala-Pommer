@@ -320,7 +320,9 @@ function Home() {
 
     const [modalGrupoAberto, setModalGrupoAberto] = useState(false);
     const [modalDadosGrupoAberto, setModalDadosGrupoAberto] = useState(false);
+    const [modalDadosComunidadeAberto, setModalDadosComunidadeAberto] = useState(false)
     const botaoFecharModalDadosGrupoRef = useRef<HTMLButtonElement>(null);
+    const botaoFecharModalDadosComunidadeRef = useRef<HTMLButtonElement>(null);
     const [nomeGrupo, setNomeGrupo] = useState("");
     const [contatosGrupo, setContatosGrupo] = useState<UsuarioConversa[]>([]);
     const [contatosGrupoSelecionados, setContatosGrupoSelecionados] =
@@ -940,6 +942,35 @@ function Home() {
             }
         };
     }, [modalDadosGrupoAberto]);
+
+    useEffect(() => {
+        if (!modalDadosComunidadeAberto) {
+            return
+        }
+
+        const overflowAnterior =document.body.style.overflow;
+        const elementoComFocoAnterior = document.activeElement;
+        document.body.style.overflow = "hidden";
+        botaoFecharModalDadosComunidadeRef.current?.focus();
+
+        function fecharComEscape(evento: KeyboardEvent) {
+            if (evento.key === "Escape") {
+                setModalDadosComunidadeAberto(false);
+            }
+        }
+
+        window.addEventListener("keydown", fecharComEscape);
+
+        return () => {
+            document.body.style.overflow = overflowAnterior;
+            window.removeEventListener("keydown", fecharComEscape);
+
+            if (elementoComFocoAnterior instanceof HTMLElement) {
+                elementoComFocoAnterior.focus();
+            }
+        };
+
+    }, [modalDadosComunidadeAberto]);
 
     useEffect(() => {
         if (!modalAdicionarPessoaAberto) {
@@ -3895,7 +3926,8 @@ function Home() {
 
                     <div
                         className={`header__avatar__dados ${
-                            conversaSelecionada.tipo === "grupo"
+                            conversaSelecionada.tipo === "grupo" ||
+                            conversaSelecionada.tipo === "comunidade"
                                 ? "header__avatar__dados--clicavel"
                                 : ""
                         }`}
@@ -3917,11 +3949,16 @@ function Home() {
                         aria-expanded={
                             conversaSelecionada.tipo === "grupo"
                                 ? modalDadosGrupoAberto
-                                : undefined
+                                : (conversaSelecionada.tipo === "comunidade" 
+                                    ? modalDadosComunidadeAberto 
+                                    : undefined
+                                )
                         }
                         onClick={() => {
                             if (conversaSelecionada.tipo === "grupo") {
                                 setModalDadosGrupoAberto(true);
+                            } else if (conversaSelecionada.tipo === "comunidade") {
+                                setModalDadosComunidadeAberto(true);
                             }
                         }}
                         onKeyDown={(evento) => {
@@ -3931,6 +3968,12 @@ function Home() {
                             ) {
                                 evento.preventDefault();
                                 setModalDadosGrupoAberto(true);
+                            } else if (
+                                conversaSelecionada.tipo === "comunidade" &&
+                                (evento.key === "Enter" || evento.key === " ")
+                            ) {
+                                evento.preventDefault();
+                                setModalDadosComunidadeAberto(true);
                             }
                         }}
                     >
@@ -5855,6 +5898,10 @@ function Home() {
                     </div>
                 </section>
             </div>
+        )}
+
+        {modalDadosComunidadeAberto && conversaSelecionada?.tipo === "comunidade" && (
+            
         )}
 
         <ModalConfirmacao

@@ -118,6 +118,7 @@ function ModalDadosComunidades({
                                     className="dados-comunidade__acao-botao"
                                     id="convidar"
                                     type="button"
+                                    title="Convidar usando link"
                                 >
                                     <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-link" viewBox="0 0 16 16">
                                         <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9q-.13 0-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
@@ -137,6 +138,7 @@ function ModalDadosComunidades({
                                     className="dados-comunidade__acao-botao"
                                     id="adicionar_membro"
                                     type="button"
+                                    title="Adicionar membro"
                                 >
                                     <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-person-add" viewBox="0 0 16 16">
                                         <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
@@ -209,7 +211,10 @@ function ModalDadosComunidades({
                                 </button>
                             </div>
 
-                            <div className="dados-comunidade__membros-adicionar">
+                            <button 
+                                className="dados-comunidade__membros-adicionar"
+                                type="button"
+                            >
                                 <div className="dados-comunidade__membros-adicionar-icone">
                                     <svg width="16" height="16" fill="currentColor" className="bi bi-person-add" viewBox="0 0 16 16">
                                         <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
@@ -219,7 +224,7 @@ function ModalDadosComunidades({
                                 <div className="dados-comunidade__membros-adicionar-texto">
                                     <span>Adicionar membro</span>
                                 </div>
-                            </div>
+                            </button>
                         </div>
                     </div>
                 </div>

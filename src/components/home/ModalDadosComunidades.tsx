@@ -51,7 +51,7 @@ function ModalDadosComunidades({
     }
 
     return (
-        <div className="modal-dados__fundo" onClick={aoFechar}>
+        <div className="modal-dados__fundo" onClick={aoFechar} data-lenis-prevent>
             <section
                 className="modal-dados modal-dados-comunidade"
                 role="dialog"
@@ -165,7 +165,7 @@ function ModalDadosComunidades({
                                 <button 
                                     className="dados-comunidade__descricao-editar"
                                     type="button"
-                                    title="Editar descri"
+                                    title="Editar descrição da comunidade"
                                 >
                                     {svgPen}
                                 </button>
@@ -179,11 +179,13 @@ function ModalDadosComunidades({
                             type="button"
                             aria-label="Abrir configurações da comunidade"
                         >
-                            <div className="dados-comunidade__configuracao-icone">
-                                {svgGear}
-                            </div>
-                            <div className="dados-comunidade__configuracao-texto">
-                                <span>Configuração da comunidade</span>
+                            <div className="dados-comunidade__config-icon-text">
+                                <div className="dados-comunidade__configuracao-icone">
+                                    {svgGear}
+                                </div>
+                                <div className="dados-comunidade__configuracao-texto">
+                                    <span>Configuração da comunidade</span>
+                                </div>
                             </div>
                             <div className="dados-comunidade__configuracao-seta">
                                 <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-right" viewBox="0 0 16 16">

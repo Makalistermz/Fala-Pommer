@@ -1250,6 +1250,10 @@
     overscroll-behavior: contain;
 }
 
+.modal-dados__conteudo::-webkit-scrollbar {
+    scrollbar-width: none;
+}
+
 .modal-dados-grupo__identidade {
     display: flex;
     align-items: center;

@@ -938,6 +938,16 @@
     text-align: center;
 }
 
+.dados-comunidade__descricao-conteudo {
+    border-top: 1px solid #edf0f5;
+}
+
+.dados-comunidade__descricao-cabecalho {
+    text-align: center;
+    border-bottom: 3px solid var(--azul-principal);
+    padding: 10px 0px;
+}
+
 html.tema-escuro:not(.alto-contraste) .modal-dados-comunidade {
     border-color: var(--tema-borda);
     background: var(--tema-superficie-elevada);

@@ -3874,7 +3874,7 @@ function Home() {
                                     <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </button>
-                            <div className="chat-header__avatar">
+                            <div className="chat-header__avatar-comunidade">
                                 {renderizarAvatar(dados.nome_comunidade, dados.imagem_comunidade, true)}
                             </div>
                             <div className="chat-header__dados">
@@ -3987,7 +3987,9 @@ function Home() {
                                 ? "chat-header__avatar-grupo" 
                                 : (conversaSelecionada?.tipo === "setor" 
                                     ? "chat-header__avatar-setor" 
-                                    : "chat-header__avatar"
+                                    : (conversaSelecionada?.tipo === "comunidade"
+                                        ? "chat-header__avatar-comunidade"
+                                        : "chat-header__avatar")
                                 )
                             }
                         >
@@ -5932,21 +5934,22 @@ function Home() {
                             </svg>
                         </button>
                     </header>
+                    
                     <div className="modal-dados__conteudo">
-                        <section>
-                            <div>
-                                <div className="chat-header__avatar">
+                        <section className="dados-comunidade__informacoes">
+                            <div className="dados-comunidade__avatar">
+                                <div className="dados-comunidade__avatar-comunidade">
                                     {renderizarAvatar(dados.nome_comunidade, dados.imagem_comunidade, true)}
                                 </div>
                             </div>
 
-                            <div>
-                                <strong>{dados.nome_comunidade}</strong>
+                            <div className="dados-comunidade__identificacao">
+                                <strong className="dados-comunidade__nome">{dados.nome_comunidade}</strong>
                             </div>
 
-                            <div>
-                                <p>
-                                    Comunidade <span>·</span>{" "}
+                            <div className="dados-comunidade__resumo">
+                                <p className="dados-comunidade__participantes">
+                                    Comunidade <span className="dados-comunidade__separador">·</span>{" "}
                                     {dados.totalParticipantes}{" "}
                                     {dados.totalParticipantes === 1 ? "membro" : "membros"}
                                 </p>

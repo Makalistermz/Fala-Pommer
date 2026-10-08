@@ -106,29 +106,47 @@ function ModalDadosComunidades({
                                 {comunidade.totalParticipantes === 1 ? "membro" : "membros"}
                             </p>
                         </div>
+
+                        <div className="dados-comunidade__acoes">
+                            <div className="dados-comunidade__acao">
+                                <button 
+                                    className="dados-comunidade__acao-botao"
+                                    id="convidar"
+                                    type="button"
+                                >
+                                    <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-link" viewBox="0 0 16 16">
+                                        <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9q-.13 0-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+                                        <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4 4 0 0 1-.82 1H12a3 3 0 1 0 0-6z"/>
+                                    </svg>
+                                </button>
+                                <label 
+                                    htmlFor="convidar"
+                                    className="dados-comunidade__acao-texto"
+                                >
+                                    Convidar
+                                </label>
+                            </div>
+
+                            <div className="dados-comunidade__acao">
+                                <button 
+                                    className="dados-comunidade__acao-botao"
+                                    id="adicionar_membro"
+                                    type="button"
+                                >
+                                    <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-person-add" viewBox="0 0 16 16">
+                                        <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                                        <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                                    </svg>
+                                </button>
+                                <label 
+                                    htmlFor="adicionar_membro" 
+                                    className="dados-comunidade__acao-texto"
+                                >
+                                    Adicionar membro
+                                </label>
+                            </div>
+                        </div>
                     </section>
-                </div>
-
-                <div className="dados-comunidade__acoes">
-                    <div className="dados-comunidade__acao">
-                        <button className="dados-comunidade__acao-botao">
-                            <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-link" viewBox="0 0 16 16">
-                                <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9q-.13 0-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
-                                <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4 4 0 0 1-.82 1H12a3 3 0 1 0 0-6z"/>
-                            </svg>
-                        </button>
-                        <span className="dados-comunidade__acao-texto">Convidar</span>
-                    </div>
-
-                    <div className="dados-comunidade__acao">
-                        <button className="dados-comunidade__acao-botao">
-                            <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-person-add" viewBox="0 0 16 16">
-                                <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-                                <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-                            </svg>
-                        </button>
-                        <span className="dados-comunidade__acao-texto">Adicionar membro</span>
-                    </div>
                 </div>
             </section>
         </div>

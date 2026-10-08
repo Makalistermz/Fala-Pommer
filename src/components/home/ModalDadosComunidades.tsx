@@ -49,23 +49,23 @@ function ModalDadosComunidades({
 
                 <div className="modal-dados__conteudo">
                     <section className="dados-comunidade__informacoes">
-                            <div className="dados-comunidade__avatar">
-                                <div className="dados-comunidade__avatar-comunidade">
-                                    {renderizarAvatar(comunidade.nome_comunidade, comunidade.imagem_comunidade, true)}
-                                </div>
+                        <div className="dados-comunidade__avatar">
+                            <div className="dados-comunidade__avatar-comunidade">
+                                {renderizarAvatar(comunidade.nome_comunidade, comunidade.imagem_comunidade, true)}
                             </div>
+                        </div>
 
-                            <div className="dados-comunidade__identificacao">
-                                <strong className="dados-comunidade__nome">{comunidade.nome_comunidade}</strong>
-                            </div>
+                        <div className="dados-comunidade__identificacao">
+                            <strong className="dados-comunidade__nome">{comunidade.nome_comunidade}</strong>
+                        </div>
 
-                            <div className="dados-comunidade__resumo">
-                                <p className="dados-comunidade__participantes">
-                                    Comunidade <span className="dados-comunidade__separador">·</span>{" "}
-                                    {comunidade.totalParticipantes}{" "}
-                                    {comunidade.totalParticipantes === 1 ? "membro" : "membros"}
-                                </p>
-                            </div>
+                        <div className="dados-comunidade__resumo">
+                            <p className="dados-comunidade__participantes">
+                                Comunidade <span className="dados-comunidade__separador">·</span>{" "}
+                                {comunidade.totalParticipantes}{" "}
+                                {comunidade.totalParticipantes === 1 ? "membro" : "membros"}
+                            </p>
+                        </div>
                     </section>
                 </div>
             </section>

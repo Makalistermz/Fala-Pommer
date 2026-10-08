@@ -5910,6 +5910,10 @@ function Home() {
             </div>
         )}
 
+        {/*
+            Modal dos dados das comunidades.
+            Localizado em components/home/ModalDadosComunidades.tsx
+        */}
         <ModalDadosComunidades
             aberto={modalDadosComunidadeAberto}
             comunidade={

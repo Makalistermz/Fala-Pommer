@@ -734,6 +734,27 @@
     outline-offset: 3px;
 }
 
+.dados-comunidade__informacoes {
+    min-height: 300px;
+    padding: 14px 12px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+}
+
+.modal-dados-comunidade {
+    width: min(100%, 620px);
+}
+
+.dados-comunidade__avatar {
+    padding: 5px;
+    border-radius: 32px;
+    background: linear-gradient(145deg, #e7f0ff, #f8fbff);
+}
+
 .dados-comunidade__avatar-comunidade {
     position: relative;
     width: 128px;
@@ -744,12 +765,19 @@
     align-items: center;
     justify-content: center;
 
-    border-radius: 50%;
-    box-shadow: 0 5px 12px rgba(19, 81, 180, 0.18);
+    border-radius: 26px;
+    color: #ffffff;
+    background-color: #1351b4;
+    box-shadow: 0 10px 24px rgba(19, 81, 180, 0.22);
     font-family: var(--fonte-dm-sans);
     font-size: 1.125rem;
     font-weight: 600;
     overflow: hidden;
+}
+
+.comunidades-acoes__icone {
+    color: #ffffff !important;
+    background-color: #1351b4 !important;
 }
 
 .dados-comunidade__avatar-comunidade img {
@@ -760,6 +788,127 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+}
+
+.dados-comunidade__avatar-comunidade svg {
+    width: 56px;
+    height: 56px;
+    fill: currentColor;
+}
+
+.dados-comunidade__identificacao {
+    width: min(100%, 460px);
+}
+
+.dados-comunidade__nome {
+    display: block;
+    overflow-wrap: anywhere;
+    color: #172033;
+    font-family: var(--fonte-poppins);
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.dados-comunidade__resumo {
+    width: min(100%, 460px);
+}
+
+.dados-comunidade__participantes {
+    margin: 0;
+    color: #667085;
+    font-family: var(--fonte-dm-sans);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+}
+
+.dados-comunidade__separador {
+    margin: 0 6px;
+    color: #98a2b3;
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-dados-comunidade {
+    border-color: var(--tema-borda);
+    background: var(--tema-superficie-elevada);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-dados-comunidade .modal-dados__cabecalho {
+    border-bottom-color: var(--tema-borda);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-dados-comunidade .modal-dados__cabecalho h2,
+html.tema-escuro:not(.alto-contraste) .dados-comunidade__nome {
+    color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-dados-comunidade .modal-dados__cabecalho button {
+    color: var(--tema-texto-secundario);
+}
+
+html.tema-escuro:not(.alto-contraste) .modal-dados-comunidade .modal-dados__cabecalho button:hover {
+    background: var(--tema-superficie-interativa);
+}
+
+html.tema-escuro:not(.alto-contraste) .dados-comunidade__avatar {
+    background: var(--tema-superficie-interativa);
+}
+
+html.tema-escuro:not(.alto-contraste) .dados-comunidade__participantes,
+html.tema-escuro:not(.alto-contraste) .dados-comunidade__separador {
+    color: var(--tema-texto-secundario);
+}
+
+@media (max-width: 640px) {
+    .modal-dados-comunidade {
+        width: min(100%, 520px);
+    }
+
+    .dados-comunidade__informacoes {
+        min-height: 270px;
+        padding: 8px 4px 16px;
+    }
+
+    .dados-comunidade__avatar-comunidade {
+        width: 112px;
+        height: 112px;
+        border-radius: 23px;
+    }
+
+    .dados-comunidade__avatar-comunidade svg {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@media (max-width: 420px) {
+    .dados-comunidade__informacoes {
+        min-height: 240px;
+        gap: 10px;
+    }
+
+    .dados-comunidade__avatar {
+        padding: 4px;
+        border-radius: 26px;
+    }
+
+    .dados-comunidade__avatar-comunidade {
+        width: 96px;
+        height: 96px;
+        border-radius: 20px;
+    }
+
+    .dados-comunidade__avatar-comunidade svg {
+        width: 42px;
+        height: 42px;
+    }
+
+    .dados-comunidade__nome {
+        font-size: 1.25rem;
+    }
+
+    .dados-comunidade__participantes {
+        font-size: 0.875rem;
+    }
 }
 
 html.tema-escuro:not(.alto-contraste) .nova-comunidade {

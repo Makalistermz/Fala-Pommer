@@ -330,7 +330,8 @@ export const ComunidadeScalarFieldEnum = {
   descricao_comunidade: 'descricao_comunidade',
   imagem_comunidade: 'imagem_comunidade',
   ocultar_municipes: 'ocultar_municipes',
-  conversa_id: 'conversa_id'
+  conversa_id: 'conversa_id',
+  comunidade_criada_em: 'comunidade_criada_em'
 } as const
 
 export type ComunidadeScalarFieldEnum = (typeof ComunidadeScalarFieldEnum)[keyof typeof ComunidadeScalarFieldEnum]

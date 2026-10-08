@@ -112,13 +112,13 @@ model conversa {
   tipo                   conversa_tipo            @default(privada)
   nome                   String?                  @db.VarChar(120)
   criada_em              DateTime                 @default(now()) @db.DateTime(0)
+  comunidade             comunidade?
   finalizacoes           conversa_finalizacao[]
   conversa_leitura       conversa_leitura[]
   conversa_participante  conversa_participante[]
   atendimento_setor      conversa_setor?
   conversa_transferencia conversa_transferencia[]
   mensagens              mensagem[]
-  comunidade             comunidade?
 }
 
 model conversa_participante {
@@ -321,13 +321,14 @@ model conversa_transferencia {
 }
 
 model comunidade {
-  id                   Int     @id @default(autoincrement())
-  nome_comunidade      String  @db.VarChar(150)
-  descricao_comunidade String  @db.VarChar(400)
-  imagem_comunidade    String? @db.VarChar(500)
-  ocultar_municipes    Boolean @default(false)
-  conversa_id         Int?    @unique(map: "uq_comunidade_conversa")
-  conversa            conversa? @relation(fields: [conversa_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_comunidade_conversa")
+  id                   Int       @id @default(autoincrement())
+  nome_comunidade      String    @db.VarChar(150)
+  descricao_comunidade String    @db.VarChar(400)
+  imagem_comunidade    String?   @db.VarChar(500)
+  ocultar_municipes    Boolean   @default(false)
+  conversa_id          Int?      @unique(map: "uq_comunidade_conversa")
+  comunidade_criada_em DateTime  @default(now()) @db.DateTime(0)
+  conversa             conversa? @relation(fields: [conversa_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_comunidade_conversa")
 }
 
 enum desafio_2fa_finalidade {

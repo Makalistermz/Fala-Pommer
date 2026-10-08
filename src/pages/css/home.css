@@ -1085,6 +1085,10 @@
     overflow: hidden;
 }
 
+.chat-header__avatar-comunidade {
+    border-radius: 20% !important;
+}
+
 .chat-header__avatar,
 .chat-header__avatar-comunidade {
     color: #ffffff;

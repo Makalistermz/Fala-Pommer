@@ -797,7 +797,26 @@
 }
 
 .dados-comunidade__identificacao {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
     width: min(100%, 460px);
+}
+
+.dados-comunidade_alter-nome {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.dados-comunidade_alter-nome:hover {
+    scale: 1.1;
+    transition: .2s;
+}
+
+.dados-comunidade_alter-nome:active {
+    scale: .97;
 }
 
 .dados-comunidade__nome {

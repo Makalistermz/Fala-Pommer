@@ -26,6 +26,7 @@ import { useAutenticacao } from "../components/AutenticacaoContext";
 import { apiFetch } from "../services/api";
 import { inicializarNotificacoes } from "../services/notificacoes.service";
 import Comunidades, { type Comunidade } from "../components/home/Comunidades.tsx";
+import ModalDadosComunidades from "../components/home/ModalDadosComunidades.tsx";
 import { Capacitor } from '@capacitor/core';
 import { Haptics } from '@capacitor/haptics';
 
@@ -5909,56 +5910,15 @@ function Home() {
             </div>
         )}
 
-        {modalDadosComunidadeAberto && conversaSelecionada?.tipo === "comunidade" && dados && (
-            <div
-                className="modal-dados__fundo"
-                onClick={() => setModalDadosComunidadeAberto(false)}
-            >
-                <section
-                    className="modal-dados modal-dados-comunidade"
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="modal-dados-comunidade-titulo"
-                    onClick={(evento) => evento.stopPropagation()}
-                >
-                    <header className="modal-dados__cabecalho">
-                        <h2 id="modal-dados-comunidade-titulo">Dados da comunidade</h2>
-                        <button
-                            ref={botaoFecharModalDadosComunidadeRef}
-                            type="button"
-                            aria-label="Fechar"
-                            onClick={() => setModalDadosComunidadeAberto(false)}
-                        >
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="m6 6 12 12M18 6 6 18" />
-                            </svg>
-                        </button>
-                    </header>
-                    
-                    <div className="modal-dados__conteudo">
-                        <section className="dados-comunidade__informacoes">
-                            <div className="dados-comunidade__avatar">
-                                <div className="dados-comunidade__avatar-comunidade">
-                                    {renderizarAvatar(dados.nome_comunidade, dados.imagem_comunidade, true)}
-                                </div>
-                            </div>
-
-                            <div className="dados-comunidade__identificacao">
-                                <strong className="dados-comunidade__nome">{dados.nome_comunidade}</strong>
-                            </div>
-
-                            <div className="dados-comunidade__resumo">
-                                <p className="dados-comunidade__participantes">
-                                    Comunidade <span className="dados-comunidade__separador">·</span>{" "}
-                                    {dados.totalParticipantes}{" "}
-                                    {dados.totalParticipantes === 1 ? "membro" : "membros"}
-                                </p>
-                            </div>
-                        </section>
-                    </div>
-                </section>
-            </div>
-        )}
+        <ModalDadosComunidades
+            aberto={modalDadosComunidadeAberto}
+            comunidade={
+                conversaSelecionada?.tipo === "comunidade" ? dados : null
+            }
+            aoFechar={() => setModalDadosComunidadeAberto(false)}
+            botaoFecharRef={botaoFecharModalDadosComunidadeRef}
+            renderizarAvatar={renderizarAvatar}
+        />
 
         <ModalConfirmacao
             aberto={setorTransferenciaSelecionado !== null}

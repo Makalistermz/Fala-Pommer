@@ -1,6 +1,6 @@
 import { apiFetch } from "../../services/api";
 import { ModalFeedback } from "../ModalFeedback";
-import "./Comunidades.css";
+import "./css/Comunidades.css";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";

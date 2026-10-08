@@ -1244,7 +1244,10 @@
 .modal-dados__conteudo {
     min-height: 0;
     padding: 22px;
-    overflow: hidden;
+    flex: 1 1 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .modal-dados-grupo__identidade {

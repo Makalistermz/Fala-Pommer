@@ -146,6 +146,22 @@ function ModalDadosComunidades({
                                 </label>
                             </div>
                         </div>
+
+                    </section>
+
+                    <section>
+                        <div>
+                            <div>
+                                <strong>Comunidade</strong>
+                            </div>
+
+                            <div>
+                                <span>{comunidade.descricao_comunidade}</span>
+                                <button>
+                                    {svgPen}
+                                </button>
+                            </div>
+                        </div>
                     </section>
                 </div>
             </section>

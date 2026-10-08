@@ -1,4 +1,4 @@
-import type { ReactNode, RefObject } from "react";
+import { useState, type ReactNode, type RefObject } from "react";
 import type { Comunidade } from "./Comunidades";
 
 interface ModalDadosComunidadeProps {
@@ -20,13 +20,30 @@ function ModalDadosComunidades({
     botaoFecharRef,
     renderizarAvatar,
 }: ModalDadosComunidadeProps) {
+    {/*retorna um elemento html*/}
+    const [iconChangeMessage, setIconChangeMessage] = useState<React.JSX.Element | null>(null);
+
     if (!aberto || !comunidade) {
         return null;
     }
 
-    const pen = <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+    const svgPen = <svg width="16" height="16" fill="currentColor" className="bi bi-pen" viewBox="0 0 16 16">
         <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
     </svg>
+
+    const svgImage = <svg width="16" height="16" fill="currentColor" className="bi bi-card-image" viewBox="0 0 16 16">
+        <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+        <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/>
+    </svg>
+
+    function IconChangeMessage() {
+        return (
+            <div>
+                <span>Alterar a foto da comunidade</span>
+                {svgImage}
+            </div>
+        )
+    }
 
     return (
         <div className="modal-dados__fundo" onClick={aoFechar}>
@@ -54,8 +71,20 @@ function ModalDadosComunidades({
                 <div className="modal-dados__conteudo">
                     <section className="dados-comunidade__informacoes">
                         <div className="dados-comunidade__avatar">
-                            <div className="dados-comunidade__avatar-comunidade">
+                            <div 
+                                className="dados-comunidade__avatar-comunidade"
+                                title="Alterar imagem"
+                                onMouseEnter={() => setIconChangeMessage(IconChangeMessage())}
+                                onMouseLeave={() => setIconChangeMessage(null)}
+                            >
                                 {renderizarAvatar(comunidade.nome_comunidade, comunidade.imagem_comunidade, true)}
+                                
+                                {iconChangeMessage && (
+                                    <div className="dados-comunidade_avatar-messagem">
+                                        {iconChangeMessage}
+                                    </div>
+                                )}
+
                             </div>
                         </div>
 
@@ -64,8 +93,9 @@ function ModalDadosComunidades({
                             <button
                                 className="dados-comunidade_alter-nome"
                                 type="button"
+                                title="Editar nome da comunidade"
                             >
-                                {pen}
+                                {svgPen}
                             </button>
                         </div>
 
@@ -77,6 +107,28 @@ function ModalDadosComunidades({
                             </p>
                         </div>
                     </section>
+                </div>
+
+                <div className="dados-comunidade__acoes">
+                    <div className="dados-comunidade__acao">
+                        <button className="dados-comunidade__acao-botao">
+                            <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-link" viewBox="0 0 16 16">
+                                <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9q-.13 0-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+                                <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4 4 0 0 1-.82 1H12a3 3 0 1 0 0-6z"/>
+                            </svg>
+                        </button>
+                        <span className="dados-comunidade__acao-texto">Convidar</span>
+                    </div>
+
+                    <div className="dados-comunidade__acao">
+                        <button className="dados-comunidade__acao-botao">
+                            <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-person-add" viewBox="0 0 16 16">
+                                <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                                <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                            </svg>
+                        </button>
+                        <span className="dados-comunidade__acao-texto">Adicionar membro</span>
+                    </div>
                 </div>
             </section>
         </div>

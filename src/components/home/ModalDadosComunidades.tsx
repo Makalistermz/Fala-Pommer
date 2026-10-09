@@ -2,6 +2,7 @@ import { useState, type ReactNode, type RefObject } from "react";
 import type { Comunidade } from "./Comunidades";
 import type { ConversaComunidade } from "../../pages/home";
 import { apiFetch } from "../../services/api";
+import { ModalFeedback } from "../ModalFeedback";
 
 interface ModalDadosComunidadeProps {
     aberto: boolean;
@@ -30,6 +31,11 @@ function ModalDadosComunidades({
     const [iconChangeMessage, setIconChangeMessage] = useState<React.JSX.Element | null>(null);
     const [configuracoesDaComunidade, setConfiguracoesDaComunidade] = useState(false);
     const [abrirModalPermissoesConfig, setAbrirModalPermissoesConfig] = useState(false);
+    const [feedback, setFeedback] = useState({
+        aberto: false,
+        tipo: "erro" as "erro" | "sucesso",
+        mensagem: "",
+    });
 
     if (!aberto || !comunidade || !conversaSelecionada) {
         return null;
@@ -82,379 +88,397 @@ function ModalDadosComunidades({
 
             await navigator.clipboard.writeText(dados.link);
 
-            alert('Link copiado com sucesso!');
+            setFeedback({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem: "Convite copiado para a área de transferência.",
+            });
         } catch (error) {
             console.error('Erro:', error);
         }
     }
 
     return (
-        <div className="modal-dados__fundo" onClick={aoFechar} data-lenis-prevent>
-            <section
-                className="modal-dados modal-dados-comunidade"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="modal-dados-comunidade-titulo"
-                onClick={(evento) => evento.stopPropagation()}
-            >
-                <header className="modal-dados__cabecalho">
-                    <h2 id="modal-dados-comunidade-titulo">Dados da comunidade</h2>
-                    <button
-                        ref={botaoFecharRef}
-                        type="button"
-                        aria-label="Fechar"
-                        onClick={aoFechar}
-                    >
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="m6 6 12 12M18 6 6 18" />
-                        </svg>
-                    </button>
-                </header>
+        <>
+            <div className="modal-dados__fundo" onClick={aoFechar} data-lenis-prevent>
+                <section
+                    className="modal-dados modal-dados-comunidade"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="modal-dados-comunidade-titulo"
+                    onClick={(evento) => evento.stopPropagation()}
+                >
+                    <header className="modal-dados__cabecalho">
+                        <h2 id="modal-dados-comunidade-titulo">Dados da comunidade</h2>
+                        <button
+                            ref={botaoFecharRef}
+                            type="button"
+                            aria-label="Fechar"
+                            onClick={aoFechar}
+                        >
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="m6 6 12 12M18 6 6 18" />
+                            </svg>
+                        </button>
+                    </header>
 
-                <div className="modal-dados__conteudo">
-                    <section className="dados-comunidade__informacoes">
-                        <div className="dados-comunidade__avatar">
-                            <div 
-                                className="dados-comunidade__avatar-comunidade"
-                                title="Alterar imagem"
-                                onMouseEnter={() => setIconChangeMessage(IconChangeMessage())}
-                                onMouseLeave={() => setIconChangeMessage(null)}
-                            >
-                                {renderizarAvatar(comunidade.nome_comunidade, comunidade.imagem_comunidade, true)}
-                                
-                                {iconChangeMessage && (
-                                    <div className="dados-comunidade_avatar-messagem">
-                                        {iconChangeMessage}
-                                    </div>
-                                )}
+                    <div className="modal-dados__conteudo">
+                        <section className="dados-comunidade__informacoes">
+                            <div className="dados-comunidade__avatar">
+                                <div 
+                                    className="dados-comunidade__avatar-comunidade"
+                                    title="Alterar imagem"
+                                    onMouseEnter={() => setIconChangeMessage(IconChangeMessage())}
+                                    onMouseLeave={() => setIconChangeMessage(null)}
+                                >
+                                    {renderizarAvatar(comunidade.nome_comunidade, comunidade.imagem_comunidade, true)}
+                                    
+                                    {iconChangeMessage && (
+                                        <div className="dados-comunidade_avatar-messagem">
+                                            {iconChangeMessage}
+                                        </div>
+                                    )}
 
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="dados-comunidade__identificacao">
-                            <strong className="dados-comunidade__nome">{comunidade.nome_comunidade}</strong>
-                            <button
-                                className="dados-comunidade_alter-nome"
-                                type="button"
-                                title="Editar nome da comunidade"
-                            >
-                                {svgPen}
-                            </button>
-                        </div>
-
-                        <div className="dados-comunidade__resumo">
-                            <p className="dados-comunidade__participantes">
-                                Comunidade <span className="dados-comunidade__separador">·</span>{" "}
-                                {comunidade.totalParticipantes}{" "}
-                                {comunidade.totalParticipantes === 1 ? "membro" : "membros"}
-                            </p>
-                        </div>
-
-                        <div className="dados-comunidade__acoes">
-                            <div className="dados-comunidade__acao">
-                                <button 
-                                    className="dados-comunidade__acao-botao"
-                                    id="convidar"
+                            <div className="dados-comunidade__identificacao">
+                                <strong className="dados-comunidade__nome">{comunidade.nome_comunidade}</strong>
+                                <button
+                                    className="dados-comunidade_alter-nome"
                                     type="button"
-                                    title="Convidar usando link"
-                                    onClick={() => gerarConvite(comunidade.id)}
-                                >
-                                    <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-link" viewBox="0 0 16 16">
-                                        <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9q-.13 0-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
-                                        <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4 4 0 0 1-.82 1H12a3 3 0 1 0 0-6z"/>
-                                    </svg>
-                                </button>
-                                <label 
-                                    htmlFor="convidar"
-                                    className="dados-comunidade__acao-texto"
-                                >
-                                    Convidar
-                                </label>
-                            </div>
-
-                            <div className="dados-comunidade__acao">
-                                <button 
-                                    className="dados-comunidade__acao-botao"
-                                    id="adicionar_membro"
-                                    type="button"
-                                    title="Adicionar membro"
-                                >
-                                    <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-person-add" viewBox="0 0 16 16">
-                                        <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-                                        <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-                                    </svg>
-                                </button>
-                                <label 
-                                    htmlFor="adicionar_membro" 
-                                    className="dados-comunidade__acao-texto"
-                                >
-                                    Adicionar membro
-                                </label>
-                            </div>
-                        </div>
-
-                    </section>
-
-                    <section className="dados-comunidade__descricao">
-                        <div className="dados-comunidade__descricao-conteudo">
-                            <div className="dados-comunidade__descricao-cabecalho">
-                                <strong className="dados-comunidade__descricao-titulo">Comunidade</strong>
-                            </div>
-
-                            <div className="dados-comunidade__descricao-texto">
-                                <span className="dados-comunidade__descricao-mensagem">{comunidade.descricao_comunidade}</span>
-                                <button 
-                                    className="dados-comunidade__descricao-editar"
-                                    type="button"
-                                    title="Editar descrição da comunidade"
+                                    title="Editar nome da comunidade"
                                 >
                                     {svgPen}
                                 </button>
                             </div>
-                        </div>
-                    </section>
 
-                    <div className="dados-comunidade__configuracao-container">
-                        {/*ativa só para admins da comunidade*/}
-                        <button
-                            className="dados-comunidade__configuracao"
-                            type="button"
-                            aria-label="Abrir configurações da comunidade"
-                            onClick={() => setConfiguracoesDaComunidade(prev => !prev)}
-                        >
-                            <div className="dados-comunidade__config-icon-text">
-                                <div className="dados-comunidade__configuracao-icone">
-                                    {svgGear}
-                                </div>
-                                <div className="dados-comunidade__configuracao-texto">
-                                    <span>Configuração da comunidade</span>
-                                </div>
-                            </div>
-                            <div className="dados-comunidade__configuracao-seta">
-                                {configuracoesDaComunidade === true 
-                                    ? <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-down" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
-                                    </svg>
-
-                                    : <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-right" viewBox="0 0 16 16">
-                                        <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
-                                    </svg>
-                                }
-                            </div>
-                        </button>
-
-                        {configuracoesDaComunidade && (
-                            <div className="dados-comunidade__configuracoes-opcoes">
-                                <button
-                                    className="dados-comunidade__configuracao-opcao"
-                                    type="button"
-                                    onClick={() => setAbrirModalPermissoesConfig(true)}
-                                >
-                                    <span className="dados-comunidade__configuracao-opcao-titulo">
-                                        Quem pode enviar mensagens
-                                    </span>
-                                    <span className="dados-comunidade__configuracao-opcao-valor">
-                                        {/*alterar para o valor recebido*/}
-                                        Todos
-                                    </span>
-                                </button>
-                            </div>
-                        )}
-
-                    </div>
-
-                    <div className="dados-comunidade__membros">
-                        <div className="dados-comunidade__membros-conteudo">
-                            <div className="dados-comunidade__membros-cabecalho">
-                                <span className="dados-comunidade__membros-total">
+                            <div className="dados-comunidade__resumo">
+                                <p className="dados-comunidade__participantes">
+                                    Comunidade <span className="dados-comunidade__separador">·</span>{" "}
                                     {comunidade.totalParticipantes}{" "}
-                                    {comunidade.totalParticipantes === 1 ? "membro da comunidade" : "membros da comunidade"}
-                                </span>
-                                <button className="dados-comunidade__membros-pesquisar">
-                                    <svg width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
-                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                                    </svg>
-                                </button>
+                                    {comunidade.totalParticipantes === 1 ? "membro" : "membros"}
+                                </p>
                             </div>
 
-                            <button 
-                                className="dados-comunidade__membros-adicionar"
-                                type="button"
-                            >
-                                <div className="dados-comunidade__membros-adicionar-icone">
-                                    <svg width="16" height="16" fill="currentColor" className="bi bi-person-add" viewBox="0 0 16 16">
-                                        <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-                                        <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-                                    </svg>
+                            <div className="dados-comunidade__acoes">
+                                <div className="dados-comunidade__acao">
+                                    <button 
+                                        className="dados-comunidade__acao-botao"
+                                        id="convidar"
+                                        type="button"
+                                        title="Convidar usando link"
+                                        onClick={() => gerarConvite(comunidade.id)}
+                                    >
+                                        <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-link" viewBox="0 0 16 16">
+                                            <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9q-.13 0-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+                                            <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4 4 0 0 1-.82 1H12a3 3 0 1 0 0-6z"/>
+                                        </svg>
+                                    </button>
+                                    <label 
+                                        htmlFor="convidar"
+                                        className="dados-comunidade__acao-texto"
+                                    >
+                                        Convidar
+                                    </label>
                                 </div>
-                                <div className="dados-comunidade__membros-adicionar-texto">
-                                    <span>Adicionar membro</span>
+
+                                <div className="dados-comunidade__acao">
+                                    <button 
+                                        className="dados-comunidade__acao-botao"
+                                        id="adicionar_membro"
+                                        type="button"
+                                        title="Adicionar membro"
+                                    >
+                                        <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-person-add" viewBox="0 0 16 16">
+                                            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                                            <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                                        </svg>
+                                    </button>
+                                    <label 
+                                        htmlFor="adicionar_membro" 
+                                        className="dados-comunidade__acao-texto"
+                                    >
+                                        Adicionar membro
+                                    </label>
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <section className="dados-comunidade__descricao">
+                            <div className="dados-comunidade__descricao-conteudo">
+                                <div className="dados-comunidade__descricao-cabecalho">
+                                    <strong className="dados-comunidade__descricao-titulo">Comunidade</strong>
+                                </div>
+
+                                <div className="dados-comunidade__descricao-texto">
+                                    <span className="dados-comunidade__descricao-mensagem">{comunidade.descricao_comunidade}</span>
+                                    <button 
+                                        className="dados-comunidade__descricao-editar"
+                                        type="button"
+                                        title="Editar descrição da comunidade"
+                                    >
+                                        {svgPen}
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div className="dados-comunidade__configuracao-container">
+                            {/*ativa só para admins da comunidade*/}
+                            <button
+                                className="dados-comunidade__configuracao"
+                                type="button"
+                                aria-label="Abrir configurações da comunidade"
+                                onClick={() => setConfiguracoesDaComunidade(prev => !prev)}
+                            >
+                                <div className="dados-comunidade__config-icon-text">
+                                    <div className="dados-comunidade__configuracao-icone">
+                                        {svgGear}
+                                    </div>
+                                    <div className="dados-comunidade__configuracao-texto">
+                                        <span>Configuração da comunidade</span>
+                                    </div>
+                                </div>
+                                <div className="dados-comunidade__configuracao-seta">
+                                    {configuracoesDaComunidade === true 
+                                        ? <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-down" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                                        </svg>
+
+                                        : <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-right" viewBox="0 0 16 16">
+                                            <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+                                        </svg>
+                                    }
                                 </div>
                             </button>
 
-                            {conversaSelecionada.participantes.length > 0 ? (
-                                <ul
-                                    className="dados-comunidade__membros-lista"
-                                    data-lenis-prevent
+                            {configuracoesDaComunidade && (
+                                <div className="dados-comunidade__configuracoes-opcoes">
+                                    <button
+                                        className="dados-comunidade__configuracao-opcao"
+                                        type="button"
+                                        onClick={() => setAbrirModalPermissoesConfig(true)}
+                                    >
+                                        <span className="dados-comunidade__configuracao-opcao-titulo">
+                                            Quem pode enviar mensagens
+                                        </span>
+                                        <span className="dados-comunidade__configuracao-opcao-valor">
+                                            {/*alterar para o valor recebido*/}
+                                            Todos
+                                        </span>
+                                    </button>
+                                </div>
+                            )}
+
+                        </div>
+
+                        <div className="dados-comunidade__membros">
+                            <div className="dados-comunidade__membros-conteudo">
+                                <div className="dados-comunidade__membros-cabecalho">
+                                    <span className="dados-comunidade__membros-total">
+                                        {comunidade.totalParticipantes}{" "}
+                                        {comunidade.totalParticipantes === 1 ? "membro da comunidade" : "membros da comunidade"}
+                                    </span>
+                                    <button className="dados-comunidade__membros-pesquisar">
+                                        <svg width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <button 
+                                    className="dados-comunidade__membros-adicionar"
+                                    type="button"
                                 >
-                                    {[...conversaSelecionada.participantes]
-                                        .sort((primeiro, segundo) => {
-                                            if (primeiro.id === usuario?.sub) return -1;
-                                            if (segundo.id === usuario?.sub) return 1;
-                                            return primeiro.nome.localeCompare(
-                                                segundo.nome,
-                                                "pt-BR",
-                                            );
-                                        })
-                                        .map((participante) => (
-                                            <li
-                                                key={participante.id}
-                                                className="dados-comunidade__membro"
-                                            >
-                                                <div className="dados-comunidade__membro-avatar">
-                                                    {renderizarAvatar(
-                                                        participante.nome,
-                                                        participante.foto_perfil_url,
-                                                    )}
-                                                </div>
-                                                <div className="dados-comunidade__membro-dados">
-                                                    <div className="dados-comunidade__membro-cabecalho">
-                                                        <strong>{participante.nome}</strong>
-                                                        {participante.id === usuario?.sub && (
-                                                            <span className="dados-comunidade__membro-voce">
-                                                                Você
-                                                            </span>
+                                    <div className="dados-comunidade__membros-adicionar-icone">
+                                        <svg width="16" height="16" fill="currentColor" className="bi bi-person-add" viewBox="0 0 16 16">
+                                            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                                            <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                                        </svg>
+                                    </div>
+                                    <div className="dados-comunidade__membros-adicionar-texto">
+                                        <span>Adicionar membro</span>
+                                    </div>
+                                </button>
+
+                                {conversaSelecionada.participantes.length > 0 ? (
+                                    <ul
+                                        className="dados-comunidade__membros-lista"
+                                        data-lenis-prevent
+                                    >
+                                        {[...conversaSelecionada.participantes]
+                                            .sort((primeiro, segundo) => {
+                                                if (primeiro.id === usuario?.sub) return -1;
+                                                if (segundo.id === usuario?.sub) return 1;
+                                                return primeiro.nome.localeCompare(
+                                                    segundo.nome,
+                                                    "pt-BR",
+                                                );
+                                            })
+                                            .map((participante) => (
+                                                <li
+                                                    key={participante.id}
+                                                    className="dados-comunidade__membro"
+                                                >
+                                                    <div className="dados-comunidade__membro-avatar">
+                                                        {renderizarAvatar(
+                                                            participante.nome,
+                                                            participante.foto_perfil_url,
                                                         )}
                                                     </div>
-                                                </div>
-                                            </li>
-                                        ))}
-                                </ul>
-                            ) : (
-                                <p className="dados-comunidade__membros-vazio">
-                                    Este grupo não possui participantes.
-                                </p>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="dados-comunidade__sair-container">
-                        <button className="dados-comunidade__sair" type="button">
-                            <div className="dados-comunidade__sair-icone">
-                                <svg width="16" height="16" fill="currentColor" className="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
-                                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
-                                </svg>
-                            </div>
-                            <div className="dados-comunidade__sair-texto">
-                                <span className="dados-comunidade__sair-rotulo">
-                                    Sair da comunidade
-                                </span>
-                            </div>
-                        </button>
-                    </div>
-
-                    <footer className="dados-comunidade__rodape">
-                        <span className="dados-comunidade__criacao">
-                            Essa comunidade foi criada por {comunidade.criador_nome} no dia {dataFormatada}
-                        </span>
-                    </footer>
-                </div>
-
-            </section>
-
-            {abrirModalPermissoesConfig && (
-                <section
-                    className="permissoes-comunidade__fundo"
-                    role="presentation"
-                    onClick={(evento) => evento.stopPropagation()}
-                    onMouseDown={(evento) => {
-                        if (evento.target === evento.currentTarget) {
-                            setAbrirModalPermissoesConfig(false);
-                        }
-                    }}
-                >
-                    <div
-                        className="permissoes-comunidade"
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby="permissoes-comunidade-titulo"
-                    >
-                        <header className="permissoes-comunidade__cabecalho">
-                            <h2 id="permissoes-comunidade-titulo">
-                                Quem pode enviar mensagens na comunidade
-                            </h2>
-                            <button
-                                className="permissoes-comunidade__fechar"
-                                type="button"
-                                aria-label="Fechar"
-                                onClick={() => setAbrirModalPermissoesConfig(false)}
-                            >
-                                <svg viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="m6 6 12 12M18 6 6 18" />
-                                </svg>
-                            </button>
-                        </header>
-
-                        <div className="permissoes-comunidade__conteudo">
-                            <div className="permissoes-comunidade__descricao">
-                                <p>As permissões de envio de mensagens são gerenciadas pelos administradores da comunidade. Quando a restrição está ativa, somente administradores têm permissão para publicar. Caso a permissão seja concedida a todos os membros, qualquer participante poderá enviar mensagens livremente.</p>
+                                                    <div className="dados-comunidade__membro-dados">
+                                                        <div className="dados-comunidade__membro-cabecalho">
+                                                            <strong>{participante.nome}</strong>
+                                                            {participante.id === usuario?.sub && (
+                                                                <span className="dados-comunidade__membro-voce">
+                                                                    Você
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                    </ul>
+                                ) : (
+                                    <p className="dados-comunidade__membros-vazio">
+                                        Este grupo não possui participantes.
+                                    </p>
+                                )}
                             </div>
                         </div>
 
-                        <div className="permissoes-comunidade__opcoes">
-                            <div className="permissoes-comunidade__opcao">
-                                <input
-                                    className="permissoes-comunidade__radio"
-                                    type="radio"
-                                    name="permissao-envio"
-                                    id="todos"
-                                />
-                                <label
-                                    className="permissoes-comunidade__opcao-texto"
-                                    htmlFor="todos"
-                                >
-                                    <strong>Todos</strong>
-                                    <span>Todos os membros poderam enviar mensagens na comunidade</span>
-                                </label>
-                            </div>
-                            <div className="permissoes-comunidade__opcao">
-                                <input
-                                    className="permissoes-comunidade__radio"
-                                    type="radio"
-                                    name="permissao-envio"
-                                    id="admins"
-                                />
-                                <label
-                                    className="permissoes-comunidade__opcao-texto"
-                                    htmlFor="admins"
-                                >
-                                    <strong>Admins</strong>
-                                    <span>Só os admins da comunidade poderam enviar mensagens na comunidade</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div className="permissoes-comunidade__acoes">
-                            <button
-                                className="permissoes-comunidade__acao permissoes-comunidade__acao--cancelar"
-                                type="button"
-                                onClick={() => setAbrirModalPermissoesConfig(false)}
-                            >
-                                Cancelar
-                            </button>
-                            <button
-                                className="permissoes-comunidade__acao permissoes-comunidade__acao--enviar"
-                                type="button"
-                            >
-                                Enviar
+                        <div className="dados-comunidade__sair-container">
+                            <button className="dados-comunidade__sair" type="button">
+                                <div className="dados-comunidade__sair-icone">
+                                    <svg width="16" height="16" fill="currentColor" className="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                                        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                                    </svg>
+                                </div>
+                                <div className="dados-comunidade__sair-texto">
+                                    <span className="dados-comunidade__sair-rotulo">
+                                        Sair da comunidade
+                                    </span>
+                                </div>
                             </button>
                         </div>
+
+                        <footer className="dados-comunidade__rodape">
+                            <span className="dados-comunidade__criacao">
+                                Essa comunidade foi criada por {comunidade.criador_nome} no dia {dataFormatada}
+                            </span>
+                        </footer>
                     </div>
+
                 </section>
-            )}
 
-        </div>
+                {abrirModalPermissoesConfig && (
+                    <section
+                        className="permissoes-comunidade__fundo"
+                        role="presentation"
+                        onClick={(evento) => evento.stopPropagation()}
+                        onMouseDown={(evento) => {
+                            if (evento.target === evento.currentTarget) {
+                                setAbrirModalPermissoesConfig(false);
+                            }
+                        }}
+                    >
+                        <div
+                            className="permissoes-comunidade"
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby="permissoes-comunidade-titulo"
+                        >
+                            <header className="permissoes-comunidade__cabecalho">
+                                <h2 id="permissoes-comunidade-titulo">
+                                    Quem pode enviar mensagens na comunidade
+                                </h2>
+                                <button
+                                    className="permissoes-comunidade__fechar"
+                                    type="button"
+                                    aria-label="Fechar"
+                                    onClick={() => setAbrirModalPermissoesConfig(false)}
+                                >
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="m6 6 12 12M18 6 6 18" />
+                                    </svg>
+                                </button>
+                            </header>
+
+                            <div className="permissoes-comunidade__conteudo">
+                                <div className="permissoes-comunidade__descricao">
+                                    <p>As permissões de envio de mensagens são gerenciadas pelos administradores da comunidade. Quando a restrição está ativa, somente administradores têm permissão para publicar. Caso a permissão seja concedida a todos os membros, qualquer participante poderá enviar mensagens livremente.</p>
+                                </div>
+                            </div>
+
+                            <div className="permissoes-comunidade__opcoes">
+                                <div className="permissoes-comunidade__opcao">
+                                    <input
+                                        className="permissoes-comunidade__radio"
+                                        type="radio"
+                                        name="permissao-envio"
+                                        id="todos"
+                                    />
+                                    <label
+                                        className="permissoes-comunidade__opcao-texto"
+                                        htmlFor="todos"
+                                    >
+                                        <strong>Todos</strong>
+                                        <span>Todos os membros poderam enviar mensagens na comunidade</span>
+                                    </label>
+                                </div>
+                                <div className="permissoes-comunidade__opcao">
+                                    <input
+                                        className="permissoes-comunidade__radio"
+                                        type="radio"
+                                        name="permissao-envio"
+                                        id="admins"
+                                    />
+                                    <label
+                                        className="permissoes-comunidade__opcao-texto"
+                                        htmlFor="admins"
+                                    >
+                                        <strong>Admins</strong>
+                                        <span>Só os admins da comunidade poderam enviar mensagens na comunidade</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div className="permissoes-comunidade__acoes">
+                                <button
+                                    className="permissoes-comunidade__acao permissoes-comunidade__acao--cancelar"
+                                    type="button"
+                                    onClick={() => setAbrirModalPermissoesConfig(false)}
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    className="permissoes-comunidade__acao permissoes-comunidade__acao--enviar"
+                                    type="button"
+                                >
+                                    Enviar
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                )}
+
+            </div>
+
+            <ModalFeedback
+                aberto={feedback.aberto}
+                tipo={feedback.tipo}
+                mensagem={feedback.mensagem}
+                aoFechar={() =>
+                    setFeedback((estadoAtual) => ({
+                        ...estadoAtual,
+                        aberto: false,
+                    }))
+                }
+            />
+        </>
     );
 }
 

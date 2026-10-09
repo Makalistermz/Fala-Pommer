@@ -321,7 +321,7 @@ export class ComunidadesService {
         });
 
         return {
-            link: `http://192.168.103.81:5173/convite/${token}`, //${process.env.FRONTEND_URL}
+            link: `${process.env.FRONTEND_URL}/convite/${token}`,
             expira_em: convite.expira_em
         };
         

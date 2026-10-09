@@ -210,6 +210,24 @@ function ModalDadosComunidades({
                                 }
                             </div>
                         </button>
+
+                        {configuracoesDaComunidade && (
+                            <div className="dados-comunidade__configuracoes-opcoes">
+                                <button
+                                    className="dados-comunidade__configuracao-opcao"
+                                    type="button"
+                                >
+                                    <span className="dados-comunidade__configuracao-opcao-titulo">
+                                        Quem pode enviar mensagens
+                                    </span>
+                                    <span className="dados-comunidade__configuracao-opcao-valor">
+                                        {/*alterar para o valor recebido*/}
+                                        Todos
+                                    </span>
+                                </button>
+                            </div>
+                        )}
+
                     </div>
 
                     <div className="dados-comunidade__membros">

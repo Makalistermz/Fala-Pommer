@@ -1400,6 +1400,21 @@
     white-space: nowrap;
 }
 
+.dados-comunidade__rodape {
+    width: 100%;
+    padding: 16px 12px 0;
+    border-top: 1px solid #edf0f5;
+    text-align: center;
+}
+
+.dados-comunidade__criacao {
+    display: block;
+    color: #667085;
+    font-family: var(--fonte-dm-sans, sans-serif);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+}
+
 html.tema-escuro:not(.alto-contraste) .modal-dados-comunidade {
     border-color: var(--tema-borda);
     background: var(--tema-superficie-elevada);
@@ -1501,6 +1516,14 @@ html.tema-escuro:not(.alto-contraste) .dados-comunidade__sair:hover {
     border-color: #8f3434;
     color: #fecaca;
     background: #482222;
+}
+
+html.tema-escuro:not(.alto-contraste) .dados-comunidade__rodape {
+    border-top-color: var(--tema-borda);
+}
+
+html.tema-escuro:not(.alto-contraste) .dados-comunidade__criacao {
+    color: var(--tema-texto-secundario);
 }
 
 html.tema-escuro:not(.alto-contraste) 

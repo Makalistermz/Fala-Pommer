@@ -294,13 +294,13 @@ function ModalDadosComunidades({
                             </div>
                         </button>
                     </div>
-                </div>
 
-                <footer className="dados-comunidade__rodape">
-                    <span className="dados-comunidade__criacao">
-                        Essa comunidade foi criada por {comunidade.criador_nome} no dia {dataFormatada}
-                    </span>
-                </footer>
+                    <footer className="dados-comunidade__rodape">
+                        <span className="dados-comunidade__criacao">
+                            Essa comunidade foi criada por {comunidade.criador_nome} no dia {dataFormatada}
+                        </span>
+                    </footer>
+                </div>
 
             </section>
         </div>

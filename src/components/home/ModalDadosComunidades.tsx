@@ -27,6 +27,7 @@ function ModalDadosComunidades({
 }: ModalDadosComunidadeProps) {
     {/*retorna um elemento html*/}
     const [iconChangeMessage, setIconChangeMessage] = useState<React.JSX.Element | null>(null);
+    const [configuracoesDaComunidade, setConfiguracoesDaComunidade] = useState(false);
 
     if (!aberto || !comunidade || !conversaSelecionada) {
         return null;
@@ -187,6 +188,7 @@ function ModalDadosComunidades({
                             className="dados-comunidade__configuracao"
                             type="button"
                             aria-label="Abrir configurações da comunidade"
+                            onClick={() => setConfiguracoesDaComunidade(prev => !prev)}
                         >
                             <div className="dados-comunidade__config-icon-text">
                                 <div className="dados-comunidade__configuracao-icone">
@@ -197,9 +199,15 @@ function ModalDadosComunidades({
                                 </div>
                             </div>
                             <div className="dados-comunidade__configuracao-seta">
-                                <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-right" viewBox="0 0 16 16">
-                                    <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
-                                </svg>
+                                {configuracoesDaComunidade === true 
+                                    ? <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-down" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                                    </svg>
+
+                                    : <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-right" viewBox="0 0 16 16">
+                                        <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+                                    </svg>
+                                }
                             </div>
                         </button>
                     </div>

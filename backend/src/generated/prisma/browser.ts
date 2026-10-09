@@ -112,3 +112,8 @@ export type conversa_transferencia = Prisma.conversa_transferenciaModel
  * 
  */
 export type comunidade = Prisma.comunidadeModel
+/**
+ * Model convite_comunidade
+ * 
+ */
+export type convite_comunidade = Prisma.convite_comunidadeModel

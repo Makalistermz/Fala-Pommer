@@ -69,7 +69,8 @@ export const ModelName = {
   avaliacao: 'avaliacao',
   conversa_finalizacao: 'conversa_finalizacao',
   conversa_transferencia: 'conversa_transferencia',
-  comunidade: 'comunidade'
+  comunidade: 'comunidade',
+  convite_comunidade: 'convite_comunidade'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -338,6 +339,19 @@ export const ComunidadeScalarFieldEnum = {
 export type ComunidadeScalarFieldEnum = (typeof ComunidadeScalarFieldEnum)[keyof typeof ComunidadeScalarFieldEnum]
 
 
+export const Convite_comunidadeScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  comunidade_id: 'comunidade_id',
+  criado_por: 'criado_por',
+  expira_em: 'expira_em',
+  usado: 'usado',
+  criado_em: 'criado_em'
+} as const
+
+export type Convite_comunidadeScalarFieldEnum = (typeof Convite_comunidadeScalarFieldEnum)[keyof typeof Convite_comunidadeScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -464,4 +478,11 @@ export const comunidadeOrderByRelevanceFieldEnum = {
 } as const
 
 export type comunidadeOrderByRelevanceFieldEnum = (typeof comunidadeOrderByRelevanceFieldEnum)[keyof typeof comunidadeOrderByRelevanceFieldEnum]
+
+
+export const convite_comunidadeOrderByRelevanceFieldEnum = {
+  token: 'token'
+} as const
+
+export type convite_comunidadeOrderByRelevanceFieldEnum = (typeof convite_comunidadeOrderByRelevanceFieldEnum)[keyof typeof convite_comunidadeOrderByRelevanceFieldEnum]
 

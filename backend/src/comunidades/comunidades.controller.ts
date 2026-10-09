@@ -119,4 +119,18 @@ export class ComunidadesController {
     ) {
         return this.comunidadesService.enviarMensagem(comunidadeId, requisicao.usuario!, dados.conteudo);
     }
+
+    @Post(':comunidadeId/convite')
+    @UseGuards(AuthGuard)
+    criarConvite(
+        @Param('comunidadeId', ParseIntPipe) comunidadeId: number,
+        @Req() requisicao: RequisicaoAutenticada,
+    ) {
+        const usuarioId = requisicao.usuario!.sub;
+
+        return this.comunidadesService.criarConviteComunidade(
+            usuarioId,
+            comunidadeId,
+        );
+    }
 }

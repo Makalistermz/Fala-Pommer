@@ -1,6 +1,7 @@
 import { useState, type ReactNode, type RefObject } from "react";
 import type { Comunidade } from "./Comunidades";
 import type { ConversaComunidade } from "../../pages/home";
+import { apiFetch } from "../../services/api";
 
 interface ModalDadosComunidadeProps {
     aberto: boolean;
@@ -57,6 +58,34 @@ function ModalDadosComunidades({
                 {svgImage}
             </div>
         )
+    }
+
+    
+    async function gerarConvite(comunidadeId: number) {
+        try {
+            const resposta = await apiFetch(
+            `/comunidades/${comunidadeId}/convite`,
+            {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            },
+            );
+
+            if (!resposta.ok) {
+            throw new Error('Erro ao gerar convite');
+            }
+
+            const dados = await resposta.json();
+
+            await navigator.clipboard.writeText(dados.link);
+
+            alert('Link copiado com sucesso!');
+        } catch (error) {
+            console.error('Erro:', error);
+        }
     }
 
     return (
@@ -128,6 +157,7 @@ function ModalDadosComunidades({
                                     id="convidar"
                                     type="button"
                                     title="Convidar usando link"
+                                    onClick={() => gerarConvite(comunidade.id)}
                                 >
                                     <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-link" viewBox="0 0 16 16">
                                         <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9q-.13 0-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>

@@ -8,6 +8,7 @@ import { type JwtPayload } from '../auth/auth.guard';
 import { conversa_tipo, Prisma } from '../generated/prisma/client';
 import { MensagensCriptografiaService } from '../criptografia/mensagens-criptografia.service';
 import { ListarMensagensDto } from '../conversas/dto/listar-mensagens.dto';
+import { randomBytes } from 'node:crypto';
 
 function selecionarComunidade(usuarioId: number) {
     return {
@@ -303,5 +304,26 @@ export class ComunidadesService {
             enviadaEm: mensagem.enviada_em,
             remetente: mensagem.remetente
         };
+    }
+
+    async criarConviteComunidade(usuarioId: number, comunidadeId: number) {
+        const token = randomBytes(32).toString('hex');
+
+        const expiracao = new Date(Date.now() + 60 * 60 * 1000); //1 hora para a expiração
+
+        const convite = await this.prisma.convite_comunidade.create({
+            data: {
+                token,
+                comunidade_id: comunidadeId,
+                criado_por: usuarioId,
+                expira_em: expiracao,
+            },
+        });
+
+        return {
+            link: `${process.env.FRONTEND_URL}/convite/${token}`,
+            expira_em: convite.expira_em
+        };
+        
     }
 }

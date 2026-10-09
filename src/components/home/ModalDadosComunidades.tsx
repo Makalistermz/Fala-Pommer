@@ -28,6 +28,7 @@ function ModalDadosComunidades({
     {/*retorna um elemento html*/}
     const [iconChangeMessage, setIconChangeMessage] = useState<React.JSX.Element | null>(null);
     const [configuracoesDaComunidade, setConfiguracoesDaComunidade] = useState(false);
+    const [abrirModalPermissoesConfig, setAbrirModalPermissoesConfig] = useState(false);
 
     if (!aberto || !comunidade || !conversaSelecionada) {
         return null;
@@ -184,6 +185,7 @@ function ModalDadosComunidades({
                     </section>
 
                     <div className="dados-comunidade__configuracao-container">
+                        {/*ativa só para admins da comunidade*/}
                         <button
                             className="dados-comunidade__configuracao"
                             type="button"
@@ -216,6 +218,7 @@ function ModalDadosComunidades({
                                 <button
                                     className="dados-comunidade__configuracao-opcao"
                                     type="button"
+                                    onClick={() => setAbrirModalPermissoesConfig(true)}
                                 >
                                     <span className="dados-comunidade__configuracao-opcao-titulo">
                                         Quem pode enviar mensagens
@@ -329,6 +332,98 @@ function ModalDadosComunidades({
                 </div>
 
             </section>
+
+            {abrirModalPermissoesConfig && (
+                <section
+                    className="permissoes-comunidade__fundo"
+                    role="presentation"
+                    onClick={(evento) => evento.stopPropagation()}
+                    onMouseDown={(evento) => {
+                        if (evento.target === evento.currentTarget) {
+                            setAbrirModalPermissoesConfig(false);
+                        }
+                    }}
+                >
+                    <div
+                        className="permissoes-comunidade"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="permissoes-comunidade-titulo"
+                    >
+                        <header className="permissoes-comunidade__cabecalho">
+                            <h2 id="permissoes-comunidade-titulo">
+                                Quem pode enviar mensagens na comunidade
+                            </h2>
+                            <button
+                                className="permissoes-comunidade__fechar"
+                                type="button"
+                                aria-label="Fechar"
+                                onClick={() => setAbrirModalPermissoesConfig(false)}
+                            >
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="m6 6 12 12M18 6 6 18" />
+                                </svg>
+                            </button>
+                        </header>
+
+                        <div className="permissoes-comunidade__conteudo">
+                            <div className="permissoes-comunidade__descricao">
+                                <p>As permissões de envio de mensagens são gerenciadas pelos administradores da comunidade. Quando a restrição está ativa, somente administradores têm permissão para publicar. Caso a permissão seja concedida a todos os membros, qualquer participante poderá enviar mensagens livremente.</p>
+                            </div>
+                        </div>
+
+                        <div className="permissoes-comunidade__opcoes">
+                            <div className="permissoes-comunidade__opcao">
+                                <input
+                                    className="permissoes-comunidade__radio"
+                                    type="radio"
+                                    name="permissao-envio"
+                                    id="todos"
+                                />
+                                <label
+                                    className="permissoes-comunidade__opcao-texto"
+                                    htmlFor="todos"
+                                >
+                                    <strong>Todos</strong>
+                                    <span>Todos os membros poderam enviar mensagens na comunidade</span>
+                                </label>
+                            </div>
+                            <div className="permissoes-comunidade__opcao">
+                                <input
+                                    className="permissoes-comunidade__radio"
+                                    type="radio"
+                                    name="permissao-envio"
+                                    id="admins"
+                                />
+                                <label
+                                    className="permissoes-comunidade__opcao-texto"
+                                    htmlFor="admins"
+                                >
+                                    <strong>Admins</strong>
+                                    <span>Só os admins da comunidade poderam enviar mensagens na comunidade</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div className="permissoes-comunidade__acoes">
+                            <button
+                                className="permissoes-comunidade__acao permissoes-comunidade__acao--cancelar"
+                                type="button"
+                                onClick={() => setAbrirModalPermissoesConfig(false)}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                className="permissoes-comunidade__acao permissoes-comunidade__acao--enviar"
+                                type="button"
+                            >
+                                Enviar
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            )}
+
         </div>
     );
 }

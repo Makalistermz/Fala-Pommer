@@ -17,6 +17,7 @@ function selecionarComunidade(usuarioId: number) {
         imagem_comunidade: true,
         ocultar_municipes: true,
         conversa_id: true,
+        comunidade_criada_em: true,
         conversa: {
             select: {
                 conversa_participante: {
@@ -39,6 +40,7 @@ function apresentarComunidade(comunidade: ComunidadeSelecionada) {
         nome_comunidade: comunidade.nome_comunidade,
         descricao_comunidade: comunidade.descricao_comunidade,
         imagem_comunidade: comunidade.imagem_comunidade,
+        comunidade_criada_em: comunidade.comunidade_criada_em,
         participa: (comunidade.conversa?.conversa_participante.length ?? 0) > 0,
         totalParticipantes: comunidade.conversa?._count.conversa_participante ?? 0
     };

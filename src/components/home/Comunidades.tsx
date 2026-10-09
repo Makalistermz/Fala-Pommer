@@ -17,6 +17,7 @@ export interface Comunidade {
     imagem_comunidade: string | null;
     participa: boolean;
     totalParticipantes: number;
+    comunidade_criada_em: string;
 }
 
 function obterUrlImagemComunidade(url: string | null) {

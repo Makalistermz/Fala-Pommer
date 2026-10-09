@@ -70,14 +70,14 @@ function ModalDadosComunidades({
     async function gerarConvite(comunidadeId: number) {
         try {
             const resposta = await apiFetch(
-            `/comunidades/${comunidadeId}/convite`,
-            {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
+                `/comunidades/${comunidadeId}/convite`,
+                {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
                 },
-                credentials: 'include',
-            },
             );
 
             if (!resposta.ok) {

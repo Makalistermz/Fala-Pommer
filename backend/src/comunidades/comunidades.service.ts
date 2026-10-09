@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { type JwtPayload } from '../auth/auth.guard';
-import { Prisma } from '../generated/prisma/client';
+import { conversa_tipo, Prisma } from '../generated/prisma/client';
 import { MensagensCriptografiaService } from '../criptografia/mensagens-criptografia.service';
 import { ListarMensagensDto } from '../conversas/dto/listar-mensagens.dto';
 
@@ -26,6 +26,13 @@ function selecionarComunidade(usuarioId: number) {
                 },
                 _count: { select: { conversa_participante: true } }
             }
+        },
+        criador: {
+            select: {
+                id: true,
+                nome: true,
+                foto_perfil_url: true
+            }
         }
     } as const;
 }
@@ -41,6 +48,7 @@ function apresentarComunidade(comunidade: ComunidadeSelecionada) {
         descricao_comunidade: comunidade.descricao_comunidade,
         imagem_comunidade: comunidade.imagem_comunidade,
         comunidade_criada_em: comunidade.comunidade_criada_em,
+        criador_nome: comunidade.criador?.nome,
         participa: (comunidade.conversa?.conversa_participante.length ?? 0) > 0,
         totalParticipantes: comunidade.conversa?._count.conversa_participante ?? 0
     };
@@ -105,18 +113,21 @@ export class ComunidadesService {
             const comunidade = await this.prisma.comunidade.create({
                 data: {
                     nome_comunidade: dados.nome_comunidade,
+                    criador: {
+                        connect: { id: usuarioId }
+                    },
                     descricao_comunidade: dados.descricao_comunidade,
                     imagem_comunidade: fotoComunidadeUrl,
                     ocultar_municipes: dados.ocultar_municipes,
                     conversa: {
                         create: {
-                            tipo: 'comunidade',
+                            tipo: conversa_tipo.comunidade,
                             nome: dados.nome_comunidade.slice(0, 120),
                             conversa_participante: {
                                 create: { usuario_id: usuarioId }
                             }
                         }
-                    }
+                    },
                 },
                 select: selecionarComunidade(usuarioId)
             });
@@ -175,7 +186,7 @@ export class ComunidadesService {
                     data: {
                         conversa: {
                             create: {
-                                tipo: 'comunidade',
+                                tipo: conversa_tipo.comunidade,
                                 nome: comunidade.nome_comunidade.slice(0, 120),
                                 conversa_participante: { create: { usuario_id: usuario.sub } }
                             }

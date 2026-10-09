@@ -34,7 +34,7 @@ model cadastro {
   secretaria                       secretaria?                @relation(fields: [secretaria_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_secretaria")
   setor                            setores?                   @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
   codigo_recuperacao_2fa           codigo_recuperacao_2fa[]
-  comunidade                       comunidade[]
+  comunidades_criadas              comunidade[]
   finalizacoes_realizadas          conversa_finalizacao[]     @relation("ResponsavelFinalizacao")
   conversa_leitura                 conversa_leitura[]
   conversa_participante            conversa_participante[]
@@ -331,7 +331,7 @@ model comunidade {
   comunidade_criada_em  DateTime  @default(now()) @db.DateTime(0)
   comunidade_criador_id Int?
   conversa              conversa? @relation(fields: [conversa_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_comunidade_conversa")
-  cadastro              cadastro? @relation(fields: [comunidade_criador_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_comunidade_criador")
+  criador               cadastro? @relation(fields: [comunidade_criador_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_comunidade_criador")
 
   @@index([comunidade_criador_id], map: "fk_comunidade_criador")
 }

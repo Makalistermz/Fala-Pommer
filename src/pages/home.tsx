@@ -11,7 +11,7 @@ import {
     type ChangeEvent,
     type RefObject,
 } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import EmojiPicker from "../assets/emojiPicker";
 import gsap from "gsap";
 import {
@@ -508,7 +508,17 @@ function Home() {
     const [processandoGravacaoAudio, setProcessandoGravacaoAudio] = useState(false);
 
     const navigate = useNavigate();
+    const location = useLocation();
     const { encerrarSessao } = useAutenticacao();
+
+    useEffect(() => {
+        const comunidade = location.state?.comunidade as Comunidade | undefined;
+
+        if (!comunidade) return;
+
+        void abrirComunidade(comunidade);
+        navigate("/home", { replace: true, state: null });
+    }, [location.state, navigate]);
 
     async function finalizarConversaSelecionada() {
         if (menuSetorRef.current) {

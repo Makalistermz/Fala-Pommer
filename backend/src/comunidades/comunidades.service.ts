@@ -321,9 +321,40 @@ export class ComunidadesService {
         });
 
         return {
-            link: `${process.env.FRONTEND_URL}/convite/${token}`,
+            link: `http://192.168.103.81:5173/convite/${token}`, //${process.env.FRONTEND_URL}
             expira_em: convite.expira_em
         };
         
+    }
+
+    async aceitarConviteComunidade(
+        token: string,
+        usuario: Pick<JwtPayload, 'sub' | 'tipo'>,
+    ) {
+        const convite = await this.prisma.convite_comunidade.findUnique({
+            where: { token },
+            select: {
+                id: true,
+                comunidade_id: true,
+                expira_em: true,
+                usado: true,
+            },
+        });
+
+        if (!convite || convite.usado || convite.expira_em <= new Date()) {
+            throw new NotFoundException('Convite inválido ou expirado.');
+        }
+
+        const comunidade = await this.entrarComunidade(
+            convite.comunidade_id,
+            usuario,
+        );
+
+        await this.prisma.convite_comunidade.updateMany({
+            where: { id: convite.id, usado: false },
+            data: { usado: true },
+        });
+
+        return comunidade;
     }
 }

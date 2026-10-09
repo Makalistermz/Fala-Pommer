@@ -18,6 +18,7 @@ import NaoEncontrada from "./pages/naoEncontrada.tsx";
 import RecaptchaLayout from "./components/reCAPTCHALayout.tsx";
 import AvisoPrivacidade from "./components/AvisoPrivacidade.tsx";
 import Privacidade from "./pages/privacidade.tsx";
+import ConviteComunidade from "./pages/convite-comunidade.tsx";
 
 function App() {
     useEffect(() => {
@@ -46,6 +47,7 @@ function App() {
       <Route path="/privacidade" element={<Privacidade />} />
       <Route path="/redefinir-senha" element={<RedefinirSenha />} />
       <Route path="/sem-permissao" element={<SemPermissao />} />
+      <Route path="/convite/:token" element={<ConviteComunidade />} />
       <Route path="*" element={<NaoEncontrada />} />
 
       <Route

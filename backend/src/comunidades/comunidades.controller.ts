@@ -120,6 +120,18 @@ export class ComunidadesController {
         return this.comunidadesService.enviarMensagem(comunidadeId, requisicao.usuario!, dados.conteudo);
     }
 
+    @Post('convites/:token/aceitar')
+    @UseGuards(AuthGuard)
+    aceitarConvite(
+        @Param('token') token: string,
+        @Req() requisicao: RequisicaoAutenticada,
+    ) {
+        return this.comunidadesService.aceitarConviteComunidade(
+            token,
+            requisicao.usuario!,
+        );
+    }
+
     @Post(':comunidadeId/convite')
     @UseGuards(AuthGuard)
     criarConvite(

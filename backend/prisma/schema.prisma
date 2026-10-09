@@ -34,6 +34,7 @@ model cadastro {
   secretaria                       secretaria?                @relation(fields: [secretaria_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_secretaria")
   setor                            setores?                   @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
   codigo_recuperacao_2fa           codigo_recuperacao_2fa[]
+  comunidade                       comunidade[]
   finalizacoes_realizadas          conversa_finalizacao[]     @relation("ResponsavelFinalizacao")
   conversa_leitura                 conversa_leitura[]
   conversa_participante            conversa_participante[]
@@ -321,14 +322,18 @@ model conversa_transferencia {
 }
 
 model comunidade {
-  id                   Int       @id @default(autoincrement())
-  nome_comunidade      String    @db.VarChar(150)
-  descricao_comunidade String    @db.VarChar(400)
-  imagem_comunidade    String?   @db.VarChar(500)
-  ocultar_municipes    Boolean   @default(false)
-  conversa_id          Int?      @unique(map: "uq_comunidade_conversa")
-  comunidade_criada_em DateTime  @default(now()) @db.DateTime(0)
-  conversa             conversa? @relation(fields: [conversa_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_comunidade_conversa")
+  id                    Int       @id @default(autoincrement())
+  nome_comunidade       String    @db.VarChar(150)
+  descricao_comunidade  String    @db.VarChar(400)
+  imagem_comunidade     String?   @db.VarChar(500)
+  ocultar_municipes     Boolean   @default(false)
+  conversa_id           Int?      @unique(map: "uq_comunidade_conversa")
+  comunidade_criada_em  DateTime  @default(now()) @db.DateTime(0)
+  comunidade_criador_id Int?
+  conversa              conversa? @relation(fields: [conversa_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_comunidade_conversa")
+  cadastro              cadastro? @relation(fields: [comunidade_criador_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_comunidade_criador")
+
+  @@index([comunidade_criador_id], map: "fk_comunidade_criador")
 }
 
 enum desafio_2fa_finalidade {

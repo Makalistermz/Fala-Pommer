@@ -350,6 +350,7 @@ export type cadastroWhereInput = {
   secretaria?: Prisma.XOR<Prisma.SecretariaNullableScalarRelationFilter, Prisma.secretariaWhereInput> | null
   setor?: Prisma.XOR<Prisma.SetoresNullableScalarRelationFilter, Prisma.setoresWhereInput> | null
   codigo_recuperacao_2fa?: Prisma.Codigo_recuperacao_2faListRelationFilter
+  comunidade?: Prisma.ComunidadeListRelationFilter
   finalizacoes_realizadas?: Prisma.Conversa_finalizacaoListRelationFilter
   conversa_leitura?: Prisma.Conversa_leituraListRelationFilter
   conversa_participante?: Prisma.Conversa_participanteListRelationFilter
@@ -391,6 +392,7 @@ export type cadastroOrderByWithRelationInput = {
   secretaria?: Prisma.secretariaOrderByWithRelationInput
   setor?: Prisma.setoresOrderByWithRelationInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faOrderByRelationAggregateInput
+  comunidade?: Prisma.comunidadeOrderByRelationAggregateInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoOrderByRelationAggregateInput
   conversa_leitura?: Prisma.conversa_leituraOrderByRelationAggregateInput
   conversa_participante?: Prisma.conversa_participanteOrderByRelationAggregateInput
@@ -436,6 +438,7 @@ export type cadastroWhereUniqueInput = Prisma.AtLeast<{
   secretaria?: Prisma.XOR<Prisma.SecretariaNullableScalarRelationFilter, Prisma.secretariaWhereInput> | null
   setor?: Prisma.XOR<Prisma.SetoresNullableScalarRelationFilter, Prisma.setoresWhereInput> | null
   codigo_recuperacao_2fa?: Prisma.Codigo_recuperacao_2faListRelationFilter
+  comunidade?: Prisma.ComunidadeListRelationFilter
   finalizacoes_realizadas?: Prisma.Conversa_finalizacaoListRelationFilter
   conversa_leitura?: Prisma.Conversa_leituraListRelationFilter
   conversa_participante?: Prisma.Conversa_participanteListRelationFilter
@@ -525,6 +528,7 @@ export type cadastroCreateInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -563,6 +567,7 @@ export type cadastroUncheckedCreateInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -600,6 +605,7 @@ export type cadastroUpdateInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -638,6 +644,7 @@ export type cadastroUncheckedUpdateInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -1215,6 +1222,22 @@ export type cadastroUpdateOneRequiredWithoutConversa_transferenciaNestedInput = 
   update?: Prisma.XOR<Prisma.XOR<Prisma.cadastroUpdateToOneWithWhereWithoutConversa_transferenciaInput, Prisma.cadastroUpdateWithoutConversa_transferenciaInput>, Prisma.cadastroUncheckedUpdateWithoutConversa_transferenciaInput>
 }
 
+export type cadastroCreateNestedOneWithoutComunidadeInput = {
+  create?: Prisma.XOR<Prisma.cadastroCreateWithoutComunidadeInput, Prisma.cadastroUncheckedCreateWithoutComunidadeInput>
+  connectOrCreate?: Prisma.cadastroCreateOrConnectWithoutComunidadeInput
+  connect?: Prisma.cadastroWhereUniqueInput
+}
+
+export type cadastroUpdateOneWithoutComunidadeNestedInput = {
+  create?: Prisma.XOR<Prisma.cadastroCreateWithoutComunidadeInput, Prisma.cadastroUncheckedCreateWithoutComunidadeInput>
+  connectOrCreate?: Prisma.cadastroCreateOrConnectWithoutComunidadeInput
+  upsert?: Prisma.cadastroUpsertWithoutComunidadeInput
+  disconnect?: Prisma.cadastroWhereInput | boolean
+  delete?: Prisma.cadastroWhereInput | boolean
+  connect?: Prisma.cadastroWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.cadastroUpdateToOneWithWhereWithoutComunidadeInput, Prisma.cadastroUpdateWithoutComunidadeInput>, Prisma.cadastroUncheckedUpdateWithoutComunidadeInput>
+}
+
 export type cadastroCreateWithoutDesativacoes_realizadasInput = {
   nome: string
   data_nascimento: Date | string
@@ -1236,6 +1259,7 @@ export type cadastroCreateWithoutDesativacoes_realizadasInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -1273,6 +1297,7 @@ export type cadastroUncheckedCreateWithoutDesativacoes_realizadasInput = {
   versao_token?: number
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -1314,6 +1339,7 @@ export type cadastroCreateWithoutResponsavel_desativacaoInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -1351,6 +1377,7 @@ export type cadastroUncheckedCreateWithoutResponsavel_desativacaoInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -1408,6 +1435,7 @@ export type cadastroUpdateWithoutDesativacoes_realizadasInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -1445,6 +1473,7 @@ export type cadastroUncheckedUpdateWithoutDesativacoes_realizadasInput = {
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -1523,6 +1552,7 @@ export type cadastroCreateWithoutSessoesInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -1560,6 +1590,7 @@ export type cadastroUncheckedCreateWithoutSessoesInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -1612,6 +1643,7 @@ export type cadastroUpdateWithoutSessoesInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -1649,6 +1681,7 @@ export type cadastroUncheckedUpdateWithoutSessoesInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -1685,6 +1718,7 @@ export type cadastroCreateWithoutTokens_pushInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -1722,6 +1756,7 @@ export type cadastroUncheckedCreateWithoutTokens_pushInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -1774,6 +1809,7 @@ export type cadastroUpdateWithoutTokens_pushInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -1811,6 +1847,7 @@ export type cadastroUncheckedUpdateWithoutTokens_pushInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -1847,6 +1884,7 @@ export type cadastroCreateWithoutErro_autenticacaoInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -1884,6 +1922,7 @@ export type cadastroUncheckedCreateWithoutErro_autenticacaoInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -1936,6 +1975,7 @@ export type cadastroUpdateWithoutErro_autenticacaoInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -1973,6 +2013,7 @@ export type cadastroUncheckedUpdateWithoutErro_autenticacaoInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -2009,6 +2050,7 @@ export type cadastroCreateWithoutLogin_eventoInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -2046,6 +2088,7 @@ export type cadastroUncheckedCreateWithoutLogin_eventoInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -2098,6 +2141,7 @@ export type cadastroUpdateWithoutLogin_eventoInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -2135,6 +2179,7 @@ export type cadastroUncheckedUpdateWithoutLogin_eventoInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -2171,6 +2216,7 @@ export type cadastroCreateWithoutConversa_participanteInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
@@ -2208,6 +2254,7 @@ export type cadastroUncheckedCreateWithoutConversa_participanteInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
@@ -2260,6 +2307,7 @@ export type cadastroUpdateWithoutConversa_participanteInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
@@ -2297,6 +2345,7 @@ export type cadastroUncheckedUpdateWithoutConversa_participanteInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -2333,6 +2382,7 @@ export type cadastroCreateWithoutConversas_atendidasInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -2370,6 +2420,7 @@ export type cadastroUncheckedCreateWithoutConversas_atendidasInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -2422,6 +2473,7 @@ export type cadastroUpdateWithoutConversas_atendidasInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -2459,6 +2511,7 @@ export type cadastroUncheckedUpdateWithoutConversas_atendidasInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -2495,6 +2548,7 @@ export type cadastroCreateWithoutMensagens_enviadasInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -2532,6 +2586,7 @@ export type cadastroUncheckedCreateWithoutMensagens_enviadasInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -2584,6 +2639,7 @@ export type cadastroUpdateWithoutMensagens_enviadasInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -2621,6 +2677,7 @@ export type cadastroUncheckedUpdateWithoutMensagens_enviadasInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -2656,6 +2713,7 @@ export type cadastroCreateWithoutSetorInput = {
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -2693,6 +2751,7 @@ export type cadastroUncheckedCreateWithoutSetorInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -2756,6 +2815,7 @@ export type cadastroCreateWithoutConversa_leituraInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
@@ -2793,6 +2853,7 @@ export type cadastroUncheckedCreateWithoutConversa_leituraInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
@@ -2845,6 +2906,7 @@ export type cadastroUpdateWithoutConversa_leituraInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
@@ -2882,6 +2944,7 @@ export type cadastroUncheckedUpdateWithoutConversa_leituraInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -2917,6 +2980,7 @@ export type cadastroCreateWithoutCodigo_recuperacao_2faInput = {
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -2954,6 +3018,7 @@ export type cadastroUncheckedCreateWithoutCodigo_recuperacao_2faInput = {
   versao_token?: number
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -3006,6 +3071,7 @@ export type cadastroUpdateWithoutCodigo_recuperacao_2faInput = {
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -3043,6 +3109,7 @@ export type cadastroUncheckedUpdateWithoutCodigo_recuperacao_2faInput = {
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -3080,6 +3147,7 @@ export type cadastroCreateWithoutDesafio_login_2faInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -3117,6 +3185,7 @@ export type cadastroUncheckedCreateWithoutDesafio_login_2faInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -3169,6 +3238,7 @@ export type cadastroUpdateWithoutDesafio_login_2faInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -3206,6 +3276,7 @@ export type cadastroUncheckedUpdateWithoutDesafio_login_2faInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -3241,6 +3312,7 @@ export type cadastroCreateWithoutSecretariaInput = {
   desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -3278,6 +3350,7 @@ export type cadastroUncheckedCreateWithoutSecretariaInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -3341,6 +3414,7 @@ export type cadastroCreateWithoutHistoricos_como_administradorInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -3378,6 +3452,7 @@ export type cadastroUncheckedCreateWithoutHistoricos_como_administradorInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -3419,6 +3494,7 @@ export type cadastroCreateWithoutHistoricos_como_usuario_alvoInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -3456,6 +3532,7 @@ export type cadastroUncheckedCreateWithoutHistoricos_como_usuario_alvoInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -3508,6 +3585,7 @@ export type cadastroUpdateWithoutHistoricos_como_administradorInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -3545,6 +3623,7 @@ export type cadastroUncheckedUpdateWithoutHistoricos_como_administradorInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -3592,6 +3671,7 @@ export type cadastroUpdateWithoutHistoricos_como_usuario_alvoInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -3629,6 +3709,7 @@ export type cadastroUncheckedUpdateWithoutHistoricos_como_usuario_alvoInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -3664,6 +3745,7 @@ export type cadastroCreateWithoutAvaliacoes_realizadasInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -3701,6 +3783,7 @@ export type cadastroUncheckedCreateWithoutAvaliacoes_realizadasInput = {
   versao_token?: number
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -3753,6 +3836,7 @@ export type cadastroUpdateWithoutAvaliacoes_realizadasInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -3790,6 +3874,7 @@ export type cadastroUncheckedUpdateWithoutAvaliacoes_realizadasInput = {
   versao_token?: Prisma.IntFieldUpdateOperationsInput | number
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -3827,6 +3912,7 @@ export type cadastroCreateWithoutFinalizacoes_realizadasInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
@@ -3864,6 +3950,7 @@ export type cadastroUncheckedCreateWithoutFinalizacoes_realizadasInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
@@ -3916,6 +4003,7 @@ export type cadastroUpdateWithoutFinalizacoes_realizadasInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
@@ -3953,6 +4041,7 @@ export type cadastroUncheckedUpdateWithoutFinalizacoes_realizadasInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
@@ -3989,6 +4078,7 @@ export type cadastroCreateWithoutConversa_transferenciaInput = {
   secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
   setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
@@ -4026,6 +4116,7 @@ export type cadastroUncheckedCreateWithoutConversa_transferenciaInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  comunidade?: Prisma.comunidadeUncheckedCreateNestedManyWithoutCadastroInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
   conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
@@ -4078,6 +4169,7 @@ export type cadastroUpdateWithoutConversa_transferenciaInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -4115,10 +4207,177 @@ export type cadastroUncheckedUpdateWithoutConversa_transferenciaInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
   conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
+  desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
+  historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
+  historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedUpdateManyWithoutUsuario_alvoNestedInput
+  login_evento?: Prisma.login_eventoUncheckedUpdateManyWithoutCadastroNestedInput
+  mensagens_enviadas?: Prisma.mensagemUncheckedUpdateManyWithoutRemetenteNestedInput
+  sessoes?: Prisma.sessaoUncheckedUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUncheckedUpdateManyWithoutUsuarioNestedInput
+}
+
+export type cadastroCreateWithoutComunidadeInput = {
+  nome: string
+  data_nascimento: Date | string
+  cpf: string
+  telefone: string
+  email: string
+  senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
+  foto_perfil_url?: string | null
+  dois_fatores_email_ativo?: boolean
+  dois_fatores_email_confirmado_em?: Date | string | null
+  desativado_em?: Date | string | null
+  motivo_desativacao?: string | null
+  versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoCreateNestedManyWithoutAvaliadorInput
+  responsavel_desativacao?: Prisma.cadastroCreateNestedOneWithoutDesativacoes_realizadasInput
+  desativacoes_realizadas?: Prisma.cadastroCreateNestedManyWithoutResponsavel_desativacaoInput
+  secretaria?: Prisma.secretariaCreateNestedOneWithoutCadastrosInput
+  setor?: Prisma.setoresCreateNestedOneWithoutCadastrosInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoCreateNestedManyWithoutFinalizada_porInput
+  conversa_leitura?: Prisma.conversa_leituraCreateNestedManyWithoutCadastroInput
+  conversa_participante?: Prisma.conversa_participanteCreateNestedManyWithoutCadastroInput
+  conversas_atendidas?: Prisma.conversa_setorCreateNestedManyWithoutUsuarioInput
+  conversa_transferencia?: Prisma.conversa_transferenciaCreateNestedManyWithoutCadastroInput
+  desafio_login_2fa?: Prisma.desafio_login_2faCreateNestedManyWithoutCadastroInput
+  erro_autenticacao?: Prisma.erro_autenticacaoCreateNestedManyWithoutCadastroInput
+  historicos_como_administrador?: Prisma.historico_administrativoCreateNestedManyWithoutAdministradorInput
+  historicos_como_usuario_alvo?: Prisma.historico_administrativoCreateNestedManyWithoutUsuario_alvoInput
+  login_evento?: Prisma.login_eventoCreateNestedManyWithoutCadastroInput
+  mensagens_enviadas?: Prisma.mensagemCreateNestedManyWithoutRemetenteInput
+  sessoes?: Prisma.sessaoCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushCreateNestedManyWithoutUsuarioInput
+}
+
+export type cadastroUncheckedCreateWithoutComunidadeInput = {
+  id?: number
+  nome: string
+  data_nascimento: Date | string
+  cpf: string
+  telefone: string
+  email: string
+  senha: string
+  token_recuperacao?: string | null
+  token_recuperacao_expira_em?: Date | string | null
+  tipo_usuario?: $Enums.cadastro_tipo_usuario
+  setor_id?: number | null
+  foto_perfil_url?: string | null
+  dois_fatores_email_ativo?: boolean
+  dois_fatores_email_confirmado_em?: Date | string | null
+  secretaria_id?: number | null
+  desativado_em?: Date | string | null
+  desativado_por?: number | null
+  motivo_desativacao?: string | null
+  versao_token?: number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedCreateNestedManyWithoutAvaliadorInput
+  desativacoes_realizadas?: Prisma.cadastroUncheckedCreateNestedManyWithoutResponsavel_desativacaoInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedCreateNestedManyWithoutCadastroInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedCreateNestedManyWithoutFinalizada_porInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedCreateNestedManyWithoutCadastroInput
+  conversa_participante?: Prisma.conversa_participanteUncheckedCreateNestedManyWithoutCadastroInput
+  conversas_atendidas?: Prisma.conversa_setorUncheckedCreateNestedManyWithoutUsuarioInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedCreateNestedManyWithoutCadastroInput
+  desafio_login_2fa?: Prisma.desafio_login_2faUncheckedCreateNestedManyWithoutCadastroInput
+  erro_autenticacao?: Prisma.erro_autenticacaoUncheckedCreateNestedManyWithoutCadastroInput
+  historicos_como_administrador?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutAdministradorInput
+  historicos_como_usuario_alvo?: Prisma.historico_administrativoUncheckedCreateNestedManyWithoutUsuario_alvoInput
+  login_evento?: Prisma.login_eventoUncheckedCreateNestedManyWithoutCadastroInput
+  mensagens_enviadas?: Prisma.mensagemUncheckedCreateNestedManyWithoutRemetenteInput
+  sessoes?: Prisma.sessaoUncheckedCreateNestedManyWithoutUsuarioInput
+  tokens_push?: Prisma.token_pushUncheckedCreateNestedManyWithoutUsuarioInput
+}
+
+export type cadastroCreateOrConnectWithoutComunidadeInput = {
+  where: Prisma.cadastroWhereUniqueInput
+  create: Prisma.XOR<Prisma.cadastroCreateWithoutComunidadeInput, Prisma.cadastroUncheckedCreateWithoutComunidadeInput>
+}
+
+export type cadastroUpsertWithoutComunidadeInput = {
+  update: Prisma.XOR<Prisma.cadastroUpdateWithoutComunidadeInput, Prisma.cadastroUncheckedUpdateWithoutComunidadeInput>
+  create: Prisma.XOR<Prisma.cadastroCreateWithoutComunidadeInput, Prisma.cadastroUncheckedCreateWithoutComunidadeInput>
+  where?: Prisma.cadastroWhereInput
+}
+
+export type cadastroUpdateToOneWithWhereWithoutComunidadeInput = {
+  where?: Prisma.cadastroWhereInput
+  data: Prisma.XOR<Prisma.cadastroUpdateWithoutComunidadeInput, Prisma.cadastroUncheckedUpdateWithoutComunidadeInput>
+}
+
+export type cadastroUpdateWithoutComunidadeInput = {
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  data_nascimento?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cpf?: Prisma.StringFieldUpdateOperationsInput | string
+  telefone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUpdateManyWithoutAvaliadorNestedInput
+  responsavel_desativacao?: Prisma.cadastroUpdateOneWithoutDesativacoes_realizadasNestedInput
+  desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
+  secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
+  setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
+  conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
+  conversas_atendidas?: Prisma.conversa_setorUpdateManyWithoutUsuarioNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUpdateManyWithoutCadastroNestedInput
+  desafio_login_2fa?: Prisma.desafio_login_2faUpdateManyWithoutCadastroNestedInput
+  erro_autenticacao?: Prisma.erro_autenticacaoUpdateManyWithoutCadastroNestedInput
+  historicos_como_administrador?: Prisma.historico_administrativoUpdateManyWithoutAdministradorNestedInput
+  historicos_como_usuario_alvo?: Prisma.historico_administrativoUpdateManyWithoutUsuario_alvoNestedInput
+  login_evento?: Prisma.login_eventoUpdateManyWithoutCadastroNestedInput
+  mensagens_enviadas?: Prisma.mensagemUpdateManyWithoutRemetenteNestedInput
+  sessoes?: Prisma.sessaoUpdateManyWithoutUsuarioNestedInput
+  tokens_push?: Prisma.token_pushUpdateManyWithoutUsuarioNestedInput
+}
+
+export type cadastroUncheckedUpdateWithoutComunidadeInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  nome?: Prisma.StringFieldUpdateOperationsInput | string
+  data_nascimento?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cpf?: Prisma.StringFieldUpdateOperationsInput | string
+  telefone?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  senha?: Prisma.StringFieldUpdateOperationsInput | string
+  token_recuperacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  token_recuperacao_expira_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  tipo_usuario?: Prisma.Enumcadastro_tipo_usuarioFieldUpdateOperationsInput | $Enums.cadastro_tipo_usuario
+  setor_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  foto_perfil_url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dois_fatores_email_ativo?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dois_fatores_email_confirmado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  secretaria_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  desativado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  desativado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motivo_desativacao?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  versao_token?: Prisma.IntFieldUpdateOperationsInput | number
+  avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
+  desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
+  codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
+  conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
+  conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
+  conversas_atendidas?: Prisma.conversa_setorUncheckedUpdateManyWithoutUsuarioNestedInput
+  conversa_transferencia?: Prisma.conversa_transferenciaUncheckedUpdateManyWithoutCadastroNestedInput
   desafio_login_2fa?: Prisma.desafio_login_2faUncheckedUpdateManyWithoutCadastroNestedInput
   erro_autenticacao?: Prisma.erro_autenticacaoUncheckedUpdateManyWithoutCadastroNestedInput
   historicos_como_administrador?: Prisma.historico_administrativoUncheckedUpdateManyWithoutAdministradorNestedInput
@@ -4171,6 +4430,7 @@ export type cadastroUpdateWithoutResponsavel_desativacaoInput = {
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -4208,6 +4468,7 @@ export type cadastroUncheckedUpdateWithoutResponsavel_desativacaoInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -4286,6 +4547,7 @@ export type cadastroUpdateWithoutSetorInput = {
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   secretaria?: Prisma.secretariaUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -4323,6 +4585,7 @@ export type cadastroUncheckedUpdateWithoutSetorInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -4401,6 +4664,7 @@ export type cadastroUpdateWithoutSecretariaInput = {
   desativacoes_realizadas?: Prisma.cadastroUpdateManyWithoutResponsavel_desativacaoNestedInput
   setor?: Prisma.setoresUpdateOneWithoutCadastrosNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUpdateManyWithoutCadastroNestedInput
@@ -4438,6 +4702,7 @@ export type cadastroUncheckedUpdateWithoutSecretariaInput = {
   avaliacoes_realizadas?: Prisma.avaliacaoUncheckedUpdateManyWithoutAvaliadorNestedInput
   desativacoes_realizadas?: Prisma.cadastroUncheckedUpdateManyWithoutResponsavel_desativacaoNestedInput
   codigo_recuperacao_2fa?: Prisma.codigo_recuperacao_2faUncheckedUpdateManyWithoutCadastroNestedInput
+  comunidade?: Prisma.comunidadeUncheckedUpdateManyWithoutCadastroNestedInput
   finalizacoes_realizadas?: Prisma.conversa_finalizacaoUncheckedUpdateManyWithoutFinalizada_porNestedInput
   conversa_leitura?: Prisma.conversa_leituraUncheckedUpdateManyWithoutCadastroNestedInput
   conversa_participante?: Prisma.conversa_participanteUncheckedUpdateManyWithoutCadastroNestedInput
@@ -4483,6 +4748,7 @@ export type CadastroCountOutputType = {
   avaliacoes_realizadas: number
   desativacoes_realizadas: number
   codigo_recuperacao_2fa: number
+  comunidade: number
   finalizacoes_realizadas: number
   conversa_leitura: number
   conversa_participante: number
@@ -4502,6 +4768,7 @@ export type CadastroCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   avaliacoes_realizadas?: boolean | CadastroCountOutputTypeCountAvaliacoes_realizadasArgs
   desativacoes_realizadas?: boolean | CadastroCountOutputTypeCountDesativacoes_realizadasArgs
   codigo_recuperacao_2fa?: boolean | CadastroCountOutputTypeCountCodigo_recuperacao_2faArgs
+  comunidade?: boolean | CadastroCountOutputTypeCountComunidadeArgs
   finalizacoes_realizadas?: boolean | CadastroCountOutputTypeCountFinalizacoes_realizadasArgs
   conversa_leitura?: boolean | CadastroCountOutputTypeCountConversa_leituraArgs
   conversa_participante?: boolean | CadastroCountOutputTypeCountConversa_participanteArgs
@@ -4546,6 +4813,13 @@ export type CadastroCountOutputTypeCountDesativacoes_realizadasArgs<ExtArgs exte
  */
 export type CadastroCountOutputTypeCountCodigo_recuperacao_2faArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.codigo_recuperacao_2faWhereInput
+}
+
+/**
+ * CadastroCountOutputType without action
+ */
+export type CadastroCountOutputTypeCountComunidadeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.comunidadeWhereInput
 }
 
 /**
@@ -4666,6 +4940,7 @@ export type cadastroSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   secretaria?: boolean | Prisma.cadastro$secretariaArgs<ExtArgs>
   setor?: boolean | Prisma.cadastro$setorArgs<ExtArgs>
   codigo_recuperacao_2fa?: boolean | Prisma.cadastro$codigo_recuperacao_2faArgs<ExtArgs>
+  comunidade?: boolean | Prisma.cadastro$comunidadeArgs<ExtArgs>
   finalizacoes_realizadas?: boolean | Prisma.cadastro$finalizacoes_realizadasArgs<ExtArgs>
   conversa_leitura?: boolean | Prisma.cadastro$conversa_leituraArgs<ExtArgs>
   conversa_participante?: boolean | Prisma.cadastro$conversa_participanteArgs<ExtArgs>
@@ -4714,6 +4989,7 @@ export type cadastroInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   secretaria?: boolean | Prisma.cadastro$secretariaArgs<ExtArgs>
   setor?: boolean | Prisma.cadastro$setorArgs<ExtArgs>
   codigo_recuperacao_2fa?: boolean | Prisma.cadastro$codigo_recuperacao_2faArgs<ExtArgs>
+  comunidade?: boolean | Prisma.cadastro$comunidadeArgs<ExtArgs>
   finalizacoes_realizadas?: boolean | Prisma.cadastro$finalizacoes_realizadasArgs<ExtArgs>
   conversa_leitura?: boolean | Prisma.cadastro$conversa_leituraArgs<ExtArgs>
   conversa_participante?: boolean | Prisma.cadastro$conversa_participanteArgs<ExtArgs>
@@ -4739,6 +5015,7 @@ export type $cadastroPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     secretaria: Prisma.$secretariaPayload<ExtArgs> | null
     setor: Prisma.$setoresPayload<ExtArgs> | null
     codigo_recuperacao_2fa: Prisma.$codigo_recuperacao_2faPayload<ExtArgs>[]
+    comunidade: Prisma.$comunidadePayload<ExtArgs>[]
     finalizacoes_realizadas: Prisma.$conversa_finalizacaoPayload<ExtArgs>[]
     conversa_leitura: Prisma.$conversa_leituraPayload<ExtArgs>[]
     conversa_participante: Prisma.$conversa_participantePayload<ExtArgs>[]
@@ -5119,6 +5396,7 @@ export interface Prisma__cadastroClient<T, Null = never, ExtArgs extends runtime
   secretaria<T extends Prisma.cadastro$secretariaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$secretariaArgs<ExtArgs>>): Prisma.Prisma__secretariaClient<runtime.Types.Result.GetResult<Prisma.$secretariaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   setor<T extends Prisma.cadastro$setorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$setorArgs<ExtArgs>>): Prisma.Prisma__setoresClient<runtime.Types.Result.GetResult<Prisma.$setoresPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   codigo_recuperacao_2fa<T extends Prisma.cadastro$codigo_recuperacao_2faArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$codigo_recuperacao_2faArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$codigo_recuperacao_2faPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  comunidade<T extends Prisma.cadastro$comunidadeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$comunidadeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$comunidadePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   finalizacoes_realizadas<T extends Prisma.cadastro$finalizacoes_realizadasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$finalizacoes_realizadasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_finalizacaoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversa_leitura<T extends Prisma.cadastro$conversa_leituraArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$conversa_leituraArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_leituraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conversa_participante<T extends Prisma.cadastro$conversa_participanteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastro$conversa_participanteArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$conversa_participantePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -5654,6 +5932,30 @@ export type cadastro$codigo_recuperacao_2faArgs<ExtArgs extends runtime.Types.Ex
   take?: number
   skip?: number
   distinct?: Prisma.Codigo_recuperacao_2faScalarFieldEnum | Prisma.Codigo_recuperacao_2faScalarFieldEnum[]
+}
+
+/**
+ * cadastro.comunidade
+ */
+export type cadastro$comunidadeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the comunidade
+   */
+  select?: Prisma.comunidadeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the comunidade
+   */
+  omit?: Prisma.comunidadeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.comunidadeInclude<ExtArgs> | null
+  where?: Prisma.comunidadeWhereInput
+  orderBy?: Prisma.comunidadeOrderByWithRelationInput | Prisma.comunidadeOrderByWithRelationInput[]
+  cursor?: Prisma.comunidadeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ComunidadeScalarFieldEnum | Prisma.ComunidadeScalarFieldEnum[]
 }
 
 /**

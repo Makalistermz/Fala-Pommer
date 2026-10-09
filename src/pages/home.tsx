@@ -211,7 +211,7 @@ interface ConversaGrupo {
 }
 
 // A comunidade usa o mesmo chat e os mesmos participantes; seu ID não é o ID da conversa.
-interface ConversaComunidade extends Omit<ConversaGrupo, "tipo"> {
+export interface ConversaComunidade extends Omit<ConversaGrupo, "tipo"> {
     tipo: "comunidade";
     comunidadeId: number;
     imagem: string | null;
@@ -5919,6 +5919,12 @@ function Home() {
             comunidade={
                 conversaSelecionada?.tipo === "comunidade" ? dados : null
             }
+            conversaSelecionada={
+                conversaSelecionada?.tipo === "comunidade"
+                    ? conversaSelecionada
+                    : null
+            }
+            usuario={usuario}
             aoFechar={() => setModalDadosComunidadeAberto(false)}
             botaoFecharRef={botaoFecharModalDadosComunidadeRef}
             renderizarAvatar={renderizarAvatar}

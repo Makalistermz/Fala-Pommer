@@ -1,9 +1,12 @@
 import { useState, type ReactNode, type RefObject } from "react";
 import type { Comunidade } from "./Comunidades";
+import type { ConversaComunidade } from "../../pages/home";
 
 interface ModalDadosComunidadeProps {
     aberto: boolean;
     comunidade: Comunidade | null;
+    conversaSelecionada: ConversaComunidade | null;
+    usuario: { sub: number } | null;
     aoFechar: () => void;
     botaoFecharRef: RefObject<HTMLButtonElement | null>;
     renderizarAvatar: (
@@ -16,6 +19,8 @@ interface ModalDadosComunidadeProps {
 function ModalDadosComunidades({
     aberto,
     comunidade,
+    conversaSelecionada,
+    usuario,
     aoFechar,
     botaoFecharRef,
     renderizarAvatar,
@@ -23,7 +28,7 @@ function ModalDadosComunidades({
     {/*retorna um elemento html*/}
     const [iconChangeMessage, setIconChangeMessage] = useState<React.JSX.Element | null>(null);
 
-    if (!aberto || !comunidade) {
+    if (!aberto || !comunidade || !conversaSelecionada) {
         return null;
     }
 
@@ -227,6 +232,50 @@ function ModalDadosComunidades({
                                     <span>Adicionar membro</span>
                                 </div>
                             </button>
+
+                            {conversaSelecionada.participantes.length > 0 ? (
+                                <ul
+                                    className="dados-comunidade__membros-lista"
+                                    data-lenis-prevent
+                                >
+                                    {[...conversaSelecionada.participantes]
+                                        .sort((primeiro, segundo) => {
+                                            if (primeiro.id === usuario?.sub) return -1;
+                                            if (segundo.id === usuario?.sub) return 1;
+                                            return primeiro.nome.localeCompare(
+                                                segundo.nome,
+                                                "pt-BR",
+                                            );
+                                        })
+                                        .map((participante) => (
+                                            <li
+                                                key={participante.id}
+                                                className="dados-comunidade__membro"
+                                            >
+                                                <div className="dados-comunidade__membro-avatar">
+                                                    {renderizarAvatar(
+                                                        participante.nome,
+                                                        participante.foto_perfil_url,
+                                                    )}
+                                                </div>
+                                                <div className="dados-comunidade__membro-dados">
+                                                    <div className="dados-comunidade__membro-cabecalho">
+                                                        <strong>{participante.nome}</strong>
+                                                        {participante.id === usuario?.sub && (
+                                                            <span className="dados-comunidade__membro-voce">
+                                                                Você
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        ))}
+                                </ul>
+                            ) : (
+                                <p className="dados-comunidade__membros-vazio">
+                                    Este grupo não possui participantes.
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>

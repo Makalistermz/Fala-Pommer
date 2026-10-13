@@ -169,6 +169,8 @@ function ModalDadosComunidades({
 
             setDetectarHandlerCliqueDescricao(false);
             setDetectarHandlerCliqueNome(false);
+            setIsDisabledDescription(true);
+            setIsDisabledName(true);
 
         } catch (erro) {
             setFeedback({

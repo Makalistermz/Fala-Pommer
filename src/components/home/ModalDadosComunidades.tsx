@@ -1,4 +1,4 @@
-import { useState, useRef, type ChangeEvent, type ReactNode, type RefObject } from "react";
+import { useState, useRef, type ReactNode, type RefObject } from "react";
 import type { Comunidade } from "./Comunidades";
 import type { ConversaComunidade } from "../../pages/home";
 import { apiFetch } from "../../services/api";
@@ -36,18 +36,29 @@ function ModalDadosComunidades({
         mensagem: "",
     });
     const [alterarDescricaoComunidade, setAlterarDescricaoComunidade] = useState(comunidade?.descricao_comunidade ?? "");
+    const [alterarNomeComunidade, setAlterarNomeComunidade] = useState(comunidade?.nome_comunidade ?? "");
     const descricaoRef = useRef<HTMLTextAreaElement>(null);
-    const [isDisabled, setIsDisabled] = useState<boolean>(true);
+    const nomeRef = useRef<HTMLInputElement>(null);
+    const [isDisabledDescription, setIsDisabledDescription] = useState<boolean>(true);
+    const [isDisabledName, setIsDisabledName] = useState<boolean>(true);
 
     //função de ativação do textarea para alteração da descrição
-    const handleClique = () => {
+    const handleCliqueDescricao = () => {
         // Ativa o input mudando o estado
-        setIsDisabled(false);
+        setIsDisabledDescription(false);
 
         // Coloca o cursor no input. Usa o setTimeout para garantir
         // que o React já renderizou o input como habilitado antes do foco.
         setTimeout(() => {
         descricaoRef.current?.focus();
+        }, 0);
+    };
+
+    const handlerCliqueNome = () => {
+        setIsDisabledName(false);
+
+        setTimeout(() => {
+            nomeRef.current?.focus();
         }, 0);
     };
 
@@ -64,6 +75,7 @@ function ModalDadosComunidades({
     useLayoutEffect(() => {
         if (aberto && comunidade) {
             setAlterarDescricaoComunidade(comunidade.descricao_comunidade ?? "");
+            setAlterarNomeComunidade(comunidade?.nome_comunidade ?? "");
         }
     }, [aberto, comunidade]);
 
@@ -167,11 +179,25 @@ function ModalDadosComunidades({
                             </div>
 
                             <div className="dados-comunidade__identificacao">
-                                <strong className="dados-comunidade__nome">{comunidade.nome_comunidade}</strong>
+                                <input 
+                                    type="text" 
+                                    name="nome_comunidade" 
+                                    id="nome_comunidade" 
+                                    className="dados-comunidade__nome"
+                                    ref={nomeRef}
+                                    value={alterarNomeComunidade}
+                                    onChange={(evento) => setAlterarNomeComunidade(evento.target.value)}
+                                    disabled={isDisabledName}
+                                    placeholder="Adicione um novo nome para a comunidade"
+                                    maxLength={150}
+                                    required
+                                    autoComplete="off"
+                                />
                                 <button
                                     className="dados-comunidade_alter-nome"
                                     type="button"
                                     title="Editar nome da comunidade"
+                                    onClick={handlerCliqueNome}
                                 >
                                     {svgPen}
                                 </button>
@@ -244,7 +270,7 @@ function ModalDadosComunidades({
                                         className="dados-comunidade__descricao-mensagem"
                                         value={alterarDescricaoComunidade}
                                         onChange={(evento) => setAlterarDescricaoComunidade(evento.target.value)}
-                                        disabled={isDisabled}
+                                        disabled={isDisabledDescription}
                                         placeholder="Adicione uma nova descrição para a comunidade"
                                         rows={3}
                                         maxLength={400}
@@ -255,7 +281,7 @@ function ModalDadosComunidades({
                                             className="dados-comunidade__descricao-editar"
                                             type="button"
                                             title="Editar descrição da comunidade"
-                                            onClick={handleClique}
+                                            onClick={handleCliqueDescricao}
                                         >
                                             {svgPen}
                                         </button>

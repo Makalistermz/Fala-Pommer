@@ -142,6 +142,40 @@ function ModalDadosComunidades({
         }
     }
 
+    async function enviarNomeAlteradoComunidade() {
+        if (!comunidade) return;
+
+        try {
+            const resposta = await apiFetch(`/comunidades/${comunidade.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    nome_comunidade: nomeRef.current?.value.trim() ?? "",
+                    descricao_comunidade: alterarDescricaoComunidade,
+                }),
+            });
+
+            if (!resposta.ok) {
+                throw new Error("Não foi possivel atualizar a comunidade.")
+            }
+
+            setFeedback({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem: `Alteração feita com sucesso!`
+            });
+
+        } catch (erro) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: `Erro: ${erro}`
+            })
+        }
+    }
+
     return (
         <>
             <div className="modal-dados__fundo" onClick={aoFechar} data-lenis-prevent>
@@ -206,6 +240,7 @@ function ModalDadosComunidades({
                                         className="dados-comunidade_alter-nome"
                                         type="button"
                                         title="Confirmar alteração"
+                                        onClick={enviarNomeAlteradoComunidade}
                                     >
                                         {svgCheck}
                                     </button>
@@ -299,6 +334,7 @@ function ModalDadosComunidades({
                                             className="dados-comunidade__descricao-editar"
                                             type="button"
                                             title="Confirmar alteração"
+                                            onClick={enviarNomeAlteradoComunidade}
                                         >
                                             {svgCheck}
                                         </button>

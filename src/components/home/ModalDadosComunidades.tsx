@@ -276,16 +276,14 @@ function ModalDadosComunidades({
                                         maxLength={400}
                                         required
                                     ></textarea>
-                                    <label htmlFor="descricao_comunidade">
-                                        <button
-                                            className="dados-comunidade__descricao-editar"
-                                            type="button"
-                                            title="Editar descrição da comunidade"
-                                            onClick={handleCliqueDescricao}
-                                        >
-                                            {svgPen}
-                                        </button>
-                                    </label>
+                                    <button
+                                        className="dados-comunidade__descricao-editar"
+                                        type="button"
+                                        title="Editar descrição da comunidade"
+                                        onClick={handleCliqueDescricao}
+                                    >
+                                        {svgPen}
+                                    </button>
                                 </div>
                             </div>
                         </section>

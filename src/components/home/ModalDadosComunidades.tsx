@@ -41,11 +41,14 @@ function ModalDadosComunidades({
     const nomeRef = useRef<HTMLInputElement>(null);
     const [isDisabledDescription, setIsDisabledDescription] = useState<boolean>(true);
     const [isDisabledName, setIsDisabledName] = useState<boolean>(true);
+    const [detectarHandlerCliqueNome, setDetectarHandlerCliqueNome] = useState(false)
+    const [detectarHandlerCliqueDescricao, setDetectarHandlerCliqueDescricao] = useState(false)
 
     //função de ativação do textarea para alteração da descrição
     const handleCliqueDescricao = () => {
         // Ativa o input mudando o estado
         setIsDisabledDescription(false);
+        setDetectarHandlerCliqueDescricao(true);
 
         // Coloca o cursor no input. Usa o setTimeout para garantir
         // que o React já renderizou o input como habilitado antes do foco.
@@ -56,6 +59,7 @@ function ModalDadosComunidades({
 
     const handlerCliqueNome = () => {
         setIsDisabledName(false);
+        setDetectarHandlerCliqueNome(true)
 
         setTimeout(() => {
             nomeRef.current?.focus();
@@ -90,6 +94,10 @@ function ModalDadosComunidades({
     const svgImage = <svg width="16" height="16" fill="currentColor" className="bi bi-card-image" viewBox="0 0 16 16">
         <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
         <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/>
+    </svg>
+
+    const svgCheck = <svg width="16" height="16" fill="currentColor" className="bi bi-check-lg" viewBox="0 0 16 16">
+        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
     </svg>
 
     const dataFormatada = new Date(comunidade.comunidade_criada_em).toLocaleDateString('pt-br');
@@ -193,14 +201,24 @@ function ModalDadosComunidades({
                                     required
                                     autoComplete="off"
                                 />
-                                <button
-                                    className="dados-comunidade_alter-nome"
-                                    type="button"
-                                    title="Editar nome da comunidade"
-                                    onClick={handlerCliqueNome}
-                                >
-                                    {svgPen}
-                                </button>
+                                {detectarHandlerCliqueNome === true 
+                                    ? <button
+                                        className="dados-comunidade_alter-nome"
+                                        type="button"
+                                        title="Confirmar alteração"
+                                    >
+                                        {svgCheck}
+                                    </button>
+
+                                    : <button
+                                        className="dados-comunidade_alter-nome"
+                                        type="button"
+                                        title="Editar nome da comunidade"
+                                        onClick={handlerCliqueNome}
+                                    >
+                                        {svgPen}
+                                    </button>
+                                }
                             </div>
 
                             <div className="dados-comunidade__resumo">
@@ -276,14 +294,24 @@ function ModalDadosComunidades({
                                         maxLength={400}
                                         required
                                     ></textarea>
-                                    <button
-                                        className="dados-comunidade__descricao-editar"
-                                        type="button"
-                                        title="Editar descrição da comunidade"
-                                        onClick={handleCliqueDescricao}
-                                    >
-                                        {svgPen}
-                                    </button>
+                                    {detectarHandlerCliqueDescricao === true
+                                        ? <button
+                                            className="dados-comunidade__descricao-editar"
+                                            type="button"
+                                            title="Confirmar alteração"
+                                        >
+                                            {svgCheck}
+                                        </button>
+
+                                        : <button
+                                            className="dados-comunidade__descricao-editar"
+                                            type="button"
+                                            title="Editar descrição da comunidade"
+                                            onClick={handleCliqueDescricao}
+                                        >
+                                            {svgPen}
+                                        </button>
+                                    }
                                 </div>
                             </div>
                         </section>

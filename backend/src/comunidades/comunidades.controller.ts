@@ -3,6 +3,7 @@ import {
     Body,
     Controller,
     Get,
+    Patch,
     HttpCode,
     Param,
     ParseIntPipe,
@@ -27,6 +28,7 @@ import { Perfis } from '../auth/decorators/perfis.decorator';
 import { CriarComunidadeDto } from './dto/criar-comunidade.dto';
 import { EnviarMensagemComunidadeDto } from './dto/enviar-mensagem-comunidade.dto';
 import { ListarMensagensDto } from '../conversas/dto/listar-mensagens.dto';
+import { AtualizarDadosComunidade } from './dto/atualizar-dados-comunidade.dto';
 
 @Controller('comunidades')
 export class ComunidadesController {
@@ -77,6 +79,20 @@ export class ComunidadesController {
         return this.comunidadesService.listarComunidade(
             requisicao.usuario!.tipo,
             requisicao.usuario!.sub
+        );
+    }
+
+    @Patch(':comunidadeId')
+    @UseGuards(AuthGuard)
+    atualizarDadosComunidade(
+        @Req() requisicao: RequisicaoAutenticada,
+        @Param('comunidadeId', ParseIntPipe) comunidadeId: number,
+        @Body() dados: AtualizarDadosComunidade
+    ) {
+        return this.comunidadesService.atualizarDadosComunidade(
+            comunidadeId,
+            requisicao.usuario!.sub,
+            dados
         );
     }
 

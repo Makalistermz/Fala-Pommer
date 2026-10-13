@@ -9,6 +9,7 @@ import { conversa_tipo, Prisma } from '../generated/prisma/client';
 import { MensagensCriptografiaService } from '../criptografia/mensagens-criptografia.service';
 import { ListarMensagensDto } from '../conversas/dto/listar-mensagens.dto';
 import { randomBytes } from 'node:crypto';
+import { AtualizarDadosComunidade } from './dto/atualizar-dados-comunidade.dto';
 
 function selecionarComunidade(usuarioId: number) {
     return {
@@ -356,5 +357,18 @@ export class ComunidadesService {
         });
 
         return comunidade;
+    }
+
+    async atualizarDadosComunidade(comunidadeId: number, usuarioId: number, dados: AtualizarDadosComunidade) {
+        return this.prisma.comunidade.update({
+            where: {
+                id: comunidadeId
+            },
+
+            data: {
+                nome_comunidade: dados.nome_comunidade.trim(),
+                descricao_comunidade: dados.descricao_comunidade.trim(),
+            },
+        });
     }
 }

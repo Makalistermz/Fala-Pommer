@@ -142,6 +142,7 @@ function ModalDadosComunidades({
         }
     }
 
+    //atualização dos dados das comunidades
     async function enviarNomeAlteradoComunidade() {
         if (!comunidade) return;
 

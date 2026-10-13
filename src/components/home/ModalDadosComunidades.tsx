@@ -29,8 +29,6 @@ function ModalDadosComunidades({
 }: ModalDadosComunidadeProps) {
     {/*retorna um elemento html*/}
     const [iconChangeMessage, setIconChangeMessage] = useState<React.JSX.Element | null>(null);
-    const [configuracoesDaComunidade, setConfiguracoesDaComunidade] = useState(false);
-    const [abrirModalPermissoesConfig, setAbrirModalPermissoesConfig] = useState(false);
     const [feedback, setFeedback] = useState({
         aberto: false,
         tipo: "erro" as "erro" | "sucesso",
@@ -48,11 +46,6 @@ function ModalDadosComunidades({
     const svgImage = <svg width="16" height="16" fill="currentColor" className="bi bi-card-image" viewBox="0 0 16 16">
         <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
         <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zm13 1a.5.5 0 0 1 .5.5v6l-3.775-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12v.54L1 12.5v-9a.5.5 0 0 1 .5-.5z"/>
-    </svg>
-
-    const svgGear = <svg width="16" height="16" fill="currentColor" className="bi bi-gear" viewBox="0 0 16 16">
-        <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
-        <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/>
     </svg>
 
     const dataFormatada = new Date(comunidade.comunidade_criada_em).toLocaleDateString('pt-br');
@@ -225,55 +218,6 @@ function ModalDadosComunidades({
                             </div>
                         </section>
 
-                        <div className="dados-comunidade__configuracao-container">
-                            {/*ativa só para admins da comunidade*/}
-                            <button
-                                className="dados-comunidade__configuracao"
-                                type="button"
-                                aria-label="Abrir configurações da comunidade"
-                                onClick={() => setConfiguracoesDaComunidade(prev => !prev)}
-                            >
-                                <div className="dados-comunidade__config-icon-text">
-                                    <div className="dados-comunidade__configuracao-icone">
-                                        {svgGear}
-                                    </div>
-                                    <div className="dados-comunidade__configuracao-texto">
-                                        <span>Configuração da comunidade</span>
-                                    </div>
-                                </div>
-                                <div className="dados-comunidade__configuracao-seta">
-                                    {configuracoesDaComunidade === true 
-                                        ? <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-down" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
-                                        </svg>
-
-                                        : <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-right" viewBox="0 0 16 16">
-                                            <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
-                                        </svg>
-                                    }
-                                </div>
-                            </button>
-
-                            {configuracoesDaComunidade && (
-                                <div className="dados-comunidade__configuracoes-opcoes">
-                                    <button
-                                        className="dados-comunidade__configuracao-opcao"
-                                        type="button"
-                                        onClick={() => setAbrirModalPermissoesConfig(true)}
-                                    >
-                                        <span className="dados-comunidade__configuracao-opcao-titulo">
-                                            Quem pode enviar mensagens
-                                        </span>
-                                        <span className="dados-comunidade__configuracao-opcao-valor">
-                                            {/*alterar para o valor recebido*/}
-                                            Todos
-                                        </span>
-                                    </button>
-                                </div>
-                            )}
-
-                        </div>
-
                         <div className="dados-comunidade__membros">
                             <div className="dados-comunidade__membros-conteudo">
                                 <div className="dados-comunidade__membros-cabecalho">
@@ -373,97 +317,6 @@ function ModalDadosComunidades({
                     </div>
 
                 </section>
-
-                {abrirModalPermissoesConfig && (
-                    <section
-                        className="permissoes-comunidade__fundo"
-                        role="presentation"
-                        onClick={(evento) => evento.stopPropagation()}
-                        onMouseDown={(evento) => {
-                            if (evento.target === evento.currentTarget) {
-                                setAbrirModalPermissoesConfig(false);
-                            }
-                        }}
-                    >
-                        <div
-                            className="permissoes-comunidade"
-                            role="dialog"
-                            aria-modal="true"
-                            aria-labelledby="permissoes-comunidade-titulo"
-                        >
-                            <header className="permissoes-comunidade__cabecalho">
-                                <h2 id="permissoes-comunidade-titulo">
-                                    Quem pode enviar mensagens na comunidade
-                                </h2>
-                                <button
-                                    className="permissoes-comunidade__fechar"
-                                    type="button"
-                                    aria-label="Fechar"
-                                    onClick={() => setAbrirModalPermissoesConfig(false)}
-                                >
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="m6 6 12 12M18 6 6 18" />
-                                    </svg>
-                                </button>
-                            </header>
-
-                            <div className="permissoes-comunidade__conteudo">
-                                <div className="permissoes-comunidade__descricao">
-                                    <p>As permissões de envio de mensagens são gerenciadas pelos administradores da comunidade. Quando a restrição está ativa, somente administradores têm permissão para publicar. Caso a permissão seja concedida a todos os membros, qualquer participante poderá enviar mensagens livremente.</p>
-                                </div>
-                            </div>
-
-                            <div className="permissoes-comunidade__opcoes">
-                                <div className="permissoes-comunidade__opcao">
-                                    <input
-                                        className="permissoes-comunidade__radio"
-                                        type="radio"
-                                        name="permissao-envio"
-                                        id="todos"
-                                    />
-                                    <label
-                                        className="permissoes-comunidade__opcao-texto"
-                                        htmlFor="todos"
-                                    >
-                                        <strong>Todos</strong>
-                                        <span>Todos os membros poderam enviar mensagens na comunidade</span>
-                                    </label>
-                                </div>
-                                <div className="permissoes-comunidade__opcao">
-                                    <input
-                                        className="permissoes-comunidade__radio"
-                                        type="radio"
-                                        name="permissao-envio"
-                                        id="admins"
-                                    />
-                                    <label
-                                        className="permissoes-comunidade__opcao-texto"
-                                        htmlFor="admins"
-                                    >
-                                        <strong>Admins</strong>
-                                        <span>Só os admins da comunidade poderam enviar mensagens na comunidade</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div className="permissoes-comunidade__acoes">
-                                <button
-                                    className="permissoes-comunidade__acao permissoes-comunidade__acao--cancelar"
-                                    type="button"
-                                    onClick={() => setAbrirModalPermissoesConfig(false)}
-                                >
-                                    Cancelar
-                                </button>
-                                <button
-                                    className="permissoes-comunidade__acao permissoes-comunidade__acao--enviar"
-                                    type="button"
-                                >
-                                    Enviar
-                                </button>
-                            </div>
-                        </div>
-                    </section>
-                )}
 
             </div>
 

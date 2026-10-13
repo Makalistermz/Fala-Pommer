@@ -167,6 +167,9 @@ function ModalDadosComunidades({
                 mensagem: `Alteração feita com sucesso!`
             });
 
+            setDetectarHandlerCliqueDescricao(false);
+            setDetectarHandlerCliqueNome(false);
+
         } catch (erro) {
             setFeedback({
                 aberto: true,

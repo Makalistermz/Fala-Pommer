@@ -827,21 +827,22 @@
 }
 
 .dados-comunidade__identificacao {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 85% 15%;
     width: min(100%, 460px);
 }
 
 .dados-comunidade_alter-nome {
-    background-color: transparent;
-    border: none;
+    max-width: 100%;
+    background: linear-gradient(135deg, #f2f7ff 0%, #e7f0ff 100%);
+    border: 1px solid #c7dcfb;
+    border-left: 0px;
+    border-radius: 0px 12px 12px 0px;
     cursor: pointer;
 }
 
 .dados-comunidade_alter-nome:hover {
-    scale: 1.1;
+    background: linear-gradient(135deg, #ebf2fd 0%, #dce8fc 100%);
     transition: .2s;
 }
 
@@ -857,7 +858,7 @@
     color: #172033;
     background: linear-gradient(135deg, #f2f7ff 0%, #e7f0ff 100%);
     border: 1px solid #c7dcfb;
-    border-radius: 12px;
+    border-radius: 12px 0px 0px 12px;
     box-shadow: 0 4px 12px rgba(19, 81, 180, 0.1);
     font-family: var(--fonte-poppins);
     font-size: clamp(1.375rem, 2vw, 1.75rem);
@@ -1355,11 +1356,19 @@ html.tema-escuro:not(.alto-contraste) .dados-comunidade__nome {
     color: var(--tema-texto);
 }
 
-html.tema-escuro:not(.alto-contraste) .dados-comunidade__nome {
+html.tema-escuro:not(.alto-contraste) 
+:is(
+    .dados-comunidade__nome,
+    .dados-comunidade_alter-nome
+) {
     background: color-mix(in srgb, var(--tema-superficie) 88%, #1351b4);
     border-color: var(--tema-borda);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     text-shadow: none;
+}
+
+html.tema-escuro:not(.alto-contraste) .dados-comunidade_alter-nome:hover {
+    background: color-mix(in srgb, var(--tema-superficie) 88%, #498bf5);
 }
 
 html.tema-escuro:not(.alto-contraste) .modal-dados-comunidade .modal-dados__cabecalho button {

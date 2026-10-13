@@ -1,8 +1,9 @@
-import { useState, type ReactNode, type RefObject } from "react";
+import { useState, useRef, type ChangeEvent, type ReactNode, type RefObject } from "react";
 import type { Comunidade } from "./Comunidades";
 import type { ConversaComunidade } from "../../pages/home";
 import { apiFetch } from "../../services/api";
 import { ModalFeedback } from "../ModalFeedback";
+import { useLayoutEffect } from "react";
 
 interface ModalDadosComunidadeProps {
     aberto: boolean;
@@ -34,6 +35,37 @@ function ModalDadosComunidades({
         tipo: "erro" as "erro" | "sucesso",
         mensagem: "",
     });
+    const [alterarDescricaoComunidade, setAlterarDescricaoComunidade] = useState(comunidade?.descricao_comunidade ?? "");
+    const descricaoRef = useRef<HTMLTextAreaElement>(null);
+    const [isDisabled, setIsDisabled] = useState<boolean>(true);
+
+    //função de ativação do textarea para alteração da descrição
+    const handleClique = () => {
+        // Ativa o input mudando o estado
+        setIsDisabled(false);
+
+        // Coloca o cursor no input. Usa o setTimeout para garantir
+        // que o React já renderizou o input como habilitado antes do foco.
+        setTimeout(() => {
+        descricaoRef.current?.focus();
+        }, 0);
+    };
+
+
+    useLayoutEffect(() => {
+        const campoDescricao = descricaoRef.current;
+
+        if (!campoDescricao) return;
+
+        campoDescricao.style.height = "auto";
+        campoDescricao.style.height = `${campoDescricao.scrollHeight}px`;
+    }, [alterarDescricaoComunidade]);
+
+    useLayoutEffect(() => {
+        if (aberto && comunidade) {
+            setAlterarDescricaoComunidade(comunidade.descricao_comunidade ?? "");
+        }
+    }, [aberto, comunidade]);
 
     if (!aberto || !comunidade || !conversaSelecionada) {
         return null;
@@ -57,9 +89,8 @@ function ModalDadosComunidades({
                 {svgImage}
             </div>
         )
-    }
+    };
 
-    
     async function gerarConvite(comunidadeId: number) {
         try {
             const resposta = await apiFetch(
@@ -206,14 +237,27 @@ function ModalDadosComunidades({
                                 </div>
 
                                 <div className="dados-comunidade__descricao-texto">
-                                    <span className="dados-comunidade__descricao-mensagem">{comunidade.descricao_comunidade}</span>
-                                    <button 
-                                        className="dados-comunidade__descricao-editar"
-                                        type="button"
-                                        title="Editar descrição da comunidade"
-                                    >
-                                        {svgPen}
-                                    </button>
+                                    <textarea 
+                                        name="descricao_comunidade" 
+                                        id="descricao_comunidade" 
+                                        ref={descricaoRef}
+                                        className="dados-comunidade__descricao-mensagem"
+                                        value={alterarDescricaoComunidade}
+                                        onChange={(evento) => setAlterarDescricaoComunidade(evento.target.value)}
+                                        disabled={isDisabled}
+                                        rows={3}
+                                        maxLength={400}
+                                    ></textarea>
+                                    <label htmlFor="descricao_comunidade">
+                                        <button
+                                            className="dados-comunidade__descricao-editar"
+                                            type="button"
+                                            title="Editar descrição da comunidade"
+                                            onClick={handleClique}
+                                        >
+                                            {svgPen}
+                                        </button>
+                                    </label>
                                 </div>
                             </div>
                         </section>

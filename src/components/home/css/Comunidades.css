@@ -980,6 +980,8 @@
     font-family: var(--fonte-dm-sans);
     font-size: 0.9375rem;
     line-height: 1.55;
+    background-color: transparent;
+    border: none;
 }
 
 .dados-comunidade__descricao-editar {

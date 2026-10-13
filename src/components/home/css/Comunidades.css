@@ -975,6 +975,7 @@
 .dados-comunidade__descricao-mensagem {
     min-width: 0;
     flex: 1;
+    resize: none;
     overflow-wrap: anywhere;
     color: #475467;
     font-family: var(--fonte-dm-sans);
@@ -982,6 +983,7 @@
     line-height: 1.55;
     background-color: transparent;
     border: none;
+    outline: 0;
 }
 
 .dados-comunidade__descricao-editar {

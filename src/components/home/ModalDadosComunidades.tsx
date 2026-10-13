@@ -245,8 +245,10 @@ function ModalDadosComunidades({
                                         value={alterarDescricaoComunidade}
                                         onChange={(evento) => setAlterarDescricaoComunidade(evento.target.value)}
                                         disabled={isDisabled}
+                                        placeholder="Adicione uma nova descrição para a comunidade"
                                         rows={3}
                                         maxLength={400}
+                                        required
                                     ></textarea>
                                     <label htmlFor="descricao_comunidade">
                                         <button

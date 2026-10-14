@@ -338,6 +338,23 @@ export type Enumcadastro_tipo_usuarioNullableWithAggregatesFilter<$PrismaModel =
   _max?: Prisma.NestedEnumcadastro_tipo_usuarioNullableFilter<$PrismaModel>
 }
 
+export type Enumcomunidade_usuarios_tipo_funcaoFilter<$PrismaModel = never> = {
+  equals?: $Enums.comunidade_usuarios_tipo_funcao | Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldRefInput<$PrismaModel>
+  in?: $Enums.comunidade_usuarios_tipo_funcao[]
+  notIn?: $Enums.comunidade_usuarios_tipo_funcao[]
+  not?: Prisma.NestedEnumcomunidade_usuarios_tipo_funcaoFilter<$PrismaModel> | $Enums.comunidade_usuarios_tipo_funcao
+}
+
+export type Enumcomunidade_usuarios_tipo_funcaoWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.comunidade_usuarios_tipo_funcao | Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldRefInput<$PrismaModel>
+  in?: $Enums.comunidade_usuarios_tipo_funcao[]
+  notIn?: $Enums.comunidade_usuarios_tipo_funcao[]
+  not?: Prisma.NestedEnumcomunidade_usuarios_tipo_funcaoWithAggregatesFilter<$PrismaModel> | $Enums.comunidade_usuarios_tipo_funcao
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumcomunidade_usuarios_tipo_funcaoFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumcomunidade_usuarios_tipo_funcaoFilter<$PrismaModel>
+}
+
 export type NestedIntFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel>
   in?: number[]
@@ -677,6 +694,23 @@ export type NestedEnumcadastro_tipo_usuarioNullableWithAggregatesFilter<$PrismaM
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumcadastro_tipo_usuarioNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumcadastro_tipo_usuarioNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumcomunidade_usuarios_tipo_funcaoFilter<$PrismaModel = never> = {
+  equals?: $Enums.comunidade_usuarios_tipo_funcao | Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldRefInput<$PrismaModel>
+  in?: $Enums.comunidade_usuarios_tipo_funcao[]
+  notIn?: $Enums.comunidade_usuarios_tipo_funcao[]
+  not?: Prisma.NestedEnumcomunidade_usuarios_tipo_funcaoFilter<$PrismaModel> | $Enums.comunidade_usuarios_tipo_funcao
+}
+
+export type NestedEnumcomunidade_usuarios_tipo_funcaoWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.comunidade_usuarios_tipo_funcao | Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldRefInput<$PrismaModel>
+  in?: $Enums.comunidade_usuarios_tipo_funcao[]
+  notIn?: $Enums.comunidade_usuarios_tipo_funcao[]
+  not?: Prisma.NestedEnumcomunidade_usuarios_tipo_funcaoWithAggregatesFilter<$PrismaModel> | $Enums.comunidade_usuarios_tipo_funcao
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumcomunidade_usuarios_tipo_funcaoFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumcomunidade_usuarios_tipo_funcaoFilter<$PrismaModel>
 }
 
 

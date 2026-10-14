@@ -416,7 +416,8 @@ export const ModelName = {
   conversa_finalizacao: 'conversa_finalizacao',
   conversa_transferencia: 'conversa_transferencia',
   comunidade: 'comunidade',
-  convite_comunidade: 'convite_comunidade'
+  convite_comunidade: 'convite_comunidade',
+  comunidade_usuarios: 'comunidade_usuarios'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -432,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "sessao" | "token_push" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao" | "conversa_transferencia" | "comunidade" | "convite_comunidade"
+    modelProps: "cadastro" | "sessao" | "token_push" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao" | "conversa_transferencia" | "comunidade" | "convite_comunidade" | "comunidade_usuarios"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1756,6 +1757,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    comunidade_usuarios: {
+      payload: Prisma.$comunidade_usuariosPayload<ExtArgs>
+      fields: Prisma.comunidade_usuariosFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.comunidade_usuariosFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidade_usuariosPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.comunidade_usuariosFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidade_usuariosPayload>
+        }
+        findFirst: {
+          args: Prisma.comunidade_usuariosFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidade_usuariosPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.comunidade_usuariosFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidade_usuariosPayload>
+        }
+        findMany: {
+          args: Prisma.comunidade_usuariosFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidade_usuariosPayload>[]
+        }
+        create: {
+          args: Prisma.comunidade_usuariosCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidade_usuariosPayload>
+        }
+        createMany: {
+          args: Prisma.comunidade_usuariosCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.comunidade_usuariosDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidade_usuariosPayload>
+        }
+        update: {
+          args: Prisma.comunidade_usuariosUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidade_usuariosPayload>
+        }
+        deleteMany: {
+          args: Prisma.comunidade_usuariosDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.comunidade_usuariosUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.comunidade_usuariosUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$comunidade_usuariosPayload>
+        }
+        aggregate: {
+          args: Prisma.Comunidade_usuariosAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateComunidade_usuarios>
+        }
+        groupBy: {
+          args: Prisma.comunidade_usuariosGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Comunidade_usuariosGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.comunidade_usuariosCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Comunidade_usuariosCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2058,6 +2125,17 @@ export const Convite_comunidadeScalarFieldEnum = {
 export type Convite_comunidadeScalarFieldEnum = (typeof Convite_comunidadeScalarFieldEnum)[keyof typeof Convite_comunidadeScalarFieldEnum]
 
 
+export const Comunidade_usuariosScalarFieldEnum = {
+  id: 'id',
+  comunidade_id: 'comunidade_id',
+  usuario_id: 'usuario_id',
+  tipo_funcao: 'tipo_funcao',
+  promovido_em: 'promovido_em'
+} as const
+
+export type Comunidade_usuariosScalarFieldEnum = (typeof Comunidade_usuariosScalarFieldEnum)[keyof typeof Comunidade_usuariosScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2277,6 +2355,13 @@ export type Enumhistorico_administrativo_acaoFieldRefInput<$PrismaModel> = Field
 
 
 /**
+ * Reference to a field of type 'comunidade_usuarios_tipo_funcao'
+ */
+export type Enumcomunidade_usuarios_tipo_funcaoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'comunidade_usuarios_tipo_funcao'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -2453,6 +2538,7 @@ export type GlobalOmitConfig = {
   conversa_transferencia?: Prisma.conversa_transferenciaOmit
   comunidade?: Prisma.comunidadeOmit
   convite_comunidade?: Prisma.convite_comunidadeOmit
+  comunidade_usuarios?: Prisma.comunidade_usuariosOmit
 }
 
 /* Types for Logging */

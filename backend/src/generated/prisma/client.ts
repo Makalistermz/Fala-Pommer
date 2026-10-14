@@ -139,3 +139,8 @@ export type comunidade = Prisma.comunidadeModel
  * 
  */
 export type convite_comunidade = Prisma.convite_comunidadeModel
+/**
+ * Model comunidade_usuarios
+ * 
+ */
+export type comunidade_usuarios = Prisma.comunidade_usuariosModel

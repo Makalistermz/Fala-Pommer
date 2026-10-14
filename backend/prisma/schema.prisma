@@ -35,6 +35,7 @@ model cadastro {
   setor                            setores?                   @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
   codigo_recuperacao_2fa           codigo_recuperacao_2fa[]
   comunidades_criadas              comunidade[]
+  comunidade_usuarios              comunidade_usuarios[]
   finalizacoes_realizadas          conversa_finalizacao[]     @relation("ResponsavelFinalizacao")
   conversa_leitura                 conversa_leitura[]
   conversa_participante            conversa_participante[]
@@ -323,16 +324,17 @@ model conversa_transferencia {
 }
 
 model comunidade {
-  id                    Int                  @id @default(autoincrement())
-  nome_comunidade       String               @db.VarChar(150)
-  descricao_comunidade  String               @db.VarChar(400)
-  imagem_comunidade     String?              @db.VarChar(500)
-  ocultar_municipes     Boolean              @default(false)
-  conversa_id           Int?                 @unique(map: "uq_comunidade_conversa")
-  comunidade_criada_em  DateTime             @default(now()) @db.DateTime(0)
+  id                    Int                   @id @default(autoincrement())
+  nome_comunidade       String                @db.VarChar(150)
+  descricao_comunidade  String                @db.VarChar(400)
+  imagem_comunidade     String?               @db.VarChar(500)
+  ocultar_municipes     Boolean               @default(false)
+  conversa_id           Int?                  @unique(map: "uq_comunidade_conversa")
+  comunidade_criada_em  DateTime              @default(now()) @db.DateTime(0)
   comunidade_criador_id Int?
-  conversa              conversa?            @relation(fields: [conversa_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_comunidade_conversa")
-  criador               cadastro?            @relation(fields: [comunidade_criador_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_comunidade_criador")
+  conversa              conversa?             @relation(fields: [conversa_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_comunidade_conversa")
+  criador               cadastro?             @relation(fields: [comunidade_criador_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_comunidade_criador")
+  comunidade_usuarios   comunidade_usuarios[]
   convite_comunidade    convite_comunidade[]
 
   @@index([comunidade_criador_id], map: "comunidade_criador_id")
@@ -351,6 +353,19 @@ model convite_comunidade {
 
   @@index([comunidade_id], map: "idx_convite_comunidade")
   @@index([criado_por], map: "idx_convite_criador")
+}
+
+model comunidade_usuarios {
+  id            Int                             @id @default(autoincrement())
+  comunidade_id Int
+  usuario_id    Int
+  tipo_funcao   comunidade_usuarios_tipo_funcao @default(membro)
+  promovido_em  DateTime?                       @db.DateTime(0)
+  comunidade    comunidade                      @relation(fields: [comunidade_id], references: [id], onUpdate: Restrict, map: "fk_cu_comunidade")
+  cadastro      cadastro                        @relation(fields: [usuario_id], references: [id], onUpdate: Restrict, map: "fk_cu_usuario")
+
+  @@unique([comunidade_id, usuario_id], map: "uq_comunidade_usuario")
+  @@index([usuario_id], map: "fk_cu_usuario")
 }
 
 enum desafio_2fa_finalidade {
@@ -392,4 +407,9 @@ enum mensagem_visibilidade {
   todos
   equipe
   cidadao
+}
+
+enum comunidade_usuarios_tipo_funcao {
+  membro
+  admin
 }

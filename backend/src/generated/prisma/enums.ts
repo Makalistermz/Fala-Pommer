@@ -69,3 +69,11 @@ export const mensagem_visibilidade = {
 } as const
 
 export type mensagem_visibilidade = (typeof mensagem_visibilidade)[keyof typeof mensagem_visibilidade]
+
+
+export const comunidade_usuarios_tipo_funcao = {
+  membro: 'membro',
+  admin: 'admin'
+} as const
+
+export type comunidade_usuarios_tipo_funcao = (typeof comunidade_usuarios_tipo_funcao)[keyof typeof comunidade_usuarios_tipo_funcao]

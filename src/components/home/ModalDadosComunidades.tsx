@@ -43,6 +43,7 @@ function ModalDadosComunidades({
     const [isDisabledName, setIsDisabledName] = useState<boolean>(true);
     const [detectarHandlerCliqueNome, setDetectarHandlerCliqueNome] = useState(false)
     const [detectarHandlerCliqueDescricao, setDetectarHandlerCliqueDescricao] = useState(false)
+    const [adicionarNovaClass, setAdicionarNovaClass] = useState(false);
 
     //função de ativação do textarea para alteração da descrição
     const handleCliqueDescricao = () => {
@@ -369,11 +370,30 @@ function ModalDadosComunidades({
                                         {comunidade.totalParticipantes}{" "}
                                         {comunidade.totalParticipantes === 1 ? "membro da comunidade" : "membros da comunidade"}
                                     </span>
-                                    <button className="dados-comunidade__membros-pesquisar">
-                                        <svg width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
-                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                                        </svg>
-                                    </button>
+                                    <div className={`dados-comunidade__membros-pesquisar
+                                        ${adicionarNovaClass 
+                                            ? " dados-comunidade__membros-pesquisar--ativo" : ""
+                                        }`}
+                                    >
+                                        <input 
+                                            type="text"
+                                            className={!adicionarNovaClass  
+                                                ?`dados-comunidade__membros-pesquisar-input`
+                                                :`dados-comunidade__membros-pesquisar-input dados-comunidade__membros-pesquisar-input-ativo`
+                                            } 
+                                        />
+                                        <button
+                                            className={!adicionarNovaClass 
+                                                ?`dados-comunidade__membros-pesquisar-botao` 
+                                                :`dados-comunidade__membros-pesquisar-botao dados-comunidade__membros-pesquisar-botao--input-ativo`
+                                            }
+                                            onClick={() => setAdicionarNovaClass((adicionar) => !adicionar)}
+                                        >
+                                            <svg width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <button 

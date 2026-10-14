@@ -44,6 +44,18 @@ function ModalDadosComunidades({
     const [detectarHandlerCliqueNome, setDetectarHandlerCliqueNome] = useState(false)
     const [detectarHandlerCliqueDescricao, setDetectarHandlerCliqueDescricao] = useState(false)
     const [adicionarNovaClass, setAdicionarNovaClass] = useState(false);
+    const [buscarUsuariosComunidade, setBuscarUsuariosComunidade] = useState("");
+    const buscaRef = useRef<HTMLInputElement>(null);
+
+    function alternarPesquisa() {
+        if (adicionarNovaClass) {
+            setBuscarUsuariosComunidade("");
+        } else {
+            // o input está com display:none; espera o React renderizar antes de focar
+            setTimeout(() => buscaRef.current?.focus(), 0);
+        }
+        setAdicionarNovaClass((adicionar) => !adicionar);
+    }
 
     //função de ativação do textarea para alteração da descrição
     const handleCliqueDescricao = () => {
@@ -67,7 +79,6 @@ function ModalDadosComunidades({
         }, 0);
     };
 
-
     useLayoutEffect(() => {
         const campoDescricao = descricaoRef.current;
 
@@ -81,6 +92,8 @@ function ModalDadosComunidades({
         if (aberto && comunidade) {
             setAlterarDescricaoComunidade(comunidade.descricao_comunidade ?? "");
             setAlterarNomeComunidade(comunidade?.nome_comunidade ?? "");
+            setBuscarUsuariosComunidade("");
+            setAdicionarNovaClass(false);
         }
     }, [aberto, comunidade]);
 
@@ -111,6 +124,30 @@ function ModalDadosComunidades({
             </div>
         )
     };
+
+    function normalizarTexto(texto: string) {
+        return texto
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .trim();
+    }
+
+    const termoBusca = normalizarTexto(buscarUsuariosComunidade);
+
+    const participantesOrdenados = [...conversaSelecionada.participantes].sort(
+        (primeiro, segundo) => {
+            if (primeiro.id === usuario?.sub) return -1;
+            if (segundo.id === usuario?.sub) return 1;
+            return primeiro.nome.localeCompare(segundo.nome, "pt-BR");
+        },
+    );
+
+    const participantesFiltrados = termoBusca
+        ? participantesOrdenados.filter((participante) =>
+            normalizarTexto(participante.nome).includes(termoBusca),
+        )
+        : participantesOrdenados;
 
     async function gerarConvite(comunidadeId: number) {
         try {
@@ -376,18 +413,27 @@ function ModalDadosComunidades({
                                         }`}
                                     >
                                         <input 
-                                            type="text"
+                                            type="search"
                                             className={!adicionarNovaClass  
                                                 ?`dados-comunidade__membros-pesquisar-input`
                                                 :`dados-comunidade__membros-pesquisar-input dados-comunidade__membros-pesquisar-input-ativo`
                                             } 
+                                            ref={buscaRef}
+                                            aria-label="Pesquisar usuários"
+                                            autoComplete="off"
+                                            placeholder="Pesquisar usuários"
+                                            value={buscarUsuariosComunidade}
+                                            onChange={(evento) => setBuscarUsuariosComunidade(evento.target.value)}
                                         />
                                         <button
                                             className={!adicionarNovaClass 
                                                 ?`dados-comunidade__membros-pesquisar-botao` 
                                                 :`dados-comunidade__membros-pesquisar-botao dados-comunidade__membros-pesquisar-botao--input-ativo`
                                             }
-                                            onClick={() => setAdicionarNovaClass((adicionar) => !adicionar)}
+                                            onClick={alternarPesquisa}
+                                            type="button"
+                                            aria-label="Abrir pesquisa"
+                                            aria-expanded={adicionarNovaClass}
                                         >
                                             <svg width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
                                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
@@ -411,47 +457,38 @@ function ModalDadosComunidades({
                                     </div>
                                 </button>
 
-                                {conversaSelecionada.participantes.length > 0 ? (
-                                    <ul
-                                        className="dados-comunidade__membros-lista"
-                                        data-lenis-prevent
-                                    >
-                                        {[...conversaSelecionada.participantes]
-                                            .sort((primeiro, segundo) => {
-                                                if (primeiro.id === usuario?.sub) return -1;
-                                                if (segundo.id === usuario?.sub) return 1;
-                                                return primeiro.nome.localeCompare(
-                                                    segundo.nome,
-                                                    "pt-BR",
-                                                );
-                                            })
-                                            .map((participante) => (
-                                                <li
-                                                    key={participante.id}
-                                                    className="dados-comunidade__membro"
-                                                >
-                                                    <div className="dados-comunidade__membro-avatar">
-                                                        {renderizarAvatar(
-                                                            participante.nome,
-                                                            participante.foto_perfil_url,
+                                {participantesFiltrados.length > 0 ? (
+                                    <ul className="dados-comunidade__membros-lista" data-lenis-prevent>
+                                        {participantesFiltrados.map((participante) => (
+                                            <li 
+                                                key={participante.id} 
+                                                className="dados-comunidade__membro"
+                                            >
+                                                <div className="dados-comunidade__membro-avatar">
+                                                    {renderizarAvatar(
+                                                        participante.nome,
+                                                        participante.foto_perfil_url,
+                                                    )}
+                                                </div>
+                                                <div className="dados-comunidade__membro-dados">
+                                                    <div className="dados-comunidade__membro-cabecalho">
+                                                        <strong>{participante.nome}</strong>
+                                                        {participante.id === usuario?.sub && (
+                                                            <span className="dados-comunidade__membro-voce">
+                                                                Você
+                                                            </span>
                                                         )}
                                                     </div>
-                                                    <div className="dados-comunidade__membro-dados">
-                                                        <div className="dados-comunidade__membro-cabecalho">
-                                                            <strong>{participante.nome}</strong>
-                                                            {participante.id === usuario?.sub && (
-                                                                <span className="dados-comunidade__membro-voce">
-                                                                    Você
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            ))}
+                                                </div>
+                                            </li>
+                                        ))}
                                     </ul>
                                 ) : (
                                     <p className="dados-comunidade__membros-vazio">
-                                        Este grupo não possui participantes.
+                                        {termoBusca
+                                            ? "Nenhum usuário encontrado."
+                                            : "Esta comunidade não possui participantes."
+                                        }
                                     </p>
                                 )}
                             </div>
@@ -461,8 +498,8 @@ function ModalDadosComunidades({
                             <button className="dados-comunidade__sair" type="button">
                                 <div className="dados-comunidade__sair-icone">
                                     <svg width="16" height="16" fill="currentColor" className="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
-                                        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                                        <path fillRule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+                                        <path fillRule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
                                     </svg>
                                 </div>
                                 <div className="dados-comunidade__sair-texto">

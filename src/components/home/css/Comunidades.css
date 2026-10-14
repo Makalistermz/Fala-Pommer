@@ -1542,6 +1542,10 @@ html.tema-escuro:not(.alto-contraste) .dados-comunidade__membros-vazio {
     color: var(--tema-texto-secundario);
 }
 
+html.tema-escuro:not(.alto-contraste) .dados-comunidade__membros-vazio {
+    background-color: var(--azul-claro);
+}
+
 html.tema-escuro:not(.alto-contraste) .dados-comunidade__membro:hover {
     background: var(--azul-claro);
 }

@@ -44,6 +44,9 @@ function ModalDadosComunidades({
     const [detectarHandlerCliqueNome, setDetectarHandlerCliqueNome] = useState(false)
     const [detectarHandlerCliqueDescricao, setDetectarHandlerCliqueDescricao] = useState(false)
     const [adicionarNovaClass, setAdicionarNovaClass] = useState(false);
+    const [abrirModalAdicionarMembro, setAbrirModalAdicionarMembro] = useState(false);
+    const botaoFecharModalAdicionarMembroRef =
+            useRef<HTMLButtonElement>(null);
     const [buscarUsuariosComunidade, setBuscarUsuariosComunidade] = useState("");
     const buscaRef = useRef<HTMLInputElement>(null);
 
@@ -340,6 +343,7 @@ function ModalDadosComunidades({
                                         id="adicionar_membro"
                                         type="button"
                                         title="Adicionar membro"
+                                        onClick={() => setAbrirModalAdicionarMembro(true)}
                                     >
                                         <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-person-add" viewBox="0 0 16 16">
                                             <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
@@ -518,6 +522,82 @@ function ModalDadosComunidades({
                     </div>
 
                 </section>
+
+                {abrirModalAdicionarMembro && (
+                    <div
+                        className="modal-adicionar-comunidade"
+                        role="presentation"
+                        onMouseDown={(evento) => {
+                            if (evento.target === evento.currentTarget) {
+                                setAbrirModalAdicionarMembro(false);
+                            }
+                        }}
+                    >
+                        <section
+                            className="modal-comunidade__janela modal-comunidade__janela--adicionar-pessoa"
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby="modal-adicionar-pessoa-titulo"
+                            aria-describedby="modal-adicionar-pessoa-descricao"
+                        >
+                            <header className="modal-grupo__cabecalho">
+                                <div className="modal-grupo__titulo">
+                                    <span className="modal-grupo__icone" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M15 19c0-2.21-2.69-4-6-4s-6 1.79-6 4" />
+                                            <circle cx="9" cy="8" r="4" />
+                                            <path d="M18 8v6M15 11h6" />
+                                        </svg>
+                                    </span>
+
+                                    <div>
+                                        <span className="modal-grupo__etapa">
+                                            NOVO PARTICIPANTE
+                                        </span>
+                                        <h2 id="modal-adicionar-pessoa-titulo">
+                                            Adicionar pessoa
+                                        </h2>
+                                        <p id="modal-adicionar-pessoa-descricao">
+                                            Escolha quem você deseja adicionar ao grupo.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <button
+                                    ref={botaoFecharModalAdicionarMembroRef}
+                                    type="button"
+                                    className="modal-grupo__fechar"
+                                    onClick={() => setAbrirModalAdicionarMembro(false)}
+                                    aria-label="Fechar adição de pessoa"
+                                >
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M6 6l12 12M18 6 6 18" />
+                                    </svg>
+                                </button>
+                            </header>
+
+                            <div className="modal-grupo__pesquisa">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <circle cx="11" cy="11" r="7" />
+                                    <path d="m16 16 4 4" />
+                                </svg>
+                                <input
+                                    type="search"
+                                    placeholder="Pesquisar pessoa"
+                                    aria-label="Pesquisar pessoa para adicionar ao grupo"
+                                    autoComplete="off"
+                                />
+                            </div>
+
+                            <div className="modal-grupo__rotulo-lista" data-lenis-prevent>
+                                <span>PESSOAS DISPONÍVEIS</span>
+                                    {/*Numero ficticio, alterar após pegar a quantidade total de usuarios fora da comunidade*/}
+                                    <span>8</span>
+                            </div>
+
+                        </section>
+                    </div>
+                )}
 
             </div>
 

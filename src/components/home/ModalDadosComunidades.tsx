@@ -137,8 +137,12 @@ function ModalDadosComunidades({
                 tipo: "sucesso",
                 mensagem: "Convite copiado para a área de transferência.",
             });
-        } catch (error) {
-            console.error('Erro:', error);
+        } catch (erro) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: `Erro: ${erro}`
+            });
         }
     }
 

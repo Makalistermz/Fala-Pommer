@@ -1573,152 +1573,6 @@ html.tema-escuro:not(.alto-contraste) :is(
     background: var(--tema-superficie-interativa);
 }
 
-@media (max-width: 640px) {
-    .modal-dados-comunidade {
-        width: min(100%, 520px);
-    }
-
-    .dados-comunidade__informacoes {
-        min-height: 270px;
-        padding: 8px 4px 16px;
-    }
-
-    .dados-comunidade__avatar-comunidade {
-        width: 112px;
-        height: 112px;
-        border-radius: 23px;
-    }
-
-    .dados-comunidade__avatar-comunidade svg {
-        width: 48px;
-        height: 48px;
-    }
-
-    .dados-comunidade_avatar-messagem {
-        padding: 12px;
-        font-size: 0.8125rem;
-    }
-
-    .dados-comunidade_avatar-messagem > div {
-        gap: 6px;
-    }
-
-    .dados-comunidade_avatar-messagem svg {
-        width: 22px;
-        height: 22px;
-    }
-
-    .dados-comunidade__acoes {
-        width: min(calc(100% - 16px), 420px);
-    }
-
-    .dados-comunidade__descricao {
-        width: min(calc(100% - 16px), 520px);
-    }
-
-    .dados-comunidade__sair-container {
-        width: min(calc(100% - 16px), 420px);
-    }
-
-}
-
-@media (max-width: 420px) {
-    .dados-comunidade__informacoes {
-        min-height: 240px;
-        gap: 10px;
-    }
-
-    .dados-comunidade__avatar {
-        padding: 4px;
-        border-radius: 26px;
-    }
-
-    .dados-comunidade__avatar-comunidade {
-        width: 96px;
-        height: 96px;
-        border-radius: 20px;
-    }
-
-    .dados-comunidade__avatar-comunidade svg {
-        width: 42px;
-        height: 42px;
-    }
-
-    .dados-comunidade_avatar-messagem {
-        padding: 8px;
-        font-size: 0.6875rem;
-        line-height: 1.25;
-    }
-
-    .dados-comunidade_avatar-messagem > div {
-        gap: 4px;
-    }
-
-    .dados-comunidade_avatar-messagem svg {
-        width: 19px;
-        height: 19px;
-    }
-
-    .dados-comunidade__nome {
-        font-size: 1.25rem;
-    }
-
-    .dados-comunidade__participantes {
-        font-size: 0.875rem;
-    }
-
-    .dados-comunidade__acoes {
-        gap: 10px;
-    }
-
-    .dados-comunidade__acao {
-        min-width: 0;
-    }
-
-    .dados-comunidade__acao-botao {
-        min-height: 44px;
-    }
-
-    .dados-comunidade__descricao-texto {
-        padding: 12px;
-        gap: 10px;
-    }
-
-    .dados-comunidade__descricao-mensagem {
-        font-size: 0.875rem;
-    }
-
-    .dados-comunidade__descricao-editar {
-        width: 34px;
-        height: 34px;
-        flex-basis: 34px;
-    }
-
-    .dados-comunidade__sair {
-        min-height: 44px;
-        padding: 9px 10px;
-        font-size: 0.875rem;
-    }
-
-    .dados-comunidade__config-icon-text {
-        gap: 8px;
-    }
-
-    .dados-comunidade__membros-conteudo {
-        padding-top: 16px;
-    }
-
-    .dados-comunidade__membros-total,
-    .dados-comunidade__membros-adicionar {
-        font-size: 0.875rem;
-    }
-
-    .dados-comunidade__membros-adicionar {
-        min-height: 48px;
-        margin-top: 10px;
-    }
-}
-
 html.tema-escuro:not(.alto-contraste) .nova-comunidade {
     border-bottom-color: var(--tema-borda);
     background: rgba(11, 18, 32, 0.94);
@@ -2018,6 +1872,152 @@ html.tema-escuro:not(.alto-contraste) .comunidades-acoes__icone {
     100% {
         left: 3px;
         transform: scaleX(1);
+    }
+}
+
+@media (max-width: 640px) {
+    .modal-dados-comunidade {
+        width: min(100%, 520px);
+    }
+
+    .dados-comunidade__informacoes {
+        min-height: 270px;
+        padding: 8px 4px 16px;
+    }
+
+    .dados-comunidade__avatar-comunidade {
+        width: 112px;
+        height: 112px;
+        border-radius: 23px;
+    }
+
+    .dados-comunidade__avatar-comunidade svg {
+        width: 48px;
+        height: 48px;
+    }
+
+    .dados-comunidade_avatar-messagem {
+        padding: 12px;
+        font-size: 0.8125rem;
+    }
+
+    .dados-comunidade_avatar-messagem > div {
+        gap: 6px;
+    }
+
+    .dados-comunidade_avatar-messagem svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .dados-comunidade__acoes {
+        width: min(calc(100% - 16px), 420px);
+    }
+
+    .dados-comunidade__descricao {
+        width: min(calc(100% - 16px), 520px);
+    }
+
+    .dados-comunidade__sair-container {
+        width: min(calc(100% - 16px), 420px);
+    }
+
+}
+
+@media (max-width: 420px) {
+    .dados-comunidade__informacoes {
+        min-height: 240px;
+        gap: 10px;
+    }
+
+    .dados-comunidade__avatar {
+        padding: 4px;
+        border-radius: 26px;
+    }
+
+    .dados-comunidade__avatar-comunidade {
+        width: 96px;
+        height: 96px;
+        border-radius: 20px;
+    }
+
+    .dados-comunidade__avatar-comunidade svg {
+        width: 42px;
+        height: 42px;
+    }
+
+    .dados-comunidade_avatar-messagem {
+        padding: 8px;
+        font-size: 0.6875rem;
+        line-height: 1.25;
+    }
+
+    .dados-comunidade_avatar-messagem > div {
+        gap: 4px;
+    }
+
+    .dados-comunidade_avatar-messagem svg {
+        width: 19px;
+        height: 19px;
+    }
+
+    .dados-comunidade__nome {
+        font-size: 1.25rem;
+    }
+
+    .dados-comunidade__participantes {
+        font-size: 0.875rem;
+    }
+
+    .dados-comunidade__acoes {
+        gap: 10px;
+    }
+
+    .dados-comunidade__acao {
+        min-width: 0;
+    }
+
+    .dados-comunidade__acao-botao {
+        min-height: 44px;
+    }
+
+    .dados-comunidade__descricao-texto {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .dados-comunidade__descricao-mensagem {
+        font-size: 0.875rem;
+    }
+
+    .dados-comunidade__descricao-editar {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+    }
+
+    .dados-comunidade__sair {
+        min-height: 44px;
+        padding: 9px 10px;
+        font-size: 0.875rem;
+    }
+
+    .dados-comunidade__config-icon-text {
+        gap: 8px;
+    }
+
+    .dados-comunidade__membros-conteudo {
+        padding-top: 16px;
+    }
+
+    .dados-comunidade__membros-total,
+    .dados-comunidade__membros-adicionar {
+        font-size: 0.875rem;
+    }
+
+    .dados-comunidade__membros-adicionar {
+        min-height: 48px;
+        margin-top: 10px;
     }
 }
 

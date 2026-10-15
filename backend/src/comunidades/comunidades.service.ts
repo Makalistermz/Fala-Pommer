@@ -398,7 +398,7 @@ export class ComunidadesService {
             },
 
             data: {
-                nome_comunidade: dados.nome_comunidade?.trim(),
+                nome_comunidade: dados.nome_comunidade?.trim(), //retorna undefined -> não altera caso não for enviado
                 descricao_comunidade: dados.descricao_comunidade?.trim(),
                 imagem_comunidade: fotoComunidadeUrl
             },

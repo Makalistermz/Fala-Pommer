@@ -149,6 +149,7 @@ export class ComunidadesService {
         }
     };
 
+    //adiciona como admin da comunidade o criador da comunidade
     async criarComunidadeFuncao(
         comunidadeId: number, 
         usuarioId: number
@@ -173,6 +174,30 @@ export class ComunidadesService {
                     comunidade_id: comunidadeId,
                     usuario_id: usuarioId,
                     tipo_funcao: tipoFuncao
+                },
+                select: {
+                    comunidade_id: true,
+                    usuario_id: true,
+                    tipo_funcao: true,
+                    promovido_em: true
+                }
+            });
+        } catch (erro) {
+            throw erro
+        }
+    }
+
+    //adiciona como membro da comunidade ao entrar na comunidade
+    async entrarComunidadeFuncao(
+        comunidadeId: number,
+        usuarioId: number
+    ) {
+        try {
+            return this.prisma.comunidade_usuarios.create({
+                data: {
+                    comunidade_id: comunidadeId,
+                    usuario_id: usuarioId,
+                    tipo_funcao: 'membro'
                 },
                 select: {
                     comunidade_id: true,
@@ -220,6 +245,12 @@ export class ComunidadesService {
     }
 
     async entrarComunidade(comunidadeId: number, usuario: Pick<JwtPayload, 'sub' | 'tipo'>) {
+        
+        await this.entrarComunidadeFuncao(
+            comunidadeId,
+            usuario.sub
+        );
+
         return this.prisma.$transaction(async (banco) => {
             // Serializa entradas, inclusive a criação do chat para comunidades antigas.
             await banco.$queryRaw(Prisma.sql`SELECT id FROM comunidade WHERE id = ${comunidadeId} FOR UPDATE`);

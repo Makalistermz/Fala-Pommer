@@ -202,7 +202,7 @@ function ModalDadosComunidades({
     }
 
     //atualização dos dados das comunidades
-    async function enviarNomeAlteradoComunidade() {
+    async function enviarNomeDescricaoAlteradoComunidade() {
         if (!comunidade) return;
 
         try {
@@ -350,7 +350,7 @@ function ModalDadosComunidades({
                                         className="dados-comunidade_alter-nome"
                                         type="button"
                                         title="Confirmar alteração"
-                                        onClick={enviarNomeAlteradoComunidade}
+                                        onClick={enviarNomeDescricaoAlteradoComunidade}
                                     >
                                         {svgCheck}
                                     </button>
@@ -445,7 +445,7 @@ function ModalDadosComunidades({
                                             className="dados-comunidade__descricao-editar"
                                             type="button"
                                             title="Confirmar alteração"
-                                            onClick={enviarNomeAlteradoComunidade}
+                                            onClick={enviarNomeDescricaoAlteradoComunidade}
                                         >
                                             {svgCheck}
                                         </button>

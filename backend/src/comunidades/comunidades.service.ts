@@ -133,6 +133,12 @@ export class ComunidadesService {
                 },
                 select: selecionarComunidade(usuarioId)
             });
+
+            await this.criarComunidadeFuncao(
+                comunidade.id,
+                usuarioId
+            );
+
             return apresentarComunidade(comunidade);
         } catch (erro) {
             if (caminhoFoto) {
@@ -142,6 +148,43 @@ export class ComunidadesService {
             throw erro;
         }
     };
+
+    async criarComunidadeFuncao(
+        comunidadeId: number, 
+        usuarioId: number
+    ) {
+        const comunidade = await this.prisma.comunidade.findUnique({
+            where: {
+                id: comunidadeId
+            }
+        });
+
+        if (!comunidade) {
+            throw new Error('Comunidade não encontrada');
+        }
+
+        const tipoFuncao = comunidade.comunidade_criador_id === usuarioId
+            ? 'admin'
+            : 'membro';
+
+        try {
+            return this.prisma.comunidade_usuarios.create({
+                data: {
+                    comunidade_id: comunidadeId,
+                    usuario_id: usuarioId,
+                    tipo_funcao: tipoFuncao
+                },
+                select: {
+                    comunidade_id: true,
+                    usuario_id: true,
+                    tipo_funcao: true,
+                    promovido_em: true
+                }
+            });
+        } catch (erro) {
+            throw erro
+        }
+    }
 
     async listarComunidade(tipoUsuario: JwtPayload["tipo"], usuarioId: number) {
         const comunidades = await this.prisma.comunidade.findMany({

@@ -595,6 +595,21 @@ function ModalDadosComunidades({
                                     <span>8</span>
                             </div>
 
+                            <div className="modal-grupo__contatos">
+                                <button>
+                                    <span className="modal-grupo__avatar"></span>
+
+                                    <span className="modal-grupo__dados">
+                                        <strong></strong>
+                                        <span className="modal-grupo__perfil">
+
+                                        </span>
+                                    </span>
+
+                                    <span className="modal-grupo__selecao"></span>
+                                </button>
+                            </div>
+
                         </section>
                     </div>
                 )}

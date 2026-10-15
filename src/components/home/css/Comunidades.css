@@ -749,6 +749,11 @@
     width: min(100%, 620px);
 }
 
+.dados-comunidade__avatar-container {
+    position: relative;
+    display: inline-block;   /* encolhe para o tamanho do avatar */
+}
+
 .dados-comunidade__avatar {
     padding: 5px;
     border-radius: 32px;
@@ -787,6 +792,50 @@
     z-index: 0;
     display: block;
     cursor: pointer;
+}
+
+.dados-comunidade__salvar-avatar-comunidade {
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 3px solid #ffffff;
+    border-radius: 50%;
+    background: var(--azul-escuro);
+    color: #ffffff;
+    box-shadow: 0 6px 14px rgba(21, 55, 128, 0.35);
+    cursor: pointer;
+    transition:
+        background-color 160ms ease,
+        box-shadow 160ms ease,
+        transform 160ms ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.dados-comunidade__salvar-avatar-comunidade:hover {
+    background: #203c86;
+    box-shadow: 0 8px 18px rgba(21, 55, 128, 0.42);
+    transform: scale(1.06);
+}
+
+.dados-comunidade__salvar-avatar-comunidade:active {
+    transform: scale(0.95);
+}
+
+.dados-comunidade__salvar-avatar-comunidade:focus-visible {
+    outline: 3px solid rgba(21, 55, 128, 0.35);
+    outline-offset: 2px;
+}
+
+.dados-comunidade__salvar-avatar-comunidade svg {
+    display: block;
+    width: 18px;
+    height: 18px;
 }
 
 .comunidades-acoes__icone {
@@ -1468,6 +1517,15 @@ html.tema-escuro:not(.alto-contraste) .modal-dados-comunidade .modal-dados__cabe
 
 html.tema-escuro:not(.alto-contraste) .dados-comunidade__avatar {
     background: var(--tema-superficie-interativa);
+}
+
+html.tema-escuro:not(.alto-contraste) .dados-comunidade__salvar-avatar-comunidade {
+    background-color: var(--azul-claro);
+    border-color: var(--tema-borda);
+}
+
+html.tema-escuro:not(.alto-contraste) .dados-comunidade__salvar-avatar-comunidade:hover {
+    background-color: #12315f;
 }
 
 html.tema-escuro:not(.alto-contraste) .dados-comunidade__participantes,

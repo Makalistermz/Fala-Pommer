@@ -267,56 +267,67 @@ function ModalDadosComunidades({
 
                     <div className="modal-dados__conteudo">
                         <section className="dados-comunidade__informacoes">
-                            <div className="dados-comunidade__avatar">
-                                <div 
-                                    className={
-                                        `dados-comunidade__avatar-comunidade 
-                                        ${fotoPreview 
-                                            ? " dados-comunidade__avatar-comunidade--com-foto" 
-                                            : ""}`
-                                    }
-                                    title="Alterar imagem"
-                                    onMouseEnter={() => setIconChangeMessage(IconChangeMessage())}
-                                    onMouseLeave={() => setIconChangeMessage(null)}
-                                >
-                                    {!fotoPreview && renderizarAvatar(
-                                        comunidade.nome_comunidade,
-                                        comunidade.imagem_comunidade,
-                                        true,
-                                    )}
-
-                                    <input 
-                                        type="file" 
-                                        name="nova-foto__comunidade" 
-                                        id="nova-foto__comunidade" 
-                                        accept="image/jpeg,image/png,image/webp"
-                                        hidden
-                                        onChange={(evento) => {
-                                            setNovaFotoComunidade(evento.target.files?.[0] ?? null);
-                                            evento.target.value = "";
-                                        }}
-                                    />
-                                    <label 
-                                        className="nova__imagem-preview"
-                                        htmlFor="nova-foto__comunidade"
-                                        title="Selecionar imagem"
+                            <div className="dados-comunidade__avatar-container">
+                                <div className="dados-comunidade__avatar">
+                                    <div
+                                        className={
+                                            `dados-comunidade__avatar-comunidade
+                                            ${fotoPreview
+                                                ? " dados-comunidade__avatar-comunidade--com-foto"
+                                                : ""}`
+                                        }
+                                        title="Alterar imagem"
+                                        onMouseEnter={() => setIconChangeMessage(IconChangeMessage())}
+                                        onMouseLeave={() => setIconChangeMessage(null)}
                                     >
-                                        {fotoPreview && (
-                                            <img
-                                                className="nova-comunidade__imagem-selecionada"
-                                                src={fotoPreview}
-                                                alt="Prévia da imagem da comunidade"
-                                            />
+                                        {!fotoPreview && renderizarAvatar(
+                                            comunidade.nome_comunidade,
+                                            comunidade.imagem_comunidade,
+                                            true,
                                         )}
-                                    </label>
-                                    
-                                    {iconChangeMessage && (
-                                        <div className="dados-comunidade_avatar-messagem">
-                                            {iconChangeMessage}
-                                        </div>
-                                    )}
-
+                                        <input
+                                            type="file"
+                                            name="nova-foto__comunidade"
+                                            id="nova-foto__comunidade"
+                                            accept="image/jpeg,image/png,image/webp"
+                                            hidden
+                                            onChange={(evento) => {
+                                                setNovaFotoComunidade(evento.target.files?.[0] ?? null);
+                                                evento.target.value = "";
+                                            }}
+                                        />
+                                        <label
+                                            className="nova__imagem-preview"
+                                            htmlFor="nova-foto__comunidade"
+                                            title="Selecionar imagem"
+                                        >
+                                            {fotoPreview && (
+                                                <img
+                                                    className="nova-comunidade__imagem-selecionada"
+                                                    src={fotoPreview}
+                                                    alt="Prévia da imagem da comunidade"
+                                                />
+                                            )}
+                                        </label>
+                                
+                                        {iconChangeMessage && (
+                                            <div className="dados-comunidade_avatar-messagem">
+                                                {iconChangeMessage}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
+
+                                {/*Adiciona o botão de salvar imagem ao colocar nova imagem*/}
+                                {fotoPreview && (
+                                    <button
+                                        className="dados-comunidade__salvar-avatar-comunidade"
+                                        type="button"
+                                        title="Salvar imagem"
+                                    >
+                                        {svgCheck}
+                                    </button>
+                                )}
                             </div>
 
                             <div className="dados-comunidade__identificacao">

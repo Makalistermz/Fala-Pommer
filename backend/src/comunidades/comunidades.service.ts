@@ -359,16 +359,55 @@ export class ComunidadesService {
         return comunidade;
     }
 
-    async atualizarDadosComunidade(comunidadeId: number, usuarioId: number, dados: AtualizarDadosComunidade) {
+    async atualizarDadosComunidade(comunidadeId: number, usuarioId: number, dados: AtualizarDadosComunidade, foto?: ArquivoFotoComunidadeUpload) {
+
+        let caminhoFoto: string | undefined;
+        let fotoComunidadeUrl: string | undefined;
+
+        if (foto) {
+            const extensoes: Record<string, string> = {
+                "image/jpeg": ".jpg",
+                "image/png": ".png",
+                "image/webp": ".webp"
+            };
+            const extensao = extensoes[foto.mimetype];
+
+            if (!extensao) {
+                throw new BadRequestException(
+                    "Formato de imagem não permitido."
+                );
+            }
+
+            const diretorioUploads = join(
+                process.cwd(),
+                "uploads",
+                "comunidades"
+            );
+            const nomeArquivo = `${randomUUID()}${extensao}`;
+
+            caminhoFoto = join(diretorioUploads, nomeArquivo);
+            fotoComunidadeUrl = `/uploads/comunidades/${nomeArquivo}`;
+
+            await mkdir(diretorioUploads, { recursive: true });
+            await writeFile(caminhoFoto, foto.buffer);
+        }
+
         return this.prisma.comunidade.update({
             where: {
                 id: comunidadeId
             },
 
             data: {
-                nome_comunidade: dados.nome_comunidade.trim(),
-                descricao_comunidade: dados.descricao_comunidade.trim(),
+                nome_comunidade: dados.nome_comunidade?.trim(),
+                descricao_comunidade: dados.descricao_comunidade?.trim(),
+                imagem_comunidade: fotoComunidadeUrl
             },
+
+            select: {
+                nome_comunidade: true,
+                descricao_comunidade: true,
+                imagem_comunidade: true
+            }
         });
     }
 }

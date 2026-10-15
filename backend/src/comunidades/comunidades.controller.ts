@@ -84,15 +84,41 @@ export class ComunidadesController {
 
     @Patch(':comunidadeId')
     @UseGuards(AuthGuard)
+    @UseInterceptors(FileInterceptor("imagem_comunidade", {
+        limits: {
+            fileSize: 5 * 1024 * 1024
+        },
+        fileFilter: (_requisicao, arquivo, callback) => {
+            const tiposPermitidos = new Set([
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ]);
+
+            if (!tiposPermitidos.has(arquivo.mimetype)) {
+                callback(
+                    new BadRequestException(
+                        "A foto deve estar nos formatos JPEG, PNG ou WebP."
+                    ),
+                    false
+                );
+                return;
+            }
+
+            callback(null, true);
+        }
+    }))
     atualizarDadosComunidade(
         @Req() requisicao: RequisicaoAutenticada,
         @Param('comunidadeId', ParseIntPipe) comunidadeId: number,
-        @Body() dados: AtualizarDadosComunidade
+        @Body() dados: AtualizarDadosComunidade,
+        @UploadedFile() foto?: ArquivoFotoComunidadeUpload
     ) {
         return this.comunidadesService.atualizarDadosComunidade(
             comunidadeId,
             requisicao.usuario!.sub,
-            dados
+            dados,
+            foto
         );
     }
 

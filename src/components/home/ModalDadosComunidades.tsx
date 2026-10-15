@@ -236,8 +236,38 @@ function ModalDadosComunidades({
             setFeedback({
                 aberto: true,
                 tipo: "erro",
-                mensagem: `Erro: ${erro}`
+                mensagem: `${erro}`
             })
+        }
+    }
+
+    async function atualizarImagemComunidade(comunidadeId: number) {
+        if (!comunidade || !novaFotoComunidade) return
+
+        try {
+            const formData = new FormData();
+            formData.append("imagem_comunidade", novaFotoComunidade);
+
+            const resposta = await apiFetch(`/comunidades/${comunidadeId}`, {
+                method: "PATCH",
+                body: formData
+            });
+
+            if (!resposta.ok) {
+                throw new Error("Não foi possivel atualizar a foto da comunidade.")
+            }
+
+            setFeedback({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem: "Foto alterada com sucesso!"
+            });
+        } catch (erro) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: `${erro}`
+            });
         }
     }
 
@@ -324,6 +354,7 @@ function ModalDadosComunidades({
                                         className="dados-comunidade__salvar-avatar-comunidade"
                                         type="button"
                                         title="Salvar imagem"
+                                        onClick={() => atualizarImagemComunidade(comunidade.id)}
                                     >
                                         {svgCheck}
                                     </button>

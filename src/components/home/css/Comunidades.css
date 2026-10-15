@@ -777,6 +777,18 @@
     cursor: pointer;
 }
 
+.dados-comunidade__avatar-comunidade--com-foto {
+    background-color: transparent;
+}
+
+.nova__imagem-preview {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    cursor: pointer;
+}
+
 .comunidades-acoes__icone {
     color: #ffffff !important;
     background-color: #1351b4 !important;

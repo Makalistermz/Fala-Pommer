@@ -3,7 +3,7 @@ import type { Comunidade } from "./Comunidades";
 import type { ConversaComunidade } from "../../pages/home";
 import { apiFetch } from "../../services/api";
 import { ModalFeedback } from "../ModalFeedback";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useEffect } from "react";
 
 interface ModalDadosComunidadeProps {
     aberto: boolean;
@@ -41,10 +41,12 @@ function ModalDadosComunidades({
     const nomeRef = useRef<HTMLInputElement>(null);
     const [isDisabledDescription, setIsDisabledDescription] = useState<boolean>(true);
     const [isDisabledName, setIsDisabledName] = useState<boolean>(true);
-    const [detectarHandlerCliqueNome, setDetectarHandlerCliqueNome] = useState(false)
-    const [detectarHandlerCliqueDescricao, setDetectarHandlerCliqueDescricao] = useState(false)
+    const [detectarHandlerCliqueNome, setDetectarHandlerCliqueNome] = useState(false);
+    const [detectarHandlerCliqueDescricao, setDetectarHandlerCliqueDescricao] = useState(false);
     const [adicionarNovaClass, setAdicionarNovaClass] = useState(false);
     const [abrirModalAdicionarMembro, setAbrirModalAdicionarMembro] = useState(false);
+    const [novaFotoComunidade, setNovaFotoComunidade] = useState<File | null>(null);
+    const [fotoPreview, setFotoPreview] = useState<string | null>(null);
     const botaoFecharModalAdicionarMembroRef =
             useRef<HTMLButtonElement>(null);
     const [buscarUsuariosComunidade, setBuscarUsuariosComunidade] = useState("");
@@ -81,6 +83,18 @@ function ModalDadosComunidades({
             nomeRef.current?.focus();
         }, 0);
     };
+
+    useEffect(() => {
+        if (!novaFotoComunidade) {
+            setFotoPreview(null);
+            return;
+        }
+
+        const urlPreview = URL.createObjectURL(novaFotoComunidade);
+        setFotoPreview(urlPreview);
+
+        return () => URL.revokeObjectURL(urlPreview);
+    }, [novaFotoComunidade]);
 
     useLayoutEffect(() => {
         const campoDescricao = descricaoRef.current;
@@ -255,12 +269,46 @@ function ModalDadosComunidades({
                         <section className="dados-comunidade__informacoes">
                             <div className="dados-comunidade__avatar">
                                 <div 
-                                    className="dados-comunidade__avatar-comunidade"
+                                    className={
+                                        `dados-comunidade__avatar-comunidade 
+                                        ${fotoPreview 
+                                            ? " dados-comunidade__avatar-comunidade--com-foto" 
+                                            : ""}`
+                                    }
                                     title="Alterar imagem"
                                     onMouseEnter={() => setIconChangeMessage(IconChangeMessage())}
                                     onMouseLeave={() => setIconChangeMessage(null)}
                                 >
-                                    {renderizarAvatar(comunidade.nome_comunidade, comunidade.imagem_comunidade, true)}
+                                    {!fotoPreview && renderizarAvatar(
+                                        comunidade.nome_comunidade,
+                                        comunidade.imagem_comunidade,
+                                        true,
+                                    )}
+
+                                    <input 
+                                        type="file" 
+                                        name="nova-foto__comunidade" 
+                                        id="nova-foto__comunidade" 
+                                        accept="image/jpeg,image/png,image/webp"
+                                        hidden
+                                        onChange={(evento) => {
+                                            setNovaFotoComunidade(evento.target.files?.[0] ?? null);
+                                            evento.target.value = "";
+                                        }}
+                                    />
+                                    <label 
+                                        className="nova__imagem-preview"
+                                        htmlFor="nova-foto__comunidade"
+                                        title="Selecionar imagem"
+                                    >
+                                        {fotoPreview && (
+                                            <img
+                                                className="nova-comunidade__imagem-selecionada"
+                                                src={fotoPreview}
+                                                alt="Prévia da imagem da comunidade"
+                                            />
+                                        )}
+                                    </label>
                                     
                                     {iconChangeMessage && (
                                         <div className="dados-comunidade_avatar-messagem">

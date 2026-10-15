@@ -134,6 +134,7 @@ export class ComunidadesService {
                 select: selecionarComunidade(usuarioId)
             });
 
+            //chama função de adicionar como admin da comunidade ao criar a comunidade
             await this.criarComunidadeFuncao(
                 comunidade.id,
                 usuarioId
@@ -211,6 +212,24 @@ export class ComunidadesService {
         }
     }
 
+    //carrega comunidade_usuarios
+    async carregarFuncoesUsuario() {
+        try {
+            return this.prisma.comunidade_usuarios.findMany({
+                select: {
+                    id: true,
+                    comunidade_id: true,
+                    usuario_id: true,
+                    tipo_funcao: true,
+                    promovido_em:true
+                },
+                orderBy: {id: "asc"}
+            })
+        } catch (erro) {
+            throw erro
+        }
+    }
+
     async listarComunidade(tipoUsuario: JwtPayload["tipo"], usuarioId: number) {
         const comunidades = await this.prisma.comunidade.findMany({
             where: tipoUsuario === "user"
@@ -246,6 +265,7 @@ export class ComunidadesService {
 
     async entrarComunidade(comunidadeId: number, usuario: Pick<JwtPayload, 'sub' | 'tipo'>) {
         
+        //chama função de adicionar usario como membro ao entrar na comunidade
         await this.entrarComunidadeFuncao(
             comunidadeId,
             usuario.sub

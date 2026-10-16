@@ -191,8 +191,8 @@ export class ComunidadesController {
     @Get(':comunidadeId/funcaoComunidade')
     @UseGuards(AuthGuard)
     carregarFuncoesUsuario(
-        @Req() requisicao: RequisicaoAutenticada,
+        @Param('comunidadeId', ParseIntPipe) comunidadeId: number,
     ) {
-        return this.comunidadesService.carregarFuncoesUsuario();
+        return this.comunidadesService.carregarFuncoesUsuario(comunidadeId);
     }
 }

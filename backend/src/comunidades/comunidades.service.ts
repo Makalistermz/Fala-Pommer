@@ -213,9 +213,10 @@ export class ComunidadesService {
     }
 
     //carrega comunidade_usuarios
-    async carregarFuncoesUsuario() {
+    async carregarFuncoesUsuario(comunidadeId: number) {
         try {
             return this.prisma.comunidade_usuarios.findMany({
+                where: { comunidade_id: comunidadeId },
                 select: {
                     id: true,
                     comunidade_id: true,

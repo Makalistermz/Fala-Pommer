@@ -19,6 +19,14 @@ interface ModalDadosComunidadeProps {
     ) => ReactNode;
 }
 
+interface FuncaoDosMembrosComunidade {
+    id: number,
+    comunidadeId: number,
+    usuarioId: number,
+    tipoFuncaoNaComunidade: string,
+    promovidoEm: string
+}
+
 function ModalDadosComunidades({
     aberto,
     comunidade,
@@ -50,6 +58,8 @@ function ModalDadosComunidades({
     const botaoFecharModalAdicionarMembroRef =
             useRef<HTMLButtonElement>(null);
     const [buscarUsuariosComunidade, setBuscarUsuariosComunidade] = useState("");
+    const [buscarFuncoesDosUsuariosNaComunidade, setBuscarFuncoesDosUsuariosNaComunidade] = 
+        useState<FuncaoDosMembrosComunidade | null>(null)
     const buscaRef = useRef<HTMLInputElement>(null);
 
     function alternarPesquisa() {
@@ -113,6 +123,32 @@ function ModalDadosComunidades({
             setAdicionarNovaClass(false);
         }
     }, [aberto, comunidade]);
+
+    useEffect( () => {
+        async function buscarFuncaoUsuarioComunidade(comunidadeId: number) {
+            if (!comunidade) return
+
+            try {
+                const resposta = await apiFetch(`/comunidades/${comunidadeId}/funcaoComunidade`)
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possivel buscar a função de cada usuário")
+                }
+
+                const dados = await resposta.json();
+                setBuscarFuncoesDosUsuariosNaComunidade(dados);
+
+            } catch (erro) {
+                setFeedback({
+                    aberto: true,
+                    tipo: "erro",
+                    mensagem: `${erro}`
+                })
+            }
+        }
+
+        if (comunidade) buscarFuncaoUsuarioComunidade(comunidade.id);
+    }, [])
 
     if (!aberto || !comunidade || !conversaSelecionada) {
         return null;

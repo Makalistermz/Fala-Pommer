@@ -187,4 +187,12 @@ export class ComunidadesController {
             comunidadeId,
         );
     }
+
+    @Get(':comunidadeId/funcaoComunidade')
+    @UseGuards(AuthGuard)
+    carregarFuncoesUsuario(
+        @Req() requisicao: RequisicaoAutenticada,
+    ) {
+        return this.comunidadesService.carregarFuncoesUsuario();
+    }
 }

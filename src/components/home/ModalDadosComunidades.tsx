@@ -21,10 +21,10 @@ interface ModalDadosComunidadeProps {
 
 interface FuncaoDosMembrosComunidade {
     id: number,
-    comunidadeId: number,
-    usuarioId: number,
-    tipoFuncaoNaComunidade: string,
-    promovidoEm: string
+    comunidade_id: number,
+    usuario_id: number,
+    tipo_funcao: string,
+    promovido_em: string
 }
 
 function ModalDadosComunidades({
@@ -59,7 +59,7 @@ function ModalDadosComunidades({
             useRef<HTMLButtonElement>(null);
     const [buscarUsuariosComunidade, setBuscarUsuariosComunidade] = useState("");
     const [buscarFuncoesDosUsuariosNaComunidade, setBuscarFuncoesDosUsuariosNaComunidade] = 
-        useState<FuncaoDosMembrosComunidade | null>(null)
+        useState<FuncaoDosMembrosComunidade[]>([])
     const buscaRef = useRef<HTMLInputElement>(null);
 
     function alternarPesquisa() {
@@ -125,9 +125,11 @@ function ModalDadosComunidades({
     }, [aberto, comunidade]);
 
     useEffect( () => {
-        async function buscarFuncaoUsuarioComunidade(comunidadeId: number) {
-            if (!comunidade) return
+        if (!aberto || !comunidade) return
 
+        const comunidadeId = comunidade.id
+
+        async function buscarFuncaoUsuarioComunidade() {
             try {
                 const resposta = await apiFetch(`/comunidades/${comunidadeId}/funcaoComunidade`)
 
@@ -135,7 +137,7 @@ function ModalDadosComunidades({
                     throw new Error("Não foi possivel buscar a função de cada usuário")
                 }
 
-                const dados = await resposta.json();
+                const dados: FuncaoDosMembrosComunidade[] = await resposta.json();
                 setBuscarFuncoesDosUsuariosNaComunidade(dados);
 
             } catch (erro) {
@@ -147,8 +149,8 @@ function ModalDadosComunidades({
             }
         }
 
-        if (comunidade) buscarFuncaoUsuarioComunidade(comunidade.id);
-    }, [])
+        buscarFuncaoUsuarioComunidade();
+    }, [aberto, comunidade?.id])
 
     if (!aberto || !comunidade || !conversaSelecionada) {
         return null;
@@ -589,29 +591,48 @@ function ModalDadosComunidades({
 
                                 {participantesFiltrados.length > 0 ? (
                                     <ul className="dados-comunidade__membros-lista" data-lenis-prevent>
-                                        {participantesFiltrados.map((participante) => (
-                                            <li 
-                                                key={participante.id} 
-                                                className="dados-comunidade__membro"
-                                            >
-                                                <div className="dados-comunidade__membro-avatar">
-                                                    {renderizarAvatar(
-                                                        participante.nome,
-                                                        participante.foto_perfil_url,
-                                                    )}
-                                                </div>
-                                                <div className="dados-comunidade__membro-dados">
-                                                    <div className="dados-comunidade__membro-cabecalho">
-                                                        <strong>{participante.nome}</strong>
-                                                        {participante.id === usuario?.sub && (
-                                                            <span className="dados-comunidade__membro-voce">
-                                                                Você
-                                                            </span>
+                                        {participantesFiltrados.map((participante) => {
+                                            
+                                            const funcao = buscarFuncoesDosUsuariosNaComunidade.find((f) => f.usuario_id === participante.id,);
+
+                                            const tipoFuncao = funcao?.tipo_funcao ?? "membro";
+
+                                            return(
+                                                <li 
+                                                    key={participante.id} 
+                                                    className="dados-comunidade__membro"
+                                                >
+                                                    <div className="dados-comunidade__membro-avatar">
+                                                        {renderizarAvatar(
+                                                            participante.nome,
+                                                            participante.foto_perfil_url,
                                                         )}
                                                     </div>
-                                                </div>
-                                            </li>
-                                        ))}
+                                                    <div className="dados-comunidade__membro-dados">
+                                                        <div className="dados-comunidade__membro-cabecalho">
+                                                            <strong>{participante.nome}</strong>
+                                                            {participante.id === usuario?.sub && (
+                                                                <span className="dados-comunidade__membro-voce">
+                                                                    Você
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    {funcao && (
+                                                        <span
+                                                            className={`
+                                                                dados-comunidade__membro-funcao 
+                                                                dados-comunidade__membro-funcao--${tipoFuncao}`
+                                                            }
+                                                        >
+                                                            {funcao.tipo_funcao}
+                                                        </span>
+                                                    )}
+
+                                                </li>
+                                            );
+                                        })}
                                     </ul>
                                 ) : (
                                     <p className="dados-comunidade__membros-vazio">

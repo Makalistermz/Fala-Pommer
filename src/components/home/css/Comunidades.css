@@ -2048,6 +2048,15 @@ html.tema-escuro:not(.alto-contraste) .comunidades-acoes__icone {
         width: min(calc(100% - 16px), 520px);
     }
 
+    .dados-comunidade__membro-cabecalho strong {
+        font-size: 0.87rem;
+    }
+
+    .dados-comunidade__membro-funcao {
+        padding: 2px 6px;
+        font-size: 0.65rem;
+    }
+
     .dados-comunidade__sair-container {
         width: min(calc(100% - 16px), 420px);
     }

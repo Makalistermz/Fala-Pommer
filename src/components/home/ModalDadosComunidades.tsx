@@ -318,7 +318,13 @@ function ModalDadosComunidades({
 
     return (
         <>
-            <div className="modal-dados__fundo" onClick={aoFechar} data-lenis-prevent>
+            <div 
+                className="modal-dados__fundo" 
+                onClick={(evento) => {
+                    if (evento.target === evento.currentTarget) aoFechar();
+                }} 
+                data-lenis-prevent
+            >
                 <section
                     className="modal-dados modal-dados-comunidade"
                     role="dialog"
@@ -700,7 +706,7 @@ function ModalDadosComunidades({
 
                 </section>
 
-                {abrirModalAdicionarMembro && (
+                {eAdmin && abrirModalAdicionarMembro && (
                     <div
                         className="modal-adicionar-comunidade"
                         role="presentation"

@@ -309,6 +309,13 @@ function ModalDadosComunidades({
         }
     }
 
+    const minhaFuncao = buscarFuncoesDosUsuariosNaComunidade.find(
+        (funcao) => funcao.usuario_id === usuario?.sub,
+    )?.tipo_funcao;
+
+    const eAdmin = minhaFuncao === "admin";
+    const eMembro = minhaFuncao === "membro";
+
     return (
         <>
             <div className="modal-dados__fundo" onClick={aoFechar} data-lenis-prevent>
@@ -353,32 +360,36 @@ function ModalDadosComunidades({
                                             comunidade.imagem_comunidade,
                                             true,
                                         )}
-                                        <input
-                                            type="file"
-                                            name="nova-foto__comunidade"
-                                            id="nova-foto__comunidade"
-                                            accept="image/jpeg,image/png,image/webp"
-                                            hidden
-                                            onChange={(evento) => {
-                                                setNovaFotoComunidade(evento.target.files?.[0] ?? null);
-                                                evento.target.value = "";
-                                            }}
-                                        />
-                                        <label
-                                            className="nova__imagem-preview"
-                                            htmlFor="nova-foto__comunidade"
-                                            title="Selecionar imagem"
-                                        >
-                                            {fotoPreview && (
-                                                <img
-                                                    className="nova-comunidade__imagem-selecionada"
-                                                    src={fotoPreview}
-                                                    alt="Prévia da imagem da comunidade"
+                                        {eAdmin && (
+                                            <>
+                                                <input
+                                                    type="file"
+                                                    name="nova-foto__comunidade"
+                                                    id="nova-foto__comunidade"
+                                                    accept="image/jpeg,image/png,image/webp"
+                                                    hidden
+                                                    onChange={(evento) => {
+                                                        setNovaFotoComunidade(evento.target.files?.[0] ?? null);
+                                                        evento.target.value = "";
+                                                    }}
                                                 />
-                                            )}
-                                        </label>
-                                
-                                        {iconChangeMessage && (
+                                                <label
+                                                    className="nova__imagem-preview"
+                                                    htmlFor="nova-foto__comunidade"
+                                                    title="Selecionar imagem"
+                                                >
+                                                    {fotoPreview && (
+                                                        <img
+                                                            className="nova-comunidade__imagem-selecionada"
+                                                            src={fotoPreview}
+                                                            alt="Prévia da imagem da comunidade"
+                                                        />
+                                                    )}
+                                                </label>
+                                            </>
+                                        )}
+
+                                        {eAdmin && iconChangeMessage && (
                                             <div className="dados-comunidade_avatar-messagem">
                                                 {iconChangeMessage}
                                             </div>
@@ -387,7 +398,7 @@ function ModalDadosComunidades({
                                 </div>
 
                                 {/*Adiciona o botão de salvar imagem ao colocar nova imagem*/}
-                                {fotoPreview && (
+                                {eAdmin && fotoPreview && (
                                     <button
                                         className="dados-comunidade__salvar-avatar-comunidade"
                                         type="button"
@@ -399,12 +410,18 @@ function ModalDadosComunidades({
                                 )}
                             </div>
 
-                            <div className="dados-comunidade__identificacao">
+                            <div className={`
+                                dados-comunidade__identificacao
+                                ${eMembro ? 'dados-comunidade__identificacao-membro' : ''}
+                            `}>
                                 <input 
                                     type="text" 
                                     name="nome_comunidade" 
                                     id="nome_comunidade" 
-                                    className="dados-comunidade__nome"
+                                    className={`
+                                        dados-comunidade__nome 
+                                        ${eMembro ? 'dados-comunidade__nome--membro' : ''}
+                                    `}
                                     ref={nomeRef}
                                     value={alterarNomeComunidade}
                                     onChange={(evento) => setAlterarNomeComunidade(evento.target.value)}
@@ -414,25 +431,27 @@ function ModalDadosComunidades({
                                     required
                                     autoComplete="off"
                                 />
-                                {detectarHandlerCliqueNome === true 
-                                    ? <button
-                                        className="dados-comunidade_alter-nome"
-                                        type="button"
-                                        title="Confirmar alteração"
-                                        onClick={enviarNomeDescricaoAlteradoComunidade}
-                                    >
-                                        {svgCheck}
-                                    </button>
 
-                                    : <button
-                                        className="dados-comunidade_alter-nome"
-                                        type="button"
-                                        title="Editar nome da comunidade"
-                                        onClick={handlerCliqueNome}
-                                    >
-                                        {svgPen}
-                                    </button>
-                                }
+                                {eAdmin && (
+                                    detectarHandlerCliqueNome === true 
+                                        ? <button
+                                            className="dados-comunidade_alter-nome"
+                                            type="button"
+                                            title="Confirmar alteração"
+                                            onClick={enviarNomeDescricaoAlteradoComunidade}
+                                        >
+                                            {svgCheck}
+                                        </button>
+
+                                        : <button
+                                            className="dados-comunidade_alter-nome"
+                                            type="button"
+                                            title="Editar nome da comunidade"
+                                            onClick={handlerCliqueNome}
+                                        >
+                                            {svgPen}
+                                        </button>
+                                )}
                             </div>
 
                             <div className="dados-comunidade__resumo">
@@ -446,7 +465,13 @@ function ModalDadosComunidades({
                             <div className="dados-comunidade__acoes">
                                 <div className="dados-comunidade__acao">
                                     <button 
-                                        className="dados-comunidade__acao-botao"
+                                        className={`
+                                            dados-comunidade__acao-botao
+                                            ${eMembro 
+                                                ? 'dados-comunidade__acao-botao-membro' 
+                                                : ''
+                                            }
+                                        `}
                                         id="convidar"
                                         type="button"
                                         title="Convidar usando link"
@@ -465,26 +490,28 @@ function ModalDadosComunidades({
                                     </label>
                                 </div>
 
-                                <div className="dados-comunidade__acao">
-                                    <button 
-                                        className="dados-comunidade__acao-botao"
-                                        id="adicionar_membro"
-                                        type="button"
-                                        title="Adicionar membro"
-                                        onClick={() => setAbrirModalAdicionarMembro(true)}
-                                    >
-                                        <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-person-add" viewBox="0 0 16 16">
-                                            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-                                            <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
-                                        </svg>
-                                    </button>
-                                    <label 
-                                        htmlFor="adicionar_membro" 
-                                        className="dados-comunidade__acao-texto"
-                                    >
-                                        Adicionar membro
-                                    </label>
-                                </div>
+                                {eAdmin && (
+                                    <div className="dados-comunidade__acao">
+                                        <button 
+                                            className="dados-comunidade__acao-botao"
+                                            id="adicionar_membro"
+                                            type="button"
+                                            title="Adicionar membro"
+                                            onClick={() => setAbrirModalAdicionarMembro(true)}
+                                        >
+                                            <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-person-add" viewBox="0 0 16 16">
+                                                <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                                                <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                                            </svg>
+                                        </button>
+                                        <label 
+                                            htmlFor="adicionar_membro" 
+                                            className="dados-comunidade__acao-texto"
+                                        >
+                                            Adicionar membro
+                                        </label>
+                                    </div>
+                                )}
                             </div>
 
                         </section>
@@ -509,25 +536,26 @@ function ModalDadosComunidades({
                                         maxLength={400}
                                         required
                                     ></textarea>
-                                    {detectarHandlerCliqueDescricao === true
-                                        ? <button
-                                            className="dados-comunidade__descricao-editar"
-                                            type="button"
-                                            title="Confirmar alteração"
-                                            onClick={enviarNomeDescricaoAlteradoComunidade}
-                                        >
-                                            {svgCheck}
-                                        </button>
 
-                                        : <button
-                                            className="dados-comunidade__descricao-editar"
-                                            type="button"
-                                            title="Editar descrição da comunidade"
-                                            onClick={handleCliqueDescricao}
-                                        >
-                                            {svgPen}
-                                        </button>
-                                    }
+                                    {eAdmin && (
+                                        detectarHandlerCliqueDescricao
+                                            ? <button
+                                                className="dados-comunidade__descricao-editar"
+                                                type="button"
+                                                title="Confirmar alteração"
+                                                onClick={enviarNomeDescricaoAlteradoComunidade}
+                                            >
+                                                {svgCheck}
+                                            </button>
+                                            : <button
+                                                className="dados-comunidade__descricao-editar"
+                                                type="button"
+                                                title="Editar descrição da comunidade"
+                                                onClick={handleCliqueDescricao}
+                                            >
+                                                {svgPen}
+                                            </button>
+                                    )}
                                 </div>
                             </div>
                         </section>

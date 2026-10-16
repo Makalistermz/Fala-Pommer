@@ -1349,6 +1349,24 @@
     font-weight: 600;
 }
 
+.dados-comunidade__membro-funcao {
+    padding: 2px 8px;
+    flex: 0 0 auto;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-family: var(--fonte-dm-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #0b4920;
+}
+
+.dados-comunidade__membro-funcao--admin {
+    color: #123c72;
+    background: transparent;
+    border-color: #b7cce9;
+}
+
 .dados-comunidade__membros-vazio {
     margin: 14px 0 0;
     padding: 18px;
@@ -1637,6 +1655,15 @@ html.tema-escuro:not(.alto-contraste) .dados-comunidade__membros-adicionar-icone
 
 html.tema-escuro:not(.alto-contraste) .dados-comunidade__membros-adicionar:hover .dados-comunidade__membros-adicionar-icone {
     background: #254b7e;
+}
+
+html.tema-escuro:not(.alto-contraste) .dados-comunidade__membro-funcao {
+    color: #208141;
+}
+
+html.tema-escuro:not(.alto-contraste) .dados-comunidade__membro-funcao--admin {
+    color: #205ad6;
+    border-color: #434952;
 }
 
 html.tema-escuro:not(.alto-contraste) .dados-comunidade__membro,

@@ -830,6 +830,9 @@ function ModalDadosComunidades({
                                     <path d="m16 16 4 4" />
                                 </svg>
                                 <input
+                                    onChange={(evento) =>
+                                        setBuscaPessoaComunidade(evento.target.value)
+                                    }
                                     type="search"
                                     placeholder="Pesquisar pessoa"
                                     aria-label="Pesquisar pessoa para adicionar ao grupo"

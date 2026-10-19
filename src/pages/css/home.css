@@ -3040,7 +3040,8 @@ button.modal-transferencia__etapa {
     color: #b42318;
 }
 
-.modal-grupo__rodape {
+.modal-grupo__rodape,
+.modal-comunidade__rodape {
     display: flex;
     min-height: 66px;
     align-items: center;
@@ -3051,7 +3052,8 @@ button.modal-transferencia__etapa {
     background: linear-gradient(180deg, #fbfcfe, #f5f8fc);
 }
 
-.modal-grupo__contador {
+.modal-grupo__contador,
+.modal-comunidade__contador {
     display: inline-flex;
     align-items: center;
     gap: 7px;
@@ -3059,7 +3061,8 @@ button.modal-transferencia__etapa {
     font-size: 0.8125rem;
 }
 
-.modal-grupo__resumo {
+.modal-grupo__resumo,
+.modal-comunidade__resumo {
     display: flex;
     min-width: 0;
     flex-direction: column;
@@ -3075,7 +3078,8 @@ button.modal-transferencia__etapa {
     white-space: nowrap;
 }
 
-.modal-grupo__contador svg {
+.modal-grupo__contador svg,
+.modal-comunidade__contador svg {
     width: 19px;
     height: 19px;
     fill: none;
@@ -3085,12 +3089,14 @@ button.modal-transferencia__etapa {
     stroke-linejoin: round;
 }
 
-.modal-grupo__contador--ativo {
+.modal-grupo__contador--ativo,
+.modal-comunidade__contador--ativo {
     color: #1351b4;
     font-weight: 600;
 }
 
-.modal-grupo__rodape button {
+.modal-grupo__rodape button,
+.modal-comunidade__rodape button {
     min-height: 40px;
     padding: 8px 17px;
     border: 0;
@@ -3105,12 +3111,14 @@ button.modal-transferencia__etapa {
     transition: background-color 150ms ease, transform 150ms ease;
 }
 
-.modal-grupo__rodape button:hover {
+.modal-grupo__rodape button:hover,
+.modal-comunidade__rodape button:hover {
     background: #0d397d;
     transform: translateY(-1px);
 }
 
-.modal-grupo__rodape button:disabled {
+.modal-grupo__rodape button:disabled,
+.modal-comunidade__rodape button:disabled {
     background: #c9d3e1;
     color: #667085;
     box-shadow: none;

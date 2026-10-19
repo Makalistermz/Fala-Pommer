@@ -907,6 +907,35 @@ function ModalDadosComunidades({
                                 })}
                             </div>
 
+                            <footer className="modal-comunidade__rodape">
+                                <div className="modal-comunidade__resumo">
+                                    <span
+                                        className={
+                                            contatosModalAdicionarPessoasSelecionados.size > 0
+                                                ? "modal-comunidade__contador modal-comunidade__contador--ativo"
+                                                : "modal-comunidade__contador"
+                                        }
+                                        aria-live="polite"
+                                    >
+                                        <svg viewBox="0 0 20 20" aria-hidden="true">
+                                            <path d="M13.5 16v-1.25A2.75 2.75 0 0 0 10.75 12h-4.5a2.75 2.75 0 0 0-2.75 2.75V16" />
+                                            <circle cx="8.5" cy="6.5" r="2.5" />
+                                            <path d="M14.5 7v5M12 9.5h5" />
+                                        </svg>
+                                        {contatosModalAdicionarPessoasSelecionados.size === 0
+                                            ? "Nenhuma pessoa selecionada"
+                                            : contatosModalAdicionarPessoasSelecionados.size === 1
+                                                ? "1 pessoa selecionada"
+                                                : `${contatosModalAdicionarPessoasSelecionados.size} pessoas selecionadas`}
+                                    </span>
+                                </div>
+                                <button
+                                    type="button"
+                                >
+                                    Adicionar ao grupo
+                                </button>
+                            </footer>
+
                         </section>
                     </div>
                 )}

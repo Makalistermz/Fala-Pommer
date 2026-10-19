@@ -5,6 +5,18 @@ import { apiFetch } from "../../services/api";
 import { ModalFeedback } from "../ModalFeedback";
 import { useLayoutEffect, useEffect } from "react";
 
+type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
+
+interface UsuarioBasico {
+    id: number;
+    nome: string;
+    foto_perfil_url: string | null;
+}
+
+interface UsuarioConversa extends UsuarioBasico {
+    tipoUsuario: TipoUsuario;
+}
+
 interface ModalDadosComunidadeProps {
     aberto: boolean;
     comunidade: Comunidade | null;
@@ -55,8 +67,12 @@ function ModalDadosComunidades({
     const [abrirModalAdicionarMembro, setAbrirModalAdicionarMembro] = useState(false);
     const [novaFotoComunidade, setNovaFotoComunidade] = useState<File | null>(null);
     const [fotoPreview, setFotoPreview] = useState<string | null>(null);
+    const [contatosDisponiveisModalAdicionarPessoas,
+        setContatosDisponiveisModalAdicionarPessoas] = useState<UsuarioConversa[]>([]);
+    const [buscaPessoaComunidade, setBuscaPessoaComunidade] = useState("");
     const botaoFecharModalAdicionarMembroRef =
             useRef<HTMLButtonElement>(null);
+    const menuComunidadeRef = useRef<HTMLDetailsElement>(null);
     const [buscarUsuariosComunidade, setBuscarUsuariosComunidade] = useState("");
     const [buscarFuncoesDosUsuariosNaComunidade, setBuscarFuncoesDosUsuariosNaComunidade] = 
         useState<FuncaoDosMembrosComunidade[]>([])
@@ -279,6 +295,31 @@ function ModalDadosComunidades({
         }
     }
 
+    async function contatosModalAdicionarContatoComunidade() {
+        if (!usuario || conversaSelecionada?.tipo !== "comunidade") return
+
+        setBuscaPessoaComunidade("");
+        setContatosDisponiveisModalAdicionarPessoas([]);
+
+        try {
+            const resposta = await apiFetch("usuarios/comunidades/contatos");
+        
+            if (!resposta.ok) {
+                throw new Error("Não foi possível carregar os contatos.");
+            }
+
+            const contatos = await resposta.json() as UsuarioConversa[];
+            setContatosDisponiveisModalAdicionarPessoas(contatos);
+
+        } catch (erro) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: `${erro}`
+            })
+        }
+    }
+
     async function atualizarImagemComunidade(comunidadeId: number) {
         if (!comunidade || !novaFotoComunidade) return
 
@@ -315,6 +356,23 @@ function ModalDadosComunidades({
 
     const eAdmin = minhaFuncao === "admin";
     const eMembro = minhaFuncao === "membro";
+
+    const contatosDisponiveisParaComunidade =
+        contatosDisponiveisModalAdicionarPessoas.filter((contato) => {
+            if (
+                conversaSelecionada?.tipo !== "comunidade" ||
+                conversaSelecionada.participantes.some(
+                    (participante) => participante.id === contato.id,
+                )
+            ) {
+                return false;
+            }
+
+            const busca = buscaPessoaComunidade.trim().toLowerCase();
+            const descricao = `${contato.nome} ${contato.tipoUsuario}`;
+
+            return descricao.toLowerCase().includes(busca);
+        });
 
     return (
         <>
@@ -503,7 +561,14 @@ function ModalDadosComunidades({
                                             id="adicionar_membro"
                                             type="button"
                                             title="Adicionar membro"
-                                            onClick={() => setAbrirModalAdicionarMembro(true)}
+                                            onClick={() => {
+                                                setAbrirModalAdicionarMembro(true)
+
+                                                if (menuComunidadeRef.current) {
+                                                    menuComunidadeRef.current.open = false;
+                                                }
+                                                void contatosModalAdicionarContatoComunidade();
+                                            }}
                                         >
                                             <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-person-add" viewBox="0 0 16 16">
                                                 <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
@@ -774,23 +839,42 @@ function ModalDadosComunidades({
 
                             <div className="modal-grupo__rotulo-lista" data-lenis-prevent>
                                 <span>PESSOAS DISPONÍVEIS</span>
-                                    {/*Numero ficticio, alterar após pegar a quantidade total de usuarios fora da comunidade*/}
-                                    <span>8</span>
+                                    <span>{contatosDisponiveisParaComunidade.length}</span>
                             </div>
 
                             <div className="modal-grupo__contatos">
-                                <button>
-                                    <span className="modal-grupo__avatar"></span>
+                                {contatosDisponiveisParaComunidade.map((contato) => {
+                                    return (
+                                        <button>
+                                            <span className="modal-grupo__avatar">
+                                                {renderizarAvatar(
+                                                    contato.nome,
+                                                    contato.foto_perfil_url
+                                                )}
+                                            </span>
 
-                                    <span className="modal-grupo__dados">
-                                        <strong></strong>
-                                        <span className="modal-grupo__perfil">
+                                            <span className="modal-grupo__dados">
+                                                <strong>{contato.nome}</strong>
+                                                {eAdmin && (
+                                                    <span className="modal-grupo__perfil">
+                                                        { contato.tipoUsuario === "superAdmin"
+                                                            ? "Super Administrador"
+                                                            : (contato.tipoUsuario === "admin"
+                                                                ? "Administrador"
+                                                                : (contato.tipoUsuario === "funcionario"
+                                                                    ? "Funcionário"
+                                                                    : "Usuário"
+                                                                )
+                                                            )
+                                                        }
+                                                    </span>
+                                                )}
+                                            </span>
 
-                                        </span>
-                                    </span>
-
-                                    <span className="modal-grupo__selecao"></span>
-                                </button>
+                                            <span className="modal-grupo__selecao"></span>
+                                        </button>
+                                    )
+                                })}
                             </div>
 
                         </section>

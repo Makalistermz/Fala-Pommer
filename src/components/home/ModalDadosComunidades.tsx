@@ -72,6 +72,9 @@ function ModalDadosComunidades({
     const [buscaPessoaComunidade, setBuscaPessoaComunidade] = useState("");
     const botaoFecharModalAdicionarMembroRef =
             useRef<HTMLButtonElement>(null);
+    const [contatosModalAdicionarPessoasSelecionados,
+            setContatosModalAdicionarPessoasSelecionados] =
+            useState<Set<number>>(new Set());
     const menuComunidadeRef = useRef<HTMLDetailsElement>(null);
     const [buscarUsuariosComunidade, setBuscarUsuariosComunidade] = useState("");
     const [buscarFuncoesDosUsuariosNaComunidade, setBuscarFuncoesDosUsuariosNaComunidade] = 
@@ -300,6 +303,7 @@ function ModalDadosComunidades({
 
         setBuscaPessoaComunidade("");
         setContatosDisponiveisModalAdicionarPessoas([]);
+        setContatosModalAdicionarPessoasSelecionados(new Set());
 
         try {
             const resposta = await apiFetch("usuarios/comunidades/contatos");
@@ -797,9 +801,9 @@ function ModalDadosComunidades({
                             aria-labelledby="modal-adicionar-pessoa-titulo"
                             aria-describedby="modal-adicionar-pessoa-descricao"
                         >
-                            <header className="modal-grupo__cabecalho">
-                                <div className="modal-grupo__titulo">
-                                    <span className="modal-grupo__icone" aria-hidden="true">
+                            <header className="modal-comunidade__cabecalho">
+                                <div className="modal-comunidade__titulo">
+                                    <span className="modal-comunidade__icone" aria-hidden="true">
                                         <svg viewBox="0 0 24 24">
                                             <path d="M15 19c0-2.21-2.69-4-6-4s-6 1.79-6 4" />
                                             <circle cx="9" cy="8" r="4" />
@@ -808,14 +812,14 @@ function ModalDadosComunidades({
                                     </span>
 
                                     <div>
-                                        <span className="modal-grupo__etapa">
+                                        <span className="modal-comunidade__etapa">
                                             NOVO PARTICIPANTE
                                         </span>
                                         <h2 id="modal-adicionar-pessoa-titulo">
                                             Adicionar pessoa
                                         </h2>
                                         <p id="modal-adicionar-pessoa-descricao">
-                                            Escolha quem você deseja adicionar ao grupo.
+                                            Escolha quem você deseja adicionar na comunidade.
                                         </p>
                                     </div>
                                 </div>
@@ -823,7 +827,7 @@ function ModalDadosComunidades({
                                 <button
                                     ref={botaoFecharModalAdicionarMembroRef}
                                     type="button"
-                                    className="modal-grupo__fechar"
+                                    className="modal-comunidade__fechar"
                                     onClick={() => setAbrirModalAdicionarMembro(false)}
                                     aria-label="Fechar adição de pessoa"
                                 >
@@ -833,7 +837,7 @@ function ModalDadosComunidades({
                                 </button>
                             </header>
 
-                            <div className="modal-grupo__pesquisa">
+                            <div className="modal-comunidade__pesquisa">
                                 <svg viewBox="0 0 24 24" aria-hidden="true">
                                     <circle cx="11" cy="11" r="7" />
                                     <path d="m16 16 4 4" />
@@ -844,31 +848,44 @@ function ModalDadosComunidades({
                                     }
                                     type="search"
                                     placeholder="Pesquisar pessoa"
-                                    aria-label="Pesquisar pessoa para adicionar ao grupo"
+                                    aria-label="Pesquisar pessoa para adicionar na comunidade"
                                     autoComplete="off"
                                 />
                             </div>
 
-                            <div className="modal-grupo__rotulo-lista" data-lenis-prevent>
+                            <div className="modal-comunidade__rotulo-lista" data-lenis-prevent>
                                 <span>PESSOAS DISPONÍVEIS</span>
                                     <span>{contatosDisponiveisParaComunidade.length}</span>
                             </div>
 
-                            <div className="modal-grupo__contatos">
+                            <div className="modal-comunidade__contatos">
                                 {contatosDisponiveisParaComunidade.map((contato) => {
+                                    const selecionado =
+                                        contatosModalAdicionarPessoasSelecionados.has(
+                                            contato.id,
+                                        );
+
                                     return (
-                                        <button>
-                                            <span className="modal-grupo__avatar">
+                                        <button
+                                        key={contato.id}
+                                        type="button"
+                                        className={`modal-comunidade__contato ${
+                                            selecionado
+                                                ? "modal-comunidade__contato--selecionado"
+                                                : ""
+                                        }`}
+                                        >
+                                            <span className="modal-comunidade__avatar">
                                                 {renderizarAvatar(
                                                     contato.nome,
                                                     contato.foto_perfil_url
                                                 )}
                                             </span>
 
-                                            <span className="modal-grupo__dados">
+                                            <span className="modal-comunidade__dados">
                                                 <strong>{contato.nome}</strong>
                                                 {eAdmin && (
-                                                    <span className="modal-grupo__perfil">
+                                                    <span className={`modal-comunidade__perfil modal-comunidade__perfil--${contato.tipoUsuario}`}>
                                                         { contato.tipoUsuario === "superAdmin"
                                                             ? "Super Administrador"
                                                             : (contato.tipoUsuario === "admin"
@@ -883,7 +900,13 @@ function ModalDadosComunidades({
                                                 )}
                                             </span>
 
-                                            <span className="modal-grupo__selecao"></span>
+                                            <span className="modal-comunidade__selecao">
+                                                {selecionado && (
+                                                    <svg viewBox="0 0 16 16">
+                                                        <path d="m3 8 3 3 7-7" />
+                                                    </svg>
+                                                )}
+                                            </span>
                                         </button>
                                     )
                                 })}

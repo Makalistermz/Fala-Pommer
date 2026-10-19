@@ -677,6 +677,15 @@ function ModalDadosComunidades({
                                     <button 
                                         className="dados-comunidade__membros-adicionar"
                                         type="button"
+                                        title="Adicionar membro"
+                                        onClick={() => {
+                                            setAbrirModalAdicionarMembro(true)
+
+                                            if (menuComunidadeRef.current) {
+                                                menuComunidadeRef.current.open = false;
+                                            }
+                                            void contatosModalAdicionarContatoComunidade();
+                                        }}
                                     >
                                         <div className="dados-comunidade__membros-adicionar-icone">
                                             <svg width="16" height="16" fill="currentColor" className="bi bi-person-add" viewBox="0 0 16 16">

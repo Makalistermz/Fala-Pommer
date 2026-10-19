@@ -378,6 +378,15 @@ function ModalDadosComunidades({
             return descricao.toLowerCase().includes(busca);
         });
 
+    function abrirModalDeAdicionarMembroComunidade() {
+        setAbrirModalAdicionarMembro(true)
+
+        if (menuComunidadeRef.current) {
+            menuComunidadeRef.current.open = false;
+        }
+        void contatosModalAdicionarContatoComunidade();
+    }
+
     return (
         <>
             <div 
@@ -565,14 +574,7 @@ function ModalDadosComunidades({
                                             id="adicionar_membro"
                                             type="button"
                                             title="Adicionar membro"
-                                            onClick={() => {
-                                                setAbrirModalAdicionarMembro(true)
-
-                                                if (menuComunidadeRef.current) {
-                                                    menuComunidadeRef.current.open = false;
-                                                }
-                                                void contatosModalAdicionarContatoComunidade();
-                                            }}
+                                            onClick={() => abrirModalDeAdicionarMembroComunidade()}
                                         >
                                             <svg width="16" height="16" fill="currentColor" className="dados-comunidade__acao-icone bi bi-person-add" viewBox="0 0 16 16">
                                                 <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
@@ -682,14 +684,7 @@ function ModalDadosComunidades({
                                         className="dados-comunidade__membros-adicionar"
                                         type="button"
                                         title="Adicionar membro"
-                                        onClick={() => {
-                                            setAbrirModalAdicionarMembro(true)
-
-                                            if (menuComunidadeRef.current) {
-                                                menuComunidadeRef.current.open = false;
-                                            }
-                                            void contatosModalAdicionarContatoComunidade();
-                                        }}
+                                        onClick={() => abrirModalDeAdicionarMembroComunidade()}
                                     >
                                         <div className="dados-comunidade__membros-adicionar-icone">
                                             <svg width="16" height="16" fill="currentColor" className="bi bi-person-add" viewBox="0 0 16 16">

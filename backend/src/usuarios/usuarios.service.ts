@@ -18,6 +18,7 @@ import * as bcrypt from "bcrypt";
 import { randomUUID } from "node:crypto";
 import { mkdir, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { identity } from "rxjs";
 
 export type ArquivoFotoPerfilUpload = {
     originalname: string;
@@ -379,6 +380,51 @@ export class UsuariosService {
                     sigla: contato.setor.sigla_setor
                 }
                 : null
+        }));
+    }
+
+    async listarContatosParaComunidade(usuarioLogadoId: number) {
+        const usuarioLogado = await this.prisma.cadastro.findUnique({
+            where: {
+                id: usuarioLogadoId
+            },
+            select: {
+                id: true,
+                tipo_usuario: true
+            }
+        })
+
+        if (!usuarioLogado) {
+            throw new NotFoundException(
+                "Usuário autenticado não encontrado."
+            );
+        }
+
+        const contatos = await this.prisma.cadastro.findMany({
+            where: {
+                desativado_em: null,
+                id: {
+                    not: usuarioLogado.id
+                }
+            },
+
+            select: {
+                id: true,
+                nome: true,
+                tipo_usuario: true,
+                foto_perfil_url: true,
+            },
+
+            orderBy: {
+                nome: "asc"
+            }
+        });
+
+        return contatos.map((contato) => ({
+            id: contato.id,
+            nome: contato.nome,
+            tipoUsuario: contato.tipo_usuario,
+            foto_perfil_url: contato.foto_perfil_url,
         }));
     }
 

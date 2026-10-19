@@ -63,6 +63,16 @@ export class UsuariosController {
         );
     }
 
+    @Get("comunidades/contatos")
+    @UseGuards(AuthGuard)
+    listarContatosParaComunidade(
+        @Req() requisicao: RequisicaoAutenticada
+    ) {
+        return this.usuariosService.listarContatosParaComunidade(
+            requisicao.usuario!.sub
+        );
+    }
+
     @Get("me")
     @UseGuards(AuthGuard)
     listarMeuPerfil(

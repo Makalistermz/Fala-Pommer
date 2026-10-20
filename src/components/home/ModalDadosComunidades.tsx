@@ -4,6 +4,7 @@ import type { ConversaComunidade } from "../../pages/home";
 import { apiFetch } from "../../services/api";
 import { ModalFeedback } from "../ModalFeedback";
 import { useLayoutEffect, useEffect } from "react";
+import { ModalConfirmacao } from "../ModalConfirmacao";
 
 type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 
@@ -86,6 +87,7 @@ function ModalDadosComunidades({
             setContatosModalAdicionarPessoasSelecionados] =
             useState<Set<number>>(new Set());
     const menuComunidadeRef = useRef<HTMLDetailsElement>(null);
+    const [modalSairComunidadeAberto, setModalSairComunidadeAberto] = useState(false)
     const [versaoMembros, setVersaoMembros] = useState(0);
     const [adicionandoPessoasComunidade, setAdicionandoPessoasComunidade] = useState(false)
     const [buscarUsuariosComunidade, setBuscarUsuariosComunidade] = useState("");
@@ -836,7 +838,11 @@ function ModalDadosComunidades({
                         </div>
 
                         <div className="dados-comunidade__sair-container">
-                            <button className="dados-comunidade__sair" type="button">
+                            <button 
+                                className="dados-comunidade__sair" 
+                                type="button"
+                                onClick={() => setModalSairComunidadeAberto(true)}
+                            >
                                 <div className="dados-comunidade__sair-icone">
                                     <svg width="16" height="16" fill="currentColor" className="bi bi-box-arrow-right" viewBox="0 0 16 16">
                                         <path fillRule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
@@ -1035,6 +1041,20 @@ function ModalDadosComunidades({
                 )}
 
             </div>
+
+            <ModalConfirmacao
+                aberto={modalSairComunidadeAberto}
+                titulo="Sair da Comunidade?"
+                mensagem={
+                    eAdmin
+                        ? "Ao sair da comunidade, você deixará de ser administrador e não fará mais parte da comunidade. Tem certeza que deseja continuar?"
+                        : "Ao sair, você não fará mais parte da comunidade nem verá as mensagens. Tem certeza que deseja continuar?"
+                }
+                textoConfirmar="Sair"
+                textoCarregando="Saindo..."
+                aoCancelar={() => setModalSairComunidadeAberto(false)}
+                aoConfirmar={() => null}
+            />
 
             <ModalFeedback
                 aberto={feedback.aberto}

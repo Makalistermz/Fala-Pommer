@@ -17,6 +17,11 @@ interface UsuarioConversa extends UsuarioBasico {
     tipoUsuario: TipoUsuario;
 }
 
+interface ResultadoAdicionarMembros {
+    participantes: ConversaComunidade["participantes"];
+    totalParticipantes: number;
+}
+
 interface ModalDadosComunidadeProps {
     aberto: boolean;
     comunidade: Comunidade | null;
@@ -29,6 +34,10 @@ interface ModalDadosComunidadeProps {
         imagem: string | null,
         comunidade?: boolean,
     ) => ReactNode;
+    aoAdicionarMembros: (
+        comunidadeId: number,
+        resultado: ResultadoAdicionarMembros,
+    ) => void;
 }
 
 interface FuncaoDosMembrosComunidade {
@@ -47,6 +56,7 @@ function ModalDadosComunidades({
     aoFechar,
     botaoFecharRef,
     renderizarAvatar,
+    aoAdicionarMembros
 }: ModalDadosComunidadeProps) {
     {/*retorna um elemento html*/}
     const [iconChangeMessage, setIconChangeMessage] = useState<React.JSX.Element | null>(null);
@@ -76,6 +86,8 @@ function ModalDadosComunidades({
             setContatosModalAdicionarPessoasSelecionados] =
             useState<Set<number>>(new Set());
     const menuComunidadeRef = useRef<HTMLDetailsElement>(null);
+    const [versaoMembros, setVersaoMembros] = useState(0);
+    const [adicionandoPessoasComunidade, setAdicionandoPessoasComunidade] = useState(false)
     const [buscarUsuariosComunidade, setBuscarUsuariosComunidade] = useState("");
     const [buscarFuncoesDosUsuariosNaComunidade, setBuscarFuncoesDosUsuariosNaComunidade] = 
         useState<FuncaoDosMembrosComunidade[]>([])
@@ -169,7 +181,7 @@ function ModalDadosComunidades({
         }
 
         buscarFuncaoUsuarioComunidade();
-    }, [aberto, comunidade?.id])
+    }, [aberto, comunidade?.id, versaoMembros])
 
     if (!aberto || !comunidade || !conversaSelecionada) {
         return null;
@@ -304,6 +316,7 @@ function ModalDadosComunidades({
         setBuscaPessoaComunidade("");
         setContatosDisponiveisModalAdicionarPessoas([]);
         setContatosModalAdicionarPessoasSelecionados(new Set());
+        setAdicionandoPessoasComunidade(false);
 
         try {
             const resposta = await apiFetch("usuarios/comunidades/contatos");
@@ -367,6 +380,61 @@ function ModalDadosComunidades({
             return novosSelecionados;
         });
     }
+
+    async function adicionarPessoasAComunidade(comunidadeId: number) {
+            if (
+                conversaSelecionada?.tipo !== "comunidade" ||
+                contatosModalAdicionarPessoasSelecionados.size < 1 ||
+                adicionandoPessoasComunidade
+            ) {
+                return;
+            }
+
+            setAdicionandoPessoasComunidade(true);
+            
+            try {
+
+                const resposta = await apiFetch(`/comunidades/${comunidadeId}/adicionarComunidade`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        usuarioIds: Array.from(
+                            contatosModalAdicionarPessoasSelecionados,
+                        ),
+                    })
+                });
+
+                if (!resposta.ok) {
+                    const erroApi = await resposta.json().catch(() => null);
+                    throw new Error(erroApi?.message ?? "Não foi possível adicionar as pessoas.");
+                }
+
+                const resultado: ResultadoAdicionarMembros = await resposta.json();
+
+                aoAdicionarMembros(comunidadeId, resultado);
+                setVersaoMembros((v) => v + 1);
+                setAbrirModalAdicionarMembro(false);
+                setContatosModalAdicionarPessoasSelecionados(new Set());
+
+                setFeedback({
+                    aberto: true,
+                    tipo: "sucesso",
+                    mensagem: "Usuário adicionado com sucesso!"
+                })
+
+            } catch (erro) {
+                setFeedback({
+                    aberto: true,
+                    tipo: "erro",
+                    mensagem: `${erro}`
+                })
+            } finally {
+                setAdicionandoPessoasComunidade(false);
+            }
+        }
+
     const minhaFuncao = buscarFuncoesDosUsuariosNaComunidade.find(
         (funcao) => funcao.usuario_id === usuario?.sub,
     )?.tipo_funcao;
@@ -950,8 +1018,15 @@ function ModalDadosComunidades({
                                 </div>
                                 <button
                                     type="button"
+                                    disabled={
+                                        contatosModalAdicionarPessoasSelecionados.size < 1 ||
+                                        adicionandoPessoasComunidade
+                                    }
+                                    onClick={() => void adicionarPessoasAComunidade(comunidade.id)}
                                 >
-                                    Adicionar ao grupo
+                                    {adicionandoPessoasComunidade
+                                        ? "Adicionando..."
+                                        : "Adicionar ao grupo"}
                                 </button>
                             </footer>
 

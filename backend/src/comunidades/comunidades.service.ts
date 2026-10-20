@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CriarComunidadeDto } from './dto/criar-comunidade.dto';
 import { randomUUID } from 'node:crypto';
@@ -503,6 +503,136 @@ export class ComunidadesService {
                 descricao_comunidade: true,
                 imagem_comunidade: true
             }
+        });
+    }
+
+    async adicionarMembrosComunidade(
+        usuarioId: number,
+        comunidadeId: number,
+        usuariosIds: number[],
+    ) {
+        const idsSelecionados = Array.from(new Set(usuariosIds));
+
+        if (
+            idsSelecionados.length < 1 ||
+            idsSelecionados.includes(usuarioId)
+        ) {
+            throw new BadRequestException(
+                "Selecione pelo menos uma pessoa diferente de você.",
+            );
+        }
+
+        return this.prisma.$transaction(async (transacao) => {
+            const [minhaFuncao, contatos, jaMembros] = await Promise.all([
+                transacao.comunidade_usuarios.findFirst({
+                    where: {
+                        comunidade_id: comunidadeId,
+                        usuario_id: usuarioId,
+                    },
+                    select: { tipo_funcao: true },
+                }),
+                transacao.cadastro.findMany({
+                    where: {
+                        id: { in: idsSelecionados },
+                        desativado_em: null,
+                    },
+                    select: { id: true },
+                }),
+                transacao.comunidade_usuarios.findMany({
+                    where: {
+                        comunidade_id: comunidadeId,
+                        usuario_id: { in: idsSelecionados },
+                    },
+                    select: { usuario_id: true },
+                }),
+            ]);
+
+            if (minhaFuncao?.tipo_funcao !== "admin") {
+                throw new ForbiddenException(
+                    "Apenas admins podem adicionar membros.",
+                );
+            }
+
+            if (contatos.length !== idsSelecionados.length) {
+                throw new BadRequestException(
+                    "Uma ou mais pessoas não podem ser adicionadas.",
+                );
+            }
+
+            if (jaMembros.length > 0) {
+                throw new ConflictException(
+                    "Uma ou mais pessoas já participam desta comunidade.",
+                );
+            }
+
+            const comunidade = await transacao.comunidade.findUnique({
+                where: { id: comunidadeId },
+                select: {
+                    conversa_id: true,
+                },
+            });
+
+            if (!comunidade) {
+                throw new NotFoundException("Comunidade não encontrada.");
+            }
+
+            if (!comunidade.conversa_id) {
+                throw new ConflictException(
+                    "Esta comunidade não possui uma conversa vinculada."
+                );
+            }
+
+            await transacao.comunidade_usuarios.createMany({
+                data: idsSelecionados.map((usuarioId) => ({
+                    comunidade_id: comunidadeId,
+                    usuario_id: usuarioId,
+                    tipo_funcao: "membro",
+                })),
+            });
+
+            await transacao.conversa_participante.createMany({
+                data: idsSelecionados.map((id) => ({
+                    conversa_id: comunidade.conversa_id!,
+                    usuario_id: id,
+                })),
+            });
+
+            const adicionados = await transacao.comunidade_usuarios.findMany({
+                where: {
+                    comunidade_id: comunidadeId,
+                    usuario_id: { in: idsSelecionados },
+                },
+                select: {
+                    usuario_id: true,
+                    tipo_funcao: true,
+                    promovido_em: true,
+                },
+            });
+
+            // busca todos os membros atuais para o front atualizar a tela
+            const membros = await transacao.comunidade_usuarios.findMany({
+                where: { comunidade_id: comunidadeId },
+                select: {
+                    tipo_funcao: true,
+                    cadastro: {
+                        select: {
+                            id: true,
+                            nome: true,
+                            tipo_usuario: true,
+                            foto_perfil_url: true,
+                        },
+                    },
+                },
+            });
+
+            return {
+                adicionados,
+                participantes: membros.map((membro) => ({
+                    ...membro.cadastro,
+                    tipoUsuario: membro.cadastro.tipo_usuario,
+                })),
+                totalParticipantes: membros.length,
+            };
         });
     }
 }

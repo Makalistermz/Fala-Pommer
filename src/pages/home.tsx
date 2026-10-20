@@ -989,6 +989,35 @@ function Home() {
 
     }, [modalDadosComunidadeAberto]);
 
+    //ao adicionar um novo usuario o sistema mostra ele temporariamente
+    //possivelmente não é usado os participantes que são enviado para o front
+    function aoAdicionarMembrosComunidade(
+        comunidadeId: number,
+        resultado: {
+            participantes: ConversaComunidade["participantes"];
+            totalParticipantes: number;
+        },
+    ) {
+        const atualizarComunidade = (conversa: Conversa): Conversa =>
+            conversa.tipo === "comunidade" && conversa.comunidadeId === comunidadeId
+                ? {
+                    ...conversa,
+                    participantes: resultado.participantes,
+                    totalParticipantes: resultado.totalParticipantes,
+                }
+                : conversa;
+
+        setConversas((atuais) => atuais.map(atualizarComunidade));
+        setConversaSelecionada((atual) => (atual ? atualizarComunidade(atual) : null));
+
+        // o modal lê o contador do cabeçalho de "dados"
+        setDados((atual) =>
+            atual && atual.id === comunidadeId
+                ? { ...atual, totalParticipantes: resultado.totalParticipantes }
+                : atual,
+        );
+    }
+
     useEffect(() => {
         if (!modalAdicionarPessoaAberto) {
             return;
@@ -5938,6 +5967,7 @@ function Home() {
             aoFechar={() => setModalDadosComunidadeAberto(false)}
             botaoFecharRef={botaoFecharModalDadosComunidadeRef}
             renderizarAvatar={renderizarAvatar}
+            aoAdicionarMembros={aoAdicionarMembrosComunidade}
         />
 
         <ModalConfirmacao

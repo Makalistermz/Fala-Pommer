@@ -195,4 +195,20 @@ export class ComunidadesController {
     ) {
         return this.comunidadesService.carregarFuncoesUsuario(comunidadeId);
     }
+
+    @Post(':comunidadeId/adicionarComunidade')
+    @UseGuards(AuthGuard)
+    adicionarMembrosComunidade(
+        @Param("comunidadeId", ParseIntPipe) comunidadeId: number,
+        @Body("usuarioIds") usuarioIds: number[],
+        @Req() requisicao: RequisicaoAutenticada,
+    ) {
+        const usuarioId = requisicao.usuario!.sub;
+
+        return this.comunidadesService.adicionarMembrosComunidade(
+            usuarioId,
+            comunidadeId,
+            usuarioIds,
+        );
+    }
 }

@@ -2980,6 +2980,11 @@ button.modal-transferencia__etapa {
     font-weight: 600;
 }
 
+.modal-comunidade__perfil--user {
+    color: rgb(30, 73, 216);
+    background-color: rgb(213, 223, 255);
+}
+
 .modal-grupo__perfil--admin,
 .modal-comunidade__perfil--admin {
     background: #fff3df;

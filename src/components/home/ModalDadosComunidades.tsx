@@ -354,6 +354,19 @@ function ModalDadosComunidades({
         }
     }
 
+    function alternarContatoModalAdicionarPessoas(contatoId: number) {
+        setContatosModalAdicionarPessoasSelecionados((selecionadosAtuais) => {
+            const novosSelecionados = new Set(selecionadosAtuais);
+
+            if (novosSelecionados.has(contatoId)) {
+                novosSelecionados.delete(contatoId);
+            } else {
+                novosSelecionados.add(contatoId);
+            }
+
+            return novosSelecionados;
+        });
+    }
     const minhaFuncao = buscarFuncoesDosUsuariosNaComunidade.find(
         (funcao) => funcao.usuario_id === usuario?.sub,
     )?.tipo_funcao;
@@ -869,6 +882,12 @@ function ModalDadosComunidades({
                                                 ? "modal-comunidade__contato--selecionado"
                                                 : ""
                                         }`}
+                                        onClick={() =>
+                                            alternarContatoModalAdicionarPessoas(
+                                                contato.id,
+                                            )
+                                        }
+                                        aria-pressed={selecionado}
                                         >
                                             <span className="modal-comunidade__avatar">
                                                 {renderizarAvatar(

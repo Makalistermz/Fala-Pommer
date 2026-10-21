@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { type JwtPayload } from '../auth/auth.guard';
-import { conversa_tipo, Prisma } from '../generated/prisma/client';
+import { comunidade_usuarios_tipo_funcao, conversa_tipo, Prisma } from '../generated/prisma/client';
 import { MensagensCriptografiaService } from '../criptografia/mensagens-criptografia.service';
 import { ListarMensagensDto } from '../conversas/dto/listar-mensagens.dto';
 import { randomBytes } from 'node:crypto';
@@ -774,5 +774,162 @@ export class ComunidadesService {
         );
 
         return resultado;
+    }
+
+    async promoverMembroComunidade(
+        id: number,
+        usuarioLogadoId: number,
+        comunidadeId: number
+    ) {
+        const promover = await this.prisma.$transaction(
+            async (transacao) => {
+                const usuario = await transacao.cadastro.findUnique({
+                    where: {
+                        id,
+                    },
+                    select: {
+                        id: true,
+                        nome: true,
+                        tipo_usuario: true,
+                        desativado_em: true,
+                        comunidade_usuarios: {
+                            where: {
+                                comunidade_id: comunidadeId
+                            },
+                            select: {
+                                tipo_funcao: true,
+                            }
+                        }
+                    }
+                });
+
+                const usuarioLogado = await transacao.cadastro.findUnique({
+                    where: {
+                        id: usuarioLogadoId
+                    },
+                    select: {
+                        id: true,
+                        nome: true,
+                        tipo_usuario: true,
+                        desativado_em: true,
+                        comunidade_usuarios: {
+                            where: {
+                                comunidade_id: comunidadeId
+                            },
+                            select: {
+                                tipo_funcao: true,
+                            }
+                        }
+                    }
+                });
+
+                const comunidade = await transacao.comunidade.findUnique({
+                    where: {
+                        id: comunidadeId
+                    },
+                    select: {
+                        id: true,
+                    }
+                });
+
+                const membro = await transacao.comunidade_usuarios.findUnique({
+                    where: {
+                        comunidade_id_usuario_id: {
+                            comunidade_id: comunidadeId,
+                            usuario_id: id
+                        }
+                    }
+                });
+
+                const membroLogado = await transacao.comunidade_usuarios.findUnique({
+                    where: {
+                        comunidade_id_usuario_id: {
+                            comunidade_id: comunidadeId,
+                            usuario_id: usuarioLogadoId
+                        }
+                    },
+                    select: {
+                        tipo_funcao: true
+                    }
+                });
+
+                if (!membro) {
+                    throw new BadRequestException(
+                        'Usuário não pertence a esta comunidade'
+                    );
+                }
+
+                if (!comunidade) {
+                    throw new NotFoundException(
+                        "Comunidade não encontrada"
+                    );
+                }
+
+                if (!usuario) {
+                    throw new NotFoundException(
+                        'Usuário não encontrado'
+                    );
+                }
+
+                if (!usuarioLogado) {
+                    throw new NotFoundException(
+                        'Usuário logado não encontrado'
+                    );
+                }
+
+                if (usuarioLogado.desativado_em !== null) {
+                    throw new ForbiddenException(
+                        'Sua conta está desativada'
+                    );
+                }
+
+                if (membroLogado?.tipo_funcao !== 'admin') {
+                    throw new ForbiddenException(
+                        'Somente administradores podem promover membros'
+                    );
+                }
+
+                if (usuario.desativado_em !== null) {
+                    throw new BadRequestException(
+                        'Não é possível promover um usuário desativado'
+                    );
+                }
+
+                if (usuarioLogado?.comunidade_usuarios?.[0]?.tipo_funcao !== "admin") {
+                    throw new BadRequestException(
+                        "Você não tem permissão para promover"
+                    );
+                }
+
+                if (membro.tipo_funcao === 'admin') {
+                    throw new BadRequestException(
+                        'Usuário já é um administrador'
+                    );
+                }
+
+                const promocao = new Date();
+
+                await transacao.comunidade_usuarios.update({
+                    where: {
+                        comunidade_id_usuario_id: {
+                            comunidade_id: comunidadeId,
+                            usuario_id: id
+                        }
+                    },
+                    data: {
+                        tipo_funcao: "admin",
+                        promovido_em: promocao
+                    },
+                    select: {
+                        comunidade_id: true,
+                        usuario_id: true,
+                        tipo_funcao: true,
+                        promovido_em: true
+                    }
+                });
+            }
+        );
+
+        return promover;
     }
 }

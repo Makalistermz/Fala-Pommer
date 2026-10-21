@@ -1289,11 +1289,13 @@
 }
 
 .dados-comunidade__membro {
+    position: relative;
     min-width: 0;
     min-height: 52px;
     padding: 10px 14px;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
     border-radius: 10px;
     cursor: pointer;
@@ -1506,6 +1508,51 @@
 
 .modal-comunidade__janela--adicionar-pessoa {
     grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+}
+
+.opcoes-informacao__usuarios-comunidade {
+    position: static;
+    flex: 0 0 100%;                /* ocupa a linha inteira abaixo do usuário */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+    padding: 6px;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    cursor: default;
+}
+
+.opcao-informacao__usuario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #344054;
+    font-family: var(--fonte-dm-sans, sans-serif);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 160ms ease;
+}
+
+.opcao-informacao__usuario:hover {
+    background: #eef5ff;
+}
+
+.opcao-informacao__usuario.remover__comunidade {
+    color: var(--vermelho, #d92d20);
+}
+
+.opcao-informacao__usuario.remover__comunidade:hover {
+    background: #fff5f5;
 }
 
 html.tema-escuro:not(.alto-contraste) .modal-dados-comunidade {
@@ -1941,6 +1988,27 @@ html.tema-escuro:not(.alto-contraste) .comunidades-acoes__icone {
     background: var(--tema-superficie-interativa);
     color: var(--tema-destaque);
     box-shadow: inset 0 0 0 1px var(--tema-borda);
+}
+
+html.tema-escuro:not(.alto-contraste) .opcoes-informacao__usuarios-comunidade {
+    background-color: var(--tema-superficie-elevada);
+    border-color: var(--tema-borda);
+}
+
+html.tema-escuro:not(.alto-contraste) .opcao-informacao__usuario {
+    color: var(--tema-texto);
+}
+
+html.tema-escuro:not(.alto-contraste) .opcao-informacao__usuario:hover {
+    background: var(--tema-superficie-interativa);
+}
+
+html.tema-escuro:not(.alto-contraste) .opcao-informacao__usuario.remover__comunidade {
+    color: rgb(212, 74, 74);
+}
+
+html.tema-escuro:not(.alto-contraste) .opcao-informacao__usuario.remover__comunidade:hover {
+    background: #482222;
 }
 
 @keyframes carregarInput {

@@ -12,7 +12,8 @@ import {
     Req,
     UploadedFile,
     UseGuards,
-    UseInterceptors
+    UseInterceptors,
+    Delete
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -209,6 +210,23 @@ export class ComunidadesController {
             usuarioId,
             comunidadeId,
             usuarioIds,
+        );
+    }
+
+    @Delete(':conversaId/:comunidadeId/sair')
+    @UseGuards(AuthGuard)
+    @HttpCode(200)
+    sairComunidade (
+        @Param("conversaId", ParseIntPipe) conversaId: number,
+        @Param("comunidadeId", ParseIntPipe) comunidadeId: number,
+        @Req() requisicao: RequisicaoAutenticada
+    ) {
+        const usuarioLogadoId = requisicao.usuario!.sub;
+
+        return this.comunidadesService.sairComunidade(
+            usuarioLogadoId,
+            comunidadeId,
+            conversaId
         );
     }
 }

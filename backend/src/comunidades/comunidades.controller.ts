@@ -229,4 +229,20 @@ export class ComunidadesController {
             conversaId
         );
     }
+
+    @Post(':id/:comunidadeId/promover')
+    @UseGuards(AuthGuard)
+    promoverMembroComunidade(
+        @Param("comunidadeId", ParseIntPipe) comunidadeId: number,
+        @Param("id", ParseIntPipe) id: number,
+        @Req() requisicao: RequisicaoAutenticada
+    ) {
+        const usuarioLogadoId = requisicao.usuario!.sub;
+
+        return this.comunidadesService.promoverMembroComunidade(
+            id,
+            usuarioLogadoId,
+            comunidadeId
+        );
+    }
 }

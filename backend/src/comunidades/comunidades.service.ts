@@ -635,4 +635,144 @@ export class ComunidadesService {
             };
         });
     }
+
+    async sairComunidade(
+        usuarioLogadoId: number,
+        comunidadeId: number,
+        conversaId: number
+    ) {
+
+        const resultado = await this.prisma.$transaction(
+            async (transacao) => {
+                const usuarioLogado = await transacao.cadastro.findUnique({
+                    where: {
+                        id: usuarioLogadoId
+                    },
+                    select: {
+                        id: true,
+                        nome: true,
+                        tipo_usuario: true,
+                        desativado_em: true
+                    }
+                });
+
+                const conversa = await transacao.conversa.findUnique({
+                    where: {
+                        id: conversaId
+                    },
+                    select: {
+                        id: true,
+                        tipo: true,
+                        comunidade: {
+                            select: {
+                                id: true
+                            }
+                        },
+                        conversa_participante: {
+                            where: {
+                                usuario_id: usuarioLogadoId
+                            },
+                            select: {
+                                usuario_id: true
+                            }
+                        }
+                    }
+                });
+
+                const comunidade = await transacao.comunidade.findUnique({
+                    where: {
+                        id: comunidadeId
+                    },
+                    select: {
+                        id: true,
+                        ocultar_municipes: true
+                    }
+                });
+
+                if (!usuarioLogado) {
+                    throw new NotFoundException(
+                        "Usuário autenticado não encontrado."
+                    );
+                }
+
+                if (usuarioLogado.desativado_em !== null) {
+                    throw new ForbiddenException(
+                        "Você não pode sair da comunidade."
+                    );
+                }
+
+                if (!conversa) {
+                    throw new NotFoundException(
+                        "Conversa não encontrada."
+                    );
+                }
+
+                if (conversa.comunidade?.id !== comunidadeId) {
+                    throw new BadRequestException(
+                        "Esta conversa não pertence à comunidade informada."
+                    );
+                }
+
+                if (conversa.tipo !== "comunidade") {
+                    throw new BadRequestException(
+                        "Somente membros de comunidades pode usar esta ação."
+                    );
+                }
+
+                if (conversa.conversa_participante.length === 0) {
+                    throw new ForbiddenException(
+                        "Você não participa desta comunidade."
+                    );
+                }
+
+                if (!comunidade) {
+                    throw new NotFoundException(
+                        "Comunidade não encontrada"
+                    );
+                }
+
+                if (usuarioLogado.tipo_usuario === "user" && comunidade.ocultar_municipes === true) {
+                    throw new BadRequestException(
+                        "Você não tem acesso a esta ação"
+                    );
+                }
+
+                await transacao.comunidade_usuarios.delete({
+                    where: {
+                        comunidade_id_usuario_id: {
+                            comunidade_id: comunidadeId,
+                            usuario_id: usuarioLogadoId
+                        }
+                    }
+                });
+
+                await transacao.conversa_leitura.deleteMany({
+                    where: {
+                        conversa_id: conversaId,
+                        usuario_id: usuarioLogadoId
+                    }
+                });
+
+                await transacao.conversa_participante.delete({
+                    where: {
+                        conversa_id_usuario_id: {
+                            conversa_id: conversaId,
+                            usuario_id: usuarioLogadoId
+                        }
+                    }
+                });
+
+                const totalParticipantes =
+                    await this.prisma.conversa_participante.count({
+                        where: {
+                            conversa_id: conversaId
+                        }
+                    });
+
+                return totalParticipantes
+            }
+        );
+
+        return resultado;
+    }
 }

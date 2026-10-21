@@ -89,6 +89,7 @@ function ModalDadosComunidades({
     const menuComunidadeRef = useRef<HTMLDetailsElement>(null);
     const [modalSairComunidadeAberto, setModalSairComunidadeAberto] = useState(false)
     const [versaoMembros, setVersaoMembros] = useState(0);
+    const [saindoDaComunidade, setSaindoDaComunidade] = useState(false);
     const [adicionandoPessoasComunidade, setAdicionandoPessoasComunidade] = useState(false)
     const [buscarUsuariosComunidade, setBuscarUsuariosComunidade] = useState("");
     const [buscarFuncoesDosUsuariosNaComunidade, setBuscarFuncoesDosUsuariosNaComunidade] = 
@@ -468,6 +469,46 @@ function ModalDadosComunidades({
             menuComunidadeRef.current.open = false;
         }
         void contatosModalAdicionarContatoComunidade();
+    }
+
+    async function setModalConfirmarSaida(comunidadeId: number, conversaId: number) {
+        
+        if (conversaSelecionada?.tipo !== "comunidade" || saindoDaComunidade)  return;
+
+        setSaindoDaComunidade(true);
+
+        try {
+
+            const resposta = await apiFetch(`/comunidades/${conversaId}/${comunidadeId}/sair`,
+                { method: "DELETE" },
+            );
+
+            if (!resposta.ok) {
+                throw new Error(
+                    "Não foi possível sair do grupo.",
+                );
+            }
+
+            setModalSairComunidadeAberto(false);
+
+            setFeedback({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem:
+                    eAdmin
+                        ? "Você saiu da comunidade. E não será mais administrador da comunidade."
+                        : "Você saiu da comunidade e não possui mais acesso a ela.",
+            });
+
+        } catch (erro) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: `${erro}`
+            })
+        } finally {
+            setSaindoDaComunidade(false);
+        }
     }
 
     return (
@@ -1050,10 +1091,11 @@ function ModalDadosComunidades({
                         ? "Ao sair da comunidade, você deixará de ser administrador e não fará mais parte da comunidade. Tem certeza que deseja continuar?"
                         : "Ao sair, você não fará mais parte da comunidade nem verá as mensagens. Tem certeza que deseja continuar?"
                 }
+                carregando={saindoDaComunidade}
                 textoConfirmar="Sair"
                 textoCarregando="Saindo..."
                 aoCancelar={() => setModalSairComunidadeAberto(false)}
-                aoConfirmar={() => null}
+                aoConfirmar={() => setModalConfirmarSaida(comunidade.id, conversaSelecionada.id)}
             />
 
             <ModalFeedback

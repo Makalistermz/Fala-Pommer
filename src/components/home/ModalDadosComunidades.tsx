@@ -91,7 +91,7 @@ function ModalDadosComunidades({
     const [versaoMembros, setVersaoMembros] = useState(0);
     const [saindoDaComunidade, setSaindoDaComunidade] = useState(false);
     const [adicionandoPessoasComunidade, setAdicionandoPessoasComunidade] = useState(false)
-    const [informacoesUsuariosComunidade, setInformacoesUsuariosComunidade] = useState(false)
+    const [usuarioMenuAbertoId, setUsuarioMenuAbertoId] = useState<number | null>(null);
     const [buscarUsuariosComunidade, setBuscarUsuariosComunidade] = useState("");
     const [buscarFuncoesDosUsuariosNaComunidade, setBuscarFuncoesDosUsuariosNaComunidade] = 
         useState<FuncaoDosMembrosComunidade[]>([])
@@ -156,6 +156,7 @@ function ModalDadosComunidades({
             setAlterarNomeComunidade(comunidade?.nome_comunidade ?? "");
             setBuscarUsuariosComunidade("");
             setAdicionarNovaClass(false);
+            setUsuarioMenuAbertoId(null);
         }
     }, [aberto, comunidade]);
 
@@ -831,71 +832,82 @@ function ModalDadosComunidades({
 
                                             const tipoFuncao = funcao?.tipo_funcao ?? "membro";
 
+                                            const menuAberto = usuarioMenuAbertoId === participante.id;
+                                            const podeGerenciar =
+                                                eAdmin && participante.id !== usuario?.sub;
+
                                             return(
                                                 <li 
                                                     key={participante.id} 
-                                                    className="dados-comunidade__membro"
-                                                    onClick={() => setInformacoesUsuariosComunidade(aberto => !aberto)}
+                                                    className={`dados-comunidade__membro ${
+                                                        menuAberto ? "dados-comunidade__membro--aberto" : ""
+                                                    }`}
+                                                    onClick={() => {
+                                                        if (!podeGerenciar) return;
+                                                        setUsuarioMenuAbertoId((atual) =>
+                                                            atual === participante.id ? null : participante.id,
+                                                        );
+                                                    }}
                                                 >
-                                                    <div className="dados-comunidade__membro-avatar">
-                                                        {renderizarAvatar(
-                                                            participante.nome,
-                                                            participante.foto_perfil_url,
-                                                        )}
-                                                    </div>
-                                                    <div className="dados-comunidade__membro-dados">
-                                                        <div className="dados-comunidade__membro-cabecalho">
-                                                            <strong>{participante.nome}</strong>
-                                                            {participante.id === usuario?.sub && (
-                                                                <span className="dados-comunidade__membro-voce">
-                                                                    Você
-                                                                </span>
+                                                        <div className="dados-comunidade__membro-avatar">
+                                                            {renderizarAvatar(
+                                                                participante.nome,
+                                                                participante.foto_perfil_url,
                                                             )}
                                                         </div>
-                                                    </div>
-
-                                                    {funcao && (
-                                                        <span
-                                                            className={`
-                                                                dados-comunidade__membro-funcao 
-                                                                dados-comunidade__membro-funcao--${tipoFuncao}`
-                                                            }
+                                                        <div className="dados-comunidade__membro-dados">
+                                                            <div className="dados-comunidade__membro-cabecalho">
+                                                                <strong>{participante.nome}</strong>
+                                                                {participante.id === usuario?.sub && (
+                                                                    <span className="dados-comunidade__membro-voce">
+                                                                        Você
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        {funcao && (
+                                                            <span
+                                                                className={`
+                                                                    dados-comunidade__membro-funcao
+                                                                    dados-comunidade__membro-funcao--${tipoFuncao}`
+                                                                }
+                                                            >
+                                                                {funcao.tipo_funcao}
+                                                            </span>
+                                                        )}
+                                                    
+                                                    {menuAberto && (
+                                                        <div 
+                                                            className="opcoes-informacao__usuarios-comunidade"
                                                         >
-                                                            {funcao.tipo_funcao}
-                                                        </span>
+                                                            {tipoFuncao !== "admin" && (
+                                                                <button
+                                                                    type="button"
+                                                                    className="opcao-informacao__usuario"
+                                                                >
+                                                                    <svg width="16" height="16" fill="currentColor" className="bi bi-person-lock" viewBox="0 0 16 16">
+                                                                        <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m0 5.996V14H3s-1 0-1-1 1-4 6-4q.845.002 1.544.107a4.5 4.5 0 0 0-.803.918A11 11 0 0 0 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664zM9 13a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"/>
+                                                                    </svg>
+                                                                    <span>Promover a admin</span>
+                                                                </button>
+                                                            )}
+                                                            <button
+                                                                type="button"
+                                                                className="opcao-informacao__usuario remover__comunidade"
+                                                            >
+                                                                <svg width="16" height="16" fill="currentColor" className="bi bi-x-circle" viewBox="0 0 16 16">
+                                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                                                                </svg>
+                                                                <span>Remover da comunidade</span>
+                                                            </button>
+                                                        </div>
                                                     )}
 
                                                 </li>
                                                 
                                             );
-
                                         })}
-
-                                        {informacoesUsuariosComunidade && (
-                                            <div 
-                                                className="opcoes-informacao__usuarios-comunidade"
-                                            >
-                                                <button 
-                                                    type="button" 
-                                                    className="opcao-informacao__usuario"
-                                                >
-                                                    <svg width="16" height="16" fill="currentColor" className="bi bi-person-lock" viewBox="0 0 16 16">
-                                                        <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m0 5.996V14H3s-1 0-1-1 1-4 6-4q.845.002 1.544.107a4.5 4.5 0 0 0-.803.918A11 11 0 0 0 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664zM9 13a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1"/>
-                                                    </svg>
-                                                    <span>Promover a admin</span>
-                                                </button>
-                                                <button 
-                                                    type="button"
-                                                    className="opcao-informacao__usuario remover__comunidade"
-                                                >
-                                                    <svg width="16" height="16" fill="currentColor" className="bi bi-x-circle" viewBox="0 0 16 16">
-                                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
-                                                    </svg>
-                                                    <span>Romover da comunidade</span>
-                                                </button>
-                                            </div>
-                                        )}
                                     </ul>
                                 ) : (
                                     <p className="dados-comunidade__membros-vazio">

@@ -88,6 +88,7 @@ function ModalDadosComunidades({
             useState<Set<number>>(new Set());
     const menuComunidadeRef = useRef<HTMLDetailsElement>(null);
     const [modalSairComunidadeAberto, setModalSairComunidadeAberto] = useState(false)
+    const [modalretirarDaComunidadeAberto, setModalretirarDaComunidadeAberto] = useState(false);
     const [versaoMembros, setVersaoMembros] = useState(0);
     const [saindoDaComunidade, setSaindoDaComunidade] = useState(false);
     const [adicionandoPessoasComunidade, setAdicionandoPessoasComunidade] = useState(false)
@@ -894,6 +895,7 @@ function ModalDadosComunidades({
                                                             <button
                                                                 type="button"
                                                                 className="opcao-informacao__usuario remover__comunidade"
+                                                                onClick={() => setModalretirarDaComunidadeAberto(true)}
                                                             >
                                                                 <svg width="16" height="16" fill="currentColor" className="bi bi-x-circle" viewBox="0 0 16 16">
                                                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
@@ -1138,6 +1140,18 @@ function ModalDadosComunidades({
                 textoCarregando="Saindo..."
                 aoCancelar={() => setModalSairComunidadeAberto(false)}
                 aoConfirmar={() => setModalConfirmarSaida(comunidade.id, conversaSelecionada.id)}
+            />
+
+            <ModalConfirmacao
+                aberto={modalretirarDaComunidadeAberto}
+                titulo="Remover este usuário da comunidade?"
+                mensagem={
+                    "Deseja realmente remover este usuário da comunidade?"
+                }
+                textoConfirmar="Remover"
+                textoCarregando="Removendo..."
+                aoCancelar={() => setModalretirarDaComunidadeAberto(false)}
+                aoConfirmar={() => null}
             />
 
             <ModalFeedback

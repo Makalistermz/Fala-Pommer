@@ -91,7 +91,7 @@ function ModalDadosComunidades({
     const [modalretirarDaComunidadeAberto, setModalretirarDaComunidadeAberto] = useState(false);
     const [versaoMembros, setVersaoMembros] = useState(0);
     const [saindoDaComunidade, setSaindoDaComunidade] = useState(false);
-    const [adicionandoPessoasComunidade, setAdicionandoPessoasComunidade] = useState(false)
+    const [adicionandoPessoasComunidade, setAdicionandoPessoasComunidade] = useState(false);
     const [usuarioMenuAbertoId, setUsuarioMenuAbertoId] = useState<number | null>(null);
     const [buscarUsuariosComunidade, setBuscarUsuariosComunidade] = useState("");
     const [buscarFuncoesDosUsuariosNaComunidade, setBuscarFuncoesDosUsuariosNaComunidade] = 
@@ -1145,9 +1145,7 @@ function ModalDadosComunidades({
             <ModalConfirmacao
                 aberto={modalretirarDaComunidadeAberto}
                 titulo="Remover este usuário da comunidade?"
-                mensagem={
-                    "Deseja realmente remover este usuário da comunidade?"
-                }
+                mensagem="Deseja realmente remover este usuário da comunidade?"
                 textoConfirmar="Remover"
                 textoCarregando="Removendo..."
                 aoCancelar={() => setModalretirarDaComunidadeAberto(false)}

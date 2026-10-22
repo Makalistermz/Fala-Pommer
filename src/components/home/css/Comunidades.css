@@ -2011,6 +2011,7 @@ html.tema-escuro:not(.alto-contraste) .opcao-informacao__usuario.remover__comuni
 
 html.tema-escuro:not(.alto-contraste) .opcao-informacao__usuario.remover__comunidade:hover {
     background: #482222;
+    color: rgb(254, 202, 202) !important;
 }
 
 @keyframes carregarInput {

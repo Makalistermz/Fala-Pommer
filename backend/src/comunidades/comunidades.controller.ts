@@ -230,6 +230,25 @@ export class ComunidadesController {
         );
     }
 
+    @Delete(':conversaId/:comunidadeId/:id/remover')
+    @UseGuards(AuthGuard)
+    @HttpCode(200)
+    removerDaComunidade(
+        @Param("conversaId", ParseIntPipe) conversaId: number,
+        @Param("comunidadeId", ParseIntPipe) comunidadeId: number,
+        @Param("id", ParseIntPipe) id: number,
+        @Req() requisicao: RequisicaoAutenticada
+    ) {
+        const usuarioLogadoId = requisicao.usuario!.sub;
+
+        return this.comunidadesService.removerDaComunidade(
+            usuarioLogadoId,
+            comunidadeId,
+            conversaId,
+            id
+        );
+    }
+
     @Post(':id/:comunidadeId/promover')
     @UseGuards(AuthGuard)
     promoverMembroComunidade(

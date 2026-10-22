@@ -1827,6 +1827,34 @@ export class ConversasService {
                 conversaId
             );
 
+        if (contexto.conversa.tipo === "comunidade") {
+            const comunidadeId = contexto.conversa.comunidade?.id;
+
+            if (!comunidadeId) {
+                throw new ForbiddenException(
+                    "Não foi possível identificar a comunidade."
+                );
+            }
+
+            const membro = await this.prisma.comunidade_usuarios.findUnique({
+                where: {
+                    comunidade_id_usuario_id: {
+                        comunidade_id: comunidadeId,
+                        usuario_id: usuarioLogadoId
+                    }
+                },
+                select: {
+                    tipo_funcao: true
+                }
+            });
+
+            if (!membro || membro.tipo_funcao !== "admin") {
+                throw new ForbiddenException(
+                    "Somente administradores podem enviar mensagens nesta comunidade."
+                );
+            }
+        }
+
         let origem: "usuario" | "setor";
 
         if (contexto.somenteLeitura) {

@@ -217,6 +217,14 @@ export interface ConversaComunidade extends Omit<ConversaGrupo, "tipo"> {
     imagem: string | null;
 }
 
+interface FuncaoDosMembrosComunidade {
+    id: number,
+    comunidade_id: number,
+    usuario_id: number,
+    tipo_funcao: string,
+    promovido_em: string
+}
+
 type Conversa = ConversaSetor | ConversaPrivada | ConversaGrupo | ConversaComunidade;
 
 interface MensagemChat {
@@ -322,6 +330,11 @@ function Home() {
         tipo: "erro" as "erro" | "sucesso",
         mensagem: "",
     });
+    const [feedback, setFeedback] = useState({
+        aberto: false,
+        tipo: "erro" as "erro" | "sucesso",
+        mensagem: "",
+    });
     const menuGrupoRef = useRef<HTMLDetailsElement>(null);
     const menuSetorRef = useRef<HTMLDetailsElement>(null);
 
@@ -388,6 +401,10 @@ function Home() {
     const [entrandoComunidade, setEntrandoComunidade] = useState(false);
     const [erroComunidade, setErroComunidade] = useState("");
     const comunidadeAbertaIdRef = useRef<number | null>(null);
+    const [
+        buscarFuncoesDosUsuariosNaComunidade, 
+        setBuscarFuncoesDosUsuariosNaComunidade
+    ] = useState<FuncaoDosMembrosComunidade[]>([])
 
     const [chatMobileAberto, setChatMobileAberto] = useState(false);
 
@@ -2912,6 +2929,13 @@ function Home() {
         return texto.toLowerCase().includes(buscaConversa.trim().toLowerCase());
     });
 
+    //verifica se o usuario logado é admin da comunidade
+    const ehAdminDaComunidade = buscarFuncoesDosUsuariosNaComunidade.some(
+        (membro) =>
+            membro.usuario_id === usuario?.sub &&
+            membro.tipo_funcao === "admin",
+    );
+
     const podeEnviarMensagem =
         conversaSelecionada !== null &&
         !(
@@ -2919,7 +2943,7 @@ function Home() {
                 conversaSelecionada.tipo === "grupo" ||
                 conversaSelecionada.tipo === "comunidade") &&
             conversaSelecionada.somenteLeitura
-        );
+        ) && (ehAdminDaComunidade);
 
     const setoresFiltrados = setores.filter((setor) => {
         const busca = buscaUsuario.trim().toLowerCase();
@@ -3331,6 +3355,32 @@ function Home() {
             }
         }
     }
+
+    useEffect(() => {
+        async function receberFuncaoUsuarioComunidade(comunidade: Comunidade) {
+            try {
+                const resposta = await apiFetch(`/comunidades/${comunidade?.id}/funcaoComunidade`)
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possivel buscar a função dos usuários na comunidade")
+                }
+
+                const resultado: FuncaoDosMembrosComunidade[] = await resposta.json();
+                setBuscarFuncoesDosUsuariosNaComunidade(resultado);
+
+            } catch (erro) {
+                setFeedback({
+                    aberto: true,
+                    tipo: "erro",
+                    mensagem: `${erro}`
+                });
+            }
+        }
+
+        if (dados?.id) {
+            void receberFuncaoUsuarioComunidade(dados)
+        }
+    }, [dados?.id])
 
     function cancelarGravacaoAudio() {
         cicloGravacaoAudioRef.current += 1;
@@ -6063,6 +6113,18 @@ function Home() {
                     ...estadoAtual,
                     aberto: false,
                 }));
+            }}
+        />
+
+        <ModalFeedback
+            aberto={feedback.aberto}
+            tipo={feedback.tipo}
+            mensagem={feedback.mensagem}
+            aoFechar={() => {
+                setFeedbackFinalizacao((estadoAtual) => ({
+                    ...estadoAtual,
+                    aberto: false,
+                }))
             }}
         />
         </main>

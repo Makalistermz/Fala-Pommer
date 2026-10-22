@@ -1554,7 +1554,7 @@
 
 .opcao-informacao__usuario.remover__comunidade:hover {
     background: #fff5f5;
-    color: rgb(254, 202, 202) !important;
+    color: rgb(180, 35, 24) !important;
 }
 
 html.tema-escuro:not(.alto-contraste) .modal-dados-comunidade {

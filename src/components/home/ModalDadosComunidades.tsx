@@ -88,9 +88,12 @@ function ModalDadosComunidades({
             useState<Set<number>>(new Set());
     const menuComunidadeRef = useRef<HTMLDetailsElement>(null);
     const [modalSairComunidadeAberto, setModalSairComunidadeAberto] = useState(false)
-    const [modalretirarDaComunidadeAberto, setModalretirarDaComunidadeAberto] = useState(false);
     const [versaoMembros, setVersaoMembros] = useState(0);
     const [saindoDaComunidade, setSaindoDaComunidade] = useState(false);
+    const [usuarioParaRemover, setUsuarioParaRemover] = useState<{
+        id: number;
+        nome: string;
+    } | null>(null);
     const [adicionandoPessoasComunidade, setAdicionandoPessoasComunidade] = useState(false);
     const [usuarioMenuAbertoId, setUsuarioMenuAbertoId] = useState<number | null>(null);
     const [buscarUsuariosComunidade, setBuscarUsuariosComunidade] = useState("");
@@ -511,6 +514,37 @@ function ModalDadosComunidades({
             })
         } finally {
             setSaindoDaComunidade(false);
+        }
+    }
+
+    async function setModalConfirmarRemocao(
+        comunidadeId: number, conversaId: number, id: number
+    ) {
+        if (conversaSelecionada?.tipo !== "comunidade")  return;
+
+        try {
+            const resposta = await apiFetch(
+                `/comunidades/${conversaId}/${comunidadeId}/${id}/remover`,
+                { method: "DELETE" }
+            );
+
+            if (!resposta.ok) {
+                throw new Error(
+                    "Não foi possível remover este usuário da comunidade",
+                );
+            }
+
+            setFeedback({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem: "Usuário removido da comunidade com sucesso!"
+            });
+        } catch (erro) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: `${erro}`
+            })
         }
     }
 
@@ -963,7 +997,11 @@ function ModalDadosComunidades({
                                                             <button
                                                                 type="button"
                                                                 className="opcao-informacao__usuario remover__comunidade"
-                                                                onClick={() => setModalretirarDaComunidadeAberto(true)}
+                                                                onClick={(evento) => {
+                                                                    evento.stopPropagation();
+                                                                    setUsuarioParaRemover({ id: participante.id, nome: participante.nome });
+                                                                    }
+                                                                }
                                                             >
                                                                 <svg width="16" height="16" fill="currentColor" className="bi bi-x-circle" viewBox="0 0 16 16">
                                                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
@@ -1211,13 +1249,20 @@ function ModalDadosComunidades({
             />
 
             <ModalConfirmacao
-                aberto={modalretirarDaComunidadeAberto}
+                aberto={usuarioParaRemover !== null}
                 titulo="Remover este usuário da comunidade?"
-                mensagem="Deseja realmente remover este usuário da comunidade?"
+                mensagem={`Deseja realmente remover ${usuarioParaRemover?.nome ?? "este usuário"} da comunidade?`}
                 textoConfirmar="Remover"
                 textoCarregando="Removendo..."
-                aoCancelar={() => setModalretirarDaComunidadeAberto(false)}
-                aoConfirmar={() => null}
+                aoCancelar={() => setUsuarioParaRemover(null)}
+                aoConfirmar={() => {
+                    if (!usuarioParaRemover) return;
+                    void setModalConfirmarRemocao(
+                        comunidade.id,
+                        conversaSelecionada.id,
+                        usuarioParaRemover.id,
+                    );
+                }}
             />
 
             <ModalFeedback

@@ -1079,6 +1079,16 @@ export class UsuariosService {
                 }
             });
 
+            await transacao.comunidade_usuarios.updateMany({
+                where: {
+                    usuario_id: id
+                },
+                data: {
+                    tipo_funcao: "membro",
+                    rebaixado_em: desativadoEm
+                }
+            });
+
             return transacao.cadastro.findUniqueOrThrow({
                 where: {
                     id

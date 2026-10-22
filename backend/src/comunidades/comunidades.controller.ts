@@ -245,4 +245,20 @@ export class ComunidadesController {
             comunidadeId
         );
     }
+
+    @Post(':id/:comunidadeId/rebaixar')
+    @UseGuards(AuthGuard)
+    rebaixarAdminComunidade(
+        @Param("comunidadeId", ParseIntPipe) comunidadeId: number,
+        @Param("id", ParseIntPipe) id: number,
+        @Req() requisicao: RequisicaoAutenticada
+    ) {
+        const usuarioLogadoId = requisicao.usuario!.sub;
+
+        return this.comunidadesService.rebaixarAdminComunidade(
+            id,
+            usuarioLogadoId,
+            comunidadeId
+        );
+    }
 }

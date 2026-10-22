@@ -776,6 +776,227 @@ export class ComunidadesService {
         return resultado;
     }
 
+    async removerDaComunidade(
+        usuarioLogadoId: number,
+        comunidadeId: number,
+        conversaId: number,
+        id: number,
+    ) {
+        const remover = await this.prisma.$transaction(
+            async (transacao) => {
+                const usuario = await transacao.cadastro.findUnique({
+                    where: {
+                        id,
+                    },
+                    select: {
+                        id: true,
+                        nome: true,
+                        tipo_usuario: true,
+                        desativado_em: true,
+                        comunidade_usuarios: {
+                            where: {
+                                comunidade_id: comunidadeId
+                            },
+                            select: {
+                                tipo_funcao: true,
+                            }
+                        }
+                    }
+                });
+
+                const usuarioLogado = await transacao.cadastro.findUnique({
+                    where: {
+                        id: usuarioLogadoId
+                    },
+                    select: {
+                        id: true,
+                        nome: true,
+                        tipo_usuario: true,
+                        desativado_em: true,
+                        comunidade_usuarios: {
+                            where: {
+                                comunidade_id: comunidadeId
+                            },
+                            select: {
+                                tipo_funcao: true,
+                            }
+                        }
+                    }
+                });
+
+                const comunidade = await transacao.comunidade.findUnique({
+                    where: {
+                        id: comunidadeId
+                    },
+                    select: {
+                        id: true,
+                        ocultar_municipes: true
+                    }
+                });
+
+                const conversa = await transacao.conversa.findUnique({
+                    where: {
+                        id: conversaId
+                    },
+                    select: {
+                        id: true,
+                        tipo: true,
+                        comunidade: {
+                            select: {
+                                id: true
+                            }
+                        },
+                        conversa_participante: {
+                            where: {
+                                usuario_id: usuarioLogadoId
+                            },
+                            select: {
+                                usuario_id: true
+                            }
+                        }
+                    }
+                });
+
+                const donoComunidade = await transacao.comunidade.findFirst({
+                    where: {
+                        id: comunidadeId,
+                        comunidade_criador_id: id
+                    },
+                    select: {
+                        comunidade_criada_em: true,
+                        comunidade_usuarios: {
+                            select: {
+                                tipo_funcao: true
+                            }
+                        }
+                    }
+                });
+
+                if (!usuarioLogado) {
+                    throw new NotFoundException(
+                        "Usuário autenticado não encontrado."
+                    );
+                }
+
+                if (usuarioLogado.desativado_em !== null) {
+                    throw new ForbiddenException(
+                        "Você não tem permissão para remover alguém"
+                    );
+                }
+
+                const funcaoSolicitante =
+                    usuarioLogado.comunidade_usuarios[0]?.tipo_funcao;
+
+                if (!funcaoSolicitante) {
+                    throw new ForbiddenException(
+                        "Você não pertence a esta comunidade."
+                    );
+                }
+
+                if (funcaoSolicitante !== "admin") {
+                    throw new ForbiddenException(
+                        "Você não tem permissão para remover membros."
+                    );
+                }
+
+                if (donoComunidade?.comunidade_usuarios?.[0]?.tipo_funcao === "admin") {
+                    throw new ForbiddenException(
+                        "Não é possível remover o criador da comunidade enquanto ele for administrador"
+                    )
+                }
+
+                if (!conversa) {
+                    throw new NotFoundException(
+                        "Conversa não encontrada."
+                    );
+                }
+
+                if (!usuario) {
+                    throw new NotFoundException(
+                        'Usuário não encontrado'
+                    );
+                }
+
+                if (conversa.comunidade?.id !== comunidadeId) {
+                    throw new BadRequestException(
+                        "Esta conversa não pertence à comunidade informada."
+                    );
+                }
+
+                if (conversa.tipo !== "comunidade") {
+                    throw new BadRequestException(
+                        "Somente admins de comunidades pode usar esta ação."
+                    );
+                }
+
+                if (conversa.conversa_participante.length === 0) {
+                    throw new ForbiddenException(
+                        "Você não participa desta comunidade."
+                    );
+                }
+
+                if (!comunidade) {
+                    throw new NotFoundException(
+                        "Comunidade não encontrada"
+                    );
+                }
+
+                if (usuarioLogado.tipo_usuario === "user" && comunidade.ocultar_municipes === true) {
+                    throw new BadRequestException(
+                        "Você não tem acesso a esta ação"
+                    );
+                }
+
+                if (usuario.comunidade_usuarios[0]?.tipo_funcao === "admin") {
+                    throw new BadRequestException(
+                        "Rebaixe este usuário antes de o remover"
+                    )
+                }
+
+                if (usuario.comunidade_usuarios.length === 0) {
+                    throw new NotFoundException(
+                        "Este usuário não pertence à comunidade."
+                    );
+                }
+
+                await transacao.comunidade_usuarios.delete({
+                    where: {
+                        comunidade_id_usuario_id: {
+                            comunidade_id: comunidadeId,
+                            usuario_id: id
+                        }
+                    }
+                });
+
+                await transacao.conversa_leitura.deleteMany({
+                    where: {
+                        conversa_id: conversaId,
+                        usuario_id: id
+                    }
+                });
+
+                await transacao.conversa_participante.delete({
+                    where: {
+                        conversa_id_usuario_id: {
+                            conversa_id: conversaId,
+                            usuario_id: id
+                        }
+                    }
+                });
+
+                const totalParticipantes =
+                    await transacao.conversa_participante.count({
+                        where: {
+                            conversa_id: conversaId
+                        }
+                    });
+
+                return totalParticipantes
+            }
+        );
+        return remover;
+    }
+
     async promoverMembroComunidade(
         id: number,
         usuarioLogadoId: number,

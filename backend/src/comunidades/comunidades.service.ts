@@ -932,4 +932,171 @@ export class ComunidadesService {
 
         return promover;
     }
+
+    async rebaixarAdminComunidade(
+        id: number,
+        usuarioLogadoId: number,
+        comunidadeId: number
+    ) {
+        const rebaixar = await this.prisma.$transaction(
+            async (transacao) => {
+                const usuario = await transacao.cadastro.findUnique({
+                    where: {
+                        id,
+                    },
+                    select: {
+                        id: true,
+                        nome: true,
+                        tipo_usuario: true,
+                        desativado_em: true,
+                        comunidade_usuarios: {
+                            where: {
+                                comunidade_id: comunidadeId
+                            },
+                            select: {
+                                tipo_funcao: true,
+                            }
+                        }
+                    }
+                });
+
+                const usuarioLogado = await transacao.cadastro.findUnique({
+                    where: {
+                        id: usuarioLogadoId
+                    },
+                    select: {
+                        id: true,
+                        nome: true,
+                        tipo_usuario: true,
+                        desativado_em: true,
+                        comunidade_usuarios: {
+                            where: {
+                                comunidade_id: comunidadeId
+                            },
+                            select: {
+                                tipo_funcao: true,
+                            }
+                        }
+                    }
+                });
+
+                const comunidade = await transacao.comunidade.findUnique({
+                    where: {
+                        id: comunidadeId
+                    },
+                    select: {
+                        id: true,
+                    }
+                });
+
+                const admin = await transacao.comunidade_usuarios.findUnique({
+                    where: {
+                        comunidade_id_usuario_id: {
+                            comunidade_id: comunidadeId,
+                            usuario_id: id
+                        }
+                    }
+                });
+
+                const membroLogado = await transacao.comunidade_usuarios.findUnique({
+                    where: {
+                        comunidade_id_usuario_id: {
+                            comunidade_id: comunidadeId,
+                            usuario_id: usuarioLogadoId
+                        }
+                    },
+                    select: {
+                        tipo_funcao: true
+                    }
+                });
+
+                const donoComunidade = await transacao.comunidade.findFirst({
+                    where: {
+                        id: comunidadeId,
+                        comunidade_criador_id: id
+                    },
+                    select: {
+                        comunidade_criada_em: true
+                    }
+                });
+
+                if (!admin) {
+                    throw new BadRequestException(
+                        'Usuário não pertence a esta comunidade'
+                    );
+                }
+
+                if (!comunidade) {
+                    throw new NotFoundException(
+                        "Comunidade não encontrada"
+                    );
+                }
+
+                if (!usuario) {
+                    throw new NotFoundException(
+                        'Usuário não encontrado'
+                    );
+                }
+
+                if (!usuarioLogado) {
+                    throw new NotFoundException(
+                        'Usuário logado não encontrado'
+                    );
+                }
+
+                if (donoComunidade) {
+                    throw new ForbiddenException(
+                        "Não é possivel rebaixar o dono da comunidade"
+                    );
+                }
+
+                if (usuarioLogado.desativado_em !== null) {
+                    throw new ForbiddenException(
+                        'Sua conta está desativada'
+                    );
+                }
+
+                if (membroLogado?.tipo_funcao !== 'admin') {
+                    throw new ForbiddenException(
+                        'Somente administradores podem rebaixar admins'
+                    );
+                }
+
+                if (usuarioLogado?.comunidade_usuarios?.[0]?.tipo_funcao !== "admin") {
+                    throw new BadRequestException(
+                        "Você não tem permissão para rebaixar"
+                    );
+                }
+
+                if (admin.tipo_funcao === 'membro') {
+                    throw new BadRequestException(
+                        'Usuário é um membro, não é possivel rebaixar membros'
+                    );
+                }
+
+                const rebaixamento = new Date();
+
+                await transacao.comunidade_usuarios.update({
+                    where: {
+                        comunidade_id_usuario_id: {
+                            comunidade_id: comunidadeId,
+                            usuario_id: id
+                        }
+                    },
+                    data: {
+                        tipo_funcao: "membro",
+                        rebaixado_em: rebaixamento
+                    },
+                    select: {
+                        comunidade_id: true,
+                        usuario_id: true,
+                        tipo_funcao: true,
+                        promovido_em: true
+                    }
+                });
+            }
+        );
+
+        return rebaixar;
+    }
 }

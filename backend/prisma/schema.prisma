@@ -361,6 +361,7 @@ model comunidade_usuarios {
   usuario_id    Int
   tipo_funcao   comunidade_usuarios_tipo_funcao @default(membro)
   promovido_em  DateTime?                       @db.DateTime(0)
+  rebaixado_em  DateTime?                       @db.DateTime(0)
   comunidade    comunidade                      @relation(fields: [comunidade_id], references: [id], onUpdate: Restrict, map: "fk_cu_comunidade")
   cadastro      cadastro                        @relation(fields: [usuario_id], references: [id], onUpdate: Restrict, map: "fk_cu_usuario")
 

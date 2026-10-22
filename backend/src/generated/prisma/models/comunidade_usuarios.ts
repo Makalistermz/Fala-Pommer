@@ -44,6 +44,7 @@ export type Comunidade_usuariosMinAggregateOutputType = {
   usuario_id: number | null
   tipo_funcao: $Enums.comunidade_usuarios_tipo_funcao | null
   promovido_em: Date | null
+  rebaixado_em: Date | null
 }
 
 export type Comunidade_usuariosMaxAggregateOutputType = {
@@ -52,6 +53,7 @@ export type Comunidade_usuariosMaxAggregateOutputType = {
   usuario_id: number | null
   tipo_funcao: $Enums.comunidade_usuarios_tipo_funcao | null
   promovido_em: Date | null
+  rebaixado_em: Date | null
 }
 
 export type Comunidade_usuariosCountAggregateOutputType = {
@@ -60,6 +62,7 @@ export type Comunidade_usuariosCountAggregateOutputType = {
   usuario_id: number
   tipo_funcao: number
   promovido_em: number
+  rebaixado_em: number
   _all: number
 }
 
@@ -82,6 +85,7 @@ export type Comunidade_usuariosMinAggregateInputType = {
   usuario_id?: true
   tipo_funcao?: true
   promovido_em?: true
+  rebaixado_em?: true
 }
 
 export type Comunidade_usuariosMaxAggregateInputType = {
@@ -90,6 +94,7 @@ export type Comunidade_usuariosMaxAggregateInputType = {
   usuario_id?: true
   tipo_funcao?: true
   promovido_em?: true
+  rebaixado_em?: true
 }
 
 export type Comunidade_usuariosCountAggregateInputType = {
@@ -98,6 +103,7 @@ export type Comunidade_usuariosCountAggregateInputType = {
   usuario_id?: true
   tipo_funcao?: true
   promovido_em?: true
+  rebaixado_em?: true
   _all?: true
 }
 
@@ -193,6 +199,7 @@ export type Comunidade_usuariosGroupByOutputType = {
   usuario_id: number
   tipo_funcao: $Enums.comunidade_usuarios_tipo_funcao
   promovido_em: Date | null
+  rebaixado_em: Date | null
   _count: Comunidade_usuariosCountAggregateOutputType | null
   _avg: Comunidade_usuariosAvgAggregateOutputType | null
   _sum: Comunidade_usuariosSumAggregateOutputType | null
@@ -224,6 +231,7 @@ export type comunidade_usuariosWhereInput = {
   usuario_id?: Prisma.IntFilter<"comunidade_usuarios"> | number
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFilter<"comunidade_usuarios"> | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.DateTimeNullableFilter<"comunidade_usuarios"> | Date | string | null
+  rebaixado_em?: Prisma.DateTimeNullableFilter<"comunidade_usuarios"> | Date | string | null
   comunidade?: Prisma.XOR<Prisma.ComunidadeScalarRelationFilter, Prisma.comunidadeWhereInput>
   cadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }
@@ -234,6 +242,7 @@ export type comunidade_usuariosOrderByWithRelationInput = {
   usuario_id?: Prisma.SortOrder
   tipo_funcao?: Prisma.SortOrder
   promovido_em?: Prisma.SortOrderInput | Prisma.SortOrder
+  rebaixado_em?: Prisma.SortOrderInput | Prisma.SortOrder
   comunidade?: Prisma.comunidadeOrderByWithRelationInput
   cadastro?: Prisma.cadastroOrderByWithRelationInput
 }
@@ -248,6 +257,7 @@ export type comunidade_usuariosWhereUniqueInput = Prisma.AtLeast<{
   usuario_id?: Prisma.IntFilter<"comunidade_usuarios"> | number
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFilter<"comunidade_usuarios"> | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.DateTimeNullableFilter<"comunidade_usuarios"> | Date | string | null
+  rebaixado_em?: Prisma.DateTimeNullableFilter<"comunidade_usuarios"> | Date | string | null
   comunidade?: Prisma.XOR<Prisma.ComunidadeScalarRelationFilter, Prisma.comunidadeWhereInput>
   cadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }, "id" | "comunidade_id_usuario_id">
@@ -258,6 +268,7 @@ export type comunidade_usuariosOrderByWithAggregationInput = {
   usuario_id?: Prisma.SortOrder
   tipo_funcao?: Prisma.SortOrder
   promovido_em?: Prisma.SortOrderInput | Prisma.SortOrder
+  rebaixado_em?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.comunidade_usuariosCountOrderByAggregateInput
   _avg?: Prisma.comunidade_usuariosAvgOrderByAggregateInput
   _max?: Prisma.comunidade_usuariosMaxOrderByAggregateInput
@@ -274,11 +285,13 @@ export type comunidade_usuariosScalarWhereWithAggregatesInput = {
   usuario_id?: Prisma.IntWithAggregatesFilter<"comunidade_usuarios"> | number
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoWithAggregatesFilter<"comunidade_usuarios"> | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.DateTimeNullableWithAggregatesFilter<"comunidade_usuarios"> | Date | string | null
+  rebaixado_em?: Prisma.DateTimeNullableWithAggregatesFilter<"comunidade_usuarios"> | Date | string | null
 }
 
 export type comunidade_usuariosCreateInput = {
   tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
   comunidade: Prisma.comunidadeCreateNestedOneWithoutComunidade_usuariosInput
   cadastro: Prisma.cadastroCreateNestedOneWithoutComunidade_usuariosInput
 }
@@ -289,11 +302,13 @@ export type comunidade_usuariosUncheckedCreateInput = {
   usuario_id: number
   tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
 }
 
 export type comunidade_usuariosUpdateInput = {
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comunidade?: Prisma.comunidadeUpdateOneRequiredWithoutComunidade_usuariosNestedInput
   cadastro?: Prisma.cadastroUpdateOneRequiredWithoutComunidade_usuariosNestedInput
 }
@@ -304,6 +319,7 @@ export type comunidade_usuariosUncheckedUpdateInput = {
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type comunidade_usuariosCreateManyInput = {
@@ -312,11 +328,13 @@ export type comunidade_usuariosCreateManyInput = {
   usuario_id: number
   tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
 }
 
 export type comunidade_usuariosUpdateManyMutationInput = {
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type comunidade_usuariosUncheckedUpdateManyInput = {
@@ -325,6 +343,7 @@ export type comunidade_usuariosUncheckedUpdateManyInput = {
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type Comunidade_usuariosListRelationFilter = {
@@ -348,6 +367,7 @@ export type comunidade_usuariosCountOrderByAggregateInput = {
   usuario_id?: Prisma.SortOrder
   tipo_funcao?: Prisma.SortOrder
   promovido_em?: Prisma.SortOrder
+  rebaixado_em?: Prisma.SortOrder
 }
 
 export type comunidade_usuariosAvgOrderByAggregateInput = {
@@ -362,6 +382,7 @@ export type comunidade_usuariosMaxOrderByAggregateInput = {
   usuario_id?: Prisma.SortOrder
   tipo_funcao?: Prisma.SortOrder
   promovido_em?: Prisma.SortOrder
+  rebaixado_em?: Prisma.SortOrder
 }
 
 export type comunidade_usuariosMinOrderByAggregateInput = {
@@ -370,6 +391,7 @@ export type comunidade_usuariosMinOrderByAggregateInput = {
   usuario_id?: Prisma.SortOrder
   tipo_funcao?: Prisma.SortOrder
   promovido_em?: Prisma.SortOrder
+  rebaixado_em?: Prisma.SortOrder
 }
 
 export type comunidade_usuariosSumOrderByAggregateInput = {
@@ -469,6 +491,7 @@ export type Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput = {
 export type comunidade_usuariosCreateWithoutCadastroInput = {
   tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
   comunidade: Prisma.comunidadeCreateNestedOneWithoutComunidade_usuariosInput
 }
 
@@ -477,6 +500,7 @@ export type comunidade_usuariosUncheckedCreateWithoutCadastroInput = {
   comunidade_id: number
   tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
 }
 
 export type comunidade_usuariosCreateOrConnectWithoutCadastroInput = {
@@ -514,11 +538,13 @@ export type comunidade_usuariosScalarWhereInput = {
   usuario_id?: Prisma.IntFilter<"comunidade_usuarios"> | number
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFilter<"comunidade_usuarios"> | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.DateTimeNullableFilter<"comunidade_usuarios"> | Date | string | null
+  rebaixado_em?: Prisma.DateTimeNullableFilter<"comunidade_usuarios"> | Date | string | null
 }
 
 export type comunidade_usuariosCreateWithoutComunidadeInput = {
   tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
   cadastro: Prisma.cadastroCreateNestedOneWithoutComunidade_usuariosInput
 }
 
@@ -527,6 +553,7 @@ export type comunidade_usuariosUncheckedCreateWithoutComunidadeInput = {
   usuario_id: number
   tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
 }
 
 export type comunidade_usuariosCreateOrConnectWithoutComunidadeInput = {
@@ -560,11 +587,13 @@ export type comunidade_usuariosCreateManyCadastroInput = {
   comunidade_id: number
   tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
 }
 
 export type comunidade_usuariosUpdateWithoutCadastroInput = {
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comunidade?: Prisma.comunidadeUpdateOneRequiredWithoutComunidade_usuariosNestedInput
 }
 
@@ -573,6 +602,7 @@ export type comunidade_usuariosUncheckedUpdateWithoutCadastroInput = {
   comunidade_id?: Prisma.IntFieldUpdateOperationsInput | number
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type comunidade_usuariosUncheckedUpdateManyWithoutCadastroInput = {
@@ -580,6 +610,7 @@ export type comunidade_usuariosUncheckedUpdateManyWithoutCadastroInput = {
   comunidade_id?: Prisma.IntFieldUpdateOperationsInput | number
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type comunidade_usuariosCreateManyComunidadeInput = {
@@ -587,11 +618,13 @@ export type comunidade_usuariosCreateManyComunidadeInput = {
   usuario_id: number
   tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
 }
 
 export type comunidade_usuariosUpdateWithoutComunidadeInput = {
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cadastro?: Prisma.cadastroUpdateOneRequiredWithoutComunidade_usuariosNestedInput
 }
 
@@ -600,6 +633,7 @@ export type comunidade_usuariosUncheckedUpdateWithoutComunidadeInput = {
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type comunidade_usuariosUncheckedUpdateManyWithoutComunidadeInput = {
@@ -607,6 +641,7 @@ export type comunidade_usuariosUncheckedUpdateManyWithoutComunidadeInput = {
   usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -617,6 +652,7 @@ export type comunidade_usuariosSelect<ExtArgs extends runtime.Types.Extensions.I
   usuario_id?: boolean
   tipo_funcao?: boolean
   promovido_em?: boolean
+  rebaixado_em?: boolean
   comunidade?: boolean | Prisma.comunidadeDefaultArgs<ExtArgs>
   cadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["comunidade_usuarios"]>
@@ -629,9 +665,10 @@ export type comunidade_usuariosSelectScalar = {
   usuario_id?: boolean
   tipo_funcao?: boolean
   promovido_em?: boolean
+  rebaixado_em?: boolean
 }
 
-export type comunidade_usuariosOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "comunidade_id" | "usuario_id" | "tipo_funcao" | "promovido_em", ExtArgs["result"]["comunidade_usuarios"]>
+export type comunidade_usuariosOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "comunidade_id" | "usuario_id" | "tipo_funcao" | "promovido_em" | "rebaixado_em", ExtArgs["result"]["comunidade_usuarios"]>
 export type comunidade_usuariosInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   comunidade?: boolean | Prisma.comunidadeDefaultArgs<ExtArgs>
   cadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
@@ -649,6 +686,7 @@ export type $comunidade_usuariosPayload<ExtArgs extends runtime.Types.Extensions
     usuario_id: number
     tipo_funcao: $Enums.comunidade_usuarios_tipo_funcao
     promovido_em: Date | null
+    rebaixado_em: Date | null
   }, ExtArgs["result"]["comunidade_usuarios"]>
   composites: {}
 }
@@ -1025,6 +1063,7 @@ export interface comunidade_usuariosFieldRefs {
   readonly usuario_id: Prisma.FieldRef<"comunidade_usuarios", 'Int'>
   readonly tipo_funcao: Prisma.FieldRef<"comunidade_usuarios", 'comunidade_usuarios_tipo_funcao'>
   readonly promovido_em: Prisma.FieldRef<"comunidade_usuarios", 'DateTime'>
+  readonly rebaixado_em: Prisma.FieldRef<"comunidade_usuarios", 'DateTime'>
 }
     
 

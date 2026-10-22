@@ -488,7 +488,7 @@ function ModalDadosComunidades({
 
             if (!resposta.ok) {
                 throw new Error(
-                    "Não foi possível sair do grupo.",
+                    "Não foi possível sair da comunidade.",
                 );
             }
 

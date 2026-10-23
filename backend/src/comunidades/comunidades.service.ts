@@ -456,6 +456,9 @@ export class ComunidadesService {
 
     async listarConvites() {
         const convites = await this.prisma.convite_comunidade.findMany({
+            orderBy: {
+                criado_em: "desc"
+            },
             select: {
                 id: true,
                 comunidade_id: true,

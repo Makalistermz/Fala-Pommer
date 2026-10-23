@@ -454,6 +454,38 @@ export class ComunidadesService {
         return comunidade;
     }
 
+    async listarConvites() {
+        const convites = await this.prisma.convite_comunidade.findMany({
+            select: {
+                id: true,
+                comunidade_id: true,
+                criado_por: true,
+                expira_em: true,
+                usado: true,
+                criado_em: true,
+                comunidade: {
+                    select: {
+                        nome_comunidade: true,
+                    }
+                },
+                cadastro: {
+                    select: {
+                        nome: true,
+                    },
+                },
+            },
+        });
+
+        return convites.map((convite) => ({
+            id: convite.id,
+            comunidade: convite.comunidade?.nome_comunidade,
+            usuario: convite.cadastro?.nome,
+            expira_em: convite.expira_em,
+            usado: convite.usado,
+            criado_em: convite.criado_em
+        }));
+    }
+
     async atualizarDadosComunidade(comunidadeId: number, usuarioId: number, dados: AtualizarDadosComunidade, foto?: ArquivoFotoComunidadeUpload) {
 
         let caminhoFoto: string | undefined;

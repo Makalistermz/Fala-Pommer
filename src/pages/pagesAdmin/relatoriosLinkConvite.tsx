@@ -2,7 +2,38 @@ import { useEffect, useState } from "react";
 import { obterItensPaginacao } from "../../library/paginacao";
 import { apiFetch } from "../../services/api";
 
+type CriacaoLinkConvite = {
+    id: number,
+    comunidade: string,
+    usuario: string,
+    expira_em: string,
+    usado: boolean,
+    criado_em: string
+}
+
+
 function RelatorioLinkConvite() {
+    const [criacaoLinkConvite, setCriacaoLinkConvite] = useState<CriacaoLinkConvite[]>([])
+
+    useEffect(() => {
+        const carregar = async () => {
+            try {
+                const resposta = await apiFetch('/comunidades/convites');
+
+                if(!resposta.ok) {
+                    throw new Error("Não foi possivel buscar logs dos links de convite")
+                }
+
+                const dados = await resposta.json() as CriacaoLinkConvite[];
+
+                setCriacaoLinkConvite(dados)
+            } catch (erro) {
+                console.error(erro);
+            }
+        };
+
+        void carregar();
+    }, []);
 
     return (
         <section className="relatorios-logs" aria-labelledby="titulo-relatorios-links">
@@ -27,13 +58,15 @@ function RelatorioLinkConvite() {
                     </thead>
                     <tbody>
                         {/* Renderiza apenas os relatórios correspondentes à página atual. */}
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
+                        {criacaoLinkConvite.map((convite) => (
+                            <tr>
+                                <td>{convite.usuario}</td>
+                                <td>{convite.comunidade}</td>
+                                <td>{convite.criado_em}</td>
+                                <td>{convite.expira_em}</td>
+                                <td>{convite.usado === true ? "Sim" : "Não"}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>

@@ -1174,6 +1174,7 @@ export class ComunidadesService {
                     },
                     data: {
                         tipo_funcao: "admin",
+                        promovido_por: usuarioLogadoId,
                         promovido_em: promocao
                     },
                     select: {
@@ -1341,6 +1342,7 @@ export class ComunidadesService {
                     },
                     data: {
                         tipo_funcao: "membro",
+                        rebaixado_por: usuarioLogadoId,
                         rebaixado_em: rebaixamento
                     },
                     select: {

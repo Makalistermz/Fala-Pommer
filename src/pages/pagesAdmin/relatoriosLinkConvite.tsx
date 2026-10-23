@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { obterItensPaginacao } from "../../library/paginacao";
 import { apiFetch } from "../../services/api";
+import { formatarData } from "./relatoriosLogs";
 
 type CriacaoLinkConvite = {
     id: number,
@@ -10,10 +11,11 @@ type CriacaoLinkConvite = {
     usado: boolean,
     criado_em: string
 }
-
-
+//formatar data e hora da expiração e da criação
 function RelatorioLinkConvite() {
-    const [criacaoLinkConvite, setCriacaoLinkConvite] = useState<CriacaoLinkConvite[]>([])
+    const [criacaoLinkConvite, setCriacaoLinkConvite] = useState<CriacaoLinkConvite[]>([]);
+
+
 
     useEffect(() => {
         const carregar = async () => {
@@ -62,8 +64,8 @@ function RelatorioLinkConvite() {
                             <tr>
                                 <td>{convite.usuario}</td>
                                 <td>{convite.comunidade}</td>
-                                <td>{convite.criado_em}</td>
-                                <td>{convite.expira_em}</td>
+                                <td>{formatarData(convite.criado_em)}</td>
+                                <td>{formatarData(convite.expira_em)}</td>
                                 <td>{convite.usado === true ? "Sim" : "Não"}</td>
                             </tr>
                         ))}

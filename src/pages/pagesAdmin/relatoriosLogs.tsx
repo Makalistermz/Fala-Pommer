@@ -29,7 +29,7 @@ const NOMES_PERFIS: Record<RelatorioLog["tipoUsuario"], string> = {
     funcionario: "Funcionário",
 };
 
-function formatarData(data: string) {
+export function formatarData(data: string) {
     return FORMATADOR_DATA.format(new Date(data));
 }
 

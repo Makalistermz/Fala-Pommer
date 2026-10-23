@@ -2130,7 +2130,9 @@ export const Comunidade_usuariosScalarFieldEnum = {
   comunidade_id: 'comunidade_id',
   usuario_id: 'usuario_id',
   tipo_funcao: 'tipo_funcao',
+  promovido_por: 'promovido_por',
   promovido_em: 'promovido_em',
+  rebaixado_por: 'rebaixado_por',
   rebaixado_em: 'rebaixado_em'
 } as const
 

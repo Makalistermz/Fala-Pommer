@@ -9,47 +9,49 @@ datasource db {
 }
 
 model cadastro {
-  id                               Int                        @id @default(autoincrement())
-  nome                             String                     @db.VarChar(150)
-  data_nascimento                  DateTime                   @db.Date
-  cpf                              String                     @db.VarChar(20)
-  telefone                         String                     @db.VarChar(20)
-  email                            String                     @db.VarChar(150)
-  senha                            String                     @db.VarChar(255)
-  token_recuperacao                String?                    @db.VarChar(64)
-  token_recuperacao_expira_em      DateTime?
-  tipo_usuario                     cadastro_tipo_usuario      @default(user)
-  setor_id                         Int?
-  foto_perfil_url                  String?                    @db.VarChar(500)
-  dois_fatores_email_ativo         Boolean                    @default(false)
-  dois_fatores_email_confirmado_em DateTime?
-  secretaria_id                    Int?
-  desativado_em                    DateTime?
-  desativado_por                   Int?
-  motivo_desativacao               String?                    @db.VarChar(500)
-  versao_token                     Int                        @default(0) @db.UnsignedInt
-  avaliacoes_realizadas            avaliacao[]                @relation("AvaliadorAvaliacao")
-  responsavel_desativacao          cadastro?                  @relation("CadastroDesativadoPor", fields: [desativado_por], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_cadastro_desativado_por")
-  desativacoes_realizadas          cadastro[]                 @relation("CadastroDesativadoPor")
-  secretaria                       secretaria?                @relation(fields: [secretaria_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_secretaria")
-  setor                            setores?                   @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
-  codigo_recuperacao_2fa           codigo_recuperacao_2fa[]
-  comunidades_criadas              comunidade[]
-  comunidade_usuarios              comunidade_usuarios[]
-  finalizacoes_realizadas          conversa_finalizacao[]     @relation("ResponsavelFinalizacao")
-  conversa_leitura                 conversa_leitura[]
-  conversa_participante            conversa_participante[]
-  conversas_atendidas              conversa_setor[]           @relation("UsuarioAtendido")
-  conversa_transferencia           conversa_transferencia[]
-  convite_comunidade               convite_comunidade[]
-  desafio_login_2fa                desafio_login_2fa[]
-  erro_autenticacao                erro_autenticacao[]
-  historicos_como_administrador    historico_administrativo[] @relation("HistoricoAdministrador")
-  historicos_como_usuario_alvo     historico_administrativo[] @relation("HistoricoUsuarioAlvo")
-  login_evento                     login_evento[]
-  mensagens_enviadas               mensagem[]                 @relation("RemetenteMensagem")
-  sessoes                          sessao[]
-  tokens_push                      token_push[]
+  id                                                              Int                        @id @default(autoincrement())
+  nome                                                            String                     @db.VarChar(150)
+  data_nascimento                                                 DateTime                   @db.Date
+  cpf                                                             String                     @db.VarChar(20)
+  telefone                                                        String                     @db.VarChar(20)
+  email                                                           String                     @db.VarChar(150)
+  senha                                                           String                     @db.VarChar(255)
+  token_recuperacao                                               String?                    @db.VarChar(64)
+  token_recuperacao_expira_em                                     DateTime?
+  tipo_usuario                                                    cadastro_tipo_usuario      @default(user)
+  setor_id                                                        Int?
+  foto_perfil_url                                                 String?                    @db.VarChar(500)
+  dois_fatores_email_ativo                                        Boolean                    @default(false)
+  dois_fatores_email_confirmado_em                                DateTime?
+  secretaria_id                                                   Int?
+  desativado_em                                                   DateTime?
+  desativado_por                                                  Int?
+  motivo_desativacao                                              String?                    @db.VarChar(500)
+  versao_token                                                    Int                        @default(0) @db.UnsignedInt
+  avaliacoes_realizadas                                           avaliacao[]                @relation("AvaliadorAvaliacao")
+  responsavel_desativacao                                         cadastro?                  @relation("CadastroDesativadoPor", fields: [desativado_por], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_cadastro_desativado_por")
+  desativacoes_realizadas                                         cadastro[]                 @relation("CadastroDesativadoPor")
+  secretaria                                                      secretaria?                @relation(fields: [secretaria_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_secretaria")
+  setor                                                           setores?                   @relation(fields: [setor_id], references: [id], onUpdate: Restrict, map: "fk_cadastro_setor")
+  codigo_recuperacao_2fa                                          codigo_recuperacao_2fa[]
+  comunidades_criadas                                             comunidade[]
+  comunidade_usuarios_comunidade_usuarios_promovido_porTocadastro comunidade_usuarios[]      @relation("comunidade_usuarios_promovido_porTocadastro")
+  comunidade_usuarios_comunidade_usuarios_rebaixado_porTocadastro comunidade_usuarios[]      @relation("comunidade_usuarios_rebaixado_porTocadastro")
+  comunidade_usuarios                                             comunidade_usuarios[]
+  finalizacoes_realizadas                                         conversa_finalizacao[]     @relation("ResponsavelFinalizacao")
+  conversa_leitura                                                conversa_leitura[]
+  conversa_participante                                           conversa_participante[]
+  conversas_atendidas                                             conversa_setor[]           @relation("UsuarioAtendido")
+  conversa_transferencia                                          conversa_transferencia[]
+  convite_comunidade                                              convite_comunidade[]
+  desafio_login_2fa                                               desafio_login_2fa[]
+  erro_autenticacao                                               erro_autenticacao[]
+  historicos_como_administrador                                   historico_administrativo[] @relation("HistoricoAdministrador")
+  historicos_como_usuario_alvo                                    historico_administrativo[] @relation("HistoricoUsuarioAlvo")
+  login_evento                                                    login_evento[]
+  mensagens_enviadas                                              mensagem[]                 @relation("RemetenteMensagem")
+  sessoes                                                         sessao[]
+  tokens_push                                                     token_push[]
 
   @@index([setor_id], map: "fk_cadastro_setor")
   @@index([secretaria_id], map: "fk_cadastro_secretaria")
@@ -356,19 +358,23 @@ model convite_comunidade {
 }
 
 model comunidade_usuarios {
-  id            Int                             @id @default(autoincrement())
-  comunidade_id Int
-  usuario_id    Int
-  tipo_funcao   comunidade_usuarios_tipo_funcao @default(membro)
-  promovido_por Int?
-  promovido_em  DateTime?                       @db.DateTime(0)
-  rebaixado_por Int?
-  rebaixado_em  DateTime?                       @db.DateTime(0)
-  comunidade    comunidade                      @relation(fields: [comunidade_id], references: [id], onUpdate: Restrict, map: "fk_cu_comunidade")
-  cadastro      cadastro                        @relation(fields: [usuario_id], references: [id], onUpdate: Restrict, map: "fk_cu_usuario")
+  id                                                   Int                             @id @default(autoincrement())
+  comunidade_id                                        Int
+  usuario_id                                           Int
+  tipo_funcao                                          comunidade_usuarios_tipo_funcao @default(membro)
+  promovido_por                                        Int?
+  promovido_em                                         DateTime?                       @db.DateTime(0)
+  rebaixado_por                                        Int?
+  rebaixado_em                                         DateTime?                       @db.DateTime(0)
+  comunidade                                           comunidade                      @relation(fields: [comunidade_id], references: [id], onUpdate: Restrict, map: "fk_cu_comunidade")
+  cadastro_comunidade_usuarios_promovido_porTocadastro cadastro?                       @relation("comunidade_usuarios_promovido_porTocadastro", fields: [promovido_por], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_cu_promovido_por")
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro cadastro?                       @relation("comunidade_usuarios_rebaixado_porTocadastro", fields: [rebaixado_por], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_cu_rebaixado_por")
+  cadastro                                             cadastro                        @relation(fields: [usuario_id], references: [id], onUpdate: Restrict, map: "fk_cu_usuario")
 
   @@unique([comunidade_id, usuario_id], map: "uq_comunidade_usuario")
   @@index([usuario_id], map: "fk_cu_usuario")
+  @@index([promovido_por], map: "fk_cu_promovido_por")
+  @@index([rebaixado_por], map: "fk_cu_rebaixado_por")
 }
 
 enum desafio_2fa_finalidade {

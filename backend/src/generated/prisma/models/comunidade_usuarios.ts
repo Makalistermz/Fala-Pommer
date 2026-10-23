@@ -257,6 +257,8 @@ export type comunidade_usuariosWhereInput = {
   rebaixado_por?: Prisma.IntNullableFilter<"comunidade_usuarios"> | number | null
   rebaixado_em?: Prisma.DateTimeNullableFilter<"comunidade_usuarios"> | Date | string | null
   comunidade?: Prisma.XOR<Prisma.ComunidadeScalarRelationFilter, Prisma.comunidadeWhereInput>
+  cadastro_comunidade_usuarios_promovido_porTocadastro?: Prisma.XOR<Prisma.CadastroNullableScalarRelationFilter, Prisma.cadastroWhereInput> | null
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro?: Prisma.XOR<Prisma.CadastroNullableScalarRelationFilter, Prisma.cadastroWhereInput> | null
   cadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }
 
@@ -270,6 +272,8 @@ export type comunidade_usuariosOrderByWithRelationInput = {
   rebaixado_por?: Prisma.SortOrderInput | Prisma.SortOrder
   rebaixado_em?: Prisma.SortOrderInput | Prisma.SortOrder
   comunidade?: Prisma.comunidadeOrderByWithRelationInput
+  cadastro_comunidade_usuarios_promovido_porTocadastro?: Prisma.cadastroOrderByWithRelationInput
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro?: Prisma.cadastroOrderByWithRelationInput
   cadastro?: Prisma.cadastroOrderByWithRelationInput
 }
 
@@ -287,6 +291,8 @@ export type comunidade_usuariosWhereUniqueInput = Prisma.AtLeast<{
   rebaixado_por?: Prisma.IntNullableFilter<"comunidade_usuarios"> | number | null
   rebaixado_em?: Prisma.DateTimeNullableFilter<"comunidade_usuarios"> | Date | string | null
   comunidade?: Prisma.XOR<Prisma.ComunidadeScalarRelationFilter, Prisma.comunidadeWhereInput>
+  cadastro_comunidade_usuarios_promovido_porTocadastro?: Prisma.XOR<Prisma.CadastroNullableScalarRelationFilter, Prisma.cadastroWhereInput> | null
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro?: Prisma.XOR<Prisma.CadastroNullableScalarRelationFilter, Prisma.cadastroWhereInput> | null
   cadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }, "id" | "comunidade_id_usuario_id">
 
@@ -322,11 +328,11 @@ export type comunidade_usuariosScalarWhereWithAggregatesInput = {
 
 export type comunidade_usuariosCreateInput = {
   tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
-  promovido_por?: number | null
   promovido_em?: Date | string | null
-  rebaixado_por?: number | null
   rebaixado_em?: Date | string | null
   comunidade: Prisma.comunidadeCreateNestedOneWithoutComunidade_usuariosInput
+  cadastro_comunidade_usuarios_promovido_porTocadastro?: Prisma.cadastroCreateNestedOneWithoutComunidade_usuarios_comunidade_usuarios_promovido_porTocadastroInput
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro?: Prisma.cadastroCreateNestedOneWithoutComunidade_usuarios_comunidade_usuarios_rebaixado_porTocadastroInput
   cadastro: Prisma.cadastroCreateNestedOneWithoutComunidade_usuariosInput
 }
 
@@ -343,11 +349,11 @@ export type comunidade_usuariosUncheckedCreateInput = {
 
 export type comunidade_usuariosUpdateInput = {
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
-  promovido_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rebaixado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comunidade?: Prisma.comunidadeUpdateOneRequiredWithoutComunidade_usuariosNestedInput
+  cadastro_comunidade_usuarios_promovido_porTocadastro?: Prisma.cadastroUpdateOneWithoutComunidade_usuarios_comunidade_usuarios_promovido_porTocadastroNestedInput
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro?: Prisma.cadastroUpdateOneWithoutComunidade_usuarios_comunidade_usuarios_rebaixado_porTocadastroNestedInput
   cadastro?: Prisma.cadastroUpdateOneRequiredWithoutComunidade_usuariosNestedInput
 }
 
@@ -375,9 +381,7 @@ export type comunidade_usuariosCreateManyInput = {
 
 export type comunidade_usuariosUpdateManyMutationInput = {
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
-  promovido_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rebaixado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -456,10 +460,38 @@ export type comunidade_usuariosSumOrderByAggregateInput = {
   rebaixado_por?: Prisma.SortOrder
 }
 
+export type comunidade_usuariosCreateNestedManyWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput = {
+  create?: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput> | Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[] | Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  connectOrCreate?: Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput | Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  createMany?: Prisma.comunidade_usuariosCreateManyCadastro_comunidade_usuarios_promovido_porTocadastroInputEnvelope
+  connect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+}
+
+export type comunidade_usuariosCreateNestedManyWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput = {
+  create?: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput> | Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[] | Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  connectOrCreate?: Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput | Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  createMany?: Prisma.comunidade_usuariosCreateManyCadastro_comunidade_usuarios_rebaixado_porTocadastroInputEnvelope
+  connect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+}
+
 export type comunidade_usuariosCreateNestedManyWithoutCadastroInput = {
   create?: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastroInput> | Prisma.comunidade_usuariosCreateWithoutCadastroInput[] | Prisma.comunidade_usuariosUncheckedCreateWithoutCadastroInput[]
   connectOrCreate?: Prisma.comunidade_usuariosCreateOrConnectWithoutCadastroInput | Prisma.comunidade_usuariosCreateOrConnectWithoutCadastroInput[]
   createMany?: Prisma.comunidade_usuariosCreateManyCadastroInputEnvelope
+  connect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+}
+
+export type comunidade_usuariosUncheckedCreateNestedManyWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput = {
+  create?: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput> | Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[] | Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  connectOrCreate?: Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput | Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  createMany?: Prisma.comunidade_usuariosCreateManyCadastro_comunidade_usuarios_promovido_porTocadastroInputEnvelope
+  connect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+}
+
+export type comunidade_usuariosUncheckedCreateNestedManyWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput = {
+  create?: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput> | Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[] | Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  connectOrCreate?: Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput | Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  createMany?: Prisma.comunidade_usuariosCreateManyCadastro_comunidade_usuarios_rebaixado_porTocadastroInputEnvelope
   connect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
 }
 
@@ -468,6 +500,34 @@ export type comunidade_usuariosUncheckedCreateNestedManyWithoutCadastroInput = {
   connectOrCreate?: Prisma.comunidade_usuariosCreateOrConnectWithoutCadastroInput | Prisma.comunidade_usuariosCreateOrConnectWithoutCadastroInput[]
   createMany?: Prisma.comunidade_usuariosCreateManyCadastroInputEnvelope
   connect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+}
+
+export type comunidade_usuariosUpdateManyWithoutCadastro_comunidade_usuarios_promovido_porTocadastroNestedInput = {
+  create?: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput> | Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[] | Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  connectOrCreate?: Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput | Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  upsert?: Prisma.comunidade_usuariosUpsertWithWhereUniqueWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput | Prisma.comunidade_usuariosUpsertWithWhereUniqueWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  createMany?: Prisma.comunidade_usuariosCreateManyCadastro_comunidade_usuarios_promovido_porTocadastroInputEnvelope
+  set?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  disconnect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  delete?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  connect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  update?: Prisma.comunidade_usuariosUpdateWithWhereUniqueWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput | Prisma.comunidade_usuariosUpdateWithWhereUniqueWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  updateMany?: Prisma.comunidade_usuariosUpdateManyWithWhereWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput | Prisma.comunidade_usuariosUpdateManyWithWhereWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  deleteMany?: Prisma.comunidade_usuariosScalarWhereInput | Prisma.comunidade_usuariosScalarWhereInput[]
+}
+
+export type comunidade_usuariosUpdateManyWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroNestedInput = {
+  create?: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput> | Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[] | Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  connectOrCreate?: Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput | Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  upsert?: Prisma.comunidade_usuariosUpsertWithWhereUniqueWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput | Prisma.comunidade_usuariosUpsertWithWhereUniqueWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  createMany?: Prisma.comunidade_usuariosCreateManyCadastro_comunidade_usuarios_rebaixado_porTocadastroInputEnvelope
+  set?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  disconnect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  delete?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  connect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  update?: Prisma.comunidade_usuariosUpdateWithWhereUniqueWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput | Prisma.comunidade_usuariosUpdateWithWhereUniqueWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  updateMany?: Prisma.comunidade_usuariosUpdateManyWithWhereWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput | Prisma.comunidade_usuariosUpdateManyWithWhereWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  deleteMany?: Prisma.comunidade_usuariosScalarWhereInput | Prisma.comunidade_usuariosScalarWhereInput[]
 }
 
 export type comunidade_usuariosUpdateManyWithoutCadastroNestedInput = {
@@ -481,6 +541,34 @@ export type comunidade_usuariosUpdateManyWithoutCadastroNestedInput = {
   connect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
   update?: Prisma.comunidade_usuariosUpdateWithWhereUniqueWithoutCadastroInput | Prisma.comunidade_usuariosUpdateWithWhereUniqueWithoutCadastroInput[]
   updateMany?: Prisma.comunidade_usuariosUpdateManyWithWhereWithoutCadastroInput | Prisma.comunidade_usuariosUpdateManyWithWhereWithoutCadastroInput[]
+  deleteMany?: Prisma.comunidade_usuariosScalarWhereInput | Prisma.comunidade_usuariosScalarWhereInput[]
+}
+
+export type comunidade_usuariosUncheckedUpdateManyWithoutCadastro_comunidade_usuarios_promovido_porTocadastroNestedInput = {
+  create?: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput> | Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[] | Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  connectOrCreate?: Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput | Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  upsert?: Prisma.comunidade_usuariosUpsertWithWhereUniqueWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput | Prisma.comunidade_usuariosUpsertWithWhereUniqueWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  createMany?: Prisma.comunidade_usuariosCreateManyCadastro_comunidade_usuarios_promovido_porTocadastroInputEnvelope
+  set?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  disconnect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  delete?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  connect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  update?: Prisma.comunidade_usuariosUpdateWithWhereUniqueWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput | Prisma.comunidade_usuariosUpdateWithWhereUniqueWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  updateMany?: Prisma.comunidade_usuariosUpdateManyWithWhereWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput | Prisma.comunidade_usuariosUpdateManyWithWhereWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  deleteMany?: Prisma.comunidade_usuariosScalarWhereInput | Prisma.comunidade_usuariosScalarWhereInput[]
+}
+
+export type comunidade_usuariosUncheckedUpdateManyWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroNestedInput = {
+  create?: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput> | Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[] | Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  connectOrCreate?: Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput | Prisma.comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  upsert?: Prisma.comunidade_usuariosUpsertWithWhereUniqueWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput | Prisma.comunidade_usuariosUpsertWithWhereUniqueWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  createMany?: Prisma.comunidade_usuariosCreateManyCadastro_comunidade_usuarios_rebaixado_porTocadastroInputEnvelope
+  set?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  disconnect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  delete?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  connect?: Prisma.comunidade_usuariosWhereUniqueInput | Prisma.comunidade_usuariosWhereUniqueInput[]
+  update?: Prisma.comunidade_usuariosUpdateWithWhereUniqueWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput | Prisma.comunidade_usuariosUpdateWithWhereUniqueWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  updateMany?: Prisma.comunidade_usuariosUpdateManyWithWhereWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput | Prisma.comunidade_usuariosUpdateManyWithWhereWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
   deleteMany?: Prisma.comunidade_usuariosScalarWhereInput | Prisma.comunidade_usuariosScalarWhereInput[]
 }
 
@@ -544,13 +632,71 @@ export type Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput = {
   set?: $Enums.comunidade_usuarios_tipo_funcao
 }
 
-export type comunidade_usuariosCreateWithoutCadastroInput = {
+export type comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput = {
   tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
-  promovido_por?: number | null
+  promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
+  comunidade: Prisma.comunidadeCreateNestedOneWithoutComunidade_usuariosInput
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro?: Prisma.cadastroCreateNestedOneWithoutComunidade_usuarios_comunidade_usuarios_rebaixado_porTocadastroInput
+  cadastro: Prisma.cadastroCreateNestedOneWithoutComunidade_usuariosInput
+}
+
+export type comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput = {
+  id?: number
+  comunidade_id: number
+  usuario_id: number
+  tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Date | string | null
   rebaixado_por?: number | null
   rebaixado_em?: Date | string | null
+}
+
+export type comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput = {
+  where: Prisma.comunidade_usuariosWhereUniqueInput
+  create: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput>
+}
+
+export type comunidade_usuariosCreateManyCadastro_comunidade_usuarios_promovido_porTocadastroInputEnvelope = {
+  data: Prisma.comunidade_usuariosCreateManyCadastro_comunidade_usuarios_promovido_porTocadastroInput | Prisma.comunidade_usuariosCreateManyCadastro_comunidade_usuarios_promovido_porTocadastroInput[]
+  skipDuplicates?: boolean
+}
+
+export type comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput = {
+  tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
+  promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
   comunidade: Prisma.comunidadeCreateNestedOneWithoutComunidade_usuariosInput
+  cadastro_comunidade_usuarios_promovido_porTocadastro?: Prisma.cadastroCreateNestedOneWithoutComunidade_usuarios_comunidade_usuarios_promovido_porTocadastroInput
+  cadastro: Prisma.cadastroCreateNestedOneWithoutComunidade_usuariosInput
+}
+
+export type comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput = {
+  id?: number
+  comunidade_id: number
+  usuario_id: number
+  tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
+  promovido_por?: number | null
+  promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
+}
+
+export type comunidade_usuariosCreateOrConnectWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput = {
+  where: Prisma.comunidade_usuariosWhereUniqueInput
+  create: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput>
+}
+
+export type comunidade_usuariosCreateManyCadastro_comunidade_usuarios_rebaixado_porTocadastroInputEnvelope = {
+  data: Prisma.comunidade_usuariosCreateManyCadastro_comunidade_usuarios_rebaixado_porTocadastroInput | Prisma.comunidade_usuariosCreateManyCadastro_comunidade_usuarios_rebaixado_porTocadastroInput[]
+  skipDuplicates?: boolean
+}
+
+export type comunidade_usuariosCreateWithoutCadastroInput = {
+  tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
+  promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
+  comunidade: Prisma.comunidadeCreateNestedOneWithoutComunidade_usuariosInput
+  cadastro_comunidade_usuarios_promovido_porTocadastro?: Prisma.cadastroCreateNestedOneWithoutComunidade_usuarios_comunidade_usuarios_promovido_porTocadastroInput
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro?: Prisma.cadastroCreateNestedOneWithoutComunidade_usuarios_comunidade_usuarios_rebaixado_porTocadastroInput
 }
 
 export type comunidade_usuariosUncheckedCreateWithoutCadastroInput = {
@@ -573,20 +719,20 @@ export type comunidade_usuariosCreateManyCadastroInputEnvelope = {
   skipDuplicates?: boolean
 }
 
-export type comunidade_usuariosUpsertWithWhereUniqueWithoutCadastroInput = {
+export type comunidade_usuariosUpsertWithWhereUniqueWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput = {
   where: Prisma.comunidade_usuariosWhereUniqueInput
-  update: Prisma.XOR<Prisma.comunidade_usuariosUpdateWithoutCadastroInput, Prisma.comunidade_usuariosUncheckedUpdateWithoutCadastroInput>
-  create: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastroInput>
+  update: Prisma.XOR<Prisma.comunidade_usuariosUpdateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput, Prisma.comunidade_usuariosUncheckedUpdateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput>
+  create: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput>
 }
 
-export type comunidade_usuariosUpdateWithWhereUniqueWithoutCadastroInput = {
+export type comunidade_usuariosUpdateWithWhereUniqueWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput = {
   where: Prisma.comunidade_usuariosWhereUniqueInput
-  data: Prisma.XOR<Prisma.comunidade_usuariosUpdateWithoutCadastroInput, Prisma.comunidade_usuariosUncheckedUpdateWithoutCadastroInput>
+  data: Prisma.XOR<Prisma.comunidade_usuariosUpdateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput, Prisma.comunidade_usuariosUncheckedUpdateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput>
 }
 
-export type comunidade_usuariosUpdateManyWithWhereWithoutCadastroInput = {
+export type comunidade_usuariosUpdateManyWithWhereWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput = {
   where: Prisma.comunidade_usuariosScalarWhereInput
-  data: Prisma.XOR<Prisma.comunidade_usuariosUpdateManyMutationInput, Prisma.comunidade_usuariosUncheckedUpdateManyWithoutCadastroInput>
+  data: Prisma.XOR<Prisma.comunidade_usuariosUpdateManyMutationInput, Prisma.comunidade_usuariosUncheckedUpdateManyWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput>
 }
 
 export type comunidade_usuariosScalarWhereInput = {
@@ -603,12 +749,44 @@ export type comunidade_usuariosScalarWhereInput = {
   rebaixado_em?: Prisma.DateTimeNullableFilter<"comunidade_usuarios"> | Date | string | null
 }
 
+export type comunidade_usuariosUpsertWithWhereUniqueWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput = {
+  where: Prisma.comunidade_usuariosWhereUniqueInput
+  update: Prisma.XOR<Prisma.comunidade_usuariosUpdateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput, Prisma.comunidade_usuariosUncheckedUpdateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput>
+  create: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput>
+}
+
+export type comunidade_usuariosUpdateWithWhereUniqueWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput = {
+  where: Prisma.comunidade_usuariosWhereUniqueInput
+  data: Prisma.XOR<Prisma.comunidade_usuariosUpdateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput, Prisma.comunidade_usuariosUncheckedUpdateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput>
+}
+
+export type comunidade_usuariosUpdateManyWithWhereWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput = {
+  where: Prisma.comunidade_usuariosScalarWhereInput
+  data: Prisma.XOR<Prisma.comunidade_usuariosUpdateManyMutationInput, Prisma.comunidade_usuariosUncheckedUpdateManyWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput>
+}
+
+export type comunidade_usuariosUpsertWithWhereUniqueWithoutCadastroInput = {
+  where: Prisma.comunidade_usuariosWhereUniqueInput
+  update: Prisma.XOR<Prisma.comunidade_usuariosUpdateWithoutCadastroInput, Prisma.comunidade_usuariosUncheckedUpdateWithoutCadastroInput>
+  create: Prisma.XOR<Prisma.comunidade_usuariosCreateWithoutCadastroInput, Prisma.comunidade_usuariosUncheckedCreateWithoutCadastroInput>
+}
+
+export type comunidade_usuariosUpdateWithWhereUniqueWithoutCadastroInput = {
+  where: Prisma.comunidade_usuariosWhereUniqueInput
+  data: Prisma.XOR<Prisma.comunidade_usuariosUpdateWithoutCadastroInput, Prisma.comunidade_usuariosUncheckedUpdateWithoutCadastroInput>
+}
+
+export type comunidade_usuariosUpdateManyWithWhereWithoutCadastroInput = {
+  where: Prisma.comunidade_usuariosScalarWhereInput
+  data: Prisma.XOR<Prisma.comunidade_usuariosUpdateManyMutationInput, Prisma.comunidade_usuariosUncheckedUpdateManyWithoutCadastroInput>
+}
+
 export type comunidade_usuariosCreateWithoutComunidadeInput = {
   tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
-  promovido_por?: number | null
   promovido_em?: Date | string | null
-  rebaixado_por?: number | null
   rebaixado_em?: Date | string | null
+  cadastro_comunidade_usuarios_promovido_porTocadastro?: Prisma.cadastroCreateNestedOneWithoutComunidade_usuarios_comunidade_usuarios_promovido_porTocadastroInput
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro?: Prisma.cadastroCreateNestedOneWithoutComunidade_usuarios_comunidade_usuarios_rebaixado_porTocadastroInput
   cadastro: Prisma.cadastroCreateNestedOneWithoutComunidade_usuariosInput
 }
 
@@ -648,6 +826,26 @@ export type comunidade_usuariosUpdateManyWithWhereWithoutComunidadeInput = {
   data: Prisma.XOR<Prisma.comunidade_usuariosUpdateManyMutationInput, Prisma.comunidade_usuariosUncheckedUpdateManyWithoutComunidadeInput>
 }
 
+export type comunidade_usuariosCreateManyCadastro_comunidade_usuarios_promovido_porTocadastroInput = {
+  id?: number
+  comunidade_id: number
+  usuario_id: number
+  tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
+  promovido_em?: Date | string | null
+  rebaixado_por?: number | null
+  rebaixado_em?: Date | string | null
+}
+
+export type comunidade_usuariosCreateManyCadastro_comunidade_usuarios_rebaixado_porTocadastroInput = {
+  id?: number
+  comunidade_id: number
+  usuario_id: number
+  tipo_funcao?: $Enums.comunidade_usuarios_tipo_funcao
+  promovido_por?: number | null
+  promovido_em?: Date | string | null
+  rebaixado_em?: Date | string | null
+}
+
 export type comunidade_usuariosCreateManyCadastroInput = {
   id?: number
   comunidade_id: number
@@ -658,13 +856,71 @@ export type comunidade_usuariosCreateManyCadastroInput = {
   rebaixado_em?: Date | string | null
 }
 
-export type comunidade_usuariosUpdateWithoutCadastroInput = {
+export type comunidade_usuariosUpdateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput = {
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
-  promovido_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  comunidade?: Prisma.comunidadeUpdateOneRequiredWithoutComunidade_usuariosNestedInput
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro?: Prisma.cadastroUpdateOneWithoutComunidade_usuarios_comunidade_usuarios_rebaixado_porTocadastroNestedInput
+  cadastro?: Prisma.cadastroUpdateOneRequiredWithoutComunidade_usuariosNestedInput
+}
+
+export type comunidade_usuariosUncheckedUpdateWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  comunidade_id?: Prisma.IntFieldUpdateOperationsInput | number
+  usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
+  tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rebaixado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type comunidade_usuariosUncheckedUpdateManyWithoutCadastro_comunidade_usuarios_promovido_porTocadastroInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  comunidade_id?: Prisma.IntFieldUpdateOperationsInput | number
+  usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
+  tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
+  promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type comunidade_usuariosUpdateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput = {
+  tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
+  promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   comunidade?: Prisma.comunidadeUpdateOneRequiredWithoutComunidade_usuariosNestedInput
+  cadastro_comunidade_usuarios_promovido_porTocadastro?: Prisma.cadastroUpdateOneWithoutComunidade_usuarios_comunidade_usuarios_promovido_porTocadastroNestedInput
+  cadastro?: Prisma.cadastroUpdateOneRequiredWithoutComunidade_usuariosNestedInput
+}
+
+export type comunidade_usuariosUncheckedUpdateWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  comunidade_id?: Prisma.IntFieldUpdateOperationsInput | number
+  usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
+  tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
+  promovido_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type comunidade_usuariosUncheckedUpdateManyWithoutCadastro_comunidade_usuarios_rebaixado_porTocadastroInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  comunidade_id?: Prisma.IntFieldUpdateOperationsInput | number
+  usuario_id?: Prisma.IntFieldUpdateOperationsInput | number
+  tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
+  promovido_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type comunidade_usuariosUpdateWithoutCadastroInput = {
+  tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
+  promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  comunidade?: Prisma.comunidadeUpdateOneRequiredWithoutComunidade_usuariosNestedInput
+  cadastro_comunidade_usuarios_promovido_porTocadastro?: Prisma.cadastroUpdateOneWithoutComunidade_usuarios_comunidade_usuarios_promovido_porTocadastroNestedInput
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro?: Prisma.cadastroUpdateOneWithoutComunidade_usuarios_comunidade_usuarios_rebaixado_porTocadastroNestedInput
 }
 
 export type comunidade_usuariosUncheckedUpdateWithoutCadastroInput = {
@@ -699,10 +955,10 @@ export type comunidade_usuariosCreateManyComunidadeInput = {
 
 export type comunidade_usuariosUpdateWithoutComunidadeInput = {
   tipo_funcao?: Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldUpdateOperationsInput | $Enums.comunidade_usuarios_tipo_funcao
-  promovido_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   promovido_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  rebaixado_por?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   rebaixado_em?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cadastro_comunidade_usuarios_promovido_porTocadastro?: Prisma.cadastroUpdateOneWithoutComunidade_usuarios_comunidade_usuarios_promovido_porTocadastroNestedInput
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro?: Prisma.cadastroUpdateOneWithoutComunidade_usuarios_comunidade_usuarios_rebaixado_porTocadastroNestedInput
   cadastro?: Prisma.cadastroUpdateOneRequiredWithoutComunidade_usuariosNestedInput
 }
 
@@ -738,6 +994,8 @@ export type comunidade_usuariosSelect<ExtArgs extends runtime.Types.Extensions.I
   rebaixado_por?: boolean
   rebaixado_em?: boolean
   comunidade?: boolean | Prisma.comunidadeDefaultArgs<ExtArgs>
+  cadastro_comunidade_usuarios_promovido_porTocadastro?: boolean | Prisma.comunidade_usuarios$cadastro_comunidade_usuarios_promovido_porTocadastroArgs<ExtArgs>
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro?: boolean | Prisma.comunidade_usuarios$cadastro_comunidade_usuarios_rebaixado_porTocadastroArgs<ExtArgs>
   cadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["comunidade_usuarios"]>
 
@@ -757,6 +1015,8 @@ export type comunidade_usuariosSelectScalar = {
 export type comunidade_usuariosOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "comunidade_id" | "usuario_id" | "tipo_funcao" | "promovido_por" | "promovido_em" | "rebaixado_por" | "rebaixado_em", ExtArgs["result"]["comunidade_usuarios"]>
 export type comunidade_usuariosInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   comunidade?: boolean | Prisma.comunidadeDefaultArgs<ExtArgs>
+  cadastro_comunidade_usuarios_promovido_porTocadastro?: boolean | Prisma.comunidade_usuarios$cadastro_comunidade_usuarios_promovido_porTocadastroArgs<ExtArgs>
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro?: boolean | Prisma.comunidade_usuarios$cadastro_comunidade_usuarios_rebaixado_porTocadastroArgs<ExtArgs>
   cadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }
 
@@ -764,6 +1024,8 @@ export type $comunidade_usuariosPayload<ExtArgs extends runtime.Types.Extensions
   name: "comunidade_usuarios"
   objects: {
     comunidade: Prisma.$comunidadePayload<ExtArgs>
+    cadastro_comunidade_usuarios_promovido_porTocadastro: Prisma.$cadastroPayload<ExtArgs> | null
+    cadastro_comunidade_usuarios_rebaixado_porTocadastro: Prisma.$cadastroPayload<ExtArgs> | null
     cadastro: Prisma.$cadastroPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1116,6 +1378,8 @@ readonly fields: comunidade_usuariosFieldRefs;
 export interface Prisma__comunidade_usuariosClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   comunidade<T extends Prisma.comunidadeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.comunidadeDefaultArgs<ExtArgs>>): Prisma.Prisma__comunidadeClient<runtime.Types.Result.GetResult<Prisma.$comunidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  cadastro_comunidade_usuarios_promovido_porTocadastro<T extends Prisma.comunidade_usuarios$cadastro_comunidade_usuarios_promovido_porTocadastroArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.comunidade_usuarios$cadastro_comunidade_usuarios_promovido_porTocadastroArgs<ExtArgs>>): Prisma.Prisma__cadastroClient<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  cadastro_comunidade_usuarios_rebaixado_porTocadastro<T extends Prisma.comunidade_usuarios$cadastro_comunidade_usuarios_rebaixado_porTocadastroArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.comunidade_usuarios$cadastro_comunidade_usuarios_rebaixado_porTocadastroArgs<ExtArgs>>): Prisma.Prisma__cadastroClient<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   cadastro<T extends Prisma.cadastroDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastroDefaultArgs<ExtArgs>>): Prisma.Prisma__cadastroClient<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1499,6 +1763,44 @@ export type comunidade_usuariosDeleteManyArgs<ExtArgs extends runtime.Types.Exte
    * Limit how many comunidade_usuarios to delete.
    */
   limit?: number
+}
+
+/**
+ * comunidade_usuarios.cadastro_comunidade_usuarios_promovido_porTocadastro
+ */
+export type comunidade_usuarios$cadastro_comunidade_usuarios_promovido_porTocadastroArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the cadastro
+   */
+  select?: Prisma.cadastroSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the cadastro
+   */
+  omit?: Prisma.cadastroOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.cadastroInclude<ExtArgs> | null
+  where?: Prisma.cadastroWhereInput
+}
+
+/**
+ * comunidade_usuarios.cadastro_comunidade_usuarios_rebaixado_porTocadastro
+ */
+export type comunidade_usuarios$cadastro_comunidade_usuarios_rebaixado_porTocadastroArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the cadastro
+   */
+  select?: Prisma.cadastroSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the cadastro
+   */
+  omit?: Prisma.cadastroOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.cadastroInclude<ExtArgs> | null
+  where?: Prisma.cadastroWhereInput
 }
 
 /**

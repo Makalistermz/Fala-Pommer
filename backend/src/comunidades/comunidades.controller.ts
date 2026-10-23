@@ -189,6 +189,12 @@ export class ComunidadesController {
         );
     }
 
+    @Get('convites')
+    @UseGuards(AuthGuard)
+    listarConvites() {
+        return this.comunidadesService.listarConvites();
+    }
+
     @Get(':comunidadeId/funcaoComunidade')
     @UseGuards(AuthGuard)
     carregarFuncoesUsuario(

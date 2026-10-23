@@ -6,6 +6,7 @@ import "./css/administracao.css";
 import VisaoGeral from "./pagesAdmin/visaoGeral";
 import RelatoriosLogs from "./pagesAdmin/relatoriosLogs";
 import RelatorioError from "./pagesAdmin/relatoriosError";
+import RelatorioLinkConvite from "./pagesAdmin/relatoriosLinkConvite";
 import CriarSectors from "./pagesAdmin/criarSectors";
 import CriarUsers from "./pagesAdmin/usuarios";
 import GerenciarAvaliações from "./pagesAdmin/gerenciarAvaliacoes";
@@ -86,6 +87,17 @@ const itensMenuLogs: ItemMenu[] = [
             </svg>
         ),
     },
+    {
+        id: "relatorios-links-convite",
+        label: "Relatórios de Links",
+        title: "Relatórios de criação de links de convite",
+        icon: (
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9q-.13 0-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+                <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4 4 0 0 1-.82 1H12a3 3 0 1 0 0-6z"/>
+            </svg>
+        ),
+    },
 ];
 
 function Administracao() {
@@ -127,6 +139,9 @@ function Administracao() {
 
             case "relatorios-error":
                 return <RelatorioError />;
+
+            case "relatorios-links-convite":
+                return <RelatorioLinkConvite />;
 
             default:
                 return null;

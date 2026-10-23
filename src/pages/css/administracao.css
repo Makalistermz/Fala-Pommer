@@ -152,7 +152,31 @@
 }
 
 .admin-nav-item__toggle {
+    display: flex;
+    align-items: center;
     justify-content: space-between;
+    width: 100%;
+}
+
+.admin-nav-chevron {
+    display: inline-flex;
+    transition: transform 0.2s ease;
+}
+
+.admin-nav-chevron.aberto {
+    transform: rotate(90deg);
+}
+
+.admin-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 12px;
+    padding-left: 12px;
+}
+
+.menu-fechado .admin-nav-chevron {
+    display: none;
 }
 
 .admin-nav-item:hover {
@@ -172,6 +196,12 @@
     height: 24px;
     flex: 0 0 24px;
     place-items: center;
+}
+
+.logs-aberto-icon {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
 }
 
 .admin-nav-label {

@@ -2476,6 +2476,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
 }
 
 .relatorios-logs__tabela,
+.relatorios-logs__links,
 .avaliacoes-setores__tabela {
     width: 100%;
     min-width: 790px;
@@ -2486,6 +2487,7 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
 }
 
 .relatorios-logs__tabela th,
+.relatorios-logs__links th,
 .avaliacoes-setores__tabela th {
     padding: 13px 20px;
     background: #f6f8fc;
@@ -2497,17 +2499,20 @@ html.tema-escuro:not(.alto-contraste) .gerenciar-user__pasta--ativa::before {
 }
 
 .relatorios-logs__tabela td,
+.relatorios-logs__links td,
 .avaliacoes-setores__tabela td {
     padding: 16px 20px;
     border-top: 1px solid #edf0f5;
 }
 
 .relatorios-logs__tabela tbody tr,
+.relatorios-logs__links tbody tr,
 .avaliacoes-setores__tabela tbody tr {
     transition: background-color 160ms ease;
 }
 
 .relatorios-logs__tabela tbody tr:hover,
+.relatorios-logs__links tbody tr:hover,
 .avaliacoes-setores__tabela tbody tr:hover {
     background: #f8faff;
 }

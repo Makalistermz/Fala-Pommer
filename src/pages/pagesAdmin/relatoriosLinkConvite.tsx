@@ -15,7 +15,7 @@ function RelatorioLinkConvite() {
             </header>
 
             <div className="relatorios-logs__tabela-container">
-                <table className="relatorios-logs__tabela">
+                <table className="relatorios-logs__links">
                     <thead>
                         <tr>
                             <th scope="col">Criador</th>

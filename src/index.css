@@ -1337,6 +1337,7 @@ html.tema-escuro:not(.alto-contraste) :is(
   .usuarios__tabela,
   .setores__tabela,
   .relatorios-logs__tabela,
+  .relatorios-logs__links,
   .avaliacoes-setores__tabela
 ) {
   color: var(--tema-texto);
@@ -1347,6 +1348,7 @@ html.tema-escuro:not(.alto-contraste) :is(
   .setores__tabela th,
   .relatorios-logs__tabela th,
   .avaliacoes-setores__tabela th,
+  .relatorios-logs__links th,
   .relatorios-logs__paginacao,
   .avaliacoes-setores__paginacao
 ) {
@@ -1359,6 +1361,7 @@ html.tema-escuro:not(.alto-contraste) :is(
   .usuarios__tabela td,
   .setores__tabela td,
   .relatorios-logs__tabela td,
+  .relatorios-logs__links td,
   .avaliacoes-setores__tabela td,
   .usuarios__header,
   .usuarios__pesquisa,
@@ -1378,6 +1381,7 @@ html.tema-escuro:not(.alto-contraste) :is(
   .usuarios__tabela tbody tr:hover,
   .setores__tabela tbody tr:hover,
   .relatorios-logs__tabela tbody tr:hover,
+  .relatorios-logs__links tbody tr:hover,
   .avaliacoes-setores__tabela tbody tr:hover
 ) {
   background: var(--tema-superficie-interativa);

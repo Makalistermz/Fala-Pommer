@@ -88,6 +88,7 @@ function Administracao() {
     // Controla a abertura do menu lateral e a página atualmente selecionada.
     const [menuAberto, setMenuAberto] = useState(true);
     const [itemAtivo, setItemAtivo] = useState("visao-geral");
+    const [identificaClique, setIdentificaClique] = useState(false);
 
     // Recupera os dados usados no título da página ativa.
     const itemSelecionado = itensMenu.find(
@@ -163,6 +164,35 @@ function Administracao() {
                             <span className="admin-nav-label">{item.label}</span>
                         </button>
                     ))}
+
+                    <button
+                        key={'logs'}
+                        className={`admin-nav-item admin-nav-item__toggle`}
+                        type="button"
+                        onClick={() => {
+                            setIdentificaClique((aberto) => !aberto);
+                        }}
+                    >
+                        <div className="admin-nav-txt__and__icon">
+                            <span className="admin-nav-icon">
+                                <svg width="16" height="16" fill="currentColor" className="bi bi-bar-chart-steps" viewBox="0 0 16 16">
+                                    <path d="M.5 0a.5.5 0 0 1 .5.5v15a.5.5 0 0 1-1 0V.5A.5.5 0 0 1 .5 0M2 1.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1-.5-.5zm2 4a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5z"/>
+                                </svg>
+                            </span>
+                            <span className="admin-nav-label">Logs</span>
+                        </div>
+                        <span>
+                            {identificaClique === true 
+                                ? <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+                                </svg>
+
+                                : <svg width="16" height="16" fill="currentColor" className="bi bi-chevron-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
+                                </svg>
+                            }
+                        </span>
+                    </button>
                 </nav>
 
                 {/* Disponibiliza o retorno à página inicial do sistema. */}

@@ -115,6 +115,12 @@
     padding: 26px 14px;
 }
 
+.admin-nav-txt__and__icon {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .admin-nav-title {
     margin: 0 12px 8px;
     color: #91b2e4;
@@ -143,6 +149,10 @@
     white-space: nowrap;
     cursor: pointer;
     transition: background 180ms ease, color 180ms ease;
+}
+
+.admin-nav-item__toggle {
+    justify-content: space-between;
 }
 
 .admin-nav-item:hover {

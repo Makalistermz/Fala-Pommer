@@ -417,7 +417,8 @@ export const ModelName = {
   conversa_transferencia: 'conversa_transferencia',
   comunidade: 'comunidade',
   convite_comunidade: 'convite_comunidade',
-  comunidade_usuarios: 'comunidade_usuarios'
+  comunidade_usuarios: 'comunidade_usuarios',
+  promocoes_comunidades: 'promocoes_comunidades'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -433,7 +434,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "sessao" | "token_push" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao" | "conversa_transferencia" | "comunidade" | "convite_comunidade" | "comunidade_usuarios"
+    modelProps: "cadastro" | "sessao" | "token_push" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao" | "conversa_transferencia" | "comunidade" | "convite_comunidade" | "comunidade_usuarios" | "promocoes_comunidades"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1823,6 +1824,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    promocoes_comunidades: {
+      payload: Prisma.$promocoes_comunidadesPayload<ExtArgs>
+      fields: Prisma.promocoes_comunidadesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.promocoes_comunidadesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$promocoes_comunidadesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.promocoes_comunidadesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$promocoes_comunidadesPayload>
+        }
+        findFirst: {
+          args: Prisma.promocoes_comunidadesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$promocoes_comunidadesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.promocoes_comunidadesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$promocoes_comunidadesPayload>
+        }
+        findMany: {
+          args: Prisma.promocoes_comunidadesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$promocoes_comunidadesPayload>[]
+        }
+        create: {
+          args: Prisma.promocoes_comunidadesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$promocoes_comunidadesPayload>
+        }
+        createMany: {
+          args: Prisma.promocoes_comunidadesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.promocoes_comunidadesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$promocoes_comunidadesPayload>
+        }
+        update: {
+          args: Prisma.promocoes_comunidadesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$promocoes_comunidadesPayload>
+        }
+        deleteMany: {
+          args: Prisma.promocoes_comunidadesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.promocoes_comunidadesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.promocoes_comunidadesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$promocoes_comunidadesPayload>
+        }
+        aggregate: {
+          args: Prisma.Promocoes_comunidadesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePromocoes_comunidades>
+        }
+        groupBy: {
+          args: Prisma.promocoes_comunidadesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Promocoes_comunidadesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.promocoes_comunidadesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Promocoes_comunidadesCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2137,6 +2204,17 @@ export const Comunidade_usuariosScalarFieldEnum = {
 } as const
 
 export type Comunidade_usuariosScalarFieldEnum = (typeof Comunidade_usuariosScalarFieldEnum)[keyof typeof Comunidade_usuariosScalarFieldEnum]
+
+
+export const Promocoes_comunidadesScalarFieldEnum = {
+  id: 'id',
+  promovido_por: 'promovido_por',
+  pessoa_promovida: 'pessoa_promovida',
+  comunidade: 'comunidade',
+  promovido_em: 'promovido_em'
+} as const
+
+export type Promocoes_comunidadesScalarFieldEnum = (typeof Promocoes_comunidadesScalarFieldEnum)[keyof typeof Promocoes_comunidadesScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2542,6 +2620,7 @@ export type GlobalOmitConfig = {
   comunidade?: Prisma.comunidadeOmit
   convite_comunidade?: Prisma.convite_comunidadeOmit
   comunidade_usuarios?: Prisma.comunidade_usuariosOmit
+  promocoes_comunidades?: Prisma.promocoes_comunidadesOmit
 }
 
 /* Types for Logging */

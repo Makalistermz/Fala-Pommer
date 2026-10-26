@@ -71,7 +71,8 @@ export const ModelName = {
   conversa_transferencia: 'conversa_transferencia',
   comunidade: 'comunidade',
   convite_comunidade: 'convite_comunidade',
-  comunidade_usuarios: 'comunidade_usuarios'
+  comunidade_usuarios: 'comunidade_usuarios',
+  promocoes_comunidades: 'promocoes_comunidades'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -365,6 +366,17 @@ export const Comunidade_usuariosScalarFieldEnum = {
 } as const
 
 export type Comunidade_usuariosScalarFieldEnum = (typeof Comunidade_usuariosScalarFieldEnum)[keyof typeof Comunidade_usuariosScalarFieldEnum]
+
+
+export const Promocoes_comunidadesScalarFieldEnum = {
+  id: 'id',
+  promovido_por: 'promovido_por',
+  pessoa_promovida: 'pessoa_promovida',
+  comunidade: 'comunidade',
+  promovido_em: 'promovido_em'
+} as const
+
+export type Promocoes_comunidadesScalarFieldEnum = (typeof Promocoes_comunidadesScalarFieldEnum)[keyof typeof Promocoes_comunidadesScalarFieldEnum]
 
 
 export const SortOrder = {

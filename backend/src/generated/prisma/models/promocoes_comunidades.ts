@@ -283,7 +283,6 @@ export type promocoes_comunidadesScalarWhereWithAggregatesInput = {
 }
 
 export type promocoes_comunidadesCreateInput = {
-  id: number
   promovido_em: Date | string
   comunidade_promocoes_comunidades_comunidadeTocomunidade: Prisma.comunidadeCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_comunidadeTocomunidadeInput
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro: Prisma.cadastroCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_pessoa_promovidaTocadastroInput
@@ -291,7 +290,7 @@ export type promocoes_comunidadesCreateInput = {
 }
 
 export type promocoes_comunidadesUncheckedCreateInput = {
-  id: number
+  id?: number
   promovido_por: number
   pessoa_promovida: number
   comunidade: number
@@ -299,7 +298,6 @@ export type promocoes_comunidadesUncheckedCreateInput = {
 }
 
 export type promocoes_comunidadesUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comunidade_promocoes_comunidades_comunidadeTocomunidade?: Prisma.comunidadeUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_comunidadeTocomunidadeNestedInput
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro?: Prisma.cadastroUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_pessoa_promovidaTocadastroNestedInput
@@ -315,7 +313,7 @@ export type promocoes_comunidadesUncheckedUpdateInput = {
 }
 
 export type promocoes_comunidadesCreateManyInput = {
-  id: number
+  id?: number
   promovido_por: number
   pessoa_promovida: number
   comunidade: number
@@ -323,7 +321,6 @@ export type promocoes_comunidadesCreateManyInput = {
 }
 
 export type promocoes_comunidadesUpdateManyMutationInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -510,14 +507,13 @@ export type promocoes_comunidadesUncheckedUpdateManyWithoutComunidade_promocoes_
 }
 
 export type promocoes_comunidadesCreateWithoutCadastro_promocoes_comunidades_pessoa_promovidaTocadastroInput = {
-  id: number
   promovido_em: Date | string
   comunidade_promocoes_comunidades_comunidadeTocomunidade: Prisma.comunidadeCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_comunidadeTocomunidadeInput
   cadastro_promocoes_comunidades_promovido_porTocadastro: Prisma.cadastroCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_promovido_porTocadastroInput
 }
 
 export type promocoes_comunidadesUncheckedCreateWithoutCadastro_promocoes_comunidades_pessoa_promovidaTocadastroInput = {
-  id: number
+  id?: number
   promovido_por: number
   comunidade: number
   promovido_em: Date | string
@@ -534,14 +530,13 @@ export type promocoes_comunidadesCreateManyCadastro_promocoes_comunidades_pessoa
 }
 
 export type promocoes_comunidadesCreateWithoutCadastro_promocoes_comunidades_promovido_porTocadastroInput = {
-  id: number
   promovido_em: Date | string
   comunidade_promocoes_comunidades_comunidadeTocomunidade: Prisma.comunidadeCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_comunidadeTocomunidadeInput
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro: Prisma.cadastroCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_pessoa_promovidaTocadastroInput
 }
 
 export type promocoes_comunidadesUncheckedCreateWithoutCadastro_promocoes_comunidades_promovido_porTocadastroInput = {
-  id: number
+  id?: number
   pessoa_promovida: number
   comunidade: number
   promovido_em: Date | string
@@ -601,14 +596,13 @@ export type promocoes_comunidadesUpdateManyWithWhereWithoutCadastro_promocoes_co
 }
 
 export type promocoes_comunidadesCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
-  id: number
   promovido_em: Date | string
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro: Prisma.cadastroCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_pessoa_promovidaTocadastroInput
   cadastro_promocoes_comunidades_promovido_porTocadastro: Prisma.cadastroCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_promovido_porTocadastroInput
 }
 
 export type promocoes_comunidadesUncheckedCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
-  id: number
+  id?: number
   promovido_por: number
   pessoa_promovida: number
   promovido_em: Date | string
@@ -641,21 +635,20 @@ export type promocoes_comunidadesUpdateManyWithWhereWithoutComunidade_promocoes_
 }
 
 export type promocoes_comunidadesCreateManyCadastro_promocoes_comunidades_pessoa_promovidaTocadastroInput = {
-  id: number
+  id?: number
   promovido_por: number
   comunidade: number
   promovido_em: Date | string
 }
 
 export type promocoes_comunidadesCreateManyCadastro_promocoes_comunidades_promovido_porTocadastroInput = {
-  id: number
+  id?: number
   pessoa_promovida: number
   comunidade: number
   promovido_em: Date | string
 }
 
 export type promocoes_comunidadesUpdateWithoutCadastro_promocoes_comunidades_pessoa_promovidaTocadastroInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comunidade_promocoes_comunidades_comunidadeTocomunidade?: Prisma.comunidadeUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_comunidadeTocomunidadeNestedInput
   cadastro_promocoes_comunidades_promovido_porTocadastro?: Prisma.cadastroUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_promovido_porTocadastroNestedInput
@@ -676,7 +669,6 @@ export type promocoes_comunidadesUncheckedUpdateManyWithoutCadastro_promocoes_co
 }
 
 export type promocoes_comunidadesUpdateWithoutCadastro_promocoes_comunidades_promovido_porTocadastroInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comunidade_promocoes_comunidades_comunidadeTocomunidade?: Prisma.comunidadeUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_comunidadeTocomunidadeNestedInput
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro?: Prisma.cadastroUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_pessoa_promovidaTocadastroNestedInput
@@ -697,14 +689,13 @@ export type promocoes_comunidadesUncheckedUpdateManyWithoutCadastro_promocoes_co
 }
 
 export type promocoes_comunidadesCreateManyComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
-  id: number
+  id?: number
   promovido_por: number
   pessoa_promovida: number
   promovido_em: Date | string
 }
 
 export type promocoes_comunidadesUpdateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro?: Prisma.cadastroUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_pessoa_promovidaTocadastroNestedInput
   cadastro_promocoes_comunidades_promovido_porTocadastro?: Prisma.cadastroUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_promovido_porTocadastroNestedInput

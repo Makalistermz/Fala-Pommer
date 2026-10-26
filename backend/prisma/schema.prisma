@@ -381,7 +381,7 @@ model comunidade_usuarios {
 }
 
 model promocoes_comunidades {
-  id                                                        Int        @id
+  id                                                        Int        @id @default(autoincrement())
   promovido_por                                             Int
   pessoa_promovida                                          Int
   comunidade                                                Int

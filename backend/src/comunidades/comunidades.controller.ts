@@ -201,6 +201,12 @@ export class ComunidadesController {
         return this.comunidadesService.listarPromocoes();
     }
 
+    @Get('rebaixadoPor')
+    @UseGuards(AuthGuard)
+    listarRebaixamentos() {
+        return this.comunidadesService.listarRebaixamentos();
+    }
+
     @Get(':comunidadeId/funcaoComunidade')
     @UseGuards(AuthGuard)
     carregarFuncoesUsuario(

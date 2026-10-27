@@ -11,6 +11,7 @@ import CriarSectors from "./pagesAdmin/criarSectors";
 import CriarUsers from "./pagesAdmin/usuarios";
 import GerenciarAvaliações from "./pagesAdmin/gerenciarAvaliacoes";
 import RelatorioPromocaoComunidade from "./pagesAdmin/relatoriosPromocaoComunidade";
+import RelatorioRebaixamentoComunidade from "./pagesAdmin/relatoriosRebaixamentosComunidades";
 
 // Define os dados necessários para cada opção do menu administrativo.
 type ItemMenu = {
@@ -168,6 +169,9 @@ function Administracao() {
 
             case "relatorios-promocao-comunidade":
                 return <RelatorioPromocaoComunidade />
+
+            case "relatorios-rebaixamento-comunidade":
+                return <RelatorioRebaixamentoComunidade />
 
             default:
                 return null;

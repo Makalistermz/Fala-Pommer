@@ -30,21 +30,21 @@ export type Promocoes_comunidadesAvgAggregateOutputType = {
   id: number | null
   promovido_por: number | null
   pessoa_promovida: number | null
-  comunidade: number | null
+  comunidade_id: number | null
 }
 
 export type Promocoes_comunidadesSumAggregateOutputType = {
   id: number | null
   promovido_por: number | null
   pessoa_promovida: number | null
-  comunidade: number | null
+  comunidade_id: number | null
 }
 
 export type Promocoes_comunidadesMinAggregateOutputType = {
   id: number | null
   promovido_por: number | null
   pessoa_promovida: number | null
-  comunidade: number | null
+  comunidade_id: number | null
   promovido_em: Date | null
 }
 
@@ -52,7 +52,7 @@ export type Promocoes_comunidadesMaxAggregateOutputType = {
   id: number | null
   promovido_por: number | null
   pessoa_promovida: number | null
-  comunidade: number | null
+  comunidade_id: number | null
   promovido_em: Date | null
 }
 
@@ -60,7 +60,7 @@ export type Promocoes_comunidadesCountAggregateOutputType = {
   id: number
   promovido_por: number
   pessoa_promovida: number
-  comunidade: number
+  comunidade_id: number
   promovido_em: number
   _all: number
 }
@@ -70,21 +70,21 @@ export type Promocoes_comunidadesAvgAggregateInputType = {
   id?: true
   promovido_por?: true
   pessoa_promovida?: true
-  comunidade?: true
+  comunidade_id?: true
 }
 
 export type Promocoes_comunidadesSumAggregateInputType = {
   id?: true
   promovido_por?: true
   pessoa_promovida?: true
-  comunidade?: true
+  comunidade_id?: true
 }
 
 export type Promocoes_comunidadesMinAggregateInputType = {
   id?: true
   promovido_por?: true
   pessoa_promovida?: true
-  comunidade?: true
+  comunidade_id?: true
   promovido_em?: true
 }
 
@@ -92,7 +92,7 @@ export type Promocoes_comunidadesMaxAggregateInputType = {
   id?: true
   promovido_por?: true
   pessoa_promovida?: true
-  comunidade?: true
+  comunidade_id?: true
   promovido_em?: true
 }
 
@@ -100,7 +100,7 @@ export type Promocoes_comunidadesCountAggregateInputType = {
   id?: true
   promovido_por?: true
   pessoa_promovida?: true
-  comunidade?: true
+  comunidade_id?: true
   promovido_em?: true
   _all?: true
 }
@@ -195,7 +195,7 @@ export type Promocoes_comunidadesGroupByOutputType = {
   id: number
   promovido_por: number
   pessoa_promovida: number
-  comunidade: number
+  comunidade_id: number
   promovido_em: Date
   _count: Promocoes_comunidadesCountAggregateOutputType | null
   _avg: Promocoes_comunidadesAvgAggregateOutputType | null
@@ -226,9 +226,9 @@ export type promocoes_comunidadesWhereInput = {
   id?: Prisma.IntFilter<"promocoes_comunidades"> | number
   promovido_por?: Prisma.IntFilter<"promocoes_comunidades"> | number
   pessoa_promovida?: Prisma.IntFilter<"promocoes_comunidades"> | number
-  comunidade?: Prisma.IntFilter<"promocoes_comunidades"> | number
+  comunidade_id?: Prisma.IntFilter<"promocoes_comunidades"> | number
   promovido_em?: Prisma.DateTimeFilter<"promocoes_comunidades"> | Date | string
-  comunidade_promocoes_comunidades_comunidadeTocomunidade?: Prisma.XOR<Prisma.ComunidadeScalarRelationFilter, Prisma.comunidadeWhereInput>
+  comunidade?: Prisma.XOR<Prisma.ComunidadeScalarRelationFilter, Prisma.comunidadeWhereInput>
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
   cadastro_promocoes_comunidades_promovido_porTocadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }
@@ -237,9 +237,9 @@ export type promocoes_comunidadesOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   promovido_por?: Prisma.SortOrder
   pessoa_promovida?: Prisma.SortOrder
-  comunidade?: Prisma.SortOrder
+  comunidade_id?: Prisma.SortOrder
   promovido_em?: Prisma.SortOrder
-  comunidade_promocoes_comunidades_comunidadeTocomunidade?: Prisma.comunidadeOrderByWithRelationInput
+  comunidade?: Prisma.comunidadeOrderByWithRelationInput
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro?: Prisma.cadastroOrderByWithRelationInput
   cadastro_promocoes_comunidades_promovido_porTocadastro?: Prisma.cadastroOrderByWithRelationInput
 }
@@ -251,9 +251,9 @@ export type promocoes_comunidadesWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.promocoes_comunidadesWhereInput | Prisma.promocoes_comunidadesWhereInput[]
   promovido_por?: Prisma.IntFilter<"promocoes_comunidades"> | number
   pessoa_promovida?: Prisma.IntFilter<"promocoes_comunidades"> | number
-  comunidade?: Prisma.IntFilter<"promocoes_comunidades"> | number
+  comunidade_id?: Prisma.IntFilter<"promocoes_comunidades"> | number
   promovido_em?: Prisma.DateTimeFilter<"promocoes_comunidades"> | Date | string
-  comunidade_promocoes_comunidades_comunidadeTocomunidade?: Prisma.XOR<Prisma.ComunidadeScalarRelationFilter, Prisma.comunidadeWhereInput>
+  comunidade?: Prisma.XOR<Prisma.ComunidadeScalarRelationFilter, Prisma.comunidadeWhereInput>
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
   cadastro_promocoes_comunidades_promovido_porTocadastro?: Prisma.XOR<Prisma.CadastroScalarRelationFilter, Prisma.cadastroWhereInput>
 }, "id">
@@ -262,7 +262,7 @@ export type promocoes_comunidadesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   promovido_por?: Prisma.SortOrder
   pessoa_promovida?: Prisma.SortOrder
-  comunidade?: Prisma.SortOrder
+  comunidade_id?: Prisma.SortOrder
   promovido_em?: Prisma.SortOrder
   _count?: Prisma.promocoes_comunidadesCountOrderByAggregateInput
   _avg?: Prisma.promocoes_comunidadesAvgOrderByAggregateInput
@@ -278,13 +278,13 @@ export type promocoes_comunidadesScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"promocoes_comunidades"> | number
   promovido_por?: Prisma.IntWithAggregatesFilter<"promocoes_comunidades"> | number
   pessoa_promovida?: Prisma.IntWithAggregatesFilter<"promocoes_comunidades"> | number
-  comunidade?: Prisma.IntWithAggregatesFilter<"promocoes_comunidades"> | number
+  comunidade_id?: Prisma.IntWithAggregatesFilter<"promocoes_comunidades"> | number
   promovido_em?: Prisma.DateTimeWithAggregatesFilter<"promocoes_comunidades"> | Date | string
 }
 
 export type promocoes_comunidadesCreateInput = {
   promovido_em: Date | string
-  comunidade_promocoes_comunidades_comunidadeTocomunidade: Prisma.comunidadeCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_comunidadeTocomunidadeInput
+  comunidade: Prisma.comunidadeCreateNestedOneWithoutPromocoes_comunidadesInput
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro: Prisma.cadastroCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_pessoa_promovidaTocadastroInput
   cadastro_promocoes_comunidades_promovido_porTocadastro: Prisma.cadastroCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_promovido_porTocadastroInput
 }
@@ -293,13 +293,13 @@ export type promocoes_comunidadesUncheckedCreateInput = {
   id?: number
   promovido_por: number
   pessoa_promovida: number
-  comunidade: number
+  comunidade_id: number
   promovido_em: Date | string
 }
 
 export type promocoes_comunidadesUpdateInput = {
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  comunidade_promocoes_comunidades_comunidadeTocomunidade?: Prisma.comunidadeUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_comunidadeTocomunidadeNestedInput
+  comunidade?: Prisma.comunidadeUpdateOneRequiredWithoutPromocoes_comunidadesNestedInput
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro?: Prisma.cadastroUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_pessoa_promovidaTocadastroNestedInput
   cadastro_promocoes_comunidades_promovido_porTocadastro?: Prisma.cadastroUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_promovido_porTocadastroNestedInput
 }
@@ -308,7 +308,7 @@ export type promocoes_comunidadesUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_por?: Prisma.IntFieldUpdateOperationsInput | number
   pessoa_promovida?: Prisma.IntFieldUpdateOperationsInput | number
-  comunidade?: Prisma.IntFieldUpdateOperationsInput | number
+  comunidade_id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -316,7 +316,7 @@ export type promocoes_comunidadesCreateManyInput = {
   id?: number
   promovido_por: number
   pessoa_promovida: number
-  comunidade: number
+  comunidade_id: number
   promovido_em: Date | string
 }
 
@@ -328,7 +328,7 @@ export type promocoes_comunidadesUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_por?: Prisma.IntFieldUpdateOperationsInput | number
   pessoa_promovida?: Prisma.IntFieldUpdateOperationsInput | number
-  comunidade?: Prisma.IntFieldUpdateOperationsInput | number
+  comunidade_id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -346,7 +346,7 @@ export type promocoes_comunidadesCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   promovido_por?: Prisma.SortOrder
   pessoa_promovida?: Prisma.SortOrder
-  comunidade?: Prisma.SortOrder
+  comunidade_id?: Prisma.SortOrder
   promovido_em?: Prisma.SortOrder
 }
 
@@ -354,14 +354,14 @@ export type promocoes_comunidadesAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   promovido_por?: Prisma.SortOrder
   pessoa_promovida?: Prisma.SortOrder
-  comunidade?: Prisma.SortOrder
+  comunidade_id?: Prisma.SortOrder
 }
 
 export type promocoes_comunidadesMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   promovido_por?: Prisma.SortOrder
   pessoa_promovida?: Prisma.SortOrder
-  comunidade?: Prisma.SortOrder
+  comunidade_id?: Prisma.SortOrder
   promovido_em?: Prisma.SortOrder
 }
 
@@ -369,7 +369,7 @@ export type promocoes_comunidadesMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   promovido_por?: Prisma.SortOrder
   pessoa_promovida?: Prisma.SortOrder
-  comunidade?: Prisma.SortOrder
+  comunidade_id?: Prisma.SortOrder
   promovido_em?: Prisma.SortOrder
 }
 
@@ -377,7 +377,7 @@ export type promocoes_comunidadesSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   promovido_por?: Prisma.SortOrder
   pessoa_promovida?: Prisma.SortOrder
-  comunidade?: Prisma.SortOrder
+  comunidade_id?: Prisma.SortOrder
 }
 
 export type promocoes_comunidadesCreateNestedManyWithoutCadastro_promocoes_comunidades_pessoa_promovidaTocadastroInput = {
@@ -464,58 +464,58 @@ export type promocoes_comunidadesUncheckedUpdateManyWithoutCadastro_promocoes_co
   deleteMany?: Prisma.promocoes_comunidadesScalarWhereInput | Prisma.promocoes_comunidadesScalarWhereInput[]
 }
 
-export type promocoes_comunidadesCreateNestedManyWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
-  create?: Prisma.XOR<Prisma.promocoes_comunidadesCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput, Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput> | Prisma.promocoes_comunidadesCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[] | Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
-  connectOrCreate?: Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput | Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
-  createMany?: Prisma.promocoes_comunidadesCreateManyComunidade_promocoes_comunidades_comunidadeTocomunidadeInputEnvelope
+export type promocoes_comunidadesCreateNestedManyWithoutComunidadeInput = {
+  create?: Prisma.XOR<Prisma.promocoes_comunidadesCreateWithoutComunidadeInput, Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidadeInput> | Prisma.promocoes_comunidadesCreateWithoutComunidadeInput[] | Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidadeInput[]
+  connectOrCreate?: Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidadeInput | Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidadeInput[]
+  createMany?: Prisma.promocoes_comunidadesCreateManyComunidadeInputEnvelope
   connect?: Prisma.promocoes_comunidadesWhereUniqueInput | Prisma.promocoes_comunidadesWhereUniqueInput[]
 }
 
-export type promocoes_comunidadesUncheckedCreateNestedManyWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
-  create?: Prisma.XOR<Prisma.promocoes_comunidadesCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput, Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput> | Prisma.promocoes_comunidadesCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[] | Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
-  connectOrCreate?: Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput | Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
-  createMany?: Prisma.promocoes_comunidadesCreateManyComunidade_promocoes_comunidades_comunidadeTocomunidadeInputEnvelope
+export type promocoes_comunidadesUncheckedCreateNestedManyWithoutComunidadeInput = {
+  create?: Prisma.XOR<Prisma.promocoes_comunidadesCreateWithoutComunidadeInput, Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidadeInput> | Prisma.promocoes_comunidadesCreateWithoutComunidadeInput[] | Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidadeInput[]
+  connectOrCreate?: Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidadeInput | Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidadeInput[]
+  createMany?: Prisma.promocoes_comunidadesCreateManyComunidadeInputEnvelope
   connect?: Prisma.promocoes_comunidadesWhereUniqueInput | Prisma.promocoes_comunidadesWhereUniqueInput[]
 }
 
-export type promocoes_comunidadesUpdateManyWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeNestedInput = {
-  create?: Prisma.XOR<Prisma.promocoes_comunidadesCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput, Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput> | Prisma.promocoes_comunidadesCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[] | Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
-  connectOrCreate?: Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput | Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
-  upsert?: Prisma.promocoes_comunidadesUpsertWithWhereUniqueWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput | Prisma.promocoes_comunidadesUpsertWithWhereUniqueWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
-  createMany?: Prisma.promocoes_comunidadesCreateManyComunidade_promocoes_comunidades_comunidadeTocomunidadeInputEnvelope
+export type promocoes_comunidadesUpdateManyWithoutComunidadeNestedInput = {
+  create?: Prisma.XOR<Prisma.promocoes_comunidadesCreateWithoutComunidadeInput, Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidadeInput> | Prisma.promocoes_comunidadesCreateWithoutComunidadeInput[] | Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidadeInput[]
+  connectOrCreate?: Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidadeInput | Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidadeInput[]
+  upsert?: Prisma.promocoes_comunidadesUpsertWithWhereUniqueWithoutComunidadeInput | Prisma.promocoes_comunidadesUpsertWithWhereUniqueWithoutComunidadeInput[]
+  createMany?: Prisma.promocoes_comunidadesCreateManyComunidadeInputEnvelope
   set?: Prisma.promocoes_comunidadesWhereUniqueInput | Prisma.promocoes_comunidadesWhereUniqueInput[]
   disconnect?: Prisma.promocoes_comunidadesWhereUniqueInput | Prisma.promocoes_comunidadesWhereUniqueInput[]
   delete?: Prisma.promocoes_comunidadesWhereUniqueInput | Prisma.promocoes_comunidadesWhereUniqueInput[]
   connect?: Prisma.promocoes_comunidadesWhereUniqueInput | Prisma.promocoes_comunidadesWhereUniqueInput[]
-  update?: Prisma.promocoes_comunidadesUpdateWithWhereUniqueWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput | Prisma.promocoes_comunidadesUpdateWithWhereUniqueWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
-  updateMany?: Prisma.promocoes_comunidadesUpdateManyWithWhereWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput | Prisma.promocoes_comunidadesUpdateManyWithWhereWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
+  update?: Prisma.promocoes_comunidadesUpdateWithWhereUniqueWithoutComunidadeInput | Prisma.promocoes_comunidadesUpdateWithWhereUniqueWithoutComunidadeInput[]
+  updateMany?: Prisma.promocoes_comunidadesUpdateManyWithWhereWithoutComunidadeInput | Prisma.promocoes_comunidadesUpdateManyWithWhereWithoutComunidadeInput[]
   deleteMany?: Prisma.promocoes_comunidadesScalarWhereInput | Prisma.promocoes_comunidadesScalarWhereInput[]
 }
 
-export type promocoes_comunidadesUncheckedUpdateManyWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeNestedInput = {
-  create?: Prisma.XOR<Prisma.promocoes_comunidadesCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput, Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput> | Prisma.promocoes_comunidadesCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[] | Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
-  connectOrCreate?: Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput | Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
-  upsert?: Prisma.promocoes_comunidadesUpsertWithWhereUniqueWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput | Prisma.promocoes_comunidadesUpsertWithWhereUniqueWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
-  createMany?: Prisma.promocoes_comunidadesCreateManyComunidade_promocoes_comunidades_comunidadeTocomunidadeInputEnvelope
+export type promocoes_comunidadesUncheckedUpdateManyWithoutComunidadeNestedInput = {
+  create?: Prisma.XOR<Prisma.promocoes_comunidadesCreateWithoutComunidadeInput, Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidadeInput> | Prisma.promocoes_comunidadesCreateWithoutComunidadeInput[] | Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidadeInput[]
+  connectOrCreate?: Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidadeInput | Prisma.promocoes_comunidadesCreateOrConnectWithoutComunidadeInput[]
+  upsert?: Prisma.promocoes_comunidadesUpsertWithWhereUniqueWithoutComunidadeInput | Prisma.promocoes_comunidadesUpsertWithWhereUniqueWithoutComunidadeInput[]
+  createMany?: Prisma.promocoes_comunidadesCreateManyComunidadeInputEnvelope
   set?: Prisma.promocoes_comunidadesWhereUniqueInput | Prisma.promocoes_comunidadesWhereUniqueInput[]
   disconnect?: Prisma.promocoes_comunidadesWhereUniqueInput | Prisma.promocoes_comunidadesWhereUniqueInput[]
   delete?: Prisma.promocoes_comunidadesWhereUniqueInput | Prisma.promocoes_comunidadesWhereUniqueInput[]
   connect?: Prisma.promocoes_comunidadesWhereUniqueInput | Prisma.promocoes_comunidadesWhereUniqueInput[]
-  update?: Prisma.promocoes_comunidadesUpdateWithWhereUniqueWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput | Prisma.promocoes_comunidadesUpdateWithWhereUniqueWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
-  updateMany?: Prisma.promocoes_comunidadesUpdateManyWithWhereWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput | Prisma.promocoes_comunidadesUpdateManyWithWhereWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
+  update?: Prisma.promocoes_comunidadesUpdateWithWhereUniqueWithoutComunidadeInput | Prisma.promocoes_comunidadesUpdateWithWhereUniqueWithoutComunidadeInput[]
+  updateMany?: Prisma.promocoes_comunidadesUpdateManyWithWhereWithoutComunidadeInput | Prisma.promocoes_comunidadesUpdateManyWithWhereWithoutComunidadeInput[]
   deleteMany?: Prisma.promocoes_comunidadesScalarWhereInput | Prisma.promocoes_comunidadesScalarWhereInput[]
 }
 
 export type promocoes_comunidadesCreateWithoutCadastro_promocoes_comunidades_pessoa_promovidaTocadastroInput = {
   promovido_em: Date | string
-  comunidade_promocoes_comunidades_comunidadeTocomunidade: Prisma.comunidadeCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_comunidadeTocomunidadeInput
+  comunidade: Prisma.comunidadeCreateNestedOneWithoutPromocoes_comunidadesInput
   cadastro_promocoes_comunidades_promovido_porTocadastro: Prisma.cadastroCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_promovido_porTocadastroInput
 }
 
 export type promocoes_comunidadesUncheckedCreateWithoutCadastro_promocoes_comunidades_pessoa_promovidaTocadastroInput = {
   id?: number
   promovido_por: number
-  comunidade: number
+  comunidade_id: number
   promovido_em: Date | string
 }
 
@@ -531,14 +531,14 @@ export type promocoes_comunidadesCreateManyCadastro_promocoes_comunidades_pessoa
 
 export type promocoes_comunidadesCreateWithoutCadastro_promocoes_comunidades_promovido_porTocadastroInput = {
   promovido_em: Date | string
-  comunidade_promocoes_comunidades_comunidadeTocomunidade: Prisma.comunidadeCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_comunidadeTocomunidadeInput
+  comunidade: Prisma.comunidadeCreateNestedOneWithoutPromocoes_comunidadesInput
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro: Prisma.cadastroCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_pessoa_promovidaTocadastroInput
 }
 
 export type promocoes_comunidadesUncheckedCreateWithoutCadastro_promocoes_comunidades_promovido_porTocadastroInput = {
   id?: number
   pessoa_promovida: number
-  comunidade: number
+  comunidade_id: number
   promovido_em: Date | string
 }
 
@@ -575,7 +575,7 @@ export type promocoes_comunidadesScalarWhereInput = {
   id?: Prisma.IntFilter<"promocoes_comunidades"> | number
   promovido_por?: Prisma.IntFilter<"promocoes_comunidades"> | number
   pessoa_promovida?: Prisma.IntFilter<"promocoes_comunidades"> | number
-  comunidade?: Prisma.IntFilter<"promocoes_comunidades"> | number
+  comunidade_id?: Prisma.IntFilter<"promocoes_comunidades"> | number
   promovido_em?: Prisma.DateTimeFilter<"promocoes_comunidades"> | Date | string
 }
 
@@ -595,120 +595,120 @@ export type promocoes_comunidadesUpdateManyWithWhereWithoutCadastro_promocoes_co
   data: Prisma.XOR<Prisma.promocoes_comunidadesUpdateManyMutationInput, Prisma.promocoes_comunidadesUncheckedUpdateManyWithoutCadastro_promocoes_comunidades_promovido_porTocadastroInput>
 }
 
-export type promocoes_comunidadesCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
+export type promocoes_comunidadesCreateWithoutComunidadeInput = {
   promovido_em: Date | string
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro: Prisma.cadastroCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_pessoa_promovidaTocadastroInput
   cadastro_promocoes_comunidades_promovido_porTocadastro: Prisma.cadastroCreateNestedOneWithoutPromocoes_comunidades_promocoes_comunidades_promovido_porTocadastroInput
 }
 
-export type promocoes_comunidadesUncheckedCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
+export type promocoes_comunidadesUncheckedCreateWithoutComunidadeInput = {
   id?: number
   promovido_por: number
   pessoa_promovida: number
   promovido_em: Date | string
 }
 
-export type promocoes_comunidadesCreateOrConnectWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
+export type promocoes_comunidadesCreateOrConnectWithoutComunidadeInput = {
   where: Prisma.promocoes_comunidadesWhereUniqueInput
-  create: Prisma.XOR<Prisma.promocoes_comunidadesCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput, Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput>
+  create: Prisma.XOR<Prisma.promocoes_comunidadesCreateWithoutComunidadeInput, Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidadeInput>
 }
 
-export type promocoes_comunidadesCreateManyComunidade_promocoes_comunidades_comunidadeTocomunidadeInputEnvelope = {
-  data: Prisma.promocoes_comunidadesCreateManyComunidade_promocoes_comunidades_comunidadeTocomunidadeInput | Prisma.promocoes_comunidadesCreateManyComunidade_promocoes_comunidades_comunidadeTocomunidadeInput[]
+export type promocoes_comunidadesCreateManyComunidadeInputEnvelope = {
+  data: Prisma.promocoes_comunidadesCreateManyComunidadeInput | Prisma.promocoes_comunidadesCreateManyComunidadeInput[]
   skipDuplicates?: boolean
 }
 
-export type promocoes_comunidadesUpsertWithWhereUniqueWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
+export type promocoes_comunidadesUpsertWithWhereUniqueWithoutComunidadeInput = {
   where: Prisma.promocoes_comunidadesWhereUniqueInput
-  update: Prisma.XOR<Prisma.promocoes_comunidadesUpdateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput, Prisma.promocoes_comunidadesUncheckedUpdateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput>
-  create: Prisma.XOR<Prisma.promocoes_comunidadesCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput, Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput>
+  update: Prisma.XOR<Prisma.promocoes_comunidadesUpdateWithoutComunidadeInput, Prisma.promocoes_comunidadesUncheckedUpdateWithoutComunidadeInput>
+  create: Prisma.XOR<Prisma.promocoes_comunidadesCreateWithoutComunidadeInput, Prisma.promocoes_comunidadesUncheckedCreateWithoutComunidadeInput>
 }
 
-export type promocoes_comunidadesUpdateWithWhereUniqueWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
+export type promocoes_comunidadesUpdateWithWhereUniqueWithoutComunidadeInput = {
   where: Prisma.promocoes_comunidadesWhereUniqueInput
-  data: Prisma.XOR<Prisma.promocoes_comunidadesUpdateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput, Prisma.promocoes_comunidadesUncheckedUpdateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput>
+  data: Prisma.XOR<Prisma.promocoes_comunidadesUpdateWithoutComunidadeInput, Prisma.promocoes_comunidadesUncheckedUpdateWithoutComunidadeInput>
 }
 
-export type promocoes_comunidadesUpdateManyWithWhereWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
+export type promocoes_comunidadesUpdateManyWithWhereWithoutComunidadeInput = {
   where: Prisma.promocoes_comunidadesScalarWhereInput
-  data: Prisma.XOR<Prisma.promocoes_comunidadesUpdateManyMutationInput, Prisma.promocoes_comunidadesUncheckedUpdateManyWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput>
+  data: Prisma.XOR<Prisma.promocoes_comunidadesUpdateManyMutationInput, Prisma.promocoes_comunidadesUncheckedUpdateManyWithoutComunidadeInput>
 }
 
 export type promocoes_comunidadesCreateManyCadastro_promocoes_comunidades_pessoa_promovidaTocadastroInput = {
   id?: number
   promovido_por: number
-  comunidade: number
+  comunidade_id: number
   promovido_em: Date | string
 }
 
 export type promocoes_comunidadesCreateManyCadastro_promocoes_comunidades_promovido_porTocadastroInput = {
   id?: number
   pessoa_promovida: number
-  comunidade: number
+  comunidade_id: number
   promovido_em: Date | string
 }
 
 export type promocoes_comunidadesUpdateWithoutCadastro_promocoes_comunidades_pessoa_promovidaTocadastroInput = {
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  comunidade_promocoes_comunidades_comunidadeTocomunidade?: Prisma.comunidadeUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_comunidadeTocomunidadeNestedInput
+  comunidade?: Prisma.comunidadeUpdateOneRequiredWithoutPromocoes_comunidadesNestedInput
   cadastro_promocoes_comunidades_promovido_porTocadastro?: Prisma.cadastroUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_promovido_porTocadastroNestedInput
 }
 
 export type promocoes_comunidadesUncheckedUpdateWithoutCadastro_promocoes_comunidades_pessoa_promovidaTocadastroInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_por?: Prisma.IntFieldUpdateOperationsInput | number
-  comunidade?: Prisma.IntFieldUpdateOperationsInput | number
+  comunidade_id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type promocoes_comunidadesUncheckedUpdateManyWithoutCadastro_promocoes_comunidades_pessoa_promovidaTocadastroInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_por?: Prisma.IntFieldUpdateOperationsInput | number
-  comunidade?: Prisma.IntFieldUpdateOperationsInput | number
+  comunidade_id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type promocoes_comunidadesUpdateWithoutCadastro_promocoes_comunidades_promovido_porTocadastroInput = {
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  comunidade_promocoes_comunidades_comunidadeTocomunidade?: Prisma.comunidadeUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_comunidadeTocomunidadeNestedInput
+  comunidade?: Prisma.comunidadeUpdateOneRequiredWithoutPromocoes_comunidadesNestedInput
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro?: Prisma.cadastroUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_pessoa_promovidaTocadastroNestedInput
 }
 
 export type promocoes_comunidadesUncheckedUpdateWithoutCadastro_promocoes_comunidades_promovido_porTocadastroInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   pessoa_promovida?: Prisma.IntFieldUpdateOperationsInput | number
-  comunidade?: Prisma.IntFieldUpdateOperationsInput | number
+  comunidade_id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type promocoes_comunidadesUncheckedUpdateManyWithoutCadastro_promocoes_comunidades_promovido_porTocadastroInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   pessoa_promovida?: Prisma.IntFieldUpdateOperationsInput | number
-  comunidade?: Prisma.IntFieldUpdateOperationsInput | number
+  comunidade_id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type promocoes_comunidadesCreateManyComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
+export type promocoes_comunidadesCreateManyComunidadeInput = {
   id?: number
   promovido_por: number
   pessoa_promovida: number
   promovido_em: Date | string
 }
 
-export type promocoes_comunidadesUpdateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
+export type promocoes_comunidadesUpdateWithoutComunidadeInput = {
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro?: Prisma.cadastroUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_pessoa_promovidaTocadastroNestedInput
   cadastro_promocoes_comunidades_promovido_porTocadastro?: Prisma.cadastroUpdateOneRequiredWithoutPromocoes_comunidades_promocoes_comunidades_promovido_porTocadastroNestedInput
 }
 
-export type promocoes_comunidadesUncheckedUpdateWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
+export type promocoes_comunidadesUncheckedUpdateWithoutComunidadeInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_por?: Prisma.IntFieldUpdateOperationsInput | number
   pessoa_promovida?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type promocoes_comunidadesUncheckedUpdateManyWithoutComunidade_promocoes_comunidades_comunidadeTocomunidadeInput = {
+export type promocoes_comunidadesUncheckedUpdateManyWithoutComunidadeInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   promovido_por?: Prisma.IntFieldUpdateOperationsInput | number
   pessoa_promovida?: Prisma.IntFieldUpdateOperationsInput | number
@@ -721,9 +721,9 @@ export type promocoes_comunidadesSelect<ExtArgs extends runtime.Types.Extensions
   id?: boolean
   promovido_por?: boolean
   pessoa_promovida?: boolean
-  comunidade?: boolean
+  comunidade_id?: boolean
   promovido_em?: boolean
-  comunidade_promocoes_comunidades_comunidadeTocomunidade?: boolean | Prisma.comunidadeDefaultArgs<ExtArgs>
+  comunidade?: boolean | Prisma.comunidadeDefaultArgs<ExtArgs>
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
   cadastro_promocoes_comunidades_promovido_porTocadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["promocoes_comunidades"]>
@@ -734,13 +734,13 @@ export type promocoes_comunidadesSelectScalar = {
   id?: boolean
   promovido_por?: boolean
   pessoa_promovida?: boolean
-  comunidade?: boolean
+  comunidade_id?: boolean
   promovido_em?: boolean
 }
 
-export type promocoes_comunidadesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "promovido_por" | "pessoa_promovida" | "comunidade" | "promovido_em", ExtArgs["result"]["promocoes_comunidades"]>
+export type promocoes_comunidadesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "promovido_por" | "pessoa_promovida" | "comunidade_id" | "promovido_em", ExtArgs["result"]["promocoes_comunidades"]>
 export type promocoes_comunidadesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  comunidade_promocoes_comunidades_comunidadeTocomunidade?: boolean | Prisma.comunidadeDefaultArgs<ExtArgs>
+  comunidade?: boolean | Prisma.comunidadeDefaultArgs<ExtArgs>
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
   cadastro_promocoes_comunidades_promovido_porTocadastro?: boolean | Prisma.cadastroDefaultArgs<ExtArgs>
 }
@@ -748,7 +748,7 @@ export type promocoes_comunidadesInclude<ExtArgs extends runtime.Types.Extension
 export type $promocoes_comunidadesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "promocoes_comunidades"
   objects: {
-    comunidade_promocoes_comunidades_comunidadeTocomunidade: Prisma.$comunidadePayload<ExtArgs>
+    comunidade: Prisma.$comunidadePayload<ExtArgs>
     cadastro_promocoes_comunidades_pessoa_promovidaTocadastro: Prisma.$cadastroPayload<ExtArgs>
     cadastro_promocoes_comunidades_promovido_porTocadastro: Prisma.$cadastroPayload<ExtArgs>
   }
@@ -756,7 +756,7 @@ export type $promocoes_comunidadesPayload<ExtArgs extends runtime.Types.Extensio
     id: number
     promovido_por: number
     pessoa_promovida: number
-    comunidade: number
+    comunidade_id: number
     promovido_em: Date
   }, ExtArgs["result"]["promocoes_comunidades"]>
   composites: {}
@@ -1098,7 +1098,7 @@ readonly fields: promocoes_comunidadesFieldRefs;
  */
 export interface Prisma__promocoes_comunidadesClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  comunidade_promocoes_comunidades_comunidadeTocomunidade<T extends Prisma.comunidadeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.comunidadeDefaultArgs<ExtArgs>>): Prisma.Prisma__comunidadeClient<runtime.Types.Result.GetResult<Prisma.$comunidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  comunidade<T extends Prisma.comunidadeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.comunidadeDefaultArgs<ExtArgs>>): Prisma.Prisma__comunidadeClient<runtime.Types.Result.GetResult<Prisma.$comunidadePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   cadastro_promocoes_comunidades_pessoa_promovidaTocadastro<T extends Prisma.cadastroDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastroDefaultArgs<ExtArgs>>): Prisma.Prisma__cadastroClient<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   cadastro_promocoes_comunidades_promovido_porTocadastro<T extends Prisma.cadastroDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.cadastroDefaultArgs<ExtArgs>>): Prisma.Prisma__cadastroClient<runtime.Types.Result.GetResult<Prisma.$cadastroPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1133,7 +1133,7 @@ export interface promocoes_comunidadesFieldRefs {
   readonly id: Prisma.FieldRef<"promocoes_comunidades", 'Int'>
   readonly promovido_por: Prisma.FieldRef<"promocoes_comunidades", 'Int'>
   readonly pessoa_promovida: Prisma.FieldRef<"promocoes_comunidades", 'Int'>
-  readonly comunidade: Prisma.FieldRef<"promocoes_comunidades", 'Int'>
+  readonly comunidade_id: Prisma.FieldRef<"promocoes_comunidades", 'Int'>
   readonly promovido_em: Prisma.FieldRef<"promocoes_comunidades", 'DateTime'>
 }
     

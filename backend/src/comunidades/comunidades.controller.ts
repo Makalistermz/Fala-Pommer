@@ -195,6 +195,12 @@ export class ComunidadesController {
         return this.comunidadesService.listarConvites();
     }
 
+    @Get('promovidoPor')
+    @UseGuards(AuthGuard)
+    listarPromocoes() {
+        return this.comunidadesService.listarPromocoes();
+    }
+
     @Get(':comunidadeId/funcaoComunidade')
     @UseGuards(AuthGuard)
     carregarFuncoesUsuario(

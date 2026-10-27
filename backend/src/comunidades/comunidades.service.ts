@@ -486,6 +486,40 @@ export class ComunidadesService {
         }));
     }
 
+    async listarPromocoes() {
+        const promocoes = await this.prisma.promocoes_comunidades.findMany({
+            orderBy: { promovido_em: "desc" },
+            select: {
+                id: true,
+                promovido_em: true,
+                comunidade: {
+                    select: { id: true, nome_comunidade: true }
+                },
+                cadastro_promocoes_comunidades_promovido_porTocadastro: {
+                    select: { id: true, nome: true }
+                },
+                cadastro_promocoes_comunidades_pessoa_promovidaTocadastro: {
+                    select: { id: true, nome: true }
+                }
+            }
+        });
+
+        return promocoes.map((promocao) => ({
+            id: promocao.id,
+            comunidade_id: promocao.comunidade.id,
+            comunidade: promocao.comunidade.nome_comunidade,
+            promovido_por_id:
+                promocao.cadastro_promocoes_comunidades_promovido_porTocadastro.id,
+            promovido_por:
+                promocao.cadastro_promocoes_comunidades_promovido_porTocadastro.nome,
+            pessoa_promovida_id:
+                promocao.cadastro_promocoes_comunidades_pessoa_promovidaTocadastro.id,
+            pessoa_promovida:
+                promocao.cadastro_promocoes_comunidades_pessoa_promovidaTocadastro.nome,
+            promovido_em: promocao.promovido_em
+        }));
+    }
+
     async atualizarDadosComunidade(comunidadeId: number, usuarioId: number, dados: AtualizarDadosComunidade, foto?: ArquivoFotoComunidadeUpload) {
 
         let caminhoFoto: string | undefined;

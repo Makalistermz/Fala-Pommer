@@ -418,7 +418,8 @@ export const ModelName = {
   comunidade: 'comunidade',
   convite_comunidade: 'convite_comunidade',
   comunidade_usuarios: 'comunidade_usuarios',
-  promocoes_comunidades: 'promocoes_comunidades'
+  promocoes_comunidades: 'promocoes_comunidades',
+  rebaixamentos_comunidades: 'rebaixamentos_comunidades'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -434,7 +435,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cadastro" | "sessao" | "token_push" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao" | "conversa_transferencia" | "comunidade" | "convite_comunidade" | "comunidade_usuarios" | "promocoes_comunidades"
+    modelProps: "cadastro" | "sessao" | "token_push" | "erro_autenticacao" | "login_evento" | "conversa" | "conversa_participante" | "conversa_setor" | "mensagem" | "setores" | "conversa_leitura" | "codigo_recuperacao_2fa" | "desafio_login_2fa" | "secretaria" | "historico_administrativo" | "avaliacao" | "conversa_finalizacao" | "conversa_transferencia" | "comunidade" | "convite_comunidade" | "comunidade_usuarios" | "promocoes_comunidades" | "rebaixamentos_comunidades"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1890,6 +1891,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    rebaixamentos_comunidades: {
+      payload: Prisma.$rebaixamentos_comunidadesPayload<ExtArgs>
+      fields: Prisma.rebaixamentos_comunidadesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.rebaixamentos_comunidadesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rebaixamentos_comunidadesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.rebaixamentos_comunidadesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rebaixamentos_comunidadesPayload>
+        }
+        findFirst: {
+          args: Prisma.rebaixamentos_comunidadesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rebaixamentos_comunidadesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.rebaixamentos_comunidadesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rebaixamentos_comunidadesPayload>
+        }
+        findMany: {
+          args: Prisma.rebaixamentos_comunidadesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rebaixamentos_comunidadesPayload>[]
+        }
+        create: {
+          args: Prisma.rebaixamentos_comunidadesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rebaixamentos_comunidadesPayload>
+        }
+        createMany: {
+          args: Prisma.rebaixamentos_comunidadesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.rebaixamentos_comunidadesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rebaixamentos_comunidadesPayload>
+        }
+        update: {
+          args: Prisma.rebaixamentos_comunidadesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rebaixamentos_comunidadesPayload>
+        }
+        deleteMany: {
+          args: Prisma.rebaixamentos_comunidadesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.rebaixamentos_comunidadesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.rebaixamentos_comunidadesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$rebaixamentos_comunidadesPayload>
+        }
+        aggregate: {
+          args: Prisma.Rebaixamentos_comunidadesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRebaixamentos_comunidades>
+        }
+        groupBy: {
+          args: Prisma.rebaixamentos_comunidadesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Rebaixamentos_comunidadesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.rebaixamentos_comunidadesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Rebaixamentos_comunidadesCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2211,6 +2278,17 @@ export const Promocoes_comunidadesScalarFieldEnum = {
 } as const
 
 export type Promocoes_comunidadesScalarFieldEnum = (typeof Promocoes_comunidadesScalarFieldEnum)[keyof typeof Promocoes_comunidadesScalarFieldEnum]
+
+
+export const Rebaixamentos_comunidadesScalarFieldEnum = {
+  id: 'id',
+  rebaixado_por: 'rebaixado_por',
+  pessoa_rebaixada: 'pessoa_rebaixada',
+  comunidade_id: 'comunidade_id',
+  rebaixada_em: 'rebaixada_em'
+} as const
+
+export type Rebaixamentos_comunidadesScalarFieldEnum = (typeof Rebaixamentos_comunidadesScalarFieldEnum)[keyof typeof Rebaixamentos_comunidadesScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2617,6 +2695,7 @@ export type GlobalOmitConfig = {
   convite_comunidade?: Prisma.convite_comunidadeOmit
   comunidade_usuarios?: Prisma.comunidade_usuariosOmit
   promocoes_comunidades?: Prisma.promocoes_comunidadesOmit
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesOmit
 }
 
 /* Types for Logging */

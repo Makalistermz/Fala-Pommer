@@ -253,6 +253,7 @@ export type comunidadeWhereInput = {
   comunidade_usuarios?: Prisma.Comunidade_usuariosListRelationFilter
   convite_comunidade?: Prisma.Convite_comunidadeListRelationFilter
   promocoes_comunidades?: Prisma.Promocoes_comunidadesListRelationFilter
+  rebaixamentos_comunidades?: Prisma.Rebaixamentos_comunidadesListRelationFilter
 }
 
 export type comunidadeOrderByWithRelationInput = {
@@ -269,6 +270,7 @@ export type comunidadeOrderByWithRelationInput = {
   comunidade_usuarios?: Prisma.comunidade_usuariosOrderByRelationAggregateInput
   convite_comunidade?: Prisma.convite_comunidadeOrderByRelationAggregateInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesOrderByRelationAggregateInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesOrderByRelationAggregateInput
   _relevance?: Prisma.comunidadeOrderByRelevanceInput
 }
 
@@ -289,6 +291,7 @@ export type comunidadeWhereUniqueInput = Prisma.AtLeast<{
   comunidade_usuarios?: Prisma.Comunidade_usuariosListRelationFilter
   convite_comunidade?: Prisma.Convite_comunidadeListRelationFilter
   promocoes_comunidades?: Prisma.Promocoes_comunidadesListRelationFilter
+  rebaixamentos_comunidades?: Prisma.Rebaixamentos_comunidadesListRelationFilter
 }, "id" | "conversa_id">
 
 export type comunidadeOrderByWithAggregationInput = {
@@ -332,6 +335,7 @@ export type comunidadeCreateInput = {
   comunidade_usuarios?: Prisma.comunidade_usuariosCreateNestedManyWithoutComunidadeInput
   convite_comunidade?: Prisma.convite_comunidadeCreateNestedManyWithoutComunidadeInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesCreateNestedManyWithoutComunidadeInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesCreateNestedManyWithoutComunidadeInput
 }
 
 export type comunidadeUncheckedCreateInput = {
@@ -346,6 +350,7 @@ export type comunidadeUncheckedCreateInput = {
   comunidade_usuarios?: Prisma.comunidade_usuariosUncheckedCreateNestedManyWithoutComunidadeInput
   convite_comunidade?: Prisma.convite_comunidadeUncheckedCreateNestedManyWithoutComunidadeInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUncheckedCreateNestedManyWithoutComunidadeInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUncheckedCreateNestedManyWithoutComunidadeInput
 }
 
 export type comunidadeUpdateInput = {
@@ -359,6 +364,7 @@ export type comunidadeUpdateInput = {
   comunidade_usuarios?: Prisma.comunidade_usuariosUpdateManyWithoutComunidadeNestedInput
   convite_comunidade?: Prisma.convite_comunidadeUpdateManyWithoutComunidadeNestedInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUpdateManyWithoutComunidadeNestedInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUpdateManyWithoutComunidadeNestedInput
 }
 
 export type comunidadeUncheckedUpdateInput = {
@@ -373,6 +379,7 @@ export type comunidadeUncheckedUpdateInput = {
   comunidade_usuarios?: Prisma.comunidade_usuariosUncheckedUpdateManyWithoutComunidadeNestedInput
   convite_comunidade?: Prisma.convite_comunidadeUncheckedUpdateManyWithoutComunidadeNestedInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUncheckedUpdateManyWithoutComunidadeNestedInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUncheckedUpdateManyWithoutComunidadeNestedInput
 }
 
 export type comunidadeCreateManyInput = {
@@ -592,6 +599,20 @@ export type comunidadeUpdateOneRequiredWithoutPromocoes_comunidadesNestedInput =
   update?: Prisma.XOR<Prisma.XOR<Prisma.comunidadeUpdateToOneWithWhereWithoutPromocoes_comunidadesInput, Prisma.comunidadeUpdateWithoutPromocoes_comunidadesInput>, Prisma.comunidadeUncheckedUpdateWithoutPromocoes_comunidadesInput>
 }
 
+export type comunidadeCreateNestedOneWithoutRebaixamentos_comunidadesInput = {
+  create?: Prisma.XOR<Prisma.comunidadeCreateWithoutRebaixamentos_comunidadesInput, Prisma.comunidadeUncheckedCreateWithoutRebaixamentos_comunidadesInput>
+  connectOrCreate?: Prisma.comunidadeCreateOrConnectWithoutRebaixamentos_comunidadesInput
+  connect?: Prisma.comunidadeWhereUniqueInput
+}
+
+export type comunidadeUpdateOneRequiredWithoutRebaixamentos_comunidadesNestedInput = {
+  create?: Prisma.XOR<Prisma.comunidadeCreateWithoutRebaixamentos_comunidadesInput, Prisma.comunidadeUncheckedCreateWithoutRebaixamentos_comunidadesInput>
+  connectOrCreate?: Prisma.comunidadeCreateOrConnectWithoutRebaixamentos_comunidadesInput
+  upsert?: Prisma.comunidadeUpsertWithoutRebaixamentos_comunidadesInput
+  connect?: Prisma.comunidadeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.comunidadeUpdateToOneWithWhereWithoutRebaixamentos_comunidadesInput, Prisma.comunidadeUpdateWithoutRebaixamentos_comunidadesInput>, Prisma.comunidadeUncheckedUpdateWithoutRebaixamentos_comunidadesInput>
+}
+
 export type comunidadeCreateWithoutCriadorInput = {
   nome_comunidade: string
   descricao_comunidade: string
@@ -602,6 +623,7 @@ export type comunidadeCreateWithoutCriadorInput = {
   comunidade_usuarios?: Prisma.comunidade_usuariosCreateNestedManyWithoutComunidadeInput
   convite_comunidade?: Prisma.convite_comunidadeCreateNestedManyWithoutComunidadeInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesCreateNestedManyWithoutComunidadeInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesCreateNestedManyWithoutComunidadeInput
 }
 
 export type comunidadeUncheckedCreateWithoutCriadorInput = {
@@ -615,6 +637,7 @@ export type comunidadeUncheckedCreateWithoutCriadorInput = {
   comunidade_usuarios?: Prisma.comunidade_usuariosUncheckedCreateNestedManyWithoutComunidadeInput
   convite_comunidade?: Prisma.convite_comunidadeUncheckedCreateNestedManyWithoutComunidadeInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUncheckedCreateNestedManyWithoutComunidadeInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUncheckedCreateNestedManyWithoutComunidadeInput
 }
 
 export type comunidadeCreateOrConnectWithoutCriadorInput = {
@@ -667,6 +690,7 @@ export type comunidadeCreateWithoutConversaInput = {
   comunidade_usuarios?: Prisma.comunidade_usuariosCreateNestedManyWithoutComunidadeInput
   convite_comunidade?: Prisma.convite_comunidadeCreateNestedManyWithoutComunidadeInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesCreateNestedManyWithoutComunidadeInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesCreateNestedManyWithoutComunidadeInput
 }
 
 export type comunidadeUncheckedCreateWithoutConversaInput = {
@@ -680,6 +704,7 @@ export type comunidadeUncheckedCreateWithoutConversaInput = {
   comunidade_usuarios?: Prisma.comunidade_usuariosUncheckedCreateNestedManyWithoutComunidadeInput
   convite_comunidade?: Prisma.convite_comunidadeUncheckedCreateNestedManyWithoutComunidadeInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUncheckedCreateNestedManyWithoutComunidadeInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUncheckedCreateNestedManyWithoutComunidadeInput
 }
 
 export type comunidadeCreateOrConnectWithoutConversaInput = {
@@ -708,6 +733,7 @@ export type comunidadeUpdateWithoutConversaInput = {
   comunidade_usuarios?: Prisma.comunidade_usuariosUpdateManyWithoutComunidadeNestedInput
   convite_comunidade?: Prisma.convite_comunidadeUpdateManyWithoutComunidadeNestedInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUpdateManyWithoutComunidadeNestedInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUpdateManyWithoutComunidadeNestedInput
 }
 
 export type comunidadeUncheckedUpdateWithoutConversaInput = {
@@ -721,6 +747,7 @@ export type comunidadeUncheckedUpdateWithoutConversaInput = {
   comunidade_usuarios?: Prisma.comunidade_usuariosUncheckedUpdateManyWithoutComunidadeNestedInput
   convite_comunidade?: Prisma.convite_comunidadeUncheckedUpdateManyWithoutComunidadeNestedInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUncheckedUpdateManyWithoutComunidadeNestedInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUncheckedUpdateManyWithoutComunidadeNestedInput
 }
 
 export type comunidadeCreateWithoutConvite_comunidadeInput = {
@@ -733,6 +760,7 @@ export type comunidadeCreateWithoutConvite_comunidadeInput = {
   criador?: Prisma.cadastroCreateNestedOneWithoutComunidades_criadasInput
   comunidade_usuarios?: Prisma.comunidade_usuariosCreateNestedManyWithoutComunidadeInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesCreateNestedManyWithoutComunidadeInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesCreateNestedManyWithoutComunidadeInput
 }
 
 export type comunidadeUncheckedCreateWithoutConvite_comunidadeInput = {
@@ -746,6 +774,7 @@ export type comunidadeUncheckedCreateWithoutConvite_comunidadeInput = {
   comunidade_criador_id?: number | null
   comunidade_usuarios?: Prisma.comunidade_usuariosUncheckedCreateNestedManyWithoutComunidadeInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUncheckedCreateNestedManyWithoutComunidadeInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUncheckedCreateNestedManyWithoutComunidadeInput
 }
 
 export type comunidadeCreateOrConnectWithoutConvite_comunidadeInput = {
@@ -774,6 +803,7 @@ export type comunidadeUpdateWithoutConvite_comunidadeInput = {
   criador?: Prisma.cadastroUpdateOneWithoutComunidades_criadasNestedInput
   comunidade_usuarios?: Prisma.comunidade_usuariosUpdateManyWithoutComunidadeNestedInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUpdateManyWithoutComunidadeNestedInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUpdateManyWithoutComunidadeNestedInput
 }
 
 export type comunidadeUncheckedUpdateWithoutConvite_comunidadeInput = {
@@ -787,6 +817,7 @@ export type comunidadeUncheckedUpdateWithoutConvite_comunidadeInput = {
   comunidade_criador_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comunidade_usuarios?: Prisma.comunidade_usuariosUncheckedUpdateManyWithoutComunidadeNestedInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUncheckedUpdateManyWithoutComunidadeNestedInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUncheckedUpdateManyWithoutComunidadeNestedInput
 }
 
 export type comunidadeCreateWithoutComunidade_usuariosInput = {
@@ -799,6 +830,7 @@ export type comunidadeCreateWithoutComunidade_usuariosInput = {
   criador?: Prisma.cadastroCreateNestedOneWithoutComunidades_criadasInput
   convite_comunidade?: Prisma.convite_comunidadeCreateNestedManyWithoutComunidadeInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesCreateNestedManyWithoutComunidadeInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesCreateNestedManyWithoutComunidadeInput
 }
 
 export type comunidadeUncheckedCreateWithoutComunidade_usuariosInput = {
@@ -812,6 +844,7 @@ export type comunidadeUncheckedCreateWithoutComunidade_usuariosInput = {
   comunidade_criador_id?: number | null
   convite_comunidade?: Prisma.convite_comunidadeUncheckedCreateNestedManyWithoutComunidadeInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUncheckedCreateNestedManyWithoutComunidadeInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUncheckedCreateNestedManyWithoutComunidadeInput
 }
 
 export type comunidadeCreateOrConnectWithoutComunidade_usuariosInput = {
@@ -840,6 +873,7 @@ export type comunidadeUpdateWithoutComunidade_usuariosInput = {
   criador?: Prisma.cadastroUpdateOneWithoutComunidades_criadasNestedInput
   convite_comunidade?: Prisma.convite_comunidadeUpdateManyWithoutComunidadeNestedInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUpdateManyWithoutComunidadeNestedInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUpdateManyWithoutComunidadeNestedInput
 }
 
 export type comunidadeUncheckedUpdateWithoutComunidade_usuariosInput = {
@@ -853,6 +887,7 @@ export type comunidadeUncheckedUpdateWithoutComunidade_usuariosInput = {
   comunidade_criador_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   convite_comunidade?: Prisma.convite_comunidadeUncheckedUpdateManyWithoutComunidadeNestedInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUncheckedUpdateManyWithoutComunidadeNestedInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUncheckedUpdateManyWithoutComunidadeNestedInput
 }
 
 export type comunidadeCreateWithoutPromocoes_comunidadesInput = {
@@ -865,6 +900,7 @@ export type comunidadeCreateWithoutPromocoes_comunidadesInput = {
   criador?: Prisma.cadastroCreateNestedOneWithoutComunidades_criadasInput
   comunidade_usuarios?: Prisma.comunidade_usuariosCreateNestedManyWithoutComunidadeInput
   convite_comunidade?: Prisma.convite_comunidadeCreateNestedManyWithoutComunidadeInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesCreateNestedManyWithoutComunidadeInput
 }
 
 export type comunidadeUncheckedCreateWithoutPromocoes_comunidadesInput = {
@@ -878,6 +914,7 @@ export type comunidadeUncheckedCreateWithoutPromocoes_comunidadesInput = {
   comunidade_criador_id?: number | null
   comunidade_usuarios?: Prisma.comunidade_usuariosUncheckedCreateNestedManyWithoutComunidadeInput
   convite_comunidade?: Prisma.convite_comunidadeUncheckedCreateNestedManyWithoutComunidadeInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUncheckedCreateNestedManyWithoutComunidadeInput
 }
 
 export type comunidadeCreateOrConnectWithoutPromocoes_comunidadesInput = {
@@ -906,6 +943,7 @@ export type comunidadeUpdateWithoutPromocoes_comunidadesInput = {
   criador?: Prisma.cadastroUpdateOneWithoutComunidades_criadasNestedInput
   comunidade_usuarios?: Prisma.comunidade_usuariosUpdateManyWithoutComunidadeNestedInput
   convite_comunidade?: Prisma.convite_comunidadeUpdateManyWithoutComunidadeNestedInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUpdateManyWithoutComunidadeNestedInput
 }
 
 export type comunidadeUncheckedUpdateWithoutPromocoes_comunidadesInput = {
@@ -919,6 +957,77 @@ export type comunidadeUncheckedUpdateWithoutPromocoes_comunidadesInput = {
   comunidade_criador_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   comunidade_usuarios?: Prisma.comunidade_usuariosUncheckedUpdateManyWithoutComunidadeNestedInput
   convite_comunidade?: Prisma.convite_comunidadeUncheckedUpdateManyWithoutComunidadeNestedInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUncheckedUpdateManyWithoutComunidadeNestedInput
+}
+
+export type comunidadeCreateWithoutRebaixamentos_comunidadesInput = {
+  nome_comunidade: string
+  descricao_comunidade: string
+  imagem_comunidade?: string | null
+  ocultar_municipes?: boolean
+  comunidade_criada_em?: Date | string
+  conversa?: Prisma.conversaCreateNestedOneWithoutComunidadeInput
+  criador?: Prisma.cadastroCreateNestedOneWithoutComunidades_criadasInput
+  comunidade_usuarios?: Prisma.comunidade_usuariosCreateNestedManyWithoutComunidadeInput
+  convite_comunidade?: Prisma.convite_comunidadeCreateNestedManyWithoutComunidadeInput
+  promocoes_comunidades?: Prisma.promocoes_comunidadesCreateNestedManyWithoutComunidadeInput
+}
+
+export type comunidadeUncheckedCreateWithoutRebaixamentos_comunidadesInput = {
+  id?: number
+  nome_comunidade: string
+  descricao_comunidade: string
+  imagem_comunidade?: string | null
+  ocultar_municipes?: boolean
+  conversa_id?: number | null
+  comunidade_criada_em?: Date | string
+  comunidade_criador_id?: number | null
+  comunidade_usuarios?: Prisma.comunidade_usuariosUncheckedCreateNestedManyWithoutComunidadeInput
+  convite_comunidade?: Prisma.convite_comunidadeUncheckedCreateNestedManyWithoutComunidadeInput
+  promocoes_comunidades?: Prisma.promocoes_comunidadesUncheckedCreateNestedManyWithoutComunidadeInput
+}
+
+export type comunidadeCreateOrConnectWithoutRebaixamentos_comunidadesInput = {
+  where: Prisma.comunidadeWhereUniqueInput
+  create: Prisma.XOR<Prisma.comunidadeCreateWithoutRebaixamentos_comunidadesInput, Prisma.comunidadeUncheckedCreateWithoutRebaixamentos_comunidadesInput>
+}
+
+export type comunidadeUpsertWithoutRebaixamentos_comunidadesInput = {
+  update: Prisma.XOR<Prisma.comunidadeUpdateWithoutRebaixamentos_comunidadesInput, Prisma.comunidadeUncheckedUpdateWithoutRebaixamentos_comunidadesInput>
+  create: Prisma.XOR<Prisma.comunidadeCreateWithoutRebaixamentos_comunidadesInput, Prisma.comunidadeUncheckedCreateWithoutRebaixamentos_comunidadesInput>
+  where?: Prisma.comunidadeWhereInput
+}
+
+export type comunidadeUpdateToOneWithWhereWithoutRebaixamentos_comunidadesInput = {
+  where?: Prisma.comunidadeWhereInput
+  data: Prisma.XOR<Prisma.comunidadeUpdateWithoutRebaixamentos_comunidadesInput, Prisma.comunidadeUncheckedUpdateWithoutRebaixamentos_comunidadesInput>
+}
+
+export type comunidadeUpdateWithoutRebaixamentos_comunidadesInput = {
+  nome_comunidade?: Prisma.StringFieldUpdateOperationsInput | string
+  descricao_comunidade?: Prisma.StringFieldUpdateOperationsInput | string
+  imagem_comunidade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ocultar_municipes?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  comunidade_criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  conversa?: Prisma.conversaUpdateOneWithoutComunidadeNestedInput
+  criador?: Prisma.cadastroUpdateOneWithoutComunidades_criadasNestedInput
+  comunidade_usuarios?: Prisma.comunidade_usuariosUpdateManyWithoutComunidadeNestedInput
+  convite_comunidade?: Prisma.convite_comunidadeUpdateManyWithoutComunidadeNestedInput
+  promocoes_comunidades?: Prisma.promocoes_comunidadesUpdateManyWithoutComunidadeNestedInput
+}
+
+export type comunidadeUncheckedUpdateWithoutRebaixamentos_comunidadesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  nome_comunidade?: Prisma.StringFieldUpdateOperationsInput | string
+  descricao_comunidade?: Prisma.StringFieldUpdateOperationsInput | string
+  imagem_comunidade?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ocultar_municipes?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  conversa_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comunidade_criada_em?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  comunidade_criador_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  comunidade_usuarios?: Prisma.comunidade_usuariosUncheckedUpdateManyWithoutComunidadeNestedInput
+  convite_comunidade?: Prisma.convite_comunidadeUncheckedUpdateManyWithoutComunidadeNestedInput
+  promocoes_comunidades?: Prisma.promocoes_comunidadesUncheckedUpdateManyWithoutComunidadeNestedInput
 }
 
 export type comunidadeCreateManyCriadorInput = {
@@ -941,6 +1050,7 @@ export type comunidadeUpdateWithoutCriadorInput = {
   comunidade_usuarios?: Prisma.comunidade_usuariosUpdateManyWithoutComunidadeNestedInput
   convite_comunidade?: Prisma.convite_comunidadeUpdateManyWithoutComunidadeNestedInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUpdateManyWithoutComunidadeNestedInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUpdateManyWithoutComunidadeNestedInput
 }
 
 export type comunidadeUncheckedUpdateWithoutCriadorInput = {
@@ -954,6 +1064,7 @@ export type comunidadeUncheckedUpdateWithoutCriadorInput = {
   comunidade_usuarios?: Prisma.comunidade_usuariosUncheckedUpdateManyWithoutComunidadeNestedInput
   convite_comunidade?: Prisma.convite_comunidadeUncheckedUpdateManyWithoutComunidadeNestedInput
   promocoes_comunidades?: Prisma.promocoes_comunidadesUncheckedUpdateManyWithoutComunidadeNestedInput
+  rebaixamentos_comunidades?: Prisma.rebaixamentos_comunidadesUncheckedUpdateManyWithoutComunidadeNestedInput
 }
 
 export type comunidadeUncheckedUpdateManyWithoutCriadorInput = {
@@ -975,12 +1086,14 @@ export type ComunidadeCountOutputType = {
   comunidade_usuarios: number
   convite_comunidade: number
   promocoes_comunidades: number
+  rebaixamentos_comunidades: number
 }
 
 export type ComunidadeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   comunidade_usuarios?: boolean | ComunidadeCountOutputTypeCountComunidade_usuariosArgs
   convite_comunidade?: boolean | ComunidadeCountOutputTypeCountConvite_comunidadeArgs
   promocoes_comunidades?: boolean | ComunidadeCountOutputTypeCountPromocoes_comunidadesArgs
+  rebaixamentos_comunidades?: boolean | ComunidadeCountOutputTypeCountRebaixamentos_comunidadesArgs
 }
 
 /**
@@ -1014,6 +1127,13 @@ export type ComunidadeCountOutputTypeCountPromocoes_comunidadesArgs<ExtArgs exte
   where?: Prisma.promocoes_comunidadesWhereInput
 }
 
+/**
+ * ComunidadeCountOutputType without action
+ */
+export type ComunidadeCountOutputTypeCountRebaixamentos_comunidadesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.rebaixamentos_comunidadesWhereInput
+}
+
 
 export type comunidadeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1029,6 +1149,7 @@ export type comunidadeSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   comunidade_usuarios?: boolean | Prisma.comunidade$comunidade_usuariosArgs<ExtArgs>
   convite_comunidade?: boolean | Prisma.comunidade$convite_comunidadeArgs<ExtArgs>
   promocoes_comunidades?: boolean | Prisma.comunidade$promocoes_comunidadesArgs<ExtArgs>
+  rebaixamentos_comunidades?: boolean | Prisma.comunidade$rebaixamentos_comunidadesArgs<ExtArgs>
   _count?: boolean | Prisma.ComunidadeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["comunidade"]>
 
@@ -1052,6 +1173,7 @@ export type comunidadeInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   comunidade_usuarios?: boolean | Prisma.comunidade$comunidade_usuariosArgs<ExtArgs>
   convite_comunidade?: boolean | Prisma.comunidade$convite_comunidadeArgs<ExtArgs>
   promocoes_comunidades?: boolean | Prisma.comunidade$promocoes_comunidadesArgs<ExtArgs>
+  rebaixamentos_comunidades?: boolean | Prisma.comunidade$rebaixamentos_comunidadesArgs<ExtArgs>
   _count?: boolean | Prisma.ComunidadeCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -1063,6 +1185,7 @@ export type $comunidadePayload<ExtArgs extends runtime.Types.Extensions.Internal
     comunidade_usuarios: Prisma.$comunidade_usuariosPayload<ExtArgs>[]
     convite_comunidade: Prisma.$convite_comunidadePayload<ExtArgs>[]
     promocoes_comunidades: Prisma.$promocoes_comunidadesPayload<ExtArgs>[]
+    rebaixamentos_comunidades: Prisma.$rebaixamentos_comunidadesPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1418,6 +1541,7 @@ export interface Prisma__comunidadeClient<T, Null = never, ExtArgs extends runti
   comunidade_usuarios<T extends Prisma.comunidade$comunidade_usuariosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.comunidade$comunidade_usuariosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$comunidade_usuariosPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   convite_comunidade<T extends Prisma.comunidade$convite_comunidadeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.comunidade$convite_comunidadeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$convite_comunidadePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   promocoes_comunidades<T extends Prisma.comunidade$promocoes_comunidadesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.comunidade$promocoes_comunidadesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$promocoes_comunidadesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  rebaixamentos_comunidades<T extends Prisma.comunidade$rebaixamentos_comunidadesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.comunidade$rebaixamentos_comunidadesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$rebaixamentos_comunidadesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1910,6 +2034,30 @@ export type comunidade$promocoes_comunidadesArgs<ExtArgs extends runtime.Types.E
   take?: number
   skip?: number
   distinct?: Prisma.Promocoes_comunidadesScalarFieldEnum | Prisma.Promocoes_comunidadesScalarFieldEnum[]
+}
+
+/**
+ * comunidade.rebaixamentos_comunidades
+ */
+export type comunidade$rebaixamentos_comunidadesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the rebaixamentos_comunidades
+   */
+  select?: Prisma.rebaixamentos_comunidadesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the rebaixamentos_comunidades
+   */
+  omit?: Prisma.rebaixamentos_comunidadesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.rebaixamentos_comunidadesInclude<ExtArgs> | null
+  where?: Prisma.rebaixamentos_comunidadesWhereInput
+  orderBy?: Prisma.rebaixamentos_comunidadesOrderByWithRelationInput | Prisma.rebaixamentos_comunidadesOrderByWithRelationInput[]
+  cursor?: Prisma.rebaixamentos_comunidadesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Rebaixamentos_comunidadesScalarFieldEnum | Prisma.Rebaixamentos_comunidadesScalarFieldEnum[]
 }
 
 /**

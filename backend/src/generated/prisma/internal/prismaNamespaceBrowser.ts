@@ -72,7 +72,8 @@ export const ModelName = {
   comunidade: 'comunidade',
   convite_comunidade: 'convite_comunidade',
   comunidade_usuarios: 'comunidade_usuarios',
-  promocoes_comunidades: 'promocoes_comunidades'
+  promocoes_comunidades: 'promocoes_comunidades',
+  rebaixamentos_comunidades: 'rebaixamentos_comunidades'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -373,6 +374,17 @@ export const Promocoes_comunidadesScalarFieldEnum = {
 } as const
 
 export type Promocoes_comunidadesScalarFieldEnum = (typeof Promocoes_comunidadesScalarFieldEnum)[keyof typeof Promocoes_comunidadesScalarFieldEnum]
+
+
+export const Rebaixamentos_comunidadesScalarFieldEnum = {
+  id: 'id',
+  rebaixado_por: 'rebaixado_por',
+  pessoa_rebaixada: 'pessoa_rebaixada',
+  comunidade_id: 'comunidade_id',
+  rebaixada_em: 'rebaixada_em'
+} as const
+
+export type Rebaixamentos_comunidadesScalarFieldEnum = (typeof Rebaixamentos_comunidadesScalarFieldEnum)[keyof typeof Rebaixamentos_comunidadesScalarFieldEnum]
 
 
 export const SortOrder = {

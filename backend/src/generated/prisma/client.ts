@@ -149,3 +149,8 @@ export type comunidade_usuarios = Prisma.comunidade_usuariosModel
  * 
  */
 export type promocoes_comunidades = Prisma.promocoes_comunidadesModel
+/**
+ * Model rebaixamentos_comunidades
+ * 
+ */
+export type rebaixamentos_comunidades = Prisma.rebaixamentos_comunidadesModel

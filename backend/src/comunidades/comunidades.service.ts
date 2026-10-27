@@ -751,9 +751,19 @@ export class ComunidadesService {
                         id: true,
                         nome: true,
                         tipo_usuario: true,
-                        desativado_em: true
+                        desativado_em: true,
+                        comunidade_usuarios: {
+                            where: { comunidade_id: comunidadeId },
+                            select: { tipo_funcao: true }
+                        }
                     }
                 });
+
+                if (!usuarioLogado) {
+                    throw new NotFoundException(
+                        "Usuário autenticado não encontrado."
+                    );
+                }
 
                 const conversa = await transacao.conversa.findUnique({
                     where: {
@@ -778,6 +788,21 @@ export class ComunidadesService {
                     }
                 });
 
+                const totalAdminsComunidade = await transacao.comunidade_usuarios.count({
+                    where: {
+                        comunidade_id: comunidadeId,
+                        tipo_funcao: "admin"
+                    }
+                });
+
+                const eAdminNestaComunidade = usuarioLogado.comunidade_usuarios[0]?.tipo_funcao === "admin";
+
+                if (totalAdminsComunidade === 1 && eAdminNestaComunidade) {
+                    throw new BadRequestException(
+                        "Você não pode sair da comunidade sendo o único admin. Promova outro membro antes de sair."
+                    );
+                }
+
                 const comunidade = await transacao.comunidade.findUnique({
                     where: {
                         id: comunidadeId
@@ -787,12 +812,6 @@ export class ComunidadesService {
                         ocultar_municipes: true
                     }
                 });
-
-                if (!usuarioLogado) {
-                    throw new NotFoundException(
-                        "Usuário autenticado não encontrado."
-                    );
-                }
 
                 if (usuarioLogado.desativado_em !== null) {
                     throw new ForbiddenException(

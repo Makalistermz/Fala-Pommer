@@ -14,15 +14,15 @@ const ITENS_POR_PAGINA = 20;
 
 //formatar data e hora da expiração e da criação
 function RelatorioPromocaoComunidade() {
-    const [criacaoLinkConvite, setCriacaoLinkConvite] = useState<PromocoesComunidades[]>([]);
+    const [promocoesComunidades, setPromocoesComunidades] = useState<PromocoesComunidades[]>([]);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
     const [paginaAtual, setPaginaAtual] = useState(1);
 
     // Seleciona apenas os registros que pertencem à página atual.
-    const totalPaginas = Math.ceil(criacaoLinkConvite.length / ITENS_POR_PAGINA);
+    const totalPaginas = Math.ceil(promocoesComunidades.length / ITENS_POR_PAGINA);
     const inicioPagina = (paginaAtual - 1) * ITENS_POR_PAGINA;
-    const linkConvitePaginados = criacaoLinkConvite.slice(
+    const promocoesComunidadesPaginados = promocoesComunidades.slice(
         inicioPagina,
         inicioPagina + ITENS_POR_PAGINA,
     );
@@ -44,7 +44,7 @@ function RelatorioPromocaoComunidade() {
 
                 const dados = await resposta.json() as PromocoesComunidades[];
 
-                setCriacaoLinkConvite(dados)
+                setPromocoesComunidades(dados)
             } catch (erro) {
                 if (controlador.signal.aborted) return;
 
@@ -86,7 +86,7 @@ function RelatorioPromocaoComunidade() {
                         {/* Informa que os registros ainda estão sendo carregados. */}
                         {carregando && (
                             <tr>
-                                <td className="relatorios-logs__mensagem" colSpan={5}>
+                                <td className="relatorios-logs__mensagem" colSpan={4}>
                                     Carregando relatórios...
                                 </td>
                             </tr>
@@ -95,23 +95,23 @@ function RelatorioPromocaoComunidade() {
                         {/* Apresenta falhas de autenticação ou de comunicação com a API. */}
                         {!carregando && erro && (
                             <tr>
-                                <td className="relatorios-logs__mensagem relatorios-logs__mensagem--erro" colSpan={5}>
+                                <td className="relatorios-logs__mensagem relatorios-logs__mensagem--erro" colSpan={4}>
                                     {erro}
                                 </td>
                             </tr>
                         )}
 
                         {/* Trata uma resposta válida que não contém registros de acesso. */}
-                        {!carregando && !erro && criacaoLinkConvite.length === 0 && (
+                        {!carregando && !erro && promocoesComunidades.length === 0 && (
                             <tr>
-                                <td className="relatorios-logs__mensagem" colSpan={5}>
+                                <td className="relatorios-logs__mensagem" colSpan={4}>
                                     Nenhum acesso registrado.
                                 </td>
                             </tr>
                         )}
 
                         {/* Renderiza apenas os relatórios correspondentes à página atual. */}
-                        {!carregando && !erro && linkConvitePaginados.map((promocao) => (
+                        {!carregando && !erro && promocoesComunidadesPaginados.map((promocao) => (
                             <tr>
                                 <td>{promocao.promovido_por}</td>
                                 <td>{promocao.pessoa_promovida}</td>

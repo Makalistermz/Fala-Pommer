@@ -179,8 +179,7 @@ export class ComunidadesService {
                 select: {
                     comunidade_id: true,
                     usuario_id: true,
-                    tipo_funcao: true,
-                    promovido_em: true
+                    tipo_funcao: true
                 }
             });
         } catch (erro) {
@@ -203,8 +202,7 @@ export class ComunidadesService {
                 select: {
                     comunidade_id: true,
                     usuario_id: true,
-                    tipo_funcao: true,
-                    promovido_em: true
+                    tipo_funcao: true
                 }
             });
         } catch (erro) {
@@ -221,8 +219,7 @@ export class ComunidadesService {
                     id: true,
                     comunidade_id: true,
                     usuario_id: true,
-                    tipo_funcao: true,
-                    promovido_em:true
+                    tipo_funcao: true
                 },
                 orderBy: {id: "asc"}
             })
@@ -639,8 +636,7 @@ export class ComunidadesService {
                 },
                 select: {
                     usuario_id: true,
-                    tipo_funcao: true,
-                    promovido_em: true,
+                    tipo_funcao: true
                 },
             });
 
@@ -1174,14 +1170,20 @@ export class ComunidadesService {
                     },
                     data: {
                         tipo_funcao: "admin",
-                        promovido_por: usuarioLogadoId,
-                        promovido_em: promocao
                     },
                     select: {
                         comunidade_id: true,
                         usuario_id: true,
-                        tipo_funcao: true,
-                        promovido_em: true
+                        tipo_funcao: true
+                    }
+                });
+
+                await transacao.promocoes_comunidades.create({
+                    data: {
+                        promovido_por: usuarioLogadoId,
+                        pessoa_promovida: id,
+                        comunidade_id: comunidadeId,
+                        promovido_em: promocao
                     }
                 });
             }
@@ -1341,17 +1343,23 @@ export class ComunidadesService {
                         }
                     },
                     data: {
-                        tipo_funcao: "membro",
-                        rebaixado_por: usuarioLogadoId,
-                        rebaixado_em: rebaixamento
+                        tipo_funcao: "membro"
                     },
                     select: {
                         comunidade_id: true,
                         usuario_id: true,
-                        tipo_funcao: true,
-                        promovido_em: true
+                        tipo_funcao: true
                     }
                 });
+
+                await transacao.rebaixamentos_comunidades.create({
+                    data: {
+                        rebaixado_por: usuarioLogadoId,
+                        pessoa_rebaixada: id,
+                        comunidade_id: comunidadeId,
+                        rebaixada_em: rebaixamento
+                    }
+                })
             }
         );
 

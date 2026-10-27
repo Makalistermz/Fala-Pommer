@@ -1084,8 +1084,7 @@ export class UsuariosService {
                     usuario_id: id
                 },
                 data: {
-                    tipo_funcao: "membro",
-                    rebaixado_em: desativadoEm
+                    tipo_funcao: "membro"
                 }
             });
 

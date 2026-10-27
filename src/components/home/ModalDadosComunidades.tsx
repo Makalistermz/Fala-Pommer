@@ -490,9 +490,16 @@ function ModalDadosComunidades({
             );
 
             if (!resposta.ok) {
-                throw new Error(
-                    "Não foi possível sair da comunidade.",
-                );
+                const erroData = await resposta.json().catch(() => null);
+            
+                // O NestJS costuma enviar a mensagem dentro de erroData.message
+                // (pode ser uma string ou um array de strings caso haja validação de DTO)
+                const mensagemDoBackend = Array.isArray(erroData?.message)
+                    ? erroData.message.join(", ")
+                    : erroData?.message;
+
+                // Lança o erro com a mensagem do back-end (ou uma mensagem padrão caso não venha nada)
+                throw new Error(mensagemDoBackend || "Não foi possível sair da comunidade.");
             }
 
             setModalSairComunidadeAberto(false);

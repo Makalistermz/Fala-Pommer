@@ -520,6 +520,40 @@ export class ComunidadesService {
         }));
     }
 
+    async listarRebaixamentos() {
+        const promocoes = await this.prisma.rebaixamentos_comunidades.findMany({
+            orderBy: { rebaixada_em: "desc" },
+            select: {
+                id: true,
+                rebaixada_em: true,
+                comunidade: {
+                    select: { id: true, nome_comunidade: true }
+                },
+                cadastro_rebaixamentos_comunidades_rebaixado_porTocadastro: {
+                    select: { id: true, nome: true }
+                },
+                cadastro_rebaixamentos_comunidades_pessoa_rebaixadaTocadastro: {
+                    select: { id: true, nome: true }
+                }
+            }
+        });
+
+        return promocoes.map((promocao) => ({
+            id: promocao.id,
+            comunidade_id: promocao.comunidade.id,
+            comunidade: promocao.comunidade.nome_comunidade,
+            rebaixado_por_id:
+                promocao.cadastro_rebaixamentos_comunidades_rebaixado_porTocadastro.id,
+            rebaixado_por:
+                promocao.cadastro_rebaixamentos_comunidades_rebaixado_porTocadastro.nome,
+            pessoa_rebaixada_id:
+                promocao.cadastro_rebaixamentos_comunidades_pessoa_rebaixadaTocadastro.id,
+            pessoa_rebaixada:
+                promocao.cadastro_rebaixamentos_comunidades_pessoa_rebaixadaTocadastro.nome,
+            rebaixada_em: promocao.rebaixada_em
+        }));
+    }
+
     async atualizarDadosComunidade(comunidadeId: number, usuarioId: number, dados: AtualizarDadosComunidade, foto?: ArquivoFotoComunidadeUpload) {
 
         let caminhoFoto: string | undefined;

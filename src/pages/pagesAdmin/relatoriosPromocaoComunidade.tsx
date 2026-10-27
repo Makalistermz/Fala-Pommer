@@ -63,7 +63,7 @@ function RelatorioPromocaoComunidade() {
     }, []);
 
     return (
-        <section className="relatorios-logs" aria-labelledby="titulo-relatorios-links">
+        <section className="relatorios-logs" aria-labelledby="titulo-relatorios-promocoes">
             <header className="relatorios-logs__header">
                 <div>
                     <span>CONTROLE DE LINKS</span>
@@ -73,7 +73,7 @@ function RelatorioPromocaoComunidade() {
             </header>
 
             <div className="relatorios-logs__tabela-container">
-                <table className="relatorios-logs__links">
+                <table className="relatorios-logs__info">
                     <thead>
                         <tr>
                             <th scope="col">Promovido Por</th>

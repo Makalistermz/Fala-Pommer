@@ -206,20 +206,6 @@
     white-space: nowrap;
 }
 
-.comunidades-acoes__seguir {
-    padding: 10px 10px;
-    background-color: var(--azul-principal);
-    border: none;
-    border-radius: 20px;
-    font-weight: 600;
-    color: var(--azul-claro);
-    cursor: pointer;
-}
-
-.comunidades-acoes__seguir:hover {
-    background-color: #2865b4;
-}
-
 .descobrir_mais {
     width: 100%;
     margin-top: 16px;
@@ -2102,15 +2088,6 @@ html.tema-escuro:not(.alto-contraste) .comunidades-acoes__nova:hover {
 html.tema-escuro:not(.alto-contraste) .comunidades-acoes__nova:active {
     background: var(--tema-superficie-elevada);
     box-shadow: none;
-}
-
-html.tema-escuro:not(.not-contraste) .comunidades-acoes__seguir {
-    background-color: #154481;
-    color: #9dc8ff;
-}
-
-html.tema-escuro:not(.not-contraste) .comunidades-acoes__seguir:hover {
-    background-color: #113e79;
 }
 
 html.tema-escuro:not(.not-contraste) .btn_descobrir_mais {

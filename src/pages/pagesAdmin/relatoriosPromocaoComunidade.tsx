@@ -66,9 +66,9 @@ function RelatorioPromocaoComunidade() {
         <section className="relatorios-logs" aria-labelledby="titulo-relatorios-promocoes">
             <header className="relatorios-logs__header">
                 <div>
-                    <span>CONTROLE DE LINKS</span>
-                    <h2 id="titulo-relatorios-erros">Criações de links de convite</h2>
-                    <p>Acompanhe a criação de links de convite das comunidades</p>
+                    <span>CONTROLE DE PROMOÇÕES</span>
+                    <h2 id="titulo-relatorios-erros">Logs de promoções</h2>
+                    <p>Acompanhe as promoções de membros das comunidades</p>
                 </div>
             </header>
 

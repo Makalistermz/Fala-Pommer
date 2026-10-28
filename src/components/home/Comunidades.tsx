@@ -285,6 +285,10 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
         buscarPerfil();
     }, []);
 
+    const ComunidadesMaisNovas = 
+    comunidades.sort((a, b) => new Date(b.comunidade_criada_em).getTime() - new Date(a.comunidade_criada_em).getTime())
+    .slice(0, 5);
+
     const podeCriarComunidade =
         usuario !== null && usuario.tipo !== "user";
 
@@ -560,7 +564,7 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                     <header className="comunidade-acoes-header">
                         <span>Encontrar comunidades para participar</span>
                     </header>
-                    {naoParticipa
+                    {naoParticipa && ComunidadesMaisNovas
                         .map((comunidade) => (
                             <>
                             <section

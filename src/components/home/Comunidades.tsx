@@ -516,10 +516,17 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                             className="comunidades-acoes"
                             key={comunidade.id}
                         >
-                            <button
-                                type="button"
+                            <div
+                                role="button"
+                                tabIndex={0}
                                 className="comunidades-acoes__nova"
                                 onClick={() => aoAbrir(comunidade)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault();
+                                        aoAbrir(comunidade);
+                                    }
+                                }}
                                 aria-pressed={comunidadeSelecionada?.id === comunidade.id}
                             >
                                 <div
@@ -541,7 +548,7 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                                 <span className="comunidades-acoes__texto">
                                     {comunidade.nome_comunidade}
                                 </span>
-                            </button>
+                            </div>
                         </section>
                     ))
                 }
@@ -556,10 +563,17 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                             <header className="comunidade-acoes-header">
                                 <span>Encontrar comunidades para participar</span>
                             </header>
-                            <button
-                                type="button"
+                            <div
+                                role="button"
+                                tabIndex={0}
                                 className="comunidades-acoes__nova comunidades-acoes__nova-nao_participa"
                                 onClick={() => aoAbrir(comunidade)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault();
+                                        aoAbrir(comunidade);
+                                    }
+                                }}
                                 aria-pressed={comunidadeSelecionada?.id === comunidade.id}
                             >
                                 <div className="comunidade-acoes_icone_texto">
@@ -585,10 +599,13 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                                 </div>
                                 <button
                                     className="comunidades-acoes__seguir"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                    }}
                                 >
                                     Seguir
                                 </button>
-                            </button>
+                            </div>
                         </section>
                     ))
                 }

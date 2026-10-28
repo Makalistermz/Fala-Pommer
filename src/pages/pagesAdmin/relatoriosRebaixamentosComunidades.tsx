@@ -66,9 +66,9 @@ function RelatorioRebaixamentoComunidade() {
         <section className="relatorios-logs" aria-labelledby="titulo-relatorios-rebaixamento">
             <header className="relatorios-logs__header">
                 <div>
-                    <span>CONTROLE DE LINKS</span>
-                    <h2 id="titulo-relatorios-erros">Criações de links de convite</h2>
-                    <p>Acompanhe a criação de links de convite das comunidades</p>
+                    <span>CONTROLE DE REBAIXAMENTOS</span>
+                    <h2 id="titulo-relatorios-erros">Logs de rebaixamentos</h2>
+                    <p>Acompanhe os rebaixamentos de membros das comunidades</p>
                 </div>
             </header>
 
@@ -76,10 +76,10 @@ function RelatorioRebaixamentoComunidade() {
                 <table className="relatorios-logs__info">
                     <thead>
                         <tr>
-                            <th scope="col">Promovido Por</th>
-                            <th scope="col">Pessoa promovida</th>
+                            <th scope="col">Rebaixada Por</th>
+                            <th scope="col">Pessoa rebaixada</th>
                             <th scope="col">Comunidade</th>
-                            <th scope="col">Data da promoção</th>
+                            <th scope="col">Data do rebaixamento</th>
                         </tr>
                     </thead>
                     <tbody>

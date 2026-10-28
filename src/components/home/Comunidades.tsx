@@ -286,8 +286,8 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
     }, []);
 
     const ComunidadesMaisNovas = 
-    comunidades.sort((a, b) => new Date(b.comunidade_criada_em).getTime() - new Date(a.comunidade_criada_em).getTime())
-    .slice(0, 5);
+    comunidades.sort((a, b) => new Date(b.comunidade_criada_em).getTime() - new Date(a.comunidade_criada_em).getTime()) //organiza por ordem da comunidade mais nova
+    .slice(0, 5); //pega 5 comunidades das mais novas
 
     const podeCriarComunidade =
         usuario !== null && usuario.tipo !== "user";

@@ -150,7 +150,6 @@
 .comunidades-acoes__nova:hover {
     background: #dddddd;
     box-shadow: 0 5px 14px rgba(0, 0, 0, 0.14);
-    transform: translateY(-1px);
 }
 
 .comunidades-acoes__nova:active {

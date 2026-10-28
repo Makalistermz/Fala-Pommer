@@ -105,7 +105,7 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(0, 0, 0, 0.5);
     white-space: nowrap;
 }
 
@@ -116,7 +116,7 @@
     height: 1px;
     background: linear-gradient(
         to right,
-        rgba(255, 255, 255, 0.14),
+        rgba(0, 0, 0, 0.14),
         transparent
     );
 }
@@ -2013,6 +2013,18 @@ html.tema-escuro:not(.alto-contraste) .comunidades-acoes__nova:hover {
 html.tema-escuro:not(.alto-contraste) .comunidades-acoes__nova:active {
     background: var(--tema-superficie-elevada);
     box-shadow: none;
+}
+
+html.tema-escuro:not(.alto-contraste) .comunidade-acoes-header span {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+html.tema-escuro:not(.alto-contraste) .comunidade-acoes-header::after {
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.14),
+        transparent
+    );
 }
 
 html.tema-escuro:not(.alto-contraste) .comunidades-acoes__icone {

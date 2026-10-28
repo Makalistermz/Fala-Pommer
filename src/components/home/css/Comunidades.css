@@ -92,6 +92,35 @@
     width: 100%;
 }
 
+.comunidade-acoes-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 12px 8px;
+    margin-top: 8px;
+}
+
+.comunidade-acoes-header span {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+}
+
+/* linha sutil que se estende após o texto */
+.comunidade-acoes-header::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.14),
+        transparent
+    );
+}
+
 /* Cartão usado para iniciar a criação de uma comunidade. */
 .comunidades-acoes__nova {
     display: flex;

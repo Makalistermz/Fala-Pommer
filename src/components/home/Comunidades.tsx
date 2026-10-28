@@ -600,7 +600,7 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                                 <button
                                     className="comunidades-acoes__seguir"
                                     onClick={(e) => {
-                                        e.stopPropagation();
+                                        e.stopPropagation(); //serve para impedir que um evento “suba” para os elementos pais
                                     }}
                                 >
                                     Seguir

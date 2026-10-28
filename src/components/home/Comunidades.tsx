@@ -99,6 +99,10 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
     const descricaoRef = useRef<HTMLTextAreaElement>(null);
     const ocultarMunicipesRef = useRef<HTMLInputElement>(null);
 
+    //não participa desta comunidade
+    const naoParticipa = comunidades.filter((comunidade) => !comunidade.participa);
+    const participa = comunidades.filter((comunidade) => comunidade.participa);
+
     //função de emoji aleatório
     function emojiAleatorio() {
         const emojis = [
@@ -509,8 +513,7 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
 
             <main className="comunidades-conteudo background-comunidades">
 
-                {comunidades
-                    .filter((comunidade) => comunidade.participa) 
+                {participa 
                     .map((comunidade) => (
                         <section
                             className="comunidades-acoes"
@@ -553,8 +556,7 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                     ))
                 }
 
-                {comunidades
-                    .filter((comunidade) => !comunidade.participa) //não participa desta comunidade
+                {naoParticipa
                     .map((comunidade) => (
                         <>
                         <section

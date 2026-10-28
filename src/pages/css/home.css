@@ -882,6 +882,61 @@
     opacity: 0.65;
 }
 
+.entrar-comunidade {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.entrar-comunidade svg {
+    transition: transform 200ms ease;
+}
+
+.entrar-comunidade:hover svg {
+    transform: translateX(3px);
+}
+
+.comunidade-entrada__seguir {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 14px;
+    color: var(--tema-texto-secundario, #667085);
+    font-size: 0.8125rem;
+}
+
+.comunidade-entrada__seguir svg {
+    flex: 0 0 auto;
+}
+
+.comunidade-entrada__cartao .comunidade-entrada__seguir-botao {
+    padding: 2px 6px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: #1351b4;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 160ms ease, color 160ms ease;
+}
+
+.comunidade-entrada__cartao .comunidade-entrada__seguir-botao:hover {
+    background: rgba(19, 81, 180, 0.1);
+    color: #2d6cca;
+}
+
+.comunidade-entrada__cartao .comunidade-entrada__seguir-botao:focus-visible {
+    outline: 3px solid rgba(19, 81, 180, 0.3);
+    outline-offset: 2px;
+}
+
+.comunidade-entrada__cartao .comunidade-entrada__seguir-botao:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
 .lista-conversas__vazia {
     margin: 24px 16px;
 

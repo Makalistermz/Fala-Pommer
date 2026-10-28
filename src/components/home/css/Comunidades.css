@@ -143,6 +143,10 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+.comunidades-acoes__nova-nao_participa {
+    justify-content: space-between;
+}
+
 .comunidades-acoes__nova:hover {
     background: #dddddd;
     box-shadow: 0 5px 14px rgba(0, 0, 0, 0.14);
@@ -158,6 +162,12 @@
 .comunidades-acoes__nova:focus-visible {
     outline: 3px solid rgba(32, 198, 106, 0.48);
     outline-offset: 2px;
+}
+
+.comunidade-acoes_icone_texto {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .comunidades-acoes__icone {
@@ -195,6 +205,20 @@
     line-height: 1.25;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.comunidades-acoes__seguir {
+    padding: 10px 10px;
+    background-color: var(--azul-principal);
+    border: none;
+    border-radius: 20px;
+    font-weight: 600;
+    color: var(--azul-claro);
+    cursor: pointer;
+}
+
+.comunidades-acoes__seguir:hover {
+    background-color: #2865b4;
 }
 
 /* A criação substitui a listagem e ocupa todo o painel de comunidades. */
@@ -2013,6 +2037,15 @@ html.tema-escuro:not(.alto-contraste) .comunidades-acoes__nova:hover {
 html.tema-escuro:not(.alto-contraste) .comunidades-acoes__nova:active {
     background: var(--tema-superficie-elevada);
     box-shadow: none;
+}
+
+html.tema-escuro:not(.not-contraste) .comunidades-acoes__seguir {
+    background-color: #154481;
+    color: #9dc8ff;
+}
+
+html.tema-escuro:not(.not-contraste) .comunidades-acoes__seguir:hover {
+    background-color: #113e79;
 }
 
 html.tema-escuro:not(.alto-contraste) .comunidade-acoes-header span {

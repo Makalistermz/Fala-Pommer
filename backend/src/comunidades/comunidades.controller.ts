@@ -133,6 +133,16 @@ export class ComunidadesController {
         return this.comunidadesService.entrarComunidade(comunidadeId, requisicao.usuario!);
     }
 
+    @Post(':comunidadeId/seguir')
+    @HttpCode(200)
+    @UseGuards(AuthGuard)
+    seguirComunidade(
+        @Param('comunidadeId', ParseIntPipe) comunidadeId: number,
+        @Req() requisicao: RequisicaoAutenticada,
+    ) {
+        return this.comunidadesService.seguirComunidade(comunidadeId, requisicao.usuario!);
+    }
+
     @Get(':comunidadeId/mensagens')
     @UseGuards(AuthGuard)
     listarMensagens(

@@ -217,12 +217,32 @@ export class NotificacoesService {
                             }
                         }
                     }
+                },
+                comunidade: {
+                    select: {
+                        comunidade_usuarios: {
+                            where: { tipo_funcao: "seguidor" },
+                            select: { usuario_id: true }
+                        }
+                    }
                 }
             }
         });
 
         if (!conversa) {
             return [];
+        }
+
+        if (conversa.tipo === "comunidade") {
+            const seguidores = new Set(
+                conversa.comunidade?.comunidade_usuarios.map(
+                    (seguidor) => seguidor.usuario_id
+                ) ?? []
+            );
+
+            return conversa.conversa_participante
+                .filter((participante) => !seguidores.has(participante.usuario_id))
+                .map((participante) => participante.usuario_id);
         }
 
         if (conversa.tipo !== "setor") {

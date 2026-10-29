@@ -2822,7 +2822,14 @@ export class ConversasService {
 
                     include: {
                         comunidade: {
-                            select: { id: true, ocultar_municipes: true }
+                            select: {
+                                id: true,
+                                ocultar_municipes: true,
+                                comunidade_usuarios: {
+                                    where: { usuario_id: usuarioLogadoId },
+                                    select: { tipo_funcao: true }
+                                }
+                            }
                         },
                         conversa_participante: {
                             select: {
@@ -2872,7 +2879,7 @@ export class ConversasService {
             );
         }
 
-        // A comunidade permite texto, anexos, leitura e digitação somente a participantes ativos.
+        // Seguidores podem apenas ler; não entram em conversa_participante.
         if (conversa.tipo === "comunidade") {
             if (!conversa.comunidade || (
                 conversa.comunidade.ocultar_municipes && usuarioLogado.tipo_usuario === "user"
@@ -2882,10 +2889,13 @@ export class ConversasService {
             const participa = conversa.conversa_participante.some((participante) =>
                 participante.usuario_id === usuarioLogadoId && participante.ocultada_em === null
             );
-            if (!participa) {
+            const eSeguidor =
+                conversa.comunidade.comunidade_usuarios[0]?.tipo_funcao === "seguidor";
+
+            if (!participa && !eSeguidor) {
                 throw new ForbiddenException("Entre na comunidade para acessar as mensagens.");
             }
-            return { usuarioLogado, conversa, atendimento: null, somenteLeitura: false };
+            return { usuarioLogado, conversa, atendimento: null, somenteLeitura: eSeguidor };
         }
 
         /*

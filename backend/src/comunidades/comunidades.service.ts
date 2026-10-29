@@ -29,6 +29,15 @@ function selecionarComunidade(usuarioId: number) {
                 _count: { select: { conversa_participante: true } }
             }
         },
+        comunidade_usuarios: {
+            where: { usuario_id: usuarioId },
+            select: {
+                id: true,
+                comunidade_id: true,
+                usuario_id: true,
+                tipo_funcao: true
+            }
+        },
         criador: {
             select: {
                 id: true,
@@ -52,7 +61,8 @@ function apresentarComunidade(comunidade: ComunidadeSelecionada) {
         comunidade_criada_em: comunidade.comunidade_criada_em,
         criador_nome: comunidade.criador?.nome,
         participa: (comunidade.conversa?.conversa_participante.length ?? 0) > 0,
-        totalParticipantes: comunidade.conversa?._count.conversa_participante ?? 0
+        totalParticipantes: comunidade.conversa?._count.conversa_participante ?? 0,
+        funcaoDosMembrosComunidade: comunidade.comunidade_usuarios[0] ?? null
     };
 }
 
@@ -210,6 +220,29 @@ export class ComunidadesService {
         }
     }
 
+    async seguirComunidadeFuncao(
+        comunidadeId: number,
+        usuarioLogadoId: number,
+        banco: Prisma.TransactionClient = this.prisma
+    ) {
+        try {
+            return banco.comunidade_usuarios.create({
+                data: {
+                    comunidade_id: comunidadeId,
+                    usuario_id: usuarioLogadoId,
+                    tipo_funcao: "seguidor"
+                },
+                select: {
+                    comunidade_id: true,
+                    usuario_id: true,
+                    tipo_funcao: true
+                }
+            });
+        } catch (erro) {
+            throw erro
+        }
+    }
+
     //carrega comunidade_usuarios
     async carregarFuncoesUsuario(comunidadeId: number) {
         try {
@@ -254,7 +287,11 @@ export class ComunidadesService {
             throw new NotFoundException('Comunidade não encontrada.');
         }
 
-        if (exigirParticipacao && !comunidade.conversa?.conversa_participante.length) {
+        const funcao = comunidade.comunidade_usuarios[0]?.tipo_funcao;
+        const participaDaConversa =
+            (comunidade.conversa?.conversa_participante.length ?? 0) > 0;
+
+        if (exigirParticipacao && !participaDaConversa && funcao !== "seguidor") {
             throw new ForbiddenException('Entre na comunidade para acessar as mensagens.');
         }
 
@@ -262,17 +299,40 @@ export class ComunidadesService {
     }
 
     async entrarComunidade(comunidadeId: number, usuario: Pick<JwtPayload, 'sub' | 'tipo'>) {
-        
-        //chama função de adicionar usario como membro ao entrar na comunidade
-        await this.entrarComunidadeFuncao(
-            comunidadeId,
-            usuario.sub
-        );
-
         return this.prisma.$transaction(async (banco) => {
             // Serializa entradas, inclusive a criação do chat para comunidades antigas.
             await banco.$queryRaw(Prisma.sql`SELECT id FROM comunidade WHERE id = ${comunidadeId} FOR UPDATE`);
             const comunidade = await this.verificarAcesso(comunidadeId, usuario, false, banco);
+
+            const vinculo = await banco.comunidade_usuarios.findUnique({
+                where: {
+                    comunidade_id_usuario_id: {
+                        comunidade_id: comunidadeId,
+                        usuario_id: usuario.sub
+                    }
+                },
+                select: { tipo_funcao: true }
+            });
+
+            if (vinculo?.tipo_funcao === "seguidor") {
+                await banco.comunidade_usuarios.update({
+                    where: {
+                        comunidade_id_usuario_id: {
+                            comunidade_id: comunidadeId,
+                            usuario_id: usuario.sub
+                        }
+                    },
+                    data: { tipo_funcao: "membro" }
+                });
+            } else if (!vinculo) {
+                await banco.comunidade_usuarios.create({
+                    data: {
+                        comunidade_id: comunidadeId,
+                        usuario_id: usuario.sub,
+                        tipo_funcao: "membro"
+                    }
+                });
+            }
 
             if (!comunidade.conversa_id) {
                 const atualizada = await banco.comunidade.update({
@@ -306,6 +366,59 @@ export class ComunidadesService {
                 where: { id: comunidadeId },
                 select: selecionarComunidade(usuario.sub)
             }));
+        });
+    }
+
+    async seguirComunidade(
+        comunidadeId: number,
+        usuario: Pick<JwtPayload, 'sub' | 'tipo'>
+    ) {
+        return this.prisma.$transaction(async (banco) => {
+            // valida existência/visibilidade, sem exigir participação
+            const comunidade = await this.verificarAcesso(comunidadeId, usuario, false, banco);
+
+            const existente = await banco.comunidade_usuarios.findUnique({
+                where: {
+                    comunidade_id_usuario_id: {
+                        comunidade_id: comunidadeId,
+                        usuario_id: usuario.sub
+                    }
+                },
+                select: { tipo_funcao: true }
+            });
+
+            if (existente) {
+                throw new ConflictException(
+                    existente.tipo_funcao === 'seguidor'
+                        ? 'Você já segue esta comunidade.'
+                        : 'Você já participa desta comunidade.'
+                );
+            }
+
+            await this.seguirComunidadeFuncao(comunidadeId, usuario.sub, banco);
+
+            // Seguir não torna o usuário participante: ele só recebe acesso de
+            // leitura pela função "seguidor".
+            if (!comunidade.conversa_id) {
+                await banco.comunidade.update({
+                    where: { id: comunidadeId },
+                    data: {
+                        conversa: {
+                            create: {
+                                tipo: conversa_tipo.comunidade,
+                                nome: comunidade.nome_comunidade.slice(0, 120)
+                            }
+                        }
+                    }
+                });
+            }
+
+            return apresentarComunidade(
+                await banco.comunidade.findUniqueOrThrow({
+                    where: { id: comunidadeId },
+                    select: selecionarComunidade(usuario.sub)
+                })
+            );
         });
     }
 
@@ -382,6 +495,22 @@ export class ComunidadesService {
             throw new BadRequestException('A mensagem deve conter de 1 a 4000 caracteres.');
         }
         const comunidade = await this.verificarAcesso(comunidadeId, usuario);
+        const membro = await this.prisma.comunidade_usuarios.findUnique({
+            where: {
+                comunidade_id_usuario_id: {
+                    comunidade_id: comunidadeId,
+                    usuario_id: usuario.sub
+                }
+            },
+            select: { tipo_funcao: true }
+        });
+
+        if (membro?.tipo_funcao !== "admin") {
+            throw new ForbiddenException(
+                "Somente administradores podem enviar mensagens nesta comunidade."
+            );
+        }
+
         const mensagem = await this.prisma.mensagem.create({
             data: {
                 conversa_id: comunidade.conversa_id!,

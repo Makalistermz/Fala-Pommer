@@ -99,10 +99,6 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
     const descricaoRef = useRef<HTMLTextAreaElement>(null);
     const ocultarMunicipesRef = useRef<HTMLInputElement>(null);
 
-    //não participa desta comunidade
-    const naoParticipa = comunidades.filter((comunidade) => !comunidade.participa);
-    const participa = comunidades.filter((comunidade) => comunidade.participa);
-
     //função de emoji aleatório
     function emojiAleatorio() {
         const emojis = [
@@ -285,9 +281,16 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
         buscarPerfil();
     }, []);
 
-    const ComunidadesMaisNovas = 
-    comunidades.sort((a, b) => new Date(b.comunidade_criada_em).getTime() - new Date(a.comunidade_criada_em).getTime()) //organiza por ordem da comunidade mais nova
-    .slice(0, 5); //pega 5 comunidades das mais novas
+    //filtra para comunidades que não participa, organiza por mais participantes
+    //e pega as 5 comunidades com mais pessoas
+    const ComunidadesComMaisPessoas = comunidades
+    .filter((comunidade) => !comunidade.participa)
+    .slice() // Cria uma cópia rasa antes de ordenar para garantir a imutabilidade
+    .sort((a, b) => b.totalParticipantes - a.totalParticipantes) //organiza por ordem da comunidade com mais pessoas
+    .slice(0, 5); //pega 5 comunidades com mais pessoas
+
+    //participa da comunidade
+    const participa = comunidades.filter((comunidade) => comunidade.participa);
 
     const podeCriarComunidade =
         usuario !== null && usuario.tipo !== "user";
@@ -564,7 +567,7 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                     <header className="comunidade-acoes-header">
                         <span>Encontrar comunidades para participar</span>
                     </header>
-                    {naoParticipa && ComunidadesMaisNovas
+                    {ComunidadesComMaisPessoas
                         .map((comunidade) => (
                             <>
                             <section

@@ -1611,6 +1611,28 @@
     border-radius: 10px;
 }
 
+.chat-header__entrar-comunidade {
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid #1351b4;
+    border-radius: 10px;
+    color: #ffffff;
+    background: #1351b4;
+    cursor: pointer;
+    font-family: var(--fonte-dm-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.chat-header__entrar-comunidade:hover:not(:disabled) {
+    background: #0c3f8f;
+}
+
+.chat-header__entrar-comunidade:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
 .chat-header__finalizar:hover,
 .chat-header__menu-opcoes button:hover {
     color: #ffffff;

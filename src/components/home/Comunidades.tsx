@@ -2,6 +2,7 @@ import { apiFetch } from "../../services/api";
 import { ModalFeedback } from "../ModalFeedback";
 import "./css/Comunidades.css";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import type { FuncaoDosMembrosComunidade } from "./ModalDadosComunidades";
 
 type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 
@@ -19,6 +20,7 @@ export interface Comunidade {
     totalParticipantes: number;
     comunidade_criada_em: string;
     criador_nome: string;
+    funcaoDosMembrosComunidade: FuncaoDosMembrosComunidade | null;
 }
 
 function obterUrlImagemComunidade(url: string | null) {

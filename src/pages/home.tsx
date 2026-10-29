@@ -2769,16 +2769,19 @@ function Home() {
 
     // Seleciona a comunidade e, para quem já participa, abre seu chat completo dentro do Home.
     async function abrirComunidade(comunidade: Comunidade) {
+        const abreChat = comunidade.participa || 
+            comunidade.funcaoDosMembrosComunidade?.tipo_funcao === "seguidor";
+        
         fecharChatMobile();
         cancelarGravacaoAudio();
         setConversaSelecionada(null);
         setDados(comunidade);
         comunidadeAbertaIdRef.current = comunidade.id;
         setErroComunidade("");
-        setCarregandoComunidade(comunidade.participa);
+        setCarregandoComunidade(abreChat);
         setEntrandoComunidade(false);
         setChatMobileAberto(true);
-        if (!comunidade.participa) return;
+        if (!abreChat) return;
 
         try {
             // O backend devolve o ID da conversa para reutilizar envio de texto, áudio e arquivos.
@@ -2820,6 +2823,42 @@ function Home() {
             }
         } finally {
             if (comunidadeAbertaIdRef.current === comunidadeId) setEntrandoComunidade(false);
+        }
+    }
+
+    const [seguindoComunidade, setSeguindoComunidade] = useState(false);
+
+    async function seguirComunidade() {
+
+        if (!dados || seguindoComunidade) return;
+
+        const comunidadeId = dados.id;
+        setSeguindoComunidade(true);
+        setErroComunidade("");
+
+        try {
+            const resposta = await apiFetch(`/comunidades/${comunidadeId}/seguir`, 
+                { method: "POST" }
+            );
+
+            const resultado = await resposta.json();
+
+            if (!resposta.ok) {
+                throw new Error(Array.isArray(resultado.message) ? resultado.message.join(", ") : resultado.message);
+            }
+
+            if (comunidadeAbertaIdRef.current === comunidadeId) {
+                await abrirComunidade(resultado as Comunidade);
+            }
+
+        } catch (erro) {
+
+            if (comunidadeAbertaIdRef.current === comunidadeId) {
+                setErroComunidade(erro instanceof Error ? erro.message : "Não foi possível seguir a comunidade.");
+            }
+
+        } finally {
+            if (comunidadeAbertaIdRef.current === comunidadeId) setSeguindoComunidade(false);
         }
     }
 
@@ -2936,8 +2975,13 @@ function Home() {
             membro.tipo_funcao === "admin",
     );
 
+    const souSeguidor =
+        conversaSelecionada?.tipo === "comunidade" && 
+        dados?.funcaoDosMembrosComunidade?.tipo_funcao === "seguidor";
+
     const podeEnviarMensagem =
         conversaSelecionada !== null &&
+        !souSeguidor &&
         !(
             (conversaSelecionada.tipo === "privada" ||
                 conversaSelecionada.tipo === "grupo" ||
@@ -3980,7 +4024,10 @@ function Home() {
                             <p>{dados.descricao_comunidade}</p>
                             {carregandoComunidade ? (
                                 <p role="status">Carregando o chat da comunidade…</p>
-                            ) : dados.participa ? (
+                            ) : (
+                                dados.participa || 
+                                dados?.funcaoDosMembrosComunidade?.tipo_funcao === "seguidor"
+                            ) ? (
                                 <button type="button" onClick={() => void abrirComunidade(dados)}>
                                     Tentar abrir o chat novamente
                                 </button>
@@ -4004,8 +4051,13 @@ function Home() {
                                             <path d="M5.164 14H15c-.299-.199-.557-.553-.78-1-.9-1.8-1.22-5.12-1.22-6q0-.396-.06-.776l-.938.938c.02.708.157 2.154.457 3.58.161.767.377 1.566.663 2.258H6.164zm5.581-9.91a4 4 0 0 0-1.948-1.01L8 2.917l-.797.161A4 4 0 0 0 4 7c0 .628-.134 2.197-.459 3.742q-.075.358-.166.718l-1.653 1.653q.03-.055.059-.113C2.679 11.2 3 7.88 3 7c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0c.942.19 1.788.645 2.457 1.284zM10 15a2 2 0 1 1-4 0zm-9.375.625a.53.53 0 0 0 .75.75l14.75-14.75a.53.53 0 0 0-.75-.75z"/>
                                         </svg>
                                         <span>Só acompanhar?</span>
-                                        <button type="button" className="comunidade-entrada__seguir-botao">
-                                            Seguir
+                                        <button
+                                            type="button" 
+                                            className="comunidade-entrada__seguir-botao"
+                                            onClick={() => void seguirComunidade()}
+                                            disabled={seguindoComunidade}
+                                        >
+                                            {seguindoComunidade ? "Seguindo…" : "Seguir"}
                                         </button>
                                     </div>
                                 </>
@@ -4044,29 +4096,32 @@ function Home() {
                     <div
                         className={`header__avatar__dados ${
                             conversaSelecionada.tipo === "grupo" ||
-                            conversaSelecionada.tipo === "comunidade"
+                            (conversaSelecionada.tipo === "comunidade" && !souSeguidor)
                                 ? "header__avatar__dados--clicavel"
                                 : ""
                         }`}
                         role={
-                            conversaSelecionada.tipo === "grupo"
+                            conversaSelecionada.tipo === "grupo" ||
+                            (conversaSelecionada.tipo === "comunidade" && !souSeguidor)
                                 ? "button"
                                 : undefined
                         }
                         tabIndex={
-                            conversaSelecionada.tipo === "grupo"
+                            conversaSelecionada.tipo === "grupo" ||
+                            (conversaSelecionada.tipo === "comunidade" && !souSeguidor)
                                 ? 0
                                 : undefined
                         }
                         aria-haspopup={
-                            conversaSelecionada.tipo === "grupo"
+                            conversaSelecionada.tipo === "grupo" ||
+                            (conversaSelecionada.tipo === "comunidade" && !souSeguidor)
                                 ? "dialog"
                                 : undefined
                         }
                         aria-expanded={
                             conversaSelecionada.tipo === "grupo"
                                 ? modalDadosGrupoAberto
-                                : (conversaSelecionada.tipo === "comunidade" 
+                                : (conversaSelecionada.tipo === "comunidade" && !souSeguidor
                                     ? modalDadosComunidadeAberto 
                                     : undefined
                                 )
@@ -4074,7 +4129,7 @@ function Home() {
                         onClick={() => {
                             if (conversaSelecionada.tipo === "grupo") {
                                 setModalDadosGrupoAberto(true);
-                            } else if (conversaSelecionada.tipo === "comunidade") {
+                            } else if (conversaSelecionada.tipo === "comunidade" && !souSeguidor) {
                                 setModalDadosComunidadeAberto(true);
                             }
                         }}
@@ -4087,6 +4142,7 @@ function Home() {
                                 setModalDadosGrupoAberto(true);
                             } else if (
                                 conversaSelecionada.tipo === "comunidade" &&
+                                !souSeguidor &&
                                 (evento.key === "Enter" || evento.key === " ")
                             ) {
                                 evento.preventDefault();
@@ -4144,6 +4200,19 @@ function Home() {
                         </div>
                     </div>
                 </div>
+
+                {conversaSelecionada.tipo === "comunidade" && souSeguidor && (
+                    <div className="chat-header__acoes">
+                        <button
+                            type="button"
+                            className="chat-header__entrar-comunidade"
+                            onClick={() => void entrarComunidade()}
+                            disabled={entrandoComunidade}
+                        >
+                            {entrandoComunidade ? "Entrando…" : "Entrar na comunidade"}
+                        </button>
+                    </div>
+                )}
 
                 {conversaSelecionada.tipo === "grupo" &&
                     !conversaSelecionada.somenteLeitura && (

@@ -41,7 +41,7 @@ interface ModalDadosComunidadeProps {
     ) => void;
 }
 
-interface FuncaoDosMembrosComunidade {
+export interface FuncaoDosMembrosComunidade {
     id: number,
     comunidade_id: number,
     usuario_id: number,

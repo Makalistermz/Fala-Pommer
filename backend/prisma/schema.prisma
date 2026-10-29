@@ -445,6 +445,7 @@ enum mensagem_visibilidade {
 }
 
 enum comunidade_usuarios_tipo_funcao {
+  seguidor
   membro
   admin
 }

@@ -72,6 +72,7 @@ export type mensagem_visibilidade = (typeof mensagem_visibilidade)[keyof typeof 
 
 
 export const comunidade_usuarios_tipo_funcao = {
+  seguidor: 'seguidor',
   membro: 'membro',
   admin: 'admin'
 } as const

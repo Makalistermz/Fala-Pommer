@@ -283,10 +283,17 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
         buscarPerfil();
     }, []);
 
+    //verifica se é seguidor
+    const ehSeguidor = (c: Comunidade) =>
+    c.funcaoDosMembrosComunidade?.tipo_funcao === "seguidor";
+
+    // segue, mas não participa
+    const comunidadeSeguindo = comunidades.filter(ehSeguidor);
+
     //filtra para comunidades que não participa, organiza por mais participantes
     //e pega as 5 comunidades com mais pessoas
     const ComunidadesComMaisPessoas = comunidades
-    .filter((comunidade) => !comunidade.participa)
+    .filter((comunidade) => !comunidade.participa && !ehSeguidor(comunidade))
     .slice() // Cria uma cópia rasa antes de ordenar para garantir a imutabilidade
     .sort((a, b) => b.totalParticipantes - a.totalParticipantes) //organiza por ordem da comunidade com mais pessoas
     .slice(0, 5); //pega 5 comunidades com mais pessoas

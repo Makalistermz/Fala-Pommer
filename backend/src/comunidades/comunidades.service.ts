@@ -243,6 +243,59 @@ export class ComunidadesService {
         }
     }
 
+    async deixarSeguirComunidadeFuncao(
+        comunidadeId: number,
+        usuario: Pick<JwtPayload, 'sub' | 'tipo'>,
+        banco: Prisma.TransactionClient = this.prisma
+    ) {
+        return this.prisma.$transaction(async (banco) => {
+            // Comunidade existe e é visível para o usuário (404 se não)
+            // exigirParticipacao = false, pois seguidor não participa da conversa
+            await this.verificarAcesso(comunidadeId, usuario, false, banco);
+
+            // 2. Existe vínculo entre o usuário e a comunidade?
+            const vinculo = await banco.comunidade_usuarios.findUnique({
+                where: {
+                    comunidade_id_usuario_id: {
+                        comunidade_id: comunidadeId,
+                        usuario_id: usuario.sub
+                    }
+                },
+                select: { tipo_funcao: true }
+            });
+
+            if (!vinculo) {
+                throw new NotFoundException('Você não segue esta comunidade.');
+            }
+
+            // Só seguidor pode deixar de seguir.
+            // Membro/admin devem usar sairComunidade (que trata o último admin, conversa etc.)
+            if (vinculo.tipo_funcao !== 'seguidor') {
+                throw new ConflictException(
+                    'Você participa desta comunidade. Use a opção de sair da comunidade.'
+                );
+            }
+
+            // Remove o vínculo
+            await banco.comunidade_usuarios.delete({
+                where: {
+                    comunidade_id_usuario_id: {
+                        comunidade_id: comunidadeId,
+                        usuario_id: usuario.sub
+                    }
+                }
+            });
+
+            // Retorna a comunidade atualizada, igual ao seguirComunidade
+            return apresentarComunidade(
+                await banco.comunidade.findUniqueOrThrow({
+                    where: { id: comunidadeId },
+                    select: selecionarComunidade(usuario.sub)
+                })
+            );
+        });
+    }
+
     //carrega comunidade_usuarios
     async carregarFuncoesUsuario(comunidadeId: number) {
         try {

@@ -469,6 +469,10 @@ function Home() {
     const acaoArquivosRef = useRef<HTMLDivElement>(null);
     const botaoArquivosRef = useRef<HTMLButtonElement>(null);
 
+    const [menuAbertoSeguindoComunidade, setMenuAbertoSeguindoComunidade] = useState(false);
+    const menuSeguindoComunidadeRef = useRef<HTMLDivElement>(null);
+    const botaoMenuSeguindoComunidadeRef = useRef<HTMLButtonElement>(null);
+
     useEffect(() => {
         if (opcoesMensagens === null) {
             return;
@@ -768,6 +772,44 @@ function Home() {
             window.removeEventListener("keydown", fecharMenuGrupoComEscape);
         };
     }, []);
+
+    useEffect(() => {
+        if (!menuAbertoSeguindoComunidade) {
+            return;
+        }
+
+        function fecharAoClicarFora(evento: PointerEvent) {
+            const alvo = evento.target;
+
+            if (!(alvo instanceof Node)) {
+                return;
+            }
+
+            if (
+                botaoMenuSeguindoComunidadeRef.current?.contains(alvo) ||
+                menuSeguindoComunidadeRef.current?.contains(alvo)
+            ) {
+                return;
+            }
+
+            setMenuAbertoSeguindoComunidade(false);
+        }
+
+        function fecharComEscape(evento: KeyboardEvent) {
+            if (evento.key === "Escape") {
+                setMenuAbertoSeguindoComunidade(false);
+                botaoMenuSeguindoComunidadeRef.current?.focus();
+            }
+        }
+
+        document.addEventListener("pointerdown", fecharAoClicarFora);
+        window.addEventListener("keydown", fecharComEscape);
+
+        return () => {
+            document.removeEventListener("pointerdown", fecharAoClicarFora);
+            window.removeEventListener("keydown", fecharComEscape);
+        };
+    }, [menuAbertoSeguindoComunidade]);
 
     useEffect(() => {
         function fecharMenuSetorAoClicarFora(evento: PointerEvent) {
@@ -4204,13 +4246,73 @@ function Home() {
                 {conversaSelecionada.tipo === "comunidade" && souSeguidor && (
                     <div className="chat-header__acoes">
                         <button
+                            ref={botaoMenuSeguindoComunidadeRef}
                             type="button"
-                            className="chat-header__entrar-comunidade"
-                            onClick={() => void entrarComunidade()}
-                            disabled={entrandoComunidade}
+                            className="chat-header__menu-seguindo"
+                            aria-label="Abrir ações da comunidade"
+                            aria-expanded={menuAbertoSeguindoComunidade}
+                            aria-haspopup="menu"
+                            onClick={() =>
+                                setMenuAbertoSeguindoComunidade((evento) => !evento)
+                            }
                         >
-                            {entrandoComunidade ? "Entrando…" : "Entrar na comunidade"}
+                            <svg
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    d="M4 7h16M4 12h16M4 17h16"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                />
+                            </svg>
                         </button>
+
+                        {menuAbertoSeguindoComunidade && (
+                            <div
+                                ref={menuSeguindoComunidadeRef}
+                                className="chat-header__menu-opcoes chat-header__menu-opcoes--grupo"
+                                role="menu"
+                            >
+                                <button
+                                    type="button"
+                                    className="chat-header__entrar-comunidade"
+                                    onClick={() => void entrarComunidade()}
+                                    disabled={entrandoComunidade}
+                                >
+                                    {entrandoComunidade ? "Entrando…" : "Entrar na comunidade"}
+                                </button>
+
+                                <button
+                                    type="button"
+                                    role="menuitem"
+                                    className="chat-header__parar-seguir"
+                                >
+                                    <svg
+                                        width="18"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            d="M10 17l5-5-5-5m5 5H3m10-9h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        />
+                                    </svg>
+                                    <span>
+                                        Deixar de seguir
+                                    </span>
+                                </button>
+                            </div>
+                        )}
                     </div>
                 )}
 

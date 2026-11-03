@@ -4016,9 +4016,9 @@ function Home() {
                                     <g transform="scale(0.25)">
                                         <path d=" M45 20 C43.5 13.5 38.5 9 32 9 C25.5 9 20.5 13.5 19 20 C20 21 20.5 22.5 20 24 V27 C20 33 25.5 37 32 35.5 C30.5 34 31 31.5 32.5 30.5 C34 29.5 37.5 29.5 39 30.5 L43 29 C44 27 44 25 44 24 C43.5 22.5 44 21 45 20Z" />
                                         <path d=" M24 38H40 C48.5 38 55 44.5 55 53 C55 59 51.5 61 45 61 H19 C12.5 61 9 59 9 53 C9 44.5 15.5 38 24 38Z" />
-                                        <path d="M15.5 22V21A16.5 16.5 0 0 1 48.5 21V22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                                        <path d="M15.5 22V21A16.5 16.5 0 0 1 48.5 21V22" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
                                         <path d=" M15.5 20 A3 3 0 0 1 18.5 23 V28.5 A3 3 0 0 1 12.5 28.5 V23 A3 3 0 0 1 15.5 20Z M48.5 20 A3 3 0 0 1 51.5 23 V28.5 A3 3 0 0 1 45.5 28.5 V23 A3 3 0 0 1 48.5 20Z" />
-                                        <path d="M48 29C45 32 41 33.5 37 33.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                        <path d="M48 29C45 32 41 33.5 37 33.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
                                         />
                                         <path d="M35 31.8H37 A1.7 1.7 0 0 1 37 35.2 H35 A1.7 1.7 0 0 1 35 31.8Z" />
                                     </g>
@@ -4263,10 +4263,10 @@ function Home() {
                                             <path d=" M45 20 C43.5 13.5 38.5 9 32 9 C25.5 9 20.5 13.5 19 20 C20 21 20.5 22.5 20 24 V27 C20 33 25.5 37 32 35.5 C30.5 34 31 31.5 32.5 30.5 C34 29.5 37.5 29.5 39 30.5 L43 29 C44 27 44 25 44 24 C43.5 22.5 44 21 45 20Z" />
                                             <path d=" M24 38H40 C48.5 38 55 44.5 55 53 C55 59 51.5 61 45 61 H19 C12.5 61 9 59 9 53 C9 44.5 15.5 38 24 38Z" />
 
-                                            <path d="M15.5 22V21A16.5 16.5 0 0 1 48.5 21V22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                                            <path d="M15.5 22V21A16.5 16.5 0 0 1 48.5 21V22" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
 
                                             <path d=" M15.5 20 A3 3 0 0 1 18.5 23 V28.5 A3 3 0 0 1 12.5 28.5 V23 A3 3 0 0 1 15.5 20Z M48.5 20 A3 3 0 0 1 51.5 23 V28.5 A3 3 0 0 1 45.5 28.5 V23 A3 3 0 0 1 48.5 20Z" />
-                                            <path d="M48 29C45 32 41 33.5 37 33.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                            <path d="M48 29C45 32 41 33.5 37 33.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
                                             />
                                             <path d="M35 31.8H37 A1.7 1.7 0 0 1 37 35.2 H35 A1.7 1.7 0 0 1 35 31.8Z" />
                                         </g>

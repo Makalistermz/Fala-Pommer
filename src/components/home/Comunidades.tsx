@@ -572,6 +572,11 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                     ))
                 }
 
+                {comunidadeSeguindo.length > 0 && (
+                    <header className="comunidade-acoes-header">
+                        <span>Seguindo</span>
+                    </header>
+                )}
                 <div>
                     <header className="comunidade-acoes-header">
                         <span>Encontrar comunidades para participar</span>

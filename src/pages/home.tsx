@@ -472,6 +472,7 @@ function Home() {
     const [menuAbertoSeguindoComunidade, setMenuAbertoSeguindoComunidade] = useState(false);
     const menuSeguindoComunidadeRef = useRef<HTMLDivElement>(null);
     const botaoMenuSeguindoComunidadeRef = useRef<HTMLButtonElement>(null);
+    const [deixandoDeSeguir, setDeixandoDeSeguir] = useState(false);
 
     useEffect(() => {
         if (opcoesMensagens === null) {
@@ -1326,8 +1327,6 @@ function Home() {
                 }
 
                 const dados = await resposta.json();
-
-                console.log("Usuário autenticado:", dados);
 
                 setUsuario(dados);
             } catch (erro) {
@@ -3040,6 +3039,50 @@ function Home() {
         );
     });
 
+    async function DeixarSeguirComunidade() {
+        if (!dados || deixandoDeSeguir) return;
+
+        const comunidadeId = dados?.id;
+        setDeixandoDeSeguir(true);
+        setMenuAbertoSeguindoComunidade(false);
+
+        try {
+            const resposta = await apiFetch(`/comunidades/${comunidadeId}/deixar-seguir`, 
+                { method: "DELETE" },
+            );
+
+            if (!resposta.ok) {
+                const erroData = await resposta.json().catch(() => null);
+            
+                // O NestJS costuma enviar a mensagem dentro de erroData.message
+                // (pode ser uma string ou um array de strings caso haja validação de DTO)
+                const mensagemDoBackend = Array.isArray(erroData?.message)
+                    ? erroData.message.join(", ")
+                    : erroData?.message;
+
+                // Lança o erro com a mensagem do back-end (ou uma mensagem padrão caso não venha nada)
+                throw new Error(mensagemDoBackend || "Não foi possível para de seguir a comunidade.");
+            }
+
+            voltarDasComunidades();
+
+            setFeedback({
+                aberto: true,
+                tipo: "sucesso",
+                mensagem: "Você deixou de seguir esta comunidade."
+            });
+
+        } catch (erro) {
+            setFeedback({
+                aberto: true,
+                tipo: "erro",
+                mensagem: `${erro}`
+            })
+        } finally {
+            setDeixandoDeSeguir(false);
+        }
+    }
+
     useEffect(() => {
         const conversaId = conversaSelecionada?.id;
 
@@ -4291,6 +4334,8 @@ function Home() {
                                     type="button"
                                     role="menuitem"
                                     className="chat-header__parar-seguir"
+                                    onClick={() => void DeixarSeguirComunidade()}
+                                    disabled={deixandoDeSeguir}
                                 >
                                     <svg
                                         width="18"
@@ -4308,7 +4353,7 @@ function Home() {
                                         />
                                     </svg>
                                     <span>
-                                        Deixar de seguir
+                                        {deixandoDeSeguir ? "Saindo..." : "Deixar de seguir"}
                                     </span>
                                 </button>
                             </div>
@@ -6313,7 +6358,7 @@ function Home() {
             tipo={feedback.tipo}
             mensagem={feedback.mensagem}
             aoFechar={() => {
-                setFeedbackFinalizacao((estadoAtual) => ({
+                setFeedback((estadoAtual) => ({
                     ...estadoAtual,
                     aberto: false,
                 }))

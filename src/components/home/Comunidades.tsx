@@ -577,7 +577,6 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                 )}
 
                 {comunidadeSeguindo.map((comunidade) => (
-                    <>
                     <section
                         className="comunidades-acoes"
                         key={comunidade.id}
@@ -617,7 +616,6 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                             </div>
                         </div>
                     </section>
-                    </>
                 ))}
 
                 <div>

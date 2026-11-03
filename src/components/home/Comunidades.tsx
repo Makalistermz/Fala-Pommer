@@ -272,8 +272,6 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
 
                 const dados = await resposta.json();
 
-                console.log("Usuário autenticado:", dados);
-
                 setUsuario(dados);
             } catch (erro) {
                 console.error("Erro ao buscar perfil:", erro);

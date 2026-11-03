@@ -577,7 +577,7 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                         <span>Seguindo</span>
                     </header>
                 )}
-                
+
                 {comunidadeSeguindo.map((comunidade) => (
                     <>
                     <section
@@ -628,7 +628,6 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                     </header>
                     {ComunidadesComMaisPessoas
                         .map((comunidade) => (
-                            <>
                             <section
                                 className="comunidades-acoes"
                                 key={comunidade.id}
@@ -669,7 +668,6 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                                     </div>
                                 </div>
                             </section>
-                            </>
                         ))
                     }
 

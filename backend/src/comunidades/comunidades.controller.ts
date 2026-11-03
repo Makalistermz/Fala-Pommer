@@ -308,4 +308,16 @@ export class ComunidadesController {
             comunidadeId
         );
     }
+
+    @Delete(':comunidadeId/deixar-seguir')
+    @UseGuards(AuthGuard)
+    deixarSeguirComunidadeFuncao(
+        @Param("comunidadeId", ParseIntPipe) comunidadeId: number,
+        @Req() requisicao: RequisicaoAutenticada
+    ) {
+        return this.comunidadesService.deixarSeguirComunidadeFuncao(
+            comunidadeId,
+            requisicao.usuario!
+        );
+    }
 }

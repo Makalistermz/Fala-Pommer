@@ -618,10 +618,15 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                     </section>
                 ))}
 
-                <div>
-                    <header className="comunidade-acoes-header">
-                        <span>Encontrar comunidades para participar</span>
-                    </header>
+                    {ComunidadesComMaisPessoas.length > 0 
+                    ?   (
+                            <header className="comunidade-acoes-header">
+                                <span>Encontrar comunidades para participar</span>
+                            </header>
+                        )
+                    : ('')
+                    }
+
                     {ComunidadesComMaisPessoas
                         .map((comunidade) => (
                             <section
@@ -679,7 +684,6 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                             </div>
                         </button>
                     </div>
-                </div>
 
             </main>
 

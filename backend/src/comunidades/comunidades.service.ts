@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CriarComunidadeDto } from './dto/criar-comunidade.dto';
+import { Categorias, CriarComunidadeDto } from './dto/criar-comunidade.dto';
 import { randomUUID } from 'node:crypto';
 import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -18,6 +18,7 @@ function selecionarComunidade(usuarioId: number) {
         descricao_comunidade: true,
         imagem_comunidade: true,
         ocultar_municipes: true,
+        categorias: true,
         conversa_id: true,
         comunidade_criada_em: true,
         conversa: {
@@ -131,6 +132,7 @@ export class ComunidadesService {
                     descricao_comunidade: dados.descricao_comunidade,
                     imagem_comunidade: fotoComunidadeUrl,
                     ocultar_municipes: dados.ocultar_municipes,
+                    categorias: dados.categorias,
                     conversa: {
                         create: {
                             tipo: conversa_tipo.comunidade,

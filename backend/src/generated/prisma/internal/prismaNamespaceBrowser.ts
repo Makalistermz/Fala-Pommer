@@ -332,6 +332,7 @@ export const ComunidadeScalarFieldEnum = {
   id: 'id',
   nome_comunidade: 'nome_comunidade',
   descricao_comunidade: 'descricao_comunidade',
+  categorias: 'categorias',
   imagem_comunidade: 'imagem_comunidade',
   ocultar_municipes: 'ocultar_municipes',
   conversa_id: 'conversa_id',

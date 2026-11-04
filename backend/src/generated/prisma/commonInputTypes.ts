@@ -338,6 +338,23 @@ export type Enumcadastro_tipo_usuarioNullableWithAggregatesFilter<$PrismaModel =
   _max?: Prisma.NestedEnumcadastro_tipo_usuarioNullableFilter<$PrismaModel>
 }
 
+export type Enumcomunidade_categoriasFilter<$PrismaModel = never> = {
+  equals?: $Enums.comunidade_categorias | Prisma.Enumcomunidade_categoriasFieldRefInput<$PrismaModel>
+  in?: $Enums.comunidade_categorias[]
+  notIn?: $Enums.comunidade_categorias[]
+  not?: Prisma.NestedEnumcomunidade_categoriasFilter<$PrismaModel> | $Enums.comunidade_categorias
+}
+
+export type Enumcomunidade_categoriasWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.comunidade_categorias | Prisma.Enumcomunidade_categoriasFieldRefInput<$PrismaModel>
+  in?: $Enums.comunidade_categorias[]
+  notIn?: $Enums.comunidade_categorias[]
+  not?: Prisma.NestedEnumcomunidade_categoriasWithAggregatesFilter<$PrismaModel> | $Enums.comunidade_categorias
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumcomunidade_categoriasFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumcomunidade_categoriasFilter<$PrismaModel>
+}
+
 export type Enumcomunidade_usuarios_tipo_funcaoFilter<$PrismaModel = never> = {
   equals?: $Enums.comunidade_usuarios_tipo_funcao | Prisma.Enumcomunidade_usuarios_tipo_funcaoFieldRefInput<$PrismaModel>
   in?: $Enums.comunidade_usuarios_tipo_funcao[]
@@ -694,6 +711,23 @@ export type NestedEnumcadastro_tipo_usuarioNullableWithAggregatesFilter<$PrismaM
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedEnumcadastro_tipo_usuarioNullableFilter<$PrismaModel>
   _max?: Prisma.NestedEnumcadastro_tipo_usuarioNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumcomunidade_categoriasFilter<$PrismaModel = never> = {
+  equals?: $Enums.comunidade_categorias | Prisma.Enumcomunidade_categoriasFieldRefInput<$PrismaModel>
+  in?: $Enums.comunidade_categorias[]
+  notIn?: $Enums.comunidade_categorias[]
+  not?: Prisma.NestedEnumcomunidade_categoriasFilter<$PrismaModel> | $Enums.comunidade_categorias
+}
+
+export type NestedEnumcomunidade_categoriasWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.comunidade_categorias | Prisma.Enumcomunidade_categoriasFieldRefInput<$PrismaModel>
+  in?: $Enums.comunidade_categorias[]
+  notIn?: $Enums.comunidade_categorias[]
+  not?: Prisma.NestedEnumcomunidade_categoriasWithAggregatesFilter<$PrismaModel> | $Enums.comunidade_categorias
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumcomunidade_categoriasFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumcomunidade_categoriasFilter<$PrismaModel>
 }
 
 export type NestedEnumcomunidade_usuarios_tipo_funcaoFilter<$PrismaModel = never> = {

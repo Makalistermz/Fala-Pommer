@@ -2236,6 +2236,7 @@ export const ComunidadeScalarFieldEnum = {
   id: 'id',
   nome_comunidade: 'nome_comunidade',
   descricao_comunidade: 'descricao_comunidade',
+  categorias: 'categorias',
   imagem_comunidade: 'imagem_comunidade',
   ocultar_municipes: 'ocultar_municipes',
   conversa_id: 'conversa_id',
@@ -2506,6 +2507,13 @@ export type Enumdesafio_2fa_finalidadeFieldRefInput<$PrismaModel> = FieldRefInpu
  * Reference to a field of type 'historico_administrativo_acao'
  */
 export type Enumhistorico_administrativo_acaoFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'historico_administrativo_acao'>
+    
+
+
+/**
+ * Reference to a field of type 'comunidade_categorias'
+ */
+export type Enumcomunidade_categoriasFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'comunidade_categorias'>
     
 
 

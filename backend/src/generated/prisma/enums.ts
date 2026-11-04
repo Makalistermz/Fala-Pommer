@@ -78,3 +78,17 @@ export const comunidade_usuarios_tipo_funcao = {
 } as const
 
 export type comunidade_usuarios_tipo_funcao = (typeof comunidade_usuarios_tipo_funcao)[keyof typeof comunidade_usuarios_tipo_funcao]
+
+
+export const comunidade_categorias = {
+  geral: 'geral',
+  saude: 'saude',
+  lazer: 'lazer',
+  esportes: 'esportes',
+  educacao: 'educacao',
+  meio_ambiente: 'meio_ambiente',
+  seguranca: 'seguranca',
+  obras: 'obras'
+} as const
+
+export type comunidade_categorias = (typeof comunidade_categorias)[keyof typeof comunidade_categorias]

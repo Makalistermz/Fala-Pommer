@@ -1,121 +1,150 @@
 function ModalDescobrirComunidades() {
     return (
         <>
-            <header>
-                <div>
-                    <section>
-                        <div>
-                            <h1>Descobrir comunidades</h1>
+            <div
+                className="descobrir-comunidades"
+            >
+                <div
+                    className="descobrir-comunidades__caixa"
+                >
+                    <header className="descobrir-comunidades__cabecalho">
+                        <div className="descobrir-comunidades__cabecalho-conteudo">
+                            <section className="descobrir-comunidades__apresentacao">
+                                <div className="descobrir-comunidades__titulo-container">
+                                    <h1 className="descobrir-comunidades__titulo">Descobrir comunidades</h1>
+                                </div>
+                                <div className="descobrir-comunidades__subtitulo-container">
+                                    <span className="descobrir-comunidades__subtitulo">
+                                        Encontre comunidades dos seus interesses e entre na conversa.
+                                    </span>
+                                </div>
+                            </section>
+                            <button
+                                className="descobrir-comunidades__fechar"
+                                type="button"
+                                aria-label="Fechar"
+                            >
+                                <svg
+                                    className="descobrir-comunidades__fechar-icone"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    viewBox="0 0 16 16"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                                </svg>
+                            </button>
                         </div>
-                        <div>
-                            <span>
-                                Encontre comunidades dos seus interesses e entre na conversa.
-                            </span>
-                        </div>
-                    </section>
-                    <button>
-                        <svg viewBox="0 0 24 24" aria-hidden="true">
-                            <path
-                                d="m6 6 12 12m18 6 6 18"
-                            />
-                        </svg>
-                    </button>
-                </div>
-            </header>
-            <main>
-                <div>
-                    <div>
-                        <div>
-                            <div>
-                                <span>
-                                    <svg
-                                        width="16"
-                                        height="16"
-                                        fill="currentColor"
-                                        className="bi bi-search"
-                                        viewBox="0 0 16 16"
-                                    >
-                                        <path
-                                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
+                    </header>
+
+                    <main className="descobrir-comunidades__conteudo">
+                        <div className="descobrir-comunidades__corpo">
+                            <div className="descobrir-comunidades__busca">
+                                <div className="descobrir-comunidades__busca-campo">
+                                    <div className="descobrir-comunidades__busca-icone-container">
+                                        <span className="descobrir-comunidades__busca-icone">
+                                            <svg
+                                                width="16"
+                                                height="16"
+                                                fill="currentColor"
+                                                viewBox="0 0 16 16"
+                                                aria-hidden="true"
+                                            >
+                                                <path
+                                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
+                                                />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div className="descobrir-comunidades__busca-input-container">
+                                        <input
+                                            className="descobrir-comunidades__busca-input"
+                                            name="pesquisa-input"
+                                            role="textbox"
+                                            aria-label="Pesquisar comunidades"
+                                            autoComplete="off"
+                                            dir="ltr"
+                                            placeholder="Pesquisar comunidades"
+                                            type="search"
                                         />
-                                    </svg>
-                                </span>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <input
-                                    name="pesquisa-input"
-                                    role="textbox"
-                                    aria-label="Pesquisar comunidades"
-                                    autoComplete="off"
-                                    dir="ltr"
-                                    placeholder="Pesquisar comunidades"
-                                    type="search"
-                                />
+
+                            <div className="descobrir-comunidades__filtros">
+                                <button className="descobrir-comunidades__filtro descobrir-comunidades__filtro--ativo">
+                                    <div className="descobrir-comunidades__filtro-conteudo">
+                                        <span className="descobrir-comunidades__filtro-texto">
+                                            Todas
+                                        </span>
+                                    </div>
+                                </button>
+                                {/*criar mais botões com um map conforme tenha os topicos */}
+                            </div>
+
+                            <div className="descobrir-comunidades__lista">
+
+                                {dadosComunidades.map((dados) => (
+                                    <div className="descobrir-comunidades__card" key={dados.id}>
+                                        <div className="descobrir-comunidades__card-cabecalho">
+                                            <div className="descobrir-comunidades__card-imagem">
+                                                {dados.imagem_comunidade}
+                                            </div>
+                                            <div className="descobrir-comunidades__card-info">
+                                                <strong className="descobrir-comunidades__card-nome">
+                                                    {dados.nome_comunidade}
+                                                </strong>
+                                                <span className="descobrir-comunidades__card-membros">
+                                                    {dados.totalParticipantes} membros
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className="descobrir-comunidades__card-descricao-container">
+                                            <p className="descobrir-comunidades__card-descricao">
+                                                {dados.descricao_comunidade}
+                                            </p>
+                                        </div>
+                                        <div className="descobrir-comunidades__card-rodape">
+                                            <div className="descobrir-comunidades__card-categoria">
+                                                {dados.categorias}
+                                            </div>
+                                            <div className="descobrir-comunidades__card-acoes">
+                                                <button className="descobrir-comunidades__card-entrar">
+                                                    Entrar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                                
                             </div>
                         </div>
-                    </div>
-                    
+                    </main>
 
-                    <div>
-                        <button>
-                            <div>
-                                <span>
-                                    Todas
+                    <footer className="descobrir-comunidades__rodape">
+                        <div className="descobrir-comunidades__rodape-conteudo">
+                            <div className="descobrir-comunidades__contador">
+                                <span className="descobrir-comunidades__contador-texto">
+                                    Mostrando X comunidades
                                 </span>
                             </div>
-                        </button>
-                        {/*criar mais botões com um map conforme tenha os topicos */}
-                    </div>
-
-                    <div>
-                        <div>
-                            <div>
-                                <div>Foto</div>
-                                <div>
-                                    <strong>
-                                        Nome comunidade
-                                    </strong>
-                                    <span>X membros</span>
+                            <div className="descobrir-comunidades__criar">
+                                <div className="descobrir-comunidades__criar-pergunta">
+                                    <span className="descobrir-comunidades__criar-texto">
+                                        Não achou a sua?
+                                    </span>
                                 </div>
-                            </div>
-
-                            <div>
-                                <p>Descrição comunidade</p>
-                            </div>
-
-                            <div>
-                                <div>
-                                    topico da comunidade
-                                </div>
-
-                                <div>
-                                    <button>
-                                        Entrar
+                                <div className="descobrir-comunidades__criar-acao">
+                                    <button className="descobrir-comunidades__criar-botao">
+                                        <span className="descobrir-comunidades__criar-icone">+</span> Criar comunidade
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </footer>
                 </div>
-            </main>
-            <footer>
-                <div>
-                    <div>
-                        <span>Mostrando X comunidades</span>
-                    </div>
-
-                    <div>
-                        <div>
-                            <span>Não achou a sua?</span>
-                        </div>
-                        <div>
-                            <button>
-                                <span>+</span> Criar comunidade
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            </div>
         </>
     )
 }

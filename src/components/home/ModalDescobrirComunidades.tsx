@@ -1,4 +1,3 @@
-import { useState } from "react"
 import type { Comunidade } from "./Comunidades"
 import { obterUrlImagemComunidade } from "../../utils/imagemComunidade";
 
@@ -13,7 +12,12 @@ function ModalDescobrirComunidades({
     aoAbrir,
     aoFechar,
 }: ModalDescobrirComunidadesProps) {
-    const [dadosComunidades] = useState<Comunidade[]>([])
+
+    const ehSeguidor = (c: Comunidade) =>
+    c.funcaoDosMembrosComunidade?.tipo_funcao === "seguidor";
+
+    const ComunidadesComMaisPessoas = comunidades
+    .filter((comunidade) => !comunidade.participa && !ehSeguidor(comunidade));
 
     return (
         <>
@@ -104,7 +108,7 @@ function ModalDescobrirComunidades({
 
                             <div className="descobrir-comunidades__lista">
 
-                                {dadosComunidades.map((dados) => (
+                                {ComunidadesComMaisPessoas.map((dados) => (
                                     <div className="descobrir-comunidades__card" key={dados.id}>
                                         <div className="descobrir-comunidades__card-cabecalho">
                                             <div className="descobrir-comunidades__card-imagem">

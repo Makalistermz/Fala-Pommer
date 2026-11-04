@@ -84,11 +84,6 @@ html.paleta-acessivel.tema-escuro:not(.alto-contraste) {
   --verde-fundo: #123d34;
 }
 
-.margin-top-bottom_zero {
-  margin-right: 0px;
-  margin-left: 0px;
-}
-
 html.paleta-acessivel:not(.alto-contraste) .acessibilidade__item::before {
   background: var(--paleta-informacao);
 }

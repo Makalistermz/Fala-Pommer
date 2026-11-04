@@ -61,13 +61,6 @@ const categoriasCriarComunidades = [
     },
 ];
 
-    if (!url) return undefined;
-
-    return url.startsWith("http://") || url.startsWith("https://")
-        ? url
-        : `${import.meta.env.VITE_API_URL}${url}`;
-}
-
 async function gerarImagemIconeComunidade(emoji: string, cor: string) {
     const canvas = document.createElement("canvas");
     canvas.width = 512;
@@ -342,6 +335,10 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
 
     //participa da comunidade
     const participa = comunidades.filter((comunidade) => comunidade.participa);
+
+    const comunidadesParaDescobrir = comunidades
+    .filter((comunidade) => !comunidade.participa && !ehSeguidor(comunidade))
+    .sort((a, b) => b.totalParticipantes - a.totalParticipantes);
 
     const podeCriarComunidade =
         usuario !== null && usuario.tipo !== "user";
@@ -771,6 +768,8 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
 
             {abrirModalDescobrirMais && (
                 <ModalDescobrirComunidades
+                    comunidades={comunidadesParaDescobrir}
+                    aoAbrir={aoAbrir}
                     aoFechar={() => setAbrirModalDescobrirMais(false)}
                 />
             )}

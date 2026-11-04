@@ -1,7 +1,18 @@
 import { useState } from "react"
 import type { Comunidade } from "./Comunidades"
+import { obterUrlImagemComunidade } from "../../utils/imagemComunidade";
 
-function ModalDescobrirComunidades({ aoFechar }: { aoFechar: () => void }) {
+interface ModalDescobrirComunidadesProps {
+    comunidades: Comunidade[];
+    aoAbrir: (comunidade: Comunidade) => void;
+    aoFechar: () => void;
+}
+
+function ModalDescobrirComunidades({
+    comunidades,
+    aoAbrir,
+    aoFechar,
+}: ModalDescobrirComunidadesProps) {
     const [dadosComunidades] = useState<Comunidade[]>([])
 
     return (
@@ -97,7 +108,10 @@ function ModalDescobrirComunidades({ aoFechar }: { aoFechar: () => void }) {
                                     <div className="descobrir-comunidades__card" key={dados.id}>
                                         <div className="descobrir-comunidades__card-cabecalho">
                                             <div className="descobrir-comunidades__card-imagem">
-                                                {dados.imagem_comunidade}
+                                                {dados.imagem_comunidade
+                                                    ? <img src={obterUrlImagemComunidade(dados.imagem_comunidade)} alt="" />
+                                                    : dados.nome_comunidade.slice(0, 2).toUpperCase()
+                                                }
                                             </div>
                                             <div className="descobrir-comunidades__card-info">
                                                 <strong className="descobrir-comunidades__card-nome">
@@ -118,7 +132,13 @@ function ModalDescobrirComunidades({ aoFechar }: { aoFechar: () => void }) {
                                                 {dados.categorias}
                                             </div>
                                             <div className="descobrir-comunidades__card-acoes">
-                                                <button className="descobrir-comunidades__card-entrar">
+                                                <button 
+                                                    className="descobrir-comunidades__card-entrar"
+                                                    onClick={() => {
+                                                        aoAbrir(dados);
+                                                        aoFechar();
+                                                    }}
+                                                >
                                                     Entrar
                                                 </button>
                                             </div>
@@ -134,7 +154,7 @@ function ModalDescobrirComunidades({ aoFechar }: { aoFechar: () => void }) {
                         <div className="descobrir-comunidades__rodape-conteudo">
                             <div className="descobrir-comunidades__contador">
                                 <span className="descobrir-comunidades__contador-texto">
-                                    Mostrando X comunidades
+                                    {comunidades.length}
                                 </span>
                             </div>
                             <div className="descobrir-comunidades__criar">

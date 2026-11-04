@@ -1,3 +1,25 @@
+html.tema-escuro:not(.alto-contraste) .descobrir-comunidades {
+    --dc-principal: var(--tema-destaque);
+    --dc-principal-hover: #9fc2ff;
+    --dc-principal-texto: var(--tema-fundo);
+
+    --dc-fundo-caixa: var(--tema-superficie-elevada);
+    --dc-fundo-card: var(--tema-superficie);
+    --dc-fundo-input: var(--tema-superficie);
+    --dc-fundo-chip: var(--tema-superficie-interativa);
+    --dc-fundo-hover: var(--tema-superficie-interativa);
+    --dc-borda: var(--tema-borda);
+    --dc-borda-forte: var(--tema-destaque);
+
+    --dc-texto: var(--tema-texto);
+    --dc-texto-card: var(--tema-texto-secundario);
+    --dc-texto-suave: var(--tema-texto-secundario);
+
+    --dc-avatar-fundo: var(--tema-superficie-interativa);
+    --dc-avatar-texto: var(--tema-destaque);
+    --dc-sombra: 0 30px 90px rgba(0, 0, 0, 0.55), 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
 /* Cabeçalho isolado da área de comunidades. */
 .comunidades-header {
     position: sticky;
@@ -1812,7 +1834,6 @@
     color: rgb(180, 35, 24) !important;
 }
 
-/* ===== Descobrir comunidades ===== */
 .descobrir-comunidades {
     /* Tema claro (padrão do sistema) */
     --dc-principal: #1351b4;
@@ -1845,29 +1866,6 @@
         radial-gradient(circle at 50% 15%, rgba(49, 128, 255, 0.2), transparent 34%),
         rgba(5, 13, 28, 0.72);
     backdrop-filter: blur(7px);
-}
-
-/* Tema escuro: só troca as variáveis pelos tokens do sistema */
-html.tema-escuro:not(.alto-contraste) .descobrir-comunidades {
-    --dc-principal: var(--tema-destaque);
-    --dc-principal-hover: #9fc2ff;
-    --dc-principal-texto: var(--tema-fundo);
-
-    --dc-fundo-caixa: var(--tema-superficie-elevada);
-    --dc-fundo-card: var(--tema-superficie);
-    --dc-fundo-input: var(--tema-superficie);
-    --dc-fundo-chip: var(--tema-superficie-interativa);
-    --dc-fundo-hover: var(--tema-superficie-interativa);
-    --dc-borda: var(--tema-borda);
-    --dc-borda-forte: var(--tema-destaque);
-
-    --dc-texto: var(--tema-texto);
-    --dc-texto-card: var(--tema-texto-secundario);
-    --dc-texto-suave: var(--tema-texto-secundario);
-
-    --dc-avatar-fundo: var(--tema-superficie-interativa);
-    --dc-avatar-texto: var(--tema-destaque);
-    --dc-sombra: 0 30px 90px rgba(0, 0, 0, 0.55), 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .descobrir-comunidades__caixa {
@@ -1961,7 +1959,7 @@ html.tema-escuro:not(.alto-contraste) .descobrir-comunidades {
     height: 20px;
 }
 
-/* ---------- Conteúdo (rola) ---------- */
+/* ---------- Conteúdo ---------- */
 .descobrir-comunidades__conteudo {
     min-height: 0;
     flex: 1;
@@ -2205,6 +2203,7 @@ html.tema-escuro:not(.alto-contraste) .descobrir-comunidades {
     font-size: 0.75rem;
     font-weight: 700;
     text-overflow: ellipsis;
+    text-transform: uppercase;
     white-space: nowrap;
 }
 
@@ -2312,62 +2311,6 @@ html.tema-escuro:not(.alto-contraste) .descobrir-comunidades {
 .descobrir-comunidades__criar-icone {
     font-size: 1.125rem;
     line-height: 1;
-}
-
-/* ---------- Animação ---------- */
-@keyframes descobrirComunidadesEntrar {
-    from {
-        opacity: 0;
-        transform: translateY(14px) scale(0.98);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-/* ---------- Responsivo ---------- */
-@media (max-width: 680px) {
-    .descobrir-comunidades__lista {
-        grid-template-columns: 1fr;
-    }
-
-    .descobrir-comunidades__rodape-conteudo {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-    }
-
-    .descobrir-comunidades__contador {
-        text-align: center;
-    }
-
-    .descobrir-comunidades__criar {
-        justify-content: space-between;
-    }
-}
-
-@media (max-width: 420px) {
-    .descobrir-comunidades__criar {
-        flex-direction: column;
-        align-items: stretch;
-        text-align: center;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .descobrir-comunidades__caixa {
-        animation: none;
-    }
-
-    .descobrir-comunidades__card,
-    .descobrir-comunidades__card-entrar,
-    .descobrir-comunidades__filtro,
-    .descobrir-comunidades__fechar,
-    .descobrir-comunidades__criar-botao {
-        transition: none;
-    }
 }
 
 html.tema-escuro:not(.alto-contraste) .modal-dados-comunidade {
@@ -2969,6 +2912,38 @@ html.tema-escuro:not(.alto-contraste) .opcao-informacao__usuario.remover__comuni
     }
 }
 
+@keyframes descobrirComunidadesEntrar {
+    from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 680px) {
+    .descobrir-comunidades__lista {
+        grid-template-columns: 1fr;
+    }
+
+    .descobrir-comunidades__rodape-conteudo {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .descobrir-comunidades__contador {
+        text-align: center;
+    }
+
+    .descobrir-comunidades__criar {
+        justify-content: space-between;
+    }
+}
+
 @media (max-width: 640px) {
     .modal-dados-comunidade {
         width: min(100%, 520px);
@@ -3028,6 +3003,12 @@ html.tema-escuro:not(.alto-contraste) .opcao-informacao__usuario.remover__comuni
 }
 
 @media (max-width: 420px) {
+    .descobrir-comunidades__criar {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
     .dados-comunidade__informacoes {
         min-height: 240px;
         gap: 10px;
@@ -3285,11 +3266,17 @@ html.tema-escuro:not(.alto-contraste) .opcao-informacao__usuario.remover__comuni
     .nova-comunidade__privacidade-controle,
     .nova-comunidade__privacidade-controle::after,
     .comunidades-header__adicionar,
-    .comunidades-acoes__nova {
+    .comunidades-acoes__nova,
+    .descobrir-comunidades__card,
+    .descobrir-comunidades__card-entrar,
+    .descobrir-comunidades__filtro,
+    .descobrir-comunidades__fechar,
+    .descobrir-comunidades__criar-botao {
         transition: none;
     }
 
-    .nova-comunidade__privacidade-controle::after {
+    .nova-comunidade__privacidade-controle::after,
+    .descobrir-comunidades__caixa {
         animation: none;
     }
 

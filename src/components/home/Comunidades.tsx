@@ -4,6 +4,7 @@ import ModalDescobrirComunidades from "../home/ModalDescobrirComunidades"
 import "./css/Comunidades.css";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { FuncaoDosMembrosComunidade } from "./ModalDadosComunidades";
+import { obterUrlImagemComunidade } from "../../utils/imagemComunidade";
 
 type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 
@@ -60,7 +61,6 @@ const categoriasCriarComunidades = [
     },
 ];
 
-function obterUrlImagemComunidade(url: string | null) {
     if (!url) return undefined;
 
     return url.startsWith("http://") || url.startsWith("https://")

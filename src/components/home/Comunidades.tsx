@@ -17,6 +17,7 @@ export interface Comunidade {
     descricao_comunidade: string;
     imagem_comunidade: string | null;
     participa: boolean;
+    categorias: string;
     totalParticipantes: number;
     comunidade_criada_em: string;
     criador_nome: string;
@@ -135,6 +136,7 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
     const nomeComunidadeRef = useRef<HTMLInputElement>(null);
     const descricaoRef = useRef<HTMLTextAreaElement>(null);
     const ocultarMunicipesRef = useRef<HTMLInputElement>(null);
+    const categoriasRef = useRef<HTMLSelectElement>(null);
 
     //função de emoji aleatório
     function emojiAleatorio() {
@@ -211,6 +213,10 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
             corpo.append(
                 "ocultar_municipes",
                 String(ocultarMunicipesRef.current?.checked ?? false)
+            );
+            corpo.append(
+                "categorias",
+                categoriasRef.current?.value ?? ""
             );
 
             if (fotoComunidade) {
@@ -516,6 +522,8 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                                     name="categoria" 
                                     id="categoria" 
                                     className="nova-comunidade__selecao"
+                                    ref={categoriasRef}
+                                    required
                                 >
                                     {categoriasCriarComunidades.map((categoria) => (
                                         <option key={categoria.value} value={categoria.value}>

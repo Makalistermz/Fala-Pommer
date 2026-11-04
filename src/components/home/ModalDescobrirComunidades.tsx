@@ -1,11 +1,18 @@
-function ModalDescobrirComunidades() {
+import { useState } from "react"
+import type { Comunidade } from "./Comunidades"
+
+function ModalDescobrirComunidades({ aoFechar }: { aoFechar: () => void }) {
+    const [dadosComunidades] = useState<Comunidade[]>([])
+
     return (
         <>
             <div
                 className="descobrir-comunidades"
+                onClick={aoFechar}
             >
                 <div
                     className="descobrir-comunidades__caixa"
+                    onClick={(e) => e.stopPropagation()}
                 >
                     <header className="descobrir-comunidades__cabecalho">
                         <div className="descobrir-comunidades__cabecalho-conteudo">
@@ -23,6 +30,7 @@ function ModalDescobrirComunidades() {
                                 className="descobrir-comunidades__fechar"
                                 type="button"
                                 aria-label="Fechar"
+                                onClick={aoFechar}
                             >
                                 <svg
                                     className="descobrir-comunidades__fechar-icone"

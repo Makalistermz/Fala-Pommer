@@ -23,6 +23,41 @@ export interface Comunidade {
     funcaoDosMembrosComunidade: FuncaoDosMembrosComunidade | null;
 }
 
+const categoriasCriarComunidades = [
+    {
+        value: "geral",
+        opcao: "Geral"
+    },
+    {
+        value: "saude",
+        opcao: "Saúde"
+    },
+    {
+        value: "lazer",
+        opcao: "Lazer"
+    },
+    {
+        value: "esportes",
+        opcao: "Esportes"
+    },
+    {
+        value: "educacao",
+        opcao: "Educação"
+    },
+    {
+        value: "meio_ambiente",
+        opcao: "Meio ambiente"
+    },
+    {
+        value: "seguranca",
+        opcao: "Segurança"
+    },
+    {
+        value: "obras",
+        opcao: "Obras"
+    },
+];
+
 function obterUrlImagemComunidade(url: string | null) {
     if (!url) return undefined;
 
@@ -473,6 +508,21 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
                                     <span className="nova-comunidade__privacidade-controle" aria-hidden="true"></span>
                                     <span>Ocultar comunidade para munícipes</span>
                                 </label>
+                            </div>
+
+                            <div className="nova-comunidade-container__selecao">
+                                <label htmlFor="categoria">Categoria </label>
+                                <select 
+                                    name="categoria" 
+                                    id="categoria" 
+                                    className="nova-comunidade__selecao"
+                                >
+                                    {categoriasCriarComunidades.map((categoria) => (
+                                        <option key={categoria.value} value={categoria.value}>
+                                            {categoria.opcao}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                         </section>
 

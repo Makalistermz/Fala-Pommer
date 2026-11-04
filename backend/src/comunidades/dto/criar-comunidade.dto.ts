@@ -1,5 +1,16 @@
 import { Transform } from "class-transformer";
-import { IsBoolean, IsNotEmpty, IsString, MaxLength } from "class-validator";
+import { IsBoolean, IsEnum, IsNotEmpty, IsString, MaxLength } from "class-validator";
+
+export enum Categorias {
+    GERAL = 'geral',
+    SAUDE = 'saude',
+    LAZER = 'lazer',
+    ESPORTES = 'esportes',
+    EDUCACAO = 'educacao',
+    MEIO_AMBIENTE = 'meio_ambiente',
+    SEGURANCA = 'seguranca',
+    OBRAS = 'obras'
+}
 
 export class CriarComunidadeDto {
     @IsString()
@@ -24,4 +35,9 @@ export class CriarComunidadeDto {
     })
     @IsBoolean()
     ocultar_municipes: boolean = false;
+    
+
+    @IsEnum(Categorias)
+    @IsNotEmpty({ message: 'A categoria é obrigatória e não pode ser vazia' })
+    categorias!: Categorias;
 }

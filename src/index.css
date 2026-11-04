@@ -858,14 +858,21 @@ html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo button:ho
 }
 
 html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo .chat-header__menu-sair-grupo,
-.chat-header__parar-seguir,
 html.tema-escuro:not(.alto-contraste) .sair {
   color: #ff8a80 !important;
 }
 
 html.tema-escuro:not(.alto-contraste) .chat-header__menu-opcoes--grupo .chat-header__menu-sair-grupo:hover,
-.chat-header__parar-seguir:hover,
 html.tema-escuro:not(.alto-contraste) .sair:hover {
+  background: #7f1d1d !important;
+  color: #ffffff !important;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-header__parar-seguir {
+  color: #ff8a80 !important;
+}
+
+html.tema-escuro:not(.alto-contraste) .chat-header__parar-seguir:hover {
   background: #7f1d1d !important;
   color: #ffffff !important;
 }

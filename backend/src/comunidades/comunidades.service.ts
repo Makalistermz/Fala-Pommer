@@ -59,6 +59,7 @@ function apresentarComunidade(comunidade: ComunidadeSelecionada) {
         nome_comunidade: comunidade.nome_comunidade,
         descricao_comunidade: comunidade.descricao_comunidade,
         imagem_comunidade: comunidade.imagem_comunidade,
+        categorias: comunidade.categorias,
         comunidade_criada_em: comunidade.comunidade_criada_em,
         criador_nome: comunidade.criador?.nome,
         participa: (comunidade.conversa?.conversa_participante.length ?? 0) > 0,

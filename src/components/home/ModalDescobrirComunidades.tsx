@@ -14,12 +14,14 @@ interface ModalDescobrirComunidadesProps {
     comunidades: Comunidade[];
     aoAbrir: (comunidade: Comunidade) => void;
     aoFechar: () => void;
+    funcaoCriarComunidade: () => void;
 }
 
 function ModalDescobrirComunidades({
     comunidades,
     aoAbrir,
     aoFechar,
+    funcaoCriarComunidade,
 }: ModalDescobrirComunidadesProps) {
     const [usuario, setUsuario] = useState<UsuarioAutenticado | null>(null);
 
@@ -204,7 +206,7 @@ function ModalDescobrirComunidades({
                                     <div className="descobrir-comunidades__criar-acao">
                                         <button 
                                             className="descobrir-comunidades__criar-botao"
-                                            onClick={() => {}}
+                                            onClick={() => funcaoCriarComunidade()}
                                         >
                                             <span className="descobrir-comunidades__criar-icone">+</span> Criar comunidade
                                         </button>

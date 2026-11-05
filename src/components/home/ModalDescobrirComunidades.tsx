@@ -181,7 +181,12 @@ function ModalDescobrirComunidades({
                                     >
                                     <div className="descobrir-comunidades__filtro-conteudo">
                                         <span className="descobrir-comunidades__filtro-texto">
-                                            {categoria}
+                                            {categoria === "seguranca" ? "segurança" 
+                                                : categoria === "saude" ? "saúde" 
+                                                : categoria === "educacao" ? "educação" 
+                                                : categoria === "meio_ambiente" ? "meio ambiente" 
+                                                : categoria
+                                            }
                                         </span>
                                     </div>
                                 </button>

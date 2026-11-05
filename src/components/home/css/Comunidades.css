@@ -2245,6 +2245,73 @@ html.tema-escuro:not(.alto-contraste) .descobrir-comunidades {
     outline-offset: 3px;
 }
 
+/* ---------- Carregar mais ---------- */
+.descobrir-comunidades__carregar {
+    grid-column: 1 / -1; /* ocupa a linha inteira do grid de 2 colunas */
+    display: flex;
+    justify-content: center;
+    padding-top: 6px;
+}
+
+.descobrir-comunidades__carregar-button {
+    display: inline-flex;
+    width: 100%;
+    max-width: 320px;
+    min-height: 46px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 11px 24px;
+    color: var(--dc-principal);
+    background: var(--dc-fundo-chip);
+    border: 1px dashed var(--dc-borda-forte);
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: var(--fonte-dm-sans, sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1.2;
+    transition:
+        background-color 200ms ease,
+        border-color 200ms ease,
+        color 200ms ease,
+        box-shadow 200ms ease,
+        transform 160ms ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.descobrir-comunidades__carregar-button > span {
+    display: grid;
+    place-items: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1;
+    transition: transform 350ms ease;
+}
+
+.descobrir-comunidades__carregar-button:hover {
+    color: var(--dc-principal-texto);
+    background: var(--dc-principal);
+    border-style: solid;
+    border-color: var(--dc-principal);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--dc-principal) 28%, transparent);
+    transform: translateY(-1px);
+}
+
+.descobrir-comunidades__carregar-button:hover > span {
+    transform: rotate(90deg) scale(1.1);
+}
+
+.descobrir-comunidades__carregar-button:active {
+    box-shadow: none;
+    transform: translateY(0) scale(0.99);
+}
+
+.descobrir-comunidades__carregar-button:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--dc-principal) 35%, transparent);
+    outline-offset: 3px;
+}
+
 /* ---------- Rodapé ---------- */
 .descobrir-comunidades__rodape {
     flex: 0 0 auto;

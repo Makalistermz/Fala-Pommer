@@ -2231,7 +2231,7 @@ html.tema-escuro:not(.alto-contraste) .descobrir-comunidades {
 .descobrir-comunidades__card-entrar:hover {
     border-color: var(--dc-principal-hover);
     background: var(--dc-principal-hover);
-    box-shadow: 0 8px 18px color-mix(in srgb, var(--dc-principal) 28%, transparent);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--dc-principal) 12%, transparent);
     transform: translateY(-1px);
 }
 
@@ -2294,7 +2294,7 @@ html.tema-escuro:not(.alto-contraste) .descobrir-comunidades {
     background: var(--dc-principal);
     border-style: solid;
     border-color: var(--dc-principal);
-    box-shadow: 0 8px 18px color-mix(in srgb, var(--dc-principal) 28%, transparent);
+    box-shadow: 0 8px 18px color-mix(in srgb, var(--dc-principal) 12%, transparent);
     transform: translateY(-1px);
 }
 

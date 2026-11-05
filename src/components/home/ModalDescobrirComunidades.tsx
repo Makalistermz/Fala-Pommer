@@ -1,5 +1,14 @@
+import { useEffect, useState } from "react";
+import { apiFetch } from "../../services/api";
 import type { Comunidade } from "./Comunidades"
 import { obterUrlImagemComunidade } from "../../utils/imagemComunidade";
+
+type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
+
+interface UsuarioAutenticado {
+    sub: number;
+    tipo: TipoUsuario;
+}
 
 interface ModalDescobrirComunidadesProps {
     comunidades: Comunidade[];
@@ -12,12 +21,36 @@ function ModalDescobrirComunidades({
     aoAbrir,
     aoFechar,
 }: ModalDescobrirComunidadesProps) {
+    const [usuario, setUsuario] = useState<UsuarioAutenticado | null>(null);
 
     const ehSeguidor = (c: Comunidade) =>
     c.funcaoDosMembrosComunidade?.tipo_funcao === "seguidor";
 
     const ComunidadesComMaisPessoas = comunidades
     .filter((comunidade) => !comunidade.participa && !ehSeguidor(comunidade));
+
+    useEffect(() => {
+        async function buscarPerfil() {
+            try {
+                const resposta = await apiFetch("/auth/Perfil");
+
+                if (!resposta.ok) {
+                return;
+                }
+
+                const dados = await resposta.json();
+
+                setUsuario(dados);
+            } catch (erro) {
+                console.error("Erro ao buscar perfil:", erro);
+            }
+        }
+
+        buscarPerfil();
+    }, []);
+
+    const podeCriarComunidade =
+        usuario !== null && usuario.tipo !== "user";
 
     return (
         <>
@@ -161,18 +194,23 @@ function ModalDescobrirComunidades({
                                     {comunidades.length} comunidades
                                 </span>
                             </div>
-                            <div className="descobrir-comunidades__criar">
-                                <div className="descobrir-comunidades__criar-pergunta">
-                                    <span className="descobrir-comunidades__criar-texto">
-                                        Não achou a sua?
-                                    </span>
+                            {podeCriarComunidade && (
+                                <div className="descobrir-comunidades__criar">
+                                    <div className="descobrir-comunidades__criar-pergunta">
+                                        <span className="descobrir-comunidades__criar-texto">
+                                            Não achou a sua?
+                                        </span>
+                                    </div>
+                                    <div className="descobrir-comunidades__criar-acao">
+                                        <button 
+                                            className="descobrir-comunidades__criar-botao"
+                                            onClick={() => {}}
+                                        >
+                                            <span className="descobrir-comunidades__criar-icone">+</span> Criar comunidade
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="descobrir-comunidades__criar-acao">
-                                    <button className="descobrir-comunidades__criar-botao">
-                                        <span className="descobrir-comunidades__criar-icone">+</span> Criar comunidade
-                                    </button>
-                                </div>
-                            </div>
+                            )}
                         </div>
                     </footer>
                 </div>

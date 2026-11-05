@@ -201,7 +201,7 @@ function ModalDescobrirComunidades({
                                     </div>
                                 ))}
 
-                                {listCard.length >= 1 && (
+                                {listCard.length >= 11 && (
                                     <div className="descobrir-comunidades__carregar">
                                         <button
                                             type="button"

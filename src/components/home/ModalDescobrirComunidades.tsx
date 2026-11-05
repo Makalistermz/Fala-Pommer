@@ -28,7 +28,7 @@ function ModalDescobrirComunidades({
     const ehSeguidor = (c: Comunidade) =>
     c.funcaoDosMembrosComunidade?.tipo_funcao === "seguidor";
 
-    const ComunidadesComMaisPessoas = comunidades
+    const ComunidadesQueNaoParticipa = comunidades
     .filter((comunidade) => !comunidade.participa && !ehSeguidor(comunidade));
 
     useEffect(() => {
@@ -53,6 +53,22 @@ function ModalDescobrirComunidades({
 
     const podeCriarComunidade =
         usuario !== null && usuario.tipo !== "user";
+
+        //carrega mais cards
+        let listCard = [];
+        let newListCard = [];
+        
+        //total de cards que vão aparecer na tela
+        const totalDeCards = 10
+
+        listCard = ComunidadesQueNaoParticipa;
+
+        let [maisItens, setMaisItens] = useState(totalDeCards);
+        const carregarMais = () => {
+            setMaisItens(maisItens + totalDeCards);
+        };
+
+        newListCard = listCard.slice(0, maisItens);
 
     return (
         <>
@@ -143,7 +159,7 @@ function ModalDescobrirComunidades({
 
                             <div className="descobrir-comunidades__lista">
 
-                                {ComunidadesComMaisPessoas.map((dados) => (
+                                {newListCard.length > 0 && newListCard.map((dados) => (
                                     <div className="descobrir-comunidades__card" key={dados.id}>
                                         <div className="descobrir-comunidades__card-cabecalho">
                                             <div className="descobrir-comunidades__card-imagem">
@@ -184,7 +200,19 @@ function ModalDescobrirComunidades({
                                         </div>
                                     </div>
                                 ))}
-                                
+
+                                {listCard.length >= 1 && (
+                                    <div className="descobrir-comunidades__carregar">
+                                        <button
+                                            type="button"
+                                            className="descobrir-comunidades__carregar-button"
+                                            onClick={carregarMais}
+                                        >
+                                            <span>+</span> Carregar mais
+                                        </button>
+                                    </div>
+                                )}
+
                             </div>
                         </div>
                     </main>

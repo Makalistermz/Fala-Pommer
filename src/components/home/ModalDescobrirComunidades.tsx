@@ -158,7 +158,7 @@ function ModalDescobrirComunidades({
                         <div className="descobrir-comunidades__rodape-conteudo">
                             <div className="descobrir-comunidades__contador">
                                 <span className="descobrir-comunidades__contador-texto">
-                                    {comunidades.length}
+                                    {comunidades.length} comunidades
                                 </span>
                             </div>
                             <div className="descobrir-comunidades__criar">

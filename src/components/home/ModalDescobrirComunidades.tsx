@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { apiFetch } from "../../services/api";
 import type { Comunidade } from "./Comunidades"
 import { obterUrlImagemComunidade } from "../../utils/imagemComunidade";
+import categoriaQueMaisGostaComunidade from "../../utils/categoriaQueMaisGostaComunidade";
 
 type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 
@@ -12,6 +13,7 @@ interface UsuarioAutenticado {
 
 interface ModalDescobrirComunidadesProps {
     comunidades: Comunidade[];
+    comunidadesSemFiltro: Comunidade[];
     aoAbrir: (comunidade: Comunidade) => void;
     aoFechar: () => void;
     funcaoCriarComunidade: () => void;
@@ -19,6 +21,7 @@ interface ModalDescobrirComunidadesProps {
 
 function ModalDescobrirComunidades({
     comunidades,
+    comunidadesSemFiltro,
     aoAbrir,
     aoFechar,
     funcaoCriarComunidade,
@@ -30,6 +33,18 @@ function ModalDescobrirComunidades({
 
     const ComunidadesQueNaoParticipa = comunidades
     .filter((comunidade) => !comunidade.participa && !ehSeguidor(comunidade));
+
+    const categoriasEmAlta = useMemo(
+        () =>
+            categoriaQueMaisGostaComunidade(
+                comunidadesSemFiltro
+                    .filter((c) => c.participa)
+                    .map((c) => c.categorias)
+                    .filter((c): c is string => Boolean(c)),
+                5,
+            ),
+        [comunidadesSemFiltro],
+    );
 
     useEffect(() => {
         async function buscarPerfil() {
@@ -147,14 +162,31 @@ function ModalDescobrirComunidades({
                             </div>
 
                             <div className="descobrir-comunidades__filtros">
-                                <button className="descobrir-comunidades__filtro descobrir-comunidades__filtro--ativo">
+                                <button 
+                                    type="button"
+                                    className="descobrir-comunidades__filtro descobrir-comunidades__filtro--ativo"
+                                >
                                     <div className="descobrir-comunidades__filtro-conteudo">
                                         <span className="descobrir-comunidades__filtro-texto">
                                             Todas
                                         </span>
                                     </div>
                                 </button>
-                                {/*criar mais botões com um map conforme tenha os topicos */}
+
+                                {categoriasEmAlta.map((categoria) => (
+                                    <button 
+                                        key={categoria}
+                                        type="button"
+                                        className="descobrir-comunidades__filtro"
+                                    >
+                                    <div className="descobrir-comunidades__filtro-conteudo">
+                                        <span className="descobrir-comunidades__filtro-texto">
+                                            {categoria}
+                                        </span>
+                                    </div>
+                                </button>
+                                ))}
+
                             </div>
 
                             <div className="descobrir-comunidades__lista">

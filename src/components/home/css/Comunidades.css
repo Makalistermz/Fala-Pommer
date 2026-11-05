@@ -2075,6 +2075,7 @@ html.tema-escuro:not(.alto-contraste) .descobrir-comunidades {
     font-size: 0.875rem;
     font-weight: 700;
     line-height: 1.2;
+    text-transform: uppercase;
 }
 
 .descobrir-comunidades__filtro--ativo,

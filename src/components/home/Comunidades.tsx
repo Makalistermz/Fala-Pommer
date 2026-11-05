@@ -769,6 +769,7 @@ function Comunidades({ aoAbrir, comunidadeSelecionada }: ComunidadesProps) {
             {abrirModalDescobrirMais && (
                 <ModalDescobrirComunidades
                     comunidades={comunidadesParaDescobrir}
+                    comunidadesSemFiltro={comunidades}
                     aoAbrir={aoAbrir}
                     aoFechar={() => setAbrirModalDescobrirMais(false)}
                     funcaoCriarComunidade={() => {

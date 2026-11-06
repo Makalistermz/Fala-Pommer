@@ -10,6 +10,7 @@ import { ModalCadastroGoogle } from "../components/ModalCadastroGoogle";
 import { useAutenticacao } from "../components/AutenticacaoContext";
 import { requisicaoPublica } from "../services/api";
 import { useRecaptchaToken } from "../hooks/useRecaptchaToken";
+import RestaurarSessao from "../components/restaurarSessao/RestaurarSessao";
 
 import {
   GoogleLogin,
@@ -115,6 +116,7 @@ function Login() {
   const [carregando, setCarregando] = useState(false);
   const [cadastroGooglePendente, setCadastroGooglePendente] =
     useState<CadastroGooglePendente | null>(null);
+  const [splash, setSplash] = useState(true);
   const [forcaSenhaGoogle, setForcaSenhaGoogle] = useState<
     "" | "Fraca" | "Media" | "Forte"
   >("");
@@ -133,6 +135,8 @@ function Login() {
     situacao: situacaoAutenticacao,
     usuario: usuarioAutenticado,
   } = useAutenticacao();
+
+  const carregar = situacaoAutenticacao === "carregando";
 
   async function tentarBiometria() {
     try {
@@ -492,10 +496,6 @@ function Login() {
     });
   }
 
-  if (situacaoAutenticacao === "carregando") {
-    return <p>Restaurando sessão...</p>;
-  }
-
   if (usuarioAutenticado) {
     // Impede que uma sessão válida volte a exibir o formulário de login.
     return (
@@ -512,7 +512,8 @@ function Login() {
   const obrigatorio = <span style={estiloObrigatorio}>*</span>;
 
   return (
-      <main className="login">
+    <>
+      {!carregar && <main className="login">
         <section className="login__formulario">
           <header className="login__cabecalho">
             <img src={brasao} alt="Brasão da Prefeitura" />
@@ -852,7 +853,15 @@ function Login() {
             }));
           }}
         />
-      </main>
+      </main>}
+
+      {splash && (
+        <RestaurarSessao
+          pronto={!carregando}
+          onConcluir={() => setSplash(false)}
+        />
+      )}
+    </>
   );
 }
 

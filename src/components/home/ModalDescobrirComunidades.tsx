@@ -72,23 +72,23 @@ function ModalDescobrirComunidades({
     const podeCriarComunidade =
         usuario !== null && usuario.tipo !== "user";
 
-        const totalDeCards = 10;
+    const totalDeCards = 10;
 
-        const termo = normalizar(buscaComunidade);
+    const termo = normalizar(buscaComunidade);
 
-        // 1) Filtra a lista de quem NÃO participa, pelo nome
-        const filtrados = ComunidadesQueNaoParticipa.filter((comunidade) => {
-            if (!termo) return true;
-            return normalizar(comunidade.nome_comunidade).includes(termo);
-        });
+    // 1) Filtra a lista de quem NÃO participa, pelo nome
+    const filtrados = ComunidadesQueNaoParticipa.filter((comunidade) => {
+        if (!termo) return true;
+        return normalizar(comunidade.nome_comunidade).includes(termo);
+    });
 
-        // 2) Corta usando maisItens (que cresce no "Carregar mais")
-        const visiveis = filtrados.slice(0, maisItens);
+    // 2) Corta usando maisItens (que cresce no "Carregar mais")
+    const visiveis = filtrados.slice(0, maisItens);
 
-        // 3) Só mostra o botão se ainda houver itens escondidos
-        const temMais = filtrados.length > maisItens;
+    // 3) Só mostra o botão se ainda houver itens escondidos
+    const temMais = filtrados.length > maisItens;
 
-        const carregarMais = () => setMaisItens((q) => q + totalDeCards);
+    const carregarMais = () => setMaisItens((q) => q + totalDeCards);
 
     return (
         <>

@@ -7,6 +7,8 @@ import { normalizar } from "../../utils/normalizarTexto";
 
 type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 
+type FiltroComunidade = "todas" | "geral" | "saude" | "lazer" | "esportes" | "educacao" | "meio_ambiente" | "seguranca"| "obras";
+
 interface UsuarioAutenticado {
     sub: number;
     tipo: TipoUsuario;
@@ -29,6 +31,7 @@ function ModalDescobrirComunidades({
 }: ModalDescobrirComunidadesProps) {
     const [usuario, setUsuario] = useState<UsuarioAutenticado | null>(null);
     const [buscaComunidade, setBuscaComunidade] = useState("");
+    const [filtroAtivo, setFiltroAtivo] = useState<FiltroComunidade>("todas")
     const [maisItens, setMaisItens] = useState(10);
 
     const ehSeguidor = (c: Comunidade) =>
@@ -48,6 +51,15 @@ function ModalDescobrirComunidades({
             ),
         [comunidadesSemFiltro],
     );
+
+    const ROTULOS: Record<string, string> = {
+        seguranca: "segurança",
+        saude: "saúde",
+        educacao: "educação",
+        meio_ambiente: "meio ambiente",
+    };
+
+    const rotulo = (categoria: string) => ROTULOS[categoria] ?? categoria;
 
     useEffect(() => {
         async function buscarPerfil() {
@@ -78,8 +90,13 @@ function ModalDescobrirComunidades({
 
     // 1) Filtra a lista de quem NÃO participa, pelo nome
     const filtrados = ComunidadesQueNaoParticipa.filter((comunidade) => {
-        if (!termo) return true;
-        return normalizar(comunidade.nome_comunidade).includes(termo);
+        const passaBusca =
+            !termo || normalizar(comunidade.nome_comunidade).includes(termo);
+
+        const passaCategoria =
+            filtroAtivo === "todas" || comunidade.categorias === filtroAtivo;
+
+        return passaBusca && passaCategoria;
     });
 
     // 2) Corta usando maisItens (que cresce no "Carregar mais")
@@ -89,6 +106,11 @@ function ModalDescobrirComunidades({
     const temMais = filtrados.length > maisItens;
 
     const carregarMais = () => setMaisItens((q) => q + totalDeCards);
+
+    const selecionarFiltro = (filtro: FiltroComunidade) => {
+        setFiltroAtivo(filtro);
+        setMaisItens(totalDeCards);
+    };
 
     return (
         <>
@@ -174,7 +196,12 @@ function ModalDescobrirComunidades({
                             <div className="descobrir-comunidades__filtros">
                                 <button 
                                     type="button"
-                                    className="descobrir-comunidades__filtro descobrir-comunidades__filtro--ativo"
+                                    className={`descobrir-comunidades__filtro ${
+                                        filtroAtivo === "todas" 
+                                            ? "descobrir-comunidades__filtro--ativo" 
+                                            : ""
+                                    }`}
+                                    onClick={() => selecionarFiltro("todas")}
                                 >
                                     <div className="descobrir-comunidades__filtro-conteudo">
                                         <span className="descobrir-comunidades__filtro-texto">
@@ -187,16 +214,18 @@ function ModalDescobrirComunidades({
                                     <button 
                                         key={categoria}
                                         type="button"
-                                        className="descobrir-comunidades__filtro"
+                                        className={`descobrir-comunidades__filtro ${
+                                            filtroAtivo === categoria 
+                                                ? "descobrir-comunidades__filtro--ativo" 
+                                                : ""
+                                        }`}
+                                        onClick={() => 
+                                            selecionarFiltro(categoria as FiltroComunidade)
+                                        }
                                     >
                                     <div className="descobrir-comunidades__filtro-conteudo">
                                         <span className="descobrir-comunidades__filtro-texto">
-                                            {categoria === "seguranca" ? "segurança" 
-                                                : categoria === "saude" ? "saúde" 
-                                                : categoria === "educacao" ? "educação" 
-                                                : categoria === "meio_ambiente" ? "meio ambiente" 
-                                                : categoria
-                                            }
+                                            {rotulo(categoria)}
                                         </span>
                                     </div>
                                 </button>

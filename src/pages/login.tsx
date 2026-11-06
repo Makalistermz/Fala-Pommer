@@ -110,13 +110,13 @@ function Login() {
   const [etapa, setEtapa] = useState<"credenciais" | "verificacao">(
     "credenciais",
   );
+  const [splash, setSplash] = useState(true);
   const [desafio, setDesafio] = useState<DesafioLogin | null>(null);
   const [codigo, setCodigo] = useState("");
   const [usarRecuperacao, setUsarRecuperacao] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [cadastroGooglePendente, setCadastroGooglePendente] =
     useState<CadastroGooglePendente | null>(null);
-  const [splash, setSplash] = useState(true);
   const [forcaSenhaGoogle, setForcaSenhaGoogle] = useState<
     "" | "Fraca" | "Media" | "Forte"
   >("");
@@ -857,7 +857,7 @@ function Login() {
 
       {splash && (
         <RestaurarSessao
-          pronto={!carregando}
+          pronto={!carregar}
           onConcluir={() => setSplash(false)}
         />
       )}

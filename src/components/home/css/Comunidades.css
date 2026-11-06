@@ -240,6 +240,7 @@ html.tema-escuro:not(.alto-contraste) .descobrir-comunidades {
     justify-content: center;
     gap: 10px;
     padding: 12px 16px;
+    margin-bottom: 10px;
 
     font-family: inherit;
     font-size: 14px;
@@ -2244,6 +2245,12 @@ html.tema-escuro:not(.alto-contraste) .descobrir-comunidades {
 .descobrir-comunidades__card-entrar:focus-visible {
     outline: 3px solid color-mix(in srgb, var(--dc-principal) 35%, transparent);
     outline-offset: 3px;
+}
+
+.descobrir-comunidades__vazio {
+    width: 100%;
+    grid-column: 1/ -1;
+    text-align: center;
 }
 
 /* ---------- Carregar mais ---------- */

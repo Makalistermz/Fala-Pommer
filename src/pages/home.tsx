@@ -1966,55 +1966,19 @@ function Home() {
 
             setModalSairGrupoAberto(false);
 
-            if (
-                usuario?.tipo === "superAdmin" &&
-                resultado.somenteLeitura
-            ) {
-                const tornarGrupoSomenteLeitura = (
-                    conversa: Conversa,
-                ): Conversa => {
-                    if (conversa.tipo !== "grupo" || conversa.id !== grupoId) {
-                        return conversa;
-                    }
-
-                    const participantes = conversa.participantes.filter(
-                        (participante) => participante.id !== usuario.sub,
-                    );
-
-                    return {
-                        ...conversa,
-                        participantes,
-                        totalParticipantes: resultado.totalParticipantes!,
-                        somenteLeitura: true,
-                        mensagensNaoLidas: 0,
-                    };
-                };
-
-                setConversas((conversasAtuais) =>
-                    conversasAtuais.map(tornarGrupoSomenteLeitura),
-                );
-                setConversaSelecionada((conversaAtual) =>
-                    conversaAtual
-                        ? tornarGrupoSomenteLeitura(conversaAtual)
-                        : null,
-                );
-            } else {
-                conversaAbertaIdRef.current = null;
-                setConversas((conversasAtuais) =>
-                    conversasAtuais.filter((conversa) => conversa.id !== grupoId),
-                );
-                setConversaSelecionada(null);
-                fecharChatMobile();
-            }
+            conversaAbertaIdRef.current = null;
+            setConversas((conversasAtuais) =>
+                conversasAtuais.filter((conversa) => conversa.id !== grupoId),
+            );
+            setConversaSelecionada(null);
+            fecharChatMobile();
 
             setFeedbackFinalizacao({
                 aberto: true,
                 tipo: "sucesso",
-                mensagem:
-                    usuario?.tipo === "superAdmin"
-                        ? "Você saiu do grupo. Ele continua disponível somente para leitura."
-                        : "Você saiu do grupo e não possui mais acesso a ele.",
+                mensagem: "Você saiu do grupo e não possui mais acesso a ele.",
             });
+
         } catch (erro) {
             console.error("Erro ao sair do grupo:", erro);
             setFeedbackFinalizacao({
@@ -3028,7 +2992,8 @@ function Home() {
                 conversaSelecionada.tipo === "grupo" ||
                 conversaSelecionada.tipo === "comunidade") &&
             conversaSelecionada.somenteLeitura
-        ) && (ehAdminDaComunidade);
+        ) && 
+        (conversaSelecionada.tipo !== "comunidade" || ehAdminDaComunidade);
 
     const setoresFiltrados = setores.filter((setor) => {
         const busca = buscaUsuario.trim().toLowerCase();
@@ -6329,11 +6294,7 @@ function Home() {
         <ModalConfirmacao
             aberto={modalSairGrupoAberto}
             titulo="Sair do grupo?"
-            mensagem={
-                usuario?.tipo === "superAdmin"
-                    ? "Você deixará de participar e não poderá mais escrever. Como super administrador, continuará vendo o grupo somente para leitura."
-                    : "Você deixará de ver as mensagens e não terá mais acesso a este grupo."
-            }
+            mensagem="Você deixará de ver as mensagens e não terá mais acesso a este grupo."
             carregando={saindoDoGrupo}
             textoConfirmar="Sair do grupo"
             textoCarregando="Saindo..."

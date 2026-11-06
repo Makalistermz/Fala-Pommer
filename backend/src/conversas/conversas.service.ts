@@ -546,17 +546,12 @@ export class ConversasService {
             await this.prisma.conversa.findMany({
                 where: {
                     tipo: "grupo",
-                    ...(usuarioLogado.tipo_usuario !== "superAdmin"
-                        ? {
-                            conversa_participante: {
-                                some: {
-                                    usuario_id: usuarioLogado.id
-                                }
-                            }
+                    conversa_participante: {
+                        some: {
+                            usuario_id: usuarioLogado.id
                         }
-                        : {})
+                    }
                 },
-
                 include: {
                     conversa_participante: {
                         include: {
@@ -1109,8 +1104,7 @@ export class ConversasService {
                 return {
                     grupoId: conversa.id,
                     totalParticipantes,
-                    somenteLeitura:
-                        usuarioLogado.tipo_usuario === "superAdmin"
+                    somenteLeitura: false
                 };
             }
         );
@@ -3037,10 +3031,7 @@ export class ConversasService {
                         participante.usuario_id === usuarioLogado.id
                 );
 
-            if (
-                !participaDaConversa &&
-                usuarioLogado.tipo_usuario !== "superAdmin"
-            ) {
+            if (!participaDaConversa) {
                 throw new ForbiddenException(
                     "Você não participa deste grupo."
                 );

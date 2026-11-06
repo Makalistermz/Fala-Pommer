@@ -1,3 +1,76 @@
+
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import "./restaurarSessao.css"
+import brasao from "../../assets/img/brasao.webp"
+import { obterTemaAparencia } from '../../library/temaAparencia';
+
+/*
+  Tela de restauração de sessão do Fala Pommer.
+
+  Props
+  - pronto:     true quando a restauração terminou (ex.: !carregando do seu contexto de login)
+  - onConcluir: chamada quando a animação de saída termina; use para desmontar o componente
+  - minMs:      tempo mínimo na tela (padrão 3200 ms)
+
+  Uso
+    const { carregando } = useAuth();
+    const [splash, setSplash] = useState(true);
+
+    {!carregando && <Rotas />}
+    {splash && <RestaurarSessao pronto={!carregando} onConcluir={() => setSplash(false)} />}
+
+  A tela real do app monta por baixo assim que `pronto` vira true, então a cortina de saída revela o app.
+*/
+
+const ITENS = ['conversas', 'grupos', 'não lidas', 'contatos', 'anexos', 'rascunhos', 'notificações', 'quem está online'];
+const CORES = ['#CFE0FF', '#DDD8FF', '#BDF2DE', '#FFD2E1', '#A9D4FF'];
+const CORESDARKMODE = ['#A9C2EC', '#B9B3E6', '#94D6BC', '#E5A9BE', '#85B6E6'];
+const NTIRAS = 6;
+
+interface TituloProps {
+    linhas: string[];
+    parado: boolean;
+}
+
+interface RestaurarSessaoProps {
+    pronto?: boolean;
+    onConcluir?: () => void;
+    minMs?: number;
+}
+
+interface Balao {
+    el: HTMLElement;
+    at: number;
+    colocado: boolean;
+    fx: number;
+    fy: number;
+    rot: number;
+}
+
+function Titulo({ linhas, parado }: TituloProps) {
+    let n = 0;
+
+    return (
+        <h1 className={`rs-h1${parado ? ' rs-still' : ''}`} aria-label={linhas.join(' ')}>
+        {linhas.map((linha, li) => (
+            <span key={li} className={`rs-l rs-l${li + 1}`} aria-hidden="true">
+            {linha.split(' ').map((palavra, wi, arr) => (
+                <span key={wi}>
+                <span className="rs-word">
+                    {Array.from(palavra).map((c, ci) => (
+                    <span key={ci} className="rs-ch" style={{ '--i': String(n++) } as React.CSSProperties}>{c}</span>
+                    ))}
+                </span>
+                {wi < arr.length - 1 ? ' ' : null}
+                </span>
+            ))}
+            </span>
+        ))}
+        </h1>
+    );
+}
+
 function RestaurarSessao({
     return (
         <section

@@ -3,6 +3,7 @@ import { apiFetch } from "../../services/api";
 import type { Comunidade } from "./Comunidades"
 import { obterUrlImagemComunidade } from "../../utils/imagemComunidade";
 import categoriaQueMaisGostaComunidade from "../../utils/categoriaQueMaisGostaComunidade";
+import { normalizar } from "../../utils/normalizarTexto";
 
 type TipoUsuario = "user" | "admin" | "funcionario" | "superAdmin";
 
@@ -27,6 +28,8 @@ function ModalDescobrirComunidades({
     funcaoCriarComunidade,
 }: ModalDescobrirComunidadesProps) {
     const [usuario, setUsuario] = useState<UsuarioAutenticado | null>(null);
+    const [buscaComunidade, setBuscaComunidade] = useState("");
+    const [maisItens, setMaisItens] = useState(10);
 
     const ehSeguidor = (c: Comunidade) =>
     c.funcaoDosMembrosComunidade?.tipo_funcao === "seguidor";
@@ -69,21 +72,23 @@ function ModalDescobrirComunidades({
     const podeCriarComunidade =
         usuario !== null && usuario.tipo !== "user";
 
-        //carrega mais cards
-        let listCard = [];
-        let newListCard = [];
-        
-        //total de cards que vão aparecer na tela
-        const totalDeCards = 10
+        const totalDeCards = 10;
 
-        listCard = ComunidadesQueNaoParticipa;
+        const termo = normalizar(buscaComunidade);
 
-        let [maisItens, setMaisItens] = useState(totalDeCards);
-        const carregarMais = () => {
-            setMaisItens(maisItens + totalDeCards);
-        };
+        // 1) Filtra a lista de quem NÃO participa, pelo nome
+        const filtrados = ComunidadesQueNaoParticipa.filter((comunidade) => {
+            if (!termo) return true;
+            return normalizar(comunidade.nome_comunidade).includes(termo);
+        });
 
-        newListCard = listCard.slice(0, maisItens);
+        // 2) Corta usando maisItens (que cresce no "Carregar mais")
+        const visiveis = filtrados.slice(0, maisItens);
+
+        // 3) Só mostra o botão se ainda houver itens escondidos
+        const temMais = filtrados.length > maisItens;
+
+        const carregarMais = () => setMaisItens((q) => q + totalDeCards);
 
     return (
         <>
@@ -156,6 +161,11 @@ function ModalDescobrirComunidades({
                                             dir="ltr"
                                             placeholder="Pesquisar comunidades"
                                             type="search"
+                                            value={buscaComunidade}
+                                            onChange={(event) => {
+                                                setBuscaComunidade(event.target.value);
+                                                setMaisItens(totalDeCards);
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -196,7 +206,7 @@ function ModalDescobrirComunidades({
 
                             <div className="descobrir-comunidades__lista">
 
-                                {newListCard.length > 0 && newListCard.map((dados) => (
+                                {visiveis.map((dados) => (
                                     <div className="descobrir-comunidades__card" key={dados.id}>
                                         <div className="descobrir-comunidades__card-cabecalho">
                                             <div className="descobrir-comunidades__card-imagem">
@@ -237,8 +247,14 @@ function ModalDescobrirComunidades({
                                         </div>
                                     </div>
                                 ))}
+                                
+                                {filtrados.length === 0 && (
+                                    <p className="descobrir-comunidades__vazio">
+                                        Nenhuma comunidade encontrada
+                                    </p>
+                                )}
 
-                                {listCard.length >= 11 && (
+                                {temMais && (
                                     <div className="descobrir-comunidades__carregar">
                                         <button
                                             type="button"
@@ -258,7 +274,7 @@ function ModalDescobrirComunidades({
                         <div className="descobrir-comunidades__rodape-conteudo">
                             <div className="descobrir-comunidades__contador">
                                 <span className="descobrir-comunidades__contador-texto">
-                                    {comunidades.length} comunidades
+                                    {filtrados.length} comunidades
                                 </span>
                             </div>
                             {podeCriarComunidade && (

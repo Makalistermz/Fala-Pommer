@@ -5,6 +5,8 @@ import {
     ConfigModule,
     ConfigService
 } from "@nestjs/config";
+import { ClsModule } from 'nestjs-cls';
+import { getClientIp } from 'get-client-ip';
 
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
@@ -21,6 +23,16 @@ import { TwoFactorEmailService } from "./two-factor-email.service";
         PrismaModule,
         EmailModule,
         ConfigModule,
+
+        ClsModule.forRoot({
+            global: true,
+            middleware: {
+                mount: true,
+                setup: (cls, req) => {
+                    cls.set('clienteIp', getClientIp(req));
+                },
+            },
+        }),
 
         JwtModule.registerAsync({
             global: true,

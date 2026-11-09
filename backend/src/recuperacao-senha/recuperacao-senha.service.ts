@@ -5,12 +5,15 @@ import { PrismaService } from "../prisma/prisma.service";
 import { EmailService } from "../email/email.service";
 import { RedefinirSenhaDto } from './dto/redefinir-senha.dto';
 import * as bcrypt from "bcrypt";
+import { criarArquivoLogMonitorSeguranca } from 'src/security-log/security-log';
+import { ClsService } from 'nestjs-cls';
 
 @Injectable()
 export class RecuperacaoSenhaService {
     constructor(
             private readonly prisma: PrismaService,
-            private readonly emailService: EmailService
+            private readonly emailService: EmailService,
+            private readonly cls: ClsService
         ) {}
     async solicitarRecuperacao(email: string) {
 
@@ -40,6 +43,13 @@ export class RecuperacaoSenhaService {
             .digest("hex");
 
         const expiracao = new Date(Date.now() + 15 * 60 * 1000);
+
+        criarArquivoLogMonitorSeguranca.call(
+            this,
+            "PASSWORD_RESET_REQUESTED",
+            "/recuperacao-senha/solicitar",
+            200
+        );
 
         await this.prisma.cadastro.update({
             where: {

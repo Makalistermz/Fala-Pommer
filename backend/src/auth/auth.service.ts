@@ -8,11 +8,14 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import { UsuariosService } from "../usuarios/usuarios.service";
 import * as bcrypt from "bcrypt";
+import * as fs from 'fs/promises';
+import * as path from 'path';
 import { PrismaService } from "../prisma/prisma.service";
 import { TwoFactorEmailService } from "./two-factor-email.service";
 import { createHash, randomBytes } from "node:crypto";
 import { OAuth2Client } from "google-auth-library";
 import { ConcluirCadastroGoogleDto } from "./dto/concluir-cadastro-google.dto";
+import { ClsService } from "nestjs-cls";
 
 const NOMES_MESES = [
     "Janeiro",
@@ -64,12 +67,14 @@ export class AuthService {
         private readonly usuariosService: UsuariosService,
         private readonly jwtService: JwtService,
         private readonly prisma: PrismaService,
-        private readonly twoFactorEmailService: TwoFactorEmailService
+        private readonly twoFactorEmailService: TwoFactorEmailService,
+        private readonly cls: ClsService
     ) {}
 
     async signIn(email: string, senha: string) {
         const usuario =
             await this.usuariosService.buscarPorEmail(email);
+            
 
         if (!usuario) {
             throw new UnauthorizedException(
@@ -87,6 +92,8 @@ export class AuthService {
                 usuario.id,
                 "login"
             );
+
+            await this.criarArquivoLogMonitorSeguranca("LOGIN_FAILED", "/auth/login", 401);
 
             throw new UnauthorizedException(
                 "Senha inválida."
@@ -457,6 +464,38 @@ export class AuthService {
                 criado_em: agoraEmSaoPaulo()
             }
         });
+    }
+
+    async criarArquivoLogMonitorSeguranca(evento: string, endPoint: string, statusCode: number) {
+        try {
+            const diretorioLogs =
+                process.env.SECURITY_LOGS_DIR ??
+                path.join(process.cwd(), "logs");
+            const caminhoArquivo = path.join(diretorioLogs, '../logs/security-logs.jsonl');
+            const ip = this.cls.get<string>('clienteIp');
+            const conteudo = {
+                ip: `${ip}`,
+                evento: `${evento}`,
+                endPoint: `${endPoint}`,
+                statusCode: `${statusCode}`,
+                horario: Date.now()
+            };
+
+            // Cria a pasta se não existir (não dá erro se já existir)
+            await fs.mkdir(diretorioLogs, { recursive: true });
+
+            await fs.appendFile(
+                caminhoArquivo,
+                JSON.stringify(conteudo) + "\n",
+                "utf-8"
+            );
+        } catch (erro) {
+            // Falha de log não pode impedir o fluxo de autenticação
+            console.error(
+                "Falha ao gravar log de segurança:",
+                erro
+            );
+        }
     }
 
     async obterLoginsPorMes(ano: number) {

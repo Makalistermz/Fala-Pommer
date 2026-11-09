@@ -62,3 +62,8 @@ prisma/migrations-backup-20260812/
 prisma/schema.baseline.prisma
 
 tsconfig.build.tsbuildinfo
+
+dist/
+*.js.map
+src/**/*.js
+src/**/*.d.ts

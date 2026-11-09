@@ -9,11 +9,13 @@ import {
 } from '@nestjs/common';
 import { createHash, randomBytes, randomInt } from 'node:crypto';
 import * as bcrypt from 'bcrypt';
+import { ClsService } from 'nestjs-cls';
 
 import type { Prisma } from '../generated/prisma/client';
 import { desafio_2fa_finalidade } from '../generated/prisma/enums';
 import { EmailService } from '../email/email.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { criarArquivoLogMonitorSeguranca } from 'src/security-log/security-log';
 
 const DIGITOS_CODIGO = 6;
 const VALIDADE_CODIGO_MS = 5 * 60 * 1000;
@@ -53,6 +55,7 @@ export class TwoFactorEmailService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly emailService: EmailService,
+    private readonly cls: ClsService
   ) {}
 
   async obterStatus(usuarioId: number): Promise<{ ativo: boolean }> {
@@ -518,6 +521,13 @@ export class TwoFactorEmailService {
     if (!codigoCorreto) {
       await this.registrarTentativaInvalida(desafio.id, finalidade, agora);
       await this.registrarErroVerificacao(desafio.usuario_id);
+
+      criarArquivoLogMonitorSeguranca.call(
+          this,
+          "TWO_FAILED_FACTORS",
+          "/auth/2fa/confirm",
+          401
+      );
 
       throw new UnauthorizedException(MENSAGEM_DESAFIO_INVALIDO);
     }

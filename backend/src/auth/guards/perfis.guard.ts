@@ -47,10 +47,18 @@ export class PerfisGuard implements CanActivate {
 
         const tipoUsuario = requisicao.usuario?.tipo;
 
-        if (
-            !tipoUsuario ||
-            !perfisPermitidos.includes(tipoUsuario)
-        ) {
+        if (!tipoUsuario) {
+            criarArquivoLogMonitorSeguranca.call(
+                this,
+                "UNAUTHENTICATED_ACCESS",
+                requisicao.originalUrl,
+                401
+            );
+
+            throw new UnauthorizedException(
+                "Autenticação necessária."
+            );
+        }
             throw new ForbiddenException(
                 "Você não possui permissão para acessar esta área."
             );

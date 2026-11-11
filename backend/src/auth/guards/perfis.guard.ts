@@ -19,7 +19,6 @@ import type {
 } from "../auth.guard";
 import { ClsService } from "nestjs-cls";
 import { criarArquivoLogMonitorSeguranca } from "src/security-log/security-log";
-import { exit } from "node:process";
 
 @Injectable()
 export class PerfisGuard implements CanActivate {
@@ -92,4 +91,5 @@ export class PerfisGuard implements CanActivate {
 
         return true;
     }
+
 }

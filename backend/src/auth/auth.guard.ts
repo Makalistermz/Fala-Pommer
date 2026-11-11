@@ -107,6 +107,7 @@ export class AuthGuard implements CanActivate {
         } catch (erro) {
             // TokenExpiredError estende JsonWebTokenError: manter esta ordem.
             if (erro instanceof TokenExpiredError) {
+                this.registrarLog("EXPIRED_TOKEN", requisicao)
                 throw new UnauthorizedException("Token expirado.");
             }
 

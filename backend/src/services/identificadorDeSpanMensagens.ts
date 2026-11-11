@@ -1,11 +1,12 @@
 import { ClsServiceManager } from "nestjs-cls";
-import { prisma } from "src/lib/prisma";
+import { PrismaService } from "src/prisma/prisma.service";
 import { criarArquivoLogMonitorSeguranca } from "src/security-log/security-log";
 
 const janela_spam_ms = 30_000;
 const limiteMensagens = 10;
 
 export default async function IdentificadorDeSpanMensagens(
+    prisma: PrismaService,
     usuarioLogado: number, 
     conversaId: number
 ) {

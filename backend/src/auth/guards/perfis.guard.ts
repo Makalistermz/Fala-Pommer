@@ -19,6 +19,7 @@ import type {
 } from "../auth.guard";
 import { ClsService } from "nestjs-cls";
 import { criarArquivoLogMonitorSeguranca } from "src/security-log/security-log";
+import { exit } from "node:process";
 
 @Injectable()
 export class PerfisGuard implements CanActivate {
@@ -61,6 +62,22 @@ export class PerfisGuard implements CanActivate {
         }
 
         if (!perfisPermitidos.includes(tipoUsuario)) {
+            
+            if (
+                perfisPermitidos.includes("admin") ||
+                perfisPermitidos.includes("superAdmin")
+            ) {
+                criarArquivoLogMonitorSeguranca.call(
+                    this,
+                    "TENTATIVA_ESCALONAMENTO_FUNÇÃO",
+                    requisicao.originalUrl,
+                    403
+                );
+                throw new ForbiddenException(
+                    "Você não possui permissão para acessar esta área."
+                );
+            }
+
             criarArquivoLogMonitorSeguranca.call(
                 this,
                 "FORBIDDEN_ACCESS",

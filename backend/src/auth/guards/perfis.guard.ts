@@ -59,6 +59,15 @@ export class PerfisGuard implements CanActivate {
                 "Autenticação necessária."
             );
         }
+
+        if (!perfisPermitidos.includes(tipoUsuario)) {
+            criarArquivoLogMonitorSeguranca.call(
+                this,
+                "FORBIDDEN_ACCESS",
+                requisicao.originalUrl,
+                403
+            );
+
             throw new ForbiddenException(
                 "Você não possui permissão para acessar esta área."
             );

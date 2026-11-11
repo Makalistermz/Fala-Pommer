@@ -3,6 +3,7 @@ import {
     CanActivate,
     ExecutionContext,
     ForbiddenException,
+    UnauthorizedException,
     Injectable
 } from "@nestjs/common";
 
@@ -16,11 +17,14 @@ import {
 import type {
     RequisicaoAutenticada
 } from "../auth.guard";
+import { ClsService } from "nestjs-cls";
+import { criarArquivoLogMonitorSeguranca } from "src/security-log/security-log";
 
 @Injectable()
 export class PerfisGuard implements CanActivate {
     constructor(
-        private readonly reflector: Reflector
+        private readonly reflector: Reflector,
+        private readonly cls: ClsService
     ) {}
 
     canActivate(contexto: ExecutionContext): boolean {

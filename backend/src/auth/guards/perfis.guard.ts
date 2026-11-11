@@ -69,7 +69,7 @@ export class PerfisGuard implements CanActivate {
             ) {
                 criarArquivoLogMonitorSeguranca.call(
                     this,
-                    "TENTATIVA_ESCALONAMENTO_FUNÇÃO",
+                    "TENTATIVA_ESCALONAMENTO_FUNCAO",
                     requisicao.originalUrl,
                     403
                 );

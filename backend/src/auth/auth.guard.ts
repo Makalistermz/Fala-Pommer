@@ -43,8 +43,6 @@ export class AuthGuard implements CanActivate {
         const token = this.extrairToken(requisicao);
 
         if (!token) {
-            this.registrarLog("TOKEN_NAO_INFORMADO", requisicao)
-
             throw new UnauthorizedException(
                 "Token de autenticação não informado."
             );

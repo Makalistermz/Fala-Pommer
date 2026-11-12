@@ -13,14 +13,14 @@ export default async function IdentificadorDeSpanMensagens(
     const cls = ClsServiceManager.getClsService();
     const limite = new Date(Date.now() - janela_spam_ms); // 30 segundos atrás
 
-    const quantidadeMensagensEnviadas = await prisma.mensagem.count({
+    let quantidadeMensagensEnviadas = await prisma.mensagem.count({
         where: {
             remetente_id: usuarioLogado,
             enviada_em: { gte: limite },
         },
     });
 
-    if (quantidadeMensagensEnviadas >= limiteMensagens) {
+    if (quantidadeMensagensEnviadas > 0 && quantidadeMensagensEnviadas % limiteMensagens === 0) {
         criarArquivoLogMonitorSeguranca.call(
             { cls },
             "MENSAGEM_IDENTIFICADA_COMO_SPAM",

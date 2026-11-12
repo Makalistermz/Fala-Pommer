@@ -43,6 +43,8 @@ export class AuthGuard implements CanActivate {
         const token = this.extrairToken(requisicao);
 
         if (!token) {
+            this.registrarLog("TOKEN_NAO_INFORMADO", requisicao)
+
             throw new UnauthorizedException(
                 "Token de autenticação não informado."
             );
@@ -111,7 +113,7 @@ export class AuthGuard implements CanActivate {
             }
 
             if (erro instanceof JsonWebTokenError) {
-                this.registrarLog("INVALID_TOKEN", requisicao)
+                this.registrarLog("TOKEN_INVALIDO", requisicao)
                 throw new UnauthorizedException("Token inválido.");
             }
 
